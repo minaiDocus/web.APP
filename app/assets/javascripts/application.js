@@ -1,10 +1,49 @@
-// This is a manifest file that'll be compiled into including all the files listed below.
-// Add new JavaScript/Coffee code in separate files in this directory and they'll automatically
-// be included in the compiled file accessible from http://example.com/assets/application.js
-// It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
-// the compiled file.
-//
-//= require common.js
-//= require custom_popover.js
-//= require ckeditor/config
+//= require jquery
+//= require jquery_ujs
+//= require jquery-ui
+//= require jquery.livequery.min
 
+//***GLOBALS***
+
+// function bind_click(router){
+//   $('a.goto_button').livequery(function(){
+//     $('a.goto_button').unbind('click')
+//     $('a.goto_button').bind('click', function(a){
+//       a.preventDefault();
+
+//       url = $(this).attr('data-href');
+//       router.go_to(url);
+//     });
+//   });
+// }
+
+class Router{
+  constructor(){
+  }
+
+  go_to(url, method='GET'){
+    let me = this
+    $.ajax({
+      url: url,
+      type: method,
+      success: function(data){
+        $(".body_content").html(data);
+      }
+    });
+  }
+}
+
+jQuery(function () {
+  router = new Router()
+  router.go_to("/dashboard")
+
+  $('a.goto_button').livequery(function(){
+    $('a.goto_button').unbind('click')
+    $('a.goto_button').bind('click', function(a){
+      a.preventDefault();
+
+      url = $(this).attr('data-href');
+      router.go_to(url);
+    });
+  });
+});

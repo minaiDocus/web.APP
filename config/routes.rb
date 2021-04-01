@@ -1,9 +1,19 @@
 require 'sidekiq/web'
 require 'sidekiq-scheduler/web'
 
+class ActionDispatch::Routing::Mapper
+  def draw(template)
+    instance_eval(File.read(Rails.root.join("app/templates/front/#{template}/routes.rb")))
+  end
+end
+
 Rails.application.routes.draw do
+  draw('dashboard')
+  draw('organizations')
+
   mount Ckeditor::Engine => '/ckeditor'
-  root to: 'account/account#index'
+  
+  root to: 'index#show'
 
   wash_out :dematbox
 
@@ -16,6 +26,3 @@ Rails.application.routes.draw do
   match '*a', to: 'errors#routing', via: :all
 end
 
-Dir[Rails.root.join("templates/front/*/routes.rb")].each do |f|
-  require f
-end

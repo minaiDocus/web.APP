@@ -12,6 +12,10 @@ module Idocus
   class Application < Rails::Application
     # load all files in lib directory
 
+    Dir[Rails.root.join("app/templates/front/*/config.rb")].each do |f|
+     require f
+    end
+
     config.load_defaults 5.2
 
     # development files
