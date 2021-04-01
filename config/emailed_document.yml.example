@@ -1,0 +1,21 @@
+defaults: &defaults
+  address:    idocus.com
+  port:       995
+  enable_ssl: true
+  user_name:  '*.sub.example.com'
+  password:   password
+  is_enabled: true
+
+development:
+  <<: *defaults
+  is_enabled: false
+
+test:
+  <<: *defaults
+  is_enabled: false
+
+staging:
+  <<: *defaults
+
+production:
+  <<: *defaults

@@ -1,0 +1,21 @@
+defaults: &defaults
+  path:       '/path_to_data'
+  server:     'ftp.example.com'
+  username:   'username'
+  password:   'password'
+  provider:   'scanning_provider'
+  is_enabled: true
+
+test:
+  <<: *defaults
+  is_enabled: false
+
+development:
+  <<: *defaults
+  is_enabled: false
+
+staging:
+  <<: *defaults
+
+production:
+  <<: *defaults

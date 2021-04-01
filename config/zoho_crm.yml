@@ -1,0 +1,35 @@
+defaults: &defaults
+  base_uri: https://www.zohoapis.com/crm/v2/
+  user_token: 1000.33d1ea7ae0d109aaa431ca1f35187bf0.64b8xcvxcvxcvxcvxcvx
+  refresh_token: 1000.9a26607cf0f6efe44bde5092812c4647.316bb8652cedeeb647969e559a6bccb5
+  client_id: 1000.R4DZKQPBWXAXF3O0WE8HC61G55FAVH
+  client_secret: 4a09514ba1be09dffc56e833039fd133735e6378eb
+  grant_type: refresh_token
+  code: 1000.8513bb9c6bdd29f0f0dc41b9843e1861.e4f97bff52e421d1eb7fef11e711b6be
+  redirect_uri: http://localhost:3000/
+
+  # user_token = '5064b25445e1bd95b9d78c49a536ffcd' ### token Prod
+  # user_token = '7e2b6d448a6d833f46ce3f83d5d25c93' ### token Luc
+  # user_token = '1000.ce9223d2a1ac41099eda5802e6b268be.e43ba977987f7600035d5a74f91bad88' ### token mina
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+staging:
+  <<: *defaults
+  redirect_uri: https://staging.idocus.com/
+
+production:
+  # <<: *defaults
+  # redirect_uri: https://my.idocus.com/
+  base_uri: https://www.zohoapis.com/crm/v2/
+  user_token: 1000.1be424dba26ae57145981619fd83a000.87f396e930c2354582d48851b3647fb7
+  refresh_token: 1000.251874ae36ff5470f5587b78ed6d8088.e681a23c7aa01e7f886711067ce9411d
+  client_id: 1000.NC86AKXDJHV6RQTNVCUJU1K8YE8SQS
+  client_secret: af15ff834a2c2bb97fe2a6e3aec83dc92bbda85212
+  grant_type: refresh_token
+  code: 1000.18617284babe97b9d6a588d7c560c26f.f094202ac71ab09a9db2adeeccd92f85
+  redirect_uri: https://my.idocus.com/

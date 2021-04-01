@@ -1,0 +1,14 @@
+%h2 Déverrouiller mon compte
+
+%hr
+
+%p
+  Veuillez saisir votre adresse e-mail.
+  Ensuite, vérifiez votre boîte aux lettres, nous vous envoyons immédiatement
+  un mail qui vous indiquera la démarche à suivre pour déverrouiller votre compte.
+%br
+
+= simple_form_for resource, url: unlock_path(resource_name) do |f|
+  = f.input :email, label: 'Votre adresse e-mail :'
+  .form-actions.padding0bottom
+    = f.submit 'Valider', class: 'btn btn-primary float-left'

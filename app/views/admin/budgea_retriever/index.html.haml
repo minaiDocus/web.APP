@@ -1,0 +1,32 @@
+#budgea_retriever_template
+  .row
+    .col-md-12
+      .box.small-shadow.clearfix
+        .float-left
+          %h3
+            Suivi budgea retriever
+        .float-right
+          = link_to image_tag('application/icon-xls.png', alt: 'Export XLS', style: '') + ' Export XLS', "/admin/budgea_retriever/export_xls", title: 'Export XLS', class: 'float-right'
+
+  .row.retractable
+    .col-md-12
+      .box
+        %button.btn.btn-primary.small-shadow#normal.font-weight-bold.onglets
+          Normal
+        %button.btn.btn-warning.small-shadow#failed.font-weight-bold.onglets
+          Failed
+        %button.btn.btn-danger.small-shadow#bug.font-weight-bold.onglets
+          Bug
+        %button.btn.btn-secondary.small-shadow#all_users.font-weight-bold.onglets
+          Check all users
+        %button.btn.btn-success.small-shadow#launcher.font-weight-bold.onglets.float-right
+          Lancer le suivi
+
+    .col-md-12
+      #body_table_loading.hide.box
+        .row
+          .col.align-self-center.text-center
+            %img{ src: "/assets/application/bar_loading.gif", alt: "chargement. . ." }
+      
+      #body_table
+        

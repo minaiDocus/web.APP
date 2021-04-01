@@ -1,0 +1,146 @@
+.preseizure_head  
+  %span.float-left.preseizure_name.check_modif_preseizure
+    %input{class: "check_#{@preseizure.id} ",id: "_#{@preseizure.id}", type: :checkbox}
+    %span
+      - if @ibiza
+        = IbizaLib::Api::Utils.description(@preseizure, @ibiza.description, @ibiza.description_separator) || @preseizure.piece_name
+      - else
+        = @preseizure.piece_name
+  %span.choose_action_preseizure
+    - if @user.has_collaborator_action?
+      %a.float-right.tip_edit.margin3.do-tooltip{href: '#', title: "Edition", data: {id: @preseizure.id}}
+        = glyphicon('pencil', {color: "fill: rgb(62, 47, 36);"})
+    - if (@user.has_collaborator_action? && @software != '' && @preseizure.is_not_delivered? && !@preseizure.is_locked)
+      %a.tip_deliver.float-right.margin3.do-tooltip{href: '#', title: "Livraison (#{@software_human_name})", data: {id: @preseizure.id}}
+        = glyphicon('loop-circular', {color: "fill: rgb(62, 47, 36);"})
+.row{style: 'margin-top: 15px;'}
+  .information_section{ class: "#{@preseizure.delivery_tried_at.present? ? 'col-sm-9' : 'col-sm-12'}" }
+    %table.table.table-striped.table-condensed.margin0bottom.information
+      %thead
+        %tr
+          %th.date.text-center Date
+          %th.date.text-center Date d'échéance
+          %th.third_party.text-center Nom de tiers
+      %tbody
+        %tr
+          %td.date.text-center#date
+            .content_date.label_date{title: "#{@user.has_collaborator_action? ? 'Cliquez pour modifier' : ''}"}
+              = @preseizure.date.try(:to_date)
+            - if @user.has_collaborator_action?
+              .edit_content_date.editable_date.hide
+                %input.edit_content_date_number.margin0bottom{type: :text, value: @preseizure.date.try(:to_date), readonly: :readonly} 
+          %td.date.text-center#deadline_date{title: "#{@user.has_collaborator_action? ? 'Cliquez pour modifier' : ''}"}
+            .content_deadline_date.label_date
+              = @preseizure.deadline_date.try(:to_date)
+            - if @user.has_collaborator_action?
+              .edit_content_deadline_date.editable_date.hide
+                %input.edit_content_deadline_date_number.margin0{type: :text, value: @preseizure.deadline_date.try(:to_date), readonly: :readonly}
+          %td.third_party.text-center{title: "#{@preseizure.third_party}"}
+            .content_third_party.word_wrap
+              = @preseizure.third_party
+            - if @user.has_collaborator_action?
+              .edit_content_third_party.hide
+                %input.edit_content_third_party_number.margin0{type: :text, placeholder: @preseizure.third_party, value: @preseizure.third_party}
+
+  - if @preseizure.delivery_tried_at.present?
+    .other_information.col-sm-3
+      %p
+        Dernière envoi
+        %strong
+          = @software_human_name      
+        le :
+        = @preseizure.delivery_tried_at.try(:to_formatted_s, :db)
+      - software_erreur = @software != '' ? @preseizure.get_delivery_message_of(@software) : ''
+      - if software_erreur.present? && (!software_erreur.match(/already sent/i) || current_user.try(:is_admin))
+        %p
+          Message d'erreur (
+          %strong
+            = @software_human_name
+          ) :
+          %span.error_message{title: software_erreur}
+            = software_erreur
+%p{style: 'text-align: left;margin: 6px 0px 8px;padding-top: 1%;clear:both;'}
+  Unité monétaire:
+  %strong= @unit
+  %input.preseizure_id{type: :hidden, value: @preseizure.id}
+  %input.delivered_preseizure{type: :hidden, value: "#{@preseizure.is_delivered? ? '1' : '0'}", id: "delivered_#{@preseizure.id}"}
+  - irregular_debit_credit_somme = verif_debit_credit_somme_of @preseizure_entries
+.row
+  .entries{ class: (@data_analytics.any? ? 'col-md-6' : 'col-md-12') }
+    - if @data_analytics.any?
+      %strong 
+        Ecritures
+    %span.color_red.float-right{class: "#{irregular_debit_credit_somme ? '' : 'hide' }"}
+      = glyphicon('info')
+      balance non équilibrée
+
+    %table.table.table-striped.table-condensed.table-bordered.margin0bottom
+      %thead
+        %tr.bg-brown.text-white
+          %th.account Numéro de compte
+          %th.entry.text-center Débit
+          %th.entry.text-center Crédit          
+      %tbody.entries
+        - @preseizure_entries.each do |entry|
+          %tr
+            %td.account
+              .content_account{title: "#{@user.has_collaborator_action? ? 'Cliquez pour modifier' : ''}"}
+                = entry.account.number
+              - if @user.has_collaborator_action?
+                .edit_account.hide
+                  %input.edit_account_number.margin0{type: :text, placeholder: entry.account.number, value: entry.account.number}
+                  .suggestion_account_list.hide                    
+            - if @user.has_collaborator_action?
+              %input.account_id_hidden{type: :hidden, value: entry.account.id}
+            %td.entry.text-center{title: "#{(@user.has_collaborator_action? && entry.type == 1) ? 'Cliquez pour modifier' : ''}", class: "#{irregular_debit_credit_somme ? 'color_red' : '' }"}
+              - if entry.type == 1
+                .content_amount
+                  .content_amount_number
+                    = entry.amount.to_f
+                  - if @user.has_collaborator_action?
+                    %span.debit_or_credit.hide.float-right
+                      = glyphicon('arrow-thick-right')
+                - if @user.has_collaborator_action?
+                  .edit_amount.hide
+                    %input.margin0{type: :text, placeholder: entry.amount , value: entry.amount}
+                    %input.entry_type{type: :hidden, value: entry.type}
+
+            %td.entry.text-center{title: "#{(@user.has_collaborator_action? && entry.type == 2) ? 'Cliquez pour modifier' : ''}", class: "#{irregular_debit_credit_somme ? 'color_red' : '' }"}
+              - if entry.type == 2
+                .content_amount
+                  - if @user.has_collaborator_action?
+                    %span.debit_or_credit.hide.float-left
+                      = glyphicon('arrow-thick-left')
+                  &nbsp;&nbsp;
+                  .content_amount_number
+                    = entry.amount.to_f
+                - if @user.has_collaborator_action?
+                  .edit_amount.hide
+                    %input.margin0{type: :text, placeholder: entry.amount, value: entry.amount}
+                    %input.entry_type{type: :hidden, value: entry.type}
+            - if @user.has_collaborator_action?
+              %input.entry_id_hidden{type: :hidden, value: entry.id}
+  - if @data_analytics.any?
+    .analytics.col-md-6
+      %strong Analyse comptable
+      %table.table.table-striped.table-condensed.table-bordered-inner.margin0bottom
+        %thead
+          %tr.bg-brown.text-white
+            %th.text-center Analyse
+            %th.text-center Axe
+            %th.text-center Ventilation
+            %th.text-center Montant ventilé
+        %tbody.entries
+          - @data_analytics.each do |analysis|
+            %tr
+              %td.text-center= analysis[:name]
+              %td.text-center
+                %ul
+                  -if analysis[:axis1].present?
+                    %li= analysis[:axis1]
+                  -if analysis[:axis2].present?
+                    %li= analysis[:axis2]
+                  -if analysis[:axis3].present?
+                    %li= analysis[:axis3]
+              %td.text-center= analysis[:ventilation].to_f.to_s + " %"
+              %td.text-center= @pre_tax_amount.to_f * (analysis[:ventilation].to_f / 100)

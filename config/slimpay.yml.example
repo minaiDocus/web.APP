@@ -1,0 +1,17 @@
+defaults: &defaults
+  scim_home: '/data/idocus/slimpay_tpe/'
+
+test:
+  <<: *defaults
+
+development:
+  <<: *defaults
+
+sandbox:
+  scim_home: '/data/idocus/slimpay_tpe/'
+
+staging:
+  scim_home: '/data/idocus/slimpay_tpe/'
+
+production:
+  scim_home: '/data/idocus/slimpay_tpe/'

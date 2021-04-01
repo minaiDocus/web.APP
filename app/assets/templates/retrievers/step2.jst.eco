@@ -1,0 +1,11 @@
+<form class="form-horizontal" novalidate="novalidate" id="additionnal_fields" action="" accept-charset="UTF-8" method="post">
+  <div id='information'></div>
+  <%- @html_fields %>
+  <hr />
+  <div class="form-actions">
+    <div class="actions">
+      <input name="commit_selection" value="Valider" class="btn btn-primary" id="retriever_additionnal_commit" type="button">
+      <a class="btn btn-light" href="/account/retrievers">Annuler</a>
+    </div>
+  </div>
+</form>

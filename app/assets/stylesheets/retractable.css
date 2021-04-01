@@ -1,0 +1,304 @@
+//Retractable CSS
+
+//Animations
+@mozkeyframes blink {
+  50% { opacity: 0; }
+}
+@webkitkeyframes blink {
+  50% { opacity: 0; }
+}
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+@mozkeyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@webkitkeyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@mozkeyframes showLogin {
+  from { max-height: 0px; max-width: 950px; }
+  to { max-height: 900px; max-width:1140px; }
+  0% { opacity: 0; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+@webkitkeyframes showLogin {
+  from { max-height: 0px; max-width: 950px; }
+  to { max-height: 900px; max-width:1140px; }
+  0% { opacity: 0; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+@keyframes showLogin {
+  from { max-height: 0px; max-width: 950px; }
+  to { max-height: 900px; max-width:1140px; }
+  0% { opacity: 0; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+
+@mozkeyframes slideDown {
+  from  { max-height: 0px; }
+  to { max-height: 500px; }
+}
+@webkitkeyframes slideDown {
+  from  { max-height: 0px; }
+  to { max-height: 500px; }
+}
+@keyframes slideDown {
+  from  { max-height: 0px; }
+  to { max-height: 500px; }
+}
+
+@mozkeyframes derivationLeft {
+  from { left: -40px; }
+  to { left: 0; }
+}
+@webkitkeyframes derivationLeft {
+  from { left: -40px; }
+  to { left: 0; }
+}
+@keyframes derivationLeft {
+  from { left: -40px; }
+  to { left: 0; }
+}
+
+@mozkeyframes derivationRight {
+  from { left: 40px; }
+  to { left: 0; }
+}
+@webkitkeyframes derivationRight {
+  from { left: 40px; }
+  to { left: 0; }
+}
+@keyframes derivationRight {
+  from { left: 40px; }
+  to { left: 0; }
+}
+
+@mozkeyframes showMenu {
+  from { top: -15px; }
+  to { top: 0; }
+}
+@webkitkeyframes showMenu {
+  from { top: -15px; }
+  to { top: 0; }
+}
+@keyframes showMenu {
+  from { top: -15px; }
+  to { top: 0; }
+}
+
+@mozkeyframes showFooter {
+  from { top: 15px; }
+  to { top: 0; }
+}
+@webkitkeyframes showFooter {
+  from { top: 15px; }
+  to { top: 0; }
+}
+@keyframes showFooter {
+  from { top: 15px; }
+  to { top: 0; }
+}
+
+@mozkeyframes showSideMenu {
+  from { left: -40px; }
+  to { left: 0; }
+}
+@webkitkeyframes showSideMenu {
+  from { left: -40px; }
+  to { left: 0; }
+}
+@keyframes showSideMenu {
+  from { left: -40px; }
+  to { left: 0; }
+}
+
+@mozkeyframes showLogo {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@webkitkeyframes showLogo {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes showLogo {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+
+// CSS ANIMATED
+.blink {
+  animation: blink 2s steps(1) infinite;
+  -webkit-animation: blink 2s steps(1) infinite;
+}
+
+.retractable.slidedown {
+  opacity: 0;
+  overflow: hidden;
+}
+
+tbody.retractable.slidedown tr {
+  opacity: 0;
+  -webkit-transition: -webkit-opacity 0.2s ease-out;
+  -moz-transition: -moz-opacity 0.2s ease-out;
+  -o-transition: opacity 0.2s ease-out;
+  -ms-transition: opacity 0.2s ease-out;
+  transition: opacity 0.2s ease-out;
+}
+
+.retractable.fadein {
+  opacity: 1;
+  animation-name: fadeIn;
+  animation-duration: 0.8s;
+}
+
+.derivationLeft {
+  animation-name: derivationLeft;
+  animation-duration: 0.8s;
+  position: relative;
+}
+
+.derivationRight {
+  animation-name: derivationRight;
+  animation-duration: 0.8s;
+  position: relative;
+}
+
+.showMenu{
+  animation-name: showMenu;
+  animation-duration: 0.3s;
+  position: relative;
+}
+
+.showFooter{
+  animation-name: showFooter;
+  animation-duration: 0.3s;
+  position: relative;
+}
+
+.side-menu{
+  animation-name: showSideMenu;
+  animation-duration: 0.3s;
+  position: relative;
+}
+
+.bg-menu .dropdown-menu.show{
+  overflow: hidden;
+  animation-name: slideDown;
+  animation-duration: 1s;
+  animation-timing-function: ease-out;
+}
+
+.logo img{
+  position: relative;
+  animation-name: showLogo;
+  animation-duration: 1.8s;
+  animation-fill-mode: forwards;
+  animation-delay: 0.7s;
+}
+
+.showLogin{
+  overflow: hidden;
+  animation-name: showLogin;
+  animation-duration: 1.2s;
+}
+
+// CSS NORMAL
+
+.retractable.with-menu {
+  padding-left: 50px;
+}
+
+.retractable.with-filter {
+  padding-right: 290px; 
+}
+
+//retractable menu
+.retractable .retractable-menu {
+    position: fixed;
+    width: 260px;
+    z-index: 300;
+    left: -210px;
+    -webkit-transition: -webkit-left 0.2s ease-out;
+    -moz-transition: -moz-left 0.2s ease-out;
+    -o-transition: left 0.2s ease-out;
+    -ms-transition: left 0.2s ease-out;
+    transition: left 0.2s ease-out;
+}
+
+.retractable .retractable-menu:hover {
+  left: -2px;
+}
+.retractable .retractable-menu .side-menu {
+  padding-left: 11px !important;
+  padding-right: 11px !important;
+  background-image: url('application/bg_body_2.png');
+  background-repeat: repeat;
+  background-attachment: fixed;
+}
+.retractable .retractable-menu .retractable-caret {
+  text-align: right;
+  width: 100%;
+  display: inline-block;
+  border-bottom: 1px solid #fff;
+  margin-bottom: 8px;
+  padding-bottom: 5px;
+}
+.retractable .retractable-menu .retractable-caret .title {
+  display: inline-block;
+  text-align: left;
+  width: 90%;
+}
+
+//retractable-filter
+.retractable .retractable-filter {
+  position: fixed;
+  z-index: 20;
+  margin-right: 15px;
+  right: 0;
+  width: 270px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.36), 0 2px 10px 0 rgba(0, 0, 0, 0.32) !important;
+}
+.retractable .retractable-filter .locker {
+  padding: 2px;
+}
+.retractable .retractable-filter.close {
+  position: absolute;
+  width: auto;
+}
+
+//detachable table head
+table.table-detachable-head thead.detached {
+  display:none;
+  position: fixed;
+  z-index: 50;
+  background-color: #214255;
+  color: #fff;
+  top: 30px;
+}
+table.table-detachable-head thead.detached a {
+  color: #CCE6FF;
+}
+table.table-detachable-head thead.detached a:hover {
+  color: #E6FFE6;
+}
+
+
+@media (max-width: 1186px) {
+  table.table-detachable-head thead.detached {
+    top: 46px;
+  }
+}

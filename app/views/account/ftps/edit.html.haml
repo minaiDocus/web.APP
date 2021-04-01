@@ -1,0 +1,15 @@
+#ftp.edit.container-fluid
+  .alerts.derivationLeft
+    = render partial: 'shared/messages'
+  .row.derivationRight
+    .col-md-12.box
+      %h2.padding16left.margin1bottom Edition de la configuration FTP
+      = simple_form_for [:account, @ftp], html: { class: 'form form-horizontal margin0' } do |f|
+        = f.input :host
+        = f.input :port, as: :integer
+        = f.input :is_passive
+        = f.input :login
+        = f.input :password
+        .form-actions.margin0bottom
+          = f.submit t('actions.submit'), class: 'btn btn-primary'
+          = link_to t('actions.cancel').capitalize, account_profile_path(anchor: 'ftp', panel: 'efs_management'), class: 'btn'

@@ -1,0 +1,20 @@
+defaults: &defaults
+  base_user_url: https://api.myunisoft.fr
+  base_api_url: https://api.myunisoft.fr
+  member_group_id: 80
+  granted_for: 10
+  target: 2
+  x_third_party_secret: idocus-s7mvtqFRXNhXspJv4skMvnTq
+
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+staging:
+  <<: *defaults  
+
+production:
+  <<: *defaults  

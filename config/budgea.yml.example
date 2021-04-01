@@ -1,0 +1,23 @@
+defaults: &defaults
+  domain: idocus-test.biapi.pro
+  client_id:
+  client_secret:
+  redirect_uri: http://localhost:3000/
+
+development:
+  <<: *defaults
+  proxy: socks5://127.0.0.1:8080
+
+test:
+  <<: *defaults
+  proxy: socks5://127.0.0.1:8080
+
+staging:
+  <<: *defaults
+  redirect_uri: https://staging.idocus.com/
+
+production:
+  domain: idocus.biapi.pro
+  client_id:
+  client_secret:
+  redirect_uri: https://my.idocus.com/

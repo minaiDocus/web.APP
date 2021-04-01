@@ -1,0 +1,11 @@
+#notifications-lists.container-fluid
+  .row
+    .col-md-12
+      .card
+        .card-header
+          %h2 Notifications
+        .card-body
+          %ul.pl-0
+            = render partial: 'notifications', locals: { notifications: @notifications }
+
+          = paginate @notifications

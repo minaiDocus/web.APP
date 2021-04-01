@@ -1,0 +1,215 @@
+## Miscelaneous workers
+
+RefreshDashboardStatisticsWorker:
+  queue: default
+  cron: '*/5 * * * *'
+Billing::CreateInvoicePdfWorker:
+  queue: high
+  cron: '0 3 1 * *'
+InitializePeriodsWorker:
+  queue: high
+  cron: '0 3 1 * *'
+Subscription::StatisticsWorker:
+  queue: default
+  cron: '0 5 * * *'
+Order::RemindToNewKitWorker:
+  queue: default
+  cron: '15 3 1 12 *'
+
+## Notifications worker
+Notifications::DocumentWorker:
+  queue: default
+  cron: '0 8 * * *'
+Notifications::RetrieversWorker:
+  queue: default
+  cron: '0 8 * * *'
+Notifications::ScansNotDeliveredNotificationWorker:
+  queue: high
+  cron: '0 1 * * *'
+Notifications::PaperQuotaReachedWorker:
+  queue: default
+  cron: '0 8 * * *'
+Notifications::PublishedDocumentDailyWorker:
+  queue: default
+  cron: '0 8 * * *'
+Notifications::PreAssignmentDeliveryDailyWorker:
+  queue: default
+  cron: '0 8 * * *'
+Notifications::PreAssignmentExportWorker:
+  queue: default
+  cron: '0 8 * * *'
+Notifications::ProcessedRequestsWorker:
+  queue: default
+  cron: '0 8 * * *'
+
+
+
+## Accounting Plan worker
+
+AccountingPlan::IbizaUpdateWorker:
+  queue: default
+  cron: '0 4 * * *'
+
+AccountingPlan::ExactOnlineUpdateWorker:
+  queue: default
+  cron: '0 3 * * *'
+
+AccountingPlan::MyUnisoftUpdateWorker:
+  queue: default
+  cron: '0 5 * * *'
+
+## Budgea retrievers workers
+
+DataProcessor::OperationsWorker:
+  queue: default
+  cron: '*/10 * * * * *'
+
+# DataProcessor::RetrievedDataWorker:
+#   queue: high
+#   cron: '*/2 * * * * *'
+
+DataProcessor::McfWorker:
+  queue: default
+  cron: '0 */5 * * * *'
+
+## resume budgea retriever connector state
+# Retriever::ResumeBudgeaWorker:
+#   queue: default
+#   cron: '0 */15 * * * *'
+
+## Accounting flow workers
+
+Ftp::FetcherWorker:
+  queue: default
+  cron: '*/10 * * * * *'
+
+RetrieveEmailedDocumentWorker:
+  queue: default
+  cron: '*/10 * * * * *'
+
+
+## File import
+
+FileImport::DropboxWorker:
+  queue: file_import
+  cron: '*/10 * * * * *'
+
+FileImport::FtpFromAllWorker:
+  queue: file_import
+  cron: '0 0 */6 * * *'
+
+FileImport::IbizaboxWorker:
+  queue: file_import
+  cron: '0 0 */6 * * *'
+
+
+
+RetrieveOcrProcessedDocumentWorker:
+  queue: default
+  cron: '*/10 * * * * *'
+
+# SendToGroupingWorker:
+#   queue: default
+#   cron: '*/2 * * * * *'
+
+# GroupDocumentWorker:
+#   queue: default
+#   cron: '*/2 * * * * *'
+
+PublishDocumentWorker:
+  queue: high
+  cron: '*/2 * * * * *'
+
+# SendPieceToPreAssignmentWorker:
+#   queue: high
+#   cron: '*/5 * * * * *'
+
+# RetrievePreAssignmentsWorker:
+#   queue: high
+#   cron: '*/10 * * * * *'
+
+
+
+## Pre assignment builder & delivery
+
+PreAssignment::Builder::IbizaWorker:
+  queue: high
+  cron: '*/10 * * * * *'
+
+PreAssignment::Builder::ExactOnlineWorker:
+  queue: high
+  cron: '*/10 * * * * *'
+
+PreAssignment::Builder::MyUnisoftWorker:
+  queue: high
+  cron: '*/10 * * * * *'
+
+PreAssignment::Delivery::IbizaWorker:
+  queue: high
+  cron: '*/10 * * * * *'
+
+PreAssignment::Delivery::ExactOnlineWorker:
+  queue: high
+  cron: '*/10 * * * * *'
+
+PreAssignment::Delivery::MyUnisoftWorker:
+  queue: high
+  cron: '*/10 * * * * *'
+
+
+System::JobProcessorWorker:
+  queue: high
+  cron: '0 */5 * * * *'
+
+## destroy some data
+System::DatabaseCleanerWorker:
+  queue: default
+  cron: '0 2 * * *'
+
+## Zoho CRM sync
+System::ZohoCrmSynchronizerWorker:
+  queue: default
+  cron: '0 1 1 * *'
+
+## Daily data verifier worker
+DataVerificator::DailyDataVerifierWorker:
+  queue: default
+  cron: '0 3 * * *'
+
+## Delivery workers
+
+DeliverFileToDropbox: &deliver_file_defaults
+  class: FileDelivery::DeliverFileWorker
+  queue: file_delivery
+  cron: '*/10 * * * * *'
+  args: dbb
+DeliverFileToDropboxExtended:
+  <<: *deliver_file_defaults
+  args: dbx
+DeliverFileToBox:
+  <<: *deliver_file_defaults
+  args: box
+DeliverFileToGoogleDrive:
+  <<: *deliver_file_defaults
+  args: gdr
+DeliverFileToFTP:
+  <<: *deliver_file_defaults
+  args: ftp
+DeliverFileToKnowings:
+  <<: *deliver_file_defaults
+  args: kwg
+DeliverFileToMcf:
+  <<: *deliver_file_defaults
+  args: mcf
+
+
+## Bridge ##
+
+Bridge::RefreshAllUsersItemsWorker:
+  queue: bridge
+  cron: 0 */4 * * *
+
+
+Bridge::RefreshAllUsersTransactionsWorker:
+  queue: bridge
+  cron: 0 */2 * * *

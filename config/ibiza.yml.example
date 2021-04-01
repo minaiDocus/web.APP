@@ -1,0 +1,17 @@
+defaults: &defaults
+  root_url: https://beta.irf-cloud.com/IRFService/services/IRFService.svc
+
+test:
+  <<: *defaults
+
+development:
+  <<: *defaults
+
+sandbox:
+  <<: *defaults
+
+staging:
+  <<: *defaults
+
+production:
+  root_url: https://webservice.irf-cloud.com/IRFService/services/IRFService.svc

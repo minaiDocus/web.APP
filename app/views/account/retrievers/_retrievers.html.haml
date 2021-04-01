@@ -1,0 +1,31 @@
+= hidden_field_tag :direction, sort_direction
+= hidden_field_tag :sort, sort_column
+= hidden_field_tag :per_page, per_page
+= hidden_field_tag :page, page
+
+= render partial: 'account/retrievers/list_options'
+
+%table.table.table-bordered-inner.table-condensed.table-striped.margin1top.margin1bottom.table-detachable-head
+  %thead
+    %tr.bg-brown.text-white
+      %th= sortable 'users.code', 'Dossier'
+      %th= sortable :capabilities, t('activerecord.models.retriever.attributes.capabilities')
+      %th= sortable :service_name, t('activerecord.models.retriever.attributes.service_name')
+      %th= sortable :name,         t('activerecord.models.retriever.attributes.name')
+      %th= sortable :journal_name, 'Journal'
+      %th= sortable :state, t('activerecord.models.retriever.attributes.state')
+      %th Actions
+  %tbody
+    - @retrievers.each do |retriever|
+      - present retriever do |retriever_presenter|
+        %tr
+          %td= retriever_presenter.user
+          %td= retriever_presenter.capabilities
+          %td= retriever_presenter.service_name
+          %td= retriever_presenter.name
+          %td= retriever_presenter.journal.try(:name) || '-'
+          %td{class: "state_field_#{retriever.id}"}= retriever_presenter.state(scope)
+          %td
+            = render partial: 'account/retrievers/actions', locals: { retriever: retriever, retriever_presenter: retriever_presenter }
+
+= render partial: 'account/retrievers/list_options'
