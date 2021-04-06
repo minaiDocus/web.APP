@@ -5,4 +5,8 @@ class Dashboard::MainController < ApplicationController
   def index
     a = 1
   end
+
+  def test500
+  	render json: { success: false }, status: 500
+  end
 end

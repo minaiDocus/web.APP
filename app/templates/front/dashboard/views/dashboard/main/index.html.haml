@@ -1,5 +1,8 @@
 .h3
   Dashboard ok
   #testid
+  %a.goto_button{ href: '#', data:{ href: '/not_found'} } Page not found link
+  %br
+  %a.goto_button{ href: '#', data:{ href: '/dashboard/test500'} } Page 500 link
 
 = javascript_include_tag 'dashboard/assets/main'
