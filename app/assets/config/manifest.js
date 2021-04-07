@@ -1,7 +1,9 @@
 //= link favicon.ico
-//= link application.css
-//= link application.js
+//= link front/application.css
+//= link front/application.js
 //= link logo/tiny_logo.png
+//= link logo/tiny_logo_2.png
+//= link icons/icon-facebook.png
 //= link logo/logo.png
 //= link application/ftp_logo.png
 //= link application/box_logo.png

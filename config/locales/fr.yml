@@ -181,6 +181,20 @@ fr:
 
   composition: Composition
 
+  dashboard:
+
+  layouts:
+    home: Accueil
+    my_documents: Mes documents
+    bank_operations: Opération bancaire
+    my_company: Mon organisation
+    reporting: Reporting
+    my_retrievers: Mes automates
+    pieces_and_pre_assignment: Pièces / Écritures comptables
+    pieces_ignored_in_pre_assignment: Pièces ignorées à la pré-affectation
+    duplicated_pre_assignment: Écritures comptables en doublon
+    pre_assignment_delivery_error: Erreur livraison d’écritures comptables
+
   views:
     pagination:
       first: '&laquo;'

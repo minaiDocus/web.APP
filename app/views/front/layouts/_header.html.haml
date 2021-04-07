@@ -1,0 +1,55 @@
+%nav.navbar.navbar-expand-lg.navbar-light.bg-light.fixed-top
+  .container-fluid
+    = link_to image_tag('logo/tiny_logo_2.png', alt: 'logo iDocus'), root_path, class: 'navbar-brand idocus-brand'
+    %button.navbar-toggler{"aria-controls" => "navbarNavDropdown", "aria-expanded" => "false", "aria-label" => "Toggle navigation", "data-target" => "#navbarNavDropdown", "data-toggle" => "collapse", :type => "button"}
+      %span.navbar-toggler-icon
+    #navbarNavDropdown.navbar-collapse.collapse
+      %ul.navbar-nav.mr-auto
+        %li.nav-item.active
+          =link_to t('layouts.home'), root_path, class: 'nav-link'
+        %li.nav-item.dropdown
+          =link_to t('layouts.my_documents'), '#my-documents', class: 'nav-link dropdown-toggle', id: 'navbardropdownmenudocuments', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-toggle' => 'dropdown'
+          .dropdown-menu{"aria-labelledby" => "navbardropdownmenudocuments"}
+            =link_to t('layouts.pieces_and_pre_assignment'), '#preseizures', class: 'dropdown-item'
+            =link_to t('layouts.pieces_ignored_in_pre_assignment'), '#preseizures-ignored', class: 'dropdown-item'
+            =link_to t('layouts.duplicated_pre_assignment'), '#duplicated-pre-assignment', class: 'dropdown-item'
+            =link_to t('layouts.pre_assignment_delivery_error'), '#pre-assignment-delivery-error', class: 'dropdown-item'
+        %li.nav-item
+          =link_to t('layouts.bank_operations'), '#operations', class: 'nav-link'
+        %li.nav-item.dropdown
+          =link_to t('layouts.my_company'), '#my-organization', class: 'nav-link dropdown-toggle', id: 'navbardropdownmenucompany', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-toggle' => 'dropdown'
+          .dropdown-menu{"aria-labelledby" => "navbardropdownmenucompany"}
+            =link_to 'iDocus', '#idocus-link', class: 'dropdown-item'
+            =link_to 'Volentis', '#volentis-link', class: 'dropdown-item'
+            =link_to 'Extentis', '#extentis-link', class: 'dropdown-item'
+        %li.nav-item
+          =link_to t('layouts.reporting'), '#reporting', class: 'nav-link'
+        %li.nav-item
+          =link_to t('layouts.my_retrievers'), '#retrievers', class: 'nav-link'
+      %ul.navbar-nav
+        %li.nav-item.dropdown
+          = link_to glyphicon('cog', style: 'width: 21.48px; height: 22px;'), '#configure-profile', class: 'nav-link dropdown-toggle', id: 'navbardropdownmenusetting', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-toggle' => 'dropdown'
+          .dropdown-menu.dropdown-menu-setting{"aria-labelledby" => "navbardropdownmenusetting"}
+            = link_to glyphicon('person', {size: '17', color: '#1A1A1A', style: 'margin-top: -2%'}) + ' Mon compte', '#my_profile', class: 'dropdown-item', target: '_blank'
+            = link_to glyphicon('document', {size: '17', color: '#1A1A1A', style: 'margin-top: -2%'}) + ' Documentation', '#documentation', class: 'dropdown-item', target: '_blank'
+            = link_to glyphicon('comment-square', {size: '17', color: '#1A1A1A', style: 'margin-top: -2%'}) + ' Nous contacter', '#contact', class: 'dropdown-item', target: '_blank'
+            = link_to glyphicon('account-logout', {size: '17', color: '#FF4848', style: 'margin-top: -2%'}) + ' Se déconnecter', '#log-out', class: 'dropdown-item account-log-out', target: '_blank'
+      %ul.navbar-nav
+        %li.nav-item.dropdown
+          %span.badge.badge-alert.fs-origin.float-right.notif-badge
+          = link_to glyphicon('bell', style: 'width: 21.48px; height: 22px;'), '#notification', class: 'nav-link dropdown-toggle', id: 'notification-content', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-toggle' => 'dropdown'
+          .dropdown-menu.dropdown-notifications{"aria-labelledby" => "notification-content"}
+            .notification-content-list
+              %ul.dropdown-notif-items
+                %li{ id: "li-id", class: 'notification-list' }
+                  .row
+                    .col-md-11
+                      = link_to '1 erreur detectée', '#notification-link', class: 'dropdown-item notification-link'
+                      .text-muted-light
+                        %span.notification-date
+                          %i.text-muted Aujourd’hui à 13:15
+                        %br
+                        %span.notification-content
+                          %i.text-muted IDOC%001 : obligatoire exercice comptable
+                    .col-md-1.notification-state
+                      .m-0.text-right

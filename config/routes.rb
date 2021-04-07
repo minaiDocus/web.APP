@@ -12,8 +12,11 @@ Rails.application.routes.draw do
   draw('organizations')
 
   mount Ckeditor::Engine => '/ckeditor'
-  
-  root to: 'index#show'
+
+  root to: 'front/index#index'
+  get '/front/my_favorite_customers/', controller: 'front/index', action: 'my_favorite_customers'
+  get '/front/notifications/', controller: 'front/index', action: 'notifications'
+  post '/front/add_customer_to_favorite/', controller: 'front/index', action: 'add_customer_to_favorite'
 
   wash_out :dematbox
 
