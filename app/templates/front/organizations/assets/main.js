@@ -5,7 +5,7 @@
 //***GLOBALS***
 class Test{
   constructor(){
-    console.log('yes')
+    console.log(window.GLOBALS.test_variable)
   }
 
   click_me(){

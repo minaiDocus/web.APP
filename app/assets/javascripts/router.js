@@ -1,5 +1,32 @@
 class Router{
   constructor(){
+    this.parseJsVar();
+  }
+
+  parseJsVar(){
+    window.GLOBALS = {}
+
+    $('span.js_var_setter').each(function(e){
+      let name  = $(this).attr('id').replace('js_var_', '').trim();
+      let value = $(this).text().trim();
+
+      window.GLOBALS[name] = atob(value);
+    });
+  }
+
+  init_window(){
+    this.parseJsVar();
+
+    const query_string = window.location.search;
+    const url_params = new URLSearchParams(query_string);
+    let path = url_params.get('r');
+
+    if(path)
+      path = atob(path);
+    else
+      path = '/dashboard';
+
+    window.router.go_to(path); //Main page
   }
 
   rebind_goto_buttons(){
@@ -13,14 +40,17 @@ class Router{
   }
 
   finalize_redirection(url){
+    window.router.parseJsVar();
     window.history.replaceState("target", "Title", url);
     window.setTimeout(window.router.rebind_goto_buttons, 100);
   }
 
-  go_to(url, method='GET'){
+  go_to(url){
     $.ajax({
       url: url,
-      type: method,
+      header: { Accept: 'application/html' },
+      data: { xhr_token: window.GLOBALS.XHR_TKN },
+      type: 'GET',
       success: function(data){
         $(".body_content").html(data);
 
@@ -28,8 +58,8 @@ class Router{
       },
       error: function(data){
         //TODO : personalize errors
-        console.log(data);
-        if(data.status == '404'){
+        if(data.status == '404')
+        {
           alert('404 : Tsy koboko oe aiza zany page zany a!!');
         }
         else

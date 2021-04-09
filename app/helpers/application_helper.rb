@@ -1,6 +1,10 @@
 # -*- encoding : UTF-8 -*-
 # FIXME : whole check
 module ApplicationHelper
+  def javascript_declare_var(name, value='')
+    content_tag :span, Base64.encode64(value.to_s), class: 'js_var_setter', id: "js_var_#{name}", style: 'display: none'
+  end
+
   def logo_url
     image_path('logo/tiny_logo.png')
   end
