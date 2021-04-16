@@ -1,0 +1,125 @@
+= stylesheet_link_tag 'organizations/assets/facture'
+
+.facture
+  .row
+    .col-md-8.title
+      %h3
+        Intégration automatique des factures
+        %span.badge.badge-secondary.badge-sm 1
+    .col-md-4.text-right
+      %button.btn.btn-success.parameter.text-left
+        %span.btn_glyph.text-left
+          = glyphicon('cog', { color: "#FFF"})
+        %span.label_btn
+          &nbsp;Paramètres
+
+  .row
+    %table.table.table-striped.table_integration
+      %thead
+        %th Code de dossiers
+        %th Journal
+        %th Action
+      %tbody
+        %tr
+          %td IDOC%002
+          %td AC
+          %td
+            .action.sub_integration.float-right
+              %span.glyph= glyphicon('ellipses', { color: '#1A1A1A'})
+        %tr
+          %td IDOC%003
+          %td VT
+          %td
+            .action.sub_integration.float-right
+              %span.glyph= glyphicon('ellipses', { color: '#1A1A1A'})
+
+      %tfoot
+        %tr
+          %td
+            .row.form-group
+              .col-md-4
+                %label Affiché par
+              .col-md-4
+                %select.form-control
+                  %option 20
+                  %option 50
+                  %option 100                
+  .row  
+    .col-md-8
+      %h3 
+        Factures
+        %span.badge.badge-secondary.badge-sm 2
+
+  .row
+    %table.table.table-striped.table_facture
+      %thead
+        %th Numero de facture
+        %th Montant
+        %th Action
+      %tbody
+        %tr
+          %td F000020
+          %td 30 €
+          %td
+            .action.sub_facture.float-right
+              %span.glyph= glyphicon('ellipses', { color: '#1A1A1A'})
+      %tfoot
+        %tr
+          %td
+            .row.form-group
+              .col-md-4
+                %label Affiché par
+              .col-md-4
+                %select.form-control
+                  %option 20
+                  %option 50
+                  %option 100
+
+  .modal#integration
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %h5.modal-title Intégration automatique des factures
+          %button.close{ type: :button, "aria-label" => "Close", data: { dismiss: "modal"} }
+            %span{ "aria-hidden" => "true"} &times;
+        .modal-body
+          .form-group
+            %label Code client
+            %select.form-control
+              %option Selectionner / Rechercher un dossier client
+              %option Dossier 1
+
+          .form-group
+            %label Type de document
+            %select.form-control
+              %option Selectionner le type de document
+              %option Type 1
+        .modal-footer
+          %button.btn.cancel{ type: :button } Annuler
+          %button.btn.add{ type: :button } Ajouter
+          %button.btn.edit{ type: :button } Editer
+
+  .sub_integration_append.hide
+    .sub_menu
+      %ul
+        %li
+          %span.synchronize= glyphicon('loop')
+          &nbsp;Synchroniser les factures
+        %li
+          %span.edit= glyphicon('pencil')
+          &nbsp;Editer
+        %li.label_red.delete
+          %span= glyphicon('trash', { color: "#FF4848" })
+          &nbsp;Supprimer
+
+  .sub_facture_append.hide
+    .sub_menu
+      %ul
+        %li
+          %span.see= glyphicon('eye')
+          &nbsp;Voir
+        %li
+          %span.download= glyphicon('cloud-download')
+          &nbsp;Télécharger
+
+= javascript_include_tag 'organizations/assets/facture'

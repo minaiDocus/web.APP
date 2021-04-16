@@ -1,0 +1,175 @@
+//***GLOBALS***
+@import bootstrap
+
+@font-face
+  font-family: Raleway-Black
+  src: url('/assets/Raleway-Black.ttf')
+
+@font-face
+  font-family: Raleway-BlackItalic
+  src: url('/assets/Raleway-BlackItalic.ttf')
+
+@font-face
+  font-family: Raleway-Bold
+  src: url('/assets/Raleway-Bold.ttf')
+
+@font-face
+  font-family: Raleway-BoldItalic
+  src: url('/assets/Raleway-BoldItalic.ttf')
+
+@font-face
+  font-family: Raleway-ExtraBold
+  src: url('/assets/Raleway-ExtraBold.ttf')
+
+@font-face
+  font-family: Raleway-ExtraBoldItalic
+  src: url('/assets/Raleway-ExtraBoldItalic.ttf')
+
+@font-face
+  font-family: Raleway-ExtraLight
+  src: url('/assets/Raleway-ExtraLight.ttf')
+
+@font-face
+  font-family: Raleway-ExtraLightItalic
+  src: url('/assets/Raleway-ExtraLightItalic.ttf')
+
+@font-face
+  font-family: Raleway-Italic
+  src: url('/assets/Raleway-Italic.ttf')
+
+@font-face
+  font-family: Raleway-Light
+  src: url('/assets/Raleway-Light.ttf')
+
+@font-face
+  font-family: Raleway-Medium
+  src: url('/assets/Raleway-Medium.ttf')
+
+@font-face
+  font-family: Raleway-MediumItalic
+  src: url('/assets/Raleway-MediumItalic.ttf')
+
+@font-face
+  font-family: Raleway-Regular
+  src: url('/assets/Raleway-Regular.ttf')
+
+@font-face
+  font-family: Raleway-SemiBold
+  src: url('/assets/Raleway-SemiBold.ttf')
+
+@font-face
+  font-family: Raleway-SemiBoldItalic
+  src: url('/assets/Raleway-SemiBoldItalic.ttf')
+
+@font-face
+  font-family: Raleway-Thin
+  src: url('/assets/Raleway-Thin.ttf')
+
+@font-face
+  font-family: Raleway-ThinItalic
+  src: url('/assets/Raleway-ThinItalic.ttf')
+
+body
+  background: rgba(26, 26, 26, 0.04)
+
+.organizations
+  width: 100%
+  display: flex
+
+.hide
+  display: none
+
+.lefter
+  font-family: Raleway-Medium
+  font-style: normal
+  font-weight: 600  
+  line-height: 16px
+  color: rgba(26, 26, 26, 0.7)  
+  width: 20%
+  display: inline-flex
+
+  ul.principal    
+    font-size: 13px
+    width: 100%
+    li
+      list-style: none
+      width: 100%
+      cursor: pointer  
+      span
+        display: block
+        padding: 4%
+      .chevron
+        width: 12%
+        float: right        
+
+    li span.link_principal.active
+      background: #C1D837
+      border-radius: 8px
+    li span.link_principal:hover
+      background: rgba(10, 16, 26, 0.1)
+      border-radius: 8px
+      padding-left: 6%
+
+  ul.slave
+    font-size: 11px
+    width: 100%
+    margin-top: 2%
+    li 
+      list-style: none
+      width: 100% 
+      span
+        padding: 2%
+    li span.link_slave.active
+      background: rgba(26, 26, 26, 0.1)
+      border-radius: 6px
+    li span.link_slave:hover
+      background: rgba(10, 16, 10, 0.1)
+      border-radius: 8px
+      width: 100%     
+
+.content
+  width: 73%
+  margin-left: 2%
+
+.header
+  font-family: Raleway-Regular
+  font-size: 15px
+  display: flex
+  background-color: #FFF
+  margin-bottom: 2%
+  .logo
+    background: url('/assets/application/logo_idocus.png') no-repeat;
+    background-position: -715px -182px
+    width: 16%
+    height: 84px
+  .menu_bar 
+    width: 80%
+    ul
+      margin-top: 2%
+      font-family: Raleway-Bold
+    li
+      display: inline
+      margin: 0 1%    
+
+  .connexion
+    display: flex
+    width: 3%
+
+
+.footer
+  display: block
+  border: 1px solid black
+  color: white
+  background-color: #1A1A1A
+  padding: 1%
+  font-family: Raleway-Regular
+  font-size: 13px
+  position: fixed
+  bottom: 0
+  width: 100%
+
+
+
+
+
+

@@ -1,6 +1,12 @@
 //= link favicon.ico
-//= link front/application.css
-//= link front/application.js
+//= link application.css
+
+//= link organizations/assets/index.css
+//= link organizations/assets/welcome.css
+//= link organizations/assets/facture.css
+//= link organizations/assets/kits.css
+//= link application.js
+
 //= link logo/tiny_logo.png
 //= link logo/tiny_logo_2.png
 //= link icons/icon-facebook.png

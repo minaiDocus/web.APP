@@ -3,7 +3,11 @@
 class Organizations::MainController < ApplicationController
   append_view_path('app/templates/front/organizations/views')
 
-  def index
-    a = 1
-  end
+  def index;  end
+
+  def facture;  end
+
+  def welcome;  end
+
+  def kits; end
 end

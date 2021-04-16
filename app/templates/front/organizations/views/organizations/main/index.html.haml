@@ -1,6 +1,43 @@
-.h3
-  Organization ok
-  #testid
+= stylesheet_link_tag 'organizations/assets/index'
 
+.organizations
+  .lefter
+    %ul.principal
+      %li{ data: { href: "accueil" } }
+        %span.link_principal.active Acceuil
+      %li{ data: { href: "parametres" } }
+        %span.chevron= glyphicon('chevron-right', { color: "#1A1A1A"})
+        %span.chevron{ style: "display: none;" }= glyphicon('chevron-bottom', { color: "#1A1A1A"})
+        %span.link_principal Paramètres        
+        %ul.slave.hide
+          %li
+            %span.link_slave.active Général
+          %li 
+            %span.link_slave Nommage PDF
+          %li 
+            %span.link_slave Emails de rappel
+          %li 
+            %span.link_slave Gestion des Adresses
+          %li 
+            %span.link_slave Logiciels Comptables et .CSV
+          %li 
+            %span.link_slave Mode de Paiement        
+      %li{ data: { href: "collaborateurs" } }
+        %span.link_principal Collaborateurs
+      %li{ data: { href: "clients" } }
+        %span.link_principal Clients
+      %li{ data: { href: "journaux_comptables" } }
+        %span.link_principal Journaux Comptables
+      %li{ data: { href: "affectation_bancaires" } }
+        %span.link_principal Affectation Bancaires
+      %li{ data: { href: "dossiers_partagés" } }
+        %span.link_principal Dossiers Partagés
+      %li{ data: { href: "facture" } }
+        %span.link_principal Factures
+      %li{ data: { href: "kits" } }
+        %span.link_principal Kits Courriers et iDocus'Box
+
+  .content
+
+= javascript_include_tag 'organizations/assets/index'
 = javascript_declare_var('test_variable', 1546)
-= javascript_include_tag 'organizations/assets/main'
