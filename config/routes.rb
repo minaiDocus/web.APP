@@ -10,6 +10,7 @@ end
 Rails.application.routes.draw do
   draw('dashboard')
   draw('organizations')
+  draw('documents')
 
   mount Ckeditor::Engine => '/ckeditor'
 

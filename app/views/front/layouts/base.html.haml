@@ -1,0 +1,21 @@
+!!!
+%html{:lang => "fr"}
+  %head
+    = stylesheet_link_tag 'front/application'
+    = yield(:head)
+    
+    %meta{ :content => 'text/html; charset=UTF-8', 'http-equiv' => 'Content-type' }
+    %meta{ name: 'viewport', content: 'width=device-width, initial-scale=1'}
+
+    %link{ :rel => 'shortcut icon', :type => 'image/ico', :href => image_path('favicon.ico') }
+    = csrf_meta_tag
+
+    %title
+      - if content_for?(:title)
+        = yield(:title)
+      - else
+        Idocus | Archivage numérique
+  %body
+    = yield(:content)
+
+    = javascript_include_tag 'front/application'

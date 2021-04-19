@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Front::IndexController < ApplicationController
-  before_action :login_user!
+  # before_action :login_user!
 
   # append_view_path('app/views/front/layouts')
 
