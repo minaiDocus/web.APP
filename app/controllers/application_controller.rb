@@ -1,17 +1,30 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
+  XHR_TOKEN = 'dHkgbnkgdG9rZW4gYW5sZSBhamF4'
+
   protect_from_forgery
+  before_action :check_xhr_token
 
   helper_method :format_price, :format_price_00
-
   before_action :configure_permitted_parameters, only: [:login_user!]
   before_action :set_raven_context
+
   if %w[staging sandbox production].include?(Rails.env)
     before_action :redirect_to_https
   end
   #around_action :catch_error if %w[sandbox production test].include?(Rails.env)
   #around_action :log_visit
+
+  def check_xhr_token
+    xhr_token = params[:xhr_token].to_s
+    path      = request.path.to_s
+
+    if xhr_token != ApplicationController::XHR_TOKEN && path != '/'
+      next_path = Base64.encode64 path
+      redirect_to "#{root_path}?r=#{next_path}"
+    end
+  end
 
   def after_sign_in_path_for(resource_or_scope)
     # TODO : reactivate when paths are sanitized
