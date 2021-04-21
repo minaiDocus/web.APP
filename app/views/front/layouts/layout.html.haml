@@ -1,18 +1,18 @@
-= render partial: 'front/layouts/header'
-.container-fluid
-  #main-layout
-    .row.welcome-info
-      .col-md-8
-        %h2.idocus-welcome
-          Bienvenue sur
-          %span.idocus-tag iDocus
-          !
-        %p.p-text Vous pouvez voir l’état de vos dossiers ici ou directement accéder à vos documents.
+!!!
+%html
+  %head
+    %title Idocus | Archivage numérique
+    %meta{ :content => "text/html; charset=UTF-8", "http-equiv" => "Content-type" }/
+    %meta{ name: "viewport", content: "width=device-width, initial-scale=1"}/
 
-    = render partial: 'front/layouts/favorite_view_content'
+    %link{ :rel => 'shortcut icon', :type => "image/ico", :href => image_path('favicon.ico') }
+    = stylesheet_link_tag 'front/main'
 
-    = render partial: 'front/layouts/support_chat'
+  = render partial: 'front/layouts/header'
+  .body_content
+  = render partial: 'front/layouts/support_chat'
   = render partial: 'front/layouts/notice_flush_messages'
-
-= render partial: 'front/layouts/footer'
-= parent_layout "base"
+  = render partial: 'front/layouts/footer'
+ 
+  = javascript_declare_var('XHR_TKN', ApplicationController::XHR_TOKEN)
+  = javascript_include_tag 'front/main'
