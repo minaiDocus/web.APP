@@ -1,20 +1,11 @@
-class Router{
+//= require '../application'
+
+class Router extends ApplicationJS{
   constructor(){
-    this.parseJsVar();
+    super();
   }
 
-  parseJsVar(){
-    window.GLOBALS = {}
-
-    $('span.js_var_setter').each(function(e){
-      let name  = $(this).attr('id').replace('js_var_', '').trim();
-      let value = $(this).text().trim();
-
-      window.GLOBALS[name] = atob(value);
-    });
-  }
-
-  init_window(){
+  initWindow(){
     this.parseJsVar();
 
     const query_string = window.location.search;
@@ -26,52 +17,39 @@ class Router{
     else
       path = '/dashboard';
 
-    window.router.go_to(path); //Main page
+    this.handleClickedMenu();
+    window.router.goTo(path); //Main page
   }
 
-  rebind_goto_buttons(){
-    $('a.goto_button').unbind('click');
-    $('a.goto_button').bind('click', function(a){
+  handleClickedMenu() {
+    $(".nav-item").unbind('click');
+    $(".nav-item").bind('click', function (){
+      $(".nav-item").removeClass("active");
+      $(this).addClass("active");
+    });
+  }
+
+  rebindGotoButtons(){
+    $('a.goto_button').unbind('click.goto_button');
+    $('a.goto_button').bind('click.goto_button', function(a){
       a.preventDefault();
 
       let url = $(this).attr('data-href');
-      window.router.go_to(url);
+      window.router.goTo(url);
     });
   }
 
-  finalize_redirection(url){
+  finalizeRedirection(url){
     window.router.parseJsVar();
     window.history.replaceState("target", "Title", url);
-    window.setTimeout(window.router.rebind_goto_buttons, 100);
+    window.setTimeout(window.router.rebindGotoButtons, 100);
   }
 
-  go_to(url){
-    $.ajax({
-      url: url,
-      header: { Accept: 'application/html' },
-      data: { xhr_token: window.GLOBALS.XHR_TKN },
-      type: 'GET',
-      success: function(data){
-        $(".body_content").html(data);
-
-        window.router.finalize_redirection(url);
-      },
-      error: function(data){
-        //TODO : personalize errors
-        if(data.status == '404')
-        {
-          alert('404 : Tsy koboko oe aiza zany page zany a!!');
-        }
-        else
-        {
-          alert(`Misy blem ${data.status}!!`);
-          $(".body_content").append('<span>'+ data.responseText + '</span>');
-        }
-
-        window.router.finalize_redirection(url);
-      },
-    });
+  goTo(url){
+    this.getFrom(url, null)
+        .then((data)=>{ $(".body_content").html(data); window.router.finalizeRedirection(url); })
+        .catch((err)=>{ window.router.finalizeRedirection(url); })
   }
 }
 
-window.router = new Router()
+window.router = new Router();

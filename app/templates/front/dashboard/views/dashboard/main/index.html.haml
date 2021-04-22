@@ -1,8 +1,34 @@
-.h3
-  Dashboard ok
-  #testid
-  %a.goto_button{ href: '#', data:{ href: '/not_found'} } Page not found link
-  %br
-  %a.goto_button{ href: '#', data:{ href: '/dashboard/test500'} } Page 500 link
+= stylesheet_link_tag 'dashboard/assets/stylesheets/main'
 
-= javascript_include_tag 'dashboard/assets/main'
+.row.view-documents
+  .col-md-4
+    = button_tag 'Voir mes documents', type: 'button', class: 'btn btn-primary view-documents-btn'
+.row.my-favorite-customers
+  .col-md-9
+    %strong
+      Mes dossiers favoris
+      %span.my-favorite-customers-count
+  .col-md-3
+    %button.btn.btn-default.add-to-favorite{'data-target' => '#add-to-favorite', 'data-toggle' => 'modal', 'data-original-value' => '455', :type => 'button'}
+      + Ajouter un dossier aux favoris
+    #add-to-favorite.modal-window.modal.fade{'aria-hidden' => 'true', 'aria-labelledby' => 'myFavoriteModalLabel', :role => 'dialog', :tabindex => '-1'}
+      .modal-dialog{:role => 'document'}
+        .modal-content
+          .modal-header
+            %h5#myFavoriteModalLabel.modal-title Ajouter un dossier aux favoris
+            %button.close{'aria-label' => 'Close', 'data-dismiss' => 'modal', :type => 'button'}
+              %span{'aria-hidden' => 'true'} ×
+          .modal-body
+            = form_tag('front/add_customer_to_favorite/', method: :post, id: 'send_customer_to_favorite', multipart: true) do |f|
+              .form-group
+                .label-section
+                  = label_tag 'my_favorite_customers_list', 'Rechercher un dossier', class: 'select control-label'
+                .control-section
+                  = select_tag 'my_favorite_customers_list', options_for_select(['Test test', 'iDocus test'], 'iDocus test'), class: 'select-customer searchable-option-list', id: 'select-customer-to-favorite', include_blank: false, multiple: true
+          .modal-footer
+            %button.cancel-btn{'data-dismiss' => 'modal', :type => 'button'} Annuler
+            %button.validate-btn{:type => 'button', id: 'add-customer-to-favorite'} Ajouter
+
+= javascript_call('DashboardMain', 'loadFavoriteCustomers')
+
+= javascript_include_tag 'dashboard/assets/javascripts/main'

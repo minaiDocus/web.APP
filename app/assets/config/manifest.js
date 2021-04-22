@@ -1,10 +1,5 @@
 //= link favicon.ico
 //= link application.css
-
-//= link organizations/assets/index.css
-//= link organizations/assets/welcome.css
-//= link organizations/assets/facture.css
-//= link organizations/assets/kits.css
 //= link application.js
 
 //= link logo/tiny_logo.png

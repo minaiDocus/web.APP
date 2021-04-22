@@ -38,11 +38,19 @@ Rails.application.config.assets.precompile += %w( ckeditor/* )
 Rails.application.config.assets.precompile += %w( front/main.css back/main.css )
 Rails.application.config.assets.precompile += %w( front/router.js front/main.js back/main.js )
 
-Dir[Rails.root.join("app/templates/front/*/assets/*")].each do |f|
+Dir[Rails.root.join("app/templates/front/*/assets/javascripts/*")].each do |f|
   Rails.application.config.assets.precompile += [f]
 end
 
-Dir[Rails.root.join("app/templates/back/*/assets/*")].each do |f|
+Dir[Rails.root.join("app/templates/front/*/assets/stylesheets/*")].each do |f|
+  Rails.application.config.assets.precompile += [f]
+end
+
+Dir[Rails.root.join("app/templates/back/*/assets/javascripts/*")].each do |f|
+  Rails.application.config.assets.precompile += [f]
+end
+
+Dir[Rails.root.join("app/templates/back/*/assets/stylesheets/*")].each do |f|
   Rails.application.config.assets.precompile += [f]
 end
 

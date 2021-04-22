@@ -1,11 +1,17 @@
 !!!
 %html
   %head
-    %title Idocus | Archivage numérique
-    %meta{ :content => "text/html; charset=UTF-8", "http-equiv" => "Content-type" }/
-    %meta{ name: "viewport", content: "width=device-width, initial-scale=1"}/
+    %title
+      - if content_for?(:title)
+        = yield(:title)
+      - else
+        Idocus | Archivage numérique
+    %meta{ :content => "text/html; charset=UTF-8", "http-equiv" => "Content-type" }
+    %meta{ name: "viewport", content: "width=device-width, initial-scale=1" }
+    = yield(:head)
 
     %link{ :rel => 'shortcut icon', :type => "image/ico", :href => image_path('favicon.ico') }
+    = csrf_meta_tag
     = stylesheet_link_tag 'front/main'
 
   = render partial: 'front/layouts/header'
@@ -14,5 +20,5 @@
   = render partial: 'front/layouts/notice_flush_messages'
   = render partial: 'front/layouts/footer'
  
-  = javascript_declare_var('XHR_TKN', ApplicationController::XHR_TOKEN)
+  = javascript_declare_var('XHR_TKN', TemplatesController::XHR_TOKEN)
   = javascript_include_tag 'front/main'

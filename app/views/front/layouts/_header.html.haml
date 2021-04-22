@@ -1,12 +1,12 @@
 %nav.navbar.navbar-expand-lg.navbar-light.bg-light.fixed-top
   .container-fluid
-    = link_to image_tag('logo/tiny_logo_2.png', alt: 'logo iDocus'), root_path, class: 'navbar-brand idocus-brand'
+    = link_to image_tag('logo/tiny_logo_2.png', alt: 'logo iDocus'), '#', class: 'navbar-brand idocus-brand goto_button', data:{ href: '/' }
     %button.navbar-toggler{"aria-controls" => "navbarNavDropdown", "aria-expanded" => "false", "aria-label" => "Toggle navigation", "data-target" => "#navbarNavDropdown", "data-toggle" => "collapse", :type => "button"}
       %span.navbar-toggler-icon
     #navbarNavDropdown.navbar-collapse.collapse
       %ul.navbar-nav.mr-auto
         %li.nav-item.active
-          =link_to t('layouts.home'), root_path, class: 'nav-link'
+          =link_to t('layouts.home'), '#', class: 'nav-link goto_button', data:{ href: '/' }
         %li.nav-item.dropdown
           =link_to t('layouts.my_documents'), '#my-documents', class: 'nav-link dropdown-toggle', id: 'navbardropdownmenudocuments', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-toggle' => 'dropdown'
           .dropdown-menu{"aria-labelledby" => "navbardropdownmenudocuments"}
@@ -19,7 +19,7 @@
         %li.nav-item.dropdown
           =link_to t('layouts.my_company'), '#my-organization', class: 'nav-link dropdown-toggle', id: 'navbardropdownmenucompany', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-toggle' => 'dropdown'
           .dropdown-menu{"aria-labelledby" => "navbardropdownmenucompany"}
-            =link_to 'iDocus', '#idocus-link', class: 'dropdown-item'
+            =link_to 'iDocus', '#', class: 'dropdown-item goto_button', data:{ href: '/organizations/' }
             =link_to 'Volentis', '#volentis-link', class: 'dropdown-item'
             =link_to 'Extentis', '#extentis-link', class: 'dropdown-item'
         %li.nav-item
@@ -41,15 +41,5 @@
           .dropdown-menu.dropdown-notifications{"aria-labelledby" => "notification-content"}
             .notification-content-list
               %ul.dropdown-notif-items
-                %li{ id: "li-id", class: 'notification-list' }
-                  .row
-                    .col-md-11
-                      = link_to '1 erreur detectée', '#notification-link', class: 'dropdown-item notification-link'
-                      .text-muted-light
-                        %span.notification-date
-                          %i.text-muted Aujourd’hui à 13:15
-                        %br
-                        %span.notification-content
-                          %i.text-muted IDOC%001 : obligatoire exercice comptable
-                    .col-md-1.notification-state
-                      .m-0.text-right
+                = javascript_call('BaseFront', 'getNotifications')
+

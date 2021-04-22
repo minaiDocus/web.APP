@@ -5,25 +5,26 @@ module ApplicationHelper
     content_tag :span, Base64.encode64(value.to_s), class: 'js_var_setter', id: "js_var_#{name}", style: 'display: none'
   end
 
+  def javascript_call(class_name, function, args=nil)
+
+    content_tag :div, (content_tag :script, "window.setTimeout(function(){ jQuery(function(){ let obj_#{class_name.downcase} = new GLOBAL.#{class_name}(); obj_#{class_name.downcase}.#{function}(#{args}); }); }, 2500);", type: "text/javascript", style: 'display: none'), class: "#{class_name.downcase}_#{function.downcase}"
+  end
+
   def logo_url
     image_path('logo/tiny_logo.png')
   end
-
 
   def format_price_with_dot(price_in_cents)
     '%0.2f' % (price_in_cents.round / 100.0)
   end
 
-
   def format_price_00(price_in_cents)
     format_price_with_dot(price_in_cents).tr('.', ',')
   end
 
-
   def format_price(price_in_cents)
     format_price_00(price_in_cents).gsub(/,00/, '')
   end
-
 
   def format_tiny_price(price_in_cents)
     price_in_euros = price_in_cents.blank? ? '' : price_in_cents / 100.0

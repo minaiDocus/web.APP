@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Organizations::MainController < ApplicationController
+class Organizations::MainController < TemplatesController
   append_view_path('app/templates/front/organizations/views')
 
   def index;  end
