@@ -1,0 +1,103 @@
+body {
+  background: rgba(26, 26, 26, 0.04);
+}
+
+.organizations{
+  width: 100%;
+  display: flex;
+}
+
+.hide{
+  display: none;
+}
+
+.lefter{
+  font-family: Raleway-Medium;
+  font-style: normal;
+  font-weight: 600; 
+  line-height: 16px;
+  color: rgba(26, 26, 26, 0.7); 
+  width: 20%;
+  display: inline-flex;
+}
+
+.lefter ul.principal{     
+    font-size: 13px;
+    width: 100%;
+}
+.lefter ul.principal li{
+  list-style: none;
+  width: 100%;
+  cursor: pointer;
+}  
+.lefter ul.principal li span{
+  display: block;
+  padding: 4%;
+}
+.lefter ul.principal li.chevron{
+  width: 12%;
+  float: right;       
+}
+.lefter li span.link_principal.active{
+  background: #C1D837;
+  border-radius: 8px;
+}
+.lefter li span.link_principal:hover{
+  background: rgba(10, 16, 26, 0.1);
+  border-radius: 8px;
+  padding-left: 6%;
+}
+.lefter ul.slave{
+  font-size: 11px;
+  width: 100%;
+  margin-top: 2%;
+}
+.lefter li{ 
+  list-style: none;
+  width: 100%;
+}
+.lefter li span{
+  padding: 2%;
+}
+.lefter li span.link_slave.active{
+  background: rgba(26, 26, 26, 0.1);
+  border-radius: 6px;
+}
+.lefter li span.link_slave:hover{
+  background: rgba(10, 16, 10, 0.1);
+  border-radius: 8px;
+  width: 100%;
+}     
+
+.content{
+  width: 73%;
+  margin-left: 2%;
+}
+.header{
+  font-family: Raleway-Regular;
+  font-size: 15px;
+  display: flex;
+  background-color: #FFF;
+  margin-bottom: 2%;
+} 
+.content .logo{
+  background: url('/assets/application/logo_idocus.png') no-repeat;
+  background-position: -715px -182px;
+  width: 16%;
+  height: 84px;
+}
+.content .menu_bar{ 
+  width: 80%;
+}
+.content ul{
+  margin-top: 2%;
+  font-family: Raleway-Bold;
+}
+.content li{
+  display: inline;
+  margin: 0 1%;
+}    
+.content .connexion{
+  display: flex;
+  width: 3%;
+}
