@@ -12,10 +12,6 @@ class Test{
     console.log('yes')
   }
 
-  click_me(){
-    $('#testid').html('<a href="#" data-href="/dashboard" class="goto_button">Go to dashboard</a>')
-  }
-
   charge_welcome_page(){
     $.ajax({
         url: '/organizations/welcome',  
@@ -52,8 +48,8 @@ class Test{
 
 
 jQuery(function () {
-  test = new Test()
-  test.click_me()
-  test.charge_welcome_page()
-  test.lefter()  
+  // alert('abce');
+  test = new Test();
+  // test.charge_welcome_page()
+  test.lefter();
 });

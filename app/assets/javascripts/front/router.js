@@ -46,8 +46,8 @@ class Router extends ApplicationJS{
   }
 
   goTo(url){
-    this.getFrom(url, null)
-        .then((data)=>{ $(".body_content").html(data); window.router.finalizeRedirection(url); })
+    this.getFrom(url)
+        .then((html)=>{ $(".body_content").html(html); window.router.finalizeRedirection(url); })
         .catch((err)=>{ window.router.finalizeRedirection(url); })
   }
 }

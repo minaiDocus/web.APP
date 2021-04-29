@@ -82,8 +82,11 @@ GLOBAL.DashboardMain = class DashboardMain extends ApplicationJS {
     super();
   }
 
-  loadFavoriteCustomers(){
-    this.getFrom("/dashboard/my_favorite_customers", '.dashboardmain_loadfavoritecustomers');
+  async loadFavoriteCustomers(){
+    let html = '';
+    await this.getFrom("/dashboard/my_favorite_customers").then( result =>{ html = result });
+
+    return html;
   }
 }
 

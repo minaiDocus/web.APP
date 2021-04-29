@@ -47,7 +47,6 @@ class ApplicationJS {
   constructor(){
     this.parseJsVar();
 
-    this.render     = this.render.bind(this)
     this.parseJsVar = this.parseJsVar.bind(this);
   }
 
@@ -85,7 +84,7 @@ class ApplicationJS {
     $('#idocus_notifications_messages .notice-internal-error').html(raw_element);
   }
 
-  getFrom(url, target, success, error){
+  getFrom(url, success, error){
     return new Promise((success, error) => {
       let self = this
 
@@ -95,8 +94,7 @@ class ApplicationJS {
         data: { xhr_token: VARIABLES.get('XHR_TKN') },
         type: 'GET',
         success: function(result){
-          if(target)
-            self.render(target, result);
+          self.parseJsVar();
 
           if(success)
             success(result);
@@ -109,9 +107,6 @@ class ApplicationJS {
           }
           else
           {
-            if(target)
-              self.render(target, '<span>Impossible de charger le contenu</span>');
-
             self.noticeInternalError(data.responseText);
           }
 
@@ -120,9 +115,5 @@ class ApplicationJS {
         },
       });
     });
-  }
-
-  render(target, html){
-    $(target).replaceWith(html);
   }
 }

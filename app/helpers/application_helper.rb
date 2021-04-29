@@ -6,8 +6,16 @@ module ApplicationHelper
   end
 
   def javascript_call(class_name, function, args=nil)
+    content_tag(:div, javascript_tag("window.setTimeout(function(){
+      jQuery(function(){
+        const launcher = async function(){
+          let obj_#{class_name.downcase} = new GLOBAL.#{class_name}();
+          let content = await(obj_#{class_name.downcase}.#{function}(#{args})) || null;
+          $('.#{class_name.downcase}_#{function.downcase}').replaceWith(content);
+        }
 
-    content_tag :div, (content_tag :script, "window.setTimeout(function(){ jQuery(function(){ let obj_#{class_name.downcase} = new GLOBAL.#{class_name}(); obj_#{class_name.downcase}.#{function}(#{args}); }); }, 2500);", type: "text/javascript", style: 'display: none'), class: "#{class_name.downcase}_#{function.downcase}"
+        launcher();
+      }) }, 2500);"), { type: "text/javascript", style: 'display: none', class: "#{class_name.downcase}_#{function.downcase}" }, escape: false).html_safe
   end
 
   def logo_url

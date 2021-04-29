@@ -6,13 +6,17 @@ GLOBAL.BaseFront = class BaseFront extends ApplicationJS {
     super();
   }
 
-  getNotifications(){
+  async getNotifications(){
     let self = this;
+    let html = '';
 
-    this.getFrom("front/notifications", ".basefront_getnotifications").then((r)=>{
-      self.parseJsVar();
-      $('.notif-badge').text(VARIABLES.get('notifications_length'));
+    await this.getFrom("front/notifications").then((result)=>{
+      html = result;
+
+      window.setTimeout(function(){ $('.notif-badge').text(VARIABLES.get('notifications_length')); }, 1000);
     });
+
+    return html;
   }
 }
 
