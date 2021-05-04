@@ -12,7 +12,6 @@ GLOBAL.BaseFront = class BaseFront extends ApplicationJS {
 
     await this.getFrom("front/notifications").then((result)=>{
       html = result;
-
       window.setTimeout(function(){ $('.notif-badge').text(VARIABLES.get('notifications_length')); }, 1000);
     });
 
@@ -21,5 +20,5 @@ GLOBAL.BaseFront = class BaseFront extends ApplicationJS {
 }
 
 jQuery(function () {
-  window.router.initWindow();
+  GLOBAL.router.initWindow();
 });

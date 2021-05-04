@@ -18,7 +18,7 @@ class Router extends ApplicationJS{
       path = '/dashboard';
 
     this.handleClickedMenu();
-    window.router.goTo(path); //Main page
+    GLOBAL.router.goTo(path); //Main page
   }
 
   handleClickedMenu() {
@@ -35,21 +35,21 @@ class Router extends ApplicationJS{
       a.preventDefault();
 
       let url = $(this).attr('data-href');
-      window.router.goTo(url);
+      GLOBAL.router.goTo(url);
     });
   }
 
   finalizeRedirection(url){
-    window.router.parseJsVar();
+    GLOBAL.router.parseJsVar();
     window.history.replaceState("target", "Title", url);
-    window.setTimeout(window.router.rebindGotoButtons, 100);
+    window.setTimeout(GLOBAL.router.rebindGotoButtons, 100);
   }
 
   goTo(url){
     this.getFrom(url)
-        .then((html)=>{ $(".body_content").html(html); window.router.finalizeRedirection(url); })
-        .catch((err)=>{ window.router.finalizeRedirection(url); })
+        .then((html)=>{ $(".body_content").html(html); GLOBAL.router.finalizeRedirection(url); })
+        .catch((err)=>{ GLOBAL.router.finalizeRedirection(url); })
   }
 }
 
-window.router = new Router();
+GLOBAL.router = new Router();

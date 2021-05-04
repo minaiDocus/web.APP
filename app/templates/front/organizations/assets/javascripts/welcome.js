@@ -14,6 +14,12 @@ class Test{
 }
 
 jQuery(function () {
+
+  // TEST VARIABLE JS
+  let test = JSON.parse(VARIABLES.get('OrganizationsTest'));
+  console.log(test);
+  console.log(test.a);
+
   var chart_abonnement = document.getElementById('chart_abonnement').getContext('2d')
 
   var mychart = new Chart(chart_abonnement, {type: 'pie', data: {
