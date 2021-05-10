@@ -14,11 +14,12 @@
     = csrf_meta_tag
     = stylesheet_link_tag 'front/main'
 
-  = render partial: 'front/layouts/header'
+  = render partial: 'layouts/front/header'
   .body_content
-  = render partial: 'front/layouts/support_chat'
-  = render partial: 'front/layouts/notice_flush_messages'
-  = render partial: 'front/layouts/footer'
+    = yield
+  = render partial: 'layouts/front/support_chat'
+  = render partial: 'layouts/front/notice_flush_messages'
+  = render partial: 'layouts/front/footer'
  
-  = javascript_declare_var('XHR_TKN', TemplatesController::XHR_TOKEN)
+  = javascript_declare_var('XHR_TKN', FrontController::XHR_TOKEN)
   = javascript_include_tag 'front/main'

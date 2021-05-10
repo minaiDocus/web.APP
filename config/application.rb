@@ -16,6 +16,10 @@ module Idocus
      require f
     end
 
+    Dir[Rails.root.join("app/templates/back/*/config.rb")].each do |f|
+     require f
+    end
+
     config.load_defaults 5.2
 
     # development files

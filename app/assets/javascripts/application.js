@@ -28,92 +28,102 @@
 //= require bootstrap-filestyle.min
 //= require bootstrap-datepicker/core
 //= require retractable
+
+// This is a manifest file that'll be compiled into including all the files listed below.
+// Add new JavaScript/Coffee code in separate files in this directory and they'll automatically
+// be included in the compiled file accessible from http://example.com/assets/application.js
+// It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
+// the compiled file.
 //
-// French translation for bootstrap-datepicker
-// Lola LAI KAM <lailol@directmada.com>
+//= require common.js
+//= require custom_popover.js
+//= require ckeditor/config
+
+
 var GLOBAL = {}
 var VARIABLES = {}
 var VARS = {}
 
-VARIABLES.set = (var_name, value) => {
-  VARS[var_name] = value;
-}
+// VARIABLES.set = (var_name, value) => {
+//   VARS[var_name] = value;
+// }
 
-VARIABLES.get = (var_name) => {
-  return VARS[var_name];
-}
+// VARIABLES.get = (var_name) => {
+//   return VARS[var_name];
+// }
 
-class ApplicationJS {
-  constructor(){
-    this.parseJsVar();
+// class ApplicationJS {
+//   constructor(){
+//     this.parseJsVar();
 
-    this.parseJsVar = this.parseJsVar.bind(this);
-  }
+//     this.parseJsVar = this.parseJsVar.bind(this);
+//   }
 
-  parseJsVar(){
-    $('span.js_var_setter').each(function(e){
-      let name  = $(this).attr('id').replace('js_var_', '').trim();
-      let value = $(this).text().trim();
+//   parseJsVar(){
+//     $('span.js_var_setter').each(function(e){
+//       let name  = $(this).attr('id').replace('js_var_', '').trim();
+//       let value = $(this).text().trim();
 
-      VARIABLES.set(name, atob(value));
-    });
-  }
+//       VARIABLES.set(name, atob(value));
+//     });
+//   }
 
-  noticeFlashMessage(type, message){
-    let raw_element = '<div class="alert alert-' + type + ' alert-dismissible fade show" role="alert">';
-    raw_element += message;
-    raw_element += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
-    raw_element += '<span aria-hidden="true">&times;</span>';
-    raw_element += '</button>';
-    raw_element += '</div>';
+//   noticeFlashMessage(type, message){
+//     let raw_element = '<div class="alert alert-' + type + ' alert-dismissible fade show" role="alert">';
+//     raw_element += message;
+//     raw_element += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
+//     raw_element += '<span aria-hidden="true">&times;</span>';
+//     raw_element += '</button>';
+//     raw_element += '</div>';
 
-    $('#idocus_notifications_messages .notice-flash-message').html(raw_element);
-  }
+//     $('#idocus_notifications_messages .notice-flash-message').html(raw_element);
+//   }
 
-  noticeInternalError(message){
-    let raw_element = '<i class="bi bi-exclamation-triangle"></i>';
-    raw_element += '<div class="alert alert-danger alert-dismissible fade show" role="alert">';
-    raw_element += '<h4 class="alert-heading">iDocus rencontre de bug!</h4>';
-    raw_element += '<hr>';
-    raw_element += '<p class="mb-0">'+ message +'.</p>';
-    raw_element += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
-    raw_element += '<span aria-hidden="true">&times;</span>';
-    raw_element += '</button>';
-    raw_element += '</div>';
+//   noticeInternalError(message){
+//     let raw_element = '<i class="bi bi-exclamation-triangle"></i>';
+//     raw_element += '<div class="alert alert-danger alert-dismissible fade show" role="alert">';
+//     raw_element += '<h4 class="alert-heading">iDocus rencontre de bug!</h4>';
+//     raw_element += '<hr>';
+//     raw_element += '<p class="mb-0">'+ message +'.</p>';
+//     raw_element += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
+//     raw_element += '<span aria-hidden="true">&times;</span>';
+//     raw_element += '</button>';
+//     raw_element += '</div>';
 
-    $('#idocus_notifications_messages .notice-internal-error').html(raw_element);
-  }
+//     $('#idocus_notifications_messages .notice-internal-error').html(raw_element);
+//   }
 
-  getFrom(url, success, error){
-    return new Promise((success, error) => {
-      let self = this
+//   getFrom(url, success, error){
+//     return new Promise((success, error) => {
+//       let self = this
 
-      $.ajax({
-        url: url,
-        header: { Accept: 'application/html' },
-        data: { xhr_token: VARIABLES.get('XHR_TKN') },
-        type: 'GET',
-        success: function(result){
-          self.parseJsVar();
+//       $.ajax({
+//         url: url,
+//         header: { Accept: 'application/html' },
+//         data: { xhr_token: VARIABLES.get('XHR_TKN') },
+//         type: 'GET',
+//         success: function(result){
+//           self.parseJsVar();
 
-          if(success)
-            success(result);
-        },
-        error: function(data){
-          //TODO : personalize errors
-          if(data.status == '404')
-          {
-            self.noticeInternalError('<span>Page introuvable ....</span>');
-          }
-          else
-          {
-            self.noticeInternalError(data.responseText);
-          }
+//           if(success)
+//             success(result);
+//         },
+//         error: function(data){
+//           //TODO : personalize errors
+//           if(data.status == '404')
+//           {
+//             self.noticeInternalError('<span>Page introuvable ....</span>');
+//           }
+//           else
+//           {
+//             self.noticeInternalError(data.responseText);
+//           }
 
-          if(error)
-            error(data);
-        },
-      });
-    });
-  }
-}
+//           if(error)
+//             error(data);
+//         },
+//       });
+//     });
+//   }
+// }
+

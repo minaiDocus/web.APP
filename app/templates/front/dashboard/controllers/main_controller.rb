@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Dashboard::MainController < TemplatesController
+class Dashboard::MainController < FrontController
   append_view_path('app/templates/front/dashboard/views')
 
   def index; end

@@ -20,5 +20,5 @@ GLOBAL.BaseFront = class BaseFront extends ApplicationJS {
 }
 
 jQuery(function () {
-  GLOBAL.router.initWindow();
+  // GLOBAL.router.initWindow();
 });

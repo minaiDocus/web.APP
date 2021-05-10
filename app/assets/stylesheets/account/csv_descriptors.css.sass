@@ -1,0 +1,168 @@
+#csv_descriptors
+  .separator
+    font-weight:bold
+    margin: 0px 5px
+    padding: 2px 8px
+    font-weight: bold
+    font-size: 16px
+    border: 1px solid gray
+    background-color: #fff
+    border-radius: 10px
+  &.edit
+    .border
+      padding: 0
+      min-height: 400px
+      .fields
+        width: 440px
+      .list
+        list-style-type: none
+        margin: 10px 15px
+        padding: 0px
+      .field
+        background-color: rgba(0, 0, 0, 0.05)
+        padding: 5px 3px 1px 3px
+        border: 1px dotted gray
+        margin: 2px
+        border-radius: 3px
+        .action
+          padding-left: 3px
+          padding-right: 3px
+      select
+        width: auto
+        margin-bottom: 0
+      input
+        width: 250px
+        margin-bottom: 0
+      input[name=format]
+        width: 73px
+      input, select
+        font-size: 10px
+      input[id=text_format]
+        width: 155px
+        height: 24px
+        font-size: 12px
+      .number-input
+        input[type=number]
+          -webkit-appearance: textfield
+          -moz-appearance: textfield
+          appearance: textfield
+
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button
+          -webkit-appearance: none
+
+      .number-input
+        border: 0px solid #ddd
+        display: inline-flex
+
+      .number-input,
+      .number-input *
+        box-sizing: border-box
+
+      .number-input button
+        outline:none
+        -webkit-appearance: none
+        background-color: transparent
+        border: none
+        align-items: center
+        justify-content: center
+        width: 2rem
+        height: 2rem
+        cursor: pointer
+        margin: 0
+        position: relative
+
+      .number-input button:before,
+      .number-input button:after
+        display: inline-block
+        position: absolute
+        content: ''
+        width: 1rem
+        height: 2px
+        background-color: #212121
+        transform: translate(-50%, -50%)
+      .number-input button.plus:after
+        transform: translate(-50%, -50%) rotate(90deg)
+
+      .number-input input[type=number]
+        font-family: sans-serif
+        width: 40px
+        height: 18px
+        padding: .1rem
+        border: solid #ddd
+        border-width: 0 1px
+        font-size: 12px
+        font-weight: bold
+        text-align: center
+    table
+      .name
+        text-align: left
+      .hint
+        text-align: left
+        font-weight: normal
+
+    .input-prepend
+      .switch
+        position: relative
+        display: inline-block
+        width: 40px
+        height: 20px
+        margin-left: 3px
+        input[type=checkbox]
+          height: 0
+          width: 0
+          visibility: hidden
+
+      .slider
+        position: absolute
+        cursor: pointer
+        top: 0
+        left: 0
+        right: 0
+        bottom: 0
+        background-color: #ca2222
+        -webkit-transition: .4s
+        transition: .4s
+        border-radius: 18px
+
+      input:checked + .slider
+        background-color: #2ab934
+
+      input:focus + .slider
+        box-shadow: 0 0 1px #2196F3
+
+      input:checked + .slider:before
+        -webkit-transform: translateX(20px)
+        -ms-transform: translateX(20px)
+        transform: translateX(20px)
+
+      .on
+        display: none
+
+      .on
+        left: 15%
+      .off
+        color: #A6A6A6!important
+        left: 70%
+
+      .on, .off
+        color: black
+        position: absolute
+        transform: translate(-50%,-50%)
+        top: 48%
+        font-size: 20px
+        font-weigth: bold
+        font-family: Verdana, sans-serif
+
+      input:checked+ .slider .on
+        display: block
+
+      input:checked + .slider .off
+        display: none
+
+      /* Rounded sliders */
+      .slider.round
+        border-radius: 20px
+
+      .slider.round:before
+        border-radius: 50%
