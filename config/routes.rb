@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   front_draw('organizations')
   front_draw('documents')
 
+  get 'admin/', to: redirect('/admin/dashboard')
   back_draw('dashboard')
 
 
@@ -685,7 +686,6 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
-    root to: 'admin#index'
     resources :users, except: %w(new create edit destroy) do
       get  'search_by_code',                   on: :collection
       post 'send_reset_password_instructions', on: :member
@@ -798,15 +798,6 @@ Rails.application.routes.draw do
 
   get 'admin/reports_delivery',                controller: 'admin/admin', action: 'reports_delivery'
   get '/admin/reporting(/:year)',              controller: 'admin/reporting', action: :index
-  get 'admin/ocr_needed_temp_packs',           controller: 'admin/admin', action: 'ocr_needed_temp_packs'
-  get 'admin/processing_temp_packs',           controller: 'admin/admin', action: 'processing_temp_packs'
-  get 'admin/failed_packs_delivery',           controller: 'admin/admin', action: 'failed_packs_delivery'
-  get 'admin/failed_reports_delivery',         controller: 'admin/admin', action: 'failed_reports_delivery'
-  get 'admin/blocked_pre_assignments',         controller: 'admin/admin', action: 'blocked_pre_assignments'
-  get 'admin/bundle_needed_temp_packs',        controller: 'admin/admin', action: 'bundle_needed_temp_packs'
-  get 'admin/awaiting_pre_assignments',        controller: 'admin/admin', action: 'awaiting_pre_assignments'
-  get 'admin/awaiting_supplier_recognition',   controller: 'admin/admin', action: 'awaiting_supplier_recognition'
-  get 'admin/currently_being_delivered_packs', controller: 'admin/admin', action: 'currently_being_delivered_packs'
   get '/admin/process_reporting(/:year)(/:month)', controller: 'admin/process_reporting', action: :index
 
   get  'admin/retriever_services',             controller: 'admin/retriever_services', action: :index

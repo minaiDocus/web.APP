@@ -3,7 +3,7 @@ function load_resources(resources) {
     (function(counter) {
       var resource = resources[counter];
       $.ajax({
-        url: '/admin/' + resource,
+        url: '/admin/dashboard/' + resource,
         dataType: 'html',
         type: 'GET',
         success: function (data) {

@@ -12,7 +12,7 @@
       %ul.nav.navbar-nav.bg-menu
         -#%li.nav-item{ style: 'font-size:16px;padding:10px 10px 0;' } Admin
         %li.nav-item{ class: ('active' if controller_name == 'admin') }
-          = link_to 'Tableau de bord', admin_root_path, class: 'nav-link'
+          = link_to 'Tableau de bord', admin_dashboard_root_path, class: 'nav-link'
         %li.nav-item.dropdown
           = link_to '#', class: 'nav-link dropdown-toggle', data: { toggle: 'dropdown' } do
             Finance

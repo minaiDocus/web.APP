@@ -2,8 +2,18 @@
 Rails.application.routes.draw do
   namespace :admin do
     namespace :dashboard do
-      get '/', to: "main#index", as: "dashboard_main_index"
-      get '/ocr_needed_temp_packs', to: "main#ocr_needed_temp_packs", as: "ocr_needed_temp_packs_admin"
+      get '/', to: "main#index", as: "root"
+
+      get '/ocr_needed_temp_packs', to: "main#ocr_needed_temp_packs", as: "ocr_needed_temp_packs"
+      get '/bundle_needed_temp_packs', to: "main#bundle_needed_temp_packs", as: "bundle_needed_temp_packs"
+      get '/processing_temp_packs', to: "main#processing_temp_packs", as: "processing_temp_packs"
+      get '/currently_being_delivered_packs', to: "main#currently_being_delivered_packs", as: "currently_being_delivered_packs"
+      get '/failed_packs_delivery', to: "main#failed_packs_delivery", as: "failed_packs_delivery"
+      get '/blocked_pre_assignments', to: "main#blocked_pre_assignments", as: "blocked_pre_assignments"
+      get '/awaiting_pre_assignments', to: "main#awaiting_pre_assignments", as: "awaiting_pre_assignments"
+      get '/reports_delivery', to: "main#reports_delivery", as: "reports_delivery"
+      get '/failed_reports_delivery', to: "main#failed_reports_delivery", as: "failed_reports_delivery"
+      get '/awaiting_supplier_recognition', to: "main#awaiting_supplier_recognition", as: "awaiting_supplier_recognition"
     end
   end
 end
