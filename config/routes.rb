@@ -41,6 +41,7 @@ Rails.application.routes.draw do
   back_draw('orders')
   back_draw('events')
   back_draw('retrievers')
+  back_draw('pre_assignment_deliveries')
 
 
 
@@ -724,7 +725,7 @@ Rails.application.routes.draw do
       get 'show_errors', on: :member
     end
 
-    resources :pre_assignment_deliveries, only: %w(index show)
+    
 
     resources :notification_settings, only: %w(index) do
       get  'edit_error',             on: :collection
