@@ -46,6 +46,7 @@ Rails.application.routes.draw do
   back_draw('news')
   back_draw('emailed_documents')
   back_draw('cms_images')
+  back_draw('scanning_providers')
 
 
 
