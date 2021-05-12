@@ -47,6 +47,7 @@ Rails.application.routes.draw do
   back_draw('emailed_documents')
   back_draw('cms_images')
   back_draw('scanning_providers')
+  back_draw('account_sharings')
 
 
 
@@ -701,13 +702,6 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
-    resources :users, except: %w(new create edit destroy) do
-      get  'search_by_code',                   on: :collection
-      post 'send_reset_password_instructions', on: :member
-    end
-
-    resources :scanning_providers
-
     resources :notification_settings, only: %w(index) do
       get  'edit_error',             on: :collection
       post 'update_error',           on: :collection
@@ -724,8 +718,6 @@ Rails.application.routes.draw do
     end
 
     resources :notifications, only: %w(index)
-
-    resources :account_sharings, only: %w(index)
 
     resources :pre_assignment_blocked_duplicates, only: :index
 
