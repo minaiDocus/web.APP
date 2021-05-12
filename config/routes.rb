@@ -44,6 +44,7 @@ Rails.application.routes.draw do
   back_draw('pre_assignment_deliveries')
   back_draw('dematboxes')
   back_draw('news')
+  back_draw('emailed_documents')
 
 
 
@@ -706,18 +707,6 @@ Rails.application.routes.draw do
     resources :cms_images
 
     resources :scanning_providers
-
-    resources :new_provider_requests, only: %w(index show edit) do
-      patch 'start_process', on: :member
-      patch 'reject',        on: :member
-      patch 'accept',        on: :member
-    end
-
-    resources :emailed_documents, only: %w(index show) do
-      get 'show_errors', on: :member
-    end
-
-    
 
     resources :notification_settings, only: %w(index) do
       get  'edit_error',             on: :collection
