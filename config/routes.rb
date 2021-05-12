@@ -51,6 +51,7 @@ Rails.application.routes.draw do
   back_draw('notifications')
   back_draw('pre_assignment_blocked_duplicates')
   back_draw('notification_settings')
+  back_draw('job_processing')
 
 
 
@@ -705,12 +706,6 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
-
-    resources :job_processing, only: :index do
-      get 'kill_job_softly', on: :collection
-      get 'real_time_event', on: :collection
-      get 'launch_data_verif', on: :collection
-    end
 
     resources :counter_error_script_mailer, only: :index do
       post 'set_state', action: 'set_state', on: :collection
