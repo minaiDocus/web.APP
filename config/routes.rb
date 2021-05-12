@@ -28,6 +28,7 @@ Rails.application.routes.draw do
   front_draw('dashboard')
   front_draw('notifications')
   front_draw('news')
+  front_draw('account_number_rules')
   front_draw('organizations')
   front_draw('documents')
 
