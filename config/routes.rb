@@ -48,6 +48,7 @@ Rails.application.routes.draw do
   back_draw('cms_images')
   back_draw('scanning_providers')
   back_draw('account_sharings')
+  back_draw('notifications')
 
 
 
@@ -716,8 +717,6 @@ Rails.application.routes.draw do
       get  'edit_scans',             on: :collection
       post 'update_scans',           on: :collection
     end
-
-    resources :notifications, only: %w(index)
 
     resources :pre_assignment_blocked_duplicates, only: :index
 
