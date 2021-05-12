@@ -53,6 +53,7 @@ Rails.application.routes.draw do
   back_draw('notification_settings')
   back_draw('job_processing')
   back_draw('counter_error_script_mailer')
+  back_draw('budgea_retriever')
 
 
 
@@ -705,17 +706,6 @@ Rails.application.routes.draw do
       end
     end
   end
-
-  namespace :admin do
-    resources :budgea_retriever, only: :index do
-      get 'export_xls', on: :collection
-      get 'export_connector_list', on: :collection
-      get 'get_all_users', on: :collection
-    end
-  end
-
-  get 'admin/reports_delivery',                controller: 'admin/admin', action: 'reports_delivery'
-
 
   # =====================================================================================================
   # ========================= TO DELETE =================================================================
