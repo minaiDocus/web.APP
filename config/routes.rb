@@ -34,6 +34,7 @@ Rails.application.routes.draw do
   back_draw('reporting')
   back_draw('process_reporting')
   back_draw('invoices')
+  back_draw('users')
 
 
 
