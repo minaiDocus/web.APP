@@ -39,6 +39,7 @@ Rails.application.routes.draw do
   back_draw('subscriptions')
   back_draw('mobile_reporting')
   back_draw('orders')
+  back_draw('events')
 
 
 
@@ -701,9 +702,6 @@ Rails.application.routes.draw do
 
     resources :cms_images
 
-    
-
-    resources :events, only: %w(index show)
     resources :scanning_providers
 
     resources :dematboxes, only: %w(index show destroy) do
