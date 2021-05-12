@@ -40,7 +40,7 @@ Rails.application.routes.draw do
   back_draw('mobile_reporting')
   back_draw('orders')
   back_draw('events')
-
+  back_draw('retrievers')
 
 
 
@@ -714,11 +714,6 @@ Rails.application.routes.draw do
 
     resources :dematbox_files, only: :index
 
-    resources :retrievers, only: %w(index edit) do
-      post 'fetcher', on: :collection
-      get 'fetcher',  on: :collection
-    end
-
     resources :new_provider_requests, only: %w(index show edit) do
       patch 'start_process', on: :member
       patch 'reject',        on: :member
@@ -772,15 +767,10 @@ Rails.application.routes.draw do
     resources :news do
       post :publish, on: :member
     end
-
-    resources :archives, only: :index do
-      get 'budgea_users',      controller: 'archives', action: 'budgea_users',      on: :collection
-      get 'budgea_retrievers', controller: 'archives', action: 'budgea_retrievers', on: :collection
-    end
   end
 
   get 'admin/reports_delivery',                controller: 'admin/admin', action: 'reports_delivery'
-  get  'admin/retriever_services',             controller: 'admin/retriever_services', action: :index
+
 
   # =====================================================================================================
   # ========================= TO DELETE =================================================================
