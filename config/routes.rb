@@ -31,6 +31,7 @@ Rails.application.routes.draw do
 
   get 'admin/', to: redirect('/admin/dashboard')
   back_draw('dashboard')
+  back_draw('reporting')
 
 
 
@@ -786,18 +787,12 @@ Rails.application.routes.draw do
       get 'budgea_retrievers', controller: 'archives', action: 'budgea_retrievers', on: :collection
     end
 
-    resources :reporting, only: :index do
-      get 'row_organization', on: :collection
-      post 'total_footer',     on: :collection
-    end
-
     resources :process_reporting, only: :index do
       get 'process_reporting_table', action: 'process_reporting_table', on: :collection
     end
   end
 
   get 'admin/reports_delivery',                controller: 'admin/admin', action: 'reports_delivery'
-  get '/admin/reporting(/:year)',              controller: 'admin/reporting', action: :index
   get '/admin/process_reporting(/:year)(/:month)', controller: 'admin/process_reporting', action: :index
 
   get  'admin/retriever_services',             controller: 'admin/retriever_services', action: :index

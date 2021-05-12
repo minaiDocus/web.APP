@@ -1,0 +1,43 @@
+#reporting
+  .row
+    .col-12
+      .box.small-shadow.clearfix
+        .float-left
+          %h3
+            Reporting de l'année #{@year}
+        .float-right
+          #show-export-xls-link.d-inline
+
+          = link_to image_tag('application/icon-xls.png', alt: 'Export xls', class: 'generate-export-xls', style: 'position:relative;top:-2px;') + ' Export XLS', "/admin/reporting/#{@year}.xls", class: "btn btn-light download-export_xls"
+          = link_to image_tag('application/icon-xls.png', alt: 'Export xls simplifié', class: 'generate-export-xls', style: 'position:relative;top:-2px;') + ' Export XLS simplifié', "/admin/reporting/#{@year}.xls?simplified=1", class: "btn btn-light download-export_xls simplified_xls"
+
+  .row
+    .col-12
+      .box
+        %table.table.table-condensed.table-striped.margin1top.margin1bottom.table-bordered-inner.table-detachable-head
+          %thead
+            %tr.bg-brown.text-white
+              %th.year
+                = link_to (@year - 1), "/admin/reporting/#{(@year - 1)}"
+                \-
+                = @year
+                \-
+                = link_to (@year + 1), "/admin/reporting/#{(@year + 1)}"
+              - t('date.month_names').compact.each.with_index(1) do |month_name, index|
+                %th
+                  %span.float-left
+                    = month_name.capitalize
+                  = link_to image_tag('application/icon-xls.png', alt: "Export XLS #{month_name.capitalize}", style: 'position:relative;top:-2px;'), "#", title: "Export XLS #{month_name.capitalize}", class: 'float-right monthly-export', data: { hrf: "/admin/reporting/#{@year}.xls?month=#{'%02d' % index}", month: "#{'%02d' % index}", year: @year }
+          = render partial: 'reporting_table', locals: { collection: @organizations }
+  #loadingPage
+    = image_tag('application/spinner_loading.gif', alt: 'logo', class: 'logo')
+  #showInvoice.modal.hide.fade
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %h3
+          %a.close{ data: { dismiss: :modal } } ×
+        .modal-body
+          %iframe{ :src => '' }
+
+= javascript_include_tag 'back/reporting/assets/javascripts/main'
