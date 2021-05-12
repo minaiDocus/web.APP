@@ -35,6 +35,7 @@ Rails.application.routes.draw do
   back_draw('process_reporting')
   back_draw('invoices')
   back_draw('users')
+  back_draw('subscription_options')
 
 
 
@@ -708,7 +709,6 @@ Rails.application.routes.draw do
 
     resources :events, only: %w(index show)
     resources :scanning_providers
-    resources :subscription_options, except: %w(show)
 
     resources :dematboxes, only: %w(index show destroy) do
       post 'subscribe', on: :member
