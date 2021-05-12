@@ -37,6 +37,7 @@ Rails.application.routes.draw do
   back_draw('users')
   back_draw('subscription_options')
   back_draw('subscriptions')
+  back_draw('mobile_reporting')
 
 
 
@@ -700,11 +701,6 @@ Rails.application.routes.draw do
     resources :cms_images
 
     get 'orders', controller: 'orders', action: 'index'
-
-    resources :mobile_reporting, only: :index do
-      get 'mobile_users_stats(/:month)(/:year)', action: 'download_mobile_users', on: :collection, as: :download_users
-      get 'mobile_documents_stats(/:month)(/:year)', action: 'download_mobile_documents', on: :collection, as: :download_documents
-    end
 
     resources :events, only: %w(index show)
     resources :scanning_providers
