@@ -45,6 +45,7 @@ Rails.application.routes.draw do
   back_draw('dematboxes')
   back_draw('news')
   back_draw('emailed_documents')
+  back_draw('cms_images')
 
 
 
@@ -703,8 +704,6 @@ Rails.application.routes.draw do
       get  'search_by_code',                   on: :collection
       post 'send_reset_password_instructions', on: :member
     end
-
-    resources :cms_images
 
     resources :scanning_providers
 
