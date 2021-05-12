@@ -50,6 +50,7 @@ Rails.application.routes.draw do
   back_draw('account_sharings')
   back_draw('notifications')
   back_draw('pre_assignment_blocked_duplicates')
+  back_draw('notification_settings')
 
 
 
@@ -704,20 +705,6 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
-    resources :notification_settings, only: %w(index) do
-      get  'edit_error',             on: :collection
-      post 'update_error',           on: :collection
-      get  'edit_subscription',      on: :collection
-      post 'update_subscription',    on: :collection
-      get  'edit_dematbox_order',    on: :collection
-      post 'update_dematbox_order',  on: :collection
-      get  'edit_paper_set_order',   on: :collection
-      post 'update_paper_set_order', on: :collection
-      get  'edit_ibiza',             on: :collection
-      post 'update_ibiza',           on: :collection
-      get  'edit_scans',             on: :collection
-      post 'update_scans',           on: :collection
-    end
 
     resources :job_processing, only: :index do
       get 'kill_job_softly', on: :collection

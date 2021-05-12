@@ -1,111 +1,70 @@
 # frozen_string_literal: true
-class Admin::Users::MainController < BackController
-  append_view_path('app/templates/back/users/views')
+class Admin::NotificationSettings::MainController < BackController
+  append_view_path('app/templates/back/notification_settings/views')
 
-  helper_method :sort_column, :sort_direction
+  # GET /admin/notification_settings
+  def index; end
 
-  before_action :load_user, only: %w[show update send_reset_password_instructions]
+  # GET /admin/notification_settings/edit_error
+  def edit_error; end
 
-  # GET /admin/users
-  def index
-    @user_contains = search_terms(params[:user_contains])
+  # POST /admin/notification_settings/update_error
+  def update_error
+    Settings.update_setting('notify_errors_to', params[:notification][:to].split(',').map(&:strip))
 
-    @users = User.not_operators.search(@user_contains).order(sort_column => sort_direction)
+    flash[:notice] = 'Modifié avec succès.'
 
-    @users_count = @users.count
-
-    respond_to do |format|
-      format.html do
-        @users = @users.page(params[:page]).per(params[:per_page])
-      end
-      format.csv do
-        csv = User::ToCsv.new(@users).execute
-        send_data(csv, type: 'text/csv', filename: 'users.csv')
-      end
-    end
+    redirect_to admin_notification_settings_path
   end
 
-  # GET /admin/users/:id
-  def show; end
+  # GET /admin/notification_settings/edit_dematbox_order
+  def edit_dematbox_order; end
 
-  # PUT /admin/users/:id
-  def update
-    respond_to do |format|
-      if params[:user][:is_prescriber]
-        @user.is_prescriber = params[:user].delete(:is_prescriber)
-      end
+  # POST /admin/notification_settings/update_dematbox_order
+  def update_dematbox_order
+    Settings.update_setting('notify_dematbox_order_to', params[:notification][:to].split(',').map(&:strip))
 
-      if (params[:user].empty? && @user.save) || (params[:user].any? && @user.update(user_params))
-        format.json { render json: {}, status: :ok }
-        format.html { redirect_to admin_user_path(@user) }
-      else
-        format.json { render json: @user.to_json, status: :unprocessable_entity }
-        format.html { redirect_to admin_user_path(@user), error: 'Impossible de modifier cette utilisateur.' }
-      end
-    end
+    flash[:notice] = 'Modifié avec succès.'
+
+    redirect_to admin_notification_settings_path
   end
 
-  # GET /admin/users/search_by_code
-  def search_by_code
-    tags = []
+  # GET /admin/notification_settings/edit_paper_set_order
+  def edit_paper_set_order; end
 
-    full_info = params[:full_info].present?
+  # POST /admin/notification_settings/update_paper_set_order
+  def update_paper_set_order
+    Settings.update_setting('notify_paper_set_order_to', params[:notification][:to].split(',').map(&:strip))
 
-    if params[:q].present?
-      users = User.where('code LIKE ?', "%#{params[:q]}%").order(code: :asc).limit(10)
+    # settings.save
 
-      users = users.prescribers if params[:prescriber].present?
+    flash[:notice] = 'Modifié avec succès.'
 
-      users.each do |user|
-        tags << { id: user.id.to_s, name: full_info ? user.info : user.code }
-      end
-    end
-
-    respond_to do |format|
-      format.json { render json: tags.to_json, status: :ok }
-    end
+    redirect_to admin_notification_settings_path
   end
 
-  # GET /admin/users/:id/send_reset_password_instructions
-  def send_reset_password_instructions
-    @user.send_reset_password_instructions
+  # GET /admin/notification_settings/edit_ibiza
+  def edit_ibiza; end
 
-    flash[:notice] = 'Email envoyé avec succès.'
+  # POST /admin/notification_settings/update_ibiza
+  def update_ibiza
+    Settings.update_setting('notify_on_ibiza_delivery',   params[:notification][:type])
+    Settings.update_setting('notify_ibiza_deliveries_to', params[:notification][:to].split(',').map(&:strip))
 
-    redirect_to admin_user_path(@user)
+    flash[:notice] = 'Modifié avec succès.'
+
+    redirect_to admin_notification_settings_path
   end
 
-  private
+  # GET /admin/notification_settings/edit_scans
+  def edit_scans; end
 
-  def load_user
-    @user = User.find params[:id]
-  end
+  # POST /admin/notification_settings/update_scans
+  def update_scans
+    Settings.update_setting('notify_scans_not_delivered_to', params[:notification][:to].split(',').map(&:strip))
 
-  def user_params
-    params.require(:user).permit(
-      :email,
-      :password,
-      :password_confirmation,
-      :code,
-      :first_name,
-      :last_name,
-      :company,
-      :knowings_code,
-      :knowings_visibility,
-      :is_fake_prescriber,
-      :is_access_by_token_active,
-      :stamp_name,
-      :is_stamp_background_filled
-    )
-  end
+    flash[:notice] = 'Modifié avec succès.'
 
-  def sort_column
-    params[:sort] || 'created_at'
+    redirect_to admin_notification_settings_path
   end
-  helper_method :sort_column
-
-  def sort_direction
-    params[:direction] || 'desc'
-  end
-  helper_method :sort_direction
 end
