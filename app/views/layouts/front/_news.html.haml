@@ -1,0 +1,7 @@
+#news.modal.fade{ class: ('active' if @news_present) }
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h3 Communications
+        %button.close{ type: 'button', 'data-dismiss' => 'modal', 'aria-hidden' => true } &times;
+      .modal-body

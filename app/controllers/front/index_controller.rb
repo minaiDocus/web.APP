@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
 class Front::IndexController < ApplicationController
+  before_action :load_user_and_role
+  before_action :verify_suspension
+  before_action :verify_if_active
+
   def index
-    render 'front/layouts/layout'
+    render 'layouts/front/layout'
   end
 
   def notifications
@@ -18,6 +22,6 @@ class Front::IndexController < ApplicationController
       @notifications << test_notif
     end
 
-    render 'front/layouts/notifications'
+    render 'layouts/front/notifications'
   end
 end

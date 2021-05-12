@@ -1,7 +1,7 @@
 class FrontController < ApplicationController
   XHR_TOKEN = 'dHkgbnkgdG9rZW4gYW5sZSBhamF4'
   before_action :login_user!
-  before_action :check_xhr_token
+  # before_action :check_xhr_token
 
   layout('front/layout')
 

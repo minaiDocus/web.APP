@@ -26,6 +26,8 @@ Rails.application.routes.draw do
   end
 
   front_draw('dashboard')
+  front_draw('notifications')
+  front_draw('news')
   front_draw('organizations')
   front_draw('documents')
 
@@ -168,17 +170,7 @@ Rails.application.routes.draw do
   post 'my_company_files/upload', controller: :my_company_files, action: 'upload'
 
   namespace :account do
-    root to: 'account/account#index'
 
-    resources :account, only: :index do
-      collection do
-        post :choose_default_summary
-        get :last_scans
-        get :last_uploads
-        get :last_dematbox_scans
-        get :last_retrieved
-      end
-    end
 
     # Named like that to avoid conflict with the routes of groups
     resources :group_organizations, controller_name: 'organization_groups'
@@ -548,20 +540,12 @@ Rails.application.routes.draw do
 
     resource :suspended, only: :show
 
-    resources :notifications do
-      get 'latest', on: :collection
-      get 'link_through', on: :member
-      post 'unread_all_notifications', on: :collection
-    end
-
     resources :account_sharings, only: %w(new create destroy) do
       get 'new_request', on: :collection
       post 'create_request', on: :collection
     end
 
     resources :analytics, only: %w(index)
-
-    get :news, controller: :news, action: :index
   end
 
   namespace :api, defaults: { format: 'json' } do

@@ -34,7 +34,7 @@ var notification_data = null;
 function load_latest_notifications(load_more) {
     if (load_more || $('.dropdown-notifications.show').length == 0) {
         $.ajax({
-            url: '/account/notifications/latest?per_page=' + (notification_per_page + (load_more ? 5 : 0)),
+            url: '/notifications/latest?per_page=' + (notification_per_page + (load_more ? 5 : 0)),
             success: function(data) {
                 if ((load_more || $('.dropdown-notifications.show').length == 0) && notification_data != data) {
                     $('#notifications .items').html(data);
@@ -68,7 +68,7 @@ setInterval(load_latest_notifications, 30000);
 
 $('#news.modal').on('show.bs.modal', function (e) {
     $.ajax({
-        url: '/account/news',
+        url: '/news/',
         beforeSend: function() {
             $('#news .modal-body').html("<img src='/assets/application/spinner_gray_alpha.gif' alt='chargement...' style='padding-top:184px;padding-left:399px;'/>");
         },

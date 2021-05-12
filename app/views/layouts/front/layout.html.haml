@@ -12,14 +12,52 @@
 
     %link{ :rel => 'shortcut icon', :type => "image/ico", :href => image_path('favicon.ico') }
     = csrf_meta_tag
+    = stylesheet_link_tag 'application'
+    = stylesheet_link_tag 'account/profiles'
+    = stylesheet_link_tag 'account/retrievers'
+    = stylesheet_link_tag 'account/organizations'
+    = stylesheet_link_tag 'account/paper_processes'
+    = stylesheet_link_tag 'account/suspended'
+    = stylesheet_link_tag 'account/addresses'
+    = stylesheet_link_tag 'account/group_organizations'
+    = stylesheet_link_tag 'account/reporting'
+    = stylesheet_link_tag 'account/pre_assignment_blocked_duplicates'
+    = stylesheet_link_tag 'account/pre_assignment_ignored'
+    = stylesheet_link_tag 'account/pre_assignment_delivery_errors'
     = stylesheet_link_tag 'front/main'
 
-  = render partial: 'layouts/front/header'
-  .body_content
-    = yield
-  = render partial: 'layouts/front/support_chat'
-  = render partial: 'layouts/front/notice_flush_messages'
-  = render partial: 'layouts/front/footer'
- 
-  = javascript_declare_var('XHR_TKN', FrontController::XHR_TOKEN)
-  = javascript_include_tag 'front/main'
+    / = javascript_declare_var('XHR_TKN', FrontController::XHR_TOKEN)
+    = javascript_include_tag Ckeditor.cdn_url
+    = javascript_include_tag 'front/main'
+
+    :plain
+      <!--[if lt IE 9]>
+        <script src="/assets/html5.js" type="text/javascript"></script>
+      <![endif]-->
+
+  / = render partial: 'layouts/front/header'
+  #wrap
+    = hidden_field_tag :state, ''
+    = hidden_field_tag :name, ''
+    = render 'layouts/front/head_menu'
+  .body_content{ style: 'padding: 15px' }
+    .retractable.fadein
+      != content_for?(:content) ? yield(:content) : yield
+
+    #push
+  = render 'layouts/front/footer'
+  = render 'layouts/front/news'
+
+  .to_delete
+    = javascript_include_tag 'application', 'inner'
+    = javascript_include_tag 'welcome'
+    = javascript_include_tag 'account/reporting'
+    = javascript_include_tag 'account/profile'
+    = javascript_include_tag 'account/retrievers'
+    = javascript_include_tag 'account/documents'
+    = javascript_include_tag 'account/compta_analytics'
+    = javascript_include_tag 'account/addresses'
+    = javascript_include_tag 'account/group_organizations'
+    = javascript_include_tag 'account/pre_assignment_blocked_duplicates'
+    = javascript_include_tag 'account/pre_assignment_ignored'
+    = javascript_include_tag 'account/accounting_plans'

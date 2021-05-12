@@ -77,19 +77,64 @@ function showFavoriteCustomersDetails(target_id, button_id){
   })
 }
 
-GLOBAL.DashboardMain = class DashboardMain extends ApplicationJS {
-  constructor(){
-    super();
-  }
+// ----------------------------------------------------------------------
 
-  async loadFavoriteCustomers(){
-    let html = '';
-    await this.getFrom("/dashboard/my_favorite_customers").then( result =>{ html = result });
+function get_last_content_for(name) {
+  $('.content.' + name).html('<div class="loading-data"></div>');
 
-    return html;
-  }
+  $.ajax({
+    url: '/dashboard/' + name,
+    dataType: 'html',
+    type: 'GET',
+    success: function (data) {
+      $('.content.' + name).html(data);
+    }
+  });
 }
 
+function last_content(){
+  var tab_name;
+  if (navigator.userAgent.toLowerCase().indexOf('msie') != -1) {
+    $('.ie-message').show();
+  }
+  $('#news.modal.active').modal('show');
+
+  tab_name = $('.tab-pane.active').attr('id');
+  if (tab_name) {
+    get_last_content_for(tab_name);
+  }
+
+  $('a.last_scans').click(function() {
+    get_last_content_for('last_scans');
+  });
+  $('a.last_uploads').click(function() {
+    get_last_content_for('last_uploads');
+  });
+  $('a.last_dematbox_scans').click(function() {
+    get_last_content_for('last_dematbox_scans');
+  });
+  $('a.last_retrieved').click(function() {
+    get_last_content_for('last_retrieved');
+  });
+}
+
+
+// -----------------------------------------------------------------------
+
+// GLOBAL.DashboardMain = class DashboardMain extends ApplicationJS {
+//   constructor(){
+//     super();
+//   }
+
+//   async loadFavoriteCustomers(){
+//     let html = '';
+//     await this.getFrom("/dashboard/my_favorite_customers").then( result =>{ html = result });
+
+//     return html;
+//   }
+// }
+
 jQuery(function() {
-  main = new GLOBAL.DashboardMain();
+  // main = new GLOBAL.DashboardMain();
+  last_content();
 });
