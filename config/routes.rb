@@ -42,6 +42,7 @@ Rails.application.routes.draw do
   back_draw('events')
   back_draw('retrievers')
   back_draw('pre_assignment_deliveries')
+  back_draw('dematboxes')
 
 
 
@@ -704,16 +705,6 @@ Rails.application.routes.draw do
     resources :cms_images
 
     resources :scanning_providers
-
-    resources :dematboxes, only: %w(index show destroy) do
-      post 'subscribe', on: :member
-    end
-
-    resources :dematbox_services, only: %w(index destroy) do
-      post 'load_from_external', on: :collection
-    end
-
-    resources :dematbox_files, only: :index
 
     resources :new_provider_requests, only: %w(index show edit) do
       patch 'start_process', on: :member
