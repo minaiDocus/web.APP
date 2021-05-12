@@ -12,7 +12,7 @@
       .box
         .row
           .col.mt-4
-            = render partial: 'shared/list_options', locals: { collection: @invoices }
+            = render partial: '/shared/list_options', locals: { collection: @invoices }
         = form_tag admin_invoices_download_path do |f|
           %table.table.table-condensed.table-striped.margin1top.margin0bottom.table-detachable-head.table-bordered-inner
             %thead
@@ -41,8 +41,8 @@
                     - if invoice.amount_in_cents_w_vat
                       = format_price_00(invoice.amount_in_cents_w_vat) + ' €'
                   %td.actions
-                    = link_to icon_show, admin_invoice_path(invoice), class: 'do-showInvoice', title: "#{invoice.number}.pdf"
-                    = icon_link_to admin_invoice_path(invoice), { icon: 'data-transfer-download' }, { target: '_blank' }
+                    = link_to icon_show, admin_invoices_show_path(invoice), class: 'do-showInvoice', title: "#{invoice.number}.pdf"
+                    = icon_link_to admin_invoices_show_path(invoice), { icon: 'data-transfer-download' }, { target: '_blank' }
           %br
           .row
             .col.mb-4
@@ -53,7 +53,7 @@
                   .float-right
                     = submit_tag 'Télécharger les fichiers sélectionnés', class: 'btn btn-primary'
 
-    = render partial: 'sidebar'
+    = render partial: '/admin/invoices/main/sidebar'
 
     #showInvoice.modal.hide.fade
       .modal-dialog
@@ -63,3 +63,6 @@
             %h3
           .modal-body
             %iframe{ src: '' }
+
+
+= javascript_include_tag 'admin/invoices'

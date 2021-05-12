@@ -49,7 +49,7 @@
               = text_field_tag 'invoice_contains[created_at][<=]', (params[:invoice_contains][:created_at]['<='] rescue ''), class: 'form-control date datepicker'
         .form-action
           = submit_tag t('filters.action'), class: 'btn btn-primary'
-          = link_to t('filters.reset'), admin_invoices_invoices_path, class: 'btn btn-outline-secondary'
+          = link_to t('filters.reset'), admin_invoices_index_path, class: 'btn btn-outline-secondary'
       %hr
       %h3 Ordre de prélèvement
       = form_tag admin_invoices_debit_order_path do

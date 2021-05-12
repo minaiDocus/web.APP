@@ -32,6 +32,8 @@ Rails.application.routes.draw do
   get 'admin/', to: redirect('/admin/dashboard')
   back_draw('dashboard')
   back_draw('reporting')
+  back_draw('process_reporting')
+  back_draw('invoices')
 
 
 
@@ -692,12 +694,6 @@ Rails.application.routes.draw do
       post 'send_reset_password_instructions', on: :member
     end
 
-    resources :invoices, only: %w(index show update) do
-      get  'archive',     on: :collection
-      post 'download',    on: :collection
-      post 'debit_order', on: :collection
-    end
-
     resources :cms_images
 
     get 'orders', controller: 'orders', action: 'index'
@@ -786,15 +782,9 @@ Rails.application.routes.draw do
       get 'budgea_users',      controller: 'archives', action: 'budgea_users',      on: :collection
       get 'budgea_retrievers', controller: 'archives', action: 'budgea_retrievers', on: :collection
     end
-
-    resources :process_reporting, only: :index do
-      get 'process_reporting_table', action: 'process_reporting_table', on: :collection
-    end
   end
 
   get 'admin/reports_delivery',                controller: 'admin/admin', action: 'reports_delivery'
-  get '/admin/process_reporting(/:year)(/:month)', controller: 'admin/process_reporting', action: :index
-
   get  'admin/retriever_services',             controller: 'admin/retriever_services', action: :index
 
   # =====================================================================================================

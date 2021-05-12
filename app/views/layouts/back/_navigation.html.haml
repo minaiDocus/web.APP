@@ -20,7 +20,7 @@
           .dropdown-menu
             = link_to 'Reporting', '/admin/reporting', class: 'dropdown-item'
             = link_to 'Reporting de traitement', '/admin/process_reporting', class: 'dropdown-item'
-            = link_to 'Factures', admin_invoices_path, class: 'dropdown-item'
+            = link_to 'Factures', admin_invoices_index_path, class: 'dropdown-item'
         %li.nav-item{ class: ( 'active' if controller_name == 'users') }
           = link_to 'Utilisateurs', admin_users_path, class: 'nav-link'
         %li.nav-item{ class: ('active' if controller_name == 'subscription_options') }
