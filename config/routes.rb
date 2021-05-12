@@ -43,6 +43,7 @@ Rails.application.routes.draw do
   back_draw('retrievers')
   back_draw('pre_assignment_deliveries')
   back_draw('dematboxes')
+  back_draw('news')
 
 
 
@@ -754,10 +755,6 @@ Rails.application.routes.draw do
       get 'export_xls', on: :collection
       get 'export_connector_list', on: :collection
       get 'get_all_users', on: :collection
-    end
-
-    resources :news do
-      post :publish, on: :member
     end
   end
 
