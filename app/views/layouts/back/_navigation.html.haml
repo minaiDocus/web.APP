@@ -28,7 +28,7 @@
         %li.nav-item{ class: ('active' if controller_name.in?(%w(subscriptions mobile_reporting))) }
           = link_to 'Statistiques', admin_subscriptions_index_path, class: 'nav-link'
         %li.nav-item{ class: ('active' if controller_name == 'orders') }
-          = link_to 'Commandes', admin_orders_path, class: 'nav-link'
+          = link_to 'Commandes', admin_orders_index_path, class: 'nav-link'
         %li.nav-item{ class: ('active' if controller_name == 'events') }
           = link_to 'Visites', admin_events_path, class: 'nav-link'
         %li.nav-item{ class: ('active' if controller_name.in?(%w(retrievers new_provider_requests))) }
