@@ -52,6 +52,7 @@ Rails.application.routes.draw do
   back_draw('pre_assignment_blocked_duplicates')
   back_draw('notification_settings')
   back_draw('job_processing')
+  back_draw('counter_error_script_mailer')
 
 
 
@@ -706,12 +707,6 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
-
-    resources :counter_error_script_mailer, only: :index do
-      post 'set_state', action: 'set_state', on: :collection
-      post 'set_counter', action: 'set_counter', on: :collection
-    end
-
     resources :budgea_retriever, only: :index do
       get 'export_xls', on: :collection
       get 'export_connector_list', on: :collection
