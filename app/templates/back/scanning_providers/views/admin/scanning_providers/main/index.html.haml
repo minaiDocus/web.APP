@@ -32,3 +32,4 @@
                 = icon_link_to admin_scanning_provider_path(scanning_provider), { icon: 'trash' }, { data: { method: 'DELETE', confirm: t('actions.confirm') } }
       %br
       = render partial: 'shared/list_options', locals: { collection: @scanning_providers }
+= javascript_include_tag 'admin/scanning_providers'

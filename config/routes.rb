@@ -49,6 +49,7 @@ Rails.application.routes.draw do
   back_draw('scanning_providers')
   back_draw('account_sharings')
   back_draw('notifications')
+  back_draw('pre_assignment_blocked_duplicates')
 
 
 
@@ -717,8 +718,6 @@ Rails.application.routes.draw do
       get  'edit_scans',             on: :collection
       post 'update_scans',           on: :collection
     end
-
-    resources :pre_assignment_blocked_duplicates, only: :index
 
     resources :job_processing, only: :index do
       get 'kill_job_softly', on: :collection
