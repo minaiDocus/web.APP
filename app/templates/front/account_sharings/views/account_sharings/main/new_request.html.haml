@@ -1,0 +1,16 @@
+= stylesheet_link_tag 'front/account_sharings/assets/stylesheets/main'
+
+#account_sharing.new_request.container-fluid.derivationRight
+  .row
+    .col-md-12
+      = simple_form_for @account_sharing_request, url: account_sharings_create_request_path, html: { class: 'form-horizontal' } do |f|
+        .card
+          .card-header
+            %h2.aligncenter Demander l'accès à un dossier
+          .card-body
+            = f.input :code_or_email, label: 'Code ou email du dossier'
+          .card-footer
+            .form-actions
+              = f.submit t('actions.submit'), class: 'btn btn-primary'
+              = link_to t('actions.cancel'), account_profile_path(panel: :account_sharing), class: 'btn btn-light'
+= javascript_include_tag 'front/account_sharings/assets/javascripts/main'

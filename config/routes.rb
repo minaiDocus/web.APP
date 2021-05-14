@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   front_draw('notifications')
   front_draw('news')
   front_draw('account_number_rules')
+  front_draw('account_sharings')
   front_draw('organizations')
   front_draw('documents')
 
@@ -199,14 +200,6 @@ Rails.application.routes.draw do
 
       resource :file_naming_policy, only: %w(edit update) do
         patch 'preview', on: :member
-      end
-
-      resources :account_number_rules do
-        patch   'import',                    on: :collection
-        get     'import_form',               on: :collection
-        get     'import_model',              on: :collection
-        post    'export_or_destroy',         on: :collection
-        post    'update_skip_accounting_plan_accounts',         on: :collection
       end
 
       resources :my_unisoft do 
@@ -540,11 +533,6 @@ Rails.application.routes.draw do
     resources :paper_processes, only: :index
 
     resource :suspended, only: :show
-
-    resources :account_sharings, only: %w(new create destroy) do
-      get 'new_request', on: :collection
-      post 'create_request', on: :collection
-    end
 
     resources :analytics, only: %w(index)
   end
