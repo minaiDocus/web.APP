@@ -30,6 +30,7 @@ Rails.application.routes.draw do
   front_draw('news')
   front_draw('account_number_rules')
   front_draw('account_sharings')
+  front_draw('addresses')
   front_draw('organizations')
   front_draw('documents')
 
