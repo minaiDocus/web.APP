@@ -2,4 +2,4 @@
   #file_storages.tab-pane.fade{ class: ('active show' if params[:tab] == 'file_storages') }
     = render partial: 'account/customers/file_storages', locals: { user: @member.user }
     / TODO ////
-    = link_to t('actions.edit'), edit_account_organization_collaborator_file_storage_authorizations_path(@organization, @member), class: 'btn btn-primary'
+    = link_to t('actions.edit'), file_storage_authorizations_edit_path(@organization, @member), class: 'btn btn-primary'
