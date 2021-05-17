@@ -33,6 +33,7 @@ Rails.application.routes.draw do
   front_draw('account_sharings')
   front_draw('addresses')
   front_draw('bank_accounts')
+  front_draw('bank_settings')
   front_draw('organizations')
   front_draw('documents')
 
@@ -461,8 +462,6 @@ Rails.application.routes.draw do
 
     resource :profile
 
-    resources :addresses
-
     resource :dropbox do
       get 'authorize_url', on: :member
       get 'callback',      on: :member
@@ -509,10 +508,6 @@ Rails.application.routes.draw do
     resources :retrieved_banking_operations, only: %W(index) do
       post 'force_processing', on: :collection
       post 'unlock_operations', on: :collection
-    end
-
-    resources :bank_settings, only: %W(index edit update create) do
-      post 'should_be_disabled', action: 'mark_as_to_be_disabled',   on: :collection
     end
 
     resources :retrieved_documents do
