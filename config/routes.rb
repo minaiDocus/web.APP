@@ -37,6 +37,7 @@ Rails.application.routes.draw do
   front_draw('profiles')
   front_draw('collaborators')
   front_draw('rights')
+  front_draw('file_storage_authorizations')
   front_draw('organizations')
   front_draw('documents')
 
@@ -239,16 +240,6 @@ Rails.application.routes.draw do
       resource :csv_descriptor, only: %w(edit update), controller: 'organization_csv_descriptors'
 
       resources :groups
-
-      # resources :collaborators do
-      #   member do
-      #     post   :add_to_organization
-      #     delete :remove_from_organization
-      #   end
-
-      #   resource :rights, only: %w(edit update)
-      #   resource :file_storage_authorizations, only: %w(edit update)
-      # end
 
       resources :paper_set_orders do
         get  'select_for_orders', on: :collection
