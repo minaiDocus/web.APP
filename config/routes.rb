@@ -34,6 +34,7 @@ Rails.application.routes.draw do
   front_draw('addresses')
   front_draw('bank_accounts')
   front_draw('bank_settings')
+  front_draw('profiles')
   front_draw('organizations')
   front_draw('documents')
 
@@ -459,8 +460,6 @@ Rails.application.routes.draw do
       resources :expenses
       resources :preseizures
     end
-
-    resource :profile
 
     resource :dropbox do
       get 'authorize_url', on: :member
