@@ -1,0 +1,49 @@
+#accounting_plan.derivationRight
+  - unless @customer.configured?
+    .box
+      = render 'account/customers/steps'
+  .card
+    .card-header
+      - if @customer.configured?
+        %h3
+          Edition du
+          = link_to 'plan comptable', accounting_plans_show_path(@organization, @customer), class: 'fs-origin'
+          du client :
+          = link_to @customer, account_organization_customer_path(@organization, @customer, tab: 'accounting_plan'), class: 'fs-origin'
+      - else
+        %h3 Plan comptable
+
+    = simple_nested_form_for @accounting_plan, url: accounting_plans_create_path(@organization, @customer), html: { class: 'form form-horizontal margin0', novalidate: true }, wrapper: false do |f|
+      .card-body
+        .row
+          .col-md-6
+            .box.bg-light
+              %h4 Fournisseurs
+              %hr
+              = f.fields_for :providers do |provider|
+                .box
+                  = provider.link_to_remove glyphicon('x'), class: 'btn btn-light', style: "position: absolute; right: 48px;"
+                  = provider.input :third_party_account, label: t('activerecord.models.accounting_plan_item.attributes.third_party_account')
+                  = provider.input :third_party_name, label: t('activerecord.models.accounting_plan_item.attributes.third_party_name')
+                  = provider.input :conterpart_account, label: t('activerecord.models.accounting_plan_item.attributes.conterpart_account')
+                  = provider.input :code, label: t('activerecord.models.accounting_plan_item.attributes.code')
+                  = provider.input :vat_autoliquidation, label: t('activerecord.models.accounting_plan_item.attributes.vat_autoliquidation')
+                  = provider.input :vat_autoliquidation_debit_account, label: t('activerecord.models.accounting_plan_item.attributes.vat_autoliquidation_debit_account')
+                  = provider.input :vat_autoliquidation_credit_account, label: t('activerecord.models.accounting_plan_item.attributes.vat_autoliquidation_credit_account')
+              = f.link_to_add 'Ajouter un fournisseur', :providers, class: 'btn btn-secondary'
+          .col-md-6
+            .box.bg-light
+              %h4 Clients
+              %hr
+              = f.fields_for :customers do |customer|
+                .box
+                  = customer.link_to_remove glyphicon('x'), class: 'btn btn-light', style: "position: absolute; right: 48px;"
+                  = customer.input :third_party_account, label: t('activerecord.models.accounting_plan_item.attributes.third_party_account')
+                  = customer.input :third_party_name, label: t('activerecord.models.accounting_plan_item.attributes.third_party_name')
+                  = customer.input :conterpart_account, label: t('activerecord.models.accounting_plan_item.attributes.conterpart_account')
+                  = customer.input :code, label: t('activerecord.models.accounting_plan_item.attributes.code')
+              = f.link_to_add 'Ajouter un client', :customers, class: 'btn btn-secondary'
+      .card-footer
+        .form-actions
+          = f.submit t('actions.submit'), class: 'btn btn-primary'
+          = link_to t('actions.cancel'), accounting_plans_show_path(@organization, @customer), class: 'btn btn-light'

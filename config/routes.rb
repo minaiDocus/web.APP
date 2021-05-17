@@ -38,6 +38,7 @@ Rails.application.routes.draw do
   front_draw('collaborators')
   front_draw('rights')
   front_draw('file_storage_authorizations')
+  front_draw('accounting_plans')
   front_draw('organizations')
   front_draw('documents')
 
@@ -297,23 +298,23 @@ Rails.application.routes.draw do
 
         resources :addresses, controller: 'customer_addresses'
 
-        resource :accounting_plan, except: %w(new create destroy) do
-          member do
-            patch  :import
-            post   :auto_update
-            post   :ibiza_synchronize
-            patch  :import_fec
-            get    :import_model
-            get    :import_fec_processing
-            delete :destroy_providers
-            delete :destroy_customers
-          end
+        # resource :accounting_plan, except: %w(new create destroy) do
+        #   member do
+        #     patch  :import
+        #     post   :auto_update
+        #     post   :ibiza_synchronize
+        #     patch  :import_fec
+        #     get    :import_model
+        #     get    :import_fec_processing
+        #     delete :destroy_providers
+        #     delete :destroy_customers
+        #   end
 
-          resources :vat_accounts do
-            get   'edit_multiple',   on: :collection
-            patch 'update_multiple', on: :collection
-          end
-        end
+        #   resources :vat_accounts do
+        #     get   'edit_multiple',   on: :collection
+        #     patch 'update_multiple', on: :collection
+        #   end
+        # end
 
         resources :exercises
 
