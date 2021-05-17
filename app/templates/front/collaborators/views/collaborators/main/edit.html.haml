@@ -1,0 +1,8 @@
+#collaborator.derivationRight
+  .card
+    .card-header
+      %h3
+        Édition du collaborateur : 
+        = link_to @member.name, collaborators_show_path(@organization, @member), class: 'fs-origin'
+
+    = render partial: 'form'
