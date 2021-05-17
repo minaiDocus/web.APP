@@ -14,7 +14,7 @@ end
 Rails.application.routes.draw do
   mount Ckeditor::Engine => '/ckeditor'
 
-  root to: 'front/index#index'
+  root :to => redirect('/dashboard')
   get '/front/notifications/', controller: 'front/index', action: 'notifications'
 
   wash_out :dematbox
@@ -25,12 +25,14 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => '/sidekiq'
   end
 
+  get '/', to: redirect('/dashboard')
   front_draw('dashboard')
   front_draw('notifications')
   front_draw('news')
   front_draw('account_number_rules')
   front_draw('account_sharings')
   front_draw('addresses')
+  front_draw('bank_accounts')
   front_draw('organizations')
   front_draw('documents')
 
@@ -518,8 +520,6 @@ Rails.application.routes.draw do
       get   'select',   on: :collection
       patch 'validate', on: :collection
     end
-
-    resources :bank_accounts
 
     resources :emailed_documents do
       post 'regenerate_code', on: :collection
