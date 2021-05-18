@@ -40,6 +40,7 @@ Rails.application.routes.draw do
   front_draw('file_storage_authorizations')
   front_draw('accounting_plans')
   front_draw('vat_accounts')
+  front_draw('csv_descriptors')
   front_draw('organizations')
   front_draw('documents')
 
@@ -315,14 +316,8 @@ Rails.application.routes.draw do
 
         resources :list_journals, only: %w(index)
 
-        resource :csv_descriptor do
-          patch 'activate',   on: :member
-          patch 'deactivate', on: :member
-        end
-
 
         resource :use_csv_descriptor, only: %w(edit update)
-        resource :file_storage_authorizations, only: %w(edit update)
         resource :subscription
 
 
