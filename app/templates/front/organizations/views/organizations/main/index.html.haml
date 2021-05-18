@@ -12,8 +12,8 @@
             %span.badge.badge-info= @organizations.total_count
         .float-right
           = #link_to icon_edit + ' ' + 'Options globales', edit_options_account_organizations_path, class: 'btn btn-primary'
-          = link_to "Groupes d'organisation", account_group_organizations_path, class: 'btn btn-secondary'
-          = link_to icon_new + ' ' + t('actions.new'), new_account_organization_path, class: 'btn btn-primary'
+          = link_to "Groupes d'organisation", group_organizations_path, class: 'btn btn-secondary'
+          = link_to icon_new + ' ' + t('actions.new'), new_organization_path, class: 'btn btn-primary'
 
   .row.retractable.with-filter.derivationLeft
     .col-md-12.retractable-content
@@ -44,15 +44,15 @@
                     %td.aligncenter= organization.is_suspended ? glyphicon('check') : ''
                     %td.aligncenter= organization.addresses.select { |a| a.is_for_billing }.count == 0 ? glyphicon('check') : ''
                     %td.aligncenter= organization.try(:debit_mandate).try(:configured?) ? '' : glyphicon('check')
-                    %td= link_to organization.name, account_organization_path(organization)
+                    %td= link_to organization.name, organization_path(organization)
                     %td
                       - if (admin_member = organization.admin_members.first)
-                        = link_to admin_member.info, account_organization_collaborator_path(organization, admin_member)
+                        = link_to admin_member.info, organization_collaborator_path(organization, admin_member)
                     %td
                       - if organization.is_suspended
-                        = link_to 'Reprendre', unsuspend_account_organization_path(organization), method: 'patch', class: 'btn btn-warning'
+                        = link_to 'Reprendre', unsuspend_organization_path(organization), method: 'patch', class: 'btn btn-warning'
                       - else
-                        = link_to 'Suspendre', suspend_account_organization_path(organization), method: 'patch', class: 'btn btn-light'
+                        = link_to 'Suspendre', suspend_organization_path(organization), method: 'patch', class: 'btn btn-light'
         = render partial: 'shared/list_options', locals: { collection: @organizations }
 
     = form_tag account_organizations_path, method: :get, class: 'form-filter' do
@@ -135,7 +135,7 @@
           .card-footer
             .form-actions
               = submit_tag t('filters.action'), class: 'btn btn-primary'
-              = link_to glyphicon('x'), account_organizations_path, class: 'btn btn-light', title: t('filters.reset')
+              = link_to glyphicon('x'), organizations_path, class: 'btn btn-light', title: t('filters.reset')
 
 
 = javascript_include_tag 'front/organizations/assets/javascripts/main'

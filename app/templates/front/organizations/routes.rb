@@ -1,7 +1,7 @@
 # encoding: utf-8
 Rails.application.routes.draw do
   namespace :organizations do
-    resources :organizations, path: '', except: :destroy do
+    resources :organizations, path: '', except: :destroy, controller: 'main' do
       patch :suspend,               on: :member
       patch :activate,              on: :member
       patch :unsuspend,             on: :member

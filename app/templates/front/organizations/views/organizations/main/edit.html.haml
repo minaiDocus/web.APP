@@ -35,6 +35,6 @@
         .form-actions.margin0bottom
           = f.submit t('actions.submit'), class: 'btn btn-primary'
           - if params[:part] != 'other_software'
-            = link_to t('actions.cancel'), account_organization_path(@organization), class: 'btn btn-light'
+            = link_to t('actions.cancel'), organization_path(@organization), class: 'btn btn-light'
           - else
-            = link_to t('actions.cancel'), account_organization_path(@organization, tab: 'other_software'), class: 'btn btn-light'
+            = link_to t('actions.cancel'), organization_path(@organization, tab: 'other_software'), class: 'btn btn-light'

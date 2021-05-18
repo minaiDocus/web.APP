@@ -43,6 +43,7 @@ Rails.application.routes.draw do
   front_draw('csv_descriptors')
   front_draw('use_csv_descriptors')
   front_draw('subscriptions')
+  front_draw('group_organizations')
   front_draw('organization')
   front_draw('organizations')
   front_draw('documents')
@@ -186,10 +187,6 @@ Rails.application.routes.draw do
   post 'my_company_files/upload', controller: :my_company_files, action: 'upload'
 
   namespace :account do
-
-
-    # Named like that to avoid conflict with the routes of groups
-    resources :group_organizations, controller_name: 'organization_groups'
 
     resources :organizations, except: :destroy do
 
