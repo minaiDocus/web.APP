@@ -41,6 +41,7 @@ Rails.application.routes.draw do
   front_draw('accounting_plans')
   front_draw('vat_accounts')
   front_draw('csv_descriptors')
+  front_draw('use_csv_descriptors')
   front_draw('organizations')
   front_draw('documents')
 
@@ -317,7 +318,6 @@ Rails.application.routes.draw do
         resources :list_journals, only: %w(index)
 
 
-        resource :use_csv_descriptor, only: %w(edit update)
         resource :subscription
 
 

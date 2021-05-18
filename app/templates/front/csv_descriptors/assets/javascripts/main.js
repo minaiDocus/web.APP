@@ -1,4 +1,4 @@
 
 jQuery(function() {
-  console.log('vat accounts todo ...');
+  console.log('csv descriptors todo ...');
 });
