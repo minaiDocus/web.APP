@@ -192,25 +192,6 @@ Rails.application.routes.draw do
     resources :group_organizations, controller_name: 'organization_groups'
 
     resources :organizations, except: :destroy do
-      patch :suspend,               on: :member
-      patch :activate,              on: :member
-      patch :unsuspend,             on: :member
-      patch :deactivate,            on: :member
-      get   :edit_options,          on: :collection
-      get   :edit_software_users,   on: :member
-      get   :close_confirm,         on: :member
-      post  :prepare_payment,       on: :member
-      post  :confirm_payment,       on: :member
-      post  :revoke_payment,        on: :member
-      patch :update_options,        on: :collection
-      patch :update_software_users, on: :member
-
-      resources :addresses, controller: 'organization_addresses'
-
-      resource :period_options, only: %w(edit update), controller: 'organization_period_options' do
-        post :propagate,                  on: :member
-        get  :select_propagation_options, on: :member
-      end
 
       resource :file_naming_policy, only: %w(edit update) do
         patch 'preview', on: :member
@@ -234,8 +215,6 @@ Rails.application.routes.draw do
         get  'customer_labels', on: :member
         get  'workshop_labels', on: :member
       end
-
-      resource :csv_descriptor, only: %w(edit update), controller: 'organization_csv_descriptors'
 
       resources :groups
 
@@ -312,39 +291,10 @@ Rails.application.routes.draw do
         resources :list_journals, only: %w(index)
 
 
-        with_options module: 'organization' do |r|
-          r.resources :new_provider_requests, only: %w(index new create edit update)
-          r.resources :bank_accounts, only: %w(index edit update)
-          r.resources :retrieved_banking_operations, only: :index do
-            post 'force_processing', on: :collection
-            post 'unlock_operations', on: :collection
-          end
-
-          r.resources :retrieved_documents, only: %w(index show) do
-            get   'piece',    on: :member
-            get   'select',   on: :collection
-            patch 'validate', on: :collection
-          end
-          r.resource :dematbox, only: %w(create destroy)
-
-          r.resources :ibizabox_documents, only: %w(index show) do
-            get   'piece',    on: :member
-            get   'select',   on: :collection
-            patch 'validate', on: :collection
-          end
-
-        end
-
-
         resources :orders, except: %w(index show)
       end
 
       resources :journals, except: 'show'
-
-      resource :organization_subscription, only: %w(edit update) do
-        get   'select_options',    on: :collection
-        patch 'propagate_options', on: :collection
-      end
 
       resource :ibiza, controller: 'ibiza', only: %w(create edit update)
 
