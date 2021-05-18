@@ -6,25 +6,36 @@
     %link{ :rel => 'shortcut icon', :type => 'image/ico', :href => image_path('favicon.ico') }
     = csrf_meta_tag
     = stylesheet_link_tag 'application', 'account/organizations'
-    - if controller_name.in?(%w(subscriptions organization_subscriptions))
-      = stylesheet_link_tag 'account/subscriptions'
-    - elsif controller_name.in?(%w(csv_descriptors organization_csv_descriptors))
-      = stylesheet_link_tag 'account/csv_descriptors'
-    - elsif controller_name.in?(%w(organizations ibiza))
-      = stylesheet_link_tag 'account/ibiza'
-    - elsif controller_name.in?(%w(retrievers new_provider_requests retrieved_banking_operations retrieved_documents))
-      = stylesheet_link_tag 'account/organization/retrievers'
-    - elsif controller_name == 'customer_addresses'
-      = stylesheet_link_tag 'account/addresses'
-    - elsif controller_name.in?(%w(invoices))
-      = stylesheet_link_tag 'account/invoices'
-    - elsif !controller_name.in?(%w(accounting_plans vat_accounts knowings pack_reports reminder_emails file_sending_kits file_storage_authorizations use_csv_descriptors list_journals account_sharings account_sharing_groups guest_collaborators ibizabox_documents ftps sftps mcf_settings))
-      = stylesheet_link_tag "account/#{controller_name}"
+    = stylesheet_link_tag 'account/subscriptions'
+    = stylesheet_link_tag 'account/csv_descriptors'
+    = stylesheet_link_tag 'account/ibiza'
+    = stylesheet_link_tag 'account/organization/retrievers'
+    = stylesheet_link_tag 'account/addresses'
+    = stylesheet_link_tag 'account/invoices'
+    = stylesheet_link_tag 'account/accounting_plans'
+    = stylesheet_link_tag 'account/vat_accounts'
+    = stylesheet_link_tag 'account/knowings'
+    = stylesheet_link_tag 'account/pack_reports'
+    = stylesheet_link_tag 'account/file_sending_kits'
+    = stylesheet_link_tag 'account/file_storage_authorizations'
+    = stylesheet_link_tag 'account/use_csv_descriptors'
+    = stylesheet_link_tag 'account/list_journals'
+    = stylesheet_link_tag 'account/account_sharings'
+    = stylesheet_link_tag 'account/account_sharing_groups'
+    = stylesheet_link_tag 'account/guest_collaborators'
+    = stylesheet_link_tag 'account/ibizabox_documents'
+    = stylesheet_link_tag 'account/ftps'
+    = stylesheet_link_tag 'account/sftps'
+    = stylesheet_link_tag 'account/mcf_settings'
 
-  %body
-    #wrap
-      = render 'layouts/head_menu'
 
+    / = javascript_declare_var('XHR_TKN', FrontController::XHR_TOKEN)
+    = javascript_include_tag Ckeditor.cdn_url
+    = javascript_include_tag 'front/main'
+
+  #wrap
+    = render 'layouts/front/head_menu'
+    .body_content{ style: 'padding: 15px' }
       .container-fluid
         .row.derivationLeft
           .col-md-12
@@ -103,30 +114,43 @@
             != yield
       #push
 
-    = render 'layouts/footer'
-    = render 'layouts/news'
+    = render 'layouts/front/footer'
+    = render 'layouts/front/news'
 
     :plain
       <!--[if lt IE 9]>
         <script src="/assets/html5.js" type="text/javascript"></script>
       <![endif]-->
-
-    = javascript_include_tag Ckeditor.cdn_url
-    = javascript_include_tag 'application', 'inner'
-    = javascript_include_tag 'account/software_users' if controller_name == 'organizations' && action_name == 'edit_software_users'
-    = javascript_include_tag 'account/compta_analytics' if controller_name == 'journals' && action_name == 'edit_analytics'
-    - if controller_name.in?(%w(subscriptions organization_subscriptions customers))
+    .to_delete
+      = javascript_include_tag 'application', 'inner'
+      = javascript_include_tag 'account/software_users'
+      = javascript_include_tag 'account/compta_analytics'
       = javascript_include_tag 'account/customers', 'account/subscriptions', 'account/organization_subscriptions', 'account/journals'
-    - elsif controller_name.in?(%w(csv_descriptors organization_csv_descriptors))
       = javascript_include_tag 'account/csv_descriptors'
-    - elsif controller_name.in?(%w(bank_accounts retrieved_documents))
       = javascript_include_tag 'account/organization_retrievers'
-    - elsif controller_name.in?(%w(customer_addresses))
       = javascript_include_tag 'account/addresses'
-    - elsif controller_name.in?(%w(invoices))
       = javascript_include_tag 'account/invoices'
-    - elsif not controller_name.in?(%w(rights collaborators organization_addresses vat_accounts exercises bank_accounts knowings pre_assignment_delivery_errors ibiza reminder_emails new_provider_requests retrieved_banking_operations retrieved_documents file_sending_kits file_storage_authorizations use_csv_descriptors list_journals account_sharing_groups guest_collaborators mcf_settings sftps))
-      = javascript_include_tag "account/#{controller_name}"
+      = javascript_include_tag 'account/rights'
+      = javascript_include_tag 'account/collaborators'
+      = javascript_include_tag 'account/organization_addresses'
+      = javascript_include_tag 'account/vat_accounts'
+      = javascript_include_tag 'account/exercises'
+      = javascript_include_tag 'account/bank_accounts'
+      = javascript_include_tag 'account/knowings'
+      = javascript_include_tag 'account/pre_assignment_delivery_errors'
+      = javascript_include_tag 'account/ibiza'
+      = javascript_include_tag 'account/reminder_emails'
+      = javascript_include_tag 'account/new_provider_requests'
+      = javascript_include_tag 'account/retrieved_banking_operations'
+      = javascript_include_tag 'account/retrieved_documents'
+      = javascript_include_tag 'account/file_sending_kits'
+      = javascript_include_tag 'account/file_storage_authorizations'
+      = javascript_include_tag 'account/use_csv_descriptors'
+      = javascript_include_tag 'account/list_journals'
+      = javascript_include_tag 'account/account_sharing_groups'
+      = javascript_include_tag 'account/guest_collaborators'
+      = javascript_include_tag 'account/mcf_settings'
+      = javascript_include_tag 'account/sftps'
     = render '/shared/google_analytics'
     = render '/shared/zendesk_help'
 

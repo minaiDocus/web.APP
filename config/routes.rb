@@ -43,6 +43,7 @@ Rails.application.routes.draw do
   front_draw('csv_descriptors')
   front_draw('use_csv_descriptors')
   front_draw('subscriptions')
+  front_draw('organization')
   front_draw('organizations')
   front_draw('documents')
 
@@ -221,14 +222,6 @@ Rails.application.routes.draw do
 
       resource :knowings, only: %w(new create edit update)
 
-      resource :ftps, only: %w(edit update destroy), module: 'organization' do
-        post :fetch_now, on: :collection
-      end
-
-      resource :sftps, only: %w(edit update destroy), module: 'organization' do
-        post :fetch_now, on: :collection
-      end
-
       resources :reminder_emails, except: :index do
         post 'deliver', on: :member
       end
@@ -380,9 +373,6 @@ Rails.application.routes.draw do
 
       resources :preseizure_accounts
 
-      resources :account_sharings, only: %w(index new create destroy), module: :organization do
-        post :accept, on: :member
-      end
       resources :guest_collaborators do
         get 'search', on: :collection
       end

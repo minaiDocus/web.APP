@@ -1,0 +1,84 @@
+= stylesheet_link_tag 'front/organization/assets/stylesheets/main'
+
+- if @customer.configured?
+  = render 'account/customers/header'
+- else
+  .box
+    = render 'account/customers/steps'
+  .row-fluid
+    .span12.box
+      %h3 Création des automates pour le dossier : #{@customer}
+      .aligncenter.margin1top
+        = link_to t('actions.previous_step'), previous_account_organization_customer_setup_path(@organization, @customer), class: 'btn'
+        - unless last_step?
+          = link_to t('actions.complete_later'), complete_later_account_organization_customer_setup_path(@organization, @customer), class: 'btn'
+        = link_to t('actions.' + (last_step? ? 'finish' : 'next_step')), next_account_organization_customer_setup_path(@organization, @customer), class: 'btn btn-primary'
+
+.row-fluid
+  .span12.box
+    - if @customer.configured?
+      %ul.nav.nav-tabs
+        %li= link_to 'Informations', account_organization_customer_path(@organization, @customer, tab: 'information')
+        %li= link_to 'Forfaits', account_organization_customer_path(@organization, @customer, tab: 'subscription')
+        %li= link_to 'Commandes Kits/Scan', account_organization_customer_path(@organization, @customer, tab: 'orders')
+        %li= link_to 'Adresses', account_organization_customer_path(@organization, @customer, tab: 'addresses')
+        - if @customer.options.is_upload_authorized
+          %li= link_to 'Option téléversement', account_organization_customer_path(@organization, @customer, tab: 'period_options')
+        %li= link_to 'Journaux comptables', account_organization_customer_path(@organization, @customer, tab: 'journals')
+        - if @customer.active? && @customer.options.is_retriever_authorized
+          %li.active= link_to "iDo'FacBanque", '#retrievers', data: { toggle: 'tab' }
+          %li= link_to 'Paramètres bancaires', account_bank_settings_path({account_id: @customer.id})
+        %li= link_to 'Comptabilité', account_organization_customer_path(@organization, @customer, tab: 'compta')
+        - if @customer.uses?(:ibiza)
+          %li= link_to 'Ibiza Box', account_organization_customer_path(@organization, @customer, tab: 'ibiza_box')
+        %li.dropdown{ class: ('active' if Interfaces::Software::Configuration::SOFTWARES.include? params[:tab]) }
+          %a.dropdown-toogle{ href: '#', data: {toggle: "dropdown"} } Logiciels comptables / export csv
+          %ul.dropdown-menu{ style: "min-width: 187px" }
+            -if @organization.ibiza.try(:used?)
+              %li{ class: ('active' if params[:tab] == 'ibiza') }
+                %a{ href: account_organization_customer_path(@organization, @customer, tab: 'ibiza') }
+                  .pull-left iBiza
+                  - if @customer.uses?(:ibiza)
+                    %i.icon-ok.pull-right
+            -if @organization.try(:coala).try(:used?)
+              %li{ class: ('active' if params[:tab] == 'coala') }
+                %a{ href: account_organization_customer_path(@organization, @customer, tab: 'coala') }
+                  .pull-left Coala
+                  - if @customer.uses?(:coala)
+                    %i.icon-ok.pull-right
+            -if @organization.try(:quadratus).try(:used?)
+              %li{ class: ('active' if params[:tab] == 'quadratus') }
+                %a{ href: account_organization_customer_path(@organization, @customer, tab: 'quadratus') }
+                  .pull-left Quadratus
+                  - if @customer.uses?(:quadratus)
+                    %i.icon-ok.pull-right
+            -if @organization.try(:csv_descriptor).try(:used?)
+              %li{ class: ('active' if params[:tab] == 'csv_descriptor') }
+                %a{ href: account_organization_customer_path(@organization, @customer, tab: 'csv_descriptor') }
+                  .pull-left Format d’export (.csv)
+                  - if @customer.uses?(:csv_descriptor)
+                    %i.icon-ok.pull-right
+        - unless @customer.uses?(:ibiza)
+          %li= link_to 'Plan comptable', account_organization_customer_path(@organization, @customer, tab: 'others')
+        - if @organization.knowings.try(:ready?)
+          %li= link_to 'Outil GED', account_organization_customer_path(@organization, @customer, tab: 'ged')
+        - if @customer.is_dematbox_authorized
+          %li= link_to "iDocus'Box", account_organization_customer_path(@organization, @customer, tab: 'idocus_box')
+        - if @user.is_admin && @customer.active?
+          %li= link_to 'Stockages externes', account_organization_customer_path(@organization, @customer, tab: 'file_storages')
+
+    #retrievers
+      = link_to 'Ajouter un automate', new_account_organization_customer_retriever_path(@organization, @customer), class: 'btn btn-primary margin1right'
+      = link_to 'Liste des automates', list_account_organization_customer_retrievers_path(@organization, @customer), class: 'btn margin1right'
+      = link_to 'Demander un nouvel automate', new_account_organization_customer_new_provider_request_path(@organization, @customer), class: 'btn margin1right'
+      = link_to 'Suivi de mes demandes', account_organization_customer_new_provider_requests_path(@organization, @customer), class: 'btn margin1right'
+      = link_to 'Opérations bancaires', account_organization_customer_retrieved_banking_operations_path(@organization, @customer), class: 'btn margin1right'
+      = link_to 'Documents (Factures)', account_organization_customer_retrieved_documents_path(@organization, @customer), class: 'btn margin1right'
+      = link_to 'Sélection des comptes bancaires', account_organization_customer_bank_accounts_path(@organization, @customer), class: 'btn margin1right'
+      = link_to 'Sélection des documents', select_account_organization_customer_retrieved_documents_path(@organization, @customer), class: 'btn'
+
+      %hr
+      %h3.margin2bottom Liste des automates (#{@retrievers.count})
+      .retrievers_list
+
+= javascript_include_tag 'front/organization/assets/javascripts/main'
