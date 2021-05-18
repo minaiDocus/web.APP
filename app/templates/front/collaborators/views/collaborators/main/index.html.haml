@@ -36,4 +36,4 @@
                     = link_to 'supprimer', collaborators_delete_path(@organization, member), class: 'btn btn-light', data: { method: :delete, confirm: "Êtes-vous sûr de vouloir supprimer ce compte définitivement ? Cette action est irréversible." }
         = render partial: 'shared/list_options', locals: { collection: @members }
     = render partial: 'sidebar'
-= stylesheet_link_tag 'front/collabortaors/assets/javascripts/main'
+= javascript_include_tag 'front/collabortaors/assets/javascripts/main'
