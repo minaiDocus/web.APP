@@ -196,7 +196,7 @@ class AccountingPlans::MainController < FrontController
 
     flash[:success] = 'Clients supprimés avec succès.'
 
-    redirect_to account_organization_customer_accounting_plan_path(@organization, @customer)
+    redirect_to organization_customer_accounting_plan_path(@organization, @customer)
   end
 
   private
@@ -209,7 +209,7 @@ class AccountingPlans::MainController < FrontController
     if @customer.inactive?
       flash[:error] = t('authorization.unessessary_rights')
 
-      redirect_to account_organization_path(@organization)
+      redirect_to organization_path(@organization)
     end
   end
 
@@ -220,7 +220,7 @@ class AccountingPlans::MainController < FrontController
   def verify_rights
     unless (@user.leader? || @user.manage_customers)
       flash[:error] = t('authorization.unessessary_rights')
-      redirect_to account_organization_path(@organization)
+      redirect_to organization_path(@organization)
     end
   end
 

@@ -59,7 +59,7 @@ class ApplicationController < ActionController::Base
 
         if user.collaborator? && prev_user_code != session[:user_code] && request.path.match(%r{^/account/organizations})
           collab = Collaborator.new(user)
-          redirect_to account_organization_path(collab.organization)
+          redirect_to organizations_organizations_path(collab.organization)
         end
       end
     end
@@ -107,7 +107,7 @@ class ApplicationController < ActionController::Base
   def verify_if_active
     if @user&.inactive? && !controller_name.in?(%w[profiles documents])
       flash[:error] = t('authorization.unessessary_rights')
-      redirect_to account_documents_path
+      redirect_to documents_path
     end
   end
 

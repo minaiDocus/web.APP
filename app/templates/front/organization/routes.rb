@@ -42,7 +42,7 @@ Rails.application.routes.draw do
       get  :select_propagation_options, on: :member
     end
 
-		resource :organization_subscription, only: %w(edit update), controller: 'organization_subscriptions' do
+		resource :subscription, only: %w(edit update), controller: 'subscriptions' do
       get   'select_options',    on: :collection
       patch 'propagate_options', on: :collection
     end

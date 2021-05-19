@@ -65,10 +65,10 @@
               %td.date= l document.scanned_at, format: '%d %B %Y'
               %td
                 - if document.pack
-                  = link_to document.name, account_documents_path(pack_name: document.name), target: '_blank'
+                  = link_to document.name, documents_path(pack_name: document.name), target: '_blank'
                 - else
                   = document.name
-    .float-right= link_to 'Tous les documents numérisés', account_paper_processes_path(paper_process_contains: { type: 'scan' })
+    .float-right= link_to 'Tous les documents numérisés', paper_processes_path(paper_process_contains: { type: 'scan' })
 .row-fluid.margin3top
   .col-sm-12
     %h4 Dernières enveloppes retournées

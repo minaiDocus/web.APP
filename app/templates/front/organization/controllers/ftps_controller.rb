@@ -35,7 +35,7 @@ class Organization::FtpsController < OrganizationController
       @ftp.is_configured = true if is_verified
       @ftp.save
       flash[:success] = 'Vos paramètres FTP ont été modifiés avec succès.'
-      redirect_to account_organization_path(@organization, tab: 'ftp')
+      redirect_to organization_path(@organization, tab: 'ftp')
     else
       flash[:error] = @ftp.reload.error_message
       render :edit
@@ -45,7 +45,7 @@ class Organization::FtpsController < OrganizationController
   def destroy
     @ftp.reset_info
     flash[:success] = 'Vos paramètres FTP ont été réinitialisés.'
-    redirect_to account_organization_path(@organization, tab: 'ftp')
+    redirect_to organization_path(@organization, tab: 'ftp')
   end
 
   def fetch_now
@@ -55,7 +55,7 @@ class Organization::FtpsController < OrganizationController
     else
       flash[:error] = "Votre FTP n'a pas été configuré correctement."
     end
-    redirect_to account_organization_path(@organization, tab: 'ftp')
+    redirect_to organization_path(@organization, tab: 'ftp')
   end
 
   private
@@ -63,7 +63,7 @@ class Organization::FtpsController < OrganizationController
   def verify_rights
     unless @user.leader?
       flash[:error] = t('authorization.unessessary_rights')
-      redirect_to account_organization_path(@organization)
+      redirect_to organization_path(@organization)
     end
   end
 

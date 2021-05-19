@@ -4,7 +4,7 @@ class Organization::SubscriptionsController < OrganizationController
   before_action :verify_rights
   before_action :load_subscription
 
-  append_view_path('app/templates/front/organization_subscriptions/views')
+  append_view_path('app/templates/front/subscriptions/views')
 
   # GET /account/organizations/:organization_id/organization_subscription/edit
   def edit; end

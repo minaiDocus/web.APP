@@ -3,7 +3,7 @@
 class Organization::AddressesController < OrganizationController
   before_action :load_address, only: %w[edit update destroy]
 
-  append_view_path('app/templates/front/organization_addresses/views')
+  append_view_path('app/templates/front/addresses/views')
 
   # GET /account/organizations/:organization_id/addresses
   def index

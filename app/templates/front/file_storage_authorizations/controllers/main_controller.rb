@@ -22,7 +22,7 @@ class FileStorageAuthorizations::MainController < FrontController
   def verify_rights
     unless current_user.is_admin
       flash[:error] = t('authorization.unessessary_rights')
-      redirect_to account_organization_path(@organization)
+      redirect_to organization_path(@organization)
     end
   end
 
@@ -52,7 +52,7 @@ class FileStorageAuthorizations::MainController < FrontController
   def verify_if_someone_is_active
     if @someone.inactive?
       flash[:error] = t('authorization.unessessary_rights')
-      redirect_to account_organization_path(@organization)
+      redirect_to organization_path(@organization)
     end
   end
 

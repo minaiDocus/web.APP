@@ -60,7 +60,7 @@ class Notifications::PreAssignments < Notifications::Notifier
       end
 
       create_notification({
-        url: Rails.application.routes.url_helpers.account_documents_path,
+        url: Rails.application.routes.url_helpers.documents_path,
         user: prescriber,
         notice_type: 'new_pre_assignment_available',
         title: list.size == 1 ? 'Nouvelle pré-affectation disponible' : 'Nouvelles pré-affectations disponibles',

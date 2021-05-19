@@ -114,10 +114,10 @@ class Collaborators::MainController < FrontController
           if related_organization == @organization
             if member.user.id == @user.id
               # Has deleted his own access to the organization, redirecting to another organization
-              redirect_to account_organization_path(@user.organizations.order(:name).first)
+              redirect_to organization_path(@user.organizations.order(:name).first)
             else
               # Has deleted access to this organization for this account, redirecting to list of collaborators
-              redirect_to account_organization_collaborators_path(@organization)
+              redirect_to organization_collaborators_path(@organization)
             end
             return
           elsif @organization.organization_groups.empty? && member.user.memberships.count == 1
@@ -142,11 +142,11 @@ class Collaborators::MainController < FrontController
     if @user.leader? || @user.manage_collaborators
       if action_name.in?(%w[new create destroy edit update]) && !@organization.is_active
         flash[:error] = t('authorization.unessessary_rights')
-        redirect_to account_organization_path(@organization)
+        redirect_to organization_path(@organization)
       end
     else
       flash[:error] = t('authorization.unessessary_rights')
-      redirect_to account_organization_path(@organization)
+      redirect_to organization_path(@organization)
     end
   end
 

@@ -46,7 +46,7 @@ class CsvDescriptors::MainController < FrontController
 
     flash[:success] = 'Modifié avec succès.'
 
-    redirect_to account_organization_customer_path(@organization, @customer, tab: 'csv_descriptor')
+    redirect_to organization_customer_path(@organization, @customer, tab: 'csv_descriptor')
   end
 
   private
@@ -54,7 +54,7 @@ class CsvDescriptors::MainController < FrontController
   def verify_rights
     unless @user.is_admin || (@user.is_prescriber && @user.organization == @organization) || @organization.try(:csv_descriptor).try(:used?)
       flash[:error] = t('authorization.unessessary_rights')
-      redirect_to account_organization_path(@organization)
+      redirect_to organization_path(@organization)
     end
   end
 

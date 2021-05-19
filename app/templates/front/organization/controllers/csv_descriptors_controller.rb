@@ -4,7 +4,7 @@ class Organization::CsvDescriptorsController < OrganizationController
   before_action :verify_rights
   before_action :load_csv_descriptor
 
-  append_view_path('app/templates/front/organization_csv_descriptors/views')
+  append_view_path('app/templates/front/csv_descriptors/views')
 
   # GET account/organizations/:organization_id/csv_descriptor/edit
   def edit; end
@@ -14,7 +14,7 @@ class Organization::CsvDescriptorsController < OrganizationController
     if @csv_descriptor.update(csv_descriptor_params)
       flash[:success] = 'Modifié avec succès.'
 
-      redirect_to account_organization_path(@organization, tab: 'csv_descriptor')
+      redirect_to organization_path(@organization, tab: 'csv_descriptor')
     else
       render :edit
     end
@@ -26,7 +26,7 @@ class Organization::CsvDescriptorsController < OrganizationController
     unless @user.is_admin || (@user.is_prescriber && @user.organization == @organization) || @organization.try(:csv_descriptor).try(:used?)
       flash[:error] = t('authorization.unessessary_rights')
 
-      redirect_to account_organization_path(@organization)
+      redirect_to organization_path(@organization)
     end
   end
 
