@@ -92,31 +92,8 @@ Rails.application.routes.draw do
 
   # ===================================== TO DELETE =============================================== 
   # ===============================================================================================
-  get '/contents/original/*all', controller: 'account/documents', action: 'handle_bad_url'
-
-  get '/account' => redirect('/account/documents')
+  
   get '/account/compositions/download',                    controller: 'account/compositions', action: 'download'
-  get '/account/documents/:id/download/:style',            controller: 'account/documents', action: 'download'
-  get '/account/documents/processing/:id/download(/:style)', controller: 'account/documents', action: 'download_processing'
-  get '/account/documents/pieces/:id/download(/:style)',   controller: 'account/documents', action: 'piece'
-  get '/account/documents/pieces/download_selected/:pieces_ids(/:style)', controller: 'account/documents', action: 'download_selected'
-  get '/account/documents/temp_documents/:id/download(/:style)',   controller: 'account/documents', action: 'temp_document'
-  get '/account/documents/pack/:id/download',              controller: 'account/documents', action: 'pack'
-  get '/account/documents/multi_pack_download',            controller: 'account/documents', action: 'multi_pack_download'
-  post '/account/documents/select_to_export',              controller: 'account/documents', action: 'select_to_export'
-  get '/account/documents/export_preseizures/:params64',   controller: 'account/documents', action: 'export_preseizures'
-  get '/account/documents/preseizure_account/:id',         controller: 'account/documents', action: 'preseizure_account'
-
-  get '/account/documents/preseizure/:id/edit',            controller: 'account/documents', action: 'edit_preseizure'
-  post '/account/documents/preseizure/:id/update',         controller: 'account/documents', action: 'update_preseizure'
-  get '/account/documents/preseizure/account/:id/edit',    controller: 'account/documents', action: 'edit_preseizure_account'
-  post '/account/documents/preseizure/account/:id/update', controller: 'account/documents', action: 'update_preseizure_account'
-  get '/account/documents/preseizure/entry/:id/edit',      controller: 'account/documents', action: 'edit_preseizure_entry'
-  post '/account/documents/preseizure/entry/:id/update',   controller: 'account/documents', action: 'update_preseizure_entry'
-  post '/account/documents/deliver_preseizures',           controller: 'account/documents', action: 'deliver_preseizures'
-  post '/account/documents/update_multiple_preseizures',   controller: 'account/documents', action: 'update_multiple_preseizures'
-  post '/account/documents/already_exist_document',        controller: 'account/documents', action: 'already_exist_document'
-  get '/account/documents/exist_document/:id/download',    controller: 'account/documents', action: 'exist_document'
 
   post '/account/preseizure_accounts/accounts_list',       controller: 'account/preseizure_accounts', action: 'accounts_list'
 
@@ -335,28 +312,6 @@ Rails.application.routes.draw do
         delete 'remove', action: 'remove'
         get 'synchronize', action: 'synchronize'
       end
-    end
-
-
-    resources :documents do
-      get  'packs',                           on: :collection
-      get  'reports',                         on: :collection
-      get  'archive',                         on: :member
-      post 'sync_with_external_file_storage', on: :collection
-      post 'delete_multiple_piece',           on: :collection
-      post 'restore_piece',                   on: :collection
-    end
-
-
-    namespace :documents do
-      resource :tags do
-        post 'update_multiple', on: :collection
-        post 'get_tag_content', on: :collection
-      end
-      resource :compta_analytics do
-        post 'update_multiple', on: :collection
-      end
-      resource :upload
     end
 
 

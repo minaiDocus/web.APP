@@ -1,8 +1,97 @@
-= stylesheet_link_tag 'front/documents/assets/index'
+= stylesheet_link_tag 'front/documents/assets/stylesheets/main'
 
-.documents-content
-	.row
-		.col-md-6
-			Mes documents pages ...
+#documents.container-fluid
+  .alerts.derivationLeft
+    = render partial: 'shared/messages'
 
-= javascript_include_tag 'front/documents/assets/index'
+  .row.derivationRight
+    .col-md-12
+      #documents_actions
+        .actionbar.box.medium-shadow.clearfix{style: 'padding: 14px 10px 5px 10px'}
+          .feedback.inactive.float-left
+            %span.out
+              Aucun traitement
+          %span.filter_indication.float-left
+            %span.filter_indication_text
+            %a.do-tooltip{ href:'#', title:'supprimer le filtre', class: 'btn btn-danger', id: 'initPackFilter' }
+              = glyphicon('x', class: 'fs-origin')
+          - if @user.active?
+            .float-right
+              - # %a{ :href => "#", :class => "toggle-qtip" } Afficher/Cacher l'aide
+              - # |
+              - if file_upload_users_list.present?
+                %a{ data: { toggle: :modal }, href: '#uploadDialog', class: 'btn btn-primary', style: 'position:relative;top:-3px;' }
+                  = glyphicon('data-transfer-upload', { class: 'mr-sm-1', color: '#fff' })
+                  Ajouter des documents
+  .row.derivationLeft
+    .col-md-3
+      #documentslist.box.bg-light.qtip-target
+        .header.clearfix
+          .actionfilter.clearfix
+            .pack_name.margin1bottom
+              = select_tag :document_owner_list, options_for_select([["en cours d'envois","current_delivery"],["tous","all"]]+linked_users_option,["tous","all"]), :class => "view_for wauto margin05left margin0bottom"
+            .other_filter.clearfix
+              .per_page.float-right
+                = label_tag :per_page, "par :", :class => "margin1left float-left"
+                = select_tag :per_page, options_for_select([["20",20],["40",40],["60",60]]), :class => "per_page w50 margin1left"
+              %a{ href:'#packFilterModal', title:'plus de filtre', style: 'margin-right: 5px', class: 'btn btn-primary float-left', data: {toggle: :modal} }
+                = glyphicon('excerpt', { class: 'mr-sm-1', color: '#fff' })
+                Plus de filtre
+        .subView
+          %span{ class: 'tab-nav selected', id: 'view_packs' }
+            Documents
+          - if @user.pre_assignement_displayed?
+            %span{ class: 'tab-nav', id: 'view_reports' }
+              Opé. bancaires
+        .packsList
+          .actions.clearfix
+            %h3.float-left
+              #{@packs.total_count} lot(s)
+            - if @user.active?
+              .actiongroup.float-right
+                - if current_user.is_admin
+                  %a.do-tooltip.delivery{ "data-toggle"=>"modal", :href => "#shareDialog", :title => "Envoyer vers mon stockage externe" }
+                    = glyphicon('share')
+                %a.do-tooltip{ :href => '#', :id => "download_multi_pack", :title => "Télécharger la séléction" }
+                  = glyphicon('data-transfer-download')
+                %a.do-tooltip.pack_tag{ "data-toggle"=>"modal", :href => "#", :title => "Tagger" }
+                  = glyphicon('tag')
+                |
+                %a.do-selectAll.do-tooltip{:href => "#", :title => "Tous"}
+                  = glyphicon('check')
+                %a.do-unselectAll.do-tooltip{:href => "#", :title => "Aucun"}
+                  = glyphicon('ban')
+          .content.clearfix
+            %ul.margin0left.padding0left
+              = render :partial => "/documents/main/pack", :collection => @packs
+            .float-right
+              = paginate @packs
+        .reportsList.hide
+          %h3
+            #{@reports.total_count} lot(s)
+          .content.clearfix
+            %ul.margin0left.padding0left
+              = render :partial => "/documents/main/report", :collection => @reports
+            .float-right
+              = paginate @reports
+
+    .col-md-9
+      #pageslist.box.derivationRight
+        %input.href_download{type: :hidden, value: ""}
+        %input.href_download_zip{type: :hidden, value: ""}
+        %input.is_collaborator{type: :hidden, value: "#{@user.has_collaborator_action? ? 1 : 0}"}
+        = render partial: '/documents/main/pieces/index'
+      #preseizuresList.derivationRight
+        = render partial: '/documents/main/preseizures/index'
+      .scroll_on_top.hide
+        %span
+          = glyphicon('arrow-top')
+
+- if @pack
+  #pack{ data: { name: @pack.name.sub(' all', ''), id: @pack.id } }
+
+= render :partial => "/documents/main/dialog_box"
+
+= render "help"
+
+= javascript_include_tag 'front/documents/assets/javascripts/main'
