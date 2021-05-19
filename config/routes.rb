@@ -47,6 +47,7 @@ Rails.application.routes.draw do
   front_draw('organization')
   front_draw('organizations')
   front_draw('documents')
+  front_draw('reporting')
 
   get 'admin/', to: redirect('/admin/dashboard')
   back_draw('dashboard')
@@ -315,13 +316,7 @@ Rails.application.routes.draw do
     end
 
 
-    resource :reporting
     resources :periods
-
-    namespace :report do
-      resources :expenses
-      resources :preseizures
-    end
 
     resource :dropbox do
       get 'authorize_url', on: :member
