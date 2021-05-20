@@ -1,0 +1,54 @@
+.card.retractable-filter
+  = form_tag account_pre_assignment_ignored_path, method: :get, class: 'form-filter' do
+    .card-header.clearfix
+      .float-left
+        %h3 Filtres
+      .float-right.margin1left
+        %a.locker{ href: "#", title: "Cacher le Filtre" }= glyphicon('layers')
+    .retractable-filter-content
+      .card-body
+        = hidden_field_tag :direction, sort_direction
+        = hidden_field_tag :sort, sort_column
+        = hidden_field_tag :per_page, per_page
+
+        .form-group.clearfix
+          .label-section
+            = label_tag 'filter_contains[created_at][>=]', t('activerecord.models.common.attributes.created_at')
+          .control-section
+            .filter-date
+              .input-prepend.date.datepicker
+                %span.add-on
+                  %span.badge.badge-secondary.fs-origin.mr-md-1 >=
+                = text_field_tag 'filter_contains[created_at][>=]', (params[:filter_contains][:created_at]['>='] rescue '')
+              .input-prepend.date.datepicker
+                %span.add-on
+                  %span.badge.badge-secondary.fs-origin.mr-md-1 <=
+                = text_field_tag 'filter_contains[created_at][<=]', (params[:filter_contains][:created_at]['<='] rescue '')
+        .form-group.clearfix
+          .label-section
+            = label_tag 'filter_contains[piece_name]', 'N° pièce'
+          .control-section
+            = text_field_tag 'filter_contains[piece_name]', (params[:filter_contains][:piece_name] rescue '')
+
+        .form-group.clearfix
+          .label-section
+            = label_tag 'filter_contains[piece_number]', 'N° facture'
+          .control-section
+            = text_field_tag 'filter_contains[piece_number]', (params[:filter_contains][:piece_number] rescue '')
+
+        .form-group.clearfix
+          .label-section
+            = label_tag 'filter_contains[pack_name]', 'Nom du lot'
+          .control-section
+            = text_field_tag 'filter_contains[pack_name]', (params[:filter_contains][:pack_name] rescue '')
+
+        .form-group.clearfix
+          .label-section
+            = label_tag 'filter_contains[pre_assignment_state]', 'Statut'
+          .control-section
+            = select_tag 'filter_contains[pre_assignment_state]', options_for_select([['Pré-affectation ignorée', 'ignored'], ['En cours de renvoi à la pré-affectation', 'force_processing']], (params[:filter_contains][:pre_assignment_state] rescue '')), include_blank: true
+
+      .card-footer
+        .form-actions
+          = submit_tag t('filters.action'), class: 'btn btn-primary'
+          = link_to glyphicon('x'), account_pre_assignment_ignored_path, class: 'btn btn-light'

@@ -1,0 +1,98 @@
+#pre_assignment_blocked_duplicates.container-fluid
+  .alerts
+    = render partial: 'shared/messages'
+
+  .row.derivationRight
+    .col-md-12
+      .box.clearfix
+        .float-left
+          %h3
+            Liste des doublons de pré-affectation
+            %span.badge.badge-info.fs-origin= @duplicates.total_count
+  .row.retractable.with-filter.derivationLeft
+    .col-md-12.retractable-content
+      .box
+        = render partial: 'shared/list_options', locals: { collection: @duplicates }
+        = form_tag '/account/pre_assignment_blocked_duplicates/update_multiple', method: :post, class: 'margin1bottom' do
+          %table.table.table-striped.table-condensed.margin1top.margin1bottom.table-bordered-inner.table-detachable-head
+            %thead
+              %tr.bg-brown.text-white
+                %th= check_box_tag 'master_checkbox', 0, false
+                %th= sortable :created_at, 'Date de création'
+                %th= sortable :piece_name, 'N° pièce'
+                %th= sortable :piece_number, 'N° facture'
+                %th= sortable :third_party, t('activerecord.models.pack_report_preseizure.attributes.third_party')
+                %th= sortable :amount, t('activerecord.models.pack_report_preseizure.attributes.amount')
+                %th= sortable :date, t('activerecord.models.pack_report_preseizure.attributes.date')
+                %th Pièces (PDF)
+                %th Statut
+            %tbody.retractable.slidedown
+              - @duplicates.each do |object|
+                - similar_preseizure = object.similar_preseizure || FakeObject.new
+                %tr
+                  %td= check_box_tag 'duplicate_ids[]', object.id, false, class: 'checkbox'
+                  %td
+                    %b
+                      - if object.created_at
+                        - if object.created_at.today?
+                          = l(object.created_at, format: '%H:%M')
+                        - else
+                          = l(object.created_at, format: '%d %b %Y %H:%M')
+                      - else
+                        \-
+                    %br
+                    - if similar_preseizure.try(:created_at)
+                      - if similar_preseizure.try(:created_at).try(:today?)
+                        = similar_preseizure.try(:created_at) ?  l(similar_preseizure.try(:created_at), format: '%H:%M') : '-'
+                      - else
+                        = similar_preseizure.try(:created_at) ? l(similar_preseizure.try(:created_at), format: '%d %b %Y %H:%M') : '-'
+                    - else
+                      \-
+                  %td
+                    %b= object.piece.try(:name)
+                    %br
+                    = similar_preseizure.try(:piece).try(:name) || 'Duplicated piece has been deleted'
+                  %td
+                    %b= object.piece_number
+                    %br
+                    = similar_preseizure.piece_number
+                  %td
+                    %b= object.third_party
+                    %br
+                    = similar_preseizure.third_party
+                  %td
+                    %b= object.cached_amount.to_s + ' €'
+                    %br
+                    = similar_preseizure.cached_amount.to_s + ' €'
+                  %td
+                    %b= l object.date, format: '%d %b %Y'
+                    %br
+                    = similar_preseizure.date ? l(similar_preseizure.date, format: '%d %b %Y') : '-'
+                  %td
+                    = link_to glyphicon('eye'), '#', class: 'do-showPieces custom_popover', title: 'Voir la différence entre les 2 pièces PDF', data: { duplicate_url: object.piece.try(:cloud_content_object).try(:url), original_url: similar_preseizure.try(:piece).try(:cloud_content_object).try(:url), content: "<div class='row-fluid'><div class='span6 aligncenter'><h3>Doublon</h3></div><div class='span6 aligncenter'><h3>Original</h3></div></div><div style='width: 1000px; height: 500px; padding: 10px;' class='aligncenter'><iframe class='duplicate' src='#{object.piece.try(:cloud_content_object).try(:url)}' style='width:470px; height:483px;'></iframe><iframe class='original' src='#{similar_preseizure.try(:piece).try(:cloud_content_object).try(:url)}' style='width:470px; height:483px;'></iframe></div>"  }
+                  %td
+                    %b Doublon
+                    %br
+                    Original
+          = glyphicon('arrow-top')
+          = submit_tag 'Débloquer ceux sélectionnés', name: 'unblock', class: 'btn btn-primary margin1right'
+          = submit_tag 'Marquer comme duplication ceux sélectionnés', name: 'approve_block', class: 'btn btn-primary'
+
+        = render partial: 'shared/list_options', locals: { collection: @duplicates }
+    = render partial: 'sidebar'
+
+  #showPieces.modal.hide.fade
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %h3 Différence
+          %a.close{ data: { dismiss: :modal } } ×
+        .modal-body
+          .row
+            .col-md-6.aligncenter
+              %h3 Doublon
+            .col-md-6.aligncenter
+              %h3 Original
+          .aligncenter
+            %iframe.duplicate{ src: '' }
+            %iframe.original{ src: '' }

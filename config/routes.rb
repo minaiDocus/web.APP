@@ -46,6 +46,10 @@ Rails.application.routes.draw do
   front_draw('group_organizations')
   front_draw('organization')
   front_draw('organizations')
+  front_draw('preseizure_accounts')
+  front_draw('pre_assignment_delivery_errors')
+  front_draw('pre_assignment_blocked_duplicates')
+  front_draw('pre_assignment_ignored')
   front_draw('documents')
   front_draw('reporting')
   front_draw('customers')
@@ -112,18 +116,7 @@ Rails.application.routes.draw do
 
   # ===================================== TO DELETE =============================================== 
   # ===============================================================================================
-  
-  get '/account/compositions/download',                    controller: 'account/compositions', action: 'download'
 
-  post '/account/preseizure_accounts/accounts_list',       controller: 'account/preseizure_accounts', action: 'accounts_list'
-
-  get '/account/pre_assignment_delivery_errors',  controller: 'account/pre_assignment_delivery_errors', action: 'index'
-
-  get '/account/pre_assignment_blocked_duplicates',  controller: 'account/pre_assignment_blocked_duplicates', action: 'index'
-  post '/account/pre_assignment_blocked_duplicates/update_multiple',  controller: 'account/pre_assignment_blocked_duplicates', action: 'update_multiple'
-
-  get '/account/pre_assignment_ignored',  controller: 'account/pre_assignment_ignored', action: 'index'
-  post '/account/pre_assignment_ignored/update_ignored_pieces',  controller: 'account/pre_assignment_ignored', action: 'update_ignored_pieces'
 
   resources :compta
 
