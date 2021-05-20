@@ -57,6 +57,7 @@ Rails.application.routes.draw do
   front_draw('ftps')
   front_draw('payments')
   front_draw('compositions')
+  front_draw('dematboxes')
 
   get 'admin/', to: redirect('/admin/dashboard')
   back_draw('dashboard')
@@ -174,9 +175,6 @@ Rails.application.routes.draw do
   post 'my_company_files/upload', controller: :my_company_files, action: 'upload'
 
   namespace :account do
-
-    resource :dematbox, only: %w(create destroy)
-
     resources :retrievers do
       get 'new_internal', on: :collection
       get 'edit_internal', on: :collection
