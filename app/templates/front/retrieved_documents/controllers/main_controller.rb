@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class RetrievedDocuments::MainController < Retrieverontroller
+class RetrievedDocuments::MainController < RetrieverController
   before_action :load_document, only: %w[show piece]
   before_action :verif_account
 

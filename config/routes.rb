@@ -62,6 +62,8 @@ Rails.application.routes.draw do
   front_draw('new_provider_requests')
   front_draw('retrieved_banking_operations')
   front_draw('retrieved_documents')
+  front_draw('emailed_documents')
+  front_draw('exact_online')
 
   get 'admin/', to: redirect('/admin/dashboard')
   back_draw('dashboard')
@@ -179,16 +181,6 @@ Rails.application.routes.draw do
   post 'my_company_files/upload', controller: :my_company_files, action: 'upload'
 
   namespace :account do
-
-    resources :emailed_documents do
-      post 'regenerate_code', on: :collection
-    end
-
-    resource :exact_online, only: [] do
-      get 'authenticate', on: :member
-      get 'subscribe',    on: :member
-      post 'unsubscribe',  on: :member
-    end
 
     resources :paper_processes, only: :index
 
