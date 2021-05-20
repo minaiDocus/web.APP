@@ -51,6 +51,7 @@ Rails.application.routes.draw do
   front_draw('customers')
   front_draw('periods')
   front_draw('dropboxes')
+  front_draw('boxes')
 
   get 'admin/', to: redirect('/admin/dashboard')
   back_draw('dashboard')
@@ -168,11 +169,6 @@ Rails.application.routes.draw do
   post 'my_company_files/upload', controller: :my_company_files, action: 'upload'
 
   namespace :account do
-
-    resource :box do
-      get 'authorize_url', on: :member
-      get 'callback',      on: :member
-    end
 
     resource :google_drive do
       post 'authorize_url', on: :member
