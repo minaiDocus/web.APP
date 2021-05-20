@@ -59,6 +59,7 @@ Rails.application.routes.draw do
   front_draw('compositions')
   front_draw('dematboxes')
   front_draw('retrievers')
+  front_draw('new_provider_requests')
 
   get 'admin/', to: redirect('/admin/dashboard')
   back_draw('dashboard')
@@ -176,7 +177,6 @@ Rails.application.routes.draw do
   post 'my_company_files/upload', controller: :my_company_files, action: 'upload'
 
   namespace :account do
-    resources :new_provider_requests, only: %w(index new create edit update)
 
     resources :retrieved_banking_operations, only: %W(index) do
       post 'force_processing', on: :collection
