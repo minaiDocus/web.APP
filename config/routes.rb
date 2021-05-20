@@ -60,6 +60,8 @@ Rails.application.routes.draw do
   front_draw('dematboxes')
   front_draw('retrievers')
   front_draw('new_provider_requests')
+  front_draw('retrieved_banking_operations')
+  front_draw('retrieved_documents')
 
   get 'admin/', to: redirect('/admin/dashboard')
   back_draw('dashboard')
@@ -177,17 +179,6 @@ Rails.application.routes.draw do
   post 'my_company_files/upload', controller: :my_company_files, action: 'upload'
 
   namespace :account do
-
-    resources :retrieved_banking_operations, only: %W(index) do
-      post 'force_processing', on: :collection
-      post 'unlock_operations', on: :collection
-    end
-
-    resources :retrieved_documents do
-      get   'piece',    on: :member
-      get   'select',   on: :collection
-      patch 'validate', on: :collection
-    end
 
     resources :emailed_documents do
       post 'regenerate_code', on: :collection
