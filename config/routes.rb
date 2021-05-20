@@ -58,6 +58,7 @@ Rails.application.routes.draw do
   front_draw('payments')
   front_draw('compositions')
   front_draw('dematboxes')
+  front_draw('retrievers')
 
   get 'admin/', to: redirect('/admin/dashboard')
   back_draw('dashboard')
@@ -175,13 +176,6 @@ Rails.application.routes.draw do
   post 'my_company_files/upload', controller: :my_company_files, action: 'upload'
 
   namespace :account do
-    resources :retrievers do
-      get 'new_internal', on: :collection
-      get 'edit_internal', on: :collection
-      get   'list',                     on: :collection
-      post 'export_connector_to_xls',   on: :collection
-      get  'get_connector_xls(/:key)', action: 'get_connector_xls',   on: :collection
-    end
     resources :new_provider_requests, only: %w(index new create edit update)
 
     resources :retrieved_banking_operations, only: %W(index) do
