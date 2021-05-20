@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class OrganizationController < FrontController
+class OrganizationController < ApplicationController
   include ConfigurationSteps
 
   before_action :login_user!

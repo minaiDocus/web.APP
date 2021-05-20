@@ -39,7 +39,7 @@ class BankAccounts::MainController < FrontController
 
   def verif_account
     if @account.nil?
-      redirect_to account_retrievers_path
+      redirect_to retrievers_path
     end
   end
 end

@@ -30,7 +30,7 @@ class Retrievers::MainController < RetrieverController
   def new
     if params[:create] == '1'
       flash[:success] = 'Edition terminée'
-      redirect_to account_retrievers_path
+      redirect_to retrievers_path
     end
   end
 
@@ -47,7 +47,7 @@ class Retrievers::MainController < RetrieverController
     @retriever.capabilities = @retriever.connector.capabilities
 
     if @retriever.save
-      redirect_to account_retrievers_path
+      redirect_to retrievers_path
     else
       render 'new_internal'
     end
@@ -63,7 +63,7 @@ class Retrievers::MainController < RetrieverController
     @retriever = Retriever.find(params[:id])
 
     if @retriever.update(retriever_params)
-      redirect_to account_retrievers_path
+      redirect_to retrievers_path
     else
       render 'edit_internal'
     end
@@ -140,7 +140,7 @@ class Retrievers::MainController < RetrieverController
 
     unless is_ok
       flash[:error] = t('authorization.unessessary_rights')
-      redirect_to account_retrievers_path
+      redirect_to retrievers_path
     end
   end
 
@@ -174,7 +174,7 @@ class Retrievers::MainController < RetrieverController
 
   def verif_account
     if @account.nil?
-      redirect_to account_retrievers_path
+      redirect_to retrievers_path
     end
   end
 

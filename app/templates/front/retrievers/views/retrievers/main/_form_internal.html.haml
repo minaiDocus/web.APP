@@ -4,7 +4,7 @@
   .row.derivationRight
     .col-md-12.box
       %h2.padding16left.margin1bottom Configuration du connecteur
-      = simple_form_for [:account, @retriever], url: account_retrievers_path, html: { class: 'form form-horizontal margin0' } do |f|
+      = simple_form_for [:account, @retriever], url: retrievers_path, html: { class: 'form form-horizontal margin0' } do |f|
         = f.input :connector_id, collection: @connectors.map {|c| [c.name, c.id]}
         = f.input :name
         = f.input :journal_id, collection: @account.account_book_types.map {|c| [c.name, c.id]}
@@ -12,4 +12,4 @@
         = f.input :password
         .form-actions.margin0bottom
           = f.submit t('actions.submit'), class: 'btn btn-primary'
-          = link_to t('actions.cancel').capitalize, account_retrievers_path, class: 'btn'
+          = link_to t('actions.cancel').capitalize, retrievers_path, class: 'btn'

@@ -4,7 +4,7 @@
     .row
       .media.col-md-12
         .media-body
-          %a{ href: link_through_account_notification_path(notification) }
+          %a{ href: link_through_notification_path(notification) }
             %strong.notification-title= notification.title
           %p.notification-desc!= markdown_render notification.message
           .notification-meta

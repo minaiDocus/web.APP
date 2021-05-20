@@ -55,7 +55,7 @@
                         = link_to 'Suspendre', suspend_organization_path(organization), method: 'patch', class: 'btn btn-light'
         = render partial: 'shared/list_options', locals: { collection: @organizations }
 
-    = form_tag account_organizations_path, method: :get, class: 'form-filter' do
+    = form_tag organizations_path, method: :get, class: 'form-filter' do
       .card.retractable-filter
         .card-header.clearfix
           .float-left

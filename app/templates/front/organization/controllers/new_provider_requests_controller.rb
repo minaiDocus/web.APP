@@ -20,7 +20,7 @@ class Organization::NewProviderRequestsController < RetrieverController
     @new_provider_request.edited_by_customer = true
     if @new_provider_request.save
       flash[:success] = 'Votre demande est prise en compte. Nous vous apporterons une réponse dans les prochains jours.'
-      redirect_to account_organization_customer_new_provider_requests_path(@organization, @customer)
+      redirect_to organization_customer_new_provider_requests_path(@organization, @customer)
     else
       render :new
     end
@@ -32,7 +32,7 @@ class Organization::NewProviderRequestsController < RetrieverController
     @new_provider_request.edited_by_customer = true
     if @new_provider_request.update(new_provider_request_params)
       flash[:success] = 'Modifié avec succès.'
-      redirect_to account_organization_customer_new_provider_requests_path(@organization, @customer)
+      redirect_to organization_customer_new_provider_requests_path(@organization, @customer)
     else
       render :edit
     end
@@ -66,6 +66,6 @@ class Organization::NewProviderRequestsController < RetrieverController
   helper_method :sort_direction
 
   def redirect_to_new_page
-    redirect_to account_retrievers_path(account_id: @customer.id)
+    redirect_to retrievers_path(account_id: @customer.id)
   end
 end

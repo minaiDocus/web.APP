@@ -22,7 +22,7 @@
 #show_pieces.clearfix.box.bg-light
   %h4
   %ul.clearfix.padding0.margin0{ :id => "pieces" }
-    = render :partial => "/account/documents/pieces/temp_document", :collection => @temp_documents
+    = render :partial => "/documents/main/pieces/temp_document", :collection => @temp_documents
 - if @documents.present?
   #show_pages.clearfix.box.bg-light
     .head.margin1bottom.clearfix
@@ -60,7 +60,7 @@
     #lists_pieces
       #lists_pieces_content.clearfix
         %ul.clearfix.padding0.margin0.margin2bottom{ :id => "pages" }
-          = render :partial => "/account/documents/pieces/document", :collection => @documents
+          = render :partial => "/documents/main/pieces/document", :collection => @documents
     .actionGroup.clearfix
       .loader.margin1top.float-left
         .feedback.inactive

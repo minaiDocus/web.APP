@@ -19,7 +19,7 @@ class Organization::RetrievedBankingOperationsController < RetrieverController
                       else
                         "#{count} opérations seront immédiatement pré-affectés."
                       end
-    redirect_to account_organization_customer_retrieved_banking_operations_path(@organization, @customer, banking_operation_contains: params[:banking_operation_contains])
+    redirect_to organization_customer_retrieved_banking_operations_path(@organization, @customer, banking_operation_contains: params[:banking_operation_contains])
   end
 
   def unlock_operations
@@ -33,7 +33,7 @@ class Organization::RetrievedBankingOperationsController < RetrieverController
         flash[:error] = "Aucune opération n'a été débloquée."
       end
     end
-    redirect_to account_organization_customer_retrieved_banking_operations_path(@organization, @customer, banking_operation_contains: params[:banking_operation_contains])
+    redirect_to organization_customer_retrieved_banking_operations_path(@organization, @customer, banking_operation_contains: params[:banking_operation_contains])
   end
 
   private
@@ -77,6 +77,6 @@ class Organization::RetrievedBankingOperationsController < RetrieverController
   end
 
   def redirect_to_new_page
-    redirect_to account_retrievers_path(account_id: @customer.id)
+    redirect_to retrievers_path(account_id: @customer.id)
   end
 end

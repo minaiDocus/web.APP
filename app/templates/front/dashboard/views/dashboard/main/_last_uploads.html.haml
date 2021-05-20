@@ -17,4 +17,4 @@
               %td= temp_document.original_file_name
               %td= temp_document.piece.try(:name) || temp_document.temp_pack.try(:name).to_s.sub(' all', '').presence || temp_document.content_file_name
               - if @user.is_prescriber
-                %td= link_to temp_document.user.company, account_organization_customer_path(temp_document.user.organization, temp_document.user)
+                %td= link_to temp_document.user.company, organization_customer_path(temp_document.user.organization, temp_document.user)

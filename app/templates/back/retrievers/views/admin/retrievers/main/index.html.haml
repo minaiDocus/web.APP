@@ -55,7 +55,7 @@
                       %td= retriever_presenter.journal.try(:name) || '-'
                       %td!= retriever_presenter.state(:admin)
                       %td= retriever.is_sane ? t('yes_value') : t('no_value')
-                      %td.text-center= icon_link_to account_retrievers_path(user_code: retriever.user.code), { icon: 'eye' }
+                      %td.text-center= icon_link_to retrievers_path(user_code: retriever.user.code), { icon: 'eye' }
         
         = render partial: 'shared/list_options', locals: { collection: @retrievers }
 

@@ -7,7 +7,7 @@
         = glyphicon('check')
     %a.do-tooltip.download.hide{ :href => pack.cloud_content_object.url, :title => "Télécharger", :target => "_blank" }
       = glyphicon('collapse-down')
-    %a.do-tooltip.zip_download.hide{ :href => archive_account_document_path(pack.id), :title => "Télécharger une archive zip", :target => "_blank"}
+    %a.do-tooltip.zip_download.hide{ :href => archive_document_path(pack.id), :title => "Télécharger une archive zip", :target => "_blank"}
       = glyphicon('data-transfer-download')
   %span.name
     %a.do-show-pack.pack_name_selection{ :href => "#", data: { user_code: pack.owner.code, pack_journal: (pack.journal.try(:name) || pack.name.split[1]), uses_ibiza_analytics: pack.owner.uses_ibiza_analytics? ? 1 : 0 } }= pack.name.sub('all','')

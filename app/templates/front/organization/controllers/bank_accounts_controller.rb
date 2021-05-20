@@ -7,7 +7,7 @@ class Organization::BankAccountsController < RetrieverController
   append_view_path('app/templates/front/organization/views')
 
   def index
-    redirect_to account_retrievers_path(account_id: @customer.id)
+    redirect_to retrievers_path(account_id: @customer.id)
     # fetch_remote_accounts
 
     # bank_account_contains = search_terms(params[:bank_account_contains])
@@ -55,7 +55,7 @@ class Organization::BankAccountsController < RetrieverController
 
       flash[:success] = 'Modifié avec succès.'
     end
-    redirect_to account_organization_customer_bank_accounts_path(@organization, @customer, bank_account_contains: params[:bank_account_contains])
+    redirect_to organization_customer_bank_accounts_path(@organization, @customer, bank_account_contains: params[:bank_account_contains])
   end
 
   private
@@ -129,6 +129,6 @@ class Organization::BankAccountsController < RetrieverController
   end
 
   def bank_setting_retriever
-    redirect_to account_bank_settings_path({account_id: @customer.id})
+    redirect_to bank_settings_path({account_id: @customer.id})
   end
 end

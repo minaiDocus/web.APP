@@ -14,7 +14,7 @@
       - unless organizations_suspended? && @user.active?
         #change_password.row.pan{ class: (@active_panel == 'change_password' ? 'active' : '')}
           .col-md-12
-            = form_for true_user, url: profiles_update_path do |f|
+            = form_for true_user, url: profile_path do |f|
               .card
                 .card-header
                   %h3 Changer mon mot de passe
@@ -193,11 +193,11 @@
                               - if @external_file_storage.dropbox_basic.is_configured?
                                 %h5
                                   Votre compte iDocus est connecté à votre compte Dropbox.
-                                  = link_to 'Paramètres.', dropboxes_authorize_url_path
+                                  = link_to 'Paramètres.', authorize_url_dropbox_path
                               - else
                                 %h5
                                   Pour connecter iDocus à votre compte Dropbox,
-                                  = link_to ' cliquez ici.', dropboxes_authorize_url_path
+                                  = link_to ' cliquez ici.', authorize_url_dropbox_path
                                   %br
                                   iDocus va créer un premier dossier « Applications » puis « iDocus ».
                               #{"."}
@@ -235,11 +235,11 @@
                               - if @external_file_storage.google_doc.is_configured?
                                 %h5
                                   Votre compte iDocus est connecté à votre compte Google Drive.
-                                  = link_to 'Paramètres.', _google_drive_authorize_url_path, method: :post
+                                  = link_to 'Paramètres.', authorize_url_google_drive_path, method: :post
                               - else
                                 %h5
                                   Pour connecter iDocus à votre compte Google Drive,
-                                  = link_to ' cliquez ici.', google_drive_authorize_url_path, method: :post
+                                  = link_to ' cliquez ici.', authorize_url_google_drive_path, method: :post
                               #{"."}
                           .row{ :class => "service_config_#{service_number} #{!is_service_used ? 'hide' : ''}" }
                             .col-md-12
@@ -260,13 +260,13 @@
                               - if @external_file_storage.ftp.is_configured?
                                 %h5
                                   Votre compte iDocus est connecté à votre compte FTP.
-                                  = link_to 'Configurer', ftp_edit_path
+                                  = link_to 'Configurer', edit_ftp_path
                                   ou
-                                  = link_to 'supprimer mes paramètres.', ftp_delete_path, method: :delete, data: { confirm: 'Êtes-vous sûr de vouloir supprimer vos paramètres FTP ?' }
+                                  = link_to 'supprimer mes paramètres.', ftp_path, method: :delete, data: { confirm: 'Êtes-vous sûr de vouloir supprimer vos paramètres FTP ?' }
                               - else
                                 %h5
                                   Pour connecter iDocus à votre compte FTP,
-                                  = link_to ' cliquez ici.', ftp_edit_path
+                                  = link_to ' cliquez ici.', edit_ftp_path
                               \.
                           .row{ :class => "service_config_#{service_number} #{!is_service_used ? 'hide' : ''}" }
                             .col-md-12
@@ -287,11 +287,11 @@
                               - if @external_file_storage.box.is_configured?
                                 %h5
                                   Votre compte iDocus est connecté à votre compte Box.com.
-                                  = link_to 'Paramètres.', authorize_url_account_box_path
+                                  = link_to 'Paramètres.', authorize_url_box_path
                               - else
                                 %h5
                                   Pour connecter iDocus à votre compte Box,
-                                  = link_to ' cliquez ici.', authorize_url_account_box_path
+                                  = link_to ' cliquez ici.', authorize_url_box_path
                               #{"."}
                           .row{ :class => "service_config_#{service_number} #{!is_service_used ? 'hide' : ''}" }
                             .col-md-12
@@ -337,7 +337,7 @@
 
             #subscription_options.row.pan{ class: (@active_panel == 'subscription_options' ? 'active' : '')}
               .col-md-12
-                = simple_form_for true_user, url: profiles_update_path, html: { id: 'subscription_options' } do |f|
+                = simple_form_for true_user, url: profile_path, html: { id: 'subscription_options' } do |f|
                   .card
                     .card-header
                       %h3 Notifications et remontées d'alertes

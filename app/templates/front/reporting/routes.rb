@@ -1,8 +1,11 @@
 # encoding: utf-8
 Rails.application.routes.draw do
-  namespace :reporting do
-    resource :reporting, path: '', controller: 'main'
-    resources :expenses, path: 'report', controller: 'expenses'
-    resources :preseizures, path: 'report', controller: 'preseizures'
+  scope module: 'reporting' do
+    resource :reporting, controller: 'main'
+
+    namespace :report do
+      resources :expenses, module: 'reporting', controller: 'expenses'
+      resources :preseizures, module: 'reporting', controller: 'preseizures'
+    end
   end
 end

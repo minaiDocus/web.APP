@@ -10,7 +10,7 @@ class NewProviderRequests::MainController < RetrieverController
   end
 
   def new
-    redirect_to account_retrievers_path(account_id: @account.id)
+    redirect_to retrievers_path(account_id: @account.id)
     # if params[:create] == '1'
     #   flash[:success] = 'Demande envoyée avec succès'
     #   redirect_to account_new_provider_requests_path
@@ -20,7 +20,7 @@ class NewProviderRequests::MainController < RetrieverController
   end
 
   def create
-    redirect_to account_retrievers_path(account_id: @account.id)
+    redirect_to retrievers_path(account_id: @account.id)
     # @new_provider_request = NewProviderRequest.new
     # @new_provider_request = @account.new_provider_requests.build new_provider_request_params
     # @new_provider_request.start_process
@@ -61,7 +61,7 @@ class NewProviderRequests::MainController < RetrieverController
 
   def verif_account
     if @account.nil?
-      redirect_to account_retrievers_path
+      redirect_to retrievers_path
     end
   end
 end

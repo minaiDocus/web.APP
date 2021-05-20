@@ -106,6 +106,6 @@ class Organization::RetrievedDocumentsController < RetrieverController
   end
 
   def redirect_to_new_page
-    redirect_to account_retrievers_path(account_id: @customer.id)
+    redirect_to retrievers_path(account_id: @customer.id)
   end
 end

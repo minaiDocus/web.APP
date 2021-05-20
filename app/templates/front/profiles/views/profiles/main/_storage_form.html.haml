@@ -1,6 +1,6 @@
 .storage_form
   %h4 Export de documents depuis iDocus
-  = simple_form_for storage, url: external_file_storages_index_path, html: { class: 'form form-horizontal margin1top margin0bottom' } do |f|
+  = simple_form_for storage, url: external_file_storage_path, html: { class: 'form form-horizontal margin1top margin0bottom' } do |f|
     = f.input :path, label: ("Modifier le chemin de livraison #{link_to(('<i class="icon-info-sign"></i>').html_safe, '#', class: 'do-popover', title: 'Informations', 'data-content' => "Choisissez l’ordre de classement de vos documents en modifiant leur positionnement dans le champ ci-contre.<br>Exemple : <b>:code/:account_book/:year:month/</b><br><br>Attention à respecter le contenu de chacun des champs:<br><b>:code</b> pour Code iDocus<br><b>:year:month</b> pour la date du lot iDocus<br><b>:account_book</b> pour le journal comptable iDocus")} : ").html_safe
     .form-group.clearfix
       .label-section

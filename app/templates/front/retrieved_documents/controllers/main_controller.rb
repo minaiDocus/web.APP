@@ -71,7 +71,7 @@ class RetrievedDocuments::MainController < RetrieverController
         flash[:success] = 'Le document sélectionné sera intégré.'
       end
     end
-    redirect_to account_retrievers_path
+    redirect_to retrievers_path
   end
 
   private
@@ -108,7 +108,7 @@ class RetrievedDocuments::MainController < RetrieverController
 
   def verif_account
     if @account.nil?
-      redirect_to account_retrievers_path
+      redirect_to retrievers_path
     end
   end
 

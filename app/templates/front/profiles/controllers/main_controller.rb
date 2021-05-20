@@ -47,9 +47,9 @@ class Profiles::MainController < FrontController
     end
 
     if params[:panel]
-      redirect_to profiles_show_path(panel: params[:panel])
+      redirect_to profile_path(panel: params[:panel])
     else
-      redirect_top profiles_show_path
+      redirect_top profile_path
     end
   end
 

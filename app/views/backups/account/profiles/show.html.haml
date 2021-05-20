@@ -285,11 +285,11 @@
                               - if @external_file_storage.box.is_configured?
                                 %h5
                                   Votre compte iDocus est connecté à votre compte Box.com.
-                                  = link_to 'Paramètres.', authorize_url_account_box_path
+                                  = link_to 'Paramètres.', authorize_url_box_path
                               - else
                                 %h5
                                   Pour connecter iDocus à votre compte Box,
-                                  = link_to ' cliquez ici.', authorize_url_account_box_path
+                                  = link_to ' cliquez ici.', authorize_url_box_path
                               #{"."}
                           .row{ :class => "service_config_#{service_number} #{!is_service_used ? 'hide' : ''}" }
                             .col-md-12

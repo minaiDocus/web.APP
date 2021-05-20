@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 class Dashboard::MainController < FrontController
-  before_action :load_user_and_role
-  before_action :verify_suspension
-  before_action :verify_if_active
-
   append_view_path('app/templates/front/dashboard/views')
 
   def index
@@ -100,17 +96,6 @@ class Dashboard::MainController < FrontController
     end
 
     render partial: 'last_retrieved'
-  end
-
-  protected
-
-  def load_user_and_role(name = :@user)
-    super do |collaborator|
-      if params[:organization_id].present?
-        organization = collaborator.organizations.find(params[:organization_id])
-        collaborator.with_organization_scope(organization)
-      end
-    end
   end
 
   private

@@ -59,7 +59,7 @@ class ApplicationController < ActionController::Base
 
         if user.collaborator? && prev_user_code != session[:user_code] && request.path.match(%r{^/account/organizations})
           collab = Collaborator.new(user)
-          redirect_to organizations_organizations_path(collab.organization)
+          redirect_to organization_path(collab.organization)
         end
       end
     end

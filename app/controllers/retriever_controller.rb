@@ -1,23 +1,40 @@
 # frozen_string_literal: true
 
-class RetrieverController < OrganizationController
-  before_action :load_customer
-  before_action :redirect_to_current_step
-  before_action :verify_rights
+class RetrieverController < FrontController
+  layout 'layouts/front/account/retrievers'
 
-  append_view_path('app/templates/front/organization/views')
+  before_action :verify_rights
+  before_action :load_account
 
   private
 
-  def load_customer
-    @customer = customers.find(params[:customer_id])
+  def verify_rights
+    unless (accounts.any? && @user.organization.is_active) || @user.organization.specific_mission
+      flash[:error] = t('authorization.unessessary_rights')
+      redirect_to root_path
+    end
   end
 
-  def verify_rights
-    unless ((@user.leader? || @user.manage_customers) && @customer.active? && @customer.options.is_retriever_authorized && @customer.organization.is_active) || @customer.organization.specific_mission
-      flash[:error] = t('authorization.unessessary_rights')
+  def load_account
+    if accounts.count == 1
+      @account = accounts.first
+      session[:retrievers_account_id] = @account.id
+    else
+      account_id = params[:account_id].presence || session[:retrievers_account_id].presence || 'all'
+      @account = nil
 
-      redirect_to organizations_organizations_path(@organization)
+      if account_id != 'all'
+        @account = accounts.where(id: account_id).first || accounts.first
+      end
+      session[:retrievers_account_id] = account_id
+    end
+  end
+
+  def accounts
+    if @user.organization.specific_mission
+      super
+    else
+      super.joins(:options).where('user_options.is_retriever_authorized = ?', true)
     end
   end
 end

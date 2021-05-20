@@ -16,7 +16,7 @@
             \: Fichiers de plus de 100 pages ou plus de 10 mégas non acceptés. PDF protégés non acceptés.
           %br
           %br
-        %form#fileupload.form-horizontal.padding3left.padding2right{ action: '/account/documents/upload', method: 'POST', enctype: 'multipart/form-data', data: { params: file_upload_params.to_json } }
+        %form#fileupload.form-horizontal.padding3left.padding2right{ action: '/documents/upload', method: 'POST', enctype: 'multipart/form-data', data: { params: file_upload_params.to_json } }
           - if has_multiple_accounts?
             .form-group.clearfix
               .label-section

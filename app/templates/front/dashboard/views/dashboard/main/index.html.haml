@@ -65,7 +65,7 @@
                   - if @user.options.try(:dashboard_summary) == view_name
                     %i.badge.badge-light{ style: 'font-size: 12px' } Vue par défaut
                   - else
-                    = link_to 'Définir comme vue par défaut', dashboard_choose_default_summary_path(service_name: view_name), method: :post, class: 'btn btn-light'
+                    = link_to 'Définir comme vue par défaut', choose_default_summary_dashboard_index_path(service_name: view_name), method: :post, class: 'btn btn-light'
                 .content{ class: view_name }
                   .loading-data
 
