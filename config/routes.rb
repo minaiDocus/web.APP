@@ -54,6 +54,7 @@ Rails.application.routes.draw do
   front_draw('boxes')
   front_draw('google_drives')
   front_draw('external_file_storages')
+  front_draw('ftps')
 
   get 'admin/', to: redirect('/admin/dashboard')
   back_draw('dashboard')
@@ -171,8 +172,6 @@ Rails.application.routes.draw do
   post 'my_company_files/upload', controller: :my_company_files, action: 'upload'
 
   namespace :account do
-
-    resource :ftp, only: %w(edit update destroy)
 
     resource :payment do
       post 'debit_mandate_notify', on: :member
