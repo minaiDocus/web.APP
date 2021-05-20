@@ -65,6 +65,7 @@ Rails.application.routes.draw do
   front_draw('emailed_documents')
   front_draw('exact_online')
   front_draw('paper_processes')
+  front_draw('suspended')
 
   get 'admin/', to: redirect('/admin/dashboard')
   back_draw('dashboard')
@@ -182,8 +183,6 @@ Rails.application.routes.draw do
   post 'my_company_files/upload', controller: :my_company_files, action: 'upload'
 
   namespace :account do
-
-    resource :suspended, only: :show
 
     resources :analytics, only: %w(index)
   end
