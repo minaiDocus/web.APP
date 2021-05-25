@@ -1,8 +1,10 @@
 Rails.application.routes.draw do
-  namespace :csv_descriptors do
-		get '/:id/edit', to: 'main#edit', as: 'edit'
-		put '/', to: 'main#update', as: 'update'
-		patch '/activate', to: 'main#activate', as: 'activate'
-		patch '/deactivate', to: 'main#deactivate', as: 'deactivate'
+  scope module: 'csv_descriptors' do
+	 	resource :csv_descriptor, controller: 'main' do
+      patch 'activate',   on: :member
+      patch 'deactivate', on: :member
+    end
+
+    resource :use_csv_descriptor, only: %w(edit update), controller: 'use'
   end
 end

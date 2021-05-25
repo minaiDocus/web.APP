@@ -3,5 +3,5 @@
     .card-header
       %h3
         Edition du client : 
-        = link_to @customer, account_organization_customer_path(@organization, @customer), class: 'fs-origin'
+        = link_to @customer, organization_customer_path(@organization, @customer), class: 'fs-origin'
     = render partial: 'form'

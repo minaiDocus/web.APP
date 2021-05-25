@@ -7,13 +7,13 @@
       - if @customer.configured?
         %h3
           Edition des options #{@software} du client : 
-          = link_to @customer, account_organization_customer_path(@organization, @customer, tab: @software), class: 'fs-origin'
+          = link_to @customer, organization_customer_path(@organization, @customer, tab: @software), class: 'fs-origin'
       - else
         %h3
           Configuration #{@software} pour le dossier : 
           %span.text-info.fs-origin= @customer
 
-    = simple_form_for @customer, url: update_software_account_organization_customer_path(@organization, @customer), html: { class: 'form-horizontal label-medium' } do |c|
+    = simple_form_for @customer, url: update_software_organization_customer_path(@organization, @customer), html: { class: 'form-horizontal label-medium' } do |c|
       - softwares = ['coala', 'quadratus', 'cegid', 'fec_agiris', 'csv_descriptor']
       .card-body
         - softwares.each do |software|
@@ -42,8 +42,8 @@
         .form-actions
           - if @customer.configured?
             = c.submit t('actions.submit'), class: 'btn btn-primary'
-            = link_to t('actions.cancel'), account_organization_customer_path(@organization, @customer, tab: @software), class: 'btn btn-light'
+            = link_to t('actions.cancel'), organization_customer_path(@organization, @customer, tab: @software), class: 'btn btn-light'
           - else
-            = link_to t('actions.previous_step'), previous_account_organization_customer_setup_path(@organization, @customer), class: 'btn btn-secondary'
-            = link_to t('actions.complete_later'), complete_later_account_organization_customer_setup_path(@organization, @customer), class: 'btn btn-light'
+            = link_to t('actions.previous_step'), previous_organization_customer_setup_path(@organization, @customer), class: 'btn btn-secondary'
+            = link_to t('actions.complete_later'), complete_later_organization_customer_setup_path(@organization, @customer), class: 'btn btn-light'
             = c.submit t('actions.next_step'), class: 'btn btn-primary'

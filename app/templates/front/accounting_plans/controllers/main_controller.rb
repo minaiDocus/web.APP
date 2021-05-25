@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class AccountingPlans::MainController < FrontController
+class AccountingPlans::MainController < OrganizationController
   before_action :load_customer
   before_action :verify_rights
   before_action :verify_if_customer_is_active
@@ -9,22 +9,22 @@ class AccountingPlans::MainController < FrontController
   append_view_path('app/templates/front/accounting_plans/views')
 
 
-  # GET /account/organizations/:organization_id/customers/:customer_id/accounting_plan
+  # GET /organizations/:organization_id/customers/:customer_id/accounting_plan
   def show
     if params[:dir].present?
       FileUtils.rm_rf params[:dir] if params[:dir]
       if params[:new_create_book_type].present?
-        redirect_to new_customer_step_two_account_organization_customer_path(@organization, @customer)
+        redirect_to new_customer_step_two_organization_customer_path(@organization, @customer)
       else
-        redirect_to account_organization_customer_accounting_plan_path(@organization, @customer)
+        redirect_to organization_customer_accounting_plan_path(@organization, @customer)
       end
     end
   end
 
-  # GET /account/organizations/:organization_id/customers/:customer_id/accounting_plan/edit
+  # GET /organizations/:organization_id/customers/:customer_id/accounting_plan/edit
   def edit; end
 
-  # PUT /account/organizations/:organization_id/customers/:customer_id/accounting_plan/:id
+  # PUT /organizations/:organization_id/customers/:customer_id/accounting_plan/:id
   def update
     modified = @accounting_plan.update(accounting_plan_params)
 
@@ -32,7 +32,7 @@ class AccountingPlans::MainController < FrontController
       format.html {
         if modified
           flash[:success] = 'Modifié avec succès.'
-          redirect_to account_organization_customer_accounting_plan_path(@organization, @customer)
+          redirect_to organization_customer_accounting_plan_path(@organization, @customer)
         else
           render :edit
         end
@@ -56,7 +56,7 @@ class AccountingPlans::MainController < FrontController
     end
   end
 
-  # POST /account/organizations/:organization_id/customers/:customer_id/accounting_plan/ibiza_auto_update
+  # POST /organizations/:organization_id/customers/:customer_id/accounting_plan/ibiza_auto_update
   def auto_update
     if params[:software].present? && params[:software_table].present?
       @customer.try(params[:software_table].to_sym).update(is_auto_updating_accounting_plan: auto_update_accounting_plan_active?)
@@ -73,19 +73,19 @@ class AccountingPlans::MainController < FrontController
     end
   end
 
-  # POST /account/organizations/:organization_id/customers/:customer_id/accounting_plan/ibiza_synchronize
+  # POST /organizations/:organization_id/customers/:customer_id/accounting_plan/ibiza_synchronize
   def ibiza_synchronize
     # TODO ... Import accounting plan into iBiza inverse of upadte accounting plan service
   end
 
-  # GET /account/organizations/:organization_id/customers/:customer_id/accounting_plan/import_model
+  # GET /organizations/:organization_id/customers/:customer_id/accounting_plan/import_model
   def import_model
     data = "NOM_TIERS;COMPTE_TIERS;COMPTE_CONTREPARTIE;CODE_TVA\n"
 
     send_data(data, type: 'plain/text', filename: "modèle d'import.csv")
   end
 
-  # PUT /account/organizations/:organization_id/customers/:customer_id/accounting_plan/import
+  # PUT /organizations/:organization_id/customers/:customer_id/accounting_plan/import
   def import
     if params[:providers_file]
       file = params[:providers_file]
@@ -105,9 +105,9 @@ class AccountingPlans::MainController < FrontController
       flash[:error] = 'Aucun fichier choisi.'
     end
     if params[:new_create_book_type].present?
-      render partial: '/account/customers/table', locals: { providers: @customer.accounting_plan.providers, customers: @customer.accounting_plan.customers }
+      render partial: '/customers/main/table', locals: { providers: @customer.accounting_plan.providers, customers: @customer.accounting_plan.customers }
     else
-      redirect_to account_organization_customer_accounting_plan_path(@organization, @customer)
+      redirect_to organization_customer_accounting_plan_path(@organization, @customer)
     end
   end
 
@@ -156,7 +156,7 @@ class AccountingPlans::MainController < FrontController
     if params[:new_create_book_type].present?
       if @params_fec.present?
         @params_fec = @params_fec.merge(new_create_book_type: params[:new_create_book_type])
-        render :partial => "/account/accounting_plans/dialog_box", locals: { organization: @organization, customer: @customer, params_fec: @params_fec }
+        render :partial => "/accounting_plans/main/dialog_box", locals: { organization: @organization, customer: @customer, params_fec: @params_fec }
       end
     else
       render :show
@@ -173,11 +173,11 @@ class AccountingPlans::MainController < FrontController
     if params[:new_create_book_type].present?
       render partial: '/account/customers/table', locals: { providers: @customer.accounting_plan.providers, customers: @customer.accounting_plan.customers }
     else
-      redirect_to account_organization_customer_accounting_plan_path(@organization, @customer)
+      redirect_to organization_customer_accounting_plan_path(@organization, @customer)
     end
   end
 
-  # DELETE /account/organizations/:organization_id/customers/:customer_id/accounting_plan/destroy_providers
+  # DELETE /organizations/:organization_id/customers/:customer_id/accounting_plan/destroy_providers
   def destroy_providers
     @accounting_plan.providers.clear
 
@@ -185,10 +185,10 @@ class AccountingPlans::MainController < FrontController
 
     flash[:success] = 'Fournisseurs supprimés avec succès.'
 
-    redirect_to account_organization_customer_accounting_plan_path(@organization, @customer)
+    redirect_to organization_customer_accounting_plan_path(@organization, @customer)
   end
 
-  # DELETE /account/organizations/:organization_id/customers/:customer_id/accounting_plan/destroy_customers
+  # DELETE /organizations/:organization_id/customers/:customer_id/accounting_plan/destroy_customers
   def destroy_customers
     @accounting_plan.customers.clear
 

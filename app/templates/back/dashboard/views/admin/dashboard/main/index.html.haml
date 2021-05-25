@@ -230,7 +230,7 @@
           .col-sm-12
             %h4 Organisations facturées n'ayant pas d'adresse de facturation
             - @unbillable_organizations.each do |organization|
-              = link_to organization, account_organization_path(organization, tab: 'addresses'), class: 'badge badge-danger fs-origin'
+              = link_to organization, organization_path(organization, tab: 'addresses'), class: 'badge badge-danger fs-origin'
 
 
 = javascript_include_tag 'back/dashboard/assets/javascripts/main'

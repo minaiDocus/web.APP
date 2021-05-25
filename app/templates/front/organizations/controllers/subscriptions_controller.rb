@@ -14,7 +14,7 @@ class Organizations::SubscriptionsController < OrganizationController
     if @subscription.update(subscription_params)
       Billing::UpdatePeriod.new(@subscription.current_period).execute
       flash[:success] = 'Modifié avec succès.'
-      redirect_to account_organization_path(@organization, tab: 'subscription')
+      redirect_to organization_path(@organization, tab: 'subscription')
     else
       render :edit
     end
@@ -50,7 +50,7 @@ class Organizations::SubscriptionsController < OrganizationController
 
         flash[:success] = 'Propagé avec succès.'
 
-        redirect_to account_organization_path(@organization, tab: 'subscription')
+        redirect_to organization_path(@organization, tab: 'subscription')
       else
         render :select_options
       end
@@ -65,7 +65,7 @@ class Organizations::SubscriptionsController < OrganizationController
     unless @user.is_admin
       flash[:error] = t('authorization.unessessary_rights')
 
-      redirect_to account_organization_path(@organization)
+      redirect_to organization_path(@organization)
     end
   end
 

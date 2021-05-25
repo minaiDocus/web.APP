@@ -2,7 +2,7 @@
   .card
     .card-header
       %h3 Quelle(s) option(s) ajouter à la facture de l'organisation ?
-    = simple_form_for @subscription, url: account_organization_organization_subscription_path(@organization), html: { class: 'form form-horizontal margin0' } do |f|
+    = simple_form_for @subscription, url: organization_organization_subscription_path(@organization), html: { class: 'form form-horizontal margin0' } do |f|
       .card-body
         = hidden_field_tag 'subscription[option_ids][]'
         %table.table.table-condensed.table-striped.table-bordered-inner
@@ -15,4 +15,4 @@
       .card-footer 
         .form-actions.margin0bottom
           = f.submit 'Valider', class: 'btn btn-primary'
-          = link_to 'Annuler', account_organization_path(@organization, tab: 'subscription'), class: 'btn btn-light'
+          = link_to 'Annuler', organization_path(@organization, tab: 'subscription'), class: 'btn btn-light'

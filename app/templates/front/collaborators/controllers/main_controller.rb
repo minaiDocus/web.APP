@@ -1,11 +1,11 @@
 # frozen_string_literal: true
-class Collaborators::MainController < FrontController
+class Collaborators::MainController < OrganizationController
   before_action :verify_rights
   before_action :load_member, except: %w[index new create]
 
   append_view_path('app/templates/front/collaborators/views')
 
-  # GET /account/organizations/:organization_id/collaborators
+  # GET /organizations/:organization_id/collaborators
   def index
     @members = @organization.members
                             .search(search_terms(params[:user_contains]))
@@ -14,41 +14,41 @@ class Collaborators::MainController < FrontController
                             .per(params[:per_page])
   end
 
-  # GET /account/organizations/:organization_id/collaborators/:id
+  # GET /organizations/:organization_id/collaborators/:id
   def show; end
 
-  # GET /account/organizations/:organization_id/collaborators/new
+  # GET /organizations/:organization_id/collaborators/new
   def new
     @member = Member.new(code: "#{@organization.code}%", role: Member::COLLABORATOR)
     @member.build_user
   end
 
-  # POST /account/organizations/:organization_id/collaborators
+  # POST /organizations/:organization_id/collaborators
   def create
     @member = User::Collaborator::Create.new(member_params, @organization).execute
     if @member.persisted?
       flash[:success] = 'Créé avec succès.'
-      redirect_to account_organization_collaborator_path(@organization, @member)
+      redirect_to organization_collaborator_path(@organization, @member)
     else
       render :new
     end
   end
 
-  # GET /account/organizations/:organization_id/collaborators/:id/edit
+  # GET /organizations/:organization_id/collaborators/:id/edit
   def edit; end
 
-  # PUT /account/organizations/:organization_id/collaborators/:id
+  # PUT /organizations/:organization_id/collaborators/:id
   def update
     updater = User::Collaborator::Update.new(@member, member_params)
     if updater.execute
       flash[:success] = 'Modifié avec succès.'
-      redirect_to account_organization_collaborator_path(@organization, @member)
+      redirect_to organization_collaborator_path(@organization, @member)
     else
       render :edit
     end
   end
 
-  # DELETE /account/organizations/:organization_id/collaborators/:id
+  # DELETE /organizations/:organization_id/collaborators/:id
   def destroy
     if @member.user.is_admin
       flash[:error] = t('authorization.unessessary_rights')
@@ -62,7 +62,7 @@ class Collaborators::MainController < FrontController
       flash[:error] = 'Impossible de supprimer.'
     end
 
-    redirect_to collaborators_index_path(@organization)
+    redirect_to organization_collaborators_path(@organization)
   end
 
   def add_to_organization
@@ -98,7 +98,7 @@ class Collaborators::MainController < FrontController
       flash[:error] = t('authorization.unessessary_rights')
     end
 
-    redirect_to collaborators_index_path(@organization, @member, tab: 'organization_group')
+    redirect_to organization_collaborator_path(@organization, @member, tab: 'organization_group')
   end
 
   def remove_from_organization
@@ -121,7 +121,7 @@ class Collaborators::MainController < FrontController
             end
             return
           elsif @organization.organization_groups.empty? && member.user.memberships.count == 1
-            redirect_to collaborators_index_path(@organization, @member)
+            redirect_to organization_collaborator_path(@organization, @member)
             return
           end
         else
@@ -133,7 +133,7 @@ class Collaborators::MainController < FrontController
     else
       flash[:error] = t('authorization.unessessary_rights')
     end
-    redirect_to collaborators_index_path(@organization, @member, tab: 'organization_group')
+    redirect_to organization_collaborator_path(@organization, @member, tab: 'organization_group')
   end
 
   private

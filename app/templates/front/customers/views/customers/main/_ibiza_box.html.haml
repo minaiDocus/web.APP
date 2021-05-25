@@ -1,6 +1,6 @@
-= link_to 'Rafraîchir', refresh_account_organization_customer_ibizabox_folders_path(@organization, @customer), method: :patch, class: 'btn btn-primary margin1right'
-= link_to 'Historique des documents', account_organization_customer_ibizabox_documents_path(@organization, @customer), class: 'btn btn-secondary margin1right'
-= link_to 'Sélection des documents', select_account_organization_customer_ibizabox_documents_path(@organization, @customer), class: 'btn btn-secondary'
+= link_to 'Rafraîchir', refresh_organization_customer_ibizabox_folders_path(@organization, @customer), method: :patch, class: 'btn btn-primary margin1right'
+= link_to 'Historique des documents', organization_customer_ibizabox_documents_path(@organization, @customer), class: 'btn btn-secondary margin1right'
+= link_to 'Sélection des documents', select_organization_customer_ibizabox_documents_path(@organization, @customer), class: 'btn btn-secondary'
 
 %hr
 %h3.margin2bottom 
@@ -29,6 +29,6 @@
         %td= ibizabox_folder_state(folder)
         %td
           - if ibiza_journal_accessible?(folder, ibiza_journals)
-            = link_to "#{folder.active? ? 'Désactiver' : 'Activer'}", account_organization_customer_ibizabox_folder_path(@organization, @customer, folder), method: 'patch', class: "btn btn-light btn-#{folder.active? ? 'danger' : 'primary'}"
+            = link_to "#{folder.active? ? 'Désactiver' : 'Activer'}", organization_customer_ibizabox_folder_path(@organization, @customer, folder), method: 'patch', class: "btn btn-light btn-#{folder.active? ? 'danger' : 'primary'}"
           - else
             = link_to "Journal ibiza inaccessible", '#', class: "btn btn-light btn-primary", disabled: true

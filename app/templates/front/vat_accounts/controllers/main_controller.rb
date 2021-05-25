@@ -53,7 +53,7 @@ class VatAccounts::MainController < FrontController
   def verify_if_customer_is_active
     if @customer.inactive?
       flash[:error] = t('authorization.unessessary_rights')
-      redirect_to account_organization_path(@organization)
+      redirect_to organization_path(@organization)
     end
   end
 
@@ -64,7 +64,7 @@ class VatAccounts::MainController < FrontController
   def verify_rights
     unless (@user.leader? || @user.manage_customers)
       flash[:error] = t('authorization.unessessary_rights')
-      redirect_to account_organization_path(@organization)
+      redirect_to organization_path(@organization)
     end
   end
 

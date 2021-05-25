@@ -1,4 +1,4 @@
-= simple_form_for [:account, @organization, @address], html: { class: 'form form-horizontal margin0' } do |f|
+= simple_form_for [@organization, @address], html: { class: 'form form-horizontal margin0' } do |f|
   .card-body
     .row
       .col-md-6
@@ -17,4 +17,4 @@
     .form-actions.margin0bottom
       = f.submit t('actions.submit'), class: 'btn btn-primary'
       - link_name = action_name == 'new' ? t('actions.return').capitalize : t('actions.cancel').capitalize
-      = link_to link_name, account_organization_addresses_path(@organization), class: 'btn btn-light'
+      = link_to link_name, organization_addresses_path(@organization), class: 'btn btn-light'

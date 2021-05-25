@@ -8,7 +8,7 @@
       - if @customer.configured?
         %h3 
           Edition du format d’export .csv du client : 
-          = link_to @customer, account_organization_customer_path(@organization, @customer, tab: 'csv_descriptor'), class: 'fs-origin'
+          = link_to @customer, organization_customer_path(@organization, @customer, tab: 'csv_descriptor'), class: 'fs-origin'
       - else
         %h3
           Format d’export .csv pour le dossier :

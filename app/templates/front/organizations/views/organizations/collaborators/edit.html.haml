@@ -3,6 +3,6 @@
     .card-header
       %h3
         Édition du collaborateur : 
-        = link_to @member.name, account_organization_collaborator_path(@organization, @member), class: 'fs-origin'
+        = link_to @member.name, organization_collaborator_path(@organization, @member), class: 'fs-origin'
 
     = render partial: 'form'

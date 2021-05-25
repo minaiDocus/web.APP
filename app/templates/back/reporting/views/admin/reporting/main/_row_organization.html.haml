@@ -1,5 +1,5 @@
 %td.organization.clearfix
-  = link_to @organization.name, [:account, @organization]
+  = link_to @organization.name, [@organization]
   = link_to image_tag('application/icon-xls.png', alt: 'Export XLS', style: 'position:relative;top:-2px;'), "/admin/reporting/#{@year}.xls?organization_id=#{@organization.id}", title: 'Export XLS', class: 'float-right'
   %input{ :type => "hidden", class: 'total-span-3', value: @year }
 - @total = 12.times.map { |e| [0,0,0] }

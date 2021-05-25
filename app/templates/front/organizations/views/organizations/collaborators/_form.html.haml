@@ -14,6 +14,6 @@
     .form-actions.margin0bottom
       = f.submit t('actions.submit'), class: 'btn btn-primary'
       - if action_name.in?(%w(new create))
-        = link_to t('actions.cancel'), account_organization_collaborators_path(@organization), class: 'btn btn-light'
+        = link_to t('actions.cancel'), organization_collaborators_path(@organization), class: 'btn btn-light'
       - else
-        = link_to t('actions.cancel'), account_organization_collaborator_path(@organization, @member), class: 'btn btn-light'
+        = link_to t('actions.cancel'), organization_collaborator_path(@organization, @member), class: 'btn btn-light'

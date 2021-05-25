@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class CsvDescriptors::MainController < FrontController
+class CsvDescriptors::MainController < OrganizationController
   before_action :verify_rights
   before_action :load_customer
   before_action :redirect_to_current_step
@@ -7,7 +7,7 @@ class CsvDescriptors::MainController < FrontController
 
   append_view_path('app/templates/front/csv_descriptors/views')
 
-  # GET /account/organizations/:organization_id/csv_descriptor/edit
+  # GET /organizations/:organization_id/csv_descriptor/edit
   def edit
     if params[:template].present?
       template = @organization.try(:csv_descriptor)
@@ -18,13 +18,13 @@ class CsvDescriptors::MainController < FrontController
     end
   end
 
-  # PUT account/organizations/:organization_id/customers/:customer_id/csv_descriptor
+  # PUT /organizations/:organization_id/customers/:customer_id/csv_descriptor
   def update
     if @csv_descriptor.update(csv_descriptor_params)
       if @customer.configured?
         flash[:success] = 'Modifié avec succès.'
 
-        redirect_to account_organization_customer_path(@organization, @customer, tab: 'csv_descriptor')
+        redirect_to organization_customer_path(@organization, @customer, tab: 'csv_descriptor')
       else
         next_configuration_step
       end
@@ -33,14 +33,14 @@ class CsvDescriptors::MainController < FrontController
     end
   end
 
-  # PUT /account/organizations/:organization_id/customers/:customer_id/csv_descriptor/activate
+  # PUT /organizations/:organization_id/customers/:customer_id/csv_descriptor/activate
   def activate
     @customer.try(:csv_descriptor).update_attribute(:use_own_csv_descriptor_format, true)
 
-    redirect_to csv_descriptors_edit_path(@organization, @customer, template: true)
+    redirect_to edit_organization_customer_csv_descriptor_edit_path(@organization, @customer, template: true)
   end
 
-  # PUT  /account/organizations/:organization_id/customers/:customer_id/csv_descriptor/deactivate
+  # PUT  /organizations/:organization_id/customers/:customer_id/csv_descriptor/deactivate
   def deactivate
     @customer.try(:csv_descriptor).update_attribute(:use_own_csv_descriptor_format, false)
 

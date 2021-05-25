@@ -2,7 +2,7 @@
   .card
     .card-header
       %h3 Importer des règles d'affectations bancaires en masse
-    = form_tag import_account_organization_account_number_rules_path(@organization), method: 'patch', multipart: true, class: 'form-horizontal' do
+    = form_tag import_organization_account_number_rules_path(@organization), method: 'patch', multipart: true, class: 'form-horizontal' do
       .card-body
         .row
           .col-md-6
@@ -13,7 +13,7 @@
               .control-section
                 = file_field_tag :file, class: 'filestyle', data: { classButton: 'btn btn-secondary pointer', input: true, buttonText: (glyphicon('file') + ' CSV') }
                 %br
-                = link_to "Télécharger le modèle d'import .csv", import_model_account_organization_account_number_rules_path(@organization)
+                = link_to "Télécharger le modèle d'import .csv", import_model_organization_account_number_rules_path(@organization)
             .form-group.clearfix.radio_buttons
               .label-section
                 = label_tag 'account_number_rule[affect]', t('activerecord.models.account_number_rule.attributes.affect')
@@ -32,4 +32,4 @@
       .card-footer
         .form-actions.margin0bottom
           = submit_tag 'Importer', class: 'btn btn-primary'
-          = link_to t('actions.cancel'), account_organization_account_number_rules_path(@organization), class: 'btn btn-light'
+          = link_to t('actions.cancel'), organization_account_number_rules_path(@organization), class: 'btn btn-light'

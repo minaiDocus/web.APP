@@ -33,7 +33,7 @@ class Order::RemindToNewKit
         message += customer_codes.join(', ')
 
         Notifications::Notifier.new.create_notification({
-          url: Rails.application.routes.url_helpers.account_organization_customers_url(organization, ActionMailer::Base.default_url_options),
+          url: Rails.application.routes.url_helpers.organization_customers_url(organization, ActionMailer::Base.default_url_options),
           user: prescriber,
           notice_type: 'remind_to_order_new_kit',
           title: "Rappel kit courrier",

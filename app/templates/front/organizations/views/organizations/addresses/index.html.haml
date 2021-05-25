@@ -5,8 +5,8 @@
         .float-left
           %h3 Liste des adresses de l'organisation
         .float-right
-          = link_to t('actions.return'), account_organization_path(@organization, tab: 'addresses'), class: 'btn btn-light'
-          = link_to 'Nouvelle adresse', new_account_organization_address_path(@organization), class: 'btn btn-primary'
+          = link_to t('actions.return'), organization_path(@organization, tab: 'addresses'), class: 'btn btn-light'
+          = link_to 'Nouvelle adresse', new_organization_address_path(@organization), class: 'btn btn-primary'
 
   .row.derivationLeft
     .col-md-12

@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
-  namespace :subscriptions do
-		get '/:id/edit', to: 'main#edit', as: 'edit'
-		put '/', to: 'main#update', as: 'update'
+  scope module: 'subscriptions' do
+    resource :subscription, controller: 'main'
   end
 end

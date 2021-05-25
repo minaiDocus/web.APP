@@ -43,11 +43,11 @@
             %li.nav-item{ class: ('active' if controller_name == 'documents') }
               = link_to 'Pièces / Ecritures comptables', documents_path, class: 'dropdown-link dropdown-item'
             %li.nav-item{ class: ('active' if controller_name == 'pre_assignment_ignored') }
-              = link_to 'Pièces ignorées à la pré-affectation', pre_assignment_ignored_index_path, class: 'dropdown-link dropdown-item'
+              = link_to 'Pièces ignorées à la pré-affectation', pre_assignment_ignored_path, class: 'dropdown-link dropdown-item'
             %li.nav-item{ class: ('active' if controller_name == 'pre_assignment_blocked_duplicates') }
-              = link_to 'Ecritures comptables en doublon', pre_assignment_blocked_duplicates_index_path, class: 'dropdown-link dropdown-item'
+              = link_to 'Ecritures comptables en doublon', pre_assignment_blocked_duplicates_path, class: 'dropdown-link dropdown-item'
             %li.nav-item{ class: ('active' if controller_name == 'pre_assignment_delivery_errors') }
-              = link_to "Erreur livraison d'écritures comptables", pre_assignment_delivery_errors_index_path, class: 'dropdown-link dropdown-item'
+              = link_to "Erreur livraison d'écritures comptables", pre_assignment_delivery_errors_path, class: 'dropdown-link dropdown-item'
         - if @user.active? && @user.organization.is_active
           - if @user.collaborator? && !@user.has_one_organization?
             %li.nav-item.dropdown{ class: ('active' if controller_name == 'reporting') }

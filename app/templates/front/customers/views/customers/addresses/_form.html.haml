@@ -31,4 +31,4 @@
     .form-actions
       = f.submit t('actions.submit'), class: 'btn btn-primary'
       - link_name = action_name == 'new' ? t('actions.return').capitalize : t('actions.cancel').capitalize
-      = link_to link_name, account_organization_customer_addresses_path(@organization, @customer), class: 'btn btn-light'
+      = link_to link_name, organization_customer_addresses_path(@organization, @customer), class: 'btn btn-light'

@@ -24,12 +24,12 @@
             - @account_sharings.each do |account_sharing|
               %tr
                 %td.date= account_sharing.created_at.strftime('%d/%m/%Y %H:%M')
-                %td= link_to account_sharing.account.info, account_organization_customer_path(account_sharing.account.organization, account_sharing.account)
+                %td= link_to account_sharing.account.info, organization_customer_path(account_sharing.account.organization, account_sharing.account)
                 %td
                   - if account_sharing.collaborator.is_guest
                     = account_sharing.collaborator.info
                   - else
-                    = link_to account_sharing.collaborator.info, account_organization_customer_path(account_sharing.collaborator.organization, account_sharing.collaborator)
+                    = link_to account_sharing.collaborator.info, organization_customer_path(account_sharing.collaborator.organization, account_sharing.collaborator)
                 %td= account_sharing.is_approved? ? 'Partagé' : 'En attente de validation'
         %br
         .row

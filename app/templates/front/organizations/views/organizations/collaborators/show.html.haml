@@ -9,7 +9,7 @@
               %i (Votre compte)
         .float-right
           - if (@user.leader? || @user.manage_collaborators) && @organization.is_active
-            = link_to icon_destroy + ' Supprimer le compte', account_organization_collaborator_path(@organization, @member), class: 'btn btn-danger btn-primary', data: { method: :delete, confirm: t('actions.confirm') }
+            = link_to icon_destroy + ' Supprimer le compte', organization_collaborator_path(@organization, @member), class: 'btn btn-danger btn-primary', data: { method: :delete, confirm: t('actions.confirm') }
 
   .row.derivationLeft
     .col-md-12

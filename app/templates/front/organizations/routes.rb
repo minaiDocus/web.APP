@@ -22,18 +22,11 @@ Rails.application.routes.draw do
         get  :select_propagation_options, on: :member
       end
 
-      resource :csv_descriptor, only: %w(edit update), controller: 'csv_descriptors'
-
-      resource :organization_subscription, only: %w(edit update), controller: 'subscriptions' do
-        get   'select_options',    on: :collection
-        patch 'propagate_options', on: :collection
-      end
-
-      resource :file_naming_policy, only: %w(edit update), controller: 'file_naming_policies' do
+      resource :file_naming_policy, only: %w(edit update), module: 'file_naming_policies', controller: 'main' do
         patch 'preview', on: :member
       end
 
-      resources :account_number_rules, controller: 'account_number_rules' do
+      resources :account_number_rules, module: 'account_number_rules', controller: 'main' do
         patch   'import',                    on: :collection
         get     'import_form',               on: :collection
         get     'import_model',              on: :collection
@@ -41,24 +34,25 @@ Rails.application.routes.draw do
         post    'update_skip_accounting_plan_accounts',         on: :collection
       end
 
-      # resources :my_unisoft do 
-          
-      # end
-
-      resource :knowings, only: %w(new create edit update), controller: 'knowings'
-
-      resource :ftps, only: %w(edit update destroy), module: 'organization', controller: 'ftps' do
-        post :fetch_now, on: :collection
+      resources :my_unisoft do 
+        
       end
-      resource :sftps, only: %w(edit update destroy), module: 'organization', controller: 'sftps' do
+
+      resource :knowings, only: %w(new create edit update), module: 'knowings', controller: 'main'
+
+      resource :ftps, only: %w(edit update destroy), controller: 'ftps' do
         post :fetch_now, on: :collection
       end
 
-      resources :reminder_emails, except: :index, controller: 'reminder_emails' do
+      resource :sftps, only: %w(edit update destroy), controller: 'sftps' do
+        post :fetch_now, on: :collection
+      end
+
+      resources :reminder_emails, except: :index, module: 'reminder_emails', controller: 'main' do
         post 'deliver', on: :member
       end
 
-      resource :file_sending_kit, only: %w(edit update), controller: 'file_sending_kits' do
+      resource :file_sending_kit, only: %w(edit update), module: 'file_sending_kits', controller: 'main' do
         get  'mails',           on: :member
         get  'select',          on: :member
         get  'folders',         on: :member
@@ -67,62 +61,69 @@ Rails.application.routes.draw do
         get  'workshop_labels', on: :member
       end
 
-      resources :groups, controller: 'groups'
+      resource :csv_descriptor, only: %w(edit update), controller: 'csv_descriptors'
 
-      resources :collaborators, controller: 'collaborators' do
+      resources :collaborators, module: 'collaborators', controller: 'main' do
         member do
           post   :add_to_organization
           delete :remove_from_organization
         end
+
+        resource :rights, only: %w(edit update), module: 'rights', controller: 'main'
+        resource :file_storage_authorizations, only: %w(edit update), module: 'file_storage_authorizations', controller: 'main'
       end
 
-      resource :rights, path: 'collaborators/rights',  only: %w(edit update) , module: 'rights', controller: 'main'
-      resource :file_storage_authorizations, path: 'collaborators/file_storage_authorizations', only: %w(edit update), module: 'file_storage_authorizations', controller: 'main'
-
-      resources :paper_set_orders, controller: 'paper_set_orders' do
+      resources :paper_set_orders, module: 'paper_set_orders', controller: 'main' do
         get  'select_for_orders', on: :collection
         post 'order_multiple',   on: :collection
         post 'create_multiple', on: :collection
       end
 
-      resources :journals, except: 'show', module: 'customers', controller: 'journals'
-      resource :ibiza, only: %w(create edit update), controller: 'ibiza'
+      resources :journals, except: 'show', module: 'journals', controller: 'main'
 
-      resources :ibiza_users,  only: :index, controller: 'ibiza_users'
-      # resources :exact_online_users,  only: :index
-      resources :mcf_users, only: :index, controller: 'mcf_users'
+      resource :organization_subscription, only: %w(edit update), controller: 'subscriptions' do
+        get   'select_options',    on: :collection
+        patch 'propagate_options', on: :collection
+      end
 
-      resources :pack_reports, only: :index, controller: 'pack_reports' do
+      resource :ibiza, module: 'ibiza', controller: 'main', only: %w(create edit update)
+
+      resources :ibiza_users, only: :index, module: 'ibiza', controller: 'users'
+      resources :exact_online_users, only: :index, module: 'exact_online',controller: 'main'
+      resources :mcf_users, only: :index, module: 'my_company_files', controller: 'users'
+      #resources :pre_assignments,                   only: :index
+      # resources :pre_assignment_delivery_errors,    only: :index
+
+      # resources :pre_assignment_ignored,            only: :index do
+      #   post :update_ignored_pieces, on: :collection
+      # end
+      # resources :pre_assignment_blocked_duplicates, only: :index do
+      #   post :update_multiple, on: :collection
+      # end
+
+      resources :pack_reports, only: :index, module: 'pack_reports', controller: 'main' do
         post 'deliver',            on: :member
         get  'select_to_download', on: :member
         post 'download',           on: :member
       end
 
-      resources :preseizures, only: %w(index update), controller: 'preseizures' do
+      resources :preseizures, only: %w(index update), module: 'preseizures', controller: 'main' do
         post 'deliver', on: :member
       end
 
-      resources :preseizure_accounts, controller: 'preseizure_accounts'
+      resources :preseizure_accounts, module: 'preseizures', controller: 'accounts'
 
-      resources :account_sharings, only: %w(index new create destroy), module: :organization, controller: 'account_sharings' do
+      resources :account_sharings, only: %w(index new create destroy), controller: 'account_sharings' do
         post :accept, on: :member
       end
-
-      resources :guest_collaborators, controller: 'guest_collaborators' do
+      resources :guest_collaborators, module: 'collaborators', controller: 'guest' do
         get 'search', on: :collection
       end
 
-      resource :mcf_settings, only: %w(edit update destroy), controller: 'mcf_settings' do
+      resource :mcf_settings, only: %w(edit update destroy), module: 'my_company_files', controller: 'settings' do
         post :authorize
         get  :callback
       end
-
-      resource :invoices, only: %w(index show), controller: 'invoices' do
-        get 'download(/:id)', action: 'download', as: :download
-        post 'insert', action: 'insert'
-        delete 'remove', action: 'remove'
-        get 'synchronize', action: 'synchronize'
-      end
-		end
+    end
   end
 end

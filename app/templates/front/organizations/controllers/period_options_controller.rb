@@ -12,7 +12,7 @@ class Organizations::PeriodOptionsController < OrganizationController
   def update
     if @organization.update(organization_params)
       flash[:success] = 'Modifié avec succès.'
-      redirect_to account_organization_path(@organization, tab: 'period_options')
+      redirect_to organization_path(@organization, tab: 'period_options')
     else
       render :edit
     end
@@ -40,7 +40,7 @@ class Organizations::PeriodOptionsController < OrganizationController
 
     flash[:success] = 'Options des périodes, propagés avec succès.'
 
-    redirect_to account_organization_path(@organization, tab: 'period_options')
+    redirect_to organization_path(@organization, tab: 'period_options')
   end
 
   private
@@ -53,7 +53,7 @@ class Organizations::PeriodOptionsController < OrganizationController
     else
       flash[:error] = t('authorization.unessessary_rights')
 
-      redirect_to account_organization_path(@organization)
+      redirect_to organization_path(@organization)
     end
   end
 

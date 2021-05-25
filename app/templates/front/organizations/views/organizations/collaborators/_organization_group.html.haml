@@ -22,7 +22,7 @@
               - if @user.leader?
                 %td
                   - if membership.organization == @organization
-                    = link_to "Retirer l'accès à cette organisation", remove_from_organization_account_organization_collaborator_path(@organization, @member, oid: organization.id), class: 'btn btn-light', data: { method: :delete, confirm: t('actions.confirm') }
+                    = link_to "Retirer l'accès à cette organisation", remove_from_organization_organization_collaborator_path(@organization, @member, oid: organization.id), class: 'btn btn-light', data: { method: :delete, confirm: t('actions.confirm') }
                   - else
                     %i Ne peut pas supprimer l'accès de ce collaborateur à cette organisation.
             - else
@@ -30,4 +30,4 @@
               %td
                 %i N'est pas membre de cette organisation
               - if @user.leader?
-                %td= link_to "Ajouter l'accès à cette organisation", add_to_organization_account_organization_collaborator_path(@organization, @member, oid: organization.id), class: 'btn btn-light', data: { method: :post, confirm: t('actions.confirm') }
+                %td= link_to "Ajouter l'accès à cette organisation", add_to_organization_organization_collaborator_path(@organization, @member, oid: organization.id), class: 'btn btn-light', data: { method: :post, confirm: t('actions.confirm') }

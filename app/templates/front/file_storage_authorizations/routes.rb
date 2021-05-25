@@ -1,7 +1,6 @@
 # encoding: utf-8
 Rails.application.routes.draw do
-  namespace :file_storage_authorizations do
-    get '/:id/edit', to: 'main#edit', as: 'edit'
-	put '/', to: 'main#update', as: 'update'
+  scope module: 'file_storage_authorizations' do
+    resource :file_storage_authorizations, only: %w(edit update), controller: 'main'
   end
 end

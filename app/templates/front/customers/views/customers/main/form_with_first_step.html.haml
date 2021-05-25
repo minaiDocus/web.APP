@@ -126,7 +126,7 @@
                                 .label-section
                                   = label_tag 'user[ibiza_attributes][ibiza_id]', "Sélectionner le dossier correspondant dans iBiza", class: 'control-label'
                                 .controls-section
-                                  = select_tag 'user[ibiza_attributes][ibiza_id]', nil, class: 'form-control select optional ibiza-customers-list', placeholder: 'Choisir un dossier', data: { original_value: nil, users_list_url: account_organization_ibiza_users_path(@organization, format: 'json') }
+                                  = select_tag 'user[ibiza_attributes][ibiza_id]', nil, class: 'form-control select optional ibiza-customers-list', placeholder: 'Choisir un dossier', data: { original_value: nil, users_list_url: organization_ibiza_users_path(@organization, format: 'json') }
                           %td= check_box_tag 'user[ibiza_attributes][is_used]', true, false, class: 'softwares_setting ibiza-customer-select', style: "position:unset"
                       - if @organization.try(:exact_online).try(:used?)
                         %tr

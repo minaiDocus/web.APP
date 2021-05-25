@@ -73,7 +73,7 @@ class Organizations::MainController < OrganizationController
     end
 
     flash[:success] = 'Modifié avec succès.'
-    redirect_to edit_software_users_account_organization_path(@organization, software: software)
+    redirect_to edit_software_users_organization_path(@organization, software: software)
   end
 
   # GET /account/organizations/new
@@ -86,7 +86,7 @@ class Organizations::MainController < OrganizationController
     @organization = Organization::Create.new(organization_params).execute
     if @organization.persisted?
       flash[:success] = 'Créé avec succès.'
-      redirect_to account_organization_path(@organization)
+      redirect_to organization_path(@organization)
     else
       render 'new'
     end
@@ -139,21 +139,21 @@ class Organizations::MainController < OrganizationController
   def suspend
     @organization.update_attribute(:is_suspended, true)
     flash[:success] = 'Suspendu avec succès.'
-    redirect_to account_organizations_path
+    redirect_to organizations_path
   end
 
   # PUT /account/organizations/:id/unsuspend
   def unsuspend
     @organization.update_attribute(:is_suspended, false)
     flash[:success] = 'Activé avec succès.'
-    redirect_to account_organizations_path
+    redirect_to organizations_path
   end
 
   # PUT /account/organizations/:id/activate
   def activate
     @organization.update_attribute(:is_active, true)
     flash[:success] = 'Activé avec succès.'
-    redirect_to account_organization_path(@organization)
+    redirect_to organization_path(@organization)
   end
 
   # PUT /account/organizations/:id/deactivate
@@ -161,7 +161,7 @@ class Organizations::MainController < OrganizationController
     Organization::Deactivate.new(@organization.id.to_s).execute
     @organization.update_attribute(:is_active, false)
     flash[:success] = 'Désactivé avec succès.'
-    redirect_to account_organization_path(@organization)
+    redirect_to organization_path(@organization)
   end
 
   # GET /account/organizations/:id/close_confirm
@@ -217,7 +217,7 @@ class Organizations::MainController < OrganizationController
       end
     end
 
-    redirect_to account_organization_path(@organization, { tab: 'payments' })
+    redirect_to organization_path(@organization, { tab: 'payments' })
   end
 
   private
@@ -313,9 +313,9 @@ class Organizations::MainController < OrganizationController
 
   def to_redirect
     if params[:part].present?
-      redirect_to account_organization_path(@organization, tab: params[:part])
+      redirect_to organization_path(@organization, tab: params[:part])
     else
-      redirect_to account_organization_path(@organization)
+      redirect_to organization_path(@organization)
     end
   end
 

@@ -29,7 +29,7 @@
     .form-actions.margin0bottom
       - if params[:action].in?(%w(new create))
         = f.submit t('actions.next_step'), class: 'btn btn-primary'
-        = link_to t('actions.cancel'), account_organization_customers_path(@organization), class: 'btn btn-light'
+        = link_to t('actions.cancel'), organization_customers_path(@organization), class: 'btn btn-light'
       - else
         = f.submit t('actions.submit'), class: 'btn btn-primary'
-        = link_to t('actions.cancel'), account_organization_customer_path(@organization, @customer), class: 'btn btn-light'
+        = link_to t('actions.cancel'), organization_customer_path(@organization, @customer), class: 'btn btn-light'

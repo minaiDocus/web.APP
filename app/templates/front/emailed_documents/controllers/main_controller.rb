@@ -12,7 +12,7 @@ class EmailedDocuments::MainController < FrontController
         flash[:error] = "Impossible d'effectuer l'opération demandée"
       end
 
-      redirect_to upload_email_infos_account_organization_customer_path(customer.organization, customer)
+      redirect_to upload_email_infos_organization_customer_path(customer.organization, customer)
     else
       if !(@user.is_admin || @user.is_prescriber || @user.inactive?) && @user.update_email_code
         flash[:success] = 'Code régénéré avec succès.'
@@ -20,7 +20,7 @@ class EmailedDocuments::MainController < FrontController
         flash[:error] = "Impossible d'effectuer l'opération demandée"
       end
 
-      redirect_to account_profile_path(panel: 'emailed_documents')
+      redirect_to profile_path(panel: 'emailed_documents')
     end
   end
 

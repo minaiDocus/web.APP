@@ -12,10 +12,10 @@
             .col-md-6
               %h3
                 Plan comptable du client :
-                = link_to @customer, account_organization_customer_path(@organization, @customer, tab: 'accounting_plan'), class: 'fs-origin'
+                = link_to @customer, organization_customer_path(@organization, @customer, tab: 'accounting_plan'), class: 'fs-origin'
             .col-md-6{style: "padding-top: 3px;padding-left: 50px;border-radius: 3px;background-color: #f8f9fa;"}
               .float-right
-                = form_tag accounting_plans_import_fec_path(@organization, @customer), method: 'patch', multipart: true, class: 'form-horizontal clearfix label-auto' do
+                = form_tag import_fec_organization_customer_accounting_plan_path(@organization, @customer), method: 'patch', multipart: true, class: 'form-horizontal clearfix label-auto' do
                   .form-group.clearfix.float-left.margin0
                     .control-section
                       = file_field_tag :fec_file, class: 'filestyle', data: { classButton: 'btn btn-secondary', input: true, buttonText: glyphicon('file') + '' }, style: "width:10%", accept: "text/plain"
@@ -34,9 +34,9 @@
                 Plan comptable pour le dossier :
                 %span.text-info.fs-origin= @customer
             .float-right
-              = link_to t('actions.previous_step'), previous_account_organization_customer_setup_path(@organization, @customer), class: 'btn btn-secondary'
-              = link_to t('actions.complete_later'), complete_later_account_organization_customer_setup_path(@organization, @customer), class: 'btn btn-secondary'
-              = link_to t('actions.next_step'), next_account_organization_customer_setup_path(@organization, @customer), class: 'btn btn-primary'
+              = link_to t('actions.previous_step'), previous_organization_customer_setup_path(@organization, @customer), class: 'btn btn-secondary'
+              = link_to t('actions.complete_later'), complete_later_organization_customer_setup_path(@organization, @customer), class: 'btn btn-secondary'
+              = link_to t('actions.next_step'), next_organization_customer_setup_path(@organization, @customer), class: 'btn btn-primary'
 
   .row.derivationLeft
     .col-md-12
@@ -79,25 +79,25 @@
             / .col-md-6
             /   .float-right{style: 'margin-right: 35px;'}
             /     .form-actions.float-left.margin1left.row
-            /       = link_to 'Synchronizer le plan comptable avec Ibiza', ibiza_synchronize_account_organization_customer_accounting_plan_path(@organization, @customer), class: 'btn btn-secondary'
+            /       = link_to 'Synchronizer le plan comptable avec Ibiza', ibiza_synchronize_organization_customer_accounting_plan_path(@organization, @customer), class: 'btn btn-secondary'
         .row
           .col-md-6
             .box.bg-light.height_groups.groups_1
               .float-left.margin1bottom
                 %h3 Fournisseurs
               .float-left.margin1bottom.margin1left
-                = link_to glyphicon('pencil'), accounting_plans_edit_path(@organization, @customer), class: 'btn btn-secondary', title: 'editer'
+                = link_to glyphicon('pencil'), edit_organization_customer_accounting_plan_path(@organization, @customer), class: 'btn btn-secondary', title: 'editer'
               .float-left.margin1bottom
-                = link_to glyphicon('x'), accounting_plans_destroy_providers_path(@organization, @customer), class: 'btn btn-secondary margin1left', title: 'supprimer tous les fournisseurs', data: { method: :delete, confirm: 'Vous êtes sur le point de supprimer tous les fournisseurs, êtes-vous sûr ?' }
+                = link_to glyphicon('x'), destroy_providers_organization_customer_accounting_plan_path(@organization, @customer), class: 'btn btn-secondary margin1left', title: 'supprimer tous les fournisseurs', data: { method: :delete, confirm: 'Vous êtes sur le point de supprimer tous les fournisseurs, êtes-vous sûr ?' }
               .float-right.alignright.margin1bottom
-                = form_tag accounting_plans_import_path(@organization, @customer), method: 'patch', multipart: true, class: 'form-horizontal clearfix label-auto' do
+                = form_tag import_organization_customer_accounting_plan_path(@organization, @customer), method: 'patch', multipart: true, class: 'form-horizontal clearfix label-auto' do
                   .form-group.clearfix.float-left
                     .control-section
                       = file_field_tag :providers_file, class: 'filestyle', data: { classButton: 'btn btn-secondary', input: true, buttonText: glyphicon('file') + ' CSV' }, style: "width:10%"
                   .form-actions.float-left.margin1left
                     = submit_tag 'Importer', class: 'btn btn-primary'
                 .links
-                  = link_to "Télécharger le modèle d'import .csv", accounting_plans_import_model_path(@organization, @customer)
+                  = link_to "Télécharger le modèle d'import .csv", import_model_organization_customer_accounting_plan_path(@organization, @customer)
               %table.table.table-striped.table-condensed.table-bordered-inner.margin0bottom.table-detachable-head.bg-white
                 %thead
                   %tr.bg-brown.text-white
@@ -123,18 +123,18 @@
               .float-left.margin1bottom
                 %h3 Clients
               .float-left.margin1bottom.margin1left
-                = link_to glyphicon('pencil'), accounting_plans_edit_path(@organization, @customer), class: 'btn btn-secondary', title: 'editer'
+                = link_to glyphicon('pencil'), edit_organization_customer_accounting_plan_path(@organization, @customer), class: 'btn btn-secondary', title: 'editer'
               .float-left.margin1bottom
-                = link_to glyphicon('x'), accounting_plans_destroy_customers_path(@organization, @customer), class: 'btn btn-secondary margin1left', title: 'supprimer tous les clients', data: { method: :delete, confirm: 'Vous êtes sur le point de supprimer tous les clients, êtes-vous sûr ?' }
+                = link_to glyphicon('x'), destroy_customers_organization_customer_accounting_plan_path(@organization, @customer), class: 'btn btn-secondary margin1left', title: 'supprimer tous les clients', data: { method: :delete, confirm: 'Vous êtes sur le point de supprimer tous les clients, êtes-vous sûr ?' }
               .float-right.alignright.margin1bottom
-                = form_tag accounting_plans_import_path(@organization, @customer), method: 'patch', multipart: true, class: 'form-horizontal clearfix label-auto' do
+                = form_tag import_organization_customer_accounting_plan_path(@organization, @customer), method: 'patch', multipart: true, class: 'form-horizontal clearfix label-auto' do
                   .form-group.clearfix.float-left
                     .control-section
                       = file_field_tag :customers_file, class: 'filestyle', data: { classButton: 'btn btn-secondary', input: true, buttonText: glyphicon('file') + ' CSV' }, style: "width:10%"
                   .form-actions.float-left.margin1left
                     = submit_tag 'Importer', class: 'btn btn-primary'
                 .links
-                  = link_to "Télécharger le modèle d'import .csv", accounting_plans_import_model_path(@organization, @customer)
+                  = link_to "Télécharger le modèle d'import .csv", import_model_organization_customer_accounting_plan_path(@organization, @customer)
               %table.table.table-striped.table-condensed.table-bordered-inner.margin0bottom.table-detachable-head.bg-white
                 %thead
                   %tr.bg-brown.text-white

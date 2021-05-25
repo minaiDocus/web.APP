@@ -27,7 +27,7 @@
                 - if @user.is_prescriber && @user.organization
                   %td
                     - if paper_process.user && paper_process.user.organization
-                      = link_to paper_process.customer_code, account_organization_customer_path(paper_process.user.organization, paper_process.user)
+                      = link_to paper_process.customer_code, organization_customer_path(paper_process.user.organization, paper_process.user)
                     - else
                       = paper_process.customer_code
                   %td= paper_process.user.try(:company)
@@ -35,7 +35,7 @@
                   = link_to_paper_tracking(paper_process) if paper_process.tracking_number.present?
                 %td
                   - if paper_process.period_document && paper_process.period_document.pack
-                    = link_to paper_process.pack_name, account_documents_path(pack_name: paper_process.pack_name), target: '_blank'
+                    = link_to paper_process.pack_name, documents_path(pack_name: paper_process.pack_name), target: '_blank'
                   - else
                     = paper_process.pack_name
         = render 'shared/list_options', collection: @paper_processes

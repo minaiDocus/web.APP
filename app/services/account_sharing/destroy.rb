@@ -32,7 +32,7 @@ class AccountSharing::Destroy
           @account_sharing.account.organization.admins
         end
 
-        url = Rails.application.routes.url_helpers.account_organization_account_sharings_url(
+        url = Rails.application.routes.url_helpers.organization_account_sharings_url(
           @account_sharing.account.organization,
           ActionMailer::Base.default_url_options
         )

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Subscriptions::MainController < FrontController
+class Subscriptions::MainController < OrganizationController
   before_action :verify_rights
   before_action :load_customer
   before_action :verify_if_customer_is_active
@@ -8,10 +8,10 @@ class Subscriptions::MainController < FrontController
 
   append_view_path('app/templates/front/subscriptions/views')
 
-  # /account/organizations/:organization_id/organization_subscription/edit
+  # /organizations/:organization_id/organization_subscription/edit
   def edit; end
 
-  # PUT /account/organizations/:organization_id/organization_subscription
+  # PUT /organizations/:organization_id/organization_subscription
   def update
     modif_params = params[:subscription][:subscription_option]
     params[:subscription][modif_params] = true
@@ -25,7 +25,7 @@ class Subscriptions::MainController < FrontController
 
       flash[:success] = 'Modifié avec succès.'
 
-      redirect_to account_organization_customer_path(@organization, @customer, tab: 'subscription')
+      redirect_to organization_customer_path(@organization, @customer, tab: 'subscription')
     else
       flash[:error] = 'Vous devez sélectionner un forfait.'
 
@@ -42,7 +42,7 @@ class Subscriptions::MainController < FrontController
   def verify_if_customer_is_active
     if @customer.inactive?
       flash[:error] = t('authorization.unessessary_rights')
-      redirect_to account_organization_path(@organization)
+      redirect_to organization_path(@organization)
     end
   end
 
@@ -53,7 +53,7 @@ class Subscriptions::MainController < FrontController
   def verify_rights
     unless @user.leader? || @user.manage_customers
       flash[:error] = t('authorization.unessessary_rights')
-      redirect_to account_organization_path(@organization)
+      redirect_to organization_path(@organization)
     end
   end
 end

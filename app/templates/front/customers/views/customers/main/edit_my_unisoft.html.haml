@@ -7,7 +7,7 @@
         Configuration My Unisoft pour le dossier : 
         %span.text-info.fs-origin= @customer
 
-    = simple_form_for @customer, url: update_my_unisoft_account_organization_customer_path(@organization, @customer), html: { class:  'form-horizontal label-medium' } do |f|
+    = simple_form_for @customer, url: update_my_unisoft_organization_customer_path(@organization, @customer), html: { class:  'form-horizontal label-medium' } do |f|
       .card-body
         .row
           .col-md-12
@@ -24,6 +24,6 @@
       .card-footer
         .form-actions.margin0bottom
           = f.submit t('actions.submit'), class: 'btn btn-primary'
-          = link_to t('actions.cancel'), account_organization_customer_path(@organization, @customer, tab: 'my_unisoft'), class: 'btn btn-light'
+          = link_to t('actions.cancel'), organization_customer_path(@organization, @customer, tab: 'my_unisoft'), class: 'btn btn-light'
           .float-right.loading.hide
             %img{ src: "/assets/application/bar_loading.gif", alt: "chargement..."}

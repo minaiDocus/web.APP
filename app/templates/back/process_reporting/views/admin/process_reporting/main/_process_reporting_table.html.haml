@@ -1,5 +1,5 @@
 - customers = @organization.customers
-%td= link_to @organization.name, [:account, @organization]
+%td= link_to @organization.name, [@organization]
 - sum = sum_of_requested_kits(customers, @time)
 %td.raw_text.aligncenter= sum
 - sum = sum_of_sent_kits(@organization, @time)

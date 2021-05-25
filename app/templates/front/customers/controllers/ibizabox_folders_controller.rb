@@ -14,13 +14,13 @@ class Customers::IbizaboxFoldersController < OrganizationController
     else
       flash[:error] = "#{@folder.active? ? 'Désactivation' : 'Activation'} échouée"
     end
-    redirect_to account_organization_customer_path(@organization, @customer, tab: 'ibiza_box')
+    redirect_to organization_customer_path(@organization, @customer, tab: 'ibiza_box')
   end
 
   def refresh
     FileImport::Ibizabox.update_folders(@customer)
     flash[:success] = 'Mise à jour avec succès'
-    redirect_to account_organization_customer_path(@organization, @customer, tab: 'ibiza_box')
+    redirect_to organization_customer_path(@organization, @customer, tab: 'ibiza_box')
   end
 
   private

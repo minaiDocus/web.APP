@@ -12,7 +12,7 @@ class Rights::MainController < FrontController
   def update
     @member.update(membership_params)
     flash[:success] = 'Modifié avec succès.'
-    redirect_to collaborators_show_path(@organization, @member, tab: 'authorization')
+    redirect_to organization_collaborator_path(@organization, @member, tab: 'authorization')
   end
 
   private
@@ -20,7 +20,7 @@ class Rights::MainController < FrontController
   def verify_rights
     unless @user.leader? || @user.manage_collaborators?
       flash[:error] = t('authorization.unessessary_rights')
-      redirect_to account_organization_path(@organization)
+      redirect_to organization_path(@organization)
     end
   end
 

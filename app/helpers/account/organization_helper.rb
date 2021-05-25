@@ -10,57 +10,57 @@ module Account::OrganizationHelper
 
   def collaborator_form_url(organization, member)
     if action_name == 'new' || !member.persisted?
-      account_organization_collaborators_url(organization)
+      organization_collaborators_url(organization)
     else
-      account_organization_collaborator_url(organization, member)
+      organization_collaborator_url(organization, member)
     end
   end
 
   def customer_form_url(organization, customer)
     if action_name == 'new' || !customer.persisted?
-      account_organization_customers_url(organization)
+      organization_customers_url(organization)
     else
-      account_organization_customer_url(organization, customer)
+      organization_customer_url(organization, customer)
     end
   end
 
   def customer_address_form_url(organization, customer, address)
     if action_name == 'new' || !address.persisted?
-      account_organization_customer_addresses_path(organization, customer)
+      organization_customer_addresses_path(organization, customer)
     else
-      account_organization_customer_address_url(organization, customer, address)
+      organization_customer_address_url(organization, customer, address)
     end
   end
 
   def journal_form_url(organization, customer, journal)
     if action_name == 'new' || !journal.try(:persisted?)
       if customer
-        account_organization_customer_journals_url(organization, customer)
+        organization_customer_journals_url(organization, customer)
       else
-        account_organization_journals_url(organization)
+        organization_journals_url(organization)
       end
     else
       if customer
-        account_organization_customer_journal_url(organization, customer, journal)
+        organization_customer_journal_url(organization, customer, journal)
       else
-        account_organization_journal_url(organization, journal)
+        organization_journal_url(organization, journal)
       end
     end
   end
 
   def exercise_form_url(organization, customer, exercise)
     if action_name == 'new' || !exercise.persisted?
-      account_organization_customer_exercises_url(organization, customer)
+      organization_customer_exercises_url(organization, customer)
     else
-      account_organization_customer_exercise_url(organization, customer, exercise)
+      organization_customer_exercise_url(organization, customer, exercise)
     end
   end
 
   def guest_collaborator_form_url(organization, guest)
     if action_name == 'new' || !guest.persisted?
-      account_organization_guest_collaborators_url(organization)
+      organization_guest_collaborators_url(organization)
     else
-      account_organization_guest_collaborator_url(organization, guest)
+      organization_guest_collaborator_url(organization, guest)
     end
   end
 

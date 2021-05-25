@@ -77,11 +77,11 @@ class Customers::MainController < OrganizationController
 
     if @customer.persisted?
       if @organization.specific_mission
-        redirect_to account_organization_customer_path(@organization, @customer)
+        redirect_to organization_customer_path(@organization, @customer)
       else
         Subscription::Form.new(@customer.subscription, @user, request).submit(params[:subscription])
 
-        redirect_to new_customer_step_two_account_organization_customer_path(@organization, @customer)
+        redirect_to new_customer_step_two_organization_customer_path(@organization, @customer)
       end
     else
       _error_messages = @customer.errors.messages
@@ -113,14 +113,14 @@ class Customers::MainController < OrganizationController
         flash[:error] = 'Impossible de modifier.'
       end
 
-      redirect_to account_organization_customer_path(@organization, @customer, tab: params[:part])
+      redirect_to organization_customer_path(@organization, @customer, tab: params[:part])
     else
       @customer.is_group_required = @user.not_leader?
 
       if Subscription::UpdateCustomer.new(@customer, user_params).execute
         flash[:success] = 'Modifié avec succès'
 
-        redirect_to account_organization_customer_path(@organization, @customer)
+        redirect_to organization_customer_path(@organization, @customer)
       else
         render :edit
       end
@@ -139,12 +139,12 @@ class Customers::MainController < OrganizationController
     else
       flash[:error] = 'Impossible de modifier.'
     end
-    redirect_to account_organization_customer_path(@organization, @customer, tab: params[:software])
+    redirect_to organization_customer_path(@organization, @customer, tab: params[:software])
   end
 
   def edit_softwares_selection
     if @customer.configured?
-      redirect_to account_organization_customer_path(@organization, @customer)
+      redirect_to organization_customer_path(@organization, @customer)
     else
       build_softwares
     end
@@ -176,7 +176,7 @@ class Customers::MainController < OrganizationController
           @customer.exact_online.try(:reset)
           redirect_to authenticate_account_exact_online_path(customer_id: @customer.id)
         else
-          redirect_to account_organization_customer_path(@organization, @customer, tab: 'exact_online')
+          redirect_to organization_customer_path(@organization, @customer, tab: 'exact_online')
         end
       else
         next_configuration_step
@@ -206,7 +206,7 @@ class Customers::MainController < OrganizationController
 
         flash[:success] = 'Modifié avec succès'
 
-        redirect_to account_organization_customer_path(@organization, @customer, tab: 'my_unisoft')
+        redirect_to organization_customer_path(@organization, @customer, tab: 'my_unisoft')
       else
         next_configuration_step
       end
@@ -233,7 +233,7 @@ class Customers::MainController < OrganizationController
 
         flash[:success] = 'Modifié avec succès'
 
-        redirect_to account_organization_customer_path(@organization, @customer, tab: 'ibiza')
+        redirect_to organization_customer_path(@organization, @customer, tab: 'ibiza')
       else
         next_configuration_step
       end
@@ -251,7 +251,7 @@ class Customers::MainController < OrganizationController
     if @customer.update(period_options_params)
       if @customer.configured?
         flash[:success] = 'Modifié avec succès.'
-        redirect_to account_organization_customer_path(@organization, @customer, tab: 'period_options')
+        redirect_to organization_customer_path(@organization, @customer, tab: 'period_options')
       else
         next_configuration_step
       end
@@ -269,7 +269,7 @@ class Customers::MainController < OrganizationController
       if @customer.configured?
         flash[:success] = 'Modifié avec succès.'
 
-        redirect_to account_organization_customer_path(@organization, @customer, tab: 'ged')
+        redirect_to organization_customer_path(@organization, @customer, tab: 'ged')
       else
         next_configuration_step
       end
@@ -287,7 +287,7 @@ class Customers::MainController < OrganizationController
       if @customer.configured?
         flash[:success] = 'Modifié avec succès.'
 
-        redirect_to account_organization_customer_path(@organization, @customer, tab: 'compta')
+        redirect_to organization_customer_path(@organization, @customer, tab: 'compta')
       else
         next_configuration_step
       end
@@ -303,7 +303,7 @@ class Customers::MainController < OrganizationController
       render :upload_by_email
     else
       flash[:error] = t('authorization.unessessary_rights')
-      redirect_to account_organization_customer_path(@organization, @customer)
+      redirect_to organization_customer_path(@organization, @customer)
     end
   end
 
@@ -322,13 +322,13 @@ class Customers::MainController < OrganizationController
       retake_mcf_documents
     end
 
-    redirect_to show_mcf_errors_account_organization_customer_path(@organization, @customer)
+    redirect_to show_mcf_errors_organization_customer_path(@organization, @customer)
   end
 
   def update_mcf
     if @customer.update(mcf_params)
       flash[:success] = 'Modifié avec succès.'
-      redirect_to account_organization_customer_path(@organization, @customer, tab: 'mcf')
+      redirect_to organization_customer_path(@organization, @customer, tab: 'mcf')
     else
       render :edit_mcf
     end
@@ -344,7 +344,7 @@ class Customers::MainController < OrganizationController
     else
       flash[:error] = 'Impossible de clôturer immédiatement le dossier, la période a été en partie facturé.'
     end
-    redirect_to account_organization_customer_path(@organization, @customer)
+    redirect_to organization_customer_path(@organization, @customer)
   end
 
   # /account/organizations/:organization_id/customers/:id/account_reopen_confirm
@@ -354,7 +354,7 @@ class Customers::MainController < OrganizationController
   def reopen_account
     Subscription::Reopen.new(@customer, @user, request).execute
     flash[:success] = 'Dossier réouvert avec succès.'
-    redirect_to account_organization_customer_path(@organization, @customer)
+    redirect_to organization_customer_path(@organization, @customer)
   end
 
   def search

@@ -20,8 +20,8 @@
             - else
               Adresse non attribuée
           .float-right
-            = link_to glyphicon('pencil'), edit_account_organization_address_path(@organization, address), class: 'btn btn-light', style: 'color: #3e2f24'
-            = link_to glyphicon('x'), account_organization_address_path(@organization, address), method: 'delete', data: { confirm: t('actions.confirm') }, class: 'btn btn-light', style: 'color: #3e2f24'
+            = link_to glyphicon('pencil'), edit_organization_address_path(@organization, address), class: 'btn btn-light', style: 'color: #3e2f24'
+            = link_to glyphicon('x'), organization_address_path(@organization, address), method: 'delete', data: { confirm: t('actions.confirm') }, class: 'btn btn-light', style: 'color: #3e2f24'
   - if address
     %tbody
       %tr

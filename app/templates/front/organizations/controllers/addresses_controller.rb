@@ -26,7 +26,7 @@ class Organizations::AddressesController < OrganizationController
 
     if @address.save
       flash[:success] = 'Créé avec succès.'
-      redirect_to account_organization_addresses_path(@organization)
+      redirect_to organization_addresses_path(@organization)
     else
       render :new
     end
@@ -39,7 +39,7 @@ class Organizations::AddressesController < OrganizationController
   def update
     if @address.update(address_params)
       flash[:success] = 'Modifié avec succès.'
-      redirect_to account_organization_addresses_path(@organization)
+      redirect_to organization_addresses_path(@organization)
     else
       render :edit
     end
@@ -49,7 +49,7 @@ class Organizations::AddressesController < OrganizationController
   def destroy
     if @address.destroy
       flash[:success] = 'Supprimé avec succès.'
-      redirect_to account_organization_addresses_path(@organization)
+      redirect_to organization_addresses_path(@organization)
     end
   end
 

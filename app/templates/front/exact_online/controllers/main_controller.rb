@@ -29,13 +29,13 @@ class ExactOnline::MainController < FrontController
     flash[:success] = 'Liaison Exact Online réussi' if success
     flash[:error] = 'Echec de la liaison Exact Online' unless success
 
-    redirect_to account_organization_customer_path(@organization, @customer, tab: 'exact_online')
+    redirect_to organization_customer_path(@organization, @customer, tab: 'exact_online')
   end
 
   def unsubscribe
     @exact_online.reset unless @exact_online.deactivated?
     flash[:success] = 'Liaison avec Exact Online supprimée.'
-    redirect_to account_organization_customer_path(@organization, @customer, tab: 'exact_online')
+    redirect_to organization_customer_path(@organization, @customer, tab: 'exact_online')
   end
 
   private

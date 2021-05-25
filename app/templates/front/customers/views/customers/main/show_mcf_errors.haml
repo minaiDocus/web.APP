@@ -4,7 +4,7 @@
       .box
         %h3
           Listes des erreurs de récupération de documents depuis le storage MCF : 
-          = link_to @customer, account_organization_customer_path(@organization, @customer, tab: 'mcf'), class: 'fs-origin'
+          = link_to @customer, organization_customer_path(@organization, @customer, tab: 'mcf'), class: 'fs-origin'
 
   .row.derivationLeft
     .col-md-12
@@ -15,7 +15,7 @@
           - if @mcf_documents_error.empty?
             %p Aucune erreur de récupération de document détéctée.
           - else
-            = form_tag retake_mcf_errors_account_organization_customer_path(@organization, @customer), method: :post, class: 'form form-vertical margin0bottom' do
+            = form_tag retake_mcf_errors_organization_customer_path(@organization, @customer), method: :post, class: 'form form-vertical margin0bottom' do
               %table.table.table-striped.table-condensed.margin0bottom
                 %tr
                   %th= check_box_tag 'master_checkbox', 0, false

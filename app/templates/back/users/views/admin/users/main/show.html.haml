@@ -41,7 +41,7 @@
               - elsif @user.is_guest
                 = @user.code
               - else
-                = link_to @user.code, account_organization_customer_path(@user.organization, @user)
+                = link_to @user.code, organization_customer_path(@user.organization, @user)
           %tr
             %th.first= t('activerecord.models.user.attributes.knowings_code')
             %td= render partial: 'text_field', locals: { value: @user.knowings_code, name: 'user[knowings_code]' }
@@ -53,7 +53,7 @@
             %td
               - if @user.collaborator?
                 - @user.organizations.each do |organization|
-                  = link_to organization.name, account_organization_path(organization)
+                  = link_to organization.name, organization_path(organization)
                   = (result = organization_status(@user, organization)) ? "(#{result})" : ''
                   %br
               - else

@@ -4,7 +4,7 @@
   .body_box
     .row.mb-5
       .col-md-12.text-center              
-        = form_tag import_fec_account_organization_customer_accounting_plan_path(@organization, @customer), method: 'patch', multipart: true, class: 'form-horizontal clearfix label-auto' do
+        = form_tag import_fec_organization_customer_accounting_plan_path(@organization, @customer), method: 'patch', multipart: true, class: 'form-horizontal clearfix label-auto' do
           .form-group.clearfix.mt-5
             %input{ type: :hidden, name: "new_create_book_type", value: "1"}
             .control-section{ style: "float:none !important;" }
@@ -27,7 +27,7 @@
         .row
           .header_box.text-left.col-md-4{ style: "padding-left: 34px; padding-top: 10px"} Fournisseurs
           .file_import.text-right.col-md-8
-            = form_tag import_account_organization_customer_accounting_plan_path(@organization, @customer), method: 'patch', multipart: true, class: 'form-horizontal clearfix label-auto' do
+            = form_tag import_organization_customer_accounting_plan_path(@organization, @customer), method: 'patch', multipart: true, class: 'form-horizontal clearfix label-auto' do
               .form-group.clearfix{ style: "margin-bottom: 0 !important" }
                 %input{ type: :hidden, name: "new_create_book_type", value: "1"}
                 .control-section{ style: "float:none !important;" }
@@ -42,7 +42,7 @@
         .row
           .header_box.text-left.col-md-4{ style: "padding-left: 34px; padding-top: 10px"} Clients
           .file_import.text-right.col-md-8
-            = form_tag import_account_organization_customer_accounting_plan_path(@organization, @customer), method: 'patch', multipart: true, class: 'form-horizontal clearfix label-auto' do
+            = form_tag import_organization_customer_accounting_plan_path(@organization, @customer), method: 'patch', multipart: true, class: 'form-horizontal clearfix label-auto' do
               .form-group.clearfix{ style: "margin-bottom: 0 !important" }
                 %input{ type: :hidden, name: "new_create_book_type", value: "1"}
                 .control-section{ style: "float:none !important;" }

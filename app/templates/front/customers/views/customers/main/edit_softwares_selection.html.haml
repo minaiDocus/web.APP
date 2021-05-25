@@ -8,7 +8,7 @@
       %h3
         Séléction de logiciels comptables pour le dossier : 
         %span.text-info.fs-origin= @customer
-    = simple_form_for @customer, url: update_softwares_selection_account_organization_customer_path(@organization, @customer), html: { class: 'form-horizontal' } do |c|
+    = simple_form_for @customer, url: update_softwares_selection_organization_customer_path(@organization, @customer), html: { class: 'form-horizontal' } do |c|
       .card-body
         - Interfaces::Software::Configuration::SOFTWARES.each do |software|
           = c.simple_fields_for software.to_sym do |f|
@@ -65,7 +65,7 @@
                         = f.check_box :is_used, style: "position:unset"
             .card-footer
               .form-actions.margin0bottom
-                = link_to t('actions.previous_step'), previous_account_organization_customer_setup_path(@organization, @customer), class: 'btn btn-secondary'
-                = link_to t('actions.complete_later'), complete_later_account_organization_customer_setup_path(@organization, @customer), class: 'btn btn-light'
+                = link_to t('actions.previous_step'), previous_organization_customer_setup_path(@organization, @customer), class: 'btn btn-secondary'
+                = link_to t('actions.complete_later'), complete_later_organization_customer_setup_path(@organization, @customer), class: 'btn btn-light'
                 = f.submit t('actions.next_step'), class: 'btn btn-primary'
 = javascript_include_tag 'account/customers'

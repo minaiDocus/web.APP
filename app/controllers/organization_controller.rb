@@ -22,7 +22,7 @@ class OrganizationController < ApplicationController
   end
 
   def organization_id
-    @organization_id ||= controller_name == 'organizations' ? params[:id] : params[:organization_id]
+    @organization_id ||= (params[:controller] == 'organizations/main' && controller_name == 'main') ? params[:id] : params[:organization_id]
   end
 
   def load_organization

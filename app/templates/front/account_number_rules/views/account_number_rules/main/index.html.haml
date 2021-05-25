@@ -9,12 +9,12 @@
             Liste des règles d'affectations bancaires - iDo'FacBanque
             %span.badge.badge-info= @account_number_rules_count
         .float-right
-          = link_to 'Ajouter une règle ', new_account_organization_account_number_rule_path(@organization), class: 'btn btn-primary'
-          = link_to 'Importer des règles  ', import_form_account_organization_account_number_rules_path(@organization), class: 'btn btn-primary'
+          = link_to 'Ajouter une règle ', new_organization_account_number_rule_path(@organization), class: 'btn btn-primary'
+          = link_to 'Importer des règles  ', import_form_organization_account_number_rules_path(@organization), class: 'btn btn-primary'
   .row.retractable.with-filter.derivationLeft
     .col-md-12.retractable-content
       .box
-        = form_tag(export_or_destroy_account_organization_account_number_rules_path(@organization), method: :post) do
+        = form_tag(export_or_destroy_organization_account_number_rules_path(@organization), method: :post) do
           .head.clearfix
             .float-left
               %p Les règles ci-dessous s'appliquent aux opérations récupérées depuis les automates. Vous pouvez exporter les règles sélectionnées ou les supprimer.
@@ -54,10 +54,10 @@
                   %td= rule.content
                   %td= rule.third_party_account
                   %td
-                    = link_to glyphicon('plus'), new_account_organization_account_number_rule_path(@organization, template: rule), class: 'btn btn-light', title: 'Créer une règle en se basant sur cette règle'
-                    = link_to glyphicon('eye'), account_organization_account_number_rule_path(@organization, rule), class: 'btn btn-light', title: 'Voir'
-                    = link_to glyphicon('pencil'), edit_account_organization_account_number_rule_path(@organization, rule), class: 'btn btn-light', title: 'Editer'
-                    = link_to glyphicon('x'), account_organization_account_number_rule_path(@organization, rule), class: 'btn btn-light', method: :delete, data: { confirm: t('actions.confirm') }, title: 'Supprimer'
+                    = link_to glyphicon('plus'), new_organization_account_number_rule_path(@organization, template: rule), class: 'btn btn-light', title: 'Créer une règle en se basant sur cette règle'
+                    = link_to glyphicon('eye'), organization_account_number_rule_path(@organization, rule), class: 'btn btn-light', title: 'Voir'
+                    = link_to glyphicon('pencil'), edit_organization_account_number_rule_path(@organization, rule), class: 'btn btn-light', title: 'Editer'
+                    = link_to glyphicon('x'), organization_account_number_rule_path(@organization, rule), class: 'btn btn-light', method: :delete, data: { confirm: t('actions.confirm') }, title: 'Supprimer'
         = render partial: 'shared/list_options', locals: { collection: @account_number_rules }
     = render partial: 'sidebar'
   = render partial: 'modal_form_skip_accounting_plan'

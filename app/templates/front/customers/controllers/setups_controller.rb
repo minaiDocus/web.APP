@@ -10,7 +10,7 @@ class Customers::SetupsController < OrganizationController
   # GET /account/organizations/:organization_id/customers/:customer_id/setup/next
   def next
     if @customer.configured?
-      redirect_to account_organization_customer_path(@organization, @customer)
+      redirect_to organization_customer_path(@organization, @customer)
     else
       next_configuration_step
     end
@@ -19,7 +19,7 @@ class Customers::SetupsController < OrganizationController
   # GET /account/organizations/:organization_id/customers/:customer_id/setup/previous
   def previous
     if @customer.configured?
-      redirect_to account_organization_customer_path(@organization, @customer)
+      redirect_to organization_customer_path(@organization, @customer)
     else
       previous_configuration_step
     end
@@ -127,7 +127,7 @@ class Customers::SetupsController < OrganizationController
       @customer.save
       redirect_to step_path(@customer.current_configuration_step)
     else
-      redirect_to account_organization_customer_path(@organization, @customer)
+      redirect_to organization_customer_path(@organization, @customer)
     end
   end
 

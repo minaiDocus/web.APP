@@ -18,7 +18,7 @@
         = render partial: '/account/customers/accounting_plan'
       
   .card-footer.text-center
-    = link_to "Terminer", account_organization_customer_path(@organization, @customer), class: 'btn btn-success small-shadow text-bold'
+    = link_to "Terminer", organization_customer_path(@organization, @customer), class: 'btn btn-success small-shadow text-bold'
 
 .modal.fade{ :id=>"for_step_two" }
   .modal-dialog

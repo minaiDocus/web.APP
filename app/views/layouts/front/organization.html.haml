@@ -12,21 +12,21 @@
     = stylesheet_link_tag 'account/organization/retrievers'
     = stylesheet_link_tag 'account/addresses'
     = stylesheet_link_tag 'account/invoices'
-    = stylesheet_link_tag 'account/accounting_plans'
-    = stylesheet_link_tag 'account/vat_accounts'
-    = stylesheet_link_tag 'account/knowings'
-    = stylesheet_link_tag 'account/pack_reports'
-    = stylesheet_link_tag 'account/file_sending_kits'
-    = stylesheet_link_tag 'account/file_storage_authorizations'
-    = stylesheet_link_tag 'account/use_csv_descriptors'
-    = stylesheet_link_tag 'account/list_journals'
-    = stylesheet_link_tag 'account/account_sharings'
-    = stylesheet_link_tag 'account/account_sharing_groups'
-    = stylesheet_link_tag 'account/guest_collaborators'
-    = stylesheet_link_tag 'account/ibizabox_documents'
-    = stylesheet_link_tag 'account/ftps'
-    = stylesheet_link_tag 'account/sftps'
-    = stylesheet_link_tag 'account/mcf_settings'
+    / = stylesheet_link_tag 'account/accounting_plans'
+    / = stylesheet_link_tag 'account/vat_accounts'
+    / = stylesheet_link_tag 'account/knowings'
+    / = stylesheet_link_tag 'account/pack_reports'
+    / = stylesheet_link_tag 'account/file_sending_kits'
+    / = stylesheet_link_tag 'account/file_storage_authorizations'
+    / = stylesheet_link_tag 'account/use_csv_descriptors'
+    / = stylesheet_link_tag 'account/list_journals'
+    / = stylesheet_link_tag 'account/account_sharings'
+    / = stylesheet_link_tag 'account/account_sharing_groups'
+    / = stylesheet_link_tag 'account/guest_collaborators'
+    / = stylesheet_link_tag 'account/ibizabox_documents'
+    / = stylesheet_link_tag 'account/ftps'
+    / = stylesheet_link_tag 'account/sftps'
+    / = stylesheet_link_tag 'account/mcf_settings'
 
 
     / = javascript_declare_var('XHR_TKN', FrontController::XHR_TOKEN)
@@ -47,9 +47,9 @@
                   - if !@organization.is_active
                     %span.badge.badge-danger.fs-origin.margin1right.closed_account Compte clôturé
                   - if @organization.is_active
-                    = link_to glyphicon('x') + " Clôturer l'organisation", close_confirm_account_organization_path(@organization), class: 'btn btn-danger'
+                    = link_to glyphicon('x') + " Clôturer l'organisation", close_confirm_organization_path(@organization), class: 'btn btn-danger'
                   - else
-                    = link_to glyphicon('briefcase') + " Réouvrir l'organisation", activate_account_organization_path(@organization), method: 'patch',class: 'btn btn-primary'
+                    = link_to glyphicon('briefcase') + " Réouvrir l'organisation", activate_organization_path(@organization), method: 'patch',class: 'btn btn-primary'
 
         .alerts
           = render partial: 'shared/messages'
@@ -63,31 +63,31 @@
                     %span.icon= glyphicon('caret-right')
                   %ul.nav.flex-column.nav-list.dlink
                     %li.nav-item{ class: ((controller_name.in?(%w(organizations organization_addresses organization_period_options reminder_emails file_sending_kits organization_subscriptions csv_descriptors organization_csv_descriptors knowings ibiza file_naming_policies ftps sftps mcf_settings)) && !request.path.match(/customers/)) ? 'active' : '') }
-                      %a{ href: account_organization_path(@organization), class: 'nav-link' }
+                      %a{ href: organization_path(@organization), class: 'nav-link' }
                         Paramètres
                         = glyphicon('cog',{ class: 'float-right' })
                     %li.nav-item{ class: (controller_name == 'groups' ? 'active' : '') }
-                      %a{ href: account_organization_groups_path(@organization), class: 'nav-link' }
+                      %a{ href: organization_groups_path(@organization), class: 'nav-link' }
                         Groupes
                         = glyphicon('people', { class: 'float-right' })
                     - if @user.leader? || @user.manage_collaborators
                       %li.nav-item{ class: ((controller_name.in?(%w(collaborators rights)) || (controller_name == 'file_storage_authorizations' and params[:collaborator_id].present?)) ? 'active' : '') }
-                        %a{ href: account_organization_collaborators_path(@organization), class: 'nav-link' }
+                        %a{ href: organization_collaborators_path(@organization), class: 'nav-link' }
                           Collaborateurs
                           = glyphicon('person', { class: 'float-right' })
                     - if @organization.is_active
                       - if (@user.leader? || @user.manage_journals) && !@organization.specific_mission
                         %li.nav-item{ class: ((controller_name == 'journals' && params[:customer_id].blank?) ? 'active' : '') }
-                          %a{ href: account_organization_journals_path(@organization), class: 'nav-link' }
+                          %a{ href: organization_journals_path(@organization), class: 'nav-link' }
                             Journaux comptables partagés
                             = glyphicon('book', { class: 'float-right' })
                     %li.nav-item{ class: (request.path.match(/customers/) ? 'active' : '') }
-                      %a{ href: account_organization_customers_path(@organization), class: 'nav-link' }
+                      %a{ href: organization_customers_path(@organization), class: 'nav-link' }
                         Clients
                         = glyphicon('briefcase', { class: 'float-right' })
                     - if @organization.is_active && !@organization.specific_mission
                       %li.nav-item{ class: (controller_name == 'account_number_rules' ? 'active' : '') }
-                        %a{ href: account_organization_account_number_rules_path(@organization), class: 'nav-link' }
+                        %a{ href: organization_account_number_rules_path(@organization), class: 'nav-link' }
                           Affectations bancaires
                           %br
                           (iDo'FacBanque)
@@ -98,16 +98,16 @@
                     - # glyphicon('file', { class: 'float-right' })
                     - unless @organization.specific_mission
                       %li.nav-item{ class: (controller_name.in?(%w(paper_set_orders)) ? 'active' : '') }
-                        %a{ href: account_organization_paper_set_orders_path(@organization), class: 'nav-link' }
+                        %a{ href: organization_paper_set_orders_path(@organization), class: 'nav-link' }
                           Commande Kit Courriers
                           = glyphicon('envelope-closed', { class: 'float-right' })
                       %li.nav-item{ class: (controller_name.in?(%w(account_sharings account_sharing_groups guest_collaborators)) ? 'active' : '') }
-                        %a{ href: account_organization_account_sharings_path(@organization), class: 'nav-link' }
+                        %a{ href: organization_account_sharings_path(@organization), class: 'nav-link' }
                           Accès clients multi-dossiers
                           = glyphicon('folder', { class: 'float-right' })
                     - if @user.leader? && !@organization.try(:is_suspended?)
                       %li.nav-item{ class: (controller_name.in?(%w(invoices)) ? 'active' : '') }
-                        %a{ href: account_organization_invoices_path(@organization), class: 'nav-link' }
+                        %a{ href: organization_invoices_path(@organization), class: 'nav-link' }
                           Factures
                           = glyphicon('spreadsheet', { class: 'float-right' })
           .col-md-12.retractable.fadein
@@ -130,27 +130,27 @@
       = javascript_include_tag 'account/organization_retrievers'
       = javascript_include_tag 'account/addresses'
       = javascript_include_tag 'account/invoices'
-      = javascript_include_tag 'account/rights'
-      = javascript_include_tag 'account/collaborators'
-      = javascript_include_tag 'account/organization_addresses'
-      = javascript_include_tag 'account/vat_accounts'
-      = javascript_include_tag 'account/exercises'
-      = javascript_include_tag 'account/bank_accounts'
-      = javascript_include_tag 'account/knowings'
-      = javascript_include_tag 'account/pre_assignment_delivery_errors'
-      = javascript_include_tag 'account/ibiza'
-      = javascript_include_tag 'account/reminder_emails'
-      = javascript_include_tag 'account/new_provider_requests'
-      = javascript_include_tag 'account/retrieved_banking_operations'
-      = javascript_include_tag 'account/retrieved_documents'
-      = javascript_include_tag 'account/file_sending_kits'
-      = javascript_include_tag 'account/file_storage_authorizations'
-      = javascript_include_tag 'account/use_csv_descriptors'
-      = javascript_include_tag 'account/list_journals'
-      = javascript_include_tag 'account/account_sharing_groups'
-      = javascript_include_tag 'account/guest_collaborators'
-      = javascript_include_tag 'account/mcf_settings'
-      = javascript_include_tag 'account/sftps'
+      / = javascript_include_tag 'account/rights'
+      / = javascript_include_tag 'account/collaborators'
+      / = javascript_include_tag 'account/organization_addresses'
+      / = javascript_include_tag 'account/vat_accounts'
+      / = javascript_include_tag 'account/exercises'
+      / = javascript_include_tag 'account/bank_accounts'
+      / = javascript_include_tag 'account/knowings'
+      / = javascript_include_tag 'account/pre_assignment_delivery_errors'
+      / = javascript_include_tag 'account/ibiza'
+      / = javascript_include_tag 'account/reminder_emails'
+      / = javascript_include_tag 'account/new_provider_requests'
+      / = javascript_include_tag 'account/retrieved_banking_operations'
+      / = javascript_include_tag 'account/retrieved_documents'
+      / = javascript_include_tag 'account/file_sending_kits'
+      / = javascript_include_tag 'account/file_storage_authorizations'
+      / = javascript_include_tag 'account/use_csv_descriptors'
+      / = javascript_include_tag 'account/list_journals'
+      / = javascript_include_tag 'account/account_sharing_groups'
+      / = javascript_include_tag 'account/guest_collaborators'
+      / = javascript_include_tag 'account/mcf_settings'
+      / = javascript_include_tag 'account/sftps'
     = render '/shared/google_analytics'
     = render '/shared/zendesk_help'
 

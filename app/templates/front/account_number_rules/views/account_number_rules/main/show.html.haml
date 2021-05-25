@@ -7,9 +7,9 @@
             Informations sur la règle : 
             %span.text-info.fs-origin= @account_number_rule.name
         .float-right
-          = link_to t('actions.edit'), edit_account_organization_account_number_rule_path(@organization, @account_number_rule), class: 'btn btn-primary'
-          = link_to t('actions.destroy'), account_organization_account_number_rule_path(@organization, @account_number_rule), class: 'btn btn-danger', method: :delete, data: { confirm: t('actions.confirm') }
-          = link_to t('actions.return'), account_organization_account_number_rules_path(@organization), class: 'btn btn-light'
+          = link_to t('actions.edit'), edit_organization_account_number_rule_path(@organization, @account_number_rule), class: 'btn btn-primary'
+          = link_to t('actions.destroy'), organization_account_number_rule_path(@organization, @account_number_rule), class: 'btn btn-danger', method: :delete, data: { confirm: t('actions.confirm') }
+          = link_to t('actions.return'), organization_account_number_rules_path(@organization), class: 'btn btn-light'
   .row.derivationLeft
     .col-md-12
       .box
@@ -41,5 +41,5 @@
               %th Clients concernés (#{@account_number_rule.users.size})
               %td
                 - @account_number_rule.users.order(code: :asc).each do |user|
-                  = link_to user.info, account_organization_customer_path(@organization, user)
+                  = link_to user.info, organization_customer_path(@organization, user)
                   %br

@@ -19,6 +19,6 @@ module Account::CollaboratorsHelper
       return "/account/organizations/#{organization_id}/invoices/download/#{invoice_id}"
     end
 
-    "#{download_account_organization_invoices_path}/#{invoice_id}"
+    "#{download_organization_invoices_path}/#{invoice_id}"
   end
 end

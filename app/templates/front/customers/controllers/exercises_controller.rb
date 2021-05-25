@@ -28,7 +28,7 @@ class Customers::ExercisesController < OrganizationController
     if @exercise.save
       flash[:success] = 'Créé avec succès.'
 
-      redirect_to account_organization_customer_exercises_path(@organization, @customer)
+      redirect_to organization_customer_exercises_path(@organization, @customer)
     else
       render :new
     end
@@ -42,7 +42,7 @@ class Customers::ExercisesController < OrganizationController
     if @exercise.update(exercise_params)
       flash[:success] = 'Modifié avec succès.'
 
-      redirect_to account_organization_customer_exercises_path(@organization, @customer)
+      redirect_to organization_customer_exercises_path(@organization, @customer)
     else
       render 'edit'
     end
@@ -54,7 +54,7 @@ class Customers::ExercisesController < OrganizationController
 
     flash[:success] = 'Supprimé avec succès.'
 
-    redirect_to account_organization_customer_exercises_path(@organization, @customer)
+    redirect_to organization_customer_exercises_path(@organization, @customer)
   end
 
   private

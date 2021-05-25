@@ -2,7 +2,7 @@
   .card
     .card-header
       %h3 Propager les quotas
-    = simple_form_for @subscription, url: propagate_options_account_organization_organization_subscription_path(@organization), html: { class: 'form-horizontal' } do |f|
+    = simple_form_for @subscription, url: propagate_options_organization_organization_subscription_path(@organization), html: { class: 'form-horizontal' } do |f|
       .card-body
         .row
           .col-md-6
@@ -69,4 +69,4 @@
       .card-footer
         .form-actions.margin0bottom
           = f.submit t('actions.propagate'), class: 'btn btn-primary'
-          = link_to t('actions.cancel'), account_organization_path(@organization, tab: 'subscription'), class: 'btn btn-light'
+          = link_to t('actions.cancel'), organization_path(@organization, tab: 'subscription'), class: 'btn btn-light'

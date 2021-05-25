@@ -1,5 +1,5 @@
 - content_for :form do
-  = simple_nested_form_for @accounting_plan, url: update_multiple_account_organization_customer_accounting_plan_vat_accounts_path(@organization, @customer), html: { class: 'form-horizontal' }, wrapper: false do |f|
+  = simple_nested_form_for @accounting_plan, url: update_multiple_organization_customer_accounting_plan_vat_accounts_path(@organization, @customer), html: { class: 'form-horizontal' }, wrapper: false do |f|
     .card-body
       .clearfix
         = f.fields_for :vat_accounts do |vat_account|
@@ -14,7 +14,7 @@
     .card-footer
       .form-actions
         = f.submit t('actions.submit'), class: 'btn btn-primary'
-        = link_to t('actions.cancel'), account_organization_customer_accounting_plan_vat_accounts_path(@organization, @customer), class: 'btn btn-light'
+        = link_to t('actions.cancel'), organization_customer_accounting_plan_vat_accounts_path(@organization, @customer), class: 'btn btn-light'
 
 #accounting_plan.edit.derivationRight
   - if @customer.configured?
@@ -22,13 +22,13 @@
       .card-header
         %h3
           Edition des 
-          = link_to 'TVA', account_organization_customer_accounting_plan_vat_accounts_path(@organization, @customer), class: 'fs-origin'
+          = link_to 'TVA', organization_customer_accounting_plan_vat_accounts_path(@organization, @customer), class: 'fs-origin'
           du client : 
-          = link_to @customer.info, account_organization_customer_path(@organization, @customer, tab: 'accounting_plan'), class: 'fs-origin'
+          = link_to @customer.info, organization_customer_path(@organization, @customer, tab: 'accounting_plan'), class: 'fs-origin'
       = content_for :form
   - else
     .box
-      = render 'account/customers/steps'
+      = render 'customers/main/steps'
     .card
       .card-header
         %h3 Comptes de TVA

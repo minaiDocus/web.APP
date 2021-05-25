@@ -25,7 +25,7 @@ class Customers::AddressesController < OrganizationController
     @address = @customer.addresses.new(address_params)
     if @address.save
       flash[:success] = 'Créé avec succès.'
-      redirect_to account_organization_customer_addresses_path(@organization, @customer)
+      redirect_to organization_customer_addresses_path(@organization, @customer)
     else
       render :new
     end
@@ -38,7 +38,7 @@ class Customers::AddressesController < OrganizationController
   def update
     if @address.update(address_params)
       flash[:success] = 'Modifié avec succès.'
-      redirect_to account_organization_customer_addresses_path(@organization, @customer)
+      redirect_to organization_customer_addresses_path(@organization, @customer)
     else
       render :edit
     end
@@ -48,7 +48,7 @@ class Customers::AddressesController < OrganizationController
   def destroy
     if @address.destroy
       flash[:success] = 'Supprimé avec succès.'
-      redirect_to account_organization_customer_addresses_path(@organization, @customer)
+      redirect_to organization_customer_addresses_path(@organization, @customer)
     end
   end
 

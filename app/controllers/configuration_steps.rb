@@ -104,7 +104,7 @@ module ConfigurationSteps
       redirect_to step_path(@customer.current_configuration_step)
     else
       flash[:success] = 'Dossier configuré avec succès.' if was_last_step
-      redirect_to account_organization_customer_path(@organization, @customer)
+      redirect_to organization_customer_path(@organization, @customer)
     end
   end
 
@@ -247,41 +247,41 @@ module ConfigurationSteps
     when 'account'
       nil
     when 'subscription'
-      edit_account_organization_customer_subscription_path(@organization, @customer)
+      edit_organization_customer_subscription_path(@organization, @customer)
     when 'softwares_selection'
-      edit_softwares_selection_account_organization_customer_path(@organization, @customer)
+      edit_softwares_selection_organization_customer_path(@organization, @customer)
     when 'compta_options'
-      edit_compta_options_account_organization_customer_path(@organization, @customer)
+      edit_compta_options_organization_customer_path(@organization, @customer)
     when 'period_options'
-      edit_period_options_account_organization_customer_path(@organization, @customer)
+      edit_period_options_organization_customer_path(@organization, @customer)
     when 'ibiza'
-      edit_ibiza_account_organization_customer_path(@organization, @customer)
+      edit_ibiza_organization_customer_path(@organization, @customer)
     when 'use_csv_descriptor'
-      edit_account_organization_customer_use_csv_descriptor_path(@organization, @customer)
+      edit_organization_customer_use_csv_descriptor_path(@organization, @customer)
     when 'csv_descriptor'
-      edit_account_organization_customer_csv_descriptor_path(@organization, @customer)
+      edit_organization_customer_csv_descriptor_path(@organization, @customer)
     when 'accounting_plans'
-      account_organization_customer_accounting_plan_path(@organization, @customer)
+      organization_customer_accounting_plan_path(@organization, @customer)
     when 'vat_accounts'
-      account_organization_customer_accounting_plan_vat_accounts_path(@organization, @customer)
+      organization_customer_accounting_plan_vat_accounts_path(@organization, @customer)
     when 'journals'
-      account_organization_customer_list_journals_path(@organization, @customer)
+      organization_customer_list_journals_path(@organization, @customer)
     when 'order_paper_set'
       order = @customer.orders.paper_sets.pending.first
       if order
-        edit_account_organization_customer_order_path(@organization, @customer, order)
+        edit_organization_customer_order_path(@organization, @customer, order)
       else
-        new_account_organization_customer_order_path(@organization, @customer, order: { type: 'paper_set' })
+        new_organization_customer_order_path(@organization, @customer, order: { type: 'paper_set' })
       end
     when 'order_dematbox'
       order = @customer.orders.dematboxes.pending.first
       if order
-        edit_account_organization_customer_order_path(@organization, @customer, order)
+        edit_organization_customer_order_path(@organization, @customer, order)
       else
-        new_account_organization_customer_order_path(@organization, @customer, order: { type: 'dematbox' })
+        new_organization_customer_order_path(@organization, @customer, order: { type: 'dematbox' })
       end
     when 'ged'
-      edit_knowings_options_account_organization_customer_path(@organization, @customer)
+      edit_knowings_options_organization_customer_path(@organization, @customer)
     end
   end
 

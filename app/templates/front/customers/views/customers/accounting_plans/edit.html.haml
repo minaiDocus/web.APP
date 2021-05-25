@@ -7,13 +7,13 @@
       - if @customer.configured?
         %h3
           Edition du
-          = link_to 'plan comptable', account_organization_customer_accounting_plan_path(@organization, @customer), class: 'fs-origin'
+          = link_to 'plan comptable', organization_customer_accounting_plan_path(@organization, @customer), class: 'fs-origin'
           du client :
-          = link_to @customer, account_organization_customer_path(@organization, @customer, tab: 'accounting_plan'), class: 'fs-origin'
+          = link_to @customer, organization_customer_path(@organization, @customer, tab: 'accounting_plan'), class: 'fs-origin'
       - else
         %h3 Plan comptable
 
-    = simple_nested_form_for @accounting_plan, url: account_organization_customer_accounting_plan_path(@organization, @customer), html: { class: 'form form-horizontal margin0', novalidate: true }, wrapper: false do |f|
+    = simple_nested_form_for @accounting_plan, url: organization_customer_accounting_plan_path(@organization, @customer), html: { class: 'form form-horizontal margin0', novalidate: true }, wrapper: false do |f|
       .card-body
         .row
           .col-md-6
@@ -46,4 +46,4 @@
       .card-footer
         .form-actions
           = f.submit t('actions.submit'), class: 'btn btn-primary'
-          = link_to t('actions.cancel'), account_organization_customer_accounting_plan_path(@organization, @customer), class: 'btn btn-light'
+          = link_to t('actions.cancel'), organization_customer_accounting_plan_path(@organization, @customer), class: 'btn btn-light'

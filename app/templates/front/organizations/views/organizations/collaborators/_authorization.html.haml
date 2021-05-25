@@ -37,4 +37,4 @@
           = @member.manage_customer_journals ? t('yes_value') : t('no_value')
   - unless @member.user.is_admin
     - if @organization.is_active
-      = link_to t('actions.edit'), edit_account_organization_collaborator_rights_path(@organization, @member), class: 'btn btn-primary'
+      = link_to t('actions.edit'), edit_organization_collaborator_rights_path(@organization, @member), class: 'btn btn-primary'

@@ -44,7 +44,7 @@ class AccountNumberRules::MainController < FrontController
     if @account_number_rule.save
       flash[:success] = 'Créé avec succès.'
 
-      redirect_to account_organization_account_number_rule_path(@organization, @account_number_rule)
+      redirect_to organization_account_number_rule_path(@organization, @account_number_rule)
     else
       render 'new'
     end
@@ -63,7 +63,7 @@ class AccountNumberRules::MainController < FrontController
     if @account_number_rule.update(account_number_rule_params)
       flash[:success] = 'Modifié avec succès.'
 
-      redirect_to account_organization_account_number_rules_path(@organization)
+      redirect_to organization_account_number_rules_path(@organization)
     else
       render 'edit'
     end
@@ -75,7 +75,7 @@ class AccountNumberRules::MainController < FrontController
 
     flash[:success] = 'Supprimé avec succès.'
 
-    redirect_to account_organization_account_number_rules_path(@organization)
+    redirect_to organization_account_number_rules_path(@organization)
   end
 
   # POST /account/organizations/:organization_id/account_number_rules/export_or_destroy
@@ -92,12 +92,12 @@ class AccountNumberRules::MainController < FrontController
         @account_number_rules.destroy_all
 
         flash[:success] = "Règles d'affectations supprimées avec succès."
-        redirect_to account_organization_account_number_rules_path(@organization)
+        redirect_to organization_account_number_rules_path(@organization)
       end
     else
       flash[:alert] = "Veuillez sélectionner les règles d'affectations à exporter ou à supprimer."
 
-      redirect_to account_organization_account_number_rules_path(@organization)
+      redirect_to organization_account_number_rules_path(@organization)
     end
   end
 
@@ -130,7 +130,7 @@ class AccountNumberRules::MainController < FrontController
       flash[:error] = 'Aucun fichier choisi.'
     end
 
-    redirect_to account_organization_account_number_rules_path(@organization)
+    redirect_to organization_account_number_rules_path(@organization)
   end
 
   def update_skip_accounting_plan_accounts

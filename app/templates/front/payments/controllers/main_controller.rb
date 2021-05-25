@@ -7,7 +7,7 @@ class Payments::MainController < FrontController
 
   # GET /account/payment/use_debit_mandate
   def use_debit_mandate
-    redirect_to account_organization_path(@user.organization, tab: 'payments')
+    redirect_to organization_path(@user.organization, tab: 'payments')
   end
 
   # POST /account/payment/debit_mandate_notify

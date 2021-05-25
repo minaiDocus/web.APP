@@ -58,11 +58,11 @@ class FileStorageAuthorizations::MainController < FrontController
 
   def load_url_path
     if @someone.is_prescriber
-      @put_url_path = file_storage_authorizations_update_path(@organization, @member)
-      @url_path     = collaborators_show_path(@organization, @member, tab: 'file_storages')
+      @put_url_path = organization_collaborator_file_storage_authorizations_path(@organization, @member)
+      @url_path     = organization_collaborator_path(@organization, @member, tab: 'file_storages')
     else
-      @put_url_path = account_organization_customer_file_storage_authorizations_path(@organization, @someone)
-      @url_path     = account_organization_customer_path(@organization, @someone, tab: 'file_storages')
+      @put_url_path = organization_customer_file_storage_authorizations_path(@organization, @someone)
+      @url_path     = organization_customer_path(@organization, @someone, tab: 'file_storages')
     end
   end
 end

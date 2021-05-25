@@ -1,5 +1,0 @@
-%ul.nav.nav-tabs
-  %li.nav-item
-    = link_to "Dossiers partagés", account_organization_account_sharings_path(@organization), class: "nav-link #{(controller_name == 'account_sharings')? 'active' : ''}"
-  %li.nav-item 
-    = link_to "Contacts", account_organization_guest_collaborators_path(@organization), class: "nav-link #{(controller_name == 'guest_collaborators')? 'active' : ''}"
