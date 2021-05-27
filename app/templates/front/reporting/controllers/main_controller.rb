@@ -6,7 +6,7 @@ class Reporting::MainController < FrontController
 
   def show
     if Collaborator.new(@user).has_many_organization? && !params[:organization_id].present?
-      redirect_to account_reporting_path(organization_id: @user.organizations.first.id)
+      redirect_to reporting_path(organization_id: @user.organizations.first.id)
     else
       @year = begin
                 Integer(params[:year])

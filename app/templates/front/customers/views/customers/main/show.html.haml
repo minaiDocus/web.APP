@@ -169,11 +169,11 @@
           #addresses.tab-pane.fade{ class: ('active show' if params[:tab] == 'addresses') }
             .row.margin1bottom
               .col-md-4
-                = render partial: 'account/customer_addresses/address', locals: { address: @customer.paper_return_address,  single: true, type: 'paper_return' }
+                = render partial: 'customers/addresses/address', locals: { address: @customer.paper_return_address,  single: true, type: 'paper_return' }
               .col-md-4
-                = render partial: 'account/customer_addresses/address', locals: { address: @customer.paper_set_shipping_address, single: true, type: 'paper_set_shipping' }
+                = render partial: 'customers/addresses/address', locals: { address: @customer.paper_set_shipping_address, single: true, type: 'paper_set_shipping' }
               .col-md-4
-                = render partial: 'account/customer_addresses/address', locals: { address: @customer.dematbox_shipping_address, single: true, type: 'dematbox_shipping' }
+                = render partial: 'customers/addresses/address', locals: { address: @customer.dematbox_shipping_address, single: true, type: 'dematbox_shipping' }
             - if @customer.active?
               .row
                 .col-md-12.aligncenter
@@ -773,5 +773,5 @@
                     = submit_tag t('actions.submit'), class: 'btn btn-primary'
           - if @user.is_admin && @customer.active?
             #file_storages.tab-pane.fade{ class: ('active show' if params[:tab] == 'file_storages') }
-              = render partial: 'account/customers/file_storages', locals: { user: @customer }
+              = render partial: 'customers/main/file_storages', locals: { user: @customer }
               = link_to t('actions.edit'), edit_organization_customer_file_storage_authorizations_path(@organization, @customer), class: 'btn btn-primary'

@@ -29,15 +29,15 @@
                   %span.label supprimé
                 = document.retriever_name
               %td= l(document.metadata['date'], format: '%d %b %Y') rescue ''
-              %td= link_to document.metadata['name'] + '.pdf', account_retrieved_document_path(document)
+              %td= link_to document.metadata['name'] + '.pdf', retrieved_document_path(document)
               %td
-                = link_to document.piece.cloud_content_object.filename, piece_account_retrieved_document_path(document) if document.piece
+                = link_to document.piece.cloud_content_object.filename, piece_retrieved_document_path(document) if document.piece
               %td.pages= document.pages_number
               %td.amount= document.metadata['amount'].to_s + ' €'
       = render partial: 'shared/list_options', locals: { collection: @documents }
 
   .card.retractable-filter
-    = form_tag account_retrieved_documents_path, method: :get, class: 'form-filter' do
+    = form_tag retrieved_documents_path, method: :get, class: 'form-filter' do
       .card-header.clearfix
         .float-left
           %h3 Filtres
@@ -92,4 +92,4 @@
         .card-footer
           .form-actions
             = submit_tag t('filters.action'), class: 'btn btn-primary'
-            = link_to glyphicon('x'), account_retrieved_documents_path, class: 'btn btn-light'
+            = link_to glyphicon('x'), retrieved_documents_path, class: 'btn btn-light'

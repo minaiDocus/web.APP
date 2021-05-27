@@ -11,7 +11,7 @@
   .row.retractable.with-filter.derivationLeft
     .col-md-12.retractable-content
       .box
-        = form_tag bank_accounts_index_path, method: :get, class: 'form form-selection form-horizontal' do
+        = form_tag bank_accounts_path, method: :get, class: 'form form-selection form-horizontal' do
           = hidden_field_tag 'retriever_budgea_config', @bi_config
           = hidden_field_tag 'retriever_bi_token', @account.budgea_account.try(:access_token)
           = hidden_field_tag 'retriever_user_token', @account.get_authentication_token
@@ -32,7 +32,7 @@
             = button_tag 'Valider les changements', class: 'btn-selection btn btn-primary'
 
     .card.retractable-filter
-      = form_tag bank_accounts_index_path, method: :get, class: 'form-filter' do
+      = form_tag bank_accounts_path, method: :get, class: 'form-filter' do
         .card-header.clearfix
           .float-left
             %h3 Filtres
@@ -48,6 +48,6 @@
           .card-footer
             .form-actions
               = submit_tag t('filters.action'), class: 'btn btn-primary'
-              = link_to glyphicon('x'), bank_accounts_index_path, class: 'btn btn-light'
+              = link_to glyphicon('x'), bank_accounts_path, class: 'btn btn-light'
 
 = javascript_include_tag 'front/bank_accounts/assets/javascripts/main'

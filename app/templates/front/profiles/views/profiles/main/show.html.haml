@@ -59,11 +59,11 @@
                         - @user.inverse_account_sharings.each do |account_sharing|
                           %li
                             = account_sharing.collaborator.info
-                            = link_to icon_destroy, account_sharings_delete_path(account_sharing), method: :delete, data: { confirm: "Êtes-vous sûr de vouloir annuler le partage de votre compte avec \"#{account_sharing.collaborator.info}\" ?" }
+                            = link_to icon_destroy, account_sharing_path(account_sharing), method: :delete, data: { confirm: "Êtes-vous sûr de vouloir annuler le partage de votre compte avec \"#{account_sharing.collaborator.info}\" ?" }
                       - else
                         %li
                           %i{ style: 'color:gray' } Aucun
-                    = link_to 'Partager mon compte avec un contact', account_sharings_new_path, class: 'btn btn-primary'
+                    = link_to 'Partager mon compte avec un contact', new_account_sharing_path, class: 'btn btn-primary'
                     %br
                     %br
                   %h4 Liste des dossiers qui me sont partagés :
@@ -72,7 +72,7 @@
                       - @user.account_sharings.each do |account_sharing|
                         %li
                           = account_sharing.account.info
-                          = link_to icon_destroy, account_sharings_delete_path(account_sharing), method: :delete, data: { confirm: "Êtes-vous sûr de ne plus vouloir accéder au dossier \"#{account_sharing.account.info}\" ?" }
+                          = link_to icon_destroy, account_sharing_path(account_sharing), method: :delete, data: { confirm: "Êtes-vous sûr de ne plus vouloir accéder au dossier \"#{account_sharing.account.info}\" ?" }
                           &nbsp;
                           %button.btn.btn-outline-info.btn-sm{type:'button', :data => {:toggle => 'modal', :target => '#email_document_info'}} Détails
                           .modal.fade{id: 'email_document_info', tabindex: '-1', role: 'dialog', aria: {labelledby: 'title_info', hidden: 'true'}}
@@ -142,11 +142,11 @@
                       - @user.account_sharings.unscoped.pending.select { |e| e.collaborator == @user }.each do |account_sharing|
                         %li
                           = account_sharing.account.info
-                          = link_to icon_destroy, account_account_sharing_path(account_sharing), method: :delete, data: { confirm: "Êtes-vous sûr de ne plus vouloir accéder au dossier \"#{account_sharing.account.info}\" ?" }
+                          = link_to icon_destroy, account_sharing_path(account_sharing), method: :delete, data: { confirm: "Êtes-vous sûr de ne plus vouloir accéder au dossier \"#{account_sharing.account.info}\" ?" }
                     - else
                       %li
                         %i{ style: 'color:gray' } Aucun
-                  = link_to "Demander l'accès à un dossier", new_request_account_account_sharings_path, class: 'btn btn-primary'
+                  = link_to "Demander l'accès à un dossier", new_request_account_sharings_path, class: 'btn btn-primary'
 
           - unless @user.is_guest
             #addresses_management.row.pan{ class: (@active_panel == 'addresses_management' ? 'active' : '')}
@@ -319,7 +319,7 @@
                       - elsif @user.account_book_types.size == 0
                         %p Pas de journaux paramétrés.
                       .alignright
-                        = link_to icon_destroy + ' Déconnecter le Scanner', dematbox_delete_path, method: :delete, class: 'btn btn-danger margin1top', data: { confirm: 'Etes-vous sûr de vouloir déconnecter le scanner ?' }
+                        = link_to icon_destroy + ' Déconnecter le Scanner', dematbox_path, method: :delete, class: 'btn btn-danger margin1top', data: { confirm: 'Etes-vous sûr de vouloir déconnecter le scanner ?' }
                     - elsif @user.dematbox.try(:beginning_configuration_at).present?
                       Configuration en cours...veuillez recharger votre page dans quelques secondes.
                     - else
@@ -330,7 +330,7 @@
                       fournit lors de la livraison.
                       %br
                       Merci d'inscrire le code d'appairage dans le champ ci-dessous :
-                      = form_tag account_dematbox_path, method: :post, class: 'form-inline margin2top' do
+                      = form_tag dematbox_path, method: :post, class: 'form-inline margin2top' do
                         = label_tag :pairing_code, 'Code appairage'
                         = text_field_tag :pairing_code, '', style: 'width:75px;'
                         = submit_tag t('actions.submit'), class: 'btn btn-primary'

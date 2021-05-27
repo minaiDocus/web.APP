@@ -78,7 +78,7 @@ module Account::OrganizationHelper
   end
 
   def inside_organization?
-    request.path =~ /organizations/ && !((controller_name == 'organizations' && action_name.in?(%w[index new create])) || controller_name == 'group_organizations')
+    request.path =~ /organizations/ && !((params[:controller] == 'organizations/main' && controller_name == 'main' && action_name.in?(%w[index new create])) || (params[:controller] == 'group_organizations/main' && controller_name == 'main'))
   end
 
   def preseizure_date_options(with_organization_option = false)

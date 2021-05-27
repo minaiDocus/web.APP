@@ -1,7 +1,10 @@
 # encoding: utf-8
 Rails.application.routes.draw do
-  namespace :rights do
-    get '/:id/edit', to: 'main#edit', as: 'edit'
-	put '/', to: 'main#update', as: 'update'
+  scope module: 'rights' do
+    resources :organizations, only: [] do
+      resources :collaborators, only: [] do
+      	resource :rights, only: %w(edit update), controller: 'main'
+      end
+    end
   end
 end

@@ -1,14 +1,14 @@
 #bank_settings.derivationRight
   - unless @account.configured?
     .box
-      = render 'account/customers/steps'
+      = render 'customers/main/steps'
 
   .card
     .card-header
       %h3
         Edition d'un compte bancaire du client :
-        = link_to @account, bank_settings_index_path({account_id: @account.try(:id)}), class: 'fs-origin'
-    = simple_form_for @bank_account, url: bank_settings_update_path, html: { class: 'form-horizontal label-medium' } do |f|
+        = link_to @account, bank_settings_path({account_id: @account.try(:id)}), class: 'fs-origin'
+    = simple_form_for @bank_account, url: bank_setting_path, html: { class: 'form-horizontal label-medium' } do |f|
       .card-body
         = f.input :number, disabled: true
         = f.input :journal
@@ -43,4 +43,4 @@
       .card-footer
         .form-actions.margin0bottom
           = f.submit t('actions.submit'), class: 'btn btn-primary'
-          = link_to t('actions.cancel'), bank_settings_index_path({account_id: @account.try(:id)}), class: 'btn btn-light'
+          = link_to t('actions.cancel'), bank_settings_path({account_id: @account.try(:id)}), class: 'btn btn-light'

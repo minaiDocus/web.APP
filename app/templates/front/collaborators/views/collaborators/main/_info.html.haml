@@ -27,4 +27,4 @@
 
   - if @organization.is_active
     / TODO ////
-    = link_to t('actions.edit'), collaborators_edit_path(@organization, @member), class: 'btn btn-primary'
+    = link_to t('actions.edit'), edit_organization_collaborator_path(@organization, @member), class: 'btn btn-primary'

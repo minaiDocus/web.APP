@@ -5,8 +5,8 @@
     .card-header
       %h3
         Edition des autorisations du collaborateur : 
-        = link_to @member.info, collaborators_show_path(@organization, @member, tab: 'authorization'), class: 'fs-origin'
-    = simple_form_for @member, url: rights_update_path(@organization, @member), html: { class: 'form form-horizontal margin0' } do |f|
+        = link_to @member.info, organization_collaborator_path(@organization, @member, tab: 'authorization'), class: 'fs-origin'
+    = simple_form_for @member, url: organization_collaborator_rights_url(@organization, @member), html: { class: 'form form-horizontal margin0' } do |f|
       .card-body
         = f.input :manage_collaborators,     as: :boolean
         = f.input :manage_customers,         as: :boolean
@@ -16,6 +16,6 @@
       .card-footer
         .form-actions
           = f.submit t('actions.submit'), class: 'btn btn-primary'
-          = link_to t('actions.cancel'), collaborators_show_path(@organization, @member, tab: 'authorization'), class: 'btn'
+          = link_to t('actions.cancel'), organization_collaborator_path(@organization, @member, tab: 'authorization'), class: 'btn'
 
 = javascript_include_tag 'front/rights/assets/javascripts/main'

@@ -10,7 +10,7 @@ class Customers::MainController < OrganizationController
 
   append_view_path('app/templates/front/customers/views')
 
-  # GET /account/organizations/:organization_id/customers
+  # GET /organizations/:organization_id/customers
   def index
     respond_to do |format|
       format.html do
@@ -31,7 +31,7 @@ class Customers::MainController < OrganizationController
     end
   end
 
-  # GET /account/organizations/:organization_id/customers/:id
+  # GET /organizations/:organization_id/customers/:id
   def show
     @subscription     = @customer.subscription
     @period           = @subscription.periods.order(created_at: :desc).first
@@ -41,13 +41,13 @@ class Customers::MainController < OrganizationController
     build_softwares
   end
 
-  # GET /account/organizations/:organization_id/customers/info
+  # GET /organizations/:organization_id/customers/info
   def info; end
 
-  # GET /account/organizations/:organization_id/customers/:id/new_customer_step_two
+  # GET /organizations/:organization_id/customers/:id/new_customer_step_two
   def new_customer_step_two;  end
 
-  # GET /account/organizations/:organization_id/customers/:id/book_type_creator/:journal_id
+  # GET /organizations/:organization_id/customers/:id/book_type_creator/:journal_id
   def book_type_creator
     @journal = AccountBookType.where(id: params[:journal_id]).first.presence || AccountBookType.new
 
@@ -58,15 +58,15 @@ class Customers::MainController < OrganizationController
     render partial: 'book_type'
   end
 
-  # GET /account/organizations/:organization_id/customers/form_with_first_step
+  # GET /organizations/:organization_id/customers/form_with_first_step
   def form_with_first_step
     @customer = User.new(code: "#{@organization.code}%")
   end
 
-  # GET /account/organizations/:organization_id/customers/new
+  # GET /organizations/:organization_id/customers/new
   def new; end
 
-  # POST /account/organizations/:organization_id/customers
+  # POST /organizations/:organization_id/customers
   def create
     @customer = Subscription::CreateCustomer.new(@organization, @user, user_params, current_user, request).execute
 

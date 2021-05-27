@@ -38,7 +38,7 @@ class Preseizures::AccountsController < OrganizationController
     account        = Pack::Report::Preseizure::Account.find params[:account_id]
     @accounts_name = account.get_similar_accounts
 
-    render partial: 'account/preseizure_accounts/accounts_list'
+    render partial: 'preseizures/accounts/accounts_list'
   end
 
   private

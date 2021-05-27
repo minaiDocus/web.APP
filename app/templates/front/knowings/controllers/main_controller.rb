@@ -4,7 +4,7 @@ class Knowings::MainController < OrganizationController
   before_action :verify_existant, only: %w[new create]
   before_action :load_knowings, only: %w[edit update]
 
-  append_view_path('app/templates/front/knownings/views')
+  append_view_path('app/templates/front/knowings/views')
 
   # GET /organizations/:organization_id/knowings/new
   def new

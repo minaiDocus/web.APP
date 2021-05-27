@@ -41,12 +41,12 @@
                 %td= bank_account.accounting_number
                 %td= bank_account.start_date
                 %td.text-center
-                  = link_to glyphicon('pencil') + ' Éditer', bank_settings_edit_path(bank_account), title: 'Éditer', rel: 'tooltip', class: "btn btn-light edit_bank_account_#{bank_account.id} #{'hide' if disabled}"
+                  = link_to glyphicon('pencil') + ' Éditer', bank_setting_path(bank_account), title: 'Éditer', rel: 'tooltip', class: "btn btn-light edit_bank_account_#{bank_account.id} #{'hide' if disabled}"
                   = link_to glyphicon('trash') + ' Supprimer', '#', class: "destroy_bank_account destroy_bank_account_#{bank_account.id} btn btn-light #{'hide' if not bank_account.can_be_deleted?}", data: { id: bank_account.id, number: bank_account.number }, title: 'Sera supprimé le mois prochain', rel: 'tooltip'
                   = link_to glyphicon('check') + ' Restaurer', '#', class: "reopen_bank_account reopen_bank_account_#{bank_account.id} btn btn-light #{'hide' if not disabled}", data: { id: bank_account.id, number: bank_account.number }, title: 'Réactiver maintenant', rel: 'tooltip'
 
     .card.retractable-filter
-      = form_tag account_bank_settings_path, method: :get, class: 'form-filter' do
+      = form_tag bank_settings_path, method: :get, class: 'form-filter' do
         .card-header.clearfix
           .float-left
             %h3 Filtres
@@ -82,7 +82,7 @@
           .card-footer
             .form-actions
               = submit_tag t('filters.action'), class: 'btn btn-primary'
-              = link_to glyphicon('x'), account_bank_settings_path({account_id: @account.try(:id)}), class: 'btn btn-light'
+              = link_to glyphicon('x'), bank_settings_path({account_id: @account.try(:id)}), class: 'btn btn-light'
 
   .modal.fade{id: 'create_bank_account', tabindex: '-1', 'data-focus-on' => 'input:first', role: 'dialog', aria: {labelledby: 'title_info', hidden: 'true'}}
     .modal-dialog.modal-dialog-centered{role: 'document'}
@@ -93,7 +93,7 @@
           %button.close{type: 'button', data: {dismiss:'modal'}, aria: {label: 'Close'}} &times;
         .modal-body
           = hidden_field_tag :retriever_budgea_config, @bi_config
-          = simple_form_for @bank_account = BankAccount.new, url: bank_settings_index_path({ id: @customer.id }), html: { class: 'form-horizontal label-medium' } do |f|
+          = simple_form_for @bank_account = BankAccount.new, url: bank_settings_path({ id: @customer.id }), html: { class: 'form-horizontal label-medium' } do |f|
             = f.input :user_id, :as => :hidden, :input_html => { :value => @customer.id }
             = f.input :api_name, :as => :hidden, :input_html => { :value => 'idocus' }
             = f.input :is_used, :as => :hidden, :input_html => { :value => true }

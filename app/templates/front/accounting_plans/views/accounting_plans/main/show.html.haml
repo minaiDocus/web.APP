@@ -3,7 +3,7 @@
 #accounting_plan
   - unless @customer.configured?
     .box
-      = render 'account/customers/steps'
+      = render 'customers/main/steps'
   .row.derivationRight
     .col-md-12
       .box
@@ -156,6 +156,6 @@
       .modal-content
         .modal-header
           %h3 Paramétrage import FEC
-        = render :partial => "/account/accounting_plans/dialog_box", locals: { organization: @organization, customer: @customer, params_fec: @params_fec }
+        = render :partial => "/accounting_plans/main/dialog_box", locals: { organization: @organization, customer: @customer, params_fec: @params_fec }
 
 = javascript_include_tag 'front/accounting_plans/assets/javascripts/main'

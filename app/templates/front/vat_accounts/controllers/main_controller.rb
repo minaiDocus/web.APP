@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class VatAccounts::MainController < FrontController
+class VatAccounts::MainController < OrganizationController
   before_action :load_customer
   before_action :verify_if_customer_is_active
   before_action :redirect_to_current_step
@@ -8,15 +8,15 @@ class VatAccounts::MainController < FrontController
 
   append_view_path('app/templates/front/vat_accounts/views')
 
-  # GET /account/organizations/:organization_id/customers/:customer_id/accounting_plan/vat_accounts
+  # GET /organizations/:organization_id/customers/:customer_id/accounting_plan/vat_accounts
   def index
     @vat_accounts = @accounting_plan.vat_accounts
   end
 
-  # /account/organizations/:organization_id/customers/:customer_id/accounting_plan/vat_accounts/edit_multiple
+  # /organizations/:organization_id/customers/:customer_id/accounting_plan/vat_accounts/edit_multiple
   def edit_multiple; end
 
-  # /account/organizations/:organization_id/customers/:customer_id/accounting_plan/update_multiple
+  # /organizations/:organization_id/customers/:customer_id/accounting_plan/update_multiple
   def update_multiple
     modified = params[:accounting_plan].present? ? @accounting_plan.update(accounting_plan_params) : true
 
@@ -24,7 +24,7 @@ class VatAccounts::MainController < FrontController
       format.html {
         if modified
           flash[:success] = 'Modifié avec succès.'
-          redirect_to vat_accounts_index_path(@organization, @customer)
+          redirect_to organization_customer_accounting_plan_vat_accounts_path(@organization, @customer)
         else
           render :edit_multiple
         end

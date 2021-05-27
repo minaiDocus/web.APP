@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class BankAccounts::MainController < FrontController
+class BankAccounts::MainController < RetrieverController
   before_action :load_budgea_config
   before_action :verif_account
 

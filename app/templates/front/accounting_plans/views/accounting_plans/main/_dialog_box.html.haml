@@ -1,4 +1,4 @@
-%form#importFecAfterConfiguration{ action: accounting_plans_import_fec_processing_path(organization, customer), method: "GET" }
+%form#importFecAfterConfiguration{ action: import_fec_processing_organization_customer_accounting_plan_path(organization, customer), method: "GET" }
   %input.file{ type: :hidden, value: "#{params_fec[:file]}", name: "file_path"}
   %input.file{ type: :hidden, value: "#{params_fec[:journal_ido]}", name: "journal_ido"}
   %input.file{ type: :hidden, value: "#{params_fec[:file]}", name: "file_path"}
@@ -67,7 +67,7 @@
     #informations.mrc-5
     .row
       .col-md-5.btn.close_modal_fec{ style: "cursor: context-menu" }
-        = link_to 'Fermer', accounting_plans_show_path(organization, customer, {dir: params_fec[:dir], new_create_book_type: "#{params_fec[:new_create_book_type]}"} ), :class=>"modal-close"
+        = link_to 'Fermer', organization_customer_accounting_plan_path(organization, customer, {dir: params_fec[:dir], new_create_book_type: "#{params_fec[:new_create_book_type]}"} ), :class=>"modal-close"
       .col-md-7
         %input#import_button.btn.btn-primary.small-shadow.text-bold{ :type => "submit", :value => "Valider" }
 

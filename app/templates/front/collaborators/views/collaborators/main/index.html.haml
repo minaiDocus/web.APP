@@ -1,4 +1,4 @@
-= stylesheet_link_tag 'front/collabortaors/assets/stylesheets/main'
+= stylesheet_link_tag 'front/collaborators/assets/stylesheets/main'
 
 #collaborators
   .row.derivationRight
@@ -10,7 +10,7 @@
             %span.badge.badge-info= @members.total_count
         .float-right
           -if @organization.is_active
-            = link_to icon_new + ' ' + t('actions.new'), collaborators_new_path(@organization), class: 'btn btn-primary'
+            = link_to icon_new + ' ' + t('actions.new'), new_organization_collaborator_path(@organization), class: 'btn btn-primary'
 
   .row.retractable.with-filter.derivationLeft
     .col-md-12
@@ -29,11 +29,11 @@
                 %td.date= l member.created_at
                 %td.user_info
                   / TODO ////
-                  %span.info= link_to member.info, collaborators_show_path(@organization, member)
+                  %span.info= link_to member.info, organization_collaborator_path(@organization, member)
                 %td= t('activerecord.models.member.attributes.role_values.' + member.role)
                 %td
                   - if @organization.is_active && !member.user.is_admin && (@user.leader? || member.collaborator?)
-                    = link_to 'supprimer', collaborators_delete_path(@organization, member), class: 'btn btn-light', data: { method: :delete, confirm: "Êtes-vous sûr de vouloir supprimer ce compte définitivement ? Cette action est irréversible." }
+                    = link_to 'supprimer', organization_collaborator_path(@organization, member), class: 'btn btn-light', data: { method: :delete, confirm: "Êtes-vous sûr de vouloir supprimer ce compte définitivement ? Cette action est irréversible." }
         = render partial: 'shared/list_options', locals: { collection: @members }
     = render partial: 'sidebar'
-= javascript_include_tag 'front/collabortaors/assets/javascripts/main'
+= javascript_include_tag 'front/collaborators/assets/javascripts/main'

@@ -7,6 +7,7 @@ class Subscriptions::MainController < OrganizationController
   before_action :load_subscription
 
   append_view_path('app/templates/front/subscriptions/views')
+  append_view_path('app/templates/front/customers/views')
 
   # /organizations/:organization_id/organization_subscription/edit
   def edit; end

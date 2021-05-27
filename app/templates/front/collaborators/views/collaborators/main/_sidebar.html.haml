@@ -1,5 +1,5 @@
 .card.retractable-filter
-  = form_tag collaborators_index_path(@organization), method: :get, class: 'form-filter' do
+  = form_tag organization_collaborators_path(@organization), method: :get, class: 'form-filter' do
     .card-header.clearfix
       .float-left
         %h3 Filtres
@@ -44,4 +44,4 @@
       .card-footer
         .form-actions
           = submit_tag t('filters.action'), class: 'btn btn-primary'
-          = link_to glyphicon('x'), collaborators_index_path(@organization), class: 'btn btn-light'
+          = link_to glyphicon('x'), organization_collaborators_path(@organization), class: 'btn btn-light'

@@ -1,10 +1,7 @@
 Rails.application.routes.draw do
-  namespace :bank_settings do
-    get '/', to: 'main#index', as: 'index'
-		get 'new', to: 'main#new', as: 'new'
-		post '/', to: 'main#create', as: 'create'
-		get '/:id/edit', to: 'main#edit', as: 'edit'
-		put '/', to: 'main#update', as: 'update'
-		post '/should_be_disabled', to:'main#mark_as_to_be_disabled', as: 'mark_as_to_be_disabled'
+  scope module: 'bank_settings' do
+	  resources :bank_settings, only: %W(index edit update create), controller: 'main' do
+      post 'should_be_disabled', action: 'mark_as_to_be_disabled',   on: :collection
+    end
   end
 end

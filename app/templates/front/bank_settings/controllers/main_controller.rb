@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class BankSettings::MainController < FrontController
+class BankSettings::MainController < RetrieverController
   before_action :load_bank_account, except: %w[index create]
   before_action :load_budgea_config, only: %w[index]
   before_action :verif_account
@@ -34,7 +34,7 @@ class BankSettings::MainController < FrontController
       flash[:error] = html_ul_content.html_safe
     end
 
-    redirect_to bank_settings_index_path({ account_id: @account.id , id: @bank_account.id})
+    redirect_to bank_settings_path({ account_id: @account.id , id: @bank_account.id})
   end
 
   def edit; end
@@ -50,7 +50,7 @@ class BankSettings::MainController < FrontController
       end
       PreAssignment::UpdateAccountNumbers.delay.execute(@bank_account.id.to_s, changes)
       flash[:success] = 'Modifié avec succès.'
-      redirect_to bank_settings_index_path({ account_id: @account.id })
+      redirect_to bank_settings_path({ account_id: @account.id })
     else
       render 'edit'
     end

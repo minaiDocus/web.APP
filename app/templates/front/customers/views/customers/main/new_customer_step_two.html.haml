@@ -7,15 +7,15 @@
     %input#organization_id{ type: :hidden, value: "#{@organization.id}"}
     %input#customer_id{ type: :hidden, value: "#{@customer.id}"}
       #book_type
-        = render partial: '/account/customers/book_type'
+        = render partial: 'customers/main/book_type'
     %br
     - if !@customer.uses_api_softwares?
       - if @customer.options.is_taxable
         #vat_account
-          = render partial: '/account/customers/vat_account'
+          = render partial: 'customers/main/vat_account'
       %br
       #accounting_plan
-        = render partial: '/account/customers/accounting_plan'
+        = render partial: 'customers/main/accounting_plan'
       
   .card-footer.text-center
     = link_to "Terminer", organization_customer_path(@organization, @customer), class: 'btn btn-success small-shadow text-bold'

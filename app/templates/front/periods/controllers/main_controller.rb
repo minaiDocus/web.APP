@@ -7,7 +7,7 @@ class Periods::MainController < FrontController
   # GET /account/periods
   def show
     respond_to do |format|
-      format.html { redirect_to account_reporting_path }
+      format.html { redirect_to reporting_path }
       format.json { render json: PeriodPresenter.new(@period, current_user).render_json, status: :ok }
     end
   end
@@ -23,7 +23,7 @@ class Periods::MainController < FrontController
       respond_to do |format|
         format.html do
           flash[:error] = t('authorization.unessessary_rights')
-          redirect_to account_reporting_path
+          redirect_to reporting_path
         end
         format.json { render plain: 'Unauthorized', status: :unauthorized }
       end

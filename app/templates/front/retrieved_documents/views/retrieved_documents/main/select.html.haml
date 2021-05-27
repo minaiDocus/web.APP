@@ -8,7 +8,7 @@
   .row.retractable.with-filter.derivationLeft
     .col-md-12.retractable-content
       .box
-        = form_tag validate_account_retrieved_documents_path, method: 'patch', class: 'form form-horizontal' do
+        = form_tag validate_retrieved_documents_path, method: 'patch', class: 'form form-horizontal' do
           = hidden_field_tag 'document_contains[retriever_id]', @retriever.id if @retriever
           = hidden_field_tag 'document_contains[service_name]', (params[:document_contains][:service_name] rescue '')
           = hidden_field_tag 'document_contains[date][>=]',     (params[:document_contains][:date]['>='] rescue '')
@@ -36,7 +36,7 @@
                       %span.label supprimé
                     = document.retriever_name
                   %td= l(document.metadata['date'], format: '%d %b %Y') rescue ''
-                  %td= link_to document.metadata['name'] + '.pdf', account_retrieved_document_path(document)
+                  %td= link_to document.metadata['name'] + '.pdf', retrieved_document_path(document)
                   %td.pages= document.pages_number
                   %td.amount= document.metadata['amount'].to_s + ' €'
           = render 'shared/list_options', collection: @documents
@@ -45,7 +45,7 @@
             = submit_tag 'Intégrer les documents sélectionnés', class: 'btn btn-primary', data: { confirm: t('actions.confirm') }
 
     .card.retractable-filter
-      = form_tag select_account_retrieved_documents_path, method: :get, class: 'form-filter' do
+      = form_tag select_retrieved_documents_path, method: :get, class: 'form-filter' do
         .card-header.clearfix
           .float-left
             %h3 Filtres
@@ -93,4 +93,4 @@
           .card-footer
             .form-actions
               = submit_tag t('filters.action'), class: 'btn btn-primary'
-              = link_to glyphicon('x'), select_account_retrieved_documents_path, class: 'btn btn-light'
+              = link_to glyphicon('x'), select_retrieved_documents_path, class: 'btn btn-light'

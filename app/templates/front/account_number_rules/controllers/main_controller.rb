@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class AccountNumberRules::MainController < FrontController
+class AccountNumberRules::MainController < OrganizationController
   before_action :load_account_number_rule, only: %w[show edit update destroy]
 
   append_view_path('app/templates/front/account_number_rules/views')

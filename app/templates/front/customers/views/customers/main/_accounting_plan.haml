@@ -53,7 +53,7 @@
                     %span
                       Importer
     .row.mb-10#partial_table
-      = render partial: '/account/customers/table', locals: { providers: @customer.accounting_plan.providers, customers: @customer.accounting_plan.customers }
+      = render partial: '/customers/main/table', locals: { providers: @customer.accounting_plan.providers, customers: @customer.accounting_plan.customers }
 
     %table.hidden_insertion_table.hide
       %tbody
