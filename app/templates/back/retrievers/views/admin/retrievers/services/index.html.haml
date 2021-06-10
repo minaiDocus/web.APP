@@ -2,7 +2,7 @@
   .row
     .col-md-12
       .box.small-shadow.clearfix
-        = render 'shared/admin_retrievers/navigation'
+        = render file: Rails.root.join('app/templates/back/retrievers/views/admin/retrievers/_navigation.html.haml')
 
   = hidden_field_tag :retriever_budgea_config, @bi_config
   #connectors_list.row-fluid
