@@ -15,6 +15,11 @@ Rails.application.routes.draw do
       patch :update_options,        on: :collection
       patch :update_software_users, on: :member
 
+      get :facture,                 on: :member
+      get :kits,                    on: :member
+      get :account_sharing,         on: :member
+      get :bank_affectation,        on: :member
+
       resources :addresses, controller: 'addresses'
 
       resource :period_options, only: %w(edit update), controller: 'period_options' do

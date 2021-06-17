@@ -1,4 +1,4 @@
-= stylesheet_link_tag 'front/dashboard/assets/stylesheets/main'
+= stylesheet_link_tag 'front/dashboard/main'
 
 .container-fluid
   .row
@@ -38,7 +38,7 @@
         %button.close{'aria-label' => 'Close', 'data-dismiss' => 'modal', :type => 'button'}
           %span{'aria-hidden' => 'true'} ×
       .modal-body
-        = form_tag('dashboard/add_customer_to_favorite/', method: :post, id: 'send_customer_to_favorite', multipart: true) do |f|
+        = form_tag('front/add_customer_to_favorite/', method: :post, id: 'send_customer_to_favorite', multipart: true) do |f|
           .form-group
             .label-section
               = label_tag 'my_favorite_customers_list', 'Rechercher un dossier', class: 'select control-label'
@@ -49,4 +49,4 @@
         %button.btn.btn-secondary.btn-add{:type => 'button', id: 'add-customer-to-favorite'} Ajouter
 
 
-= javascript_include_tag 'front/dashboard/assets/javascripts/main'
+= javascript_include_tag 'front/dashboard/main'

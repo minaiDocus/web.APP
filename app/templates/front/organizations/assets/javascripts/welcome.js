@@ -2,23 +2,9 @@
 //= require jquery_ujs
 //= require jquery-ui
 
-//***GLOBALS***
-class Test{
-  constructor(){
-    console.log(VARIABLES.get('test_variable'))
-  }
-
-  click_me(){
-    $('#testid').html('<a href="#" data-href="/dashboard" class="goto_button">Go to dashboard</a>')
-  }
-}
-
 jQuery(function () {
 
-  // TEST VARIABLE JS
-  let test = JSON.parse(VARIABLES.get('OrganizationsTest'));
-  console.log(test);
-  console.log(test.a);
+  var organization_options = JSON.parse($('#organization_options').val());
 
   var chart_abonnement = document.getElementById('chart_abonnement').getContext('2d')
 
@@ -32,7 +18,7 @@ jQuery(function () {
     ],
     datasets: [{
       label: 'My First Dataset',
-      data: [200, 150, 50, 50, 50],
+      data: [organization_options.micro_package, organization_options.nano_package, organization_options.idox_package, organization_options.basic_package, organization_options.retriever_package],
       backgroundColor: [
         '#72AA42',
         '#C1E637',
@@ -64,6 +50,7 @@ jQuery(function () {
       data: [65, 59, 80, 81, 56, 55, 40, 25, 87, 45, 32, 49],
       fill: false,
       borderColor: '#72AA42',      
+      backgroundColor: 'rgba(75, 192, 192, 0.2)',   
       tension: 0.1
     }]
   }, options: {

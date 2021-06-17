@@ -1,0 +1,138 @@
+= stylesheet_link_tag 'front/documents/main'
+
+.container-fluid
+  .row
+    .col-md-1
+      %button.btn.btn-default.add-to-favorite.float-right
+        = glyphicon('arrow-left', {size: '12', color: '#72AA42'})
+        &nbsp;Retour
+    .col-md-7.no-padding
+      %h3.bold
+        Test - IDOC%0001 BQ 2021011245
+        %span.badge.badge-secondary.regular 4
+    .col-md-3   
+      .search-content
+        .row.no-margin
+          .col-md-1.no-padding.text-center.glass
+            = glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })
+          .col-md-11.no-padding.no-margin
+            %input{ placeholder: 'Rechercher'}
+    .col-md-1.no-padding
+      %button.btn.btn-light.more-filter
+        Filtrer
+        %span
+          = glyphicon('layers', { size: '16', color: '#72AA42'})
+
+  .row.box.pr-0
+    .col-md-1.no-padding.text-left.change-view.to-list= glyphicon('grid-two-up', { size: '25', color:'rgba(26, 26, 26, 0.32);'}) 
+    .col-md-1.no-padding.text-left.change-view.to-grid.hide= glyphicon('media-pause', { size: '25', color:'rgba(26, 26, 26, 0.32);', style: 'transform: rotate(90deg)'}) 
+    .col-md-8
+    .col-md-3
+      .row.text-right
+        .col-md-6.action-selected-hide
+        .col-md-1.action-group.pointer.action-selected.hide= glyphicon('trash', { size: '25',  color:'#FF4848'})
+        .col-md-1.action-group.pointer.action-selected.hide= glyphicon('tag', { size: '25', color:'rgba(26, 26, 26, 0.32);'})
+        .col-md-1.action-group.pointer.action-selected.hide= glyphicon('pencil', { size: '25', color:'rgba(26, 26, 26, 0.32);'})
+        .col-md-1.action-group.pointer= glyphicon('account-logout', { size: '25', color:'rgba(26, 26, 26, 0.32);', style: 'transform: rotate(90deg)'})
+        .col-md-1.action-group.pointer= glyphicon('cloud-download', { size: '25', color:'rgba(26, 26, 26, 0.32);'})
+        .col-md-1.action-group.pointer
+          %label.container.pointer
+            %input.select-all{ type: :checkbox }
+            %span.checkmark
+              = glyphicon('check', { size: '14', color: '#FFF'})
+
+  - document = Pack::Piece.last
+  .box.list.hide
+    .row
+      .col-md-3
+        .stamp-content               
+          .image_piece.text-center
+            = image_tag document_thumb_url(document)
+          .label-content.text-center.p-2 DEVP%0001 AC 20210501 001
+      .col-md-3
+        .stamp-content               
+          .image_piece.text-center
+            = image_tag document_thumb_url(document)
+          .label-content.text-center.p-2 DEVP%0001 AC 20210501 002
+      .col-md-3
+        .stamp-content               
+          .image_piece.text-center
+            = image_tag document_thumb_url(document)
+          .label-content.text-center.p-2 DEVP%0001 AC 20210501 003
+      .col-md-3
+        .stamp-content            
+          .image_piece.text-center
+            = image_tag document_thumb_url(document)
+          .label-content.text-center.p-2 DEVP%0001 AC 20210501 004
+
+  .box.grid{ id: "document_1" }
+    .row.grid-content
+      .w-25      
+        .stamp-content.pagethumb 
+          .zoom.pointer
+            = glyphicon('magnifying-glass', { size: '20', color: 'background: rgba(26, 26, 26, 0.7)'})         
+          .image_piece
+            = image_tag document_thumb_url(document)
+      .w-75
+        .row.m-1
+          .col-md-10
+            %h5.pack.semibold IDOC%0001 BQ 2021011245
+          .col-md-2.text-right.for-dismiss-modal
+            %label.container.pointer
+              %input.select-document{ type: :checkbox }
+              %span.checkmark
+                = glyphicon('check', { size: '14', color: '#FFF'})
+        .row.m-1
+          .col-md-5
+            %span 13/11/2020
+            %span -         
+            %span Devise :
+            %span EUR
+
+        %br
+        .row.m-1
+          .col-md-5
+            %span Nom de tiers 
+            %span.semibold SCNF
+        .row.m-1
+          .col-md-5
+            %span Dernier envoi iBiza 
+            %span.semibold 12/11/2020
+            %span - 
+            %span 7h43 
+
+        .row.ml-3.mt-3.mb-3.mr-0.content-table
+          %table.table
+            %thead
+              %th.no-border N° de compte
+              %th.no-border Débit
+              %th.no-border Crédit
+            %tbody
+              %tr
+                %td 4233154897
+                %td -
+                %td 22.6
+              %tr.striped
+                %td 87452145
+                %td 22.6
+                %td -
+              %tr
+                %td 423125452
+                %td 0
+                %td -
+        %hr   
+        .row.ml-1.mt-1.mb-1.mr-0
+          .col-md-9
+            %span.badge.badge-success Ecriture comptable livrée
+            %span.badge.badge-dark Test
+            %span.badge.badge-dark iDocus
+          .col-md-3.text-right.p-0
+            %span.action-group= glyphicon('tag', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+            %span.action-group= glyphicon('cloud-download', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+            %span.action-group= glyphicon('pencil', { size: '20', color:'rgba(26, 26, 26, 0.32);', style: 'transform: rotate(90deg)'})
+            %span.action-group= glyphicon('trash', { size: '20', color:'#FF4848'})
+
+ 
+= render partial: 'document_dialog'
+
+= javascript_include_tag 'front/documents/main'

@@ -1,45 +1,44 @@
 %nav.navbar.navbar-expand-lg.navbar-light.bg-light.fixed-top
-  .container-fluid
-    = link_to image_tag('logo/tiny_logo_2.png', alt: 'logo iDocus'), '#', class: 'navbar-brand idocus-brand goto_button', data:{ href: '/' }
-    %button.navbar-toggler{"aria-controls" => "navbarNavDropdown", "aria-expanded" => "false", "aria-label" => "Toggle navigation", "data-target" => "#navbarNavDropdown", "data-toggle" => "collapse", :type => "button"}
-      %span.navbar-toggler-icon
-    #navbarNavDropdown.navbar-collapse.collapse
-      %ul.navbar-nav.mr-auto
-        %li.nav-item.active
-          =link_to t('layouts.home'), '#', class: 'nav-link goto_button', data:{ href: '/' }
-        %li.nav-item.dropdown
-          =link_to t('layouts.my_documents'), '#my-documents', class: 'nav-link dropdown-toggle', id: 'navbardropdownmenudocuments', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-toggle' => 'dropdown'
-          .dropdown-menu{"aria-labelledby" => "navbardropdownmenudocuments"}
-            =link_to t('layouts.pieces_and_pre_assignment'), '#preseizures', class: 'dropdown-item'
-            =link_to t('layouts.pieces_ignored_in_pre_assignment'), '#preseizures-ignored', class: 'dropdown-item'
-            =link_to t('layouts.duplicated_pre_assignment'), '#duplicated-pre-assignment', class: 'dropdown-item'
-            =link_to t('layouts.pre_assignment_delivery_error'), '#pre-assignment-delivery-error', class: 'dropdown-item'
-        %li.nav-item
-          =link_to t('layouts.bank_operations'), '#operations', class: 'nav-link'
-        %li.nav-item.dropdown
-          =link_to t('layouts.my_company'), '#my-organization', class: 'nav-link dropdown-toggle', id: 'navbardropdownmenucompany', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-toggle' => 'dropdown'
-          .dropdown-menu{"aria-labelledby" => "navbardropdownmenucompany"}
-            =link_to 'iDocus', '#', class: 'dropdown-item goto_button', data:{ href: '/organizations/' }
-            =link_to 'Volentis', '#volentis-link', class: 'dropdown-item'
-            =link_to 'Extentis', '#extentis-link', class: 'dropdown-item'
-        %li.nav-item
-          =link_to t('layouts.reporting'), '#reporting', class: 'nav-link'
-        %li.nav-item
-          =link_to t('layouts.my_retrievers'), '#retrievers', class: 'nav-link'
+  .row.w-100
+    .col-md-1
+      = link_to image_tag('logo/tiny_logo_2.png', alt: 'logo iDocus'), '#', class: 'navbar-brand idocus-brand goto_button', data:{ href: '/' }
+      %button.navbar-toggler{"aria-controls" => "navbarNavDropdown", "aria-expanded" => "false", "aria-label" => "Toggle navigation", "data-target" => "#navbarNavDropdown", "data-toggle" => "collapse", :type => "button"}
+    .col-md-9
       %ul.navbar-nav
+        %li.nav-item.active
+          =link_to t('layouts.home'), '/dashboard', class: 'nav-link goto_button bold', data:{ href: '/' }
         %li.nav-item.dropdown
-          = link_to glyphicon('cog', style: 'width: 21.48px; height: 22px;'), '#configure-profile', class: 'nav-link dropdown-toggle', id: 'navbardropdownmenusetting', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-toggle' => 'dropdown'
+          =link_to t('layouts.my_documents'), '/documents', class: 'nav-link dropdown-toggle bold', id: 'navbardropdownmenudocuments', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-toggle' => 'dropdown'
+          .dropdown-menu{"aria-labelledby" => "navbardropdownmenudocuments"}
+            =link_to t('layouts.pieces_and_pre_assignment'), '/documents', class: 'dropdown-item'
+            =link_to t('layouts.pieces_ignored_in_pre_assignment'), '/documents#preseizures-ignored', class: 'dropdown-item'
+            =link_to t('layouts.duplicated_pre_assignment'), '/documents#duplicated-pre-assignment', class: 'dropdown-item'
+            =link_to t('layouts.pre_assignment_delivery_error'), '/documents#pre-assignment-delivery-error', class: 'dropdown-item'
+        %li.nav-item
+          =link_to t('layouts.bank_operations'), '/operations', class: 'nav-link bold'
+        %li.nav-item.dropdown
+          =link_to t('layouts.my_company'), '/organizations', class: 'nav-link dropdown-toggle bold', id: 'navbardropdownmenucompany', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-toggle' => 'dropdown'
+          .dropdown-menu{"aria-labelledby" => "navbardropdownmenucompany"}
+            =link_to 'iDocus', '/organizations#', class: 'dropdown-item goto_button', data:{ href: '/organizations/' }
+            =link_to 'Volentis', '/organizations#volentis-link', class: 'dropdown-item'
+            =link_to 'Extentis', '/organizations#extentis-link', class: 'dropdown-item'
+        %li.nav-item
+          =link_to t('layouts.reporting'), '/reporting', class: 'nav-link bold'
+        %li.nav-item
+          =link_to t('layouts.my_retrievers'), '/retrievers', class: 'nav-link bold'  
+        
+    .col-md-2
+      %ul.navbar-nav.notifaction_group
+        %li.nav-item.dropdown
+          = link_to glyphicon('cog', style: 'width: 21.48px; height: 22px;'), '#configure-profile', class: 'nav-link dropdown-toggle bold', id: 'navbardropdownmenusetting', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-toggle' => 'dropdown'
           .dropdown-menu.dropdown-menu-setting{"aria-labelledby" => "navbardropdownmenusetting"}
             = link_to glyphicon('person', {size: '17', color: '#1A1A1A', style: 'margin-top: -2%'}) + ' Mon compte', '#my_profile', class: 'dropdown-item', target: '_blank'
             = link_to glyphicon('document', {size: '17', color: '#1A1A1A', style: 'margin-top: -2%'}) + ' Documentation', '#documentation', class: 'dropdown-item', target: '_blank'
             = link_to glyphicon('comment-square', {size: '17', color: '#1A1A1A', style: 'margin-top: -2%'}) + ' Nous contacter', '#contact', class: 'dropdown-item', target: '_blank'
             = link_to glyphicon('account-logout', {size: '17', color: '#FF4848', style: 'margin-top: -2%'}) + ' Se déconnecter', '#log-out', class: 'dropdown-item account-log-out', target: '_blank'
-      %ul.navbar-nav
         %li.nav-item.dropdown
           %span.badge.badge-alert.fs-origin.float-right.notif-badge
           = link_to glyphicon('bell', style: 'width: 21.48px; height: 22px;'), '#notification', class: 'nav-link dropdown-toggle', id: 'notification-content', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-toggle' => 'dropdown'
           .dropdown-menu.dropdown-notifications{"aria-labelledby" => "notification-content"}
             .notification-content-list
               %ul.dropdown-notif-items
-                = javascript_call('BaseFront', 'getNotifications')
-

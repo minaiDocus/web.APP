@@ -57,8 +57,8 @@
                 noItemsAvailable: 'No entries found',
                 selectAll: 'Select all',
                 selectNone: 'Select none',
-                quickDelete: '&times;',
-                searchplaceholder: 'Click here to search',
+                quickDelete: '<svg viewBox="0 0 8 8" class="oi-icon  colored" style="width: 12px; height: 12px;fill: #000;"><use xlink:href="/assets/open-iconic.min.svg#circle-x" class="icon icon-circle-x"></use></svg>',
+                searchplaceholder: 'Selectionner un/des dossiers',
                 loadingData: 'Still loading data...',
                 itemsSelected: '{$a} items selected'
             },
@@ -246,7 +246,7 @@
             this.$loadingData = $('<div class="sol-loading-data"/>').html(this.config.texts.loadingData);
             this.$xItemsSelected = $('<div class="sol-results-count"/>');
 
-            this.$caret = $('<div class="sol-caret-container"><b class="sol-caret"/></div>').click(function (e) {
+            this.$caret = $('<div class="sol-caret-container"><svg viewBox="0 0 8 8" class="oi-icon  colored" style="width: 20px; height: 20px;fill: #b5a6a6;"><use xlink:href="/assets/open-iconic.min.svg#chevron-right" class="icon icon-chevron-right"></use></svg></div>').click(function (e) {
                 self.toggle();
                 e.preventDefault();
                 return false;
@@ -272,13 +272,17 @@
 
             var $el = this.config.resultsContainer || this.$innerContainer
             if (this.config.resultsContainer) {
-                this.$showSelectionContainer.appendTo($el)
+                this.$showSelectionContainer.prependTo($el);
             } else {
                 if (this.config.showSelectionBelowList) {
-                    this.$showSelectionContainer.insertAfter($el);
-                } else {
                     this.$showSelectionContainer.insertBefore($el);
+                } else { 
+                    this.$showSelectionContainer.insertAfter($el);
                 }
+            }
+            
+            if ($el.length > 0) {
+                $(".btn-add").removeClass('btn-secondary').addClass('btn-primary');
             }
 
 
@@ -772,10 +776,11 @@
                 .attr('name', inputName)
                 .val(solOption.value);
 
-            $label = $('<label class="sol-label"/>')
+            $label = $('<label class="sol-label container"/>')
                 .attr('title', solOption.tooltip)
+                .append($labelText)
                 .append($inputElement)
-                .append($labelText);
+                .append('<span class="checkmark"><svg viewBox="0 0 8 8" class="oi-icon  colored" style="width: 14px; height: 14px;fill: #FFF;"><use xlink:href="/assets/open-iconic.min.svg#check" class="icon icon-check"></use></svg></span>');
 
             $displayElement = $('<div class="sol-option"/>').append($label);
             solOption.displayElement = $displayElement;
@@ -825,7 +830,7 @@
                     });
 
                 this.$actionButtons = $('<div class="sol-action-buttons"/>').append($selectAllButton).append($deselectAllButton).append('<div class="sol-clearfix"/>');
-                this.$selectionContainer.prepend(this.$actionButtons);
+                // this.$selectionContainer.prepend(this.$actionButtons);
             }
         },
 
@@ -847,35 +852,43 @@
                 });
             }
 
-            if ($changeItem.prop('checked')) {
+            if ($changeItem.prop('checked')) {                
                 this._addSelectionDisplayItem($changeItem);
-            } else {
+            } else {                
                 this._removeSelectionDisplayItem($changeItem);
             }
 
             if (this.config.multiple) {
                 // update position of selection container
-                // to allow selecting more entries
+                // to allow selecting more entries                
                 this.config.scrollTarget.trigger('scroll');
             } else {
                 // only one option selectable
-                // close selection container
+                // close selection container                
                 this.close();
             }
 
             var selected = this.$showSelectionContainer.children('.sol-selected-display-item');
-            if (this.config.maxShow != 0 && selected.length > this.config.maxShow) {
+            if (this.config.maxShow != 0 && selected.length > this.config.maxShow) {                
                 selected.hide();
                 var xitemstext = this.config.texts.itemsSelected.replace('{$a}', selected.length);
                 this.$xItemsSelected.html('<div class="sol-selected-display-item-text">' + xitemstext + '<div>');
                 this.$showSelectionContainer.append(this.$xItemsSelected);
                 this.$xItemsSelected.show();
-            } else {
+            } else {                
                 selected.show();
                 this.$xItemsSelected.hide();
             }
 
-            if (!skipCallback && $.isFunction(this.config.events.onChange)) {
+            if (selected.length != 0) {
+                $(".btn-add").removeClass('btn-secondary').addClass('btn-primary');
+            }
+            else{
+                $(".btn-add").removeClass('btn-primary').addClass('btn-secondary');
+            }
+
+
+            if (!skipCallback && $.isFunction(this.config.events.onChange)) {                
                 this.config.events.onChange.call(this, this, $changeItem);
             }
         },
@@ -894,14 +907,14 @@
 
                 // show remove button on display items if not disabled and null selection allowed
                 if ((this.config.multiple || this.config.allowNullSelection) && !$changedItem.prop('disabled')) {
-                    $('<span class="sol-quick-delete"/>')
+                    $('<span class="sol-quick-delete"></span>')
                         .html(this.config.texts.quickDelete)
                         .click(function () {
                             $changedItem
                                 .prop('checked', false)
                                 .trigger('change');
                         })
-                        .prependTo($existingDisplayItem);
+                        .appendTo($existingDisplayItem);
                 }
 
                 solOptionItem.displaySelectionItem = $existingDisplayItem;

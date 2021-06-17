@@ -10,11 +10,32 @@ class Organizations::MainController < OrganizationController
 
   append_view_path('app/templates/front/organizations/views')
 
-  # GET /account/organizations
+  # GET /organizations
   def index
     @organizations = ::Organization.search(search_terms(params[:organization_contains])).order(sort_column => sort_direction).page(params[:page]).per(params[:per_page])
     @without_address_count = Organization.joins(:addresses).where('addresses.is_for_billing =  ?', true).count
     @debit_mandate_not_configured_count = DebitMandate.not_configured.count
+
+    @organization = @organizations.first
+  end
+
+
+  def facture
+    @organization = Organization.find 7
+    render partial: 'organizations_facture', locals: { collection: @organization }
+  end
+
+  def kits
+    @organization = Organization.find 7
+    render partial: 'organizations_kits', locals: { collection: @favorites }
+  end
+
+  def account_sharing
+    render partial: 'organizations_account_sharing'
+  end
+
+  def bank_affectation
+    render partial: 'organizations_bank_affectation'
   end
 
   # GET /account/organizations/:id/update_options

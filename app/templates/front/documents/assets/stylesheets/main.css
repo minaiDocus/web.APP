@@ -1,0 +1,163 @@
+#add-document .upload-content{
+  background: rgba(26, 26, 26, 0.04);
+  border: 1px dashed rgba(26, 26, 26, 0.32);
+  border-radius: 4px;
+}
+
+.bank-content {
+  margin: 2% 0;
+}
+
+.box{
+  background: #FFFFFF;
+  box-shadow: 0px 1px 3px rgba(26, 26, 26, 0.1);
+  border-radius: 16px;
+  padding: 2%;
+  margin: 1%;
+}
+
+.operation-count{
+  padding: 10%;
+  text-align: right;
+}
+
+.operation-count span{
+  padding: 15%;
+  background: rgba(26, 26, 26, 0.1);
+  border-radius: 8px;
+}
+
+.action-group {
+  margin: 0 4%;
+}
+
+.search-content {
+  background: #FFFFFF;
+  border: 1px solid rgba(26, 26, 26, 0.1);
+  box-sizing: border-box;
+  border-radius: 6px;
+}
+
+.search-content input{
+  border: none;
+  width: 100%;
+  padding: 2%;
+}
+
+.search-content .glass{
+  margin-top: 1.5%;
+}
+
+.oi-icon.colored:hover{
+  fill: #C1D837 !important;
+  cursor: pointer;
+}
+
+.content-table{
+  border: 1px solid rgba(26, 26, 26, 0.1); 
+  border-radius: 8px;
+}
+
+.striped{
+  background: rgba(26, 26, 26, 0.04);
+}
+
+.multi-select-container{
+  padding: 0;
+}
+
+.multi-select-menuitem{
+  padding: 1%;
+}
+
+.multi-select-button {
+  padding: 0.6em;
+}
+
+.arrow {    
+  padding: 1% 2%;
+}
+
+.select-container{
+  padding: 1%;
+  width: 100%;
+}
+
+.compare-choice .multi-select-button{
+  padding: 1% 0 0 3%;
+}
+
+.compare-choice .multi-select-container{
+  padding: 3.5%;
+}
+
+#add-document .upload-content{
+  background: rgba(26, 26, 26, 0.04);
+  border: 1px dashed rgba(26, 26, 26, 0.32);
+  border-radius: 4px;
+}
+
+.grid-content .stamp-content {  
+  height: 100%;
+  background: rgba(26, 26, 26, 0.04);
+  border-radius: 8px;
+}
+
+.list .stamp-content.active {  
+  height: 100%;
+  border-radius: 8px;
+}
+
+.list .stamp-content.active, .list .stamp-content:hover {
+  border: 1px solid rgba(26, 26, 26, 0.04);
+  cursor: pointer;
+}
+
+.list .stamp-content.active .label-content{
+  background: rgba(26, 26, 26, 0.04);
+}
+
+.list .stamp-content:hover .label-content{
+  background: rgba(26, 26, 26, 0.04);
+}
+
+#view-document-content .modal-dialog{
+  max-width: 80%;
+}
+
+hr{
+  width: 97%;
+}
+
+img{  
+  filter: drop-shadow(0px 4px 16px rgba(26, 26, 26, 0.24));
+}
+
+.grid-content img{
+  width: 95%;
+}
+
+.list img{
+  width: 80%;
+}
+
+.grid-content .image_piece {
+  padding: 4% 6% 4% 14%;
+}
+
+.list .image_piece{
+  padding: 4% 9%;
+}
+
+.image_piece:hover{
+
+}
+
+.zoom{
+  position: absolute;
+  padding: 0.3%;
+}
+
+.border-green{
+  border: 1px solid #C1D837;
+}

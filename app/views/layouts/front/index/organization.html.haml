@@ -1,4 +1,4 @@
-= stylesheet_link_tag 'front/organizations/assets/stylesheets/main' 
+= stylesheet_link_tag 'front/organizations/main' 
 
 .organizations
   .lefter
@@ -21,23 +21,24 @@
           %li 
             %span.link_slave Logiciels Comptables et .CSV
           %li
-            %span.link_slave Mode de Paiement    
-      %li{ data: { href: "#{@organization.id}/collaborateurs" } }
+            %span.link_slave Mode de Paiement        
+      %li{ data: { href: "collaborateurs" } }
         %span.link_principal Collaborateurs
-      %li{ data: { href: "#{@organization.id}/clients" } }
+      %li{ data: { href: "clients" } }
         %span.link_principal Clients
-      %li{ data: { href: "#{@organization.id}/journaux_comptables" } }
+      %li{ data: { href: "journaux_comptables" } }
         %span.link_principal Journaux Comptables
-      %li{ data: { href: "#{@organization.id}/bank_affectation" } }
+      %li{ data: { href: "affectation_bancaires" } }
         %span.link_principal Affectation Bancaires
-      %li{ data: { href: "#{@organization.id}/account_sharing" } }
+      %li{ data: { href: "account_sharing" } }
         %span.link_principal Dossiers Partagés
-      %li{ data: { href: "#{@organization.id}/facture" } }
+      %li{ data: { href: "facture" } }
         %span.link_principal Factures
-      %li{ data: { href: "#{@organization.id}/kits" } }
+      %li{ data: { href: "kits" } }
         %span.link_principal Kits Courriers et iDocus'Box
 
   .content
     = render partial: 'organizations_welcome'
 
-= javascript_include_tag 'front/organizations/assets/javascripts/main'
+= javascript_include_tag 'front/organizations/main'
+

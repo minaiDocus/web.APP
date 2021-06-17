@@ -1,0 +1,235 @@
+= stylesheet_link_tag 'front/organizations/assets/stylesheets/bank_affectation'
+
+.facture
+  .row
+    .col-md-6
+      %h3.bold
+        Règle d'affectation bancaires
+        %span.badge.badge-secondary.badge-sm.regular 104
+    .col-md-3.no-padding
+      .search-content
+        .row.no-margin
+          .col-md-1.no-padding.text-center.glass
+            = glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })
+          .col-md-11.no-padding.no-margin
+            %input{ placeholder: 'Rechercher'}
+    .col-md-1.text-center.no-padding
+      %button.btn.btn-light.more-filter
+        Filtrer
+        %span
+          = glyphicon('transfer', { size: '16', color: '#72AA42', style: 'transform: rotate(90deg)'})
+    .col-md-2.no-padding.add-rule
+      %button.btn.btn-primary
+        Ajouter une règle     
+        %span.pl-2.chevron-add-rule= glyphicon('chevron-bottom', { size: '16', color: '#FFFF'})
+      
+  .box
+    .row
+      .col-md-8
+        %h6.mt-3 Les règles ci-dessous s'appliquent aux opérations récupérées dans les automates
+      .col-md-4.text-right
+        %button.btn.btn-light-secondary.add-document.m-1#export-rule Exporter sur Excel
+        %button.btn.btn-light-secondary.add-document.m-1#delete-rule Supprimer
+        
+    .row.mt-5
+      .col-md-12
+        %table.table.table-striped.table_integration
+          %thead
+            %th 
+              %label.container
+                %input.check-all-bank-rule{ type: :checkbox}
+                %span.checkmark
+                  = glyphicon('check', { size: '14', color: '#FFF'})
+            %th Nom de la règle
+            %th Affecté à
+            %th Type de règle
+            %th Catégorisation
+            %th Contenu recherche
+            %th N° de compte
+            %th.text-right Action
+          %tbody
+            %tr
+              %td
+                %label.container
+                  %input.check-bank-rule{ type: :checkbox}
+                  %span.checkmark
+                    = glyphicon('check', { size: '14', color: '#FFF'})
+              %td SG frais
+              %td Organisation
+              %td Recherche loi
+              %td CB
+              %td 'COTIS JAZZPRO'
+              %td 627000
+              %td.text-right.pointer
+                .action.sub_integration
+                  %span.glyph= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
+            %tr
+              %td
+                %label.container
+                  %input.check-bank-rule{ type: :checkbox}
+                  %span.checkmark
+                    = glyphicon('check', { size: '14', color: '#FFF'})
+              %td SG frais
+              %td Organisation
+              %td Recherche loi
+              %td CB
+              %td 'COTIS JAZZPRO'
+              %td 627000
+              %td.text-right.pointer
+                .action.sub_integration
+                  %span.glyph= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
+            %tr
+              %td
+                %label.container
+                  %input.check-bank-rule{ type: :checkbox}
+                  %span.checkmark
+                    = glyphicon('check', { size: '14', color: '#FFF'})
+              %td SG frais
+              %td Organisation
+              %td Recherche loi
+              %td CB
+              %td 'COTIS JAZZPRO'
+              %td 627000
+              %td.text-right.pointer
+                .action.sub_integration
+                  %span.glyph= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
+  
+  .modal#add-new-rule
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %h5.modal-title.bold Ajouter une règle
+          %button.close{ type: :button, "aria-label" => "Close", data: { dismiss: "modal"} }
+            %span{ "aria-hidden" => "true" }
+              = glyphicon('x', { size: '15', color: 'rgba(26, 26, 26, 0.32)'})
+        .modal-body
+          .form-group
+            %label.semibold Nom de la règle
+            .select-container.no-padding.w-100
+              %input.rule-name{ placeholder: "ex: Amazon" }
+
+          .form-group
+            .row
+              .col-md-6
+                %label.semibold Appliquer à
+                %select.form-control#apply-to{ name: 'apply-to', multiple: true }              
+                  %option{ value: 'all'} Tous
+                  %option{ value: 'recet'} Recette
+                  %option{ value: 'depens'} Dépense
+              .col-md-6
+                %label.semibold Catégorie
+                .select-container.no-padding.w-100
+                  %input.rule-category{ placeholder: "ex: Banque, impôt, chèques..." }
+
+          .form-group
+            .row
+              .col-md-6
+                %label.semibold Affecté à
+                %select.form-control#affect-to{ name: 'affect-to', multiple: true }              
+                  %option{ value: 'organization'} Organisation
+                  %option{ value: 'customer'} Client
+                %i Ne pourra plus être changé par la suite
+              .col-md-6
+                %label.semibold Type de règle
+                %select.form-control#rule-type{ name: 'rule-type', multiple: true }              
+                  %option{ value: 'search'} Recherche
+                  %option{ value: 'correct'} Correction
+                %i Effectue une recherche ou une correction du plan de compte
+
+          .form-group.customers-list.hide            
+            %label.semibold Client affectés par la règle
+            %select.form-control#customers-list{ name: 'customers-list', multiple: true }              
+              %option DEVP%001 - TEST- Test              
+              %option DEVP%002 - TEST- Test              
+              %option DEVP%003 - TEST- Test              
+              %option DEVP%004 - TEST- Test              
+              %option DEVP%005 - TEST- Test              
+              %option DEVP%006 - TEST- Test              
+              %option DEVP%007 - TEST- Test              
+
+          .form-group
+            %label.semibold Contenu recherche dans la libellé
+            .select-container.no-padding.w-100
+              %input.rule-name{ type: :textarea, placeholder: "ex: 'station' 2015" }
+              %span
+                = glyphicon('info', { size: '12', color: 'rgba(26, 26, 26, 0.7)'})
+                %i Utiliser un asterisque (*) pour représenter du texte ou caractère avant/après le contenu recherché
+
+          .form-group
+            .row
+              .col-md-6
+                %label.semibold Priorisation de règle similaires
+                .select-container.no-padding.w-100
+                  %input.rule-category{ placeholder: "ex: 0" }
+                %i 0 étant prioritaire sur 1. 1 étant prioritaire sur 2..
+              .col-md-6
+                %label.semibold Numéro de compte
+                .select-container.no-padding.w-100
+                  %input.rule-category{ placeholder: "ex: 627000" }
+                %i Le numéro qui sera assigné si la recherche est un succès
+          
+        .modal-footer
+          %button.btn.btn-light.cancel{ type: :button } Annuler
+          %button.btn.btn-secondary.share{ type: :button, disabled: true } Ajouter
+
+  .modal#import-rule
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %h5.modal-title.bold Importer une règle
+          %button.close{ type: :button, "aria-label" => "Close", data: { dismiss: "modal"} }
+            %span{ "aria-hidden" => "true" }
+              = glyphicon('x', { size: '15', color: 'rgba(26, 26, 26, 0.32)'})
+        .modal-body
+          .form-group
+            %h6.p-2 Une règle d'affectation doit avoir un nom unique. Si des règles dans le fichier d'import portent le même nom qu'une règle déjà existante, ces règles seront auto incrémentées.
+            .upload-content.text-center.p-5.m-3
+              .import-process.hide
+                .w-100
+                  %span= glyphicon('cloud-download', { size: '22', color: 'rgba(26, 26, 26, 0.7)'})
+                .w-100 Déposez un fichiers CSV ici
+                .w-100
+                  %span ou 
+                  %span.pointer.green-label séléctionnez-les depuis votre ordinateur
+              .import-success
+                .w-100
+                  %span= glyphicon('check', { size: '22', color: '#72AA42'})
+                .w-100 Importation terminée !
+
+
+          .form-group
+            %label.semibold Affecté à
+            %select.form-control#affect-to{ name: 'affect-to', multiple: true }              
+              %option{ value: 'organization'} Organisation
+              %option{ value: 'customer'} Client
+            %i Ne pourra plus être changé par la suite
+          
+        .modal-footer
+          %button.btn.btn-light.cancel{ type: :button } Annuler
+          %button.btn.btn-secondary.share{ type: :button, disabled: true } Suivant
+
+  .sub_integration_append.hide
+    .sub_menu.text-left
+      %ul.no-margin.no-padding.regular
+        %li
+          %span.edit= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
+          &nbsp;Editer
+        %li
+          %span.edit= glyphicon('layers', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
+          &nbsp;Dupliquer
+        %li.red-label
+          %span= glyphicon('trash', { size: '15', color: "#FF4848" })
+          &nbsp;Supprimer
+
+  .sub_rule_append.hide
+    .sub_rule_menu.text-left.mt-2
+      %ul.no-margin.no-padding.regular        
+        %li.add
+          %span= glyphicon('plus', { size: '12', color: 'rgba(26, 26, 26, 0.7);'})
+          &nbsp;Créer une règle
+        %li.download
+          %span= glyphicon('cloud-download', { size: '12', color: 'rgba(26, 26, 26, 0.7);'})
+          &nbsp;Importer une règle
+
+= javascript_include_tag 'front/organizations/assets/javascripts/facture'
+= javascript_include_tag 'front/organizations/assets/javascripts/bank_affectation'

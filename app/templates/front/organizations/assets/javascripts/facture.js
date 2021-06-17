@@ -24,15 +24,23 @@ jQuery(function () {
   $('.parameter').unbind('click')
   $(".parameter").bind('click',function(e) {
       e.stopPropagation()
-      $('.modal .modal-footer .edit').remove()
+        $('#select-customer').multiSelect({
+          'noneText': 'Selectionner/Rechercher un dossier client'
+        });         
+        $('#select-document').multiSelect({
+          'noneText': 'Selectionner le type de document'
+        }); 
+      $('.modal .modal-footer .edit').remove();
       $('#integration').modal('show')
   });
 
-  $('.action .sub_menu').livequery(function(){
-    $('.sub_menu .edit').unbind('click')
-    $(".sub_menu .edit").bind('click',function(e) {
-        e.stopPropagation()
-        alert('siora')
-    });    
-  })
+  $('.commande').unbind('click')
+  $(".commande").bind('click',function(e) {
+      e.stopPropagation()
+      $('#select-kit').searchableOptionList({
+        'searchplaceholder': 'Selectionner / Rechercher un dossier client à qui envoyer un kit courrier'
+      });
+
+      $('#commande-courrier').modal('show')
+  });
 });

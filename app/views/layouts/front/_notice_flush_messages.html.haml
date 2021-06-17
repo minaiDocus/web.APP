@@ -1,3 +1,18 @@
 #idocus_notifications_messages
-	.notice-internal-error
-	.notice-flash-message
+  .notice.notice-internal-error.hide
+    .icon-alert
+      = glyphicon('warning', {size: '16', color: '#FF4848'})
+      %span.bold
+        iDocus rencontre actuellement un bug
+      %span.float-right.pointer
+        = glyphicon('x', {size: '16', color: '#8e8e8e'})
+    .message-alert
+      Nous faisons tout notre possible pour régler le problème au plus vite. Merci de votre patience
+  .notice.notice-internal-success.text-center.text-white.hide
+    .message-alert.bold
+      Les dossiers ont été bien ajoutés
+    .cancel-action
+      Vous pouvez annuler votre action
+      %span.cancel-action-confirmed 
+        %u.pointer en cliquant ici
+  .notice-flash-message.hide

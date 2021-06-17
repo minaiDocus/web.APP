@@ -1,0 +1,93 @@
+= stylesheet_link_tag 'front/organizations/assets/stylesheets/facture'
+
+.facture
+  .row
+    .col-md-9
+      %h3.bold
+        Dossiers partagés
+        %span.badge.badge-secondary.badge-sm 2
+    .col-md-3.text-center
+      %button.btn.btn-primary.to-share
+        %span
+          = glyphicon('share', { color: "#FFF", size: '16', style: 'transform: rotate(180deg)'})       
+        &nbsp;Partager un dossier
+  
+  .box.mt-4
+    %table.table.table-striped.table_integration
+      %thead
+        %th Dossiers
+        %th Partagé le
+        %th Client ou contact
+        %th.text-right Action
+      %tbody
+        %tr
+          %td IDOC%002 - support
+          %td 30/10/2020
+          %td IDOC%002 - idocus
+          %td.text-right.pointer
+            .action.sub_integration
+              %span.glyph= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
+        %tr
+          %td IDOC%002 - support
+          %td 30/10/2020
+          %td IDOC%002 - idocus
+          %td.text-right.pointer
+            .action.sub_integration
+              %span.glyph= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
+
+    .row.form-group
+      .col-md-4
+        %label Affiché par
+      .col-md-4
+        %select.form-control
+          %option 20
+          %option 50
+          %option 100          
+  
+
+  .modal#shared-account
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %h5.modal-title.bold Partager un dossier
+          %button.close{ type: :button, "aria-label" => "Close", data: { dismiss: "modal"} }
+            %span{ "aria-hidden" => "true" }
+              = glyphicon('x', { size: '15', color: 'rgba(26, 26, 26, 0.32)'})
+        .modal-body
+          .form-group
+            %label Dossier à partager
+            %select.form-control#select-to-share{ name: 'select-to-share', multiple: true }              
+              %option partage 1
+              %option partage 2
+              %option partage 3
+
+          .form-group
+            %label Partager à un client
+            %select.form-control#select-shared{ name: 'select-shared', multiple: true }              
+              %option client 1
+              %option client 2
+              %option client 3
+
+          .form-group
+            .row
+              .col-md-12.text-center ou
+
+          .form-group
+            %label Partager avec une adresse e-mail
+            .select-container.no-padding.w-100
+              %input.mail-content{ placeholder: "ex: jean@idocus.com" }      
+        .modal-footer
+          %button.btn.btn-light.cancel{ type: :button } Annuler
+          %button.btn.btn-secondary.share{ type: :button, disabled: true } Partager
+
+  .sub_integration_append.hide
+    .sub_menu.text-left
+      %ul.no-margin.no-padding.regular        
+        %li
+          %span.edit= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
+          &nbsp;Editer
+        %li.red-label
+          %span= glyphicon('trash', { size: '15', color: "#FF4848" })
+          &nbsp;Supprimer  
+
+= javascript_include_tag 'front/organizations/assets/javascripts/facture'
