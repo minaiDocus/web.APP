@@ -4,38 +4,38 @@
   .lefter
     %ul.principal
       %li{ data: { href: "accueil" } }
-        %span.link_principal.active Acceuil
+        %span.link_principal.active= t('organizations.home')
       %li{ data: { href: "parametres" } }
         %span.chevron= glyphicon('chevron-right', { color: "#1A1A1A"})
         %span.chevron{ style: "display: none;" }= glyphicon('chevron-bottom', { color: "#1A1A1A"})
-        %span.link_principal Paramètres        
+        %span.link_principal= t('views.standards.setting').capitalize.pluralize
         %ul.slave.hide
           %li
-            %span.link_slave.active Général
+            %span.link_slave.active= t('organizations.general')
           %li 
-            %span.link_slave Nommage PDF
+            %span.link_slave= t('organizations.pdf_naming')
           %li 
-            %span.link_slave Emails de rappel
+            %span.link_slave= t('organizations.reminder_emails')
           %li 
-            %span.link_slave Gestion des Adresses
+            %span.link_slave= t('organizations.address_management')
           %li 
-            %span.link_slave Logiciels Comptables et .CSV
+            %span.link_slave= t('organizations.software')
           %li
-            %span.link_slave Mode de Paiement    
+            %span.link_slave= t('organizations.payment_method')
       %li{ data: { href: "#{@organization.id}/collaborateurs" } }
-        %span.link_principal Collaborateurs
+        %span.link_principal= t('organizations.collaborators')
       %li{ data: { href: "#{@organization.id}/clients" } }
-        %span.link_principal Clients
+        %span.link_principal= t('organizations.customers')
       %li{ data: { href: "#{@organization.id}/journaux_comptables" } }
-        %span.link_principal Journaux Comptables
+        %span.link_principal= t('organizations.journals')
       %li{ data: { href: "#{@organization.id}/bank_affectation" } }
-        %span.link_principal Affectation Bancaires
+        %span.link_principal= t('organizations.bank_assignment')
       %li{ data: { href: "#{@organization.id}/account_sharing" } }
-        %span.link_principal Dossiers Partagés
+        %span.link_principal= t('folders.shared_folders')
       %li{ data: { href: "#{@organization.id}/facture" } }
-        %span.link_principal Factures
+        %span.link_principal= t('organizations.invoices')
       %li{ data: { href: "#{@organization.id}/kits" } }
-        %span.link_principal Kits Courriers et iDocus'Box
+        %span.link_principal= t('organizations.idocus_box_and_order')
 
   .content
     = render partial: 'organizations_welcome'

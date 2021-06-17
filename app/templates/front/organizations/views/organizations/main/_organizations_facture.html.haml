@@ -4,21 +4,22 @@
   .row
     .col-md-10
       %h3.bold
-        Intégration automatique des factures
+        = t('invoices.auto_invoice_integration')
         %span.badge.badge-secondary.badge-sm 1
     .col-md-2.text-center
       %button.btn.btn-primary.parameter
         %span
           = glyphicon('cog', { color: "#FFF", size: '16'})       
-        &nbsp;Paramètres
+        &nbsp;
+        = t('views.standards.setting').capitalize.pluralize
 
   
   .box.mt-4
     %table.table.table-striped.table_integration
       %thead
-        %th Code de dossiers
-        %th Journal
-        %th.text-right Action
+        %th= t('invoices.users_code')
+        %th= t('views.standards.journal').capitalize
+        %th.text-right= t('actions.name')
       %tbody
         %tr
           %td IDOC%002
@@ -35,7 +36,7 @@
 
     .row.form-group
       .col-md-4
-        %label Affiché par
+        %label= t('views.standards.displayed_by').capitalize
       .col-md-4
         %select.form-control
           %option 20
@@ -44,15 +45,15 @@
   .row
     .col-md-8
       %h3.bold 
-        Factures
+        = t('views.standards.invoice').capitalize.pluralize
         %span.badge.badge-secondary.badge-sm 2
 
   .box.mt-4
     %table.table.table-striped.table_facture
       %thead
-        %th Numero de facture
-        %th Montant
-        %th.text-right Action
+        %th= t('invoices.invoice_number')
+        %th= t('views.standards.amount').capitalize
+        %th.text-right= t('actions.name')
       %tbody
         %tr
           %td F000020
@@ -63,7 +64,7 @@
     
     .row.form-group
       .col-md-4
-        %label Affiché par
+        %label= t('views.standards.displayed_by').capitalize
       .col-md-4
         %select.form-control
           %option 20
@@ -74,50 +75,55 @@
     .modal-dialog
       .modal-content
         .modal-header
-          %h5.modal-title.bold Intégration automatique des factures
+          %h5.modal-title.bold= t('invoices.auto_invoice_integration')
           %button.close{ type: :button, "aria-label" => "Close", data: { dismiss: "modal"} }
             %span{ "aria-hidden" => "true" }
               = glyphicon('x', { size: '15', color: 'rgba(26, 26, 26, 0.32)'})
         .modal-body
           .form-group
-            %label Code client
+            %label= t('invoices.client_code')
             %select.form-control#select-customer{ name: 'select-customer', multiple: true }              
               %option Dossier 1
               %option Dossier 2
               %option Dossier 3
 
           .form-group
-            %label Type de document
+            %label= t('invoices.number')
             %select.form-control#select-document{ name: 'select-document', multiple: true }              
               %option Type 1
               %option Type 2
               %option Type 3
         .modal-footer
-          %button.btn.btn-light.cancel{ type: :button } Annuler
-          %button.btn.btn-primary.add{ type: :button } Ajouter
-          %button.btn.btn-primary.edit{ type: :button } Editer
+          %button.btn.btn-light.cancel{ type: :button }= t('actions.cancel')
+          %button.btn.btn-primary.add{ type: :button }= t('actions.add')
+          %button.btn.btn-primary.edit{ type: :button }= t('actions.edit')
 
   .sub_integration_append.hide
     .sub_menu.text-left
       %ul.no-margin.no-padding.regular
         %li
           %span.synchronize= glyphicon('loop', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-          &nbsp;Synchroniser les factures
+          &nbsp;
+          = t('invoices.invoice_synchonize')
         %li
           %span.edit= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-          &nbsp;Editer
+          &nbsp;
+          = t('actions.edit')
         %li.red-label
           %span= glyphicon('trash', { size: '15', color: "#FF4848" })
-          &nbsp;Supprimer
+          &nbsp;
+          = t('actions.destroy')
 
   .sub_facture_append.hide
     .sub_menu.text-left
       %ul.no-margin.no-padding.regular
         %li
           %span.see= glyphicon('eye', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-          &nbsp;Voir
+          &nbsp;
+          = t('actions.show')
         %li
           %span.download= glyphicon('cloud-download', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-          &nbsp;Télécharger
+          &nbsp;
+          = t('actions.download')
 
 = javascript_include_tag 'front/organizations/assets/javascripts/facture'

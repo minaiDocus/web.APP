@@ -4,7 +4,7 @@
   .row
     .col-md-12.title
       %h1
-        Mon organisation :
+        = t('organizations.my_organization') + ' :'
         %span= @organization.name
   .row
     .col-md-12.statistic_board                 
@@ -13,18 +13,18 @@
           .col-md-12.collab_customer
             .col-md-5.collaborator.box
               %h2= @organization.collaborators.count
-              %h4 Collaborateurs
+              %h4= t('organizations.collaborators')
             .col-md-5.float-right.customer.box
               %h2= @organization.customers.count
-              %h4 Dossiers actifs
+              %h4= t('organizations.active_customers')
         .row
           .col-md-12.evolution
-            %h4 Evolution du nombre de dossiers
+            %h4= t('organizations.customers_evolution')
             
             %canvas#chart_dossiers          
       .col-md-4.right_section
         .repartition
-          %h4 Répartition des abonnements
+          %h4= t('organizations.distribution_of_subscriptions')
           %canvas#chart_abonnement
           - organization_statistic = SubscriptionStatistic.where(organization_id: @organization.id).first
           %input#organization_options{ type: :hidden, value: organization_statistic.options.to_json }
@@ -32,23 +32,23 @@
             %tbody
               %tr
                 %td.glyph= glyphicon('media-record', { color: '#72AA42' })
-                %td.left iDo'Micro
+                %td.left= t('subscription_options.ido_micro')
                 %td.right= organization_statistic.options[:micro_package].to_i
               %tr
                 %td.glyph= glyphicon('media-record', { color: '#C1E637' })
-                %td.left iDo'Nano
+                %td.left= t('subscription_options.ido_nano')
                 %td.right= organization_statistic.options[:nano_package].to_i
               %tr
                 %td.glyph= glyphicon('media-record', { color: '#C1D837' })
-                %td.left iDo'X
+                %td.left= t('subscription_options.ido_x')
                 %td.right= organization_statistic.options[:idox_package].to_i
               %tr
                 %td.glyph= glyphicon('media-record', { color: '#445E2B' })
-                %td.left iDo'Classique
+                %td.left= t('subscription_options.ido_classic')
                 %td.right= organization_statistic.options[:basic_package].to_i
               %tr
                 %td.glyph= glyphicon('media-record', { color: '#1A1A1A' })
-                %td.left Automate       
+                %td.left= t('subscription_options.retriever')
                 %td.right= organization_statistic.options[:retriever_package].to_i
 
 = javascript_include_tag 'front/organizations/assets/javascripts/welcome'

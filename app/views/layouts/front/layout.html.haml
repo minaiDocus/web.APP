@@ -5,7 +5,7 @@
       - if content_for?(:title)
         = yield(:title)
       - else
-        Idocus | Archivage numérique
+        = t('layouts.title')
     %meta{ :content => "text/html; charset=UTF-8", "http-equiv" => "Content-type" }
     %meta{ name: "viewport", content: "width=device-width, initial-scale=1" }
     = yield(:head)

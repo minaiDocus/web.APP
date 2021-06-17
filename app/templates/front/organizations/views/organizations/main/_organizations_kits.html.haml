@@ -13,13 +13,13 @@
   .box.mt-4
     %table.table.table-striped
       %thead
-        %th Dossier
-        %th Date de commande
-        %th Société
-        %th Commande
-        %th N° de suivi
-        %th Statut
-        %th.text-right Action
+        %th= t('kits.folder').capitalize
+        %th= t('kits.order_date').capitalize
+        %th= t('kits.company').capitalize
+        %th= t('kits.order').capitalize
+        %th= t('kits.monitoring_number').capitalize
+        %th= t('kits.state').capitalize
+        %th.text-right= t('actions.name').capitalize
       %tbody
         %tr
           %td IDOC%002 - support - John Doe
@@ -28,7 +28,7 @@
           %td 34
           %td 43256488879
           %td
-            .badge.badge-dark En transit          
+            .badge.badge-dark En transit
           %td.text-right
             .action.sub_integration
               %span= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
@@ -49,7 +49,7 @@
           %td
             .row.form-group
               .col-md-4
-                %label Affiché par
+                %label= t('views.standards.displayed_by').capitalize
               .col-md-4
                 %select.form-control
                   %option 20

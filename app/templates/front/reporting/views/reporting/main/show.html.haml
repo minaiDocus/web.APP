@@ -3,50 +3,48 @@
 .container-fluid
   .row
     .col-md-6
-      %h1.bold
-        Reporting
+      %h1.bold= t('reporting.reporting_text')
     .col-md-3      
-      = select_tag 'customer_filter', options_for_select(['DEVP%001 - TEST - Testa Test', 'DEVP%002 - TEST - Testa Test', 'DEVP%003 - TEST - Testa Test', 'DEVP%004 - TEST - Testa Test']), id: 'customer_filter', multiple: true     
+      = select_tag 'customer_filter', options_for_select(['DEVP%001 - TEST - Testa Test', 'DEVP%002 - TEST - Testa Test', 'DEVP%003 - TEST - Testa Test', 'DEVP%004 - TEST - Testa Test']), id: 'customer_filter', multiple: true
     .col-md-3
       .select-container
         .row.date.datepicker
           .col-md-2= glyphicon('calendar', { size: '20', color: '#b5a6a6'} )
-          .col-md-8.label-titre Filtrer par period                        
+          .col-md-8.label-titre= t('reporting.filter_by_period')
           .col-md-2.no-padding= glyphicon('chevron-bottom', { size: '20', color: '#b5a6a6'})
           %span.add-on.hide{style: 'width: 0px; height:35px'}
   .row
     .col-md-4.chart-container.back-white
-      %h4.bold Flux documentaire
+      %h4.bold= t('reporting.reporting_flow')
       .row
         .col-md-12.mt-4
           %canvas#chart_flux_document
     .col-md-4.chart-container.back-white
-      %h4.bold Taux de livraison en compte d'attente
+      %h4.bold= t('reporting.reporting_delivery_account')
       .row.chart-deliver
         .col-md-11
           %canvas#chart_sending
     .col-md-4.chart-container.back-white
-      %h4.bold Fonctionnement auto
+      %h4.bold= t('reporting.reporting_retrievers')
       .row.chart-retriever.mt-5
         .col-md-6.no-margin.no-padding
           .label-canvas.bold
             60%
           %canvas#chart_retriever_active          
-          %h5.text-center.label-retriever.no-margin Automate actifs  
+          %h5.text-center.label-retriever.no-margin= t('reporting.active_retrievers')
         .col-md-6.no-margin.no-padding
           .label-canvas.bold
             40%
           %canvas#chart_retriever_inactive          
-          %h5.text-center.label-retriever.no-margin Automate en panne  
+          %h5.text-center.label-retriever.no-margin= t('reporting.failed_retrievers')
 
   .row
     .col-md-4.chart-container.back-white
-      %h4.bold
-        Top retard envoi de document
+      %h4.bold= t('reporting.top_delay_sending_document')
       %table.table.table-striped
         %thead
-          %th.text-left Nom du dossier
-          %th.text-right Date du dernier doc.
+          %th.text-left= t('reporting.folder_name')
+          %th.text-right= t('reporting.last_document_date')
         %tbody
           %tr
             %td.text-left IDOC%Client1 - iDocus
@@ -55,12 +53,11 @@
             %td.text-left IDOC%Client2 - iDocus
             %td.text-right 31/10/20
     .col-md-4.chart-container.back-white
-      %h4.bold
-        Top livraison compte d'attente
+      %h4.bold= t('reporting.top_delivery_waiting_account')
       %table.table.table-striped
         %thead
-          %th.text-left Nom du dossier
-          %th.text-right Part de compte d'attente
+          %th.text-left= t('reporting.folder_name')
+          %th.text-right= t('reporting.share_waiting_account')
         %tbody
           %tr
             %td.text-left IDOC%Client1 - iDocus
@@ -69,13 +66,12 @@
             %td.text-left IDOC%Client2 - iDocus
             %td.text-right 20%
     .col-md-4.chart-container.back-white
-      %h4.bold
-        Automate en panne
+      %h4.bold= t('reporting.failed_retrievers')
       %table.table.table-striped
         %thead
-          %th.text-left Nom du dossier
-          %th.text-center Automate
-          %th.text-right Status
+          %th.text-left= t('reporting.folder_name')
+          %th.text-center= t('reporting.retriever')
+          %th.text-right= t('reporting.status')
         %tbody
           %tr
             %td.text-left IDOC%Client1 - iDocus

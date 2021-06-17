@@ -18,62 +18,62 @@
       %hr.clearfix 
       .row
         .col-md-10
-          %h6.bold État de la configuration
+          %h6.bold= t('dashboard.configuration_state')
           .text-small-content
             %p
-              Le dossier client est configuré de façon optimale
+              = t('dashboard.configuration_text')
               %span
                 = link_to glyphicon('cog', {size: '11', color: '#b5a6a6'}), '#todo', class: 'support-chat-link'
         .col-md-1.no-padding.text-right
-          %span.state.state-medium Moyen
+          %span.state.state-medium= t('dashboard.medium_state')
       %hr.clearfix
       .row
         .col-md-10
-          %h6.bold Activité du dossier
+          %h6.bold= t('dashboard.folder_activity')
           .row              
             .col-md-4
               %span
-                %span Dernier lot ajouté :
+                %span= t('dashboard.last_pack_added') + ' :'
             .col-md-3.text-right
               %span
                 %span NDF 202011
                 = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#todo', class: 'support-chat-link'
         .col-md-1.no-padding.text-right
-          %span.state.state-good Bonne
+          %span.state.state-good= t('dashboard.good_state')
       %hr.clearfix
       .row
         .col-md-10
           .row
             .col-md-4
               %span
-                %span Dernière activité :
+                %span= t('dashboard.last_activity') + ' :'
             .col-md-3.text-right
               %span
                 %span 06/11/20
                 = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#todo', class: 'support-chat-link'
         .col-md-1.no-padding.text-right
-          %span.state.state-medium Moyen
+          %span.state.state-medium= t('dashboard.medium_state')
       %hr.clearfix
       .row
         .col-md-10
-          %h6.bold Ajout de documents            
+          %h6.bold= t('dashboard.add_documents')
           .row
             .col-md-4
-              %span Erreurs détectées :
+              %span= t('dashboard.errors_found') + ' :'
             .col-md-3.text-right
               %span 8
               = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#todo', class: 'support-chat-link'
           .row
             .col-md-4
-              %span Pannes d’automates :
+              %span= t('dashboard.retrievers_failing') + ' :'
             .col-md-3.text-right
               %span 1
               = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#todo', class: 'support-chat-link'
           .row
             .col-md-4
-              %span Doublons en pré-affectation :
+              %span= t('dashboard.pre_assignement_duplicated') + ' :'
             .col-md-3.text-right
               %span 0
               = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#todo', class: 'support-chat-link'
         .col-md-1.no-padding.text-right
-          %span.state.state-critical Critique
+          %span.state.state-critical= t('dashboard.critical_state')

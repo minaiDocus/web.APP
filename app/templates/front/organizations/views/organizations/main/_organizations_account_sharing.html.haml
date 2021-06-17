@@ -4,21 +4,22 @@
   .row
     .col-md-9
       %h3.bold
-        Dossiers partagés
+        = t('folders.shared_folders')
         %span.badge.badge-secondary.badge-sm 2
     .col-md-3.text-center
       %button.btn.btn-primary.to-share
         %span
           = glyphicon('share', { color: "#FFF", size: '16', style: 'transform: rotate(180deg)'})       
-        &nbsp;Partager un dossier
+        &nbsp;
+        = t('folders.share_a_folder')
   
   .box.mt-4
     %table.table.table-striped.table_integration
       %thead
-        %th Dossiers
-        %th Partagé le
-        %th Client ou contact
-        %th.text-right Action
+        %th= t('folders.folder')
+        %th= t('folders.shared_at')
+        %th= t('folders.client_or_contact')
+        %th.text-right= t('actions.name')
       %tbody
         %tr
           %td IDOC%002 - support
@@ -37,7 +38,7 @@
 
     .row.form-group
       .col-md-4
-        %label Affiché par
+        %label= t('views.standards.displayed_by').capitalize
       .col-md-4
         %select.form-control
           %option 20
@@ -49,20 +50,20 @@
     .modal-dialog
       .modal-content
         .modal-header
-          %h5.modal-title.bold Partager un dossier
+          %h5.modal-title.bold= t('folders.share_a_folder')
           %button.close{ type: :button, "aria-label" => "Close", data: { dismiss: "modal"} }
             %span{ "aria-hidden" => "true" }
               = glyphicon('x', { size: '15', color: 'rgba(26, 26, 26, 0.32)'})
         .modal-body
           .form-group
-            %label Dossier à partager
+            %label= t('folders.folder_to_share')
             %select.form-control#select-to-share{ name: 'select-to-share', multiple: true }              
               %option partage 1
               %option partage 2
               %option partage 3
 
           .form-group
-            %label Partager à un client
+            %label= t('folders.share_to_a_customer')
             %select.form-control#select-shared{ name: 'select-shared', multiple: true }              
               %option client 1
               %option client 2
@@ -70,24 +71,26 @@
 
           .form-group
             .row
-              .col-md-12.text-center ou
+              .col-md-12.text-center= t('views.or')
 
           .form-group
-            %label Partager avec une adresse e-mail
+            %label= t('folders.share_with_mail_address')
             .select-container.no-padding.w-100
               %input.mail-content{ placeholder: "ex: jean@idocus.com" }      
         .modal-footer
-          %button.btn.btn-light.cancel{ type: :button } Annuler
-          %button.btn.btn-secondary.share{ type: :button, disabled: true } Partager
+          %button.btn.btn-light.cancel{ type: :button }= t('actions.cancel')
+          %button.btn.btn-secondary.share{ type: :button, disabled: true }= t('actions.share')
 
   .sub_integration_append.hide
     .sub_menu.text-left
       %ul.no-margin.no-padding.regular        
         %li
           %span.edit= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-          &nbsp;Editer
+          &nbsp;
+          = t('actions.edit')
         %li.red-label
           %span= glyphicon('trash', { size: '15', color: "#FF4848" })
-          &nbsp;Supprimer  
+          &nbsp;
+          = t('actions.destroy')
 
 = javascript_include_tag 'front/organizations/assets/javascripts/facture'

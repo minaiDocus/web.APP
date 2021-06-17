@@ -182,8 +182,134 @@ fr:
   composition: Composition
 
   dashboard:
+    welcome_to: Bienvenue sur
+    folder_text_info: Vous pouvez voir l’état de vos dossiers ici ou directement accéder à vos documents.
+    my_favorite_folders: Mes dossiers favoris
+    view_my_documents: Voir mes documents
+    add_folder_to_favorite: Ajouter un dossier aux favoris
+    no_favorite_customer: Veuillez ajoutés vos dossiers favories
+    search_folder: Rechercher un dossier
+    add_action: Ajouter
+    cancel_action: Annuler
+    configuration_state: État de la configuration
+    configuration_text: Le dossier client est configuré de façon optimale
+    good_state: Bonne
+    medium_state: Moyen
+    critical_state: Critiqué
+    folder_activity: Activité du dossier
+    last_pack_added: Dernier lot ajouté
+    last_activity: Dernière activité
+    add_documents: Ajout de documents
+    errors_found: Erreurs détectées
+    retrievers_failing: Pannes d’automates
+    pre_assignement_duplicated: Doublons en pré-affectation
+    favorite_success_state: bon
+    favorite_critical_state: critiqué
+
+  reporting:
+    reporting_text: Reporting
+    reporting_flow: Flux documentaire
+    reporting_delivery_account: Taux de livraison en compte d’attente
+    reporting_retrievers: Fonctionnement automates
+    active_retrievers: Automate actifs
+    failed_retrievers: Automate en panne
+    top_delay_sending_document: Top retard envoi de document
+    top_delivery_waiting_account: Top livraison compte d'attente
+    share_waiting_account: Part de compte d'attente
+    folder_name: Nom du dossier
+    last_document_date: Date du dernier doc.
+    retriever: Automate
+    state: Status
+    filter_by_period: Filtrer par period
+
+  organizations:
+    home: Accueil
+    my_organization: Mon organisation
+    organization: Organisation
+    customer: Client
+    general: Général
+    pdf_naming: Nommage PDF
+    reminder_emails: Emails de rappel
+    address_management: Gestion des Adresses
+    software: Logiciels Comptables et .CSV
+    payment_method: Mode de Paiement
+    collaborators: Collaborateurs
+    customers: Clients
+    journals: Journaux comptables
+    bank_assignment: Affectation bancaires
+    bank_assignment_rule: Règle d'affectation bancaires
+    invoices: Factures
+    idocus_box_and_order: Kits Courriers et iDocus'Box
+    active_customers: Dossiers actifs
+    customers_evolution: Evolution du nombre de dossiers
+    distribution_of_subscriptions: Répartition des abonnements
+
+  folders:
+    shared_folders: Dossiers Partagés
+    share_a_folder: Partager un dossier
+    folder: Dossiers
+    shared_at: Partagé le
+    client_or_contact: Client ou Contact
+    folder_to_share: Dossier à partager
+    share_to_a_customer: Partager à un client
+    share_with_mail_address: Partager avec une adresse e-mail
+
+  subscription_options:
+    ido_micro: iDo'Micro
+    ido_nano: iDo'Nano
+    ido_x: iDo'X
+    ido_classic: iDo'Classique
+    retriever: Automate
+
+  kits:
+    mail_kit: Kit courrier
+    order_mail_kit: Commander kit courrier
+    folder: Dossier
+    order_date: Date de commande
+    company: Société
+    order: Commande
+    monitoring_number: N° de suivi
+    state: Statut
+
+  rules:
+    name: Nom de la règle
+    assigned_to: Affecté à
+    assign_to: Affecter à
+    type: Type de règle
+    categorizatiojn:  Catégorisation
+    searched_content:  Contenu recherché
+    account_number: Numéro de compte
+    account_number_helper_text: Le numéro qui sera assigné si la recherche est un succès
+    recipe: Recette
+    expense: Dépense
+    category: Catégorie
+    research: Recherche
+    correction: Correction
+    assigned_to_helper_text: Ne pourra plus être changé par la suite
+    type_helper_text: Effectue une recherche ou une correction du plan de compte
+    assigned_client: Client affectés par la règle
+    import_finished: Importation terminée !
+    label_content_search: Contenu recherche dans la libellé
+    label_content_search_helper_text: Utiliser un asterisque (*) pour représenter du texte ou caractère avant/après le contenu recherché
+    similar_rule_priorization: Priorisation de règle similaires
+    similar_rule_priorization_helper_text: 0 étant prioritaire sur 1. 1 étant prioritaire sur 2..
+    recovery_operation_retriever: Les règles ci-dessous s'appliquent aux opérations récupérées dans les automates
+    file_import_info: Une règle d'affectation doit avoir un nom unique. Si des règles dans le fichier d'import portent le même nom qu'une règle déjà existante, ces règles seront auto incrémentées.
+    drop_csv_file: Déposez un fichiers CSV ici
+    select_csv_file_from_computer: séléctionnez-les depuis votre ordinateur
+
+  invoices:
+    auto_invoice_integration: Intégration automatique des factures
+    invoice_number: Numéro de facture
+    users_code: Code de dossiers
+    document_type: Type de document
+    client_code: Code client
+
+  footer:
+    copyright_text: Tous droits réservés iDocus
 
   layouts:
+    title: Idocus | Archivage numérique
     home: Accueil
     my_documents: Mes documents
     bank_operations: Opération bancaire
@@ -202,11 +328,23 @@ fr:
       previous: '&lsaquo;'
       next: '&rsaquo;'
       truncate: '...'
+    standards:
+      or: ou
+      and: et
+      all: tous
+      displayed_by: affiché par
+      journal: journal
+      setting: paramètre
+      parameterize: paramètrer
+      configure: configurer
+      amount: montant
+      invoice: facture
 
   actions:
     name: Actions
     show: Voir
     new: Nouveau
+    add: Ajouter
     edit: Editer
     destroy: Supprimer
     cancel_destroy: Annuler la suppression
@@ -220,6 +358,17 @@ fr:
     complete_later: Terminer plus tard
     previous_step: < Etape précédente
     finish: Terminer
+    share: Partager
+    duplicate: Dupliquer
+    next: Suivant
+    download: Télécharger
+    rules:
+      add: Ajouter une règle
+      apply_to: Appliquer à
+      excel_export: Exporter sur Excel
+      import: Importer une règle
+      create: Créer une règle
+      invoice_synchronize: Synchroniser les factures
 
   filters:
     name: Filtre
