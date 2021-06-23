@@ -11,7 +11,7 @@ class OrganizationController < ApplicationController
   before_action :apply_membership
   before_action :load_recent_notifications
 
-  layout('front/organization')
+  layout('front/layout') # TODO ...
 
   protected
 

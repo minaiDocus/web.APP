@@ -265,7 +265,7 @@ class Organizations::MainController < OrganizationController
     if action_name.in?(%w[index edit_options update_options new create])
       'front/layout'
     else
-      'front/organization'
+      'front/layout' # TODO ....
     end
   end
 
