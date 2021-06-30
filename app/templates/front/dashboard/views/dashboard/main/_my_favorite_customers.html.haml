@@ -2,14 +2,14 @@
   .box
     .favorite-list
       .row
-        .col-md-10.float-left
+        .col-md-10.float-start
           %span.bold= favorite.name
           %br
           %i.text-muted
             = favorite.name
             %span.text-muted-light= favorite.info
 
-        .col-md-1.no-padding.text-right
+        .col-md-1.no-padding.text-end
           %span.state{ class: "state-#{favorite.state}"}= favorite.note
         .col-md-1
           = link_to glyphicon('chevron-right', {size: '17', color: '#b5a6a6'}), '#', class: 'favorite-link', id: favorite.id
@@ -24,7 +24,7 @@
               = t('dashboard.configuration_text')
               %span
                 = link_to glyphicon('cog', {size: '11', color: '#b5a6a6'}), '#todo', class: 'support-chat-link'
-        .col-md-1.no-padding.text-right
+        .col-md-1.no-padding.text-end
           %span.state.state-medium= t('dashboard.medium_state')
       %hr.clearfix
       .row
@@ -34,11 +34,11 @@
             .col-md-4
               %span
                 %span= t('dashboard.last_pack_added') + ' :'
-            .col-md-3.text-right
+            .col-md-3.text-end
               %span
                 %span NDF 202011
                 = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#todo', class: 'support-chat-link'
-        .col-md-1.no-padding.text-right
+        .col-md-1.no-padding.text-end
           %span.state.state-good= t('dashboard.good_state')
       %hr.clearfix
       .row
@@ -47,11 +47,11 @@
             .col-md-4
               %span
                 %span= t('dashboard.last_activity') + ' :'
-            .col-md-3.text-right
+            .col-md-3.text-end
               %span
                 %span 06/11/20
                 = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#todo', class: 'support-chat-link'
-        .col-md-1.no-padding.text-right
+        .col-md-1.no-padding.text-end
           %span.state.state-medium= t('dashboard.medium_state')
       %hr.clearfix
       .row
@@ -60,20 +60,20 @@
           .row
             .col-md-4
               %span= t('dashboard.errors_found') + ' :'
-            .col-md-3.text-right
+            .col-md-3.text-end
               %span 8
               = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#todo', class: 'support-chat-link'
           .row
             .col-md-4
               %span= t('dashboard.retrievers_failing') + ' :'
-            .col-md-3.text-right
+            .col-md-3.text-end
               %span 1
               = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#todo', class: 'support-chat-link'
           .row
             .col-md-4
               %span= t('dashboard.pre_assignement_duplicated') + ' :'
-            .col-md-3.text-right
+            .col-md-3.text-end
               %span 0
               = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#todo', class: 'support-chat-link'
-        .col-md-1.no-padding.text-right
+        .col-md-1.no-padding.text-end
           %span.state.state-critical= t('dashboard.critical_state')

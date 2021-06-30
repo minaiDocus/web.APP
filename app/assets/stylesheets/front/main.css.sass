@@ -22,10 +22,10 @@ footer
   font-family: Raleway-semiBold
 
 .red-label
-  color: #FF4848
+  color: #FF4848 !important
   
 .green-label
-  color: #72AA42  
+  color: #C1D837 !important
 
 .hide
   display: none
@@ -43,23 +43,34 @@ footer
   border: none
 
 .btn-light
-  background: #FFFFFF;
-  border: 1px solid #72AA42;
-  box-sizing: border-box;
-  border-radius: 8px;
-  color: #72AA42;
+  background: #FFFFFF
+  border: 1px solid #72AA42
+  box-sizing: border-box
+  border-radius: 8px
+  color: #72AA42
 
 .btn-light:hover
-  background: #FFFFFF;
+  background: #FFFFFF
+
+.btn-light-secondary
+  background: #FFFFFF
+  border: 1px solid rgba(26, 26, 26, 0.32)
+  box-sizing: border-box
+  border-radius: 8px
+  color: rgba(26, 26, 26, 0.32)
+
+.btn-light-secondary:hover
+  background: #FFFFFF
+  color: rgba(26, 26, 26, 0.32)
 
 .btn-secondary
-  background: rgba(26, 26, 26, 0.1);
-  border-radius: 8px;
-  border: none;
-  color: rgba(26, 26, 26, 0.32);
+  background: rgba(26, 26, 26, 0.1)
+  border-radius: 8px
+  border: none
+  color: rgba(26, 26, 26, 0.32)
 
 .btn-secondary:hover
-  background: #FFFFFF;
+  background: #FFFFFF
   color: #888
 
 .btn-default
@@ -71,6 +82,16 @@ footer
   color: #72AA42
   border: 1px solid #72AA42
   border-radius: 5px
+
+.btn-danger
+  background: #FFFFFF
+  border-radius: 8px
+  border: 1px solid #FF4848
+  color: #FF4848
+
+.btn-danger:hover
+  color: #FF4848
+  background: #FFFFFF
 
 .badge
   box-shadow: 0px 1px 3px rgba(26, 26, 26, 0.1)
@@ -128,6 +149,23 @@ table td
   padding: 2%
   margin: 1%
 
+.search-content 
+  background: #FFFFFF
+  border: 1px solid rgba(26, 26, 26, 0.1)
+  box-sizing: border-box
+  border-radius: 6px
+
+
+.search-content input
+  border: none
+  width: 100%
+  padding: 2%
+
+
+.search-content .glass
+  margin-top: 1.5%
+
+
 .notifaction_group
   float: right
   margin: 2% 0
@@ -141,11 +179,12 @@ table td
 .dropdown-item
   padding: 2% 5%
 
-.active, .nav-link:hover  
-  border-bottom: 3px solid #C1D837
+.navbar-nav
+  .active, .nav-link:hover  
+    border-bottom: 3px solid #C1D837
 
-.active:hover
-  border-bottom: none
+  .active:hover
+    border-bottom: none
 
 .rotate
   transform: rotate(90deg)
@@ -162,6 +201,9 @@ table td
   background: #FFFFFF
   box-shadow: 0px 4px 16px rgba(26, 26, 26, 0.24)
   border-radius: 16px
+
+.container
+  cursor: pointer
 
 .container input
   position: absolute
@@ -214,7 +256,14 @@ label.container
 .datepicker-dropdown.datepicker-orient-bottom:before, .datepicker-dropdown.datepicker-orient-bottom:after
   top: 0
 
-
+.upload-content
+  border: 1px dashed rgba(26, 26, 26, 0.32)
+  border-radius: 4px
+  font-family: Raleway-semiBold
+  .import-process
+    background: rgba(26, 26, 26, 0.04)
+  .import-success
+    background: #EEF8B8  
 
 .notice
   padding-top: 10px
@@ -259,8 +308,53 @@ label.container
   box-shadow: 0px 2px 2px rgba(26, 26, 26, 0.24)
   border-radius: 50%
 
+.label_idocus
+  color: #C1D837
 
+.form-check-input:checked
+  background-color: #C1D837
+  border-color: #C1D837
 
+.login
+  width: 40%
+  padding: 5% 0
+  max-width: 450px
+
+  a
+    font-size: 0.8rem
+    opacity: 0.8
+
+  p
+    font-size: 0.8rem
+
+  .glyph-login
+    position: absolute
+    padding: 0.5%
+    right: 35%
+
+  .checkmark
+    left: 0 !important
+    right: 0 !important    
+
+  .stay-connect
+    font-size: 0.9rem
+    opacity: 0.8
+
+  .box
+    padding: 2% 7%
+
+  .container
+    font-size: 0.9rem
+    .checkmark
+      height: 18px
+      width: 18px
+      .oi-icon.colored
+        left: 16%
+        top: 3px
+
+  .form-group
+    margin-bottom: 40px
+    outline: 0px
 
 .notice-flash-message
   position: fixed

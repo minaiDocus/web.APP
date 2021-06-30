@@ -5,11 +5,11 @@
     .col-md-10
       %h3.bold
         = t('invoices.auto_invoice_integration')
-        %span.badge.badge-secondary.badge-sm 1
+        %span.badge.badge-secondary.badge-sm.total-invoices-setting= @invoice_settings.size
     .col-md-2.text-center
       %button.btn.btn-primary.parameter
         %span
-          = glyphicon('cog', { color: "#FFF", size: '16'})
+          = glyphicon('cog', { color: "#FFF", size: '16'})       
         &nbsp;
         = t('views.standards.setting').capitalize.pluralize
 
@@ -18,41 +18,38 @@
       %thead
         %th= t('invoices.users_code')
         %th= t('views.standards.journal').capitalize
-        %th.text-right= t('actions.name')
+        %th.text-end= t('actions.name')
       %tbody
-        %tr
-          %td IDOC%002
-          %td AC
-          %td.text-right.pointer
-            .action.sub_integration
-              %span.glyph= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
-        %tr
-          %td IDOC%003
-          %td VT
-          %td.text-right.pointer
-            .action.sub_integration
-              %span.glyph= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
+        - @invoice_settings.each do |invoice_setting|
+          %tr
+            %td{id:'edit-user-code'}= User.find_by_code(invoice_setting.user_code).info
+            %td{id:'edit-journal-code'}= invoice_setting.journal_code
+            %td.text-end.pointer
+              .action.sub_integration.invoice-toggle-menu
+                %input#invoice_setting{type: :hidden, value: invoice_setting.id, name: 'invoice_setting', data: {code: invoice_setting.user_code, journal: invoice_setting.journal_code, info: User.find_by_code(invoice_setting.user_code).info}}
+                %span.glyph= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
 
-    .row.form-group
-      .col-md-4
-        %label= t('views.standards.displayed_by').capitalize
-      .col-md-4
-        %select.form-control
-          %option 20
-          %option 50
-          %option 100
+    .row
+      .col-md-3
+        .row.mb-3
+          %label.col-md-6.form-label= t('views.standards.displayed_by').capitalize
+          .col-md-6
+            %select.form-select.d-invoice-setting#display_invoice_setting_per
+              %option{id: 'option_by_20', value: 20, selected: 'selected', class: 'option_by_20 displayed_per', data: {href: "/organizations/#{@organization.id}/invoices?per_page=20"}} 20
+              %option{id: 'option_by_50', value: 50, class: 'option_by_50 displayed_per', data: {href: "/organizations/#{@organization.id}/invoices?per_page=50"}} 50
+              %option{id: 'option_by_100', value: 100, class: 'option_by_100 displayed_per', data: {href: "/organizations/#{@organization.id}/invoices?per_page=100"}} 100
   .row
     .col-md-8
-      %h3.bold
+      %h3.bold 
         = t('views.standards.invoice').capitalize.pluralize
-        %span.badge.badge-secondary.badge-sm= @invoices.size
+        %span.badge.badge-secondary.badge-sm.total-invoices= @invoices.size
 
   .box.mt-4
     %table.table.table-striped.table_facture
       %thead
         %th= t('invoices.invoice_number')
         %th= t('views.standards.amount').capitalize
-        %th.text-right= t('actions.name')
+        %th.text-end= t('actions.name')
       %tbody
         - if !@user.leader?
           %tr
@@ -70,57 +67,83 @@
                 - if invoice.amount_in_cents_w_vat
                   = "#{format_price_00(invoice.amount_in_cents_w_vat)} €"
               %td.text-right.pointer
-                .action.sub_facture
+                .action.sub_facture.invoice-toggle-menu
+                  %input#invoiceviewing-action{type: :hidden, name: 'invoice-viewing-action', link: organization_invoice_path(invoice.id), title: "#{invoice.number}.pdf"}
                   %span.glyph= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
 
-    .row.form-group
-      .col-md-4
-        %label= t('views.standards.displayed_by').capitalize
-      .col-md-4
-        %select.form-control
-          %option 20
-          %option 50
-          %option 100
+    .row
+      .col-md-3
+        .row.mb-3
+          %label.col-md-6.form-label= t('views.standards.displayed_by').capitalize
+          .col-md-6
+            %select.form-select.d-invoice#display_invoice_per
+              %option{id: 'option_by_20', value: 20, selected: 'selected', class: 'option_by_20 displayed_per', data: {href: "/organizations/#{@organization.id}/invoices?per_page=20"}} 20
+              %option{id: 'option_by_50', value: 50, class: 'option_by_50 displayed_per', data: {href: "/organizations/#{@organization.id}/invoices?per_page=50"}} 50
+              %option{id: 'option_by_100', value: 100, class: 'option_by_100 displayed_per', data: {href: "/organizations/#{@organization.id}/invoices?per_page=100"}} 100
+
+  .modal#showInvoice
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %h3
+          %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+        .modal-body
+          %iframe{ src: '' }
 
   .modal#integration
     .modal-dialog
       .modal-content
         .modal-header
           %h5.modal-title.bold= t('invoices.auto_invoice_integration')
-          %button.close{ type: :button, "aria-label" => "Close", data: { dismiss: "modal"} }
-            %span{ "aria-hidden" => "true" }
-              = glyphicon('x', { size: '15', color: 'rgba(26, 26, 26, 0.32)'})
+          %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
         .modal-body
-          .form-group
-            %label= t('invoices.client_code')
-            %select.form-control#select-customer{ name: 'select-customer', multiple: true }
-              %option Dossier 1
-              %option Dossier 2
-              %option Dossier 3
-
-          .form-group
-            %label= t('invoices.number')
-            %select.form-control#select-document{ name: 'select-document', multiple: true }
-              %option Type 1
-              %option Type 2
-              %option Type 3
+          = simple_form_for @invoice_setting, :url => insert_organization_invoices_path(@organization), :controller => 'main_controller', :method => :post, html: { class: 'form', :id => 'data-invoice-upload', data: { params: file_upload_params.to_json } } do |f|
+            .form-group.clearfix
+              = f.input :id, as: :hidden, id: 'invoice-setting-id'
+            .form-group.clearfix
+              = f.input :user_code, label: t('invoices.client_code') + ' :', collection: file_upload_users_list.map{ |e| [e.short_info, e.code] }, include_blank: true, required: true, id: :user_code
+            .form-group.clearfix
+              = f.input :journal_code, label: t('invoices.document_type') + ' :', collection: [], id: :journal_code, required: true
         .modal-footer
-          %button.btn.btn-light.cancel{ type: :button }= t('actions.cancel')
-          %button.btn.btn-primary.add{ type: :button }= t('actions.add')
-          %button.btn.btn-primary.edit{ type: :button }= t('actions.edit')
+          %button.btn.btn-light.cancel{ type: :reset, id: 'reset-invoice-setting-form' }= t('actions.cancel')
+          %button.btn.btn-primary.add{ type: :submit, id: 'add-to-invoice-setting' }= t('actions.add')
+          %button.btn.btn-primary.edit{ type: :button, id: 'edit-to-invoice-setting' }= t('actions.edit')
+
+  .modal#synchronization
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %h6.text-center
+            %span#synchronize_user_info.modal-title.bold
+            %br
+            %hr
+            %span Synchroniser les factures dépuis la période sélectionnée
+          %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+        .modal-body
+          = form_tag synchronize_organization_invoices_path(@organization), :method => :get, class: 'synchronization-invoice-form', :id => 'synchronization-invoice-form' do
+            .form-group.clearfix
+              = hidden_field_tag 'invoice_setting_id'
+            .form-group.clearfix
+              .label-section
+                = label_tag 'invoice_setting_synchronize_contains[period]', 'Sélectionner la période:', class: 'control-label'
+              .control-section
+                = select_tag 'invoice_setting_synchronize_contains[period]', options_for_select( @synchronize_months, (params[:invoice_setting_synchronize_contains][:period] rescue '') ), class: 'form-control select'
+        .modal-footer
+          = submit_tag 'Synchroniser', class: 'btn btn-primary mb-2', id: 'synchronize-invoice-setting'
 
   .sub_integration_append.hide
     .sub_menu.text-left
       %ul.no-margin.no-padding.regular
-        %li
+        %input#invoice-setting-data{type: :hidden, name: 'invoice-setting-data', data: {id: 'invoice_setting_id', code: 'user_code', journal: 'journal_code', info: 'user_info', organization_id: @organization.id}}
+        %li#invoice-setting-synchronize{class: 'invoice-setting-action invoice-setting-synchronize'}
           %span.synchronize= glyphicon('loop', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
           &nbsp;
           = t('invoices.invoice_synchonize')
-        %li
+        %li#invoice-setting-edit{class: 'invoice-setting-action invoice-setting-edit'}
           %span.edit= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
           &nbsp;
           = t('actions.edit')
-        %li.red-label
+        %li.red-label#invoice-setting-delete{class: 'invoice-setting-action invoice-setting-delete'}
           %span= glyphicon('trash', { size: '15', color: "#FF4848" })
           &nbsp;
           = t('actions.destroy')
@@ -128,11 +151,12 @@
   .sub_facture_append.hide
     .sub_menu.text-left
       %ul.no-margin.no-padding.regular
-        %li
+        %input#invoice-data{type: :hidden, name: 'invoice-data', data: {title: 'invoice.number.pdf', link: 'organization_invoice_path(invoice.id)'}}
+        %li#invoice-viewing-pdf{class: 'invoice-action do-showInvoice'}
           %span.see= glyphicon('eye', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
           &nbsp;
           = t('actions.show')
-        %li
+        %li#invoice-download-pdf{class: 'invoice-action do-downloadInvoice'}
           %span.download= glyphicon('cloud-download', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
           &nbsp;
           = t('actions.download')

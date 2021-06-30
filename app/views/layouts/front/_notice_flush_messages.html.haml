@@ -3,16 +3,23 @@
     .icon-alert
       = glyphicon('warning', {size: '16', color: '#FF4848'})
       %span.bold
-        iDocus rencontre actuellement un bug
-      %span.float-right.pointer
+        = t('flush_notifications.bug_error')
+      %span.float-end.pointer
         = glyphicon('x', {size: '16', color: '#8e8e8e'})
     .message-alert
       Nous faisons tout notre possible pour régler le problème au plus vite. Merci de votre patience
   .notice.notice-internal-success.text-center.text-white.hide
     .message-alert.bold
-      Les dossiers ont été bien ajoutés
+      - flash.each do |name, msg|
+        - if msg.present?
+          .row-fluid.derivationLeft
+            .col-sm-12{ class: "alert #{twitterized_type(name)}" }
+              %a.close{ "data-bs-dismiss" => "alert" } &#215;
+              - if msg.is_a?(String)
+                %div{ id: "flash_#{twitterized_type(name)}" }
+                  != msg
     .cancel-action
       Vous pouvez annuler votre action
-      %span.cancel-action-confirmed 
+      %span.cancel-action-confirmed
         %u.pointer en cliquant ici
   .notice-flash-message.hide

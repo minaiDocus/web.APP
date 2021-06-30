@@ -17,10 +17,16 @@
       %h3.favorite_label
         = t('dashboard.my_favorite_folders')
         %span.badge.badge-secondary.regular#my-favorite-customers-count 12
-    .col-md-6
-      %button.btn.btn-default.add-to-favorite.float-right{'data-target' => '#add-to-favorite', 'data-toggle' => 'modal', 'data-original-value' => '455', :type => 'button'}
+    .col-md-6.text-end
+      %button.btn.btn-default.add-to-favorite.float-end{'data-bs-target' => '#add-to-favorite', 'data-bs-toggle' => 'modal', 'data-bs-original-value' => '455', :type => 'button'}
         = glyphicon('plus', {size: '12', color: '#72AA42'})
         = t('dashboard.add_folder_to_favorite')
+
+  .row
+    .form-check.form-switch
+      %input.form-check-input#flexSwitchCheckDefault{ type: :checkbox }
+      %label.form-check-label test
+
   .row.my-favorite-customers
     - if @favorites.size > 0
       = render partial: 'favorite_customers', locals: { collection: @favorites }
@@ -33,8 +39,7 @@
     .modal-content
       .modal-header
         %h5.modal-title.bold= t('dashboard.add_folder_to_favorite')
-        %button.close{'aria-label' => 'Close', 'data-dismiss' => 'modal', :type => 'button'}
-          %span{'aria-hidden' => 'true'} ×
+        %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
       .modal-body
         = form_tag('dashboard/add_customer_to_favorite/', method: :post, id: 'send_customer_to_favorite', multipart: true) do |f|
           .form-group

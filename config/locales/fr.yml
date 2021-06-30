@@ -304,6 +304,7 @@ fr:
     users_code: Code de dossiers
     document_type: Type de document
     client_code: Code client
+    invoice_synchonize: Synchroniser factures
 
   footer:
     copyright_text: Tous droits réservés iDocus
@@ -339,6 +340,12 @@ fr:
       configure: configurer
       amount: montant
       invoice: facture
+    flush_notifications:
+      bug_error: iDocus rencontre actuellement un bug
+      alert_message: Nous faisons tout notre possible pour régler le problème au plus vite. Merci de votre patience
+      notice_success: Les dossiers ont été bien ajoutés
+      cance_action: Vous pouvez annuler votre action
+      confirmed_cancel_action: en cliquant ici
 
   actions:
     name: Actions

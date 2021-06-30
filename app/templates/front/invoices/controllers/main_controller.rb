@@ -3,15 +3,7 @@ class Invoices::MainController < OrganizationController
   append_view_path('app/templates/front/invoices/views')
 
   def show
-    @invoices = @organization.invoices.order(created_at: :desc).page(params[:page])
-    @invoice_settings = @organization.invoice_settings.order(created_at: :desc)
-    @invoice_setting = InvoiceSetting.new
-
-    @synchronize_date = Date.today
-    @synchronize_months = []
-    (0..24).each do |month|
-      @synchronize_months << [@synchronize_date.prev_month(month).strftime("%b %Y"), @synchronize_date.prev_month(month)]
-    end
+    base_content
   end
 
   def download
@@ -41,7 +33,9 @@ class Invoices::MainController < OrganizationController
       flash[:error] = 'Enregistrement non valide, veuillez verifier les informations.'
     end
 
-    redirect_to organization_invoices_path(@organization)
+    base_content
+
+    render :show
   end
 
   def synchronize
@@ -59,7 +53,9 @@ class Invoices::MainController < OrganizationController
       flash[:error] = 'Synchronisation échouée, veuillez verifier les informations.'
     end
 
-    redirect_to organization_invoices_path(@organization)
+    base_content
+
+    render :show
   end
 
 
@@ -68,10 +64,24 @@ class Invoices::MainController < OrganizationController
 
     flash[:success] = 'Suppression avec succès.'
 
-    redirect_to organization_invoices_path(@organization)
+    base_content
+
+    render :show
   end
 
   private
+
+  def base_content
+    @invoices = @organization.invoices.order(created_at: :desc).page(params[:page]).per(params[:per_page])
+    @invoice_settings = @organization.invoice_settings.order(created_at: :desc).page(params[:page]).per(params[:per_page])
+    @invoice_setting = InvoiceSetting.new
+
+    @synchronize_date = Date.today
+    @synchronize_months = []
+    (0..24).each do |month|
+      @synchronize_months << [@synchronize_date.prev_month(month).strftime("%b %Y"), @synchronize_date.prev_month(month)]
+    end
+  end
 
   def invoice_setting_params
     params.require(:invoice_setting).permit(:user_code, :journal_code)

@@ -85,6 +85,42 @@ class ApplicationJS {
     $('#idocus_notifications_messages .notice-internal-error').html(raw_element);
   }
 
+  parseAjaxResponse(beforeUpdateContent=function(e){}, afterUpdateContent=function(e){}){
+    var updateContent = (result, totalSelector, tableSelector) => {
+      $(totalSelector).text($(result).find(totalSelector).text());
+      $(tableSelector).html('');
+      $.each($(result).find(tableSelector.concat(' tr')), function(i, item) {
+        $(tableSelector).append(item);
+      });
+    }
+
+    $.ajax({
+      url: VARIABLES.get('url'),
+      type: VARIABLES.get('type'),
+      data: VARIABLES.get('data'),
+      contentType: VARIABLES.get('contentType'),
+      dataType: VARIABLES.get('dataType'),
+      success: function(result) {
+        if (beforeUpdateContent !== null) { beforeUpdateContent(); }
+        updateContent(result, VARIABLES.get('totalSelector'), VARIABLES.get('tableSelector'));
+        if (afterUpdateContent !== null) { afterUpdateContent(); }
+
+        $('.notice-internal-success').show('');
+        setTimeout(function(){$('.notice-internal-success').fadeOut('');}, 5000);
+      },
+      error: function(result){
+        // TODO ... personalize message content
+        $('.notice-internal-error').show('');
+        $('#add-to-favorite').modal('hide');
+      }
+    });
+  }
+
+
+  displayListPer(afterUpdateContent=function(e){}){
+    if (afterUpdateContent !== null) { this.parseAjaxResponse(null, afterUpdateContent); }
+  }
+
   getFrom(url, success, error){
     return new Promise((success, error) => {
       let self = this

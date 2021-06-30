@@ -19,7 +19,7 @@
         %li.nav-item.dropdown
           =link_to t('layouts.my_company'), '/organizations', class: 'nav-link dropdown-toggle bold', id: 'navbardropdownmenucompany', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-toggle' => 'dropdown'
           .dropdown-menu{"aria-labelledby" => "navbardropdownmenucompany"}
-            =link_to 'iDocus', '/organizations#', class: 'dropdown-item goto_button', data:{ href: '/organizations/' }
+            =link_to 'iDocus', '/organizations', class: 'dropdown-item goto_button', data:{ href: '/organizations/' }
             =link_to 'Volentis', '/organizations#volentis-link', class: 'dropdown-item'
             =link_to 'Extentis', '/organizations#extentis-link', class: 'dropdown-item'
         %li.nav-item
@@ -37,7 +37,7 @@
             = link_to glyphicon('comment-square', {size: '17', color: '#1A1A1A', style: 'margin-top: -2%'}) + ' Nous contacter', '#contact', class: 'dropdown-item', target: '_blank'
             = link_to glyphicon('account-logout', {size: '17', color: '#FF4848', style: 'margin-top: -2%'}) + ' Se déconnecter', '#log-out', class: 'dropdown-item account-log-out', target: '_blank'
         %li.nav-item.dropdown
-          %span.badge.badge-alert.fs-origin.float-right.notif-badge
+          %span.badge.badge-alert.fs-origin.float-end.notif-badge
           = link_to glyphicon('bell', style: 'width: 21.48px; height: 22px;'), '#notification', class: 'nav-link dropdown-toggle', id: 'notification-content', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-toggle' => 'dropdown'
           .dropdown-menu.dropdown-notifications{"aria-labelledby" => "notification-content"}
             .notification-content-list

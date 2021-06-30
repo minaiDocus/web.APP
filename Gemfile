@@ -80,7 +80,7 @@ gem 'sprockets-rails'
 gem 'uglifier'
 
 # CSS Libraries and CSS Processors
-gem 'bootstrap'
+gem 'bootstrap', '~> 5.0.1'
 gem 'compass-rails'
 gem 'sass-rails'
 

@@ -31,7 +31,7 @@
     .col-md-6
       .favorite-list
         .row
-          .col-md-10.float-left
+          .col-md-10.float-start
             %span TEST
             %br
             %i.text-muted
@@ -99,18 +99,18 @@
                 .col-md-2
                   %span.badge.badge-success.status-critical Critiqué
 
-          .col-md-2.float-right.text-right
+          .col-md-2.float-end.text-right
             %span.badge.badge-success.status-sucess.favorite-status bon
             = link_to glyphicon('chevron-right', {size: '17', color: '#b5a6a6'}), '#', class: 'favorite-customer-details-link', id: 'f-customer-details-id-1'
     .col-md-6
       .favorite-list
         .row
-          .col-md-10.float-left
+          .col-md-10.float-start
             %span iDocus
             %br
             %i.text-muted
               iDocus
               %span.text-muted-light iDocus test
-          .col-md-2.float-right.text-right
+          .col-md-2.float-end.text-right
             %span.badge.badge-success.status-critical.favorite-status critiqué           
             = link_to glyphicon('chevron-right', {size: '17', color: '#b5a6a6'}), '#todo', class: 'favorite-customer-details-link', id: 'f-customer-details-id-2'
