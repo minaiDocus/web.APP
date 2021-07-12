@@ -3,7 +3,7 @@
 .organizations
   .lefter
     %ul.principal
-      %li{ data: { href: "accueil" } }
+      %li{ data: { href: @organization.id } }
         %span.link_principal.active= t('organizations.home')
       %li{ data: { href: "parametres" } }
         %span.chevron= glyphicon('chevron-right', { color: "#1A1A1A"})

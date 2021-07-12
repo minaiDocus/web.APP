@@ -1,0 +1,44 @@
+!!!
+%html
+  %head
+    %title
+      Idocus | Connexion
+    %meta{ :content => "text/html; charset=UTF-8", "http-equiv" => "Content-type" }
+    %meta{ name: "viewport", content: "width=device-width, initial-scale=1" }
+
+    %link{ :rel => 'shortcut icon', :type => "image/ico", :href => image_path('favicon.ico') }
+    = stylesheet_link_tag 'front/main'
+
+  .body_content
+    .container-fluid.text-center.login
+      .box.text-center
+        %h4.regular.m-3.p-4.semibold
+          Bienvenue sur
+          %span.semibold.label_idocus iDocus
+
+        %form.text-start.w-100.m-1
+          .row.text-center
+            .col-md-12
+              .input-group.mb-3
+                %span.input-group-text#basic-addon1= glyphicon('person', { size: '14', color: 'background: rgba(26, 26, 26, 0.7)' })          
+                %input.form-control{ type: :text, placeholder: 'identifiant (email)', "aria-label" => "identifiant (email)", "aria-describedby" => "basic-addon1"  }
+              .input-group.mb-3
+                %span.input-group-text#basic-addon1= glyphicon('key', { size: '14', color: 'background: rgba(26, 26, 26, 0.7)', style: 'transform: rotate(45deg)'})          
+                %input.form-control{ type: :password, placeholder: 'mot de passe', "aria-label" => "identifiant (email)", "aria-describedby" => "basic-addon1"  }             
+                       
+          .row.text-center.p-2.semibold.hide.alert-identification
+            .col-md-12.red-label identifiant ou mot de passe incorrect
+
+          
+          .form-check
+            %input.form-check-input.pointer.float-none{ type: :checkbox, value: "" }
+            %label.form-check-label.stay-connect Rester connecté
+
+          .row.mt-3
+            .col-md-12.text-center
+              .btn.btn-primary.bold.w-100.connexion{ type: :submit } Connexion
+          .row.mt-3
+            .col-md-12.text-start
+              %a.red-label{ href: '/sign_in/re_init_password' } Mot de passe oublié ?
+
+  = javascript_include_tag 'front/main'

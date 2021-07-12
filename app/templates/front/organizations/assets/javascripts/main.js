@@ -16,6 +16,7 @@ jQuery(function () {
       $(this).parent().find('.chevron').toggle()
       $(this).parent().find('ul').slideToggle()
     }
+    else if ($(this).parent().data('href') == "organization_home") {location.reload();}
     else{
       $(".organizations .content").html('');
       let url = '/organizations/'+$(this).parent().data('href')
