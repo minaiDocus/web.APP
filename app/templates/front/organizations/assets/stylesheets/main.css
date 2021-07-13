@@ -96,11 +96,12 @@ body {
   box-shadow: 0px 4px 16px rgba(26, 26, 26, 0.24);
   border-radius: 8px;
   z-index: 5;
+  font-size: 0.8rem;
 }
 
 .sub_menu li{
   display: block !important;
-  padding: 3% 6%;
+  padding: 4% 6%;
   cursor: pointer;
 }
 
@@ -126,4 +127,18 @@ body {
 
 table .badge{
   padding: 10%
+}
+
+table{
+  font-size: 0.9rem;
+}
+
+.padding-group-collaborator{
+  padding: 1%;
+  width: 31%;
+  margin: 1% !important;
+}
+
+.modal#edit-collaborator i{
+  font-size: 0.7rem;
 }

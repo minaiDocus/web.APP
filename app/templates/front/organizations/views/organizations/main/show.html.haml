@@ -8,9 +8,9 @@
       %li{ data: { href: "parametres" } }
         %span.chevron= glyphicon('chevron-right', { color: "#1A1A1A"})
         %span.chevron{ style: "display: none;" }= glyphicon('chevron-bottom', { color: "#1A1A1A"})
-        %span.link_principal= t('views.standards.setting').capitalize.pluralize
+        %span.link_principal.parameters= t('views.standards.setting').capitalize.pluralize
         %ul.slave.hide
-          %li
+          %li{ data: { href: "#{@organization.id}/edit" } }
             %span.link_slave.active= t('organizations.general')
           %li 
             %span.link_slave= t('organizations.pdf_naming')
