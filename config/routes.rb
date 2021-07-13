@@ -87,6 +87,7 @@ Rails.application.routes.draw do
   get 'admin/', to: redirect('/admin/dashboard')
   back_draw('dashboard')
   back_draw('reporting')
+  back_draw('organizations')
   back_draw('process_reporting')
   back_draw('invoices')
   back_draw('users')
@@ -110,25 +111,7 @@ Rails.application.routes.draw do
   back_draw('counter_error_script_mailer')
   back_draw('budgea_retriever')
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  # ===================================== TO DELETE =============================================== 
-  # ===============================================================================================
-
+  #### --------------- native resources -----------------------------###
 
   resources :compta
 
@@ -330,9 +313,6 @@ Rails.application.routes.draw do
       end
     end
   end
-
-  # =====================================================================================================
-  # ========================= TO DELETE =================================================================
 
   match '*a', to: 'errors#routing', via: :all
 end

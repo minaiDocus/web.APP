@@ -44,7 +44,7 @@ Rails.application.config.assets.precompile += %w( paper_process.css account/repo
                                                   account/csv_descriptors.css account/orders.css account/bank_accounts.css account/rights.css account/retrievers.css account/pre_assignment_ignored.css
                                                   account/pre_assignment_blocked_duplicates.css account/pre_assignment_delivery_errors.css account/suspended.css )
 
-Rails.application.config.assets.precompile += %w( admin.js admin/admin.js admin/events.js admin/invoices.js admin/mobile_reporting.js admin/news.js admin/pre_assignment_blocked_duplicates.js
+Rails.application.config.assets.precompile += %w( admin.js admin/admin.js admin/events.js admin/group_organizations.js admin/invoices.js admin/mobile_reporting.js admin/news.js admin/pre_assignment_blocked_duplicates.js
                                                   admin/reporting.js admin/scanning_providers.js admin/subscriptions.js admin/user.js admin/retriever_services.js admin/job_processing.js admin/budgea_retriever.js admin/counter_error_script_mailer.js admin/process_reporting.js admin/archives.js )
 
 

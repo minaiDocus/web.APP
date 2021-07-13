@@ -1,0 +1,11 @@
+= simple_form_for @organization_group, url: (@organization_group.persisted? ? admin_organizations_group_path : admin_organizations_groups_path), html: { class: 'form-horizontal label-medium' } do |f|
+  .card-body
+    = f.input :name
+    = f.association :organizations, collection: Organization.all.order(:name), input_html: { class: 'searchable-option-list' }, required: true
+    = f.input :is_auto_membership_activated
+  .card-footer
+    .form-actions.margin0bottom
+      = f.submit t('actions.submit'), class: 'btn btn-primary'
+      = link_to t('actions.cancel'), admin_organizations_groups_path, class: 'btn btn-light'
+
+= javascript_include_tag 'admin/group_organizations'

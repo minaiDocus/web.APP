@@ -248,7 +248,7 @@ jQuery(function () {
       $(e.currentTarget).addClass('active');
   });
 
-  $("a[rel=popover]").popover();
+  // $("a[rel=popover]").popover(); #TODO : debug this
   $(".tooltip").tooltip();
   $("a[rel=tooltip]").tooltip();
 
