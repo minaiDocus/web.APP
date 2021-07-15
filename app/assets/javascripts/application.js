@@ -60,58 +60,44 @@ class ApplicationJS {
     });
   }
 
-  noticeFlashMessage(type, message){
-    let raw_element = '<div class="alert alert-' + type + ' alert-dismissible fade show" role="alert">';
-    raw_element += message;
-    raw_element += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
-    raw_element += '<span aria-hidden="true">&times;</span>';
-    raw_element += '</button>';
-    raw_element += '</div>';
+  noticeFlashMessageFrom(page){
+    var html = $(page).find('.notice-internal-success').html();
 
-    $('#idocus_notifications_messages .notice-flash-message').html(raw_element);
+    $('#idocus_notifications_messages .notice-internal-success').html(html);
+
+    $('#idocus_notifications_messages .notice-internal-success').show('');
+    setTimeout(function(){$('.notice-internal-success').fadeOut('');}, 5000);
   }
 
-  noticeInternalError(message){
-    let raw_element = '<i class="bi bi-exclamation-triangle"></i>';
-    raw_element += '<div class="alert alert-danger alert-dismissible fade show" role="alert">';
-    raw_element += '<h4 class="alert-heading">iDocus rencontre de bug!</h4>';
-    raw_element += '<hr>';
-    raw_element += '<p class="mb-0">'+ message +'.</p>';
-    raw_element += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
-    raw_element += '<span aria-hidden="true">&times;</span>';
-    raw_element += '</button>';
-    raw_element += '</div>';
+  noticeInternalErrorFrom(page){
+    var html = $(page).find('.notice-internal-error').html();
 
-    $('#idocus_notifications_messages .notice-internal-error').html(raw_element);
+    $('#idocus_notifications_messages .notice-internal-error').html(html);
+
+    $('#idocus_notifications_messages .notice-internal-error').show('');
   }
 
-  parseAjaxResponse(beforeUpdateContent=function(e){}, afterUpdateContent=function(e){}){
-    var updateContent = (result, totalSelector, tableSelector) => {
-      $(totalSelector).text($(result).find(totalSelector).text());
-      $(tableSelector).html('');
-      $.each($(result).find(tableSelector.concat(' tr')), function(i, item) {
-        $(tableSelector).append(item);
-      });
-    }
+  parseAjaxResponse(params={}, beforeUpdateContent=function(e){}, afterUpdateContent=function(e){}){
+    var self = this
+    var target = params.target;
 
     $.ajax({
-      url: VARIABLES.get('url'),
-      type: VARIABLES.get('type'),
-      data: VARIABLES.get('data'),
-      contentType: VARIABLES.get('contentType'),
-      dataType: VARIABLES.get('dataType'),
+      url: params.url,
+      type: params.type || 'GET',
+      data: params.data,
+      contentType: params.contentType || 'application/x-www-form-urlencoded; charset=UTF-8',
+      dataType: params.dataType || 'html',
       success: function(result) {
-        if (beforeUpdateContent !== null) { beforeUpdateContent(); }
-        updateContent(result, VARIABLES.get('totalSelector'), VARIABLES.get('tableSelector'));
-        if (afterUpdateContent !== null) { afterUpdateContent(); }
+        if (beforeUpdateContent) { beforeUpdateContent(); }
 
-        $('.notice-internal-success').show('');
-        setTimeout(function(){$('.notice-internal-success').fadeOut('');}, 5000);
+        if(target){ $(target).html($(result).find(target).html()); }
+
+        if (afterUpdateContent) { afterUpdateContent(); }
+
+        self.noticeFlashMessageFrom(result);
       },
       error: function(result){
-        // TODO ... personalize message content
-        $('.notice-internal-error').show('');
-        $('#add-to-favorite').modal('hide');
+        self.noticeInternalErrorFrom(result);
       }
     });
   }

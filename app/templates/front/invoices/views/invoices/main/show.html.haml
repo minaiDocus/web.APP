@@ -1,85 +1,88 @@
 = stylesheet_link_tag 'front/invoices/assets/stylesheets/main'
 
 .facture
-  .row
-    .col-md-10
-      %h3.bold
-        = t('invoices.auto_invoice_integration')
-        %span.badge.badge-secondary.badge-sm.total-invoices-setting= @invoice_settings.size
-    .col-md-2.text-center
-      %button.btn.btn-primary.parameter
-        %span
-          = glyphicon('cog', { color: "#FFF", size: '16'})       
-        &nbsp;
-        = t('views.standards.setting').capitalize.pluralize
-
-  .box.mt-4
-    %table.table.table-striped.table_integration
-      %thead
-        %th= t('invoices.users_code')
-        %th= t('views.standards.journal').capitalize
-        %th.text-end= t('actions.name')
-      %tbody
-        - @invoice_settings.each do |invoice_setting|
-          %tr
-            %td{id:'edit-user-code'}= User.find_by_code(invoice_setting.user_code).info
-            %td{id:'edit-journal-code'}= invoice_setting.journal_code
-            %td.text-end.pointer
-              .action.sub_integration.invoice-toggle-menu
-                %input#invoice_setting{type: :hidden, value: invoice_setting.id, name: 'invoice_setting', data: {code: invoice_setting.user_code, journal: invoice_setting.journal_code, info: User.find_by_code(invoice_setting.user_code).info}}
-                %span.glyph= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
-
+  .auto_integration_box
     .row
-      .col-md-3
-        .row.mb-3
-          %label.col-md-6.form-label= t('views.standards.displayed_by').capitalize
-          .col-md-6
-            %select.form-select.d-invoice-setting#display_invoice_setting_per
-              %option{id: 'option_by_20', value: 20, selected: 'selected', class: 'option_by_20 displayed_per', data: {href: "/organizations/#{@organization.id}/invoices?per_page=20"}} 20
-              %option{id: 'option_by_50', value: 50, class: 'option_by_50 displayed_per', data: {href: "/organizations/#{@organization.id}/invoices?per_page=50"}} 50
-              %option{id: 'option_by_100', value: 100, class: 'option_by_100 displayed_per', data: {href: "/organizations/#{@organization.id}/invoices?per_page=100"}} 100
-  .row
-    .col-md-8
-      %h3.bold 
-        = t('views.standards.invoice').capitalize.pluralize
-        %span.badge.badge-secondary.badge-sm.total-invoices= @invoices.size
+      .col-md-10
+        %h3.bold
+          = t('invoices.auto_invoice_integration')
+          %span.badge.badge-secondary.badge-sm.total-invoices-setting= @invoice_settings.size
+      .col-md-2.text-center
+        %button.btn.btn-primary.parameter
+          %span
+            = glyphicon('cog', { color: "#FFF", size: '16'})       
+          &nbsp;
+          = t('views.standards.setting').capitalize.pluralize
 
-  .box.mt-4
-    %table.table.table-striped.table_facture
-      %thead
-        %th= t('invoices.invoice_number')
-        %th= t('views.standards.amount').capitalize
-        %th.text-end= t('actions.name')
-      %tbody
-        - if !@user.leader?
-          %tr
-            %td{ colspan: 3 }
-              .badge.badge-warning.fs-origin Vous n'avez pas le droit necessaire pour acceder à cette page
-        - elsif @organization.try(:is_suspended)
-          %tr
-            %td{ colspan:3 }
-              .badge.badge-warning.fs-origin Cette organization a été suspendue
-        - else
-          - @invoices.each do |invoice|
+    .box.mt-4
+      %table.table.table-striped.table_integration
+        %thead
+          %th= t('invoices.users_code')
+          %th= t('views.standards.journal').capitalize
+          %th.text-end= t('actions.name')
+        %tbody
+          - @invoice_settings.each do |invoice_setting|
             %tr
-              %td= invoice.number
-              %td.price
-                - if invoice.amount_in_cents_w_vat
-                  = "#{format_price_00(invoice.amount_in_cents_w_vat)} €"
-              %td.text-right.pointer
-                .action.sub_facture.invoice-toggle-menu
-                  %input#invoiceviewing-action{type: :hidden, name: 'invoice-viewing-action', link: organization_invoice_path(invoice.id), title: "#{invoice.number}.pdf"}
+              %td{id:'edit-user-code'}= User.find_by_code(invoice_setting.user_code).info
+              %td{id:'edit-journal-code'}= invoice_setting.journal_code
+              %td.text-end.pointer
+                .action.sub_integration.invoice-toggle-menu
+                  %input#invoice_setting{type: :hidden, value: invoice_setting.id, name: 'invoice_setting', data: {code: invoice_setting.user_code, journal: invoice_setting.journal_code, info: User.find_by_code(invoice_setting.user_code).info}}
                   %span.glyph= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
 
+      .row
+        .col-md-3
+          .row.mb-3
+            %label.col-md-6.form-label= t('views.standards.displayed_by').capitalize
+            .col-md-6
+              %select.form-select.d-invoice-setting#display_invoice_setting_per
+                %option{id: 'option_by_20', value: 20, selected: 'selected', class: 'option_by_20 displayed_per', data: {href: "/organizations/#{@organization.id}/invoices?per_page=20"}} 20
+                %option{id: 'option_by_50', value: 50, class: 'option_by_50 displayed_per', data: {href: "/organizations/#{@organization.id}/invoices?per_page=50"}} 50
+                %option{id: 'option_by_100', value: 100, class: 'option_by_100 displayed_per', data: {href: "/organizations/#{@organization.id}/invoices?per_page=100"}} 100
+  
+  .invoices_box
     .row
-      .col-md-3
-        .row.mb-3
-          %label.col-md-6.form-label= t('views.standards.displayed_by').capitalize
-          .col-md-6
-            %select.form-select.d-invoice#display_invoice_per
-              %option{id: 'option_by_20', value: 20, selected: 'selected', class: 'option_by_20 displayed_per', data: {href: "/organizations/#{@organization.id}/invoices?per_page=20"}} 20
-              %option{id: 'option_by_50', value: 50, class: 'option_by_50 displayed_per', data: {href: "/organizations/#{@organization.id}/invoices?per_page=50"}} 50
-              %option{id: 'option_by_100', value: 100, class: 'option_by_100 displayed_per', data: {href: "/organizations/#{@organization.id}/invoices?per_page=100"}} 100
+      .col-md-8
+        %h3.bold
+          = t('views.standards.invoice').capitalize.pluralize
+          %span.badge.badge-secondary.badge-sm.total-invoices= @invoices.size
+
+    .box.mt-4
+      %table.table.table-striped.table_facture
+        %thead
+          %th= t('invoices.invoice_number')
+          %th= t('views.standards.amount').capitalize
+          %th.text-end= t('actions.name')
+        %tbody
+          - if !@user.leader?
+            %tr
+              %td{ colspan: 3 }
+                .badge.badge-warning.fs-origin Vous n'avez pas le droit necessaire pour acceder à cette page
+          - elsif @organization.try(:is_suspended)
+            %tr
+              %td{ colspan:3 }
+                .badge.badge-warning.fs-origin Cette organization a été suspendue
+          - else
+            - @invoices.each do |invoice|
+              %tr
+                %td= invoice.number
+                %td.price
+                  - if invoice.amount_in_cents_w_vat
+                    = "#{format_price_00(invoice.amount_in_cents_w_vat)} €"
+                %td.text-right.pointer
+                  .action.sub_facture.invoice-toggle-menu
+                    %input#invoiceviewing-action{type: :hidden, name: 'invoice-viewing-action', link: organization_invoice_path(invoice.id), title: "#{invoice.number}.pdf"}
+                    %span.glyph= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
+
+      .row
+        .col-md-3
+          .row.mb-3
+            %label.col-md-6.form-label= t('views.standards.displayed_by').capitalize
+            .col-md-6
+              %select.form-select.d-invoice#display_invoice_per
+                %option{id: 'option_by_20', value: 20, selected: 'selected', class: 'option_by_20 displayed_per', data: {href: "/organizations/#{@organization.id}/invoices?per_page=20"}} 20
+                %option{id: 'option_by_50', value: 50, class: 'option_by_50 displayed_per', data: {href: "/organizations/#{@organization.id}/invoices?per_page=50"}} 50
+                %option{id: 'option_by_100', value: 100, class: 'option_by_100 displayed_per', data: {href: "/organizations/#{@organization.id}/invoices?per_page=100"}} 100
 
   .modal#showInvoice
     .modal-dialog

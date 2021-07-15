@@ -1,31 +1,36 @@
-- favorites.each do |favorite|
+- favorites.each do |user_id|
+  - infos = FavoriteCustomer.get_infos_of(user_id)
+
   .box
     .favorite-list
       .row
         .col-md-10.float-start
-          %span.bold= favorite.name
+          %span.bold= infos.try(:name)
           %br
           %i.text-muted
-            = favorite.name
-            %span.text-muted-light= favorite.info
+            = infos.try(:name)
+            %span.text-muted-light= infos.try(:message)
 
         .col-md-1.no-padding.text-end
-          %span.state{ class: "state-#{favorite.state}"}= favorite.note
+          %span.state{ class: "state-#{infos.try(:state)}"}= infos.try(:note)
         .col-md-1
-          = link_to glyphicon('chevron-right', {size: '17', color: '#b5a6a6'}), '#', class: 'favorite-link', id: favorite.id
+          = link_to glyphicon('chevron-right', {size: '17', color: '#b5a6a6'}), '#', class: 'favorite-link', id: infos.try(:id)
 
-    .favorite-customer-content.hide{id: "details_#{favorite.id}"}
+    .favorite-customer-content.hide{id: "details_#{infos.try(:id)}"}
       %hr.clearfix 
       .row
         .col-md-10
           %h6.bold= t('dashboard.configuration_state')
           .text-small-content
             %p
-              = t('dashboard.configuration_text')
+              - if infos.try(:active)
+                = t('dashboard.configuration_text')
+              - else
+                = 'Dossier cloturé'
               %span
                 = link_to glyphicon('cog', {size: '11', color: '#b5a6a6'}), '#todo', class: 'support-chat-link'
         .col-md-1.no-padding.text-end
-          %span.state.state-medium= t('dashboard.medium_state')
+          %span.state.state-good= t('dashboard.good_state')
       %hr.clearfix
       .row
         .col-md-10
@@ -36,7 +41,7 @@
                 %span= t('dashboard.last_pack_added') + ' :'
             .col-md-3.text-end
               %span
-                %span NDF 202011
+                %span= infos.try(:last_pack).try(:name).try(:gsub, 'all', '') || '-'
                 = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#todo', class: 'support-chat-link'
         .col-md-1.no-padding.text-end
           %span.state.state-good= t('dashboard.good_state')
@@ -49,10 +54,10 @@
                 %span= t('dashboard.last_activity') + ' :'
             .col-md-3.text-end
               %span
-                %span 06/11/20
+                %span= infos.try(:last_pack).try(:updated_at) || '-'
                 = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#todo', class: 'support-chat-link'
         .col-md-1.no-padding.text-end
-          %span.state.state-medium= t('dashboard.medium_state')
+          %span.state.state-good= t('dashboard.good_state')
       %hr.clearfix
       .row
         .col-md-10
@@ -61,19 +66,20 @@
             .col-md-4
               %span= t('dashboard.errors_found') + ' :'
             .col-md-3.text-end
-              %span 8
+              %span= infos.try(:temp_docs_error_size).to_i
               = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#todo', class: 'support-chat-link'
-          .row
-            .col-md-4
-              %span= t('dashboard.retrievers_failing') + ' :'
-            .col-md-3.text-end
-              %span 1
-              = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#todo', class: 'support-chat-link'
+          - if infos.try(:retriever_option_active)
+            .row
+              .col-md-4
+                %span= t('dashboard.retrievers_failing') + ' :'
+              .col-md-3.text-end
+                %span 1
+                = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#todo', class: 'support-chat-link'
           .row
             .col-md-4
               %span= t('dashboard.pre_assignement_duplicated') + ' :'
             .col-md-3.text-end
-              %span 0
+              %span= infos.try(:duplicated_preseizures_size).to_i
               = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#todo', class: 'support-chat-link'
         .col-md-1.no-padding.text-end
           %span.state.state-critical= t('dashboard.critical_state')

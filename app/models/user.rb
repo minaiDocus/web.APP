@@ -75,6 +75,7 @@ class User < ApplicationRecord
 
   has_one  :budgea_account,                                                                     dependent: :destroy
   has_one  :bridge_account,                                                                     dependent: :destroy
+  has_one  :favorite_customers, class_name: 'FavoriteCustomer',                                 dependent: :destroy
   has_many :retrievers,                                                                         dependent: :destroy
   has_many :retrievers_historics,                                                               dependent: :destroy
   has_many :retrieved_data,                                                                     dependent: :destroy

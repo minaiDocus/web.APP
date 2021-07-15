@@ -195,16 +195,16 @@ fr:
     configuration_text: Le dossier client est configuré de façon optimale
     good_state: Bonne
     medium_state: Moyen
-    critical_state: Critiqué
+    critical_state: Critique
     folder_activity: Activité du dossier
     last_pack_added: Dernier lot ajouté
     last_activity: Dernière activité
     add_documents: Ajout de documents
-    errors_found: Erreurs détectées
+    errors_found: Erreurs de téléversement
     retrievers_failing: Pannes d’automates
     pre_assignement_duplicated: Doublons en pré-affectation
     favorite_success_state: bon
-    favorite_critical_state: critiqué
+    favorite_critical_state: critique
 
   reporting:
     reporting_text: Reporting

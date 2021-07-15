@@ -1,14 +1,15 @@
 class InvoiceMain {
   constructor(){ }
 
-  setVariables(url, type, contentType, dataType, totalSelector, tableSelector, data = null) {
-    VARIABLES.set('url', url);
-    VARIABLES.set('type', type);
-    if (data != null || data !== undefined) { VARIABLES.set('data', data); }
-    VARIABLES.set('contentType', contentType);
-    VARIABLES.set('dataType', dataType);
-    VARIABLES.set('totalSelector', totalSelector);
-    VARIABLES.set('tableSelector', tableSelector);
+  setVariables(url, type, contentType, dataType, target='', data = null) {
+    return  {
+              'url': url,
+              'type': type,
+              'data': (data)? data : '',
+              'contentType': contentType,
+              'dataType': dataType,
+              'target': target,
+            }
   }
 
   resetForm(formId) {
@@ -23,7 +24,7 @@ class InvoiceMain {
     $(modalId).modal('show');
   }
 
-  unbindInvoiceAction(selector) {
+  reBindInvoiceAction(selector) {
     var self = this
     $(selector).unbind('click').bind('click', self.handleInvoice());
   }
@@ -81,32 +82,33 @@ class InvoiceMain {
           organization_id: organizationId
       };
 
-      self.setVariables(
-        '/organizations/' + organizationId + '/invoices/insert',
-        'POST',
-        'application/json; charset=utf-8',
-        'html',
-        '.total-invoices-setting',
-        'table.table_integration tbody',
-        JSON.stringify(dataParams)
-      );
-
       var applicationJS = new ApplicationJS();
 
       var beforeUpdateContent = function(){
         self.resetForm('form#data-invoice-upload');
         self.hideModal('#integration');
       };
-      var afterUpdateContent = function(){ self.unbindInvoiceAction('.action.sub_integration'); };
+      var afterUpdateContent = function(){ 
+        self.settingInvoice();
+        self.reBindInvoiceAction('.action.sub_integration'); 
+      };
 
-      applicationJS.parseAjaxResponse(beforeUpdateContent, afterUpdateContent);
+      var params = self.setVariables(
+        '/organizations/' + organizationId + '/invoices/insert',
+        'POST',
+        'application/json; charset=utf-8',
+        'html',
+        '.auto_integration_box',
+        JSON.stringify(dataParams)
+      );
+
+      applicationJS.parseAjaxResponse(params, beforeUpdateContent, afterUpdateContent);
     });
 
     $('#reset-invoice-setting-form').on('click', function() {
       $('form#data-invoice-upload').trigger("reset");
     });
   }
-
 
   integrateInvoiceSetting() {
     var self = this;
@@ -169,7 +171,7 @@ class InvoiceMain {
               self.hideModal('form#data-invoice-upload');
               self.hideModal('#integration');
             };
-            var afterUpdateContent = function(){ self.unbindInvoiceAction('.action.sub_integration'); };
+            var afterUpdateContent = function(){ self.reBindInvoiceAction('.action.sub_integration'); };
 
             applicationJS.parseAjaxResponse(beforeUpdateContent, afterUpdateContent);
           }
@@ -224,7 +226,7 @@ class InvoiceMain {
       );
 
       var applicationJS = new ApplicationJS();
-      var afterUpdateContent = function(){ self.unbindInvoiceAction(actionSelector); };
+      var afterUpdateContent = function(){ self.reBindInvoiceAction(actionSelector); };
 
       applicationJS.displayListPer(afterUpdateContent);
     });
@@ -276,7 +278,6 @@ class InvoiceMain {
     });
   }
 
-
   synchronizeInvoice() {
     var self = this;
     $('input#synchronize-invoice-setting').on('click', function(e) {
@@ -307,7 +308,7 @@ class InvoiceMain {
 
       var applicationJS = new ApplicationJS();
 
-      var afterUpdateContent = function(){ self.unbindInvoiceAction('.action.sub_facture'); $('#synchronization').modal('hide'); };
+      var afterUpdateContent = function(){ self.reBindInvoiceAction('.action.sub_facture'); $('#synchronization').modal('hide'); };
 
       applicationJS.parseAjaxResponse(null, afterUpdateContent);
     })

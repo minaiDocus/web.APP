@@ -8,7 +8,6 @@ Rails.application.routes.draw do
         get :last_uploads
         get :last_dematbox_scans
         get :last_retrieved
-        get :my_favorite_customers
         post :add_customer_to_favorite
       end
     end

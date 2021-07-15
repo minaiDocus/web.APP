@@ -4,7 +4,7 @@
 
 jQuery(function () {
 
-  var organization_options = JSON.parse($('#organization_options').val());
+  var organization_options = JSON.parse($('#organization_options').val() || '{}');
 
   var chart_abonnement = document.getElementById('chart_abonnement').getContext('2d')
 
