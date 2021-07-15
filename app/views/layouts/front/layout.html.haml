@@ -16,8 +16,11 @@
     = javascript_include_tag 'front/main'
 
   = render partial: 'layouts/front/header'
-  .body_content  
-    != content_for?(:content) ? yield(:content) : yield
+  .body_content
+    - if @is_organization_layout   
+      = render partial: 'layouts/front/organization_lefter'
+    - else
+      != content_for?(:content) ? yield(:content) : yield
   - render partial: 'layouts/front/support_chat'
   = render partial: 'layouts/front/notice_flush_messages'
   = render partial: 'layouts/front/footer'

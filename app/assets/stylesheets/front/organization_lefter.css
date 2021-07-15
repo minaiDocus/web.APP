@@ -22,37 +22,49 @@ body {
 }
 
 .lefter ul.principal{     
-    font-size: 13px;
-    width: 100%;
+  font-size: 13px;
+  width: 100%;
 }
+
 .lefter ul.principal li{
   list-style: none;
   width: 100%;
   cursor: pointer;
-}  
+}
+
+.lefter ul.principal li a{
+  text-decoration: none;
+  color: rgba(26, 26, 26, 0.7);
+}
+
 .lefter ul.principal li span{
   display: block;
   padding: 4%;
 }
+
 .lefter ul.principal li span.chevron{
   width: 12%;
   float: right;       
 }
+
 .lefter li span.link_principal.active{
   background: #C1D837;
   border-radius: 8px;
   border-bottom: none;
 }
+
 .lefter li span.link_principal:hover{
   background: rgba(10, 16, 26, 0.1);
   border-radius: 8px;
   padding-left: 6%;
 }
+
 .lefter ul.slave{
   font-size: 11px;
   width: 100%;
   margin-top: 2%;
 }
+
 .lefter li{ 
   list-style: none;
   width: 100%;
@@ -60,11 +72,13 @@ body {
 .lefter li span{
   padding: 2%;
 }
+
 .lefter li span.link_slave.active{
   background: rgba(26, 26, 26, 0.1);
   border-radius: 6px;
   border-bottom: none;
 }
+
 .lefter li span.link_slave:hover{
   background: rgba(10, 16, 10, 0.1);
   border-radius: 8px;
@@ -75,6 +89,7 @@ body {
   width: 73%;
   margin-left: 2%;
 }
+
 .header{
   font-family: Raleway-Regular;
   font-size: 15px;
@@ -82,6 +97,7 @@ body {
   background-color: #FFF;
   margin-bottom: 2%;
 } 
+
 .content .logo{
   background: url('/assets/application/logo_idocus.png') no-repeat;
   background-position: -715px -182px;
@@ -141,4 +157,129 @@ table{
 
 .modal#edit-collaborator i{
   font-size: 0.7rem;
+}
+
+/* CUSTOMER */
+.customers .sub_menu{
+  min-width: 9% !important;
+}
+
+.customers .sub_menu li{
+  padding: 6% 9%;
+}
+
+/* COLLABORATOR */
+.collaborators .collaborator-column{
+  width: 20%;
+}
+
+.collaborators .sub_menu{
+  min-width: 8% !important;
+}
+
+.collaborators .sub_menu li{
+  padding: 6% 8%;
+}
+
+/* BOOK */
+.book .sub_menu{  
+  min-width: 7% !important;
+}
+
+.book .sub_menu li{  
+  padding: 7% 9%;
+}
+
+.modal{
+  font-size: 0.9rem;
+}
+
+.modal i{
+  font-size: 0.7rem;
+  color: rgba(26, 26, 26, 0.7);
+}
+
+/* BANK AFFECTATION */
+.bank-affectation .sub_menu{  
+  min-width: 7% !important;
+}
+
+.bank-affectation .sub_menu li{  
+  padding: 6% 8%;
+}
+
+.bank-affectation table{
+  font-size: 0.9rem;
+}
+
+.bank-affectation table .checkmark{
+  left: 4% !important;
+  margin-top: 0.45%;
+}
+
+.bank-affectation .container input {
+  position: relative;
+}
+
+.bank-affectation h6{
+  color: rgba(26, 26, 26, 0.7);
+}
+
+.bank-affectation .sub_rule_menu {
+  position: absolute;
+  min-width: 10%;
+  background: #FFFFFF;
+  box-shadow: 0px 4px 16px rgba(26, 26, 26, 0.24);
+  border-radius: 8px;
+  z-index: 5;
+  font-size: 0.8rem;
+  margin: 0.5% 0%;
+}
+
+.bank-affectation .sub_rule_menu li{
+  display: block !important;
+  padding: 4% 6%;
+  cursor: pointer;
+  color: rgba(26, 26, 26, 0.7);
+}
+
+.bank-affectation .sub_rule_menu li:hover{
+  background-color: rgba(26, 26, 26, 0.04);
+}
+
+.bank-affectation #add-new-rule, #import-rule, #add-new-rule .btn, #import-rule .btn{
+  font-size: 0.9rem;
+}
+
+.bank-affectation #add-new-rule i{
+  font-size: 0.7rem;
+}
+
+/* ACCOUNT SHARING */
+.account-sharing .sub_menu{  
+  min-width: 8% !important;
+}
+
+.account-sharing .sub_menu li{  
+  padding: 6% 9%;
+}
+
+/* INVOICE */
+.invoice .sub_menu.integration{
+  margin: 0.15% 5%;
+  min-width: 11% !important;
+}
+
+.invoice .sub_menu.invoice{
+  margin: 0.15% 6%;
+  min-width: 8% !important;
+}
+
+/* KITS */
+.kits .sub_menu{
+  min-width: 7% !important;
+}
+
+.kits .sub_menu li{
+  padding: 6% 9%;
 }

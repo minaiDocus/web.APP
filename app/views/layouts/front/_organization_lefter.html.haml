@@ -1,0 +1,57 @@
+= stylesheet_link_tag 'front/organization_lefter'
+
+.organizations
+  .lefter
+    %ul.principal
+      %li{ data: { href: 'organization_home' } }
+        %a{href: organization_path(@organization) }
+          %span.link_principal.active= t('organizations.home')
+      %li{ data: { href: "parametres" } }
+        %span.chevron= glyphicon('chevron-right', { color: "#1A1A1A"})
+        %span.chevron{ style: "display: none;" }= glyphicon('chevron-bottom', { color: "#1A1A1A"})
+        %span.link_principal.parameters= t('views.standards.setting').capitalize.pluralize
+        %ul.slave.hide
+          %li{ data: { href: "#{@organization.id}/edit" } }
+            %a{href: edit_organization_file_naming_policy_path(@organization) }
+              %span.link_slave.active= t('organizations.general')
+          %li{ data: { href: "#{@organization.id}/file_naming_policy/edit" } }
+            %a{href: "#" }
+              %span.link_slave= t('organizations.pdf_naming')
+          %li{ data: { href: "#{@organization.id}/reminder_emails/new" } }
+            %a{href: "#" }
+              %span.link_slave= t('organizations.reminder_emails')
+          %li{ data: { href: "#{@organization.id}/addresses" } }
+            %a{href: "#" }
+              %span.link_slave= t('organizations.address_management')
+          %li{ data: { href: "#{@organization.id}/edit" } }
+            %a{href: "#" }
+              %span.link_slave= t('organizations.software')
+          %li{ data: { href: "#{@organization.id}/edit" } }
+            %a{href: "#" }
+              %span.link_slave= t('organizations.payment_method')
+      %li{ data: { href: "#{@organization.id}/collaborateurs" } }
+        %a{href: "#" }
+          %span.link_principal= t('organizations.collaborators')
+      %li{ data: { href: "#{@organization.id}/clients" } }
+        %a{href: "#" }
+          %span.link_principal= t('organizations.customers')
+      %li{ data: { href: "#{@organization.id}/journaux_comptables" } }
+        %a{href: "#" }
+          %span.link_principal= t('organizations.journals')
+      %li{ data: { href: "#{@organization.id}/bank_affectation" } }
+        %span.link_principal= t('organizations.bank_assignment')
+      %li{ data: { href: "#{@organization.id}/account_sharing" } }
+        %a{href: "#" }
+          %span.link_principal= t('folders.shared_folders')
+      %li{ data: { href: "#{@organization.id}/invoices" } }
+        %a{href: organization_invoices_path(@organization) }
+          %span.link_principal= t('organizations.invoices')
+      %li{ data: { href: "#{@organization.id}/kits" } }
+        %a{href: "#" }
+          %span.link_principal= t('organizations.idocus_box_and_order')
+
+  .content
+    != content_for?(:content) ? yield(:content) : yield
+
+= javascript_include_tag 'front/organization_lefter'
+= javascript_include_tag Ckeditor.cdn_url

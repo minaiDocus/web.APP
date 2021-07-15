@@ -1,111 +1,119 @@
-= stylesheet_link_tag 'front/organizations/assets/stylesheets/settings'
+= stylesheet_link_tag 'front/organizations/assets/stylesheets/edit'
 
-.general
+.general.derivationRight
   .row
     %h3.bold Paramètres : Général (Édition de l'organisation)
 
 
-  = simple_form_for [@organization], html: { class: 'form-horizontal label-medium' } do |f|
+  = simple_form_for [@organization], html: { id: 'edit-organization', class: 'form-horizontal label-medium' } do |f|
     .box.mt-4
       = hidden_field_tag :part, params[:part]
       - if params[:part] != 'other_software'
         = f.input :name, label_html: { class: 'semibold custom-label-field' }, input_html: { class: 'select-container no-padding w-100 book-code-software custom-input-field', placeholder: "iDocus" }
-      .form-group
-        %label.semibold Code
-        .select-container.no-padding.w-100
-          %input.book-code-software{ placeholder: "IDOC" }
+        - unless @organization.specific_mission
+          = f.input :jefacture_api_key, label_html: { class: 'semibold custom-label-field' }, input_html: { class: 'select-container no-padding w-100 book-code-software custom-input-field', placeholder: "ex : T4534638846" }
 
-      .form-group.row
-        .col-md-11
-          %label.semibold Divulguer le coût iDocus au client ?
-        .col-md-1.form-check.form-switch
-          %label.form-check-label Non
-          %input.form-check-input#flexSwitchCheckDefault{ type: :checkbox }
+          - if @user.is_admin
+            = f.input :code, label_html: { class: 'semibold custom-label-field' }, input_html: { class: 'select-container no-padding w-100 book-code-software custom-input-field', placeholder: "IDOC" }
+            .form-group.row
+              .col-md-11
+                = f.label :is_detail_authorized, class: 'semibold'
+              .col-md-1.form-check.form-switch.custom-form-switch
+                = f.input :is_detail_authorized, as: :boolean, label: "Non", label_html: { class: 'form-check-label' }, input_html: { id: 'flexSwitchCheckDefault', class: 'custom-form-inline form-check-input' }
+            .form-group.row
+              .col-md-11
+                = f.label :is_test, class: 'semibold'
+              .col-md-1.form-check.form-switch.custom-form-switch
+                = f.input :is_test, as: :boolean, label: "Non", label_html: { class: 'form-check-label' }, input_html: { id: 'flexSwitchCheckDefault', class: 'custom-form-inline form-check-input' }
+          .form-group.row
+            .col-md-11
+              = f.label :is_operation_processing_forced, class: 'semibold'
+            .col-md-1.form-check.form-switch.custom-form-switch
+              = f.input :is_operation_processing_forced, as: :boolean, label: "Non", label_html: { class: 'form-check-label' }, input_html: { id: 'flexSwitchCheckDefault', class: 'custom-form-inline form-check-input' }
+          .form-group.row
+            .col-md-11
+              = f.label :is_operation_value_date_needed, class: 'semibold'
+            .col-md-1.form-check.form-switch.custom-form-switch
+              = f.input :is_operation_value_date_needed, as: :boolean, label: "Non", label_html: { class: 'form-check-label' }, input_html: { id: 'flexSwitchCheckDefault', class: 'custom-form-inline form-check-input' }
+          .form-group.row
+            .col-md-11
+              = f.label :is_duplicate_blocker_activated, class: 'semibold'
+            .col-md-1.form-check.form-switch.custom-form-switch
+              = f.input :is_duplicate_blocker_activated, as: :boolean, label: "Non", label_html: { class: 'form-check-label' }, input_html: { id: 'flexSwitchCheckDefault', class: 'custom-form-inline form-check-input' }
+          .form-group
+            .row
+              .col-md-5.semibold Date de l’écriture des opérations bancaires
+              .col-md-3
+                .form-check.form-check-inline
+                  = f.radio_button :preseizure_date_option, preseizure_date_options[0][1], id: 'flexRadioDefault', class: 'form-check-input'
+                  = f.label :preseizure_date_option, preseizure_date_options[0][0], class: 'form-check-label'
+              .col-md-4
+                .form-check.form-check-inline
+                  = f.radio_button :preseizure_date_option, preseizure_date_options[1][1], id: 'flexRadioDefault', class: 'form-check-input'
+                  = f.label :preseizure_date_option, preseizure_date_options[1][0], class: 'form-check-label'
+          .form-group
+            .row
+              .col-md-5.semibold Date de saisie des factures
+              .col-md-3
+                .form-check.form-check-inline
+                  = f.radio_button :is_pre_assignment_date_computed, false, id: 'flexRadioDefault', class: 'form-check-input'
+                  = f.label :is_pre_assignment_date_computed, "Date d’origine", class: 'form-check-label'
+              .col-md-4
+                .form-check.form-check-inline
+                  = f.radio_button :is_pre_assignment_date_computed, true, id: 'flexRadioDefault', class: 'form-check-input'
+                  = f.label :is_pre_assignment_date_computed, "Date de la période iDocus", class: 'form-check-label'
 
-      .form-group.row
-        .col-md-11
-          %label.semibold Forcer la pré-affectation des écritures récupérées par les automates ?
-        .col-md-1.form-check.form-switch
-          %label.form-check-label Non
-          %input.form-check-input#flexSwitchCheckDefault{ type: :checkbox }
-
-      .form-group.row
-        .col-md-11
-          %label.semibold Afficher la date de réalisation de l’opération si différente de la date de prélèvement
-        .col-md-1.form-check.form-switch
-          %label.form-check-label Non
-          %input.form-check-input#flexSwitchCheckDefault{ type: :checkbox }
-
-      .form-group.row
-        .col-md-11
-          %label.semibold Bloquer les doublons de pré-affectation ?
-        .col-md-1.form-check.form-switch
-          %label.form-check-label Non
-          %input.form-check-input#flexSwitchCheckDefault{ type: :checkbox }
 
 
+        .form-group
+          %label.semibold Nombre de périodes antérieures accessibles au téléversement des pièces
+          .select-container.no-padding.w-100
+            %input.book-code-software{ placeholder: "1" }
 
-      .form-group
-        %label.semibold Nombre de périodes antérieures accessibles au téléversement des pièces
-        .select-container.no-padding.w-100
-          %input.book-code-software{ placeholder: "1" }
+        .form-group
+          %label.semibold Jour de clôture de la période précédente dans la période en cours
+          .select-container.no-padding.w-100
+            %input.book-code-software{ placeholder: "11" }
+          %i Par exemple le 11 février pour cloturer janvier. Choisir un chiffre de 0 à 28.
 
-      .form-group
-        %label.semibold Jour de clôture de la période précédente dans la période en cours
-        .select-container.no-padding.w-100
-          %input.book-code-software{ placeholder: "11" }
-        %i Par exemple le 11 février pour cloturer janvier. Choisir un chiffre de 0 à 28.
-
-      .form-group
-        .row
-          .col-md-6.semibold Date de l’écriture des opérations bancaires                
-          .col-md-3
-            .form-check.form-check-inline                 
-              %label.form-check-label Date de réalisation
-              %input.form-check-input#flexRadioDefault1{ type: :radio, name: "flexRadioDefault" }
-          .col-md-3
-            .form-check.form-check-inline               
-              %label.form-check-label Date de prélèvement
-              %input.form-check-input#flexRadioDefault1{ type: :radio, name: "flexRadioDefault" }
-
-      .form-group
-        .row
-          .col-md-6.semibold Date de saisie des factures            
-          .col-md-3
-            .form-check.form-check-inline                 
-              %label.form-check-label Date d’origine
-              %input.form-check-input#flexRadioDefault1{ type: :radio, name: "flexRadioDefault" }
-          .col-md-3
-            .form-check.form-check-inline               
-              %label.form-check-label Date de la période iDocus
-              %input.form-check-input#flexRadioDefault1{ type: :radio, name: "flexRadioDefault" }
-
-      .form-group
-        %label.semibold Email(s) en copie de la facture iDocus
-        .select-container.no-padding.w-100
-          %input.book-code-software{ placeholder: "Ex : jean.dupont@mail.com, marie.dupuis@mail.com" }
-        %i Doit être séparé par une virgule (",") si plusieurs
-
-      .form-group
-        %label.semibold Clé API Jefacture.com
-        .select-container.no-padding.w-100
-          %input.book-code-software{ placeholder: "ex : T4534638846" }
+        = f.input :invoice_mails, label_html: { class: 'semibold custom-label-field' }, input_html: { class: 'select-container no-padding w-100 book-code-software custom-input-field', placeholder: "Ex : jean.dupont@mail.com, marie.dupuis@mail.com" }, hint: 'Doit être séparé par une virgule (",") si plusieurs'
+        - if @user.is_admin
+          - unless @organization.specific_mission
+            .form-group.row
+              .col-md-11
+                = f.label :subject_to_vat, class: 'semibold'
+              .col-md-1.form-check.form-switch.custom-form-switch
+                = f.input :subject_to_vat, as: :boolean, label: "Non", label_html: { class: 'form-check-label' }, input_html: { id: 'flexSwitchCheckDefault', class: 'custom-form-inline form-check-input' }
+          .form-group.row
+            .col-md-11
+              = f.label :specific_mission, class: 'semibold'
+            .col-md-1.form-check.form-switch.custom-form-switch
+              = f.input :specific_mission, as: :boolean, label: "Non", label_html: { class: 'form-check-label' }, input_html: { id: 'flexSwitchCheckDefault', class: 'custom-form-inline form-check-input' }
+          = f.input :default_banking_provider, as: :select, label_html: { class: 'semibold custom-label-field' }, collection: default_banking_provider_options_for_select, input_html: { class: 'select-container no-padding w-100 book-code-software custom-input-field' }
+      - elsif !@organization.specific_mission
+        - ['quadratus', 'coala', 'csv_descriptor'].each do |software|
+          = f.simple_fields_for software.to_sym do |sf|
+            .form-group.row
+              .col-md-11
+                = sf.label :is_used, t("activerecord.models.software_#{software}.attributes.is_used"), class: 'semibold'
+              .col-md-1.form-check.form-switch.custom-form-switch
+                = sf.input :is_used, as: :boolean, label: "Non", label_html: { class: 'form-check-label' }, input_html: { id: 'flexSwitchCheckDefault', class: 'custom-form-inline form-check-input' }
 
       .form-group.no-margin
         .w-100.text-end
-          %button.btn.btn-primary.valid-modification Valider les modifications
+          = f.submit 'Valider les modifications', class: 'btn btn-primary valid-modification'
 
-    .modal#general-modal
-      .modal-dialog
-        .modal-content
-          .modal-header
-            %h5.modal-title.bold Confirmation
-            %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}    
-          .modal-body
-            %p Vous venez de changer les paramètres, voulez-vous enregister les modifications apportées ?
-          .modal-footer
-            .w-100.text-end
-              %button.btn.btn-light{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'} Annuler les modifications
-              %button.btn.btn-primary.valid Valider les modifications
+      .modal#general-modal
+        .modal-dialog
+          .modal-content
+            .modal-header
+              %h5.modal-title.bold Confirmation
+              %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}    
+            .modal-body
+              %p Vous venez de changer les paramètres, voulez-vous enregister les modifications apportées ?
+            .modal-footer
+              .w-100.text-end
+                %button.btn.btn-light{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'} Annuler les modifications
+                %button.btn.btn-primary.valid Valider les modifications
 
-= javascript_include_tag 'front/organizations/assets/javascripts/settings'
+= javascript_include_tag 'front/organizations/assets/javascripts/edit'

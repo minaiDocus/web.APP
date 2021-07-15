@@ -10,34 +10,6 @@ class Organizations::MainController < OrganizationController
 
   append_view_path('app/templates/front/organizations/views')
 
-  # GET /organizations
-  def index
-    @organizations = ::Organization.search(search_terms(params[:organization_contains])).order(sort_column => sort_direction).page(params[:page]).per(params[:per_page])
-    @without_address_count = Organization.joins(:addresses).where('addresses.is_for_billing =  ?', true).count
-    @debit_mandate_not_configured_count = DebitMandate.not_configured.count
-
-    @organization = @organizations.first
-  end
-
-
-  def facture
-    @organization = Organization.find 7
-    render partial: 'organizations_facture', locals: { collection: @organization }
-  end
-
-  def kits
-    @organization = Organization.find 7
-    render partial: 'organizations_kits', locals: { collection: @favorites }
-  end
-
-  def account_sharing
-    render partial: 'organizations_account_sharing'
-  end
-
-  def bank_affectation
-    render partial: 'organizations_bank_affectation'
-  end
-
   # GET /account/organizations/:id/update_options
   def edit_options; end
 
@@ -97,22 +69,6 @@ class Organizations::MainController < OrganizationController
     redirect_to edit_software_users_organization_path(@organization, software: software)
   end
 
-  # GET /account/organizations/new
-  def new
-    @organization = Organization.new
-  end
-
-  # POST /account/organizations/new
-  def create
-    @organization = Organization::Create.new(organization_params).execute
-    if @organization.persisted?
-      flash[:success] = 'Créé avec succès.'
-      redirect_to organization_path(@organization)
-    else
-      render 'new'
-    end
-  end
-
   # GET /account/organizations/:id/
   def show
     @members = @organization.customers.page(params[:page]).per(params[:per])
@@ -154,20 +110,6 @@ class Organizations::MainController < OrganizationController
     else
       render 'edit'
     end
-  end
-
-  # PUT /account/organizations/:id/suspend
-  def suspend
-    @organization.update_attribute(:is_suspended, true)
-    flash[:success] = 'Suspendu avec succès.'
-    redirect_to organizations_path
-  end
-
-  # PUT /account/organizations/:id/unsuspend
-  def unsuspend
-    @organization.update_attribute(:is_suspended, false)
-    flash[:success] = 'Activé avec succès.'
-    redirect_to organizations_path
   end
 
   # PUT /account/organizations/:id/activate

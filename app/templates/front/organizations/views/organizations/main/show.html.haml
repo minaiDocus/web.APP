@@ -1,43 +1,54 @@
-= stylesheet_link_tag 'front/organizations/assets/stylesheets/main' 
+= stylesheet_link_tag 'front/organizations/assets/stylesheets/show'
 
-.organizations
-  .lefter
-    %ul.principal
-      %li{ data: { href: 'organization_home' } }
-        %span.link_principal.active= t('organizations.home')
-      %li{ data: { href: "parametres" } }
-        %span.chevron= glyphicon('chevron-right', { color: "#1A1A1A"})
-        %span.chevron{ style: "display: none;" }= glyphicon('chevron-bottom', { color: "#1A1A1A"})
-        %span.link_principal.parameters= t('views.standards.setting').capitalize.pluralize
-        %ul.slave.hide
-          %li{ data: { href: "#{@organization.id}/edit" } }
-            %span.link_slave.active= t('organizations.general')
-          %li 
-            %span.link_slave= t('organizations.pdf_naming')
-          %li 
-            %span.link_slave= t('organizations.reminder_emails')
-          %li 
-            %span.link_slave= t('organizations.address_management')
-          %li 
-            %span.link_slave= t('organizations.software')
-          %li
-            %span.link_slave= t('organizations.payment_method')
-      %li{ data: { href: "#{@organization.id}/collaborateurs" } }
-        %span.link_principal= t('organizations.collaborators')
-      %li{ data: { href: "#{@organization.id}/clients" } }
-        %span.link_principal= t('organizations.customers')
-      %li{ data: { href: "#{@organization.id}/journaux_comptables" } }
-        %span.link_principal= t('organizations.journals')
-      %li{ data: { href: "#{@organization.id}/bank_affectation" } }
-        %span.link_principal= t('organizations.bank_assignment')
-      %li{ data: { href: "#{@organization.id}/account_sharing" } }
-        %span.link_principal= t('folders.shared_folders')
-      %li{ data: { href: "#{@organization.id}/invoices" } }
-        %span.link_principal= t('organizations.invoices')
-      %li{ data: { href: "#{@organization.id}/kits" } }
-        %span.link_principal= t('organizations.idocus_box_and_order')
+.acceuil_organizations.container-fluid
+  .row
+    .col-md-12.title
+      %h1
+        = t('organizations.my_organization') + ' :'
+        %span= @organization.name
+  .row
+    .col-md-12.statistic_board                 
+      .col-md-8.left_section
+        .row
+          .col-md-12.collab_customer
+            .col-md-5.collaborator.box
+              %h2= @organization.collaborators.count
+              %h4= t('organizations.collaborators')
+            .col-md-5.float-right.customer.box
+              %h2= @organization.customers.count
+              %h4= t('organizations.active_customers')
+        .row
+          .col-md-12.evolution
+            %h4= t('organizations.customers_evolution')
+            
+            %canvas#chart_dossiers          
+      .col-md-4.right_section
+        .repartition
+          %h4= t('organizations.distribution_of_subscriptions')
+          %canvas#chart_abonnement
+          - organization_statistic = SubscriptionStatistic.where(organization_id: @organization.id).first
+          %input#organization_options{ type: :hidden, value: organization_statistic.try(:options).to_json }
+          %table.table.borderless
+            %tbody
+              %tr
+                %td.glyph= glyphicon('media-record', { color: '#72AA42' })
+                %td.left= t('subscription_options.ido_micro')
+                %td.right= organization_statistic.try(:options).try(:[], :micro_package).to_i
+              %tr
+                %td.glyph= glyphicon('media-record', { color: '#C1E637' })
+                %td.left= t('subscription_options.ido_nano')
+                %td.right= organization_statistic.try(:options).try(:[], :nano_package).to_i
+              %tr
+                %td.glyph= glyphicon('media-record', { color: '#C1D837' })
+                %td.left= t('subscription_options.ido_x')
+                %td.right= organization_statistic.try(:options).try(:[], :idox_package).to_i
+              %tr
+                %td.glyph= glyphicon('media-record', { color: '#445E2B' })
+                %td.left= t('subscription_options.ido_classic')
+                %td.right= organization_statistic.try(:options).try(:[], :basic_package).to_i
+              %tr
+                %td.glyph= glyphicon('media-record', { color: '#1A1A1A' })
+                %td.left= t('subscription_options.retriever')
+                %td.right= organization_statistic.try(:options).try(:[], :retriever_package).to_i
 
-  .content
-    = render partial: 'organizations_welcome'
-
-= javascript_include_tag 'front/organizations/assets/javascripts/main'
+= javascript_include_tag 'front/organizations/assets/javascripts/show'

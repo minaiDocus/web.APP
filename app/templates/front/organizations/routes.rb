@@ -1,10 +1,8 @@
 # encoding: utf-8
 Rails.application.routes.draw do
   scope module: 'organizations' do
-    resources :organizations, except: :destroy, controller: 'main' do
-      patch :suspend,               on: :member
+    resources :organizations, except: [:index, :new, :create, :destroy], controller: 'main' do
       patch :activate,              on: :member
-      patch :unsuspend,             on: :member
       patch :deactivate,            on: :member
       get   :edit_options,          on: :collection
       get   :edit_software_users,   on: :member
@@ -14,10 +12,6 @@ Rails.application.routes.draw do
       post  :revoke_payment,        on: :member
       patch :update_options,        on: :collection
       patch :update_software_users, on: :member
-
-      get :kits,                    on: :member
-      get :account_sharing,         on: :member
-      get :bank_affectation,        on: :member
 
       resources :addresses, controller: 'addresses'
 

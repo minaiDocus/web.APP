@@ -2,6 +2,7 @@
 class OrganizationController < ApplicationController
   include ConfigurationSteps
 
+  before_action :is_organization_layout
   before_action :login_user!
   before_action :load_user_and_role
   before_action :verify_if_active
@@ -11,9 +12,13 @@ class OrganizationController < ApplicationController
   before_action :apply_membership
   before_action :load_recent_notifications
 
-  layout('front/layout') # TODO ...
+  layout('front/layout') # TODO ..
 
   protected
+
+  def is_organization_layout
+    @is_organization_layout = true
+  end
 
   def verify_if_a_collaborator
     unless @user.collaborator?
