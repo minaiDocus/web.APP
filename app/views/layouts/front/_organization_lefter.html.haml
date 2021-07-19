@@ -14,10 +14,10 @@
           %li{ data: { href: "#{@organization.id}/edit" } }
             %a{href: edit_organization_path(@organization) }
               %span.link_slave.active= t('organizations.general')
-          %li{ data: { href: "#{@organization.id}/edit" } }
+          %li{ data: { href: "#{@organization.id}/file_naming_policy/edit" } }
             %a{href: edit_organization_file_naming_policy_path(@organization) }
               %span.link_slave= t('organizations.pdf_naming')
-          %li{ data: { href: edit_organization_file_naming_policy_path(@organization) } }
+          %li{ data: { href: "#{@organization.id}/edit" } }
             %a{href: "#" }
               %span.link_slave= t('organizations.reminder_emails')
           %li{ data: { href: "#{@organization.id}/addresses" } }
