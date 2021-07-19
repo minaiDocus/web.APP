@@ -131,8 +131,8 @@ class ApplicationJS {
   }
 
 
-  displayListPer(afterUpdateContent=function(e){}){
-    if (afterUpdateContent !== null) { this.parseAjaxResponse(null, afterUpdateContent); }
+  displayListPer(params={}, afterUpdateContent=function(e){}){
+    if (afterUpdateContent !== null) { this.parseAjaxResponse(params, null, afterUpdateContent); }
   }
 
   getFrom(url, success, error){

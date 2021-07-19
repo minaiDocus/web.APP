@@ -1,11 +1,3 @@
-//= require jquery
-//= require jquery_ujs
-//= require jquery-ui
-//= require chart.min
-//= require bootstrap
-//= require searchable-option-list
-//= require jquery.livequery.min
-
 jQuery(function () {
   $(".principal li > span.link_principal, .principal .slave li > span.link_slave").unbind('click');
   $(".principal li > span.link_principal, .principal .slave li > span.link_slave").bind('click',function(e) {
@@ -20,7 +12,7 @@ jQuery(function () {
     else{
       $(".organizations .content").html('');
       if ($(this).hasClass('link_slave')){
-        $('.parameters').addClass('active')
+        $('.parameters').addClass('active');
       }
     }
   });
