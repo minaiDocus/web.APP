@@ -12,12 +12,12 @@
         %span.link_principal.parameters= t('views.standards.setting').capitalize.pluralize
         %ul.slave.hide
           %li{ data: { href: "#{@organization.id}/edit" } }
-            %a{href: edit_organization_file_naming_policy_path(@organization) }
+            %a{href: edit_organization_path(@organization) }
               %span.link_slave.active= t('organizations.general')
-          %li{ data: { href: "#{@organization.id}/file_naming_policy/edit" } }
-            %a{href: "#" }
+          %li{ data: { href: "#{@organization.id}/edit" } }
+            %a{href: edit_organization_file_naming_policy_path(@organization) }
               %span.link_slave= t('organizations.pdf_naming')
-          %li{ data: { href: "#{@organization.id}/reminder_emails/new" } }
+          %li{ data: { href: edit_organization_file_naming_policy_path(@organization) } }
             %a{href: "#" }
               %span.link_slave= t('organizations.reminder_emails')
           %li{ data: { href: "#{@organization.id}/addresses" } }
