@@ -1,9 +1,13 @@
 # frozen_string_literal: true
 class ReminderEmails::MainController < OrganizationController
   before_action :verify_rights
-  before_action :load_reminder_email, except: %w[new create]
+  before_action :load_reminder_email, except: %w[index new create]
 
   append_view_path('app/templates/front/reminder_emails/views')
+
+  def index
+    base_content
+  end
 
   # GET /organizations/:organization_id/reminder_emails/:id
   def show
@@ -34,7 +38,7 @@ class ReminderEmails::MainController < OrganizationController
     if @reminder_email.save
       flash[:success] = 'Créé avec succès.'
 
-      redirect_to organization_path(@organization, tab: 'reminder_emails')
+      redirect_to organization_reminder_emails_path(@organization)
     else
       render :new
     end
@@ -48,7 +52,7 @@ class ReminderEmails::MainController < OrganizationController
     if @reminder_email.update(reminder_email_params)
       flash[:success] = 'Modifié avec succès.'
 
-      redirect_to organization_path(@organization, tab: 'reminder_emails')
+      redirect_to organization_reminder_emails_path(@organization)
     else
       render 'edit'
     end
@@ -60,7 +64,9 @@ class ReminderEmails::MainController < OrganizationController
 
     flash[:success] = 'Supprimé avec succès.'
 
-    redirect_to organization_path(@organization, tab: 'reminder_emails')
+    base_content
+
+    render :index
   end
 
   # POST /organizations/:organization_id/reminder_emails/:id/deliver
@@ -75,10 +81,16 @@ class ReminderEmails::MainController < OrganizationController
       flash[:error] = 'Une erreur est survenu lors de la livraison.'
     end
 
-    redirect_to organization_path(@organization, tab: 'reminder_emails')
+    base_content
+
+    render :index
   end
 
   private
+
+  def base_content
+    @reminder_emails = @organization.reminder_emails.order(created_at: :desc).page(params[:page]).per(params[:per_page])
+  end
 
   def verify_rights
     unless @user.is_admin || (@user.is_prescriber && @user.organization == @organization)

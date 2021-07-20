@@ -8,39 +8,39 @@ jQuery(function () {
 
     if ($(this).val() != '')
     {
-      $(this).removeClass('not-completed').addClass('completed')
+      $(this).removeClass('not-completed').addClass('completed');
     }
     else
     {
-      $(this).removeClass('completed').addClass('not-completed')
+      $(this).removeClass('completed').addClass('not-completed');
     }
 
     if ($('.login #identification').val() != '' && $('.login #password').val() != '')
     {
-      $('.btn.connexion').removeClass('btn-light-secondary').addClass('btn-primary')
+      $('.btn.connexion').removeClass('btn-light-secondary').addClass('btn-primary');
     }
     else
     {
-      $('.btn.connexion').removeClass('btn-primary').addClass('btn-light-secondary')
+      $('.btn.connexion').removeClass('btn-primary').addClass('btn-light-secondary');
     }
 
     if ($('.login #email').val() != '')
     {
-      $('.btn.valid').removeClass('btn-light-secondary').addClass('btn-primary')
+      $('.btn.valid').removeClass('btn-light-secondary').addClass('btn-primary');
     }
     else
     {
-      $('.btn.valid').removeClass('btn-primary').addClass('btn-light-secondary')
+      $('.btn.valid').removeClass('btn-primary').addClass('btn-light-secondary');
     }
 
     if ($('#password').val() != ''){
-      $('.see').removeClass('hide')
-      $('.not-see').addClass('hide')
+      $('.see').removeClass('hide');
+      $('.not-see').addClass('hide');
     }
     else
     {
-      $('.not-see').removeClass('hide')
-      $('.see').addClass('hide')
+      $('.not-see').removeClass('hide');
+      $('.see').addClass('hide');
     }
   });
 
@@ -48,11 +48,11 @@ jQuery(function () {
   $('.see').bind('mouseover',function(e) {
     e.stopPropagation();
 
-    $('input#password').attr('type','text')
+    $('input#password').attr('type','text');
   }).bind('mouseout',function(e) {
     e.stopPropagation();
 
-    $('input#password').attr('type','password')
+    $('input#password').attr('type','password');
   });
 
   /* LOGIN */

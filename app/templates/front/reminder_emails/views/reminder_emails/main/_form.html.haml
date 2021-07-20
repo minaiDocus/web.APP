@@ -1,11 +1,28 @@
-= simple_form_for [@organization, @reminder_email], html: { class: 'form form-horizontal margin0' } do |f|
-  .card-body
+= simple_form_for [@organization, @reminder_email || ReminderEmail.new], html: { class: 'form form-horizontal margin0' } do |f|
+  .modal-body
     = f.input :name, :placeholder => 'Exemple: Envoi 1'
-    = f.input :delivery_day, as: :integer, required: true
-    = f.input :period, collection: [[t('activerecord.models.reminder_email.attributes.period_options.monthly'), 1], [t('activerecord.models.reminder_email.attributes.period_options.quarterly'), 3]], required: true
+    = f.input :delivery_day, as: :integer, required: true, hint: 'Choisir un chiffre de 0 à 28.', input_html: { min: 0, max: 20, placeholder: "Ex : 1" }
     = f.input :subject, input_html: { class: 'input-xxlarge' }
-    = f.input :content, :as => :ckeditor, :input_html => { :ckeditor => {:toolbar => 'mini'}}
-  .card-footer
-    .form-actions.margin0bottom
-      = f.submit t('actions.submit'), class: 'btn btn-primary'
-      = link_to t('actions.cancel'), organization_path(@organization, tab: 'reminder_emails'), class: 'btn btn-light'
+    = f.input :content, :as => :ckeditor, :input_html => {class: 'ckeditor', :ckeditor => {:toolbar => 'mini'}}
+
+    .form-group
+      %label.semibold Envoyez à
+      .select-container.no-padding.w-100
+        %input.book-code-software{ placeholder: "Ex : N’oubliez pas d’envoyer vos documents !" }
+
+    .form-group
+      .row
+        .col-md-7.semibold Envoyez tous les...
+        .col-md-2
+          .form-check.form-check-inline
+            = f.radio_button :period, 1, id: 'flexRadioDefault', class: 'form-check-input'
+            = f.label :period, t('activerecord.models.reminder_email.attributes.period_options.monthly'), class: 'form-check-label'
+        .col-md-3
+          .form-check.form-check-inline
+            = f.radio_button :period, 3, id: 'flexRadioDefault', class: 'form-check-input'
+            = f.label :period, t('activerecord.models.reminder_email.attributes.period_options.quarterly'), class: 'form-check-label'
+
+  .modal-footer
+    .w-100.text-end
+      %button.btn.btn-light.semibold{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'} Annuler
+      = f.submit t('actions.submit'), class: 'btn btn-primary semibold'

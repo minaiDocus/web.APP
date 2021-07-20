@@ -18,12 +18,12 @@
             %a{href: edit_organization_file_naming_policy_path(@organization) }
               %span.link_slave= t('organizations.pdf_naming')
           %li{ data: { href: "#{@organization.id}/edit" } }
-            %a{href: "#" }
+            %a{href: organization_reminder_emails_path(@organization) }
               %span.link_slave= t('organizations.reminder_emails')
-          %li{ data: { href: "#{@organization.id}/addresses" } }
-            %a{href: "#" }
+          %li{ data: { href: "#{@organization.id}/reminder_emails/" } }
+            %a{href: organization_addresses_path(@organization) }
               %span.link_slave= t('organizations.address_management')
-          %li{ data: { href: "#{@organization.id}/edit" } }
+          %li{ data: { href: "#{@organization.id}/addresses" } }
             %a{href: "#" }
               %span.link_slave= t('organizations.software')
           %li{ data: { href: "#{@organization.id}/edit" } }

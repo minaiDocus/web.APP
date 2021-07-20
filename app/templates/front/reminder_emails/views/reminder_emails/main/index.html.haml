@@ -1,0 +1,77 @@
+= stylesheet_link_tag 'front/reminder_emails/assets/stylesheets/main'
+
+.general.derivationRight
+  .row
+    .col-md-8
+      %h3.bold Paramètres : Emails de rappel
+    .col-md-4.text-end
+      %button.btn.btn-primary.new-reminder-email.semibold
+        %span.me-2= glyphicon('plus', { color: "#FFF", size: '16'})       
+        %span Nouvel email
+
+  .reminder-email-content
+    .box.mt-4
+      %table.table.table-striped.table_integration
+        %thead
+          %th Nom de l'email
+          %th Date de création
+          %th Destinataire(s)
+          %th Jour d'envoi
+          %th Statut        
+          %th.text-end Action
+        %tbody
+          - @reminder_emails.each do |reminder_email|
+            %tr
+              %td.semibold= reminder_email.name
+              %td= reminder_email.created_at.strftime('%Y/%m/%d')
+              %td TODO 
+              %td= reminder_email.delivery_day
+              %td
+                .badge.badge-success.semibold Actif
+              %td.text-end.pointer
+                .action.sub-menu-mail-reminder
+                  %span= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
+                  .sub_menu.text-start.hide
+                    %ul.no-margin.no-padding.regular
+                      %li.reminder-email-action.view
+                        = link_to glyphicon('eye', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Voir', organization_reminder_email_path(@organization, reminder_email), target: :_blank
+                      %li.reminder-email-action.edit
+                        = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Editer', edit_organization_reminder_email_path(@organization, reminder_email)
+                      %li.reminder-email-action.de-activate
+                        = link_to glyphicon('ban', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Désactiver', organization_reminder_email_path(@organization, reminder_email)
+                      %li.reminder-email-action.delete.red-label
+                        = link_to glyphicon('trash', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Supprimer', organization_reminder_email_path(@organization, reminder_email), id: reminder_email.id, organization_id: @organization.id, method: :delete, data: { confirm: t('actions.confirm') }
+                      %li.reminder-email-action.deliver
+                        = link_to glyphicon('envelope-open', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Envoyer', deliver_organization_reminder_email_path(@organization, reminder_email), data: { confirm: t('activerecord.models.reminder_email.actions.send_confirmation') }, method: :post, id: reminder_email.id, organization_id: @organization.id
+
+      .form-group
+        .row.pagination
+          .col-md-6
+            .row
+              .col-md-3.text-end.pt-1
+                %label Afficher par
+              .col-md-2
+                %select.form-select.form-select-sm.display.reminder-email{ "aria-label" => ".form-select-sm" }
+                  %option{value: "#{@organization.id}_20", selected: 'selected'} 20
+                  %option{value: "#{@organization.id}_50"} 50
+                  %option{value: "#{@organization.id}_100"} 100        
+
+          .col-md-6.text-end
+            .row
+              .col-md-10
+                %label= "#{@reminder_emails.size}-#{@organization.reminder_emails.size} de #{@organization.reminder_emails.size} éléments"
+              .col-md-1
+                = link_to_prev_page @reminder_emails, glyphicon('chevron-left', { size: '15', color: "#1A1A1A" })
+              .col-md-1
+                = link_to_next_page @reminder_emails, glyphicon('chevron-right', { size: '15', color: "#1A1A1A" })
+    
+
+  .modal#reminder-email-modal
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %h5.modal-title.bold Nouvel email
+          %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+        = render partial: 'form'
+
+= javascript_include_tag 'front/reminder_emails/assets/javascripts/main'
