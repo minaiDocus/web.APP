@@ -3,7 +3,10 @@
     .card
       .card-header.clearfix
         .float-left
-          %h3 Edition d'adresse
+          .w-100.text-start
+            %h3 Edition d'adresse
         .float-right
-          = link_to 'Nouvelle adresse', new_organization_address_path(@organization), class: 'btn btn-primary'
+          .form-group.no-margin
+            .w-100.text-end
+              = link_to 'Nouvelle adresse', new_organization_address_path(@organization), class: 'btn btn-primary add-adress'
       = render partial: 'form'
