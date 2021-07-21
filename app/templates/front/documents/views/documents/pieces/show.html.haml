@@ -1,0 +1,54 @@
+= stylesheet_link_tag 'front/documents/assets/stylesheets/main'
+
+.container-fluid
+  .row.derivationLeft
+    .col-md-1
+      %button.btn.btn-default.add-to-favorite.float-right
+        %a{href: '/documents'}
+          = glyphicon('arrow-left', {size: '12', color: '#72AA42'})
+          &nbsp;Retour
+    .col-md-7.no-padding{ id: 'current_pack', data: { id: @pack.id } }
+      %h3.bold
+        = @pack.name.gsub('all', '')
+        %span.badge.badge-secondary.regular.datas_size= @pieces.total_count
+    .col-md-3   
+      .search-content
+        .row.no-margin
+          .col-md-1.no-padding.text-center.glass
+            = glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })
+          .col-md-11.no-padding.no-margin
+            %input#search_input{placeholder: 'Rechercher'}
+    .col-md-1.no-padding
+      %button.btn.btn-light.more-filter
+        Filtrer
+        %span
+          = glyphicon('layers', { size: '16', color: '#72AA42'})
+
+  .row.box.pr-0.derivationRight
+    .col-md-1.no-padding.text-left.change-view.to-list= glyphicon('grid-two-up', { size: '25', color:'rgba(26, 26, 26, 0.32);'}) 
+    .col-md-1.no-padding.text-left.change-view.to-grid.hide= glyphicon('media-pause', { size: '25', color:'rgba(26, 26, 26, 0.32);', style: 'transform: rotate(90deg)'}) 
+    .col-md-8
+    .col-md-3
+      .row.text-right
+        .col-md-6.action-selected-hide
+        .col-md-1.action-group.pointer.action-selected.hide= glyphicon('trash', { size: '25',  color:'#FF4848'})
+        .col-md-1.action-group.pointer.action-selected.hide= glyphicon('tag', { size: '25', color:'rgba(26, 26, 26, 0.32);'})
+        .col-md-1.action-group.pointer.action-selected.hide= glyphicon('pencil', { size: '25', color:'rgba(26, 26, 26, 0.32);'})
+        .col-md-1.action-group.pointer.download_pack_bundle{title: 'Télécharger', data: {id: @pack.id}}= glyphicon('data-transfer-download', { size: '25', color:'rgba(26, 26, 26, 0.32);'})
+        .col-md-1.action-group.pointer.download_pack_archive{title: 'Télécharger une archive zip', data: {id: @pack.id}}= glyphicon('account-logout', { size: '25', color:'rgba(26, 26, 26, 0.32);', style: 'transform: rotate(90deg)'})
+        .col-md-1.action-group.pointer.preseizures_export{title: 'Export écriture', data:{ id: @pack.id, type: 'pack', multi: true }}= glyphicon('cloud-download', { size: '25', color:'rgba(26, 26, 26, 0.32);'})
+        .col-md-1.action-group.pointer
+          %label.container.pointer
+            %input.select-all{ type: :checkbox }
+            %span.checkmark
+              = glyphicon('check', { size: '14', color: '#FFF'})
+
+  .main-content.derivationLeft
+    - if @pieces.size > 0
+      = render partial: 'piece_box'
+    - else
+      .no-data-found.box= t('global.no-data-found')
+
+= render partial: 'document_dialog'
+
+= javascript_include_tag 'front/documents/assets/javascripts/pieces_details'

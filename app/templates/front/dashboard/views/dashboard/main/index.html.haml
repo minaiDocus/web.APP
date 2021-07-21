@@ -11,7 +11,7 @@
 
   .row.derivationLeft
     .col-md-4.view-documents.no-padding
-      %button.btn.btn-primary.view-documents-btn= t('dashboard.view_my_documents')
+      %a.btn.btn-primary.view-documents-btn{href: documents_path}= t('dashboard.view_my_documents')
   #container-box.derivationRight
     .row
       .col-md-6.no-padding

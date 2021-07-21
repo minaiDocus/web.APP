@@ -7,7 +7,8 @@ class FileImport::Dropbox
                   invalid_file_extension: 'extension invalide',
                   file_size_is_too_big: 'fichier trop volumineux',
                   pages_number_is_too_high: 'nombre de page trop important',
-                  file_is_corrupted_or_protected: 'fichier corrompu ou protégé par mdp',
+                  file_is_corrupted_or_protected: 'Votre document est en-cours de traitement',
+                  real_corrupted_document: 'fichier corrompu ou protégé par mdp',
                   unprocessable: 'erreur fichier non valide pour iDocus'
                 }.freeze
 
@@ -251,7 +252,7 @@ class FileImport::Dropbox
 
     if valid_file_name(file_name)
       if needed_folders.include?(path)
-        if UploadedDocument.valid_extensions.include?(File.extname(file_path).downcase) && metadata.size <= 10.megabytes
+        if UploadedDocument.valid_extensions.include?(File.extname(file_path).downcase)
           customer, journal_name, period_offset, collaborator_code = get_info_from_path path
 
           begin
@@ -264,13 +265,16 @@ class FileImport::Dropbox
 
                 uploader = collaborator_code.present? ? user.memberships.find_by_code(collaborator_code) : user
 
-                uploaded_document = UploadedDocument.new(file, file_name, customer, journal_name, period_offset, uploader, 'dropbox')
-                if uploaded_document.valid?
+                corrupted_document_state = PdfIntegrator.verify_corruption(file.path)
+
+                uploaded_document = UploadedDocument.new(file, file_name, customer, journal_name, period_offset, uploader, 'dropbox') if corrupted_document_state.to_s == 'continu'
+                if corrupted_document_state.to_s == 'uploaded' || uploaded_document.try(:valid?)
                   System::Log.info('processing', "[Dropbox Import][#{uploader.code}][SUCCESS]#{file_detail(uploaded_document)} #{file_path}")
                   client.delete file_path
                 else
-                  System::Log.info('processing', "[Dropbox Import][#{uploader.code}][#{uploaded_document.errors.last[0].to_s}] #{file_path}")
-                  mark_file_error(path, file_name, uploaded_document.errors)
+                  System::Log.info('processing', "[Dropbox Import][#{uploader.code}][#{uploaded_document.try(:errors).try(:last).try(:[], 0).to_s}] #{file_path}")
+                  error = (corrupted_document_state.to_s == 'rejected') ? [[:real_corrupted_document]] : uploaded_document.errors
+                  mark_file_error(path, file_name, error)
                 end
               end
             end
@@ -289,7 +293,12 @@ class FileImport::Dropbox
       error_message = ERROR_LISTS[err[0].to_sym] if ERROR_LISTS[err[0].to_sym].present?
     end
 
-    new_file_name = File.basename(file_name, '.*') + " (#{error_message})" + File.extname(file_name)
+
+    basename = File.basename(file_name, '.*').gsub(/\(#{ERROR_LISTS[:file_is_corrupted_or_protected]}\)/, '').strip
+
+    return false if basename =~ /#{error_message}/i
+
+    new_file_name = basename + " (#{error_message})" + File.extname(file_name)
     client.move(File.join(path, file_name), File.join(path, new_file_name), autorename: true)
     rescue DropboxApi::Errors::NotFoundError
   end
@@ -349,9 +358,9 @@ class FileImport::Dropbox
 
   def valid_file_name(file_name)
     ERROR_LISTS.each do |pattern|
-      if file_name =~ /#{pattern.last}/i
-        return false
-      end
+      next if pattern.last =~ /#{ERROR_LISTS[:file_is_corrupted_or_protected]}/i
+
+      return false if file_name =~ /#{pattern.last}/i
     end
     return true
   end

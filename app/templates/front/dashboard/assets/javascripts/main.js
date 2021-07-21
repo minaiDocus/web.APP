@@ -24,8 +24,7 @@ jQuery(function() {
   $('#select-customer-to-favorite').searchableOptionList();
   bind_favorite_clicks();
 
-  $('#add-customer-to-favorite.btn-add').unbind('click');
-  $('#add-customer-to-favorite.btn-add').bind('click',function(e) {
+  $('#add-customer-to-favorite.btn-add').unbind('click').bind('click',function(e) {
     e.stopPropagation();
     $(this).attr('disabled', true);
 

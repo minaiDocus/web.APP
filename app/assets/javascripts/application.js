@@ -44,6 +44,17 @@ VARIABLES.get = (var_name) => {
   return VARS[var_name];
 }
 
+AppListenTo = (event_name, callback={}) => {
+  document.addEventListener(event_name, callback, false);
+}
+
+AppEmit = (event_name, params=null) => {
+  const event = new CustomEvent(event_name, {'detail': params});
+  event.initEvent(event_name, true, true);
+
+  document.dispatchEvent(event);
+}
+
 class ApplicationJS {
   constructor(){
     this.parseJsVar();
@@ -62,11 +73,14 @@ class ApplicationJS {
 
   noticeFlashMessageFrom(page){
     var html = $(page).find('.notice-internal-success').html();
+    var is_present = $(page).find('.notice-internal-success .msg_present');
 
-    $('#idocus_notifications_messages .notice-internal-success').html(html);
+    if(is_present.length > 0){
+      $('#idocus_notifications_messages .notice-internal-success').html(html);
 
-    $('#idocus_notifications_messages .notice-internal-success').show('');
-    setTimeout(function(){$('.notice-internal-success').fadeOut('');}, 5000);
+      $('#idocus_notifications_messages .notice-internal-success').show('');
+      setTimeout(function(){$('.notice-internal-success').fadeOut('');}, 5000);
+    }
   }
 
   noticeInternalErrorFrom(page){
@@ -79,26 +93,40 @@ class ApplicationJS {
 
   parseAjaxResponse(params={}, beforeUpdateContent=function(e){}, afterUpdateContent=function(e){}){
     var self = this
-    var target = params.target;
 
-    $.ajax({
-      url: params.url,
-      type: params.type || 'GET',
-      data: params.data,
-      contentType: params.contentType || 'application/x-www-form-urlencoded; charset=UTF-8',
-      dataType: params.dataType || 'html',
-      success: function(result) {
-        if (beforeUpdateContent) { beforeUpdateContent(); }
+    return new Promise((success, error) => {
+      var target = params.target;
 
-        if(target){ $(target).html($(result).find(target).html()); }
+      $.ajax({
+        url: params.url,
+        type: params.type || 'GET',
+        data: params.data,
+        contentType: params.contentType || 'application/x-www-form-urlencoded; charset=UTF-8',
+        dataType: params.dataType || 'html',
+        beforeSend: function(){
+          $('div.loading_box').removeClass('hide');
+        },
+        success: function(result) {
+          $('div.loading_box').addClass('hide');
+          if (beforeUpdateContent) { beforeUpdateContent(); }
 
-        if (afterUpdateContent) { afterUpdateContent(); }
+          if(target){ $(target).html($(result).find(target).html()); }
 
-        self.noticeFlashMessageFrom(result);
-      },
-      error: function(result){
-        self.noticeInternalErrorFrom(result);
-      }
+          if (afterUpdateContent) { afterUpdateContent(); }
+
+          self.noticeFlashMessageFrom(result);
+
+          if(success)
+            success(result);
+        },
+        error: function(result){
+          $('div.loading_box').addClass('hide');
+          self.noticeInternalErrorFrom(result);
+
+          if(success)
+            success(result);
+        }
+      });
     });
   }
 

@@ -1,9 +1,0 @@
-%span.total_preseizures_count.hide= @preseizures.try(:total_count).to_i
-%span.software_used.hide= @software_human_name
-%span.need_delivery.hide= @need_delivery
-
-- if @data_source == 'pack'
-  = render partial: '/documents/main/pieces/show'
-- else 
-  = render partial: '/documents/main/preseizures/show'
-

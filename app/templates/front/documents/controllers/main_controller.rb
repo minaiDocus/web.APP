@@ -1,99 +1,131 @@
 # frozen_string_literal: true
 
 class Documents::MainController < FrontController
-
-	layout :current_layout
-
   skip_before_action :login_user!, only: %w[download piece handle_bad_url temp_document get_tag already_exist_document], raise: false
 
   append_view_path('app/templates/front/documents/views')
 
-  # GET /account/documents
-  def index
-    options = {
-      owner_ids: account_ids,
-      page: params[:page],
-      per_page: params[:per_page],
-      sort: true
-    }
-
-    pack_with_includes = Pack.includes(:owner, :preseizures, :cloud_content_attachment, :reports)
-
-    if params[:pack_name].present?
-      @packs = pack_with_includes.where(owner_id: options[:owner_ids], name: params[:pack_name]).page(options[:page]).per(options[:per_page])
-      @reports = Pack::Report.where(user_id: options[:owner_ids], name: params[:pack_name].gsub('all', '').strip, pack_id: nil).order(updated_at: :desc).page(options[:page]).per(options[:per_page])
-    else
-      @packs   = pack_with_includes.search(params.try(:[], :by_piece).try(:[], :content), options)
-      @reports = Pack::Report.where(user_id: options[:owner_ids], pack_id: nil).order(updated_at: :desc).page(options[:page]).per(options[:per_page])
+  def export_options
+    if params[:ids]
+      obj = Pack::Report::Preseizure.where(id: params[:ids]).limit(1).first
+    elsif params[:id]
+      obj = if params[:type] == 'report'
+              Pack::Report.find params[:id]
+            else
+              Pack.find params[:id]
+            end
     end
 
-    @last_composition = @user.composition
+    user    = obj.try(:user)
+    options = []
 
-    ### TODO : GET DOCUMENTS COMPOSITION FROM PIECES INSTEAD OF DOCUMENTS FOR COMPOSITION CREATED AFTER 23/01/2019
-    @composition = nil # TEMP FIX
-    # @composition      = Document.where(id: @last_composition.document_ids) if @last_composition
-    ######################
+    if user
+      options << %w[CSV csv] if user.uses?(:csv_descriptor)
+      if current_user.is_admin && user.organization.ibiza.try(:configured?) && user.uses?(:ibiza)
+        options << ['XML (Ibiza)', 'xml_ibiza']
+      end
+      options << ['TXT (Quadratus)', 'txt_quadratus']          if user.uses?(:quadratus)
+      options << ['ZIP (Quadratus)', 'zip_quadratus']          if user.uses?(:quadratus)
+      options << ['ZIP (Coala)', 'zip_coala']                  if user.uses?(:coala)
+      options << ['XLS (Coala)', 'xls_coala']                  if user.uses?(:coala)
+      options << ['CSV (Cegid)', 'csv_cegid']                  if user.uses?(:cegid)
+      options << ['TRA + pièces jointes (Cegid)', 'tra_cegid'] if user.uses?(:cegid)
+      options << ['TXT (Fec Agiris)', 'txt_fec_agiris']        if user.uses?(:fec_agiris)
+      options << ['TXT (Fec ACD)', 'txt_fec_acd']              if user.uses?(:fec_acd)
+    end
 
-    @period_service = Billing::Period.new user: @user
+    options << ['Aucun logiciel comptable paramètré', ''] if options.empty?
+
+    render json: { options: options }, status: 200
   end
 
-  # GET /account/documents/:id
-  def show
-    @data_type = params[:fetch] || 'pieces'
-    @data_source = params[:source] || 'pack'
+  def export_preseizures
+    params64 = Base64.decode64(params[:q])
+    params64 = JSON.parse(params64)
 
-    if @data_type == 'pieces' && @data_source == 'pack'
-      show_pack_pieces
+    export_type = params64['type']
+    export_ids  = params64['ids'].presence || params64['id']
+    export_format = params64['format']
+
+    preseizures = []
+    if export_ids && export_type == 'preseizure'
+      preseizures = Pack::Report::Preseizure.where(id: export_ids)
+      if preseizures.any?
+        @report = preseizures.first.report
+
+        update_report
+
+        preseizures.reload
+      end
+    elsif export_ids && export_type == 'report'
+      @report = Pack::Report.where(id: export_ids).first
+
+      update_report
+
+      preseizures = Pack::Report.where(id: export_ids).first.preseizures
+    elsif export_ids && export_type == 'pack'
+      pack    = Pack.where(id: export_ids).first
+      reports = pack.present? ? assign_report_with(pack) : []
+
+      preseizures = Pack::Report::Preseizure.not_deleted.where(report_id: reports.collect(&:id))
+    end
+
+    supported_format = %w[csv xml_ibiza txt_quadratus zip_quadratus zip_coala xls_coala txt_fec_agiris txt_fec_acd csv_cegid tra_cegid]
+
+    if preseizures.any? && export_format.in?(supported_format)
+      preseizures = preseizures.by_position
+
+      export = PreseizureExport::GeneratePreAssignment.new(preseizures, export_format).generate_on_demand
+      if export && export.file_name.present? && export.file_path.present?
+        contents = File.read(export.file_path.to_s)
+
+        send_data(contents, filename: File.basename(export.file_name.to_s), disposition: 'attachment')
+      else
+        render plain: 'Aucun résultat'
+      end
+    elsif !export_format.in?(supported_format)
+      render plain: 'Traitement impossible : le format est incorrect.'
     else
-      show_report_preseizures
+      render plain: 'Aucun résultat'
     end
   end
 
-  # GET /account/documents/packs
-  def packs
-    if params[:view] == 'current_delivery'
-      pack_ids = @user.remote_files.not_processed.distinct.pluck(:pack_id)
-      @packs = Pack.where(owner_id: account_ids, id: pack_ids)
-                   .order(updated_at: :desc)
-                   .page(params[:page])
-                   .per(params[:per_page])
-      @remaining_files = @user.remote_files.not_processed.count
+  def download_archive
+    pack = Pack.find(params[:id])
+    pack = nil unless pack.owner.in?(accounts)
+
+    begin
+      if !pack.cloud_archive.attached? || pack.archive_name.gsub('%', '_') != pack.try(:cloud_archive_object).try(:filename)
+        pack.save_archive_to_storage #May takes several times
+      end
+
+      zip_path = pack.cloud_archive_object.reload.path.presence || pack.archive_file_path
+
+      ok = pack && File.exist?(zip_path)
+    rescue => e
+      ok = false
+    end
+
+    if ok
+      send_file(zip_path, type: 'application/zip', filename: pack.archive_name, x_sendfile: true)
     else
-      if params[:by_all].present?
-        params[:by_piece] = params[:by_piece].present? ? params[:by_piece].merge(params[:by_all].permit!) : params[:by_all]
-      end
-
-      options = { page: params[:page], per_page: params[:per_page] }
-      options[:sort] = true
-
-      options[:piece_created_at] = params[:by_piece].try(:[], :created_at)
-      options[:piece_created_at_operation] = params[:by_piece].try(:[], :created_at_operation)
-
-      options[:piece_position] = params[:by_piece].try(:[], :position)
-      options[:piece_position_operation] = params[:by_piece].try(:[], :position_operation)
-
-      options[:name] = params[:by_pack].try(:[], :pack_name)
-      options[:tags] = params[:by_piece].try(:[], :tags)
-
-      options[:pre_assignment_state] = params[:by_piece].try(:[], :state_piece)
-
-      options[:owner_ids] = if params[:view].present? && params[:view] != 'all'
-                              _user = accounts.find(params[:view])
-                              _user ? [_user.id] : []
-                            else
-                              account_ids
-      end
-
-      if params[:by_preseizure].present?
-        piece_ids = Pack::Report::Preseizure.where(user_id: options[:owner_ids], operation_id: ['', nil]).filter_by(params[:by_preseizure]).distinct.pluck(:piece_id).presence || [0]
-      end
-
-      options[:piece_ids] = piece_ids if piece_ids.present?
-
-      @packs = Pack.search(params.try(:[], :by_piece).try(:[], :content), options).distinct.order(updated_at: :desc).page(options[:page]).per(options[:per_page])
-
+      render plain: "File unavalaible"
     end
   end
+
+  def download_bundle
+    @pack = Pack.find params[:id]
+    filepath = @pack.cloud_content_object.path
+
+    if File.exist?(filepath) && (@pack.owner.in?(accounts) || current_user.try(:is_admin))
+      mime_type = 'application/pdf'
+      send_file(filepath, type: mime_type, filename: @pack.cloud_content_object.filename, x_sendfile: true, disposition: 'inline')
+    else
+      render body: nil, status: 404
+    end
+  end
+
+  #############################################
 
   def reports
     if params[:view] == 'current_delivery'
@@ -285,112 +317,6 @@ class Documents::MainController < FrontController
       render json: { error: error }, status: 200
     else
       render json: { error: '' }, status: 200
-    end
-  end
-
-  def select_to_export
-    if params[:ids]
-      obj = Pack::Report::Preseizure.where(id: params[:ids]).limit(1).first
-    elsif params[:id]
-      obj = if params[:type] == 'report'
-              Pack::Report.find params[:id]
-            else
-              Pack.find params[:id]
-            end
-    end
-
-    user    = obj.try(:user)
-    options = []
-
-    if user
-      options << %w[CSV csv] if user.uses?(:csv_descriptor)
-      if current_user.is_admin && user.organization.ibiza.try(:configured?) && user.uses?(:ibiza)
-        options << ['XML (Ibiza)', 'xml_ibiza']
-      end
-      options << ['TXT (Quadratus)', 'txt_quadratus']          if user.uses?(:quadratus)
-      options << ['ZIP (Quadratus)', 'zip_quadratus']          if user.uses?(:quadratus)
-      options << ['ZIP (Coala)', 'zip_coala']                  if user.uses?(:coala)
-      options << ['XLS (Coala)', 'xls_coala']                  if user.uses?(:coala)
-      options << ['CSV (Cegid)', 'csv_cegid']                  if user.uses?(:cegid)
-      options << ['TRA + pièces jointes (Cegid)', 'tra_cegid'] if user.uses?(:cegid)
-      options << ['TXT (Fec Agiris)', 'txt_fec_agiris']        if user.uses?(:fec_agiris)
-    end
-
-    render json: { options: options }, status: 200
-  end
-
-  def export_preseizures
-    params64 = Base64.decode64(params[:params64])
-    params64 = params64.split('&')
-
-    export_type = params64[0].presence
-    export_ids  = params64[1].presence.try(:split, ',')
-    export_format = params64[2].presence
-
-    preseizures = []
-    if export_ids && export_type == 'preseizure'
-      preseizures = Pack::Report::Preseizure.where(id: export_ids)
-      if preseizures.any?
-        @report = preseizures.first.report
-
-        update_report
-
-        preseizures.reload
-      end
-    elsif export_ids && export_type == 'report'
-      @report = Pack::Report.where(id: export_ids).first
-
-      update_report
-
-      preseizures = Pack::Report.where(id: export_ids).first.preseizures
-    elsif export_ids && export_type == 'pack'
-      pack    = Pack.where(id: export_ids).first
-      reports = pack.present? ? assign_report_with(pack) : []
-
-      preseizures = Pack::Report::Preseizure.not_deleted.where(report_id: reports.collect(&:id))
-    end
-
-    supported_format = %w[csv xml_ibiza txt_quadratus zip_quadratus zip_coala xls_coala txt_fec_agiris csv_cegid tra_cegid]
-
-    if preseizures.any? && export_format.in?(supported_format)
-      preseizures = preseizures.by_position
-
-      export = PreseizureExport::GeneratePreAssignment.new(preseizures, export_format).generate_on_demand
-      if export && export.file_name.present? && export.file_path.present?
-        contents = File.read(export.file_path.to_s)
-
-        send_data(contents, filename: File.basename(export.file_name.to_s), disposition: 'attachment')
-      else
-        render plain: 'Aucun résultat'
-      end
-    elsif !export_format.in?(supported_format)
-      render plain: 'Traitement impossible : le format est incorrect.'
-    else
-      render plain: 'Aucun résultat'
-    end
-  end
-
-  # GET /account/documents/:id/archive
-  def archive
-    pack = Pack.find(params[:id])
-    pack = nil unless pack.owner.in?(accounts)
-
-    begin
-      if !pack.cloud_archive.attached? || pack.archive_name.gsub('%', '_') != pack.try(:cloud_archive_object).try(:filename)
-        pack.save_archive_to_storage #May takes several times
-      end
-
-      zip_path = pack.cloud_archive_object.reload.path.presence || pack.archive_file_path
-
-      ok = pack && File.exist?(zip_path)
-    rescue => e
-      ok = false
-    end
-
-    if ok
-      send_file(zip_path, type: 'application/zip', filename: pack.archive_name, x_sendfile: true)
-    else
-      render plain: "File unavalaible"
     end
   end
 
@@ -600,19 +526,6 @@ class Documents::MainController < FrontController
       mime_type = File.extname(filepath) == '.png' ? 'image/png' : 'application/pdf'
 
       send_file(filepath, type: mime_type, filename: @piece.cloud_content_object.filename, x_sendfile: true, disposition: 'inline')
-    else
-      render body: nil, status: 404
-    end
-  end
-
-  # GET /account/documents/pack/:id/download
-  def pack
-    @pack = Pack.find params[:id]
-    filepath = @pack.cloud_content_object.path
-
-    if File.exist?(filepath) && (@pack.owner.in?(accounts) || current_user.try(:is_admin))
-      mime_type = 'application/pdf'
-      send_file(filepath, type: mime_type, filename: @pack.cloud_content_object.filename, x_sendfile: true, disposition: 'inline')
     else
       render body: nil, status: 404
     end
@@ -831,5 +744,49 @@ class Documents::MainController < FrontController
       pack = Pack.where(name: @report.name + ' all').first
       assign_report_with(pack) if pack.present?
     end
+  end
+
+  #####################
+
+  def options
+    if params[:by_all].present?
+      params[:by_piece] = params[:by_piece].present? ? params[:by_piece].merge(params[:by_all].permit!) : params[:by_all]
+    end
+
+    options = { page: params[:page], per_page: 16 } #IMPORTANT: per_page option must be a multiple of 4 and > 4 (needed by grid type view)
+    options[:sort] = true
+
+    options[:piece_created_at] = params[:by_piece].try(:[], :created_at)
+    options[:piece_created_at_operation] = params[:by_piece].try(:[], :created_at_operation)
+
+    options[:piece_position] = params[:by_piece].try(:[], :position)
+    options[:piece_position_operation] = params[:by_piece].try(:[], :position_operation)
+
+    options[:name] = params[:pack_name]
+    options[:tags] = params[:by_piece].try(:[], :tags)
+
+    options[:pre_assignment_state] = params[:by_piece].try(:[], :state_piece)
+
+    options[:owner_ids] = if params[:view].present? && params[:view] != 'all'
+                            _user = accounts.find(params[:view])
+                            _user ? [_user.id] : []
+                          else
+                            account_ids
+                          end
+
+    if params[:by_preseizure].present? && (params[:by_preseizure].try(:[], 'is_delivered').present? || params[:by_preseizure].try(:[], 'delivery_tried_at').present? || params[:by_preseizure].try(:[], 'date').present? || params[:by_preseizure].try(:[], 'amount').present?)
+      piece_ids = Pack::Report::Preseizure.where(user_id: options[:owner_ids], operation_id: ['', nil]).filter_by(params[:by_preseizure]).distinct.pluck(:piece_id).presence || [0]
+    end
+
+    options[:piece_ids] = piece_ids if piece_ids.present?
+
+    options
+  end
+
+  def load_pack
+    @pack = Pack.where(id: params[:id]).first
+    @pack = nil if not account_ids.include? @pack.owner_id
+
+    redirect_to documents_path if not @pack
   end
 end

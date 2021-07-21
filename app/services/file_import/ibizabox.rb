@@ -45,7 +45,6 @@ class FileImport::Ibizabox
     return false if @user.subscription.try(:current_period).try(:is_active?, :ido_x) || !valid?
 
     @folder.process
-    @folder.update_attribute(:last_checked_at, Time.now)
     accessible_ibiza_periods.each do |period|
       if get_ibiza_folder_contents(period)
         process(contents, prev_period_offset_of(period))
@@ -128,14 +127,20 @@ class FileImport::Ibizabox
       file_name   = data.at_css('name').content
       document_id = data.at_css('objectID').content
       unless @user.temp_documents.where(api_id: document_id, delivered_by: 'ibiza').first
-        if UploadedDocument.valid_extensions.include?(File.extname(file_name).downcase)
+        extension = File.extname(file_name).downcase
+
+        if UploadedDocument.valid_extensions.include?(extension) || (file_name.length >= 99 && extension.blank?)
           CustomUtils.mktmpdir('ibizabox_import') do |dir|
             begin
+              file_name = "#{file_name[0..98]}.pdf" if(file_name.length >= 99 && extension.blank?)
+
               file_path = File.join(dir, file_name)
               file = get_file(document_id, file_path)
 
               if File.exist?(file_path) && File.size(file_path) > 0
-                Ibizabox::Document.new(file, @folder, document_id, prev_period_offset)
+                corrupted_document_state = PdfIntegrator.verify_corruption(file_path)
+
+                Ibizabox::Document.new(file, @folder, document_id, prev_period_offset) if corrupted_document_state.to_s == 'continu'
               end
             ensure
               file.close if file

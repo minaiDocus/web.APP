@@ -5,11 +5,34 @@ class SgiApiServices::GroupDocument
   FILE_NAME_PATTERN_2 = /\A([A-Z0-9]+_*[A-Z0-9]*_[A-Z][A-Z0-9]+_\d{4}([01T]\d)*)_\d{3,4}_\d{3}\.pdf\z/i
 
   class << self
-    def processing(json_content, _temp_document_ids, temp_pack)
+    def processing(json_content, _temp_document_ids, temp_pack_id)
       CustomUtils.mktmpdir('api_group_document') do |dir|
-        create_new_temp_document(json_content, _temp_document_ids, dir, temp_pack)
+        temp_pack = TempPack.where(id: temp_pack_id).first
 
-        temp_pack.temp_documents.where(id: _temp_document_ids).each(&:bundled)
+        if temp_pack
+          create_new_temp_document(json_content, _temp_document_ids, dir, temp_pack)
+
+          temp_pack.temp_documents.where(id: _temp_document_ids).each do |temp_document|
+            if temp_document.children.size > 0
+              temp_document.update(state: 'bundled')
+            else
+              mail_info = {
+                subject: "[SgiApiServices::GroupDocument] create temp document errors (can't create a child)",
+                name: "SgiApiServices::CreateTempDocumentFromGrouping-cannot-create-child",
+                error_group: "[sgi-api-services-create-temp-document-from-grouping] create temp document errors (can't create a child)",
+                erreur_type: "create temp document with errors - can't create a child",
+                date_erreur: Time.now.strftime('%Y-%m-%d %H:%M:%S'),
+                more_information: {
+                  temp_document_id: temp_document.id,
+                  temp_pack_id: temp_pack.id,
+                  temp_pack_name: temp_pack.name
+                }
+              }
+
+              ErrorScriptMailer.error_notification(mail_info).deliver
+            end
+          end
+        end
       end
     end
 
@@ -86,7 +109,7 @@ class SgiApiServices::GroupDocument
       temp_pack          = find_temp_pack(json_content['pack_name'])
       _temp_document_ids = temp_document_ids(json_content['pieces']).uniq
 
-      SgiApiServices::GroupDocument.delay(queue: :high).processing(json_content, _temp_document_ids, temp_pack)
+      staffing = StaffingFlow.new({ kind: 'grouping', params: { json_content: json_content, temp_document_ids: _temp_document_ids, temp_pack_id: temp_pack.id } }).save
 
       { success: true }
     else
@@ -264,7 +287,14 @@ class SgiApiServices::GroupDocument
     end
 
     def create_temp_document(recreate_later = false)
-      file_name                                 = File.basename(@file_path)
+      file_name     = File.basename(@file_path)
+      parents_pages = parents_documents_pages
+      checksum      = DocumentTools.checksum(@file_path)
+
+      found_with_parents  = TempDocument.where(parents_documents_pages: parents_pages).first
+      found_with_checksum = TempDocument.where(original_fingerprint: checksum).where.not(parents_documents_ids: []).first
+
+      return true if found_with_parents || found_with_checksum
 
       temp_document                             = TempDocument.new
       temp_document.temp_pack                   = @temp_pack
@@ -278,11 +308,11 @@ class SgiApiServices::GroupDocument
       temp_document.delivered_by                = original_temp_document.delivered_by
       temp_document.delivery_type               = original_temp_document.delivery_type
       temp_document.api_name                    = original_temp_document.api_name
-      temp_document.parent_document_id          = original_temp_document.id
-      temp_document.parents_documents_pages     = parents_documents_pages
+      temp_document.parents_documents_ids       = @temp_document_ids
+      temp_document.parents_documents_pages     = parents_pages
       temp_document.scan_bundling_document_ids  = bundling_document_ids
       temp_document.analytic_reference_id       = original_temp_document.analytic_reference_id
-      temp_document.original_fingerprint        = DocumentTools.checksum(@file_path)
+      temp_document.original_fingerprint        = checksum
 
       if temp_document.save
         temp_document.ready
@@ -294,6 +324,21 @@ class SgiApiServices::GroupDocument
         end
         true
       else
+        mail_info = {
+          subject: "[SgiApiServices::GroupDocument] can't create a new temp document from grouping",
+          name: "SgiApiServices::CreateTempDocumentFromGrouping-cannot-create-child",
+          error_group: "[sgi-api-services-create-temp-document-from-grouping] can't create a new temp document from grouping",
+          erreur_type: "create temp document with errors - can't create a new temp document from grouping",
+          date_erreur: Time.now.strftime('%Y-%m-%d %H:%M:%S'),
+          more_information: {
+            errors_messages: errors.messages.to_s,
+            parents_documents_infos: parents_pages.to_s,
+            temp_pack_name: @temp_pack.name
+          }
+        }
+
+        ErrorScriptMailer.error_notification(mail_info).deliver
+
         false
       end
     end

@@ -6,7 +6,8 @@ class FileImport::Ftp
                   invalid_file_extension: 'extension invalide',
                   file_size_is_too_big: 'fichier trop volumineux, 10Mo max.',
                   pages_number_is_too_high: 'nombre de page trop important',
-                  file_is_corrupted_or_protected: 'fichier corrompu ou protégé par mdp',
+                  file_is_corrupted_or_protected: 'Votre document est en-cours de traitement',
+                  real_corrupted_document: 'fichier corrompu ou protégé par mdp',
                   unprocessable: 'erreur fichier non valide pour iDocus'
                 }.freeze
 
@@ -354,34 +355,40 @@ class FileImport::Ftp
       end
 
       file_paths.each do |untrusted_file_path|
+        next if not untrusted_file_path.to_s.match(/.+[.].+/)
+
         file_name = File.basename(untrusted_file_path).force_encoding('UTF-8')
         file_path = File.join(item.path, file_name)
 
         next if file_name =~ /^\./
-        next unless valid_file_name(file_name)
+        next if not valid_file_name(file_name)
 
-        unless UploadedDocument.valid_extensions.include?(File.extname(file_name).downcase)
+        if not UploadedDocument.valid_extensions.include?(File.extname(file_name).downcase)
           mark_file_error item.path, file_name, [[:invalid_file_extension]]
           next
         end
 
-        if client.size(file_path) > 10.megabytes
-          mark_file_error item.path, file_name, [[:file_size_is_too_big]]
-          next
-        end
+        # Don't check file size
+        # if client.size(file_path) > 10.megabytes
+        #   mark_file_error item.path, file_name, [[:file_size_is_too_big]]
+        #   next
+        # end
 
         CustomUtils.mktmpdir('ftp_import') do |dir|
           File.open File.join(dir, file_name), 'wb' do |file|
             client.getbinaryfile file_path, file
 
-            uploaded_document = UploadedDocument.new file, file_name, item.customer, item.journal, 0, @ftp.organization, 'ftp'
+            corrupted_document_state = PdfIntegrator.verify_corruption(file.path)
 
-            if uploaded_document.valid?
+            uploaded_document = UploadedDocument.new file, file_name, item.customer, item.journal, 0, @ftp.organization, 'ftp' if corrupted_document_state.to_s == 'continu'
+
+            if corrupted_document_state.to_s == 'uploaded' || uploaded_document.try(:valid?)
               System::Log.info('processing', "#{log_prefix}[SUCCESS]#{file_detail(uploaded_document)} #{file_path}")
               client.delete file_path
             else
-              System::Log.info('processing', "#{log_prefix}[INVALID][#{uploaded_document.errors.last[0].to_s}] #{file_path}")
-              mark_file_error(item.path, file_name, uploaded_document.errors)
+              System::Log.info('processing', "#{log_prefix}[INVALID][#{uploaded_document.try(:errors).try(:last).try(:[], 0).to_s}] #{file_path}")
+              error = (corrupted_document_state.to_s == 'rejected') ? [[:real_corrupted_document]] : uploaded_document.errors
+              mark_file_error(item.path, file_name, error)
             end
           end
         end
@@ -395,7 +402,8 @@ class FileImport::Ftp
       error_message = ERROR_LISTS[err[0].to_sym] if ERROR_LISTS[err[0].to_sym].present?
     end
 
-    file_rename = File.basename(file_name, '.*') + " (#{error_message})" + File.extname(file_name)
+    file_rename = File.basename(file_name, '.*').gsub(/\(#{ERROR_LISTS[:file_is_corrupted_or_protected]}\)/, '').strip
+    file_rename = file_rename + " (#{error_message})" + File.extname(file_name)
     new_file_name = file_rename
     loop_count = 1
     error = true
@@ -422,9 +430,9 @@ class FileImport::Ftp
 
   def valid_file_name(file_name)
     ERROR_LISTS.each do |pattern|
-      if file_name =~ /#{pattern.last}/i
-        return false
-      end
+      next if pattern.last =~ /#{ERROR_LISTS[:file_is_corrupted_or_protected]}/i
+
+      return false if file_name =~ /#{pattern.last}/i
     end
     return true
   end

@@ -140,6 +140,10 @@ class Pack < ApplicationRecord
     documents.count > 0
   end
 
+  def has_not_delivered_preseizures?
+    self.preseizures.where('pack_report_preseizures.delivery_message <> "{}" AND pack_report_preseizures.delivery_message <> null AND pack_report_preseizures.delivery_message <> ""').size > 0
+  end
+
   def set_tags
     self.tags = original_document.tags.presence || name.downcase.sub(' all', '').split
   end

@@ -63,6 +63,7 @@ Rails.application.routes.draw do
   front_draw('preseizures')
   front_draw('pre_assignments')
   front_draw('documents')
+  front_draw('organizations')
   front_draw('reporting')
   front_draw('customers')
   front_draw('periods')

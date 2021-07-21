@@ -1,0 +1,37 @@
+- packs.each do |pack|
+  .box
+    .row
+      .col-md-5
+        %h5.pack.semibold= pack.name.to_s.gsub('all', '').strip
+        %h6.under_pack.regular= pack.user.organization.name 
+      .col-md-4
+        .created-date
+          %span.semibold Premier ajout le :
+          %span= pack.created_at.strftime('%d/%m/%Y')
+        .updated-date
+          %span Modifié le :
+          %span= pack.updated_at.strftime('%d/%m/%Y')
+      .col-md-2.no-padding
+        .operation-count 
+          %span= pack.pieces.size
+      .col-md-1
+        =link_to glyphicon('caret-right', { size: '20', color: '#CCC' }), documents_details_path(id: pack.id) 
+    %hr    
+    .row
+      .col-md-9
+        - if pack.created_at >= 1.days.ago
+          %span.badge.badge-success Nouveau
+        - if pack.has_not_delivered_preseizures?
+          %span.badge.badge-danger Ecritures non livrées
+        - if pack.pieces.size >= 50
+          %span.badge.badge-warning Inmportant
+        - if pack.pieces.collect(&:expense).any?
+          %span.badge.bg-dark Notes de frais
+        - if not pack.is_fully_processed
+          %span.badge.bg-dark En cours ...
+      .col-md-3.text-right
+        %span.action-group= glyphicon('flag', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+        %span.action-group= glyphicon('tag', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+        %span.action-group.download_pack_bundle{title: 'Télécharger', data: {id: pack.id}}= glyphicon('data-transfer-download', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+        %span.action-group.download_pack_archive{title: 'Télécharger une archive zip', data: {id: pack.id}}= glyphicon('account-logout', { size: '20', color:'rgba(26, 26, 26, 0.32);', style: 'transform: rotate(90deg)'})
+        %span.action-group.preseizures_export{title: 'Export écriture', data:{ id: pack.id, type: 'pack', multi: true }}= glyphicon('cloud-download', { size: '20', color:'rgba(26, 26, 26, 0.32);'})

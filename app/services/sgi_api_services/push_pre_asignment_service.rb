@@ -1,7 +1,10 @@
 # -*- encoding : UTF-8 -*-
 class SgiApiServices::PushPreAsignmentService
   class << self
-    def process(piece, data_pre_assignments, errors)
+    def process(piece_id, data_pre_assignments)
+      piece    = Pack::Piece.where(id: piece_id).first
+      return false if not piece
+
       period   = piece.pack.owner.subscription.current_period
       document = Reporting.find_or_create_period_document(piece.pack, period)
       report   = document.report || create_report(piece.pack, document)
@@ -19,9 +22,12 @@ class SgiApiServices::PushPreAsignmentService
 
       not_blocked_pre_assignments = pre_assignments.select(&:is_not_blocked_for_duplication)
       not_blocked_pre_assignments = not_blocked_pre_assignments.select{|pres| !pres.has_deleted_piece? }
+
       if not_blocked_pre_assignments.size > 0
-        PreAssignment::CreateDelivery.new(not_blocked_pre_assignments, ['ibiza', 'exact_online'], is_auto: true).execute
-        PreseizureExport::GeneratePreAssignment.new(not_blocked_pre_assignments).execute
+        not_blocked_pre_assignments.each_slice(40) do |preseizures_group|
+          PreAssignment::CreateDelivery.new(preseizures_group, ['ibiza', 'exact_online', 'my_unisoft'], is_auto: true).execute
+          PreseizureExport::GeneratePreAssignment.new(preseizures_group).execute
+        end
         FileDelivery.prepare(report)
         FileDelivery.prepare(piece.pack)
       end
@@ -164,7 +170,7 @@ class SgiApiServices::PushPreAsignmentService
     errors << "Piece #{piece.name} already pre-assigned" if piece && piece.is_already_pre_assigned_with?(@data_preassignment["process"])
 
     if errors.empty?
-      SgiApiServices::PushPreAsignmentService.delay.process(piece, @data_preassignment, errors)
+      staffing = StaffingFlow.new({ kind: 'preassignment', params: { piece_id: piece.id, data_preassignment: @data_preassignment } }).save
     else
       piece.not_processed_pre_assignment
     end

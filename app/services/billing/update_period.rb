@@ -54,7 +54,7 @@ class Billing::UpdatePeriod
     if @subscription.organization
       _options = [extra_options, discount_options]
     else
-      _options = [base_options, journals_option, order_options, extra_options, bank_accounts_options, operation_options]
+      _options = [base_options, journals_option, order_options, extra_options, bank_accounts_options, operation_options, digitize_options]
     end
 
     _options.flatten.compact.each_with_index do |option, index|
@@ -233,7 +233,11 @@ class Billing::UpdatePeriod
   end
 
   def order_options
+    is_manual_paper_set_order = CustomUtils.is_manual_paper_set_order?(@period.user.organization)
+
     @period.orders.order(created_at: :asc).map do |order|
+      next if order.paper_set? && is_manual_paper_set_order
+
       option      = ProductOptionOrder.new
       option.name = 'extra_option'
 
@@ -248,6 +252,7 @@ class Billing::UpdatePeriod
                              end
 
         option.title = 'Commande de Kit envoi courrier'
+        order_paper_set_exist = true
       end
 
       option.duration    = 1
@@ -316,13 +321,25 @@ class Billing::UpdatePeriod
 
     rest.sort.each do |value_date|
       if value_date.to_s.match(/^[0-9]{6}$/) && value_date.to_i >= 202001 && value_date.to_i < @period.start_date.strftime("%Y%m").to_i
+        previous_orders = @period.user.periods.collect(&:product_option_orders).flatten.compact
+        jump = false
+        title = "Opérations bancaires mois de #{I18n.l(Date.new(value_date.to_s[0..3].to_i, value_date.to_s[4..-1].to_i), format: '%B')} #{value_date.to_s[0..3].to_i}"
+
+        previous_orders.each do |order|
+          next if jump
+
+          jump = true if title == order.title
+        end
+
+        next if jump
+
         option = ProductOptionOrder.new
 
         option.name        = 'billing_previous_operations'
         option.group_title = option_infos[:group]
 
         begin
-          option.title = "Opérations bancaires mois de #{I18n.l(Date.new(value_date.to_s[0..3].to_i, value_date.to_s[4..-1].to_i), format: '%B')} #{value_date.to_s[0..3].to_i}"
+          option.title = title
         rescue => e
           p "----->#{e.to_s}---->" + value_date.to_s
           next
@@ -337,5 +354,53 @@ class Billing::UpdatePeriod
     end
 
     billing_options
+  end
+
+  def digitize_options
+    # is_manual_paper_set_order = CustomUtils.is_manual_paper_set_order?(@period.user.organization)
+    digitize_option = []
+
+    if @period.subscription.is_package?('digitize_option')
+      option_infos = Subscription::Package.infos_of(:digitize_option)
+
+      scanned_sheets_size = @period.scanned_sheets
+
+      if scanned_sheets_size > 0
+        #### ------- Scanned sheet Option -------- ####
+        ss_option = ProductOptionOrder.new
+
+        ss_option.name        = 'scanned_sheets'
+        ss_option.group_title = option_infos[:group]
+
+        ss_option.title = "#{scanned_sheets_size} feuille(s) numérisée(s)"
+
+        ss_option.duration = 0
+        ss_option.quantity = scanned_sheets_size
+        ss_option.price_in_cents_wo_vat = scanned_sheets_size * 10.0
+
+        digitize_option << ss_option
+
+        #### --------- Pack size Option -------- ####
+        pack_names = @period.user.paper_processes.where('created_at >= ? and created_at <= ?', @period.start_date, @period.end_date).where(type: 'scan').select(:pack_name).distinct
+        pack_size  = pack_names.collect(&:pack_name).size
+
+        if pack_size > 0
+          ps_option = ProductOptionOrder.new
+
+          ps_option.name        = 'scanned_sheets'
+          ps_option.group_title = option_infos[:group]
+
+          ps_option.title = "#{pack_size} pochette(s) scannée(s)"
+
+          ps_option.duration = 0
+          ps_option.quantity = pack_size
+          ps_option.price_in_cents_wo_vat = pack_size * 100.0
+
+          digitize_option << ps_option
+        end
+      end
+    end
+
+    digitize_option
   end
 end

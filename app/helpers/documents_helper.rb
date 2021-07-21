@@ -5,21 +5,6 @@ module DocumentsHelper
     has_multiple_accounts? ? accounts.map { |u| [u, u.id] } : []
   end
 
-  def account_book_types_option
-    account_book_types = []
-
-    if @user.try(:options).try(:upload_authorized?) || @user.authorized_all_upload?
-      account_book_types = @user.account_book_types.specific_mission.by_position if not @user.try(:options).try(:upload_authorized?)
-      account_book_types = @user.account_book_types.by_position if @user.try(:options).try(:upload_authorized?)
-    elsif @user.authorized_bank_upload?
-      account_book_types = @user.account_book_types.bank_processable.by_position
-    end
-
-    account_book_types.map do |j|
-      [j.name + ' ' + j.description, j.name, { 'compta-processable' => (j.compta_processable? ? '1' : '0') }]
-    end
-  end
-
   def active_users(users, year)
     users.select do |u|
       if u.created_at.year <= year

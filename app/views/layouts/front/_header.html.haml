@@ -15,7 +15,7 @@
             =link_to t('layouts.duplicated_pre_assignment'), '/documents#preseizures-ignored', class: 'dropdown-item'
             =link_to t('layouts.pre_assignment_delivery_error'), '/documents#preseizures-ignored', class: 'dropdown-item'
         %li.nav-item
-          =link_to t('layouts.bank_operations'), '/operations', class: 'nav-link bold'
+          =link_to t('layouts.bank_operations'), operations_path, class: 'nav-link bold'
         %li.nav-item.dropdown
           =link_to t('layouts.my_company'), "/organizations/#{@user.organization.id}", class: 'nav-link dropdown-toggle bold', id: 'navbardropdownmenucompany', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-toggle' => 'dropdown', 'data-bs-toggle' => "dropdown", 'role' => "button"
           .dropdown-menu{"aria-labelledby" => "navbardropdownmenucompany"}

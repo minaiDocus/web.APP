@@ -3,6 +3,19 @@
 # contributor: Sebastien Grosjean - ZenCocoon.com
 
 fr:
+  global:
+    no-data-found: 'Aucun résultat trouvé'
+
+  pieces:
+    delivery_state:
+      awaiting_analytics: 'En attente analytique'
+      awaiting_pre_assignment: 'Pré-affectation en cours'
+      delivered: 'Ecriture livrée'
+      delivery_pending: 'En attente livraison écriture'
+      delivery_failed: 'Erreur livraison écriture'
+      duplication: 'Ecriture en doublon'
+      piece_ignored: 'Pré-affectation ignorée'
+
   date:
     formats:
       default: "%d/%m/%Y"

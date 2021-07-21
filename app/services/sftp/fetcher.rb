@@ -1,4 +1,9 @@
 # -*- encoding : UTF-8 -*-
+# IMPORTANT :
+#
+# THIS FILE IS NOT USED - JUST KEEP IT IN CASE
+#
+
 require 'net/sftp'
 
 class Sftp::Fetcher
@@ -96,7 +101,7 @@ class Sftp::Fetcher
     rescue Errno::ETIMEDOUT, EOFError => e
       System::Log.info('debug_sftp', "[#{Time.now}] SFTP: connect to #{url} : #{e.to_s}")
       false
-    rescue Net::SFTPConnectionError, Net::SFTPError, Net::SFTPPermError, Net::SFTPProtoError, Net::SFTPReplyError, Net::SFTPTempError, SocketError, Errno::ECONNREFUSED => e
+    rescue => e
       content = "#{e.class}<br /><br />#{e.message}"
       addresses = Array(Settings.first.notify_errors_to)
 

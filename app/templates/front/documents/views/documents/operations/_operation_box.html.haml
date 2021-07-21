@@ -1,0 +1,48 @@
+- operation = preseizure.operation
+
+.w-50
+  .box
+    .row
+      .col-md-10
+        %h5.pack.semibold= operation.try(:label)
+      .col-md-1.action-group
+        %label.container.pointer
+          %input{ type: :checkbox }
+          %span.checkmark
+            = glyphicon('check', { size: '14', color: '#FFF'})
+    .row
+      .col-md-5
+        %span= preseizure.date.strftime('%d/%m/%Y')
+        %span -         
+        %span Devise :
+        %span= preseizure.unit 
+
+    .row.m-3.content-table
+      %table.table
+        %thead
+          %th.no-border N° de compte
+          %th.no-border Débit
+          %th.no-border Crédit
+        - accounts = preseizure.try(:accounts) || []
+        - entries  = preseizure.try(:entries) || []
+        %tbody
+          %tr
+            %td= accounts[0].try(:number) || '-'
+            %td= (entries[0].try(:debit?))? entries[0].try(:amount) : '-'
+            %td= (entries[0].try(:credit?))? entries[0].try(:amount) : '-'
+          %tr.striped
+            %td= accounts[1].try(:number) || '-'
+            %td= (entries[1].try(:debit?))? entries[1].try(:amount) : '-'
+            %td= (entries[1].try(:credit?))? entries[1].try(:amount) : '-'
+    %hr    
+    .row
+      .col-md-9
+        %span.badge.badge-success Nouveau
+        %span.badge.badge-danger Ecritures non livrées
+        %span.badge.badge-dark Banque
+        %span.badge.badge-dark Neatops
+      .col-md-3.text-right
+        %span.action-group= glyphicon('flag', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+        %span.action-group= glyphicon('tag', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+        %span.action-group= glyphicon('loop-circular', { size: '20', color:'rgba(26, 26, 26, 0.32);', style: 'transform: rotate(90deg)'})
+        %span.action-group= glyphicon('pencil', { size: '20', color:'rgba(26, 26, 26, 0.32);'})

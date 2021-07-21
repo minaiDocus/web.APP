@@ -35,6 +35,12 @@ class Pack::Report < ApplicationRecord
     software.nil? ? reports.where.not(is_delivered_to: [nil, '']) : reports.where("is_delivered_to = '#{software}'")
   end
 
+  def operations
+    preseizures = self.preseizures.where('operation_id > 0') || []
+    (preseizures.any?)? preseizures.collect(&:operation).flatten.compact : []
+  end
+
+
   def journal(options={ name_only: true })
     #TODO : separate journal and journal name
     result = name.split[1]
