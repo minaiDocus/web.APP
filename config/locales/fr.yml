@@ -202,7 +202,7 @@ fr:
     add_folder_to_favorite: Ajouter un dossier aux favoris
     no_favorite_customer: Veuillez ajoutés vos dossiers favories
     search_folder: Rechercher un dossier
-    add_action: Ajouter
+    edit_action: Editer vos dossiers favories
     cancel_action: Annuler
     configuration_state: État de la configuration
     configuration_text: Le dossier client est configuré de façon optimale
@@ -325,15 +325,21 @@ fr:
   layouts:
     title: Idocus | Archivage numérique
     home: Accueil
+    my_account: Mon compte
+    change_password: Changer mon mot de passe
+    external_storage: Configurer les stockages externes
+    notification: Notifications et remontées d'alertes
     my_documents: Mes documents
     bank_operations: Opération bancaire
     my_company: Mon organisation
     reporting: Reporting
     my_retrievers: Mes automates
     pieces_and_pre_assignment: Pièces / Écritures comptables
-    pieces_ignored_in_pre_assignment: Pièces ignorées à la pré-affectation
-    duplicated_pre_assignment: Écritures comptables en doublon
-    pre_assignment_delivery_error: Erreur livraison d’écritures comptables
+    pieces_errors: Pièces en erreur    
+    retriever:
+      automates: Automates
+      historic: Historique de récupération
+      others: Autres
 
   views:
     pagination:

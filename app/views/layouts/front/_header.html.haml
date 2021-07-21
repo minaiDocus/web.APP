@@ -1,31 +1,39 @@
 %nav.navbar.navbar-expand-lg.navbar-light.bg-light.fixed-top.sticky-top
-  .row.w-100
-    .col-md-1
-      = link_to image_tag('logo/tiny_logo_2.png', alt: 'logo iDocus'), '#', class: 'navbar-brand idocus-brand goto_button', data:{ href: '/' }
+  .row.w-100.no-margin
+    .col-md-1.text-center
+      = link_to image_tag('logo/tiny_logo_2.png', alt: 'logo iDocus'), '#', class: 'navbar-brand no-margin', data:{ href: '/' }
       %button.navbar-toggler{"aria-controls" => "navbarNavDropdown", "aria-expanded" => "false", "aria-label" => "Toggle navigation", "data-target" => "#navbarNavDropdown", "data-toggle" => "collapse", :type => "button"}
     .col-md-9
       %ul.navbar-nav
         %li.nav-item.active
-          =link_to t('layouts.home'), '/dashboard', class: 'nav-link goto_button bold', data:{ href: '/' }
+          =link_to t('layouts.home'), '#', class: 'nav-link goto_button bold', data:{ href: '/' }
         %li.nav-item.dropdown
-          =link_to t('layouts.my_documents'), '/documents', class: 'nav-link dropdown-toggle bold', id: 'navbardropdownmenudocuments', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-toggle' => 'dropdown', 'data-bs-toggle' => "dropdown", 'role' => "button"
+          =link_to t('layouts.my_account'), '', class: 'nav-link dropdown-toggle bold', id: 'navbardropdownmenuaccount', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-bs-toggle' => "dropdown", 'role' => "button"
+          .dropdown-menu{"aria-labelledby" => "navbardropdownmenuaccount"}
+            =link_to t('layouts.change_password'), '/account/profile', class: 'dropdown-item'
+            =link_to t('layouts.external_storage'), '/account/external_storage', class: 'dropdown-item'
+            =link_to t('layouts.notification'), '/account/notification', class: 'dropdown-item'
+        %li.nav-item.dropdown
+          =link_to t('layouts.my_documents'), '', class: 'nav-link dropdown-toggle bold', id: 'navbardropdownmenudocuments', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-bs-toggle' => "dropdown", 'role' => "button"
           .dropdown-menu{"aria-labelledby" => "navbardropdownmenudocuments"}
             =link_to t('layouts.pieces_and_pre_assignment'), '/documents', class: 'dropdown-item'
-            =link_to t('layouts.pieces_ignored_in_pre_assignment'), '/documents#preseizures-ignored', class: 'dropdown-item'
-            =link_to t('layouts.duplicated_pre_assignment'), '/documents#preseizures-ignored', class: 'dropdown-item'
-            =link_to t('layouts.pre_assignment_delivery_error'), '/documents#preseizures-ignored', class: 'dropdown-item'
+            =link_to t('layouts.pieces_errors'), '/documents/others', class: 'dropdown-item'            
         %li.nav-item
-          =link_to t('layouts.bank_operations'), operations_path, class: 'nav-link bold'
+          =link_to t('layouts.bank_operations'), '/operations', class: 'nav-link bold'
         %li.nav-item.dropdown
-          =link_to t('layouts.my_company'), "/organizations/#{@user.organization.id}", class: 'nav-link dropdown-toggle bold', id: 'navbardropdownmenucompany', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-toggle' => 'dropdown', 'data-bs-toggle' => "dropdown", 'role' => "button"
+          =link_to t('layouts.my_company'), '', class: 'nav-link dropdown-toggle bold', id: 'navbardropdownmenucompany', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-bs-toggle' => "dropdown", 'role' => "button"
           .dropdown-menu{"aria-labelledby" => "navbardropdownmenucompany"}
-            =link_to 'iDocus', "/organizations/#{@user.organization.id}", class: 'dropdown-item goto_button', data:{ href: "/organizations/#{@user.organization.id}" }
-            =link_to 'Volentis', '/organizations#volentis-link', class: 'dropdown-item'
-            =link_to 'Extentis', '/organizations#extentis-link', class: 'dropdown-item'
+            =link_to 'iDocus', '/organization', class: 'dropdown-item goto_button', data:{ href: '' }
+            =link_to 'Volentis', '#volentis-link', class: 'dropdown-item'
+            =link_to 'Extentis', '#extentis-link', class: 'dropdown-item'
         %li.nav-item
           =link_to t('layouts.reporting'), '/reporting', class: 'nav-link bold'
-        %li.nav-item
-          =link_to t('layouts.my_retrievers'), '/retrievers', class: 'nav-link bold'  
+        %li.nav-item.dropdown
+          =link_to t('layouts.my_retrievers'), '', class: 'nav-link dropdown-toggle bold', id: 'navbardropdownmenuretriever', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-bs-toggle' => "dropdown", 'role' => "button"
+          .dropdown-menu{"aria-labelledby" => "navbardropdownmenuretriever"}
+            =link_to t('layouts.retriever.automates'), '/retriever/automates', class: 'dropdown-item'
+            =link_to t('layouts.retriever.historic'), '/retriever/historic', class: 'dropdown-item'
+            =link_to t('layouts.retriever.others'), '/retriever/others', class: 'dropdown-item'
         
     .col-md-2
       %ul.navbar-nav.notifaction_group

@@ -13,8 +13,7 @@
       - flash.each do |name, msg|
         - if msg.present?
           .row-fluid.derivationLeft.msg_present
-            .col-sm-12{ class: "alert #{twitterized_type(name)}" }
-              %a.close{ "data-bs-dismiss" => "alert" } &#215;
+            .col-sm-12              
               - if msg.is_a?(String)
                 %div{ id: "flash_#{twitterized_type(name)}" }
                   != msg

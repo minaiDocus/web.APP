@@ -165,14 +165,13 @@
 }
 
 .sol-active.sol-selection-bottom .sol-selection-container {
-    -webkit-border-top-left-radius: 0;
-    -moz-border-top-left-radius: 0;
-    border-top-left-radius: 0;
-    background: #FFFFFF;
-    box-shadow: 0px 4px 16px rgba(26, 26, 26, 0.24);
-    border-radius: 8px !important;
-    margin-top: 6px !important;
-    padding: 5px;
+  -webkit-border-top-left-radius: 0;
+  -moz-border-top-left-radius: 0;
+  border-top-left-radius: 0;
+  background: #FFFFFF;
+  box-shadow: 0px 4px 16px rgba(26, 26, 26, 0.24);
+  border-radius: 8px !important;
+  margin-top: 6px !important;   
 }
 
 .sol-active.sol-selection-bottom .sol-inner-container {
@@ -231,47 +230,27 @@
 
 .sol-option {
     display: block;
-    padding: 10px;
+    padding: 5px 10px;
 }
 
 .sol-label {
     display: block;
     position: relative;
+    font-family: Raleway-Regular;
 }
 
-.sol-label.container{
-  display: block;
-  position: relative;
-  font-size: 18px;
-  cursor: pointer;  
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+.sol-label{
+  font-size: 15px;
+  cursor: pointer;
 }
-
-/***/
-.sol-label .checkmark {
-  position: absolute;
-  top: 0;
-  right: 5px;
-  height: 25px;
-  width: 25px;
-  background-color: #eee;
-  border-radius: 5px;
-}
-
-.sol-label .checkmark .oi-icon.colored{ 
-  top: 5px;
-}
-/***/
 
 .sol-label-text {    
-    line-height: 1.2em;
+  line-height: 1.2em;
+  font-family: Raleway-Regular;
 }
 
 .sol-selection:not(.sol-keyboard-navigation) .sol-option:hover, .sol-option.keyboard-selection {
-    background: rgba(26, 26, 26, 0.04);
+  background: rgba(26, 26, 26, 0.04);
 }
 
 .sol-optiongroup {
@@ -290,7 +269,7 @@
 }
 
 .sol-optiongroup.disabled {
-    color: #999;
+  color: #999;
 }
 
 .sol-selection div:first-child.sol-optiongroup > .sol-optiongroup-label {

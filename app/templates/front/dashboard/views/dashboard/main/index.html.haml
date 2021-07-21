@@ -10,7 +10,7 @@
     %p= t('dashboard.folder_text_info')
 
   .row.derivationLeft
-    .col-md-4.view-documents.no-padding
+    .col-md-4.view-documents.no-padding.semibold
       %a.btn.btn-primary.view-documents-btn{href: documents_path}= t('dashboard.view_my_documents')
   #container-box.derivationRight
     .row
@@ -18,10 +18,10 @@
         %h3.favorite_label
           = t('dashboard.my_favorite_folders')
           %span.badge.badge-secondary.regular#my-favorite-customers-count= @favorites.size
-      .col-md-6.text-end
+      .col-md-6.text-end.semibold
         %button.btn.btn-default.add-to-favorite.float-end{'data-bs-target' => '#add-to-favorite', 'data-bs-toggle' => 'modal', 'data-bs-original-value' => '455', :type => 'button'}
-          = glyphicon('plus', {size: '12', color: '#72AA42'})
-          = t('dashboard.add_folder_to_favorite')
+          %span.me-2= glyphicon('plus', {size: '12', color: '#72AA42'})
+          %span= t('dashboard.add_folder_to_favorite')
 
     .row.my-favorite-customers
       - if @favorites.size > 0
@@ -49,8 +49,8 @@
             .control-section
               = select_tag 'favorite_customers', options_for_select(favorite_options, @favorites), class: 'select-customer searchable-option-list', id: 'select-customer-to-favorite', include_blank: false, multiple: true
       .modal-footer
-        %button.btn.btn-light{'data-bs-dismiss' => 'modal', :type => 'button'}= t('dashboard.cancel_action')
-        %button.btn.btn-secondary.btn-add{:type => 'button', id: 'add-customer-to-favorite'}= t('dashboard.add_action')
+        %button.btn.btn-light.semibold{'data-bs-dismiss' => 'modal', :type => 'button'}= t('dashboard.cancel_action')
+        %button.btn.btn-primary.semibold.btn-add{:type => 'button', id: 'add-customer-to-favorite'}= t('dashboard.edit_action')
 
 
 = javascript_include_tag 'front/dashboard/assets/javascripts/main'

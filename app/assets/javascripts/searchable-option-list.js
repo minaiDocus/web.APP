@@ -279,12 +279,7 @@
                 } else { 
                     this.$showSelectionContainer.insertAfter($el);
                 }
-            }
-            
-            if ($el.length > 0) {
-                $(".btn-add").removeClass('btn-secondary').addClass('btn-primary');
-            }
-
+            }    
 
             // dimensions
             if (this.config.maxHeight) {
@@ -735,7 +730,7 @@
             var self = this,
                 $actualTargetContainer = $optionalTargetContainer || this.$selection,
                 $inputElement,
-                $labelText = $('<div class="sol-label-text"/>')
+                $labelText = $('<div class="sol-label-text d-inline"/>')
                     .html(solOption.label.trim().length === 0 ? '&nbsp;' : solOption.label)
                     .addClass(solOption.cssClass),
                 $label,
@@ -774,13 +769,13 @@
                 .prop('checked', solOption.selected)
                 .prop('disabled', solOption.disabled)
                 .attr('name', inputName)
+                .attr('class', 'form-check-input pointer float-end mt-1')
                 .val(solOption.value);
 
-            $label = $('<label class="sol-label container"/>')
+            $label = $('<label class="sol-label d-block"/>')
                 .attr('title', solOption.tooltip)
                 .append($labelText)
-                .append($inputElement)
-                .append('<span class="checkmark"><svg viewBox="0 0 8 8" class="oi-icon  colored" style="width: 14px; height: 14px;fill: #FFF;"><use xlink:href="/assets/open-iconic.min.svg#check" class="icon icon-check"></use></svg></span>');
+                .append($inputElement)               
 
             $displayElement = $('<div class="sol-option"/>').append($label);
             solOption.displayElement = $displayElement;
@@ -879,14 +874,6 @@
                 selected.show();
                 this.$xItemsSelected.hide();
             }
-
-            if (selected.length != 0) {
-                $(".btn-add").removeClass('btn-secondary').addClass('btn-primary');
-            }
-            else{
-                $(".btn-add").removeClass('btn-primary').addClass('btn-secondary');
-            }
-
 
             if (!skipCallback && $.isFunction(this.config.events.onChange)) {                
                 this.config.events.onChange.call(this, this, $changeItem);
