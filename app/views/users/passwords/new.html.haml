@@ -21,12 +21,12 @@
         = simple_form_for resource, url: password_path(resource_name), wrapper_html: { class: "text-left w-100 m-1" } do |f|
           .row.text-center
             .col-md-12
-              .form-group
-                %span.glyph-login= glyphicon('envelope-closed', { size: '14', color: 'rgba(26, 26, 26, 0.7)'})
-                = f.input :email, wrapper_html: {id: 'email', class: "form-control not-completed", placeholder: 'identifiant (email)', "aria-label" => "identifiant (email)", "aria-describedby" => "basic-addon1"}
+              .input-group.mb-3
+                %span.input-group-text#input-email= glyphicon('envelope-closed', { size: '14', color: 'background: rgba(26, 26, 26, 0.7)' })          
+                = f.input :email, wrapper_html: { id: 'email', placeholder: 'identifiant (email)', "aria-label" => "identifiant (email)", "aria-describedby" => "input-email"}
 
           .row.mt-3
             .col-md-12.text-center
-              = f.submit 'Valider', class: 'btn btn-light-secondary bold w-100 valid'
+              = f.submit 'Valider', class: 'btn btn-primary bold w-100 valid'
 
   = javascript_include_tag 'front/main'

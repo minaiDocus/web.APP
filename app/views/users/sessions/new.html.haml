@@ -29,19 +29,19 @@
           .row.text-center
             .col-md-12
               .input-group.mb-3
-                %span.input-group-text#basic-addon1= glyphicon('person', { size: '14', color: 'background: rgba(26, 26, 26, 0.7)' })          
-                = f.input :email, wrapper_html: { class: "form-control #{error_class}", placeholder: 'identifiant (email)', "aria-label" => "identifiant (email)", "aria-describedby" => "basic-addon1"}
+                %span.input-group-text#input-email= glyphicon('person', { size: '14', color: 'background: rgba(26, 26, 26, 0.7)' })          
+                = f.input :email, wrapper_html: { class: "#{error_class}", placeholder: 'identifiant (email)', "aria-label" => "identifiant (email)", "aria-describedby" => "input-email"}
               .input-group.mb-3
-                %span.input-group-text#basic-addon1= glyphicon('key', { size: '14', color: 'background: rgba(26, 26, 26, 0.7)', style: 'transform: rotate(45deg)'})          
-                = f.input :password, wrapper_html: { class: "form-control #{error_class}", required: true, placeholder: 'mot de passe', "aria-label" => "identifiant (email)", "aria-describedby" => "basic-addon1"}
+                %span.input-group-text#input-password= glyphicon('key', { size: '14', color: 'background: rgba(26, 26, 26, 0.7)', style: 'transform: rotate(45deg)'})          
+                = f.input :password, wrapper_html: { class: "#{error_class}", required: true, placeholder: 'mot de passe', "aria-label" => "identifiant (email)", "aria-describedby" => "input-password"}
                        
           .row.text-center.p-2.semibold.hide.alert-identification
             .col-md-12.red-label identifiant ou mot de passe incorrect
 
           
-          .form-check
+          .form-check.text-start
             = f.check_box :remember_me, class: 'form-check-input pointer float-none'
-            = f.label :remember_me, 'Rester connecté ?', class: 'form-check-label stay-connect'
+            = f.label :remember_me, 'Rester connecté ?', class: 'form-check-label stay-connect ms-2'
 
           .row.mt-3
             .col-md-12.text-center
