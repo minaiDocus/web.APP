@@ -1,4 +1,5 @@
 //= require './main'
+//= require './tags'
 //= require './uploader'
 
 class DocumentsPieces extends DocumentsMain{

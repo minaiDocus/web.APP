@@ -1,4 +1,6 @@
 //= require './main'
+//= require './tags'
+//= require './preseizures'
 
 class DocumentsDetails extends DocumentsMain{
   constructor(){

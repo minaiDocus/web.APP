@@ -1,6 +1,5 @@
 function bind_all_events(){
-  $('#delivery-date.datepicker').datepicker();
-  $('#invoice-date.datepicker').datepicker();  
+  $('.datepicker').datepicker();
 
   $('.more-filter').unbind('click').bind('click',function(e) {
     e.stopPropagation();
@@ -108,6 +107,12 @@ function bind_all_events(){
 
   $('.download_pack_archive').unbind('click').bind('click', function(){ AppEmit('download_pack_archive', {'obj': this}); });
   $('.download_pack_bundle').unbind('click').bind('click', function(){ AppEmit('download_pack_bundle', {'obj': this}); });
+
+  $('.update_tags').unbind('click').bind('click', function(){ AppEmit('documents_update_tags', {'obj': this}); });
+
+  $('.edit_preseizures').unbind('click').bind('click', function(){ AppEmit('documents_edit_preseizures', {'obj': this}); });
+
+  $('.deliver_preseizures').unbind('click').bind('click', function(){ AppEmit('documents_deliver_preseizures', {'obj': this}); });
 }
 
 jQuery(function() {

@@ -117,13 +117,64 @@ class Documents::MainController < FrontController
     @pack = Pack.find params[:id]
     filepath = @pack.cloud_content_object.path
 
-    if File.exist?(filepath) && (@pack.owner.in?(accounts) || current_user.try(:is_admin))
+    if File.exist?(filepath.to_s) && (@pack.owner.in?(accounts) || current_user.try(:is_admin))
       mime_type = 'application/pdf'
       send_file(filepath, type: mime_type, filename: @pack.cloud_content_object.filename, x_sendfile: true, disposition: 'inline')
     else
       render body: nil, status: 404
     end
   end
+
+  def get_tags
+    if params[:type] == 'pack'
+      @models = Pack.where(id: params[:ids])
+    else
+      @models = Pack::Piece.where(id: params[:ids])
+    end
+
+    render partial: 'tags'
+  end
+
+  def update_tags
+    UpdateMultipleTags.execute(@user, params[:tags], Array(params[:ids]), params[:type])
+
+    render json: {message: 'Tag mis à jours avec succès'}, status: :ok
+  end
+
+  def deliver_preseizures
+    if @user.has_collaborator_action?
+      if params[:ids].present?
+        preseizures = Pack::Report::Preseizure.not_delivered.not_locked.where(id: params[:ids])
+      elsif params[:id]
+        if params[:type] == 'report'
+          reports = Pack::Report.where(id: params[:id])
+          if reports.present?
+            preseizures = Pack::Report::Preseizure.not_delivered.not_locked
+          end
+        else
+          reports = Pack.find(params[:id]).try(:reports)
+          if reports.present?
+            preseizures = Pack::Report::Preseizure.not_deleted.not_delivered.not_locked
+          end
+        end
+
+        if reports.present?
+          preseizures = preseizures.where(report_id: reports.collect(&:id))
+        end
+      end
+
+      if preseizures.present?
+        preseizures.group_by(&:report_id).each do |_report_id, preseizures_by_report|
+          PreAssignment::CreateDelivery.new(preseizures_by_report, %w[ibiza exact_online my_unisoft]).execute
+        end
+      end
+
+      render json: { success: true }, status: 200
+    else
+      render json: { success: true }, status: 200
+    end
+  end
+
 
   #############################################
 
@@ -248,40 +299,6 @@ class Documents::MainController < FrontController
       render json: { error: error }, status: 200
     else
       render json: { error: '' }, status: 200
-    end
-  end
-
-  def deliver_preseizures
-    if @user.has_collaborator_action?
-      if params[:ids].present?
-        preseizures = Pack::Report::Preseizure.not_delivered.not_locked.where(id: params[:ids])
-      elsif params[:id]
-        if params[:type] == 'report'
-          reports = Pack::Report.where(id: params[:id])
-          if reports.present?
-            preseizures = Pack::Report::Preseizure.not_delivered.not_locked
-          end
-        else
-          reports = Pack.find(params[:id]).try(:reports)
-          if reports.present?
-            preseizures = Pack::Report::Preseizure.not_deleted.not_delivered.not_locked
-          end
-        end
-
-        if reports.present?
-          preseizures = preseizures.where(report_id: reports.collect(&:id))
-        end
-      end
-
-      if preseizures.present?
-        preseizures.group_by(&:report_id).each do |_report_id, preseizures_by_report|
-          PreAssignment::CreateDelivery.new(preseizures_by_report, %w[ibiza exact_online my_unisoft]).execute
-        end
-      end
-
-      render json: { success: true }, status: :ok
-    else
-      render json: { success: true }, status: 200
     end
   end
 

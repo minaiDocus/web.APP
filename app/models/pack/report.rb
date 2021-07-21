@@ -8,7 +8,6 @@ class Pack::Report < ApplicationRecord
   has_many   :pre_assignment_deliveries
   has_many   :pre_assignment_exports
 
-
   belongs_to :user
   belongs_to :pack, optional: true
   belongs_to :document, class_name: 'PeriodDocument', inverse_of: :report, foreign_key: :document_id, optional: true
@@ -161,5 +160,9 @@ class Pack::Report < ApplicationRecord
       mess = mess[software.to_s] || ''
     end
     mess
+  end
+
+  def has_not_delivered_preseizures?
+    self.preseizures.where('pack_report_preseizures.delivery_message <> "{}" AND pack_report_preseizures.delivery_message <> null AND pack_report_preseizures.delivery_message <> ""').size > 0
   end
 end

@@ -71,9 +71,18 @@ class ApplicationJS {
     });
   }
 
-  noticeFlashMessageFrom(page){
-    var html = $(page).find('.notice-internal-success').html();
-    var is_present = $(page).find('.notice-internal-success .msg_present');
+  noticeFlashMessageFrom(page=null, message = null){
+    var html = message;
+    var is_present = null;
+    if(message)
+    {
+      is_present = 'true';
+    }
+    else
+    {
+      html = $(page).find('.notice-internal-success').html();
+      is_present = $(page).find('.notice-internal-success .msg_present');
+    }
 
     if(is_present.length > 0){
       $('#idocus_notifications_messages .notice-internal-success').html(html);
@@ -83,12 +92,16 @@ class ApplicationJS {
     }
   }
 
-  noticeInternalErrorFrom(page){
-    var html = $(page).find('.notice-internal-error').html();
+  noticeInternalErrorFrom(page=null, message = null){
+    var html = message;
+    if(page)
+      html = $(page).find('.notice-internal-error').html();
 
-    $('#idocus_notifications_messages .notice-internal-error').html(html);
-
-    $('#idocus_notifications_messages .notice-internal-error').show('');
+    if(html)
+    {
+      $('#idocus_notifications_messages .notice-internal-error').html(html);
+      $('#idocus_notifications_messages .notice-internal-error').show('');
+    }
   }
 
   parseAjaxResponse(params={}, beforeUpdateContent=function(e){}, afterUpdateContent=function(e){}){

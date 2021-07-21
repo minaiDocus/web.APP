@@ -29,7 +29,7 @@ class Documents::OperationsController < FrontController
 
   # GET /operations/:id
   def show
-    preseizures = @report.preseizures
+    preseizures = @report.preseizures.where('operation_id > 0')
 
     if params[:by_preseizure].present? && (params[:by_preseizure].try(:[], 'is_delivered').present? || params[:by_preseizure].try(:[], 'delivery_tried_at').present? || params[:by_preseizure].try(:[], 'date').present? || params[:by_preseizure].try(:[], 'amount').present?)
       preseizures = preseizures.filter_by(params[:by_preseizure])
@@ -45,7 +45,7 @@ class Documents::OperationsController < FrontController
   private
 
   def load_report
-  	@report = Pack::Report.where(id: params[:id]).first
+  	@report = Pack::Report.where(id: params[:id], pack_id: [nil, '']).first
     # @report = nil if not account_ids.include? @report.user_id #disable temporarly to be enable later
 
     redirect_to operations_path if not @report

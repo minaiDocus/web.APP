@@ -1,6 +1,6 @@
 - operation = preseizure.operation
 
-.w-50
+.w-50.dynamic_box{ data: { preseizure_id: preseizure.id, type: 'operation' }}
   .box
     .row
       .col-md-10
@@ -37,12 +37,21 @@
     %hr    
     .row
       .col-md-9
-        %span.badge.badge-success Nouveau
-        %span.badge.badge-danger Ecritures non livrées
-        %span.badge.badge-dark Banque
-        %span.badge.badge-dark Neatops
+        - if preseizure.created_at >= 1.days.ago
+          %span.badge.badge-success Nouveau
+
+        - delivery_state = preseizure.get_state_to('text')
+        - if ['delivery_failed', 'duplication', 'piece_ignored'].include?(delivery_state)
+          %span.badge.badge-danger= t("pieces.delivery_state.#{delivery_state}")
+        - elsif ['awaiting_analytics', 'awaiting_pre_assignment', 'delivery_pending'].include?(delivery_state)
+          %span.badge.badge-warning= t("pieces.delivery_state.#{delivery_state}")
+        - elsif delivery_state != 'none'
+          %span.badge.badge-success= t("pieces.delivery_state.#{delivery_state}")
+
+        - if preseizure.third_party.present?
+          %span.badge.bg-dark= preseizure.third_party
       .col-md-3.text-right
-        %span.action-group= glyphicon('flag', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
-        %span.action-group= glyphicon('tag', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
-        %span.action-group= glyphicon('loop-circular', { size: '20', color:'rgba(26, 26, 26, 0.32);', style: 'transform: rotate(90deg)'})
-        %span.action-group= glyphicon('pencil', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+        %span.action-group.preseizures_export{title: 'Export écriture comptable', data:{ id: preseizure.id, type: 'preseizure', multi: false }}= glyphicon('cloud-download', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+        - if preseizure.user.uses_api_softwares? && preseizure.is_not_delivered?
+          %span.action-group.deliver_preseizures{title: 'Livraison écriture comptable', data: {ids: [preseizure.id]}}= glyphicon('loop-circular', { size: '20', color:'rgba(26, 26, 26, 0.32);', style: 'transform: rotate(90deg)'})
+        %span.action-group.edit_preseizures{title: 'Edition écriture comptable', data: { id: preseizure.id }}= glyphicon('pencil', { size: '20', color:'rgba(26, 26, 26, 0.32);'})

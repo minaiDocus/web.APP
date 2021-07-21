@@ -1,4 +1,5 @@
 //= require './main'
+//= require './preseizures'
 
 class DocumentsOperationsDetails extends DocumentsMain{
   constructor(){

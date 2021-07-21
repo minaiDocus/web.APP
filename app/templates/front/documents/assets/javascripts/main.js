@@ -18,7 +18,7 @@ class DocumentsMain{
     this.ajax_params['target'] = (append)? null : '.main-content';
     this.ajax_params['data']   = data.join('&');
 
-    this.applicationJS.parseAjaxResponse(this.ajax_params, function(){ $('#more-filter.modal').modal('hide'); }, bind_all_events)
+    this.applicationJS.parseAjaxResponse(this.ajax_params, function(){ $('#more-filter.modal').modal('hide'); })
                  .then((e)=>{
                     $('.datas_size').html($(e).find('.datas_size').html());
 
@@ -29,6 +29,8 @@ class DocumentsMain{
                         $('.main-content').append($(e).find('.main-content').html());
                       }
                     }
+
+                    bind_all_events();
                   });
   }
 
@@ -79,6 +81,30 @@ class DocumentsMain{
   download_pack_bundle(pack_id){
     window.open(`/documents/download_bundle/${pack_id}`);
   }
+
+  deliver_preseizures(elem){
+    let id   = elem.attr('data-id');
+    let ids  = elem.attr('data-ids');
+    let type = elem.attr('data-type');
+    let confirm_message = 'Voulez vous vraiment livrer les écritures comptables non livrées du lot?';
+
+    let datas = {type: type, id: id };
+    if(ids){
+      ids = JSON.parse(ids);
+      confirm_message = `Voulez vous vraiment livrer (${ids.length}) écriture(s) comptable(s)?`;
+      datas = { ids: ids };
+    }
+
+    let params =  {
+                    'url': '/documents/deliver_preseizures',
+                    'type': 'POST',
+                    'data': datas,
+                    'dataType': 'json'
+                  }
+
+    if(confirm(confirm_message))
+      this.applicationJS.parseAjaxResponse(params).then((e)=>{ this.applicationJS.noticeFlashMessageFrom(null, 'Livraison en cours ...'); });
+  }
 }
 
 jQuery(function() {
@@ -86,6 +112,8 @@ jQuery(function() {
 
   AppListenTo('download_pack_archive', (e)=>{ main.download_pack_archive($(e.detail.obj).attr('data-id')); });
   AppListenTo('download_pack_bundle', (e)=>{ main.download_pack_bundle($(e.detail.obj).attr('data-id')); });
+
+  AppListenTo('documents_deliver_preseizures', (e)=>{ main.deliver_preseizures($(e.detail.obj)); });
 
   $('#preseizures_export.modal').unbind('show.bs.modal').bind('show.bs.modal', function(){ main.fetch_export_options(); });
   $('#preseizures_export.modal #export_button').unbind('click').bind('click', function(){ main.launch_export(); });

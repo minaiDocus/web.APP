@@ -7,24 +7,28 @@
       .col-md-4
         .created-date
           %span.semibold Premier ajout le :
-          %span= report.operations.first.try(:created_at).try(:strftime, '%d/%M/%Y')
+          %span= report.preseizures.first.try(:created_at).try(:strftime, '%d/%M/%Y')
         .updated-date
           %span Dérnier ajout le :
-          %span= report.operations.last.try(:created_at).try(:strftime, '%d/%M/%Y')
+          %span= report.preseizures.last.try(:created_at).try(:strftime, '%d/%M/%Y')
       .col-md-2.no-padding
         .operation-count 
-          %span= report.operations.size
+          %span= report.preseizures.where('operation_id > 0').size
       .col-md-1
         = link_to glyphicon('caret-right', { size: '20', color: '#CCC' }), operations_details_path(id: report.id)
     %hr    
     .row
-      .col-md-9
-        %span.badge.badge-success Nouveau
-        %span.badge.badge-danger Ecritures non livrées
-        %span.badge.badge-dark Banque
-        %span.badge.badge-dark Neatops
-      .col-md-3.text-right
+      .col-md-8
+        - if report.created_at >= 1.days.ago
+          %span.badge.badge-success Nouveau
+        - if report.has_not_delivered_preseizures?
+          %span.badge.badge-danger Ecritures non livrées
+        - if report.preseizures.size >= 50
+          %span.badge.badge-warning Inmportant
+        - if report.expenses.size > 0
+          %span.badge.bg-dark Notes de frais
+      .col-md-4.text-right
         %span.action-group= glyphicon('flag', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
-        %span.action-group= glyphicon('tag', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
-        %span.action-group= glyphicon('account-logout', { size: '20', color:'rgba(26, 26, 26, 0.32);', style: 'transform: rotate(90deg)'})
-        %span.action-group= glyphicon('loop-circular', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+        %span.action-group.preseizures_export{title: 'Export écriture comptable', data:{ id: report.id, type: 'report', multi: true }}= glyphicon('cloud-download', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+        - if report.user.uses_api_softwares?
+          %span.action-group.deliver_preseizures{title: 'Livraison écriture comptable', data: {id: report.id, type: 'report'}}= glyphicon('loop-circular', { size: '20', color:'rgba(26, 26, 26, 0.32);'})

@@ -7,10 +7,10 @@
     %br
     != text_field_tag :tags, nil, :id => "selectionsTags", :style => 'width: 50%'
     %br
-    %input.tag_type{ type: :hidden, value: "#{@documents.first.class.name.downcase}"}
+    %input.tag_type{ type: :hidden, value: "#{@models.first.class.name.downcase}"}
     .tag{ style: "display: inline-flex" }
       - list_tags = []
-      - @documents.each do |document|
+      - @models.each do |document|
         - tags = document.get_tags.split('-')
         - tags.each do |tag|
           - if not list_tags.include?(tag)
@@ -19,6 +19,3 @@
               %input.tag_value{ type: :hidden, value: "#{tag.strip}"}
               %span= tag
               %span.delete_tag{ style: "cursor: pointer;color: red;", title: "Supprimer ce tag" } &times;
-
-  %p.names_alert
-  %p.length_alert

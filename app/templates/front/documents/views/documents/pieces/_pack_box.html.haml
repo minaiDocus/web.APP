@@ -18,7 +18,7 @@
         =link_to glyphicon('caret-right', { size: '20', color: '#CCC' }), documents_details_path(id: pack.id) 
     %hr    
     .row
-      .col-md-9
+      .col-md-8
         - if pack.created_at >= 1.days.ago
           %span.badge.badge-success Nouveau
         - if pack.has_not_delivered_preseizures?
@@ -29,9 +29,11 @@
           %span.badge.bg-dark Notes de frais
         - if not pack.is_fully_processed
           %span.badge.bg-dark En cours ...
-      .col-md-3.text-right
+      .col-md-4.text-right
         %span.action-group= glyphicon('flag', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
-        %span.action-group= glyphicon('tag', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+        %span.action-group.update_tags{title: 'Taguer le lot', data: {ids: pack.id, type: 'pack'}}= glyphicon('tag', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
         %span.action-group.download_pack_bundle{title: 'Télécharger', data: {id: pack.id}}= glyphicon('data-transfer-download', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
         %span.action-group.download_pack_archive{title: 'Télécharger une archive zip', data: {id: pack.id}}= glyphicon('account-logout', { size: '20', color:'rgba(26, 26, 26, 0.32);', style: 'transform: rotate(90deg)'})
-        %span.action-group.preseizures_export{title: 'Export écriture', data:{ id: pack.id, type: 'pack', multi: true }}= glyphicon('cloud-download', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+        %span.action-group.preseizures_export{title: 'Export écriture comptable', data:{ id: pack.id, type: 'pack', multi: true }}= glyphicon('cloud-download', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+        - if pack.user.uses_api_softwares?
+          %span.action-group.deliver_preseizures{title: 'Livraison écriture comptable', data: {id: pack.id, type: 'pack'}}= glyphicon('loop-circular', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
