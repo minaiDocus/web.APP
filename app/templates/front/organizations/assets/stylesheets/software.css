@@ -43,7 +43,7 @@ img {
 }
 
 .box-software{
-  display: flex;  
+  display: flex;
   background: #FFFFFF;
   border: 1px solid rgba(26, 26, 26, 0.1);
   box-sizing: border-box;
@@ -62,7 +62,12 @@ img {
   margin: auto;
 }
 
-label{  
+#my-unisoft span{
+  font-size: 2rem;
+  margin: auto;
+}
+
+label{
   font-size: 13px;
 }
 

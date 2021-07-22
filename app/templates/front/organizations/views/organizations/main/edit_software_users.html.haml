@@ -1,3 +1,5 @@
+= stylesheet_link_tag 'front/organizations/assets/stylesheets/software'
+
 #organizations.derivationRight
   .edit_software_users
     .card
@@ -32,5 +34,7 @@
               = select_tag 'software_account_list', options_for_select(list_options, list_selected), include_blank: false, multiple: true, class: 'searchable-option-list'
         .card-footer
           .form-actions
-            = submit_tag t('actions.submit'), class: 'btn btn-primary'
             = link_to t('actions.cancel'), organization_path(@organization, tab: @software), class: 'btn btn-light'
+            = submit_tag t('actions.submit'), class: 'btn btn-primary'
+
+= javascript_include_tag 'front/organizations/assets/javascripts/software'

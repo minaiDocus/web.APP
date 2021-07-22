@@ -23,8 +23,8 @@
           %li{ data: { href: "#{@organization.id}/reminder_emails/" } }
             %a{href: organization_addresses_path(@organization) }
               %span.link_slave= t('organizations.address_management')
-          %li{ data: { href: "#{@organization.id}/addresses" } }
-            %a{href: "#" }
+          %li{ data: { href: "#{@organization.id}/use_software" } }
+            %a{href: use_software_organization_path(@organization) }
               %span.link_slave= t('organizations.software')
           %li{ data: { href: "#{@organization.id}/edit" } }
             %a{href: "#" }
