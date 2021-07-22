@@ -133,6 +133,9 @@ class Organizations::MainController < OrganizationController
   # GET /account/organizations/:id/close_confirm
   def close_confirm; end
 
+  # GET /account/organizations/:id/edit_payment
+  def edit_payment; end
+
   def prepare_payment
     debit_mandate = @organization.debit_mandate
 

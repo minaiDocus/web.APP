@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       get   :use_software,          on: :member
       get   :edit_software_users,   on: :member
       get   :close_confirm,         on: :member
+      get   :edit_payment,          on: :member
       post  :prepare_payment,       on: :member
       post  :confirm_payment,       on: :member
       post  :revoke_payment,        on: :member
