@@ -9,7 +9,7 @@
           - if !@is_operations
             .form-group
               %label Etat pièce
-              %select.form-control#state_piece{ name: 'by_piece[state_piece]', multiple: false }
+              %select.form-select#state_piece{ name: 'by_piece[state_piece]' }
                 %option{value: ''} Tous
                 %option{value: 'waiting_analytics'} En attente validation analytique
                 %option{value: 'ignored,truly_ignored'} Ignorée
@@ -17,7 +17,7 @@
           - if @user.pre_assignement_displayed?
             .form-group
               %label Livraison/Export écriture comptable
-              %select.form-control#delivery{ name: 'by_preseizure[is_delivered]', multiple: false }
+              %select.form-select#delivery{ name: 'by_preseizure[is_delivered]' }
                 %option{value: ''} Tous
                 %option{value: 1} Livrée
                 %option{value: 2} Non livrée
@@ -25,30 +25,24 @@
                 %option{value: 4} Téléchargée
                 %option{value: 5} Non récupérée
             .form-group
-              %label Date de livraison
-              .select-container
-                %input.value-content{ type: 'hidden', name: 'by_preseizure[delivery_tried_at_operation]', value: 1 }
-                #delivery-date.row.date.datepicker
-                  %input.value-content{ name: 'by_preseizure[delivery_tried_at]', value: '' }
-                  .col-md-1.text-center= glyphicon('calendar', { size: '28', color: 'rgba(26, 26, 26, 0.7)'} )
-                  .col-md-10.p-1.label-titre Séléctionner une date ou une période                  
-                  .col-md-1.text-end.arrow-bottom= glyphicon('chevron-bottom', { size: '20', color: 'rgba(26, 26, 26, 0.7)'})
-                  %span.add-on.hide{style: 'width: 0px; height:35px'}
+              %label Date de livraison              
+              .input-group.mb-3
+                %span.input-group-text#date-livraiso= glyphicon('calendar', { size: '14', color: 'background: rgba(26, 26, 26, 0.7)' })          
+                %input.form-control.value-content.date.daterange#delivery-date{ type: :text, name: 'by_preseizure[delivery_tried_at]', value: ''}
+                %span.input-group-text-right= glyphicon('chevron-bottom', { size: '12', color: 'background: rgba(26, 26, 26, 0.7)' })
+              %input.value-content{ type: 'hidden', name: 'by_preseizure[delivery_tried_at_operation]', value: 1 }                
             .form-group
               %label Date de facture
-              .select-container
-                %input.value-content{ type: 'hidden', name: 'by_preseizure[date_operation]', value: 1 }
-                #invoice-date.row.date.datepicker
-                  %input.value-content{ name: 'by_preseizure[date]', value: '' }
-                  .col-md-1.text-center= glyphicon('calendar', { size: '28', color: 'rgba(26, 26, 26, 0.7)'} )
-                  .col-md-10.p-1.label-titre Séléctionner une date ou une période                  
-                  .col-md-1.text-end.arrow-bottom= glyphicon('chevron-bottom', { size: '20', color: 'rgba(26, 26, 26, 0.7)'})
-                  %span.add-on.hide{style: 'width: 0px; height:35px'}
+              .input-group.mb-3
+                %span.input-group-text= glyphicon('calendar', { size: '14', color: 'background: rgba(26, 26, 26, 0.7)' })
+                %input.form-control.value-content.date.daterange#invoice-date{ type: :text, name: 'by_preseizure[date]', value: ''}
+                %span.input-group-text-right= glyphicon('chevron-bottom', { size: '12', color: 'background: rgba(26, 26, 26, 0.7)' })
+              %input.value-content{ type: 'hidden', name: 'by_preseizure[date_operation]', value: 1 }
           .form-group
             %label Montant
             .row
               .col-md-4.compare-choice
-                %select.form-control#compare{ name: 'by_preseizure[amount_operation]', multiple: false }
+                %select.form-select.mt-1#compare{ name: 'by_preseizure[amount_operation]' }
                   %option{value: 0} Eg à
                   %option{value: 1} Sup - Eg à
                   %option{value: 2} Inf - Eg à
@@ -57,9 +51,12 @@
                   %input.value-content{ name: 'by_preseizure[amount]', placeholder: "ex: 100" }          
 
       .modal-footer
-        %button.btn.btn-secondary.btn-reinit{:type => 'button', id: 'launch-reinit'} Réinitialiser
-        %button.btn.btn-light{'data-bs-dismiss' => 'modal', :type => 'button'} Annuler
-        %button.btn.btn-primary.btn-add{:type => 'button', id: 'launch-filter'} Filtrer
+        .row.w-100
+          .col-md-8.d-inline-block
+            %button.btn.btn-default.semibold.btn-reinit{:type => 'button', id: 'launch-reinit'} Réinitialiser    
+          .col-md-4.d-inline-block.ps-1.text-end
+            %button.btn.btn-light.semibold{'data-bs-dismiss' => 'modal', :type => 'button'} Annuler
+            %button.btn.btn-primary.semibold.btn-add{:type => 'button', id: 'launch-filter'} Filtrer
 
 #preseizures_export.modal.fade{'aria-hidden' => 'true', :role => 'dialog', :tabindex => '-1'}
   .modal-dialog

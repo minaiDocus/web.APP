@@ -65,9 +65,16 @@ hr
 
 .body_content
   padding: 2%
+  overflow: auto
+  max-height: 900px
 
 .btn
   font-size: 0.85vw
+
+.btn:hover  
+  -moz-box-shadow: 1px 1px 4px -2px rgb(0, 0, 0);
+  -webkit-box-shadow: 1px 1px 4px -2px rgb(0, 0, 0);
+  box-shadow: 1px 1px 4px -2px rgb(0, 0, 0);
 
 .btn-primary
   background: linear-gradient(90deg, #DDE357 0%, #72AA42 100%)
@@ -110,6 +117,10 @@ hr
   color: #72AA42
   font-size: 17px
   margin-right: 5%
+  a
+    color: #72AA42
+    text-decoration: none
+
 
 .btn-default:hover
   color: #72AA42
@@ -136,6 +147,9 @@ hr
   color: #FF4848
   background: #FFFFFF
 
+.btn-sm
+  font-size: 12px
+
 .badge
   box-shadow: 0px 1px 3px rgba(26, 26, 26, 0.1)
   border-radius: 4px
@@ -154,6 +168,9 @@ hr
 
 .badge-warning
   background: #FDAF3A
+
+.badge.count
+  font-size: 17px
 
 .no-padding
   padding: 0 !important
@@ -302,8 +319,7 @@ label.container
 .input-group-text
   display: flex
   align-items: center
-  padding: 0.375rem 0.75rem
-  font-size: 1vw
+  padding: 0.375rem 0.75rem  
   font-weight: 400
   line-height: 1.5
   color: #212529
@@ -319,11 +335,32 @@ label.container
       border-bottom-right-radius: 8px
   border-right: none
 
+.input-group-text-right
+  display: flex
+  align-items: center
+  padding: 0.375rem 0.75rem  
+  font-weight: 400
+  line-height: 1.5
+  color: #212529
+  text-align: center
+  white-space: nowrap
+  background-color: #FFF
+  border: 1px solid #ced4da
+      border-right-color: rgb(206, 212, 218)
+      border-right-style: solid
+      border-right-width: 1px
+  border-radius: 8px
+      border-top-right-radius: 8px
+      border-bottom-right-radius: 8px
+  border-left: none
+
 .input-group input
   border-left: none
   border-bottom-right-radius: 8px
   border-top-right-radius: 8px
 
+.input-group input.daterange
+  border-right: none !important
 
 .datepicker-dropdown.datepicker-orient-bottom:before, .datepicker-dropdown.datepicker-orient-bottom:after
   top: 0
@@ -481,3 +518,65 @@ label.container
     font-size: 1rem
   .pt-1
     padding-top: 0.18rem !important
+
+.form-select
+  background-color: rgba(26, 26, 26, 0.04)
+  color: #1A1A1A
+  border: 0px solid #ced4da
+  option
+    font-family: Raleway-Regular
+    font-size: 13px
+
+.nav-tabs .nav-link  
+  border-top-right-radius: 10px
+  border-top-left-radius: 10px
+
+.nav-tabs .nav-link
+  color: #72AA42
+
+.nav-tabs .nav-link.active
+  color: rgba(0, 0, 0, 0.5)
+
+.pagination .form-select
+  background-color: #FFF
+
+i
+  font-size: 0.8rem
+
+i.remark
+  font-size: 0.55rem
+
+.sub_menu
+  position: absolute
+  min-width: 14%
+  background: #FFFFFF
+  box-shadow: 0px 4px 16px rgba(26, 26, 26, 0.24)
+  border-radius: 8px
+  z-index: 5
+  font-size: 0.8rem
+
+.sub_menu li
+  display: block !important
+  padding: 4% 6%
+  cursor: pointer
+
+.sub_menu li:hover
+  background: rgba(26, 26, 26, 0.04)
+
+.modal .back-grey
+  background: rgba(26, 26, 26, 0.04)
+
+.drp-calendar.right
+  display: none !important
+
+.daterangepicker td.active, .daterangepicker td.active.end-date, .daterangepicker td.active:hover  
+  background: #C1D837  
+  color: #FFFFF
+
+.daterangepicker td.in-range
+  background-color: #eaf4aa
+
+.modal .btn:hover, .btn-default:hover
+  -moz-box-shadow: 0px 0px 0px 0px
+  -webkit-box-shadow: 0px 0px 0px 0px
+  box-shadow: 0px 0px 0px 0px

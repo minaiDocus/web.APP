@@ -1,5 +1,19 @@
 function bind_all_events(){
-  $('.datepicker').datepicker();
+  $('#delivery-date.daterange').daterangepicker({
+    "autoApply": true,
+    linkedCalendars: false,
+    locale: {
+      format: 'DD/MM/YYYY'
+    }
+  });
+
+  $('#invoice-date.daterange').daterangepicker({
+    "autoApply": true,
+    linkedCalendars: false,
+    locale: {
+      format: 'DD/MM/YYYY'
+    }
+  });
 
   $('.more-filter').unbind('click').bind('click',function(e) {
     e.stopPropagation();

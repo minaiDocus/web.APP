@@ -109,16 +109,20 @@
 }
 
 .grid .stamp-content.active, .grid .stamp-content:hover {
-  border: 1px solid rgba(26, 26, 26, 0.04);
+  border: 1px solid #C1D837;
   cursor: pointer;
+  color: #FFFFFF;
+  font-family: Raleway-semiBold;
 }
 
 .grid .stamp-content.active .label-content{
-  background: rgba(26, 26, 26, 0.04);
+  background: #C1D837;
+  color: #FFFFFF;
+  font-family: Raleway-semiBold;
 }
 
 .grid .stamp-content:hover .label-content{
-  background: rgba(26, 26, 26, 0.04);
+  background: #C1D837;
 }
 
 #view-document-content .modal-dialog{
@@ -134,7 +138,7 @@ img{
 }
 
 .list-content img{
-  width: 95%;
+  /*width: 60%;*/
 }
 
 .grid img{
@@ -156,8 +160,14 @@ img{
 .zoom{
   position: absolute;
   padding: 0.3%;
+  z-index: 1;
 }
 
 .border-green{
   border: 1px solid #C1D837;
+}
+
+.file-list-content{
+  max-height: 250px;
+  overflow: auto;
 }

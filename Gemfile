@@ -93,6 +93,8 @@ gem 'jquery-ui-rails'
 
 # Frontend tools
 gem 'bootstrap-datepicker-rails'
+gem 'momentjs-rails'
+gem 'bootstrap-daterangepicker-rails'
 gem 'ckeditor'
 gem 'haml'
 
