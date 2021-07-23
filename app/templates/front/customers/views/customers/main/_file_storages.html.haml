@@ -1,5 +1,6 @@
 - if user.active?
   - external_file_storage = user.find_or_create_external_file_storage.reload
+  - options = { size: '15', color: 'rgba(26, 26, 26, 0.7);'}
   %table.table.table-striped.table-condensed.table-bordered-inner.table-detachable-head
     %thead
       %tr.bg-brown.text-white
@@ -11,31 +12,31 @@
     %tbody.retractable.slidedown
       %tr
         %th Dropbox Extended
-        %td.text-center= icon_tag user.is_dropbox_extended_authorized
-        %td.text-center= icon_tag(DropboxExtended.access_token.present?)
+        %td.text-center= icon_tag(user.is_dropbox_extended_authorized, options)
+        %td.text-center= icon_tag(DropboxExtended.access_token.present?, options)
         %td
         %td= user.dropbox_delivery_folder
       %tr
         %th Dropbox
-        %td.text-center= icon_tag external_file_storage.is_dropbox_basic_authorized?
-        %td.text-center= icon_tag external_file_storage.dropbox_basic.is_configured?
-        %td.text-center= icon_tag external_file_storage.is_used?(ExternalFileStorage::F_DROPBOX)
+        %td.text-center= icon_tag(external_file_storage.is_dropbox_basic_authorized?, options)
+        %td.text-center= icon_tag(external_file_storage.dropbox_basic.is_configured?, options)
+        %td.text-center= icon_tag(external_file_storage.is_used?(ExternalFileStorage::F_DROPBOX), options)
         %td= external_file_storage.dropbox_basic.path
       %tr
         %th Google Drive
-        %td.text-center= icon_tag external_file_storage.is_google_docs_authorized?
-        %td.text-center= icon_tag external_file_storage.google_doc.is_configured?
-        %td.text-center= icon_tag external_file_storage.is_used?(ExternalFileStorage::F_GOOGLE_DOCS)
+        %td.text-center= icon_tag(external_file_storage.is_google_docs_authorized?, options)
+        %td.text-center= icon_tag(external_file_storage.google_doc.is_configured?, options)
+        %td.text-center= icon_tag(external_file_storage.is_used?(ExternalFileStorage::F_GOOGLE_DOCS), options)
         %td= external_file_storage.google_doc.path
       %tr
         %th FTP
-        %td.text-center= icon_tag external_file_storage.is_ftp_authorized?
-        %td.text-center= icon_tag external_file_storage.ftp.is_configured?
-        %td.text-center= icon_tag external_file_storage.is_used?(ExternalFileStorage::F_FTP)
+        %td.text-center= icon_tag(external_file_storage.is_ftp_authorized?, options)
+        %td.text-center= icon_tag(external_file_storage.ftp.is_configured?, options)
+        %td.text-center= icon_tag(external_file_storage.is_used?(ExternalFileStorage::F_FTP), options)
         %td= external_file_storage.ftp.path
       %tr
         %th Box
-        %td.text-center= icon_tag external_file_storage.is_box_authorized?
-        %td.text-center= icon_tag external_file_storage.box.is_configured?
-        %td.text-center= icon_tag external_file_storage.is_used?(ExternalFileStorage::F_BOX)
+        %td.text-center= icon_tag(external_file_storage.is_box_authorized?, options)
+        %td.text-center= icon_tag(external_file_storage.box.is_configured?, options)
+        %td.text-center= icon_tag(external_file_storage.is_used?(ExternalFileStorage::F_BOX), options)
         %td= external_file_storage.box.path

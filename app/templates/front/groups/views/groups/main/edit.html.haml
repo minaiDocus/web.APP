@@ -1,7 +1,10 @@
-#group.derivationRight
-  .card
-    .card-header
-      %h3
-        Edition du groupe : 
-        = link_to @group, organization_group_path(@organization, @group), class: 'fs-origin'
-    = render partial: 'form'
+.modal#collaborator
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.modal-title.bold
+          Edition du groupe :
+          = @group.name
+        %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+
+      = render partial: 'form'

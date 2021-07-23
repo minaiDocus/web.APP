@@ -10,14 +10,42 @@
     = simple_form_for @someone, url: @put_url_path, html: { class: 'form-horizontal' } do |f|
       .card-body
         = f.input :is_dropbox_extended_authorized, as: :boolean
+        .form-group.row
+          .col-md-10
+            = f.label :is_dropbox_extended_authorized, class: 'semibold'
+          .col-md-2.form-check.form-switch
+            = f.label :is_dropbox_extended_authorized, 'Oui', class: 'semibold'
+            = check_box_tag 'user[is_dropbox_extended_authorized]', '1', @someone.is_dropbox_extended_authorized, class: 'custom-form-inline form-check-input'
         = f.simple_fields_for :external_file_storage do |sf|
-          = sf.input :is_dropbox_basic_authorized, as: :boolean
-          = sf.input :is_google_docs_authorized,   as: :boolean
-          = sf.input :is_ftp_authorized,           as: :boolean
-          = sf.input :is_box_authorized,           as: :boolean
+          .form-group.row
+            .col-md-10
+              = sf.label :is_dropbox_basic_authorized, class: 'semibold'
+            .col-md-2.form-check.form-switch
+              = sf.label :is_dropbox_basic_authorized, 'Oui', class: 'semibold'
+              = check_box_tag 'user[external_file_storage_attributes][is_dropbox_basic_authorized]', '1', @someone.try(:external_file_storage).try(:is_dropbox_basic_authorized), class: 'custom-form-inline form-check-input'
+          .form-group.row
+            .col-md-10
+              = sf.label :is_google_docs_authorized, class: 'semibold'
+            .col-md-2.form-check.form-switch
+              = sf.label :is_google_docs_authorized, 'Oui', class: 'semibold'
+              = check_box_tag 'user[external_file_storage_attributes][is_google_docs_authorized]', '1', @someone.try(:external_file_storage).try(:is_google_docs_authorized), class: 'custom-form-inline form-check-input'
+          .form-group.row
+            .col-md-10
+              = sf.label :is_ftp_authorized, class: 'semibold'
+            .col-md-2.form-check.form-switch
+              = sf.label :is_ftp_authorized, 'Oui', class: 'semibold'
+              = check_box_tag 'user[external_file_storage_attributes][is_ftp_authorized]', '1', @someone.try(:external_file_storage).try(:is_ftp_authorized), class: 'custom-form-inline form-check-input'
+          .form-group.row
+            .col-md-10
+              = sf.label :is_box_authorized, class: 'semibold'
+            .col-md-2.form-check.form-switch
+              = sf.label :is_box_authorized, 'Oui', class: 'semibold'
+              = check_box_tag 'user[external_file_storage_attributes][is_box_authorized]', '1', @someone.try(:external_file_storage).try(:is_box_authorized), class: 'custom-form-inline form-check-input'
       .card-footer
         .form-actions.margin0bottom
-          = f.submit t('actions.submit'), class: 'btn btn-primary'
-          = link_to t('actions.cancel'), @url_path, class: 'btn btn-light'
+          .form-group.no-margin
+            .w-100.text-end
+              = link_to t('actions.cancel'), @url_path, class: 'btn btn-light'
+              = f.submit t('actions.submit'), class: 'btn btn-primary'
 
 = javascript_include_tag 'front/file_storage_authorizations/assets/javascripts/main'

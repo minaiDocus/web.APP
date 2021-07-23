@@ -1,34 +1,34 @@
 = simple_form_for @group, url: (action_name.in?(%w(new create)) ? organization_groups_path(@organization) : organization_group_path(@organization, @group)), html: { class: ' form-horizontal label-small' } do |f|
-  .card-body
-    .row
+  .modal-body
+    - if @user.leader?
+      %h4 Informations
+      %hr
+      = f.input :name, label: t('activerecord.models.group.attributes.name'), label_html: { class: 'semibold custom-label-field' }, input_html: { class: 'select-container no-padding w-100 book-code-software custom-input-field', placeholder: "Direction" }
+      .select-container.no-padding.w-100
+        = f.input :description, as: :text, label: t('activerecord.models.group.attributes.description')
+      - if @user.is_admin
+        %h4 Dropbox Extended
+        %hr
+        = f.input :dropbox_delivery_folder, label: t('activerecord.models.group.attributes.dropbox_delivery_folder'), input_html: { class: 'input-xxlarge' }
+        .form-group.row
+          .col-md-10
+            = f.label :is_dropbox_authorized, t('activerecord.models.group.attributes.is_dropbox_authorized'), class: 'semibold'
+          .col-md-2.form-check.form-switch
+            = f.label :is_dropbox_authorized, 'Oui', class: 'semibold'
+            = check_box_tag 'group[is_dropbox_authorized]', '1', @group.is_dropbox_authorized, class: 'custom-form-inline form-check-input'
+    - content_for :assignation do
+      %h4 Assignation #{ 'des clients' if not @user.leader? }
+      %hr
       - if @user.leader?
-        .field{ class: (@user.is_admin? ? 'col-md-4' : 'col-md-6') }
-          .box.bg-light.height_groups.groups_1
-            %h4 Informations
-            %hr
-            = f.input :name, label: t('activerecord.models.group.attributes.name')
-            = f.input :description, as: :text, label: t('activerecord.models.group.attributes.description')
-        - if @user.is_admin
-          .field.col-md-4
-            .box.bg-light.height_groups.groups_1
-              %h4 Dropbox Extended
-              %hr
-              = f.input :dropbox_delivery_folder, label: t('activerecord.models.group.attributes.dropbox_delivery_folder'), input_html: { class: 'input-xxlarge' }
-              = f.input :is_dropbox_authorized, as: :boolean, label: t('activerecord.models.group.attributes.is_dropbox_authorized')
-      .field{ class: (@user.admin? ? 'col-md-4' : (@user.leader? ? 'col-md-6' : 'col-md-12') ) }
-        - content_for :assignation do
-          %h4 Assignation #{ 'des clients' if not @user.leader? }
-          %hr
-          - if @user.leader?
-            = f.association :members, collection: @organization.members.order(:code), label_method: :info, input_html: { class: 'searchable-option-list show-selection-below-list show-select-all' }
-          = f.association :customers, collection: @organization.customers.order(:code), label_method: :info, input_html: { class: 'searchable-option-list' }
+        = f.association :members, collection: @organization.members.order(:code), label_method: :info, input_html: { class: 'searchable-option-list show-selection-below-list show-select-all', id: 'select-collaborators-list'}, include_blank: false, multiple: true
+      = f.association :customers, collection: @organization.customers.order(:code), label_method: :info, input_html: { class: 'searchable-option-list', id: 'select-customers-collaborators-list' }, include_blank: false, multiple: true
 
-        - if @user.leader?
-          .box.bg-light.height_groups.groups_1
-            = content_for :assignation
-        - else
-          = content_for :assignation
-  .card-footer
-    .form-actions.margin0bottom
-      = f.submit t('actions.submit'), class: 'btn btn-primary'
-      = link_to t('actions.cancel'), organization_groups_path(@organization), class: 'btn btn-light'
+    - if @user.leader?
+      = content_for :assignation
+    - else
+      = content_for :assignation
+  .modal-footer
+    .form-group.no-margin
+      .w-100.text-end
+        = link_to t('actions.cancel'), organization_groups_path(@organization), class: 'btn btn-light'
+        = f.submit t('actions.submit'), class: 'btn btn-primary semibold'

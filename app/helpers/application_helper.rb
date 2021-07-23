@@ -110,48 +110,48 @@ module ApplicationHelper
   end
 
 
-  def icon_ok
-    glyphicon('check')
+  def icon_ok(options={})
+    glyphicon('check', options)
   end
 
 
-  def icon_not_ok
-    glyphicon('x')
+  def icon_not_ok(options={})
+    glyphicon('x', options)
   end
 
 
-  def ok_link
-    link_to icon_ok, '#', class: :ok
+  def ok_link(options={})
+    link_to icon_ok(options), '#', class: :ok
   end
 
 
-  def not_ok_link
-    link_to icon_not_ok, '#', class: :not_ok
+  def not_ok_link(options={})
+    link_to icon_not_ok(options), '#', class: :not_ok
   end
 
 
-  def icon_tag(value)
-    value ? icon_ok : icon_not_ok
+  def icon_tag(value, options={})
+    value ? icon_ok(options) : icon_not_ok(options)
   end
 
 
-  def label_ok(is_current = false)
-    content_tag(:span, icon_ok, class: "badge #{is_current ? 'badge-success' : ''}", style: 'margin-left:2px;margin-right:2px;')
+  def label_ok(is_current = false, options = {})
+    content_tag(:span, icon_ok(options), class: "badge #{is_current ? 'badge-success' : ''}", style: 'margin-left:2px;margin-right:2px;')
   end
 
 
-  def label_not_ok(is_current = false)
-    content_tag(:span, icon_not_ok, class: "badge #{!is_current ? 'badge-danger' : ''}", style: 'margin-left:2px;margin-right:2px;')
+  def label_not_ok(is_current = false, options={})
+    content_tag(:span, icon_not_ok(options), class: "badge #{!is_current ? 'badge-danger' : ''}", style: 'margin-left:2px;margin-right:2px;')
   end
 
 
-  def label_icon_tag(value)
-    value ? label_ok(value) : label_not_ok(value)
+  def label_icon_tag(value, options={})
+    value ? label_ok(value) : label_not_ok(value, options)
   end
 
 
-  def label_choice_tag(value)
-    link_to(label_ok(value), '#', class: :ok) + link_to(label_not_ok(value), '#', class: :not_ok)
+  def label_choice_tag(value, options={})
+    link_to(label_ok(value, options), '#', class: :ok) + link_to(label_not_ok(value, options), '#', class: :not_ok)
   end
 
 

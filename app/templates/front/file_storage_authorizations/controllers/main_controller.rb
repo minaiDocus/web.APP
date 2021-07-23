@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class FileStorageAuthorizations::MainController < FrontController
+class FileStorageAuthorizations::MainController < OrganizationController
   before_action :verify_rights
   before_action :load_someone
   before_action :verify_if_someone_is_active

@@ -1,39 +1,125 @@
 = stylesheet_link_tag 'front/collaborators/assets/stylesheets/main'
 
-#collaborators
-  .row.derivationRight
-    .col-md-12
-      .box.clearfix
-        .float-left
-          %h3
-            Liste des collaborateurs 
-            %span.badge.badge-info= @members.total_count
-        .float-right
-          -if @organization.is_active
-            = link_to icon_new + ' ' + t('actions.new'), new_organization_collaborator_path(@organization), class: 'btn btn-primary'
+.collaborators
+  %input#organization_id{type: :hidden, value: @organization.id, name: 'organization_id'}
+  .collaborators-content
+    .row
+      .col-md-7
+        %h3.bold
+          Liste des collaborateurs
+          %span.badge.badge-secondary.badge-sm.regular= @members.count
+      .col-md-2.no-padding
+        .input-group.mb-3
+          %span.input-group-text#basic-addon1= glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })          
+          %input.form-control{ type: :text, "aria-label" => "Rechercher", "aria-describedby" => "basic-addon1", placeholder: 'Rechercher'  }    
+      .col-md-3.text-end.collaborator-column
+        %button.btn.btn-primary.add-collaborator.member.add-or-edit.semibold
+          %span.me-3= glyphicon('plus', { size: '14', color: '#FFFF'})
+          %span Ajouter un collaborateur
 
-  .row.retractable.with-filter.derivationLeft
-    .col-md-12
-      .box
-        = render partial: 'shared/list_options', locals: { collection: @members }
-        %table.table.table-condensed.table-striped.users_list.margin1top.margin1bottom.table-detachable-head.table-bordered-inner
-          %thead
-            %tr.bg-brown.text-white
-              %th.date= sortable :created_at, t('activerecord.models.common.attributes.created_at')
-              %th= sortable :code, t('activerecord.models.user.attributes.formatted_identifier')
-              %th= sortable :role, t('activerecord.models.member.attributes.role')
-              %th Action
-          %tbody.retractable.slidedown
-            - @members.each do |member|
-              %tr
-                %td.date= l member.created_at
-                %td.user_info
-                  / TODO ////
-                  %span.info= link_to member.info, organization_collaborator_path(@organization, member)
-                %td= t('activerecord.models.member.attributes.role_values.' + member.role)
-                %td
-                  - if @organization.is_active && !member.user.is_admin && (@user.leader? || member.collaborator?)
-                    = link_to 'supprimer', organization_collaborator_path(@organization, member), class: 'btn btn-light', data: { method: :delete, confirm: "Êtes-vous sûr de vouloir supprimer ce compte définitivement ? Cette action est irréversible." }
-        = render partial: 'shared/list_options', locals: { collection: @members }
-    = render partial: 'sidebar'
+    .box
+      .row
+        .col-md-12
+          %table.table.table-striped.table_integration
+            %thead            
+              %th Nom
+              %th.date= t('activerecord.models.common.attributes.created_at')
+              %th= t('activerecord.models.user.attributes.formatted_identifier')
+              %th Groupe
+              %th= t('activerecord.models.member.attributes.role')
+              %th.text-end Action
+            %tbody
+              - @members.each do |member|
+                %tr
+                  %td.semibold= member.name
+                  %td.date= member.created_at.strftime('%d/%m/%Y')
+                  %td.user_info.text-table-green
+                    / TODO ////
+                    %span.info= link_to member.info, organization_collaborator_path(@organization, member)
+                  %td.date= member.groups.select(:name).join(', ')
+                  %td= t('activerecord.models.member.attributes.role_values.' + member.role)
+                  %td.text-end.pointer
+                    .action.sub_edit_delete.list-collaborators
+                      %span.glyph= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
+                    .sub_menu.text-start.hide
+                      %ul.no-margin.no-padding.regular.edit-delete{id: "member-#{member.id}"}
+                        %li.edit.member.add-or-edit
+                          %span= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
+                          &nbsp;Editer
+                        - if @organization.is_active && !member.user.is_admin && (@user.leader? || member.collaborator?)
+                          %li.delete.red-label
+                            = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', organization_collaborator_path(@organization, member), data: { method: :delete, confirm: "Êtes-vous sûr de vouloir supprimer ce compte définitivement ? Cette action est irréversible." }
+
+          .form-group
+            .row.pagination
+              .col-md-6
+                .row
+                  .col-md-3.text-end.pt-1
+                    %label Afficher par
+                  .col-md-2
+                    %select.form-select.form-select-sm.display{ "aria-label" => ".form-select-sm" }
+                      %option{value: 20, selected: 'selected'} 20
+                      %option{value: 50} 50
+                      %option{value: 100} 100
+
+              .col-md-6.text-end
+                .row
+                  .col-md-10
+                    %label= "#{@members.size}-#{@organization.members.size} de #{@organization.members.size} éléments"
+                  .col-md-1
+                    = link_to_prev_page @members, glyphicon('chevron-left', { size: '15', color: "#1A1A1A" })
+                  .col-md-1
+                    = link_to_next_page @members, glyphicon('chevron-right', { size: '15', color: "#1A1A1A" })
+
+  .row.mt-5
+    .col-md-8
+      %h3.bold
+        Gérer les groupes
+        %span.badge.badge-secondary.badge-sm.regular= @groups.size
+    .col-md-2.no-padding
+      .input-group.mb-3
+        %span.input-group-text#basic-addon1= glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })          
+        %input.form-control{ type: :text, "aria-label" => "Rechercher", "aria-describedby" => "basic-addon1", placeholder: 'Rechercher'  }    
+    .col-md-2.text-start
+      %button.btn.btn-primary.create-group.member-group.add-or-edit.semibold
+        %span= glyphicon('plus', { size: '14', color: '#FFFF'})
+        %span.ms-1 Créer un groupe
+
+  = render file: Rails.root.join('app/templates/front/groups/views/groups/main/index.html.haml')
+  
+  .modal#add-edit-collaborator
+    .modal-dialog
+      .modal-content
+
+
+  .modal#filter-rule
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %h5.modal-title.bold Importer une règle
+          %button.close{ type: :button, "aria-label" => "Close", data: { dismiss: "modal"} }
+            %span{ "aria-hidden" => "true" }
+              = glyphicon('x', { size: '15', color: 'rgba(26, 26, 26, 0.32)'})
+        .modal-body
+          .form-group
+            %label.semibold Affecté à
+            %select.form-control#filter-affect-to{ name: 'filter-affect-to', multiple: true }              
+              %option{ value: 'organization'} Organisation
+              %option{ value: 'customer'} Client
+          .form-group
+            %label.semibold Type de règle
+            %select.form-control#filter-rule-type{ name: 'filter-rule-type', multiple: true }              
+              %option{ value: '1'} Type 1
+              %option{ value: '2'} Type 2
+          .form-group
+            %label.semibold Catégorisation
+            %select.form-control#rule-categories{ name: 'rule-categories', multiple: true }              
+              %option{ value: '1'} Catégorie 1
+              %option{ value: '2'} Catégorie 2
+          
+        .modal-footer
+          %button.btn.btn-light.cancel{ type: :button } Annuler
+          %button.btn.btn-primary.filter{ type: :button, disabled: true } Filtrer
+
+
 = javascript_include_tag 'front/collaborators/assets/javascripts/main'

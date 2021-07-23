@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Rights::MainController < FrontController
+class Rights::MainController < OrganizationController
   before_action :verify_rights
   before_action :load_member
 

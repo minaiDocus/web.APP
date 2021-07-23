@@ -1,0 +1,99 @@
+.form-group .ui-sortable li {
+  width: 20%;
+  float: left;
+  margin-right: 2%;
+  margin-bottom: 1%;
+  text-align: center;
+  padding: 1%;
+  cursor: pointer;
+}
+
+#sortable-software li, #sortable-software-preseizures li{
+  width: auto;
+  font-size: 0.8rem;
+}
+
+.form-group .ui-sortable li.btn-light:hover {
+  border: 1px solid #72AA42;
+  border-radius: 8px;
+  color: #72AA42;
+  font-weight: bold;
+}
+
+.form-group .ui-sortable li.btn-light.active{
+  background: #EEF8B8;
+  border: 1px solid #72AA42;
+  border-radius: 8px;
+  color: #72AA42;
+}
+
+.form-group .ui-sortable li.btn-light span{
+  padding: 3%;
+  float: right;
+}
+
+.sub_menu{
+  min-width: 10% !important;
+}
+
+img {
+  max-width:100%;
+  height:auto;
+  margin: auto;
+}
+
+.box-software{
+  display: flex;  
+  background: #FFFFFF;
+  border: 1px solid rgba(26, 26, 26, 0.1);
+  box-sizing: border-box;
+  border-radius: 8px;
+  width: 25%;
+  margin: 3%;
+  height: 10em;
+}
+
+.box-software.selected{
+  border: 1px solid #72AA42;
+}
+
+#csv span{
+  font-size: 5rem;
+  margin: auto;
+}
+
+label{  
+  font-size: 13px;
+}
+
+.form-group{
+  margin-bottom: 1%;
+}
+
+.select-container input{
+  padding: 0.5%;
+  font-size: 17px;
+}
+
+.organization_is_detail_authorized,
+.organization_is_test,
+.organization_is_operation_processing_forced,
+.organization_is_operation_value_date_needed,
+.organization_is_duplicate_blocker_activated{
+  display: inline-flex;
+}
+
+.organization_is_detail_authorized .control-section,
+.organization_is_test .control-section,
+.organization_is_operation_processing_forced .control-section,
+.organization_is_operation_value_date_needed .control-section,
+.organization_is_duplicate_blocker_activated .control-section{
+  position: relative;
+  float: left;
+  left: -101%;
+}
+
+.custom-form-inline {
+  display: inline-block;
+  width: auto;
+}

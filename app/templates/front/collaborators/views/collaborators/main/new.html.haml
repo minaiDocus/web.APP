@@ -1,6 +1,8 @@
-#collaborator.derivationRight
-  .card
-    .card-header
-      %h3 Nouveau collaborateur
+.modal#collaborator
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.modal-title.bold Nouveau collaborateur
+        %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
 
-    = render partial: 'form'
+      = render partial: 'form'

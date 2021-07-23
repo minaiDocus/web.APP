@@ -1,8 +1,10 @@
-#collaborator.derivationRight
-  .card
-    .card-header
-      %h3
-        Édition du collaborateur : 
-        = link_to @member.name, organization_collaborator_path(@organization, @member), class: 'fs-origin'
+.modal#collaborator
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.modal-title.bold
+          Édition du collaborateur :
+          = @member.name
+        %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
 
-    = render partial: 'form'
+      = render partial: 'form'

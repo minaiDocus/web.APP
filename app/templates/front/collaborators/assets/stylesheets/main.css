@@ -1,0 +1,5 @@
+.edit-delete .delete a {
+  text-decoration: none;
+  cursor: pointer;
+  color: #FF4848;
+}

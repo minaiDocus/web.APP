@@ -30,7 +30,7 @@
             %a{href: edit_payment_organization_path(@organization) }
               %span.link_slave= t('organizations.payment_method')
       %li{ data: { href: "#{@organization.id}/collaborateurs" } }
-        %a{href: "#" }
+        %a{href: organization_collaborators_path(@organization) }
           %span.link_principal= t('organizations.collaborators')
       %li{ data: { href: "#{@organization.id}/clients" } }
         %a{href: "#" }

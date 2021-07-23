@@ -8,14 +8,41 @@
         = link_to @member.info, organization_collaborator_path(@organization, @member, tab: 'authorization'), class: 'fs-origin'
     = simple_form_for @member, url: organization_collaborator_rights_url(@organization, @member), html: { class: 'form form-horizontal margin0' } do |f|
       .card-body
-        = f.input :manage_collaborators,     as: :boolean
-        = f.input :manage_customers,         as: :boolean
-        = f.input :manage_groups,            as: :boolean
-        = f.input :manage_journals,          as: :boolean
-        = f.input :manage_customer_journals, as: :boolean
+        .form-group.row
+          .col-md-10
+            = f.label :manage_collaborators, class: 'semibold'
+          .col-md-2.form-check.form-switch
+            = f.label :manage_collaborators, 'Oui', class: 'semibold'
+            = check_box_tag 'member[manage_collaborators]', '1', @member.manage_collaborators, class: 'custom-form-inline form-check-input'
+        .form-group.row
+          .col-md-10
+            = f.label :manage_customers, class: 'semibold'
+          .col-md-2.form-check.form-switch
+            = f.label :manage_customers, 'Oui', class: 'semibold'
+            = check_box_tag 'member[manage_customers]', '1', @member.manage_customers, class: 'custom-form-inline form-check-input'
+        .form-group.row
+          .col-md-10
+            = f.label :manage_groups, class: 'semibold'
+          .col-md-2.form-check.form-switch
+            = f.label :manage_groups, 'Oui', class: 'semibold'
+            = check_box_tag 'member[manage_groups]', '1', @member.manage_groups, class: 'custom-form-inline form-check-input'
+        .form-group.row
+          .col-md-10
+            = f.label :manage_journals, class: 'semibold'
+          .col-md-2.form-check.form-switch
+            = f.label :manage_journals, 'Oui', class: 'semibold'
+            = check_box_tag 'member[manage_journals]', '1', @member.manage_journals, class: 'custom-form-inline form-check-input'
+        .form-group.row
+          .col-md-10
+            = f.label :manage_customer_journals, class: 'semibold'
+          .col-md-2.form-check.form-switch
+            = f.label :manage_customer_journals, 'Oui', class: 'semibold'
+            = check_box_tag 'member[manage_customer_journals]', '1', @member.manage_customer_journals, class: 'custom-form-inline form-check-input'
       .card-footer
         .form-actions
-          = f.submit t('actions.submit'), class: 'btn btn-primary'
-          = link_to t('actions.cancel'), organization_collaborator_path(@organization, @member, tab: 'authorization'), class: 'btn'
+          .form-group.no-margin
+            .w-100.text-end
+              = link_to t('actions.cancel'), organization_collaborator_path(@organization, @member, tab: 'authorization'), class: 'btn'
+              = f.submit t('actions.submit'), class: 'btn btn-primary'
 
 = javascript_include_tag 'front/rights/assets/javascripts/main'

@@ -1,12 +1,18 @@
+= stylesheet_link_tag 'front/collaborators/assets/stylesheets/main'
+
 #group
+  %input#organization_id{type: :hidden, value: @organization.id, name: 'organization_id'}
   .row.derivationRight
     .col-md-12
       .box.clearfix
-        .float-left
-          %h3 #{@group}
-        .float-right
-          - if (@user.leader? || @user.manage_groups) && @organization.is_active
-            = link_to t('actions.edit'), edit_organization_group_path(@organization, @group), class: 'btn btn-primary'
+        .row
+          .col-md-10
+            %h3 #{@group}
+          .col-md-2
+            .form-group
+              .w-100.text-end{id: "group-#{@group.id}"}
+                - if (@user.leader? || @user.manage_groups) && @organization.is_active
+                  %button.btn.btn-primary.edit.member-group.add-or-edit.semibold= t('actions.edit')
 
   .row.derivationLeft
     .col-md-12
@@ -45,3 +51,12 @@
               %ul
                 - @group.customers.order(code: :asc).each do |customer|
                   %li= customer.info
+
+
+.modal#edit-group
+  .modal-dialog
+    .modal-content
+
+
+
+= javascript_include_tag 'front/collaborators/assets/javascripts/main'

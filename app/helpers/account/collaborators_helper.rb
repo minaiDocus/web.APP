@@ -9,7 +9,7 @@ module Account::CollaboratorsHelper
   end
 
   def accessible_organizations_for_user(user)
-    organizations = @organization.organization_group&.organizations || []
+    organizations = @organization.organization_groups.collect(&:organizations).flatten.compact
     organizations += user.organizations.to_a
     organizations.uniq.sort_by(&:name)
   end
@@ -19,6 +19,6 @@ module Account::CollaboratorsHelper
       return "/account/organizations/#{organization_id}/invoices/download/#{invoice_id}"
     end
 
-    "#{download_organization_invoices_path}/#{invoice_id}"
+    "#{download_account_organization_invoices_path}/#{invoice_id}"
   end
 end
