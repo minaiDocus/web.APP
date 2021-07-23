@@ -84,9 +84,7 @@ function bind_all_events(){
 
   $('.grid .stamp-content').unbind('dblclick').bind('dblclick',function(e) {
     e.stopPropagation();
-    $('#view-document-content .modal-body').html($('#document_1').clone().removeClass('hide').html());
-    $('#view-document-content .modal-body .for-dismiss-modal').html($('.dismiss-modal').clone().removeClass('hide').html());
-    $('#view-document-content').modal('show');
+    AppEmit('documents_show_preseizures_details', {'obj': this});
   });
 
   $('.add-document').unbind('click').bind('click',function(e) {
@@ -113,6 +111,12 @@ function bind_all_events(){
   $('.edit_preseizures').unbind('click').bind('click', function(){ AppEmit('documents_edit_preseizures', {'obj': this}); });
 
   $('.deliver_preseizures').unbind('click').bind('click', function(){ AppEmit('documents_deliver_preseizures', {'obj': this}); });
+
+  $('table.entries .content_amount').unbind('click').bind('click', function(){ AppEmit('documents_edit_entry_amount', {'obj': this}); });
+  $('table.entries .content_account').unbind('click').bind('click', function(){ AppEmit('documents_edit_entry_account', {'obj': this}); });
+
+  $('table.entries td.entry').mouseover(function(){ $(this).find('.content_amount span').show(); }).mouseout(function(){ $(this).find('.content_amount span').hide(); });
+  $('table.entries .debit_or_credit').unbind('click').bind('click', function(){ AppEmit('documents_change_entry_type', {'obj': this}); });
 }
 
 jQuery(function() {

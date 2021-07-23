@@ -28,7 +28,7 @@
         - if report.expenses.size > 0
           %span.badge.bg-dark Notes de frais
       .col-md-4.text-right
-        %span.action-group= glyphicon('flag', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+        / %span.action-group= glyphicon('flag', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
         %span.action-group.preseizures_export{title: 'Export écriture comptable', data:{ id: report.id, type: 'report', multi: true }}= glyphicon('cloud-download', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
         - if report.user.uses_api_softwares?
           %span.action-group.deliver_preseizures{title: 'Livraison écriture comptable', data: {id: report.id, type: 'report'}}= glyphicon('loop-circular', { size: '20', color:'rgba(26, 26, 26, 0.32);'})

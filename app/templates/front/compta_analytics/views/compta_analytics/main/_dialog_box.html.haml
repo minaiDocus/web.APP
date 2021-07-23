@@ -1,0 +1,21 @@
+#comptaAnalysisEdition.modal.fade{ style: "width: '570px'" }
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h3 Edition Compta Analytique
+        %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+      .modal-body
+        %p.length_alert
+        - if @user.organization.ibiza.try(:configured?)
+          %form#compta_analytic_form_modal
+            - if not without_hidden_fields
+              = render file: Rails.root.join('app/templates/front/compta_analytics/views/compta_analytics/main/_hidden_fields.html.haml')
+            = render file: Rails.root.join('app/templates/front/compta_analytics/views/compta_analytics/main/_basic_form.html.haml')
+      .modal-footer
+        .analytic_validation_loading.float-left.hide
+          .feedback.active
+            Traitement en cours ...
+        %a#analysis_validate.btn.btn-primary.hide{ :href => "#" }
+          Valider
+
+= javascript_include_tag 'front/compta_analytics/assets/javascripts/main'

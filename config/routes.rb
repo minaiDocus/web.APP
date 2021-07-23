@@ -36,6 +36,7 @@ Rails.application.routes.draw do
   front_draw('bank_settings')
   front_draw('profiles')
   front_draw('collaborators')
+  front_draw('compta_analytics')
   front_draw('exercises')
   front_draw('rights')
   front_draw('setups')

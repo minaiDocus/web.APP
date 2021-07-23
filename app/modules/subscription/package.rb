@@ -1,7 +1,7 @@
 class Subscription::Package
   PACKAGES_LIST = [:ido_classique, :ido_mini, :ido_micro, :ido_nano, :ido_x].freeze
-  OPTIONS_LIST  = [:mail_option, :retriever_option, :pre_assignment_option].freeze
-  PRICES_LIST   = { ido_classique: 10, ido_x: 5, ido_mini: 10, ido_micro: 10, ido_nano: 5, mail_option: 10, retriever_option: 5, retriever_option_reduced: 3, pre_assignment_option: 9, signing_piece: 1 }
+  OPTIONS_LIST  = [:mail_option, :retriever_option, :pre_assignment_option, :digitize_option].freeze
+  PRICES_LIST   = { ido_classique: 10, ido_x: 5, ido_mini: 10, ido_micro: 10, ido_nano: 5, mail_option: 10, retriever_option: 5, retriever_option_reduced: 3, pre_assignment_option: 9, signing_piece: 1, digitize_option: 0 }
 
   class << self
     def price_of(package_or_option, reduced=false)
@@ -43,16 +43,18 @@ class Subscription::Package
         when :ido_mini
           { label: 'Téléchargement + Pré-saisie comptable + Engagement 12 mois', name: 'mini_package_subscription', group: "iDo'Mini", tooltip: "iDo Mini (10€ / mois)  : vous permet de transférer jusqu'à 300 pièces/trimèstre, mutualisation des quotas au niveau du cabinet. Au-delà du quota cabinet cumulé, calcul du dépassement simplifié : 0,25€ ht/facture" }
         when :ido_micro
-          { label: 'Téléchargement + Pré-saisie comptable + Engagement 12 mois', name: 'micro_package_subscription', group: "iDo'Micro", tooltip: "iDo Micro (10€ / mois). vous permet de transférer jusqu'à 100 pièces/an et de bénéficier des automates de récupérations bancaires et documentaires pour un engagement de 12 mois. Au-delà de 100 factures, calcul du dépassement simplifié : 0,25€ ht/facture" }
+          { label: 'Téléchargement + Pré-saisie comptable + Engagement 12 mois', name: 'micro_package_subscription', group: "iDo'Micro", tooltip: "iDo Micro (10€ / mois). vous permet de transférer jusqu'à 100 pièces/an et de bénéficier des automates de récupérations bancaires pour un engagement de 12 mois. Au-delà de 100 factures, calcul du dépassement simplifié : 0,25€ ht/facture" }
         when :ido_nano
           { label: 'Téléchargement + Pré-saisie comptable + Engagement 12 mois', name: 'nano_package_subscription', group: "iDo'Nano", tooltip: "iDo Nano (5€ / mois). vous permet de transférer jusqu'à 100 pièces/an pour un engagement de 12 mois. Au-delà de 100 factures, calcul du dépassement simplifié : 0,25€ ht/facture" }
         #options
         when :mail_option
           { label: 'Envoi par courrier A/R', name: 'mail_package_subscription', group: "Courrier", tooltip: "Courrier (10€ / mois) : vous permet d’adresser vos pièces par courrier à notre centre de numérisation. Disponible pour les forfaits iDo Mini et iDo Classique" }
         when :retriever_option
-          { label: 'Récupération banque + Factures sur Internet', name: "retriever_package_subscription", group: "Automates", tooltip: "Automates (5€ / mois) : vous permet de bénéficier des automates de récupération bancaires et documentaires" }
+          { label: 'Récupération banque', name: "retriever_package_subscription", group: "Automates", tooltip: "Automates (5€ / mois) : vous permet de bénéficier des automates de récupération bancaires" }
         when :pre_assignment_option
           { label: 'Pré-saisie comptable active', name: "pre_assignment_option", group: "Pré-affectation", tooltip: "Etat de pré-saisie comptable"}
+        when :digitize_option
+          { label: "Génération de kit d'envoi de numérisation", name: "digitize_package_subscription", group: "Numérisation", tooltip: "Vous permet de générer vos kit d'envoi de numérisation gratuitement (0 €)"}
         else
           { label: '', name: '', group: '', tooltip: ''}
       end
@@ -111,14 +113,14 @@ class Subscription::Package
       end
     end
 
-    def discount_billing_of(package, special = false)
+    def discount_billing_of(package, special = '')
       if package == :ido_mini
         [
           { limit: (0..49), subscription_price: 0, retriever_price: 0 },
           { limit: (50..Float::INFINITY), subscription_price: -4, retriever_price: 0 }
         ]
       else
-        if special
+        if special.to_s == 'one'
           [
             { limit: (0..50), subscription_price: -1, retriever_price: 0 },
             { limit: (51..150), subscription_price: -1.5, retriever_price: -0.5 },
@@ -127,6 +129,11 @@ class Subscription::Package
             { limit: (251..350), subscription_price: -3, retriever_price: -1.25 },
             { limit: (351..500), subscription_price: -4, retriever_price: -1.50 },
             { limit: (501..Float::INFINITY), subscription_price: -5, retriever_price: -2 }
+          ]
+        elsif special.to_s == 'two'
+          [
+            { limit: (0..250), subscription_price: 0, retriever_price: 0 },
+            { limit: (251..Float::INFINITY), subscription_price: -10, retriever_price: 0 }
           ]
         else
           [

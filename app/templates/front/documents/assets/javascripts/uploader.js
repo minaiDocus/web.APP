@@ -7,6 +7,10 @@ class DocumentsUploader{
     this.base_modal = $('#add-document');
   }
 
+  initialize_params(){
+    this.upload_params = JSON.parse($('#fileupload').attr('data-params'));
+  }
+
   fetch_url(url, data, method = 'GET'){
     return new Promise((success, error)=>{
       $.ajax({
@@ -28,7 +32,17 @@ class DocumentsUploader{
     }
   }
 
+  fetch_analytics(){
+    let use_analytics = false;
+    if(this.upload_params[this.current_code] != undefined)
+      use_analytics = this.upload_params[this.current_code]['is_analytic_used'];
+
+    AppEmit('compta_analytics_main_loading', { code: this.current_code, pattern: this.input_journal.val(), type: 'journal', is_used: use_analytics });
+  }
+
   fill_journals_and_periods(){
+    this.current_code = this.input_user.val();
+
     this.fill_journals();
     this.fill_periods();
   }
@@ -43,19 +57,24 @@ class DocumentsUploader{
   }
 
   fill_journals(){
+    let me = this
     this.fetch_url(`/documents/uploader/journals/${ encodeURIComponent(this.input_user.val()) }`)
         .then((result)=>{
           let options = '';
           result.forEach((opt)=>{ options += `<option compta-processable="${opt[2]}" value="${opt[1]}">${opt[0]}</option>` });
-          this.input_journal.html(options);
+          me.input_journal.html(options);
 
-          this.input_journal.unbind('change').bind('change', function(e){ 
-            let option_processable = $(this).find('option[value="'+$(this).val()+'"]').attr('compta-processable');
+          me.input_journal.unbind('change').bind('change', function(e, self){
+            me.fetch_analytics();
+
+            let option_processable = $(self).find('option[value="'+$(self).val()+'"]').attr('compta-processable');
             if( option_processable == '1' )
               $('#add-document #compta_processable').css('display', 'none');
             else
               $('#add-document #compta_processable').css('display', 'inline');
           });
+
+          me.input_journal.change();
         })
   }
 }
@@ -75,5 +94,6 @@ jQuery(function() {
     $('#add-document .btn-add').unbind('click.addition').bind('click.addition', function(e){ VARIABLES.set('can_reload_packs', true); });
   });
 
+  uploader.base_modal.on('shown.bs.modal', function(e){ VARIABLES.set('analytic_target_form', '#fileupload'); uploader.initialize_params();});
   uploader.base_modal.on('hide.bs.modal', function(e){ uploader.reload_packs(); });
 });

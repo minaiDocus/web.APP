@@ -26,7 +26,6 @@ module Interfaces::User::Customer
 
 
   def uses_api_softwares?
-    return true
     uses?(:ibiza) || uses?(:exact_online) || uses?(:my_unisoft)
   end
 

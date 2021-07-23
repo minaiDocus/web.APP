@@ -4,94 +4,23 @@
     .row.grid-content
       - pieces.each do |piece|
         .col-md-3
-          .stamp-content               
+          .stamp-content{ data: { preseizure_id: piece.preseizures.first.try(:id) } }
             .image_piece.text-center
               = image_tag document_thumb_url(piece)
             .label-content.text-center.p-2= piece.name
   //---------------------------------------------------------------------------------------------------------------------------------------------
   // list type
   - pieces.each do |piece|
-    - preseizure = piece.preseizures.first
-    .box.list.dynamic_box{ id: "document_#{piece.id}", data: { preseizure_id: preseizure.id, type: 'piece' } }
-      .row.list-content
-        .w-25      
-          .stamp-content.pagethumb 
-            .zoom.pointer
-              = glyphicon('magnifying-glass', { size: '20', color: 'background: rgba(26, 26, 26, 0.7)'})         
-            .image_piece
-              = image_tag document_thumb_url(piece)
-        .w-75
-          .row.m-1
-            .col-md-10
-              %h5.pack.semibold= piece.name
-            .col-md-2.text-right.for-dismiss-modal
-              %label.container.pointer
-                %input.select-document{ type: :checkbox }
-                %span.checkmark
-                  = glyphicon('check', { size: '14', color: '#FFF'})
-          .row.m-1
-            .col-md-5
-              %span= preseizure.date.strftime('%d/%m/%Y')
-              %span -         
-              %span Devise :
-              %span= preseizure.unit
-
-          %br
-          .row.m-1
-            .col-md-5
-              %span Nom de tiers 
-              %span.semibold= preseizure.third_party
-          .row.m-1
-            .col-md-5
-              - sending_date = preseizure.pre_assignment_deliveries.where(state: 'sent').first.try(:created_at)
-              - if sending_date.present?
-                %span Dernier envoi iBiza 
-                %span.semibold= sending_date.strftime("%d/%m/%Y")
-                %span - 
-                %span= sending_date.strftime("%Hh%M")
-
-          - accounts = preseizure.accounts
-          - entries  = preseizure.entries
-          .row.ml-3.mt-3.mb-3.mr-0.content-table
-            %table.table
-              %thead
-                %th.no-border N° de compte
-                %th.no-border Débit
-                %th.no-border Crédit
-              %tbody
-                %tr
-                  %td= accounts[0].try(:number) || '-'
-                  %td= (entries[0].try(:debit?))? entries[0].try(:amount) : '-'
-                  %td= (entries[0].try(:credit?))? entries[0].try(:amount) : '-'
-                %tr.striped
-                  %td= accounts[1].try(:number) || '-'
-                  %td= (entries[1].try(:debit?))? entries[1].try(:amount) : '-'
-                  %td= (entries[1].try(:credit?))? entries[1].try(:amount) : '-'
-                - if accounts[2].present?
-                  %tr
-                    %td= accounts[2].try(:number) || '-'
-                    %td= (entries[2].try(:debit?))? entries[2].try(:amount) : '-'
-                    %td= (entries[2].try(:credit?))? entries[2].try(:amount) : '-'
-          %hr   
-          .row.ml-1.mt-1.mb-1.mr-0
-            .col-md-9
-              - if preseizure.created_at >= 1.days.ago
-                %span.badge.badge-success Nouveau
-
-              - delivery_state = piece.get_state_to('text')
-              - if ['delivery_failed', 'duplication', 'piece_ignored'].include?(delivery_state)
-                %span.badge.badge-danger= t("pieces.delivery_state.#{delivery_state}")
-              - elsif ['awaiting_analytics', 'awaiting_pre_assignment', 'delivery_pending'].include?(delivery_state)
-                %span.badge.badge-warning= t("pieces.delivery_state.#{delivery_state}")
-              - elsif delivery_state != 'none'
-                %span.badge.badge-success= t("pieces.delivery_state.#{delivery_state}")
-
-              - if preseizure.third_party.present?
-                %span.badge.bg-dark= preseizure.third_party
-
-            .col-md-3.text-right.p-0
-              %span.action-group.update_tags{title: 'Taguer la pièce', data: {ids: piece.id, type: 'piece'}}= glyphicon('tag', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
-              %span.action-group.preseizures_export{title: 'Export écriture comptable', data:{ id: preseizure.id, type: 'preseizure', multi: false }}= glyphicon('cloud-download', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
-              %span.action-group.edit_preseizures{title: 'Edition écriture comptable', data:{ id: preseizure.id }}= glyphicon('pencil', { size: '20', color:'rgba(26, 26, 26, 0.32);', style: 'transform: rotate(90deg)'})
-              - if preseizure.user.uses_api_softwares? && preseizure.is_not_delivered?
-                %span.action-group.deliver_preseizures{title: 'Livraison écriture comptable', data: {ids: [preseizure.id]}}= glyphicon('loop-circular', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+    .preseizures_box
+      - preseizure = piece.preseizures.first
+      - if preseizure
+        .box.list.dynamic_box{ id: "document_#{piece.id}", data: { preseizure_id: preseizure.id, type: 'piece' } }
+          .row.list-content
+            .w-25      
+              .stamp-content.pagethumb 
+                .zoom.pointer
+                  = glyphicon('magnifying-glass', { size: '20', color: 'background: rgba(26, 26, 26, 0.7)'})         
+                .image_piece
+                  = image_tag document_thumb_url(piece)
+            .w-75
+              = render file: Rails.root.join('app/templates/front/documents/views/documents/preseizures/_preseizure_box.html.haml'), locals: { preseizure: preseizure, piece: piece, operation: nil }

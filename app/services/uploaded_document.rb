@@ -190,7 +190,7 @@ class UploadedDocument
     results = []
 
     @errors.each do |error|
-      results << I18n.t("activerecord.errors.models.uploaded_document.attributes.#{error.first}")
+      results << I18n.t("activerecord.errors.models.uploaded_document.attributes.#{error.first}", error.last)
     end
 
     results.join(', ')

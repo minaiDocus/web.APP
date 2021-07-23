@@ -53,6 +53,7 @@ class User < ApplicationRecord
   has_many :operations
   has_many :forced_processing_operations, class_name: 'Operation', foreign_key: :forced_processing_by_user_id, inverse_of: :forced_processing_by_user
   has_many :preseizures,  class_name: 'Pack::Report::Preseizure', inverse_of: :user
+  has_many :temp_preseizures,  class_name: 'Pack::Report::TempPreseizure', inverse_of: :user
   has_many :pack_pieces,  class_name: 'Pack::Piece',              inverse_of: :user
   has_many :pack_reports, class_name: 'Pack::Report',             inverse_of: :user
   has_many :remote_files
@@ -67,6 +68,7 @@ class User < ApplicationRecord
   has_many :pre_assignment_exports
   has_many :notifications, dependent: :destroy
   has_many :ibizabox_folders, dependent: :destroy
+  has_many :archive_document_corrupted, class_name: 'Archive::DocumentCorrupted'
 
   belongs_to :manager, class_name: 'Member', inverse_of: :managed_users, optional: true
 
@@ -111,6 +113,7 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :coala
   accepts_nested_attributes_for :quadratus
   accepts_nested_attributes_for :fec_agiris
+  accepts_nested_attributes_for :fec_acd
   accepts_nested_attributes_for :cegid
   accepts_nested_attributes_for :exact_online
   accepts_nested_attributes_for :my_unisoft
@@ -261,12 +264,20 @@ class User < ApplicationRecord
   end
 
   def paper_return_address
-    addresses.for_paper_return.first
+    if CustomUtils.is_manual_paper_set_order?(organization)
+      addresses.for_paper_return.first || organization.paper_return_address || get_fake_address
+    else
+      addresses.for_paper_return.first
+    end
   end
 
 
   def paper_set_shipping_address
-    addresses.for_paper_set_shipping.first
+    if CustomUtils.is_manual_paper_set_order?(organization)
+      addresses.for_paper_set_shipping.first || organization.paper_set_shipping_address || get_fake_address
+    else
+      addresses.for_paper_set_shipping.first
+    end
   end
 
 
@@ -367,5 +378,12 @@ class User < ApplicationRecord
         errors.add(:group_ids, :invalid)
       end
     end
+  end
+
+  def get_fake_address
+    addr = FakeObject.new
+    addr.company = addr.last_name = addr.first_name = addr.address_1 = addr.zip = addr.city = '-'
+
+    addr
   end
 end

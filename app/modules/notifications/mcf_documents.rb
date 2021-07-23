@@ -24,7 +24,7 @@ class Notifications::McfDocuments < Notifications::Notifier
           end
 
           create_notification({
-            url:         Rails.application.routes.url_helpers.organization_customers_url(collab.organization, ActionMailer::Base.default_url_options),
+            url:         Rails.application.routes.url_helpers.account_organization_customers_url(collab.organization, ActionMailer::Base.default_url_options),
             user:        collaborator,
             notice_type: 'mcf_document_errors',
             title:       "documents mcf, non récupérés",
@@ -70,6 +70,6 @@ class Notifications::McfDocuments < Notifications::Notifier
   end
 
   def url
-    Rails.application.routes.url_helpers.organization_url(@user.organization, { tab: 'mcf' }.merge(ActionMailer::Base.default_url_options))
+    Rails.application.routes.url_helpers.account_organization_url(@user.organization, { tab: 'mcf' }.merge(ActionMailer::Base.default_url_options))
   end
 end

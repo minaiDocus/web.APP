@@ -15,6 +15,13 @@ class CustomUtils
       ['AC0162', 'MFA%ADAPTO']
     end
 
+    def clear_string(str, replacement = '_')
+      str = str.gsub(/[^a-z0-9_.éèàçôêîù:\/]/i, replacement.to_s)
+      str = str.gsub(/#{replacement.to_s}+/, replacement.to_s) if replacement.present?
+
+      str
+    end
+
     def add_chmod_access_into(nfs_directory, type=0777)
       FileUtils.chmod(type, nfs_directory)
     end
@@ -82,6 +89,13 @@ class CustomUtils
       end
 
       final_dir
+    end
+
+    def is_manual_paper_set_order?(organization)
+      ### ADD ORGANIZATION CODE INTO ARRAY FOR MANUAL PAPER SET ORDER ###
+      ### EXAMPLE: ["IDOC", 'ORGCODE1', "ORGCODE2"].include?(organization.code)
+
+      ["IDOC", "MCN", "CEN"].include?(organization.code)
     end
   end
 end

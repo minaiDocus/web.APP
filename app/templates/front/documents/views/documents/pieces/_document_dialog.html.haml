@@ -1,3 +1,8 @@
+#view-document-content.modal.fade{'aria-hidden' => 'true', :role => 'dialog', :tabindex => '-1'}
+  .modal-dialog
+    .modal-content      
+      .modal-body.m-2.document-content
+
 = render file: Rails.root.join('app/templates/front/documents/views/documents/_dialog_box.html.haml')
 
 #add-document.modal.fade{'aria-hidden' => 'true', :role => 'dialog', :tabindex => '-1'}
@@ -37,18 +42,7 @@
                 après le
                 %span.date
                 \.
-          - if @user.organization.ibiza.try(:configured?) && (has_multiple_accounts? || @user.uses_ibiza_analytics?)
-            .row
-              .col-md-3.text-center.no-padding.mt-2 Compta analytique
-              .col-md-4.no-padding
-                %button.btn.btn-light Editer analytique
-            %br
-            %span.with_default_analysis.help-block.hide
-              %span.fs-origin.badge.badge-warning.margin1right
-                Attention :
-              Une analyse par défaut existe pour ce journal, si vous n'éditez pas l'analyse actuelle, les documents uploadés seront affectés automatiquement à l'analyse par défaut.
-            .analytic_resume_box
-            = render 'shared/compta_analytics_hidden_fields'
+          = render file: Rails.root.join('app/templates/front/compta_analytics/views/compta_analytics/main/_preview.html.haml')
           .fileupload-buttonbar
             .upload-content.text-center.m-3
               .import-process.p-5
@@ -159,7 +153,4 @@
           {% } %}
           </script>
 
-#view-document-content.modal.fade{'aria-hidden' => 'true', :role => 'dialog', :tabindex => '-1'}
-  .modal-dialog
-    .modal-content      
-      .modal-body.m-2.document-content
+= render file: Rails.root.join('app/templates/front/compta_analytics/views/compta_analytics/main/_dialog_box.html.haml'), locals: { without_hidden_fields: true }

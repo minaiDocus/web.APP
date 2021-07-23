@@ -3,7 +3,7 @@
 class Documents::PreseizuresController < FrontController
   append_view_path('app/templates/front/documents/views')
 
-  before_action :load_preseizure
+  before_action :load_preseizure, except: %w[accounts_list]
 
   def show
     if params[:view] == 'by_type'
@@ -44,6 +44,36 @@ class Documents::PreseizuresController < FrontController
     else
       render json: { error: "Authorisation requise" }, status: 200
     end
+  end
+
+  def update_account
+    if @user.has_collaborator_action?
+      error = ''
+      if params[:type] == 'account'
+        account = Pack::Report::Preseizure::Account.find params[:account_id]
+        account.number = params[:new_value]
+        error = account.errors.full_messages if not account.save
+      elsif params[:type] == 'entry'
+        entry = Pack::Report::Preseizure::Entry.find params[:account_id]
+        entry.amount = params[:new_value]
+        error = entry.errors.full_messages if not entry.save
+      elsif params[:type] == 'change_type'
+        entry = Pack::Report::Preseizure::Entry.find params[:account_id]
+        entry.type = params[:new_value]
+        error = entry.errors.full_messages if not entry.save
+      end
+
+      render json: { error: error }, status: 200
+    else
+      render json: { error: '' }, status: 200
+    end
+  end
+
+  def accounts_list
+    account        = Pack::Report::Preseizure::Account.find params[:account_id]
+    @accounts_name = account.get_similar_accounts
+
+    render partial: 'accounts_list'
   end
 
   private

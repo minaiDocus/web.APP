@@ -10,17 +10,19 @@ class Operation < ApplicationRecord
   belongs_to :pack, optional: true
   belongs_to :piece,   class_name: 'Pack::Piece',              inverse_of: :operations, optional: true
   belongs_to :forced_processing_by_user, class_name: 'User',   inverse_of: :forced_processing_operations, optional: true
+  belongs_to :cedricom_reception, optional: true
   has_one :preseizure, class_name: 'Pack::Report::Preseizure', inverse_of: :operation
+  has_one :temp_preseizure,  class_name: 'Pack::Report::TempPreseizure', inverse_of: :operation
 
   validates_presence_of :date, :label, :amount
 
-  validates_uniqueness_of :api_id, scope: :api_name, :if => :not_cap_idocus?
+  validates_uniqueness_of :api_id, scope: :api_name, :if => :not_cap_idocus_and_not_ebics?
 
   scope :retrieved,     -> { where(api_name: ['budgea', 'fiduceo']) }
   scope :other,         -> { where.not(api_name: ['budgea', 'fiduceo']) }
   scope :not_accessed,  -> { where(accessed_at: nil) }
   scope :not_processed, -> { where(processed_at: [nil, '']) }
-  scope :processed,     -> { where.not(processed_at: [nil, '']) }
+  scope :processed,     -> { where.not(processed_at: nil) }
   scope :locked,        -> { where(is_locked: true) }
   scope :not_locked,    -> { where(is_locked: [nil, false]) }
 
@@ -31,7 +33,11 @@ class Operation < ApplicationRecord
   scope :not_deleted,        -> { where(deleted_at: nil) }
   scope :with_api_id,        -> { where.not(api_id: nil) }
 
+  scope :not_duplicated,    -> { where.not('comment LIKE "%Locked for duplication%"') }
+  scope :duplicated,        -> { where('comment LIKE "%Locked for duplication%"') }
+
   scope :not_recently_added_or_forced, -> { where('operations.created_at < ? OR operations.forced_processing_at IS NOT ?', 7.days.ago, nil) }
+  scope :with,                         -> (period) { where(updated_at: period) }
 
   after_save do |operation|
     Rails.cache.write(['user', operation.user.id, 'operations', 'last_updated_at'], Time.now.to_i)
@@ -50,6 +56,12 @@ class Operation < ApplicationRecord
     if contains[:date]
       contains[:date].each do |operator, value|
         collection = collection.where("date #{operator} ?", value) if operator.in?(['>=', '<='])
+      end
+    end
+
+    if contains[:value_date]
+      contains[:value_date].each do |operator, value|
+        collection = collection.where("value_date #{operator} ?", value) if operator.in?(['>=', '<='])
       end
     end
 
@@ -75,6 +87,10 @@ class Operation < ApplicationRecord
     operations + forced_operations
   end
 
+  def self.select_with(_api_name, period)
+    Operation.with(period).where(api_name: _api_name)
+  end
+
   def old?
     bank_account = self.bank_account
 
@@ -86,7 +102,7 @@ class Operation < ApplicationRecord
   def to_lock?
     bank_account = self.bank_account
 
-    (bank_account.start_date.present? && self.date < bank_account.start_date) ||
+    bank_account.nil? || (bank_account.start_date.present? && self.date < bank_account.start_date) ||
     self.date < Date.parse('2017-01-01') ||
     self.is_coming || old?
   end
@@ -107,7 +123,7 @@ class Operation < ApplicationRecord
     self.amount >= 0
   end
 
-  def not_cap_idocus?
-    self.api_name != 'capidocus'
+  def not_cap_idocus_and_not_ebics?
+    self.api_name != 'capidocus' && self.api_name != 'cedricom'
   end
 end

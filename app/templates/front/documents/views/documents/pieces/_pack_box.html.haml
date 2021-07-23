@@ -30,7 +30,7 @@
         - if not pack.is_fully_processed
           %span.badge.bg-dark En cours ...
       .col-md-4.text-right
-        %span.action-group= glyphicon('flag', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+        / %span.action-group= glyphicon('flag', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
         %span.action-group.update_tags{title: 'Taguer le lot', data: {ids: pack.id, type: 'pack'}}= glyphicon('tag', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
         %span.action-group.download_pack_bundle{title: 'Télécharger', data: {id: pack.id}}= glyphicon('data-transfer-download', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
         %span.action-group.download_pack_archive{title: 'Télécharger une archive zip', data: {id: pack.id}}= glyphicon('account-logout', { size: '20', color:'rgba(26, 26, 26, 0.32);', style: 'transform: rotate(90deg)'})

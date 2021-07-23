@@ -1,0 +1,124 @@
+- if piece
+  .row.m-1
+    .col-md-10
+      %h5.pack.semibold= piece.name
+    .col-md-2.text-right.for-dismiss-modal
+      %label.container.pointer
+        %input.select-document{ type: :checkbox }
+        %span.checkmark
+          = glyphicon('check', { size: '14', color: '#FFF'})
+
+- elsif operation
+  .row
+    .col-md-10
+      %h5.pack.semibold= operation.try(:label)
+    .col-md-1.action-group
+      %label.container.pointer
+        %input{ type: :checkbox }
+        %span.checkmark
+          = glyphicon('check', { size: '14', color: '#FFF'})
+
+.row.m-1
+  .col-md-5
+    %span= preseizure.date.strftime('%d/%m/%Y')
+    %span -         
+    %span Devise :
+    %span= preseizure.unit
+
+- if piece
+  %br
+  .row.m-1
+    .col-md-5
+      %span Nom de tiers 
+      %span.semibold= preseizure.third_party
+.row.m-1
+  .col-md-5
+    - sending_date = preseizure.pre_assignment_deliveries.where(state: 'sent').first.try(:created_at)
+    - if sending_date.present?
+      %span Dernier envoi iBiza 
+      %span.semibold= sending_date.strftime("%d/%m/%Y")
+      %span - 
+      %span= sending_date.strftime("%Hh%M")
+
+- entries  = preseizure.entries
+- irregular_debit_credit_somme = verif_debit_credit_somme_of entries
+.row.ml-3.mt-3.mb-3.mr-0.content-table
+  %span.color_red.float-right{class: "#{irregular_debit_credit_somme ? '' : 'hide' }"}
+    balance non équilibrée
+  %table.table.entries{data: { preseizure_id: preseizure.id }}
+    %thead
+      %th.no-border N° de compte
+      %th.no-border Débit
+      %th.no-border Crédit
+    %tbody
+      - entries.each_with_index do |entry, index|
+        %tr{ class: (index % 2 == 0)? '' : 'striped' }
+          %td.account
+            .content_account{title: "#{@user.has_collaborator_action? ? 'Cliquez pour modifier' : ''}"}
+              = entry.account.number
+            - if @user.has_collaborator_action?
+              .edit_account.hide
+                %input.edit_account_number.margin0{type: :text, placeholder: entry.account.number , value: entry.account.number}
+                .suggestion_account_list.hide
+          %input.account_id_hidden{type: :hidden, value: entry.account.id}
+          %td.entry.text-center{title: "#{(@user.has_collaborator_action? && entry.type == 1) ? 'Cliquez pour modifier' : ''}", class: "#{irregular_debit_credit_somme ? 'color_red' : '' }"}
+            - if entry.type == 1
+              .content_amount
+                .content_amount_number
+                  = entry.amount.to_f
+                - if @user.has_collaborator_action?
+                  %span.debit_or_credit.hide.float-right.pointer
+                    = glyphicon('arrow-thick-right', {size: 20})
+              - if @user.has_collaborator_action?
+                .edit_amount.hide
+                  %input.margin0{type: :text, placeholder: entry.amount, value: entry.amount}
+                  %input.entry_type{type: :hidden, value: entry.type}
+
+          %td.entry.text-center{title: "#{(@user.has_collaborator_action? && entry.type == 2) ? 'Cliquez pour modifier' : ''}", class: "#{irregular_debit_credit_somme ? 'color_red' : '' }"}
+            - if entry.type == 2
+              .content_amount
+                - if @user.has_collaborator_action?
+                  %span.debit_or_credit.hide.float-left.pointer                          
+                    = glyphicon('arrow-thick-left', {size: 20})
+                &nbsp;&nbsp;
+                .content_amount_number
+                  = entry.amount.to_f
+              - if @user.has_collaborator_action?
+                .edit_amount.hide
+                  %input.margin0{type: :text, placeholder: entry.amount, value: entry.amount}
+                  %input.entry_type{type: :hidden, value: entry.type}
+          - if @user.has_collaborator_action?
+            %input.entry_id_hidden{type: :hidden, value: entry.id}
+%hr   
+.row.ml-1.mt-1.mb-1.mr-0
+  .col-md-9
+    - if preseizure.created_at >= 1.days.ago
+      %span.badge.badge-success Nouveau
+
+    - if piece
+      - delivery_state = piece.get_state_to('text')
+      - if ['delivery_failed', 'duplication', 'piece_ignored'].include?(delivery_state)
+        %span.badge.badge-danger= t("pieces.delivery_state.#{delivery_state}")
+      - elsif ['awaiting_analytics', 'awaiting_pre_assignment', 'delivery_pending'].include?(delivery_state)
+        %span.badge.badge-warning= t("pieces.delivery_state.#{delivery_state}")
+      - elsif delivery_state != 'none'
+        %span.badge.badge-success= t("pieces.delivery_state.#{delivery_state}")
+    - elsif operation
+      - delivery_state = preseizure.get_state_to('text')
+      - if ['delivery_failed', 'duplication', 'piece_ignored'].include?(delivery_state)
+        %span.badge.badge-danger= t("pieces.delivery_state.#{delivery_state}")
+      - elsif ['awaiting_analytics', 'awaiting_pre_assignment', 'delivery_pending'].include?(delivery_state)
+        %span.badge.badge-warning= t("pieces.delivery_state.#{delivery_state}")
+      - elsif delivery_state != 'none'
+        %span.badge.badge-success= t("pieces.delivery_state.#{delivery_state}")
+
+    - if preseizure.third_party.present?
+      %span.badge.bg-dark= preseizure.third_party
+
+  .col-md-3.text-right.p-0
+    - if piece
+      %span.action-group.update_tags{title: 'Taguer la pièce', data: {ids: piece.id, type: 'piece'}}= glyphicon('tag', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+    %span.action-group.preseizures_export{title: 'Export écriture comptable', data:{ id: preseizure.id, type: 'preseizure', multi: false }}= glyphicon('cloud-download', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+    %span.action-group.edit_preseizures{title: 'Edition écriture comptable', data:{ id: preseizure.id }}= glyphicon('pencil', { size: '20', color:'rgba(26, 26, 26, 0.32);', style: 'transform: rotate(90deg)'})
+    - if preseizure.user.uses_api_softwares? && preseizure.is_not_delivered?
+      %span.action-group.deliver_preseizures{title: 'Livraison écriture comptable', data: {ids: [preseizure.id]}}= glyphicon('loop-circular', { size: '20', color:'rgba(26, 26, 26, 0.32);'})

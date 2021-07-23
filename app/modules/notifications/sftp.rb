@@ -20,7 +20,7 @@ class Notifications::Sftp < Notifications::Notifier
 
   def notify_organization_sftp_auth_failure
     result = create_notification({
-      url:         Rails.application.routes.url_helpers.organization_url(@arguments[:sftp].organization, { tab: 'sftp' }.merge(ActionMailer::Base.default_url_options)),
+      url:         Rails.application.routes.url_helpers.account_organization_url(@arguments[:sftp].organization, { tab: 'sftp' }.merge(ActionMailer::Base.default_url_options)),
       user:        @user,
       notice_type: 'org_sftp_auth_failure',
       title:       'Import/Export SFTP - Reconfiguration requise',

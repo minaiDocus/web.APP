@@ -16,11 +16,31 @@ class DocumentsDetails extends DocumentsMain{
   load_pieces(serialize_form=false, append=false){
     this.load_datas(serialize_form, append);
   }
+
+  show_preseizures_modal(elem){
+    let preseizure_id = elem.attr('data-preseizure-id');
+    if(preseizure_id){
+      let params =  {
+                      'url': `/preseizures/${preseizure_id}`,
+                      'data': { view: 'by_type' },
+                      'dataType': 'html'
+                    }
+
+      this.applicationJS.parseAjaxResponse(params).then((e)=>{
+        $('#view-document-content .modal-body').html($(e).find('.preseizures_box').html());
+        $('#view-document-content .modal-body .for-dismiss-modal').html($('.dismiss-modal').clone().removeClass('hide').html());
+        $('#view-document-content').modal('show');
+        bind_all_events();
+      });
+    }
+  }
 }
 
 
 jQuery(function() {
   let main = new DocumentsDetails();
+
+  AppListenTo('documents_show_preseizures_details', (e)=>{ main.show_preseizures_modal($(e.detail.obj)) });
 
   AppListenTo('documents_load_datas', (e)=>{ main.load_pieces(true) });
   AppListenTo('documents_reinit_datas', (e)=>{ main.load_pieces(false) });

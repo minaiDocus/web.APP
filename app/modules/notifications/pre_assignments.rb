@@ -42,7 +42,7 @@ class Notifications::PreAssignments < Notifications::Notifier
 
       list = prescriber.notify.notifiable_new_pre_assignments.includes(notifiable: [:report]).to_a
 
-      return if list.empty?
+      return if list.empty? || !list.first.try(:notifiable).try(:report).try(:name)
 
       notification_message = if list.size == 1
         "1 nouvelle pré-affectation est disponible pour le lot suivant : #{list.first.notifiable.report.name}"
@@ -60,7 +60,7 @@ class Notifications::PreAssignments < Notifications::Notifier
       end
 
       create_notification({
-        url: Rails.application.routes.url_helpers.documents_path,
+        url: Rails.application.routes.url_helpers.account_documents_path,
         user: prescriber,
         notice_type: 'new_pre_assignment_available',
         title: list.size == 1 ? 'Nouvelle pré-affectation disponible' : 'Nouvelles pré-affectations disponibles',

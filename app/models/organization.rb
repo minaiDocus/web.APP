@@ -7,7 +7,7 @@ class Organization < ApplicationRecord
   validates_presence_of   :name, :code
   validates_uniqueness_of :name, :code
 
-  belongs_to :organization_group, optional: true
+  has_and_belongs_to_many :organization_groups, optional: true
   has_many :members
   has_many :admin_members, -> { admins }, class_name: 'Member'
   has_many :admins, through: :admin_members, source: :user
@@ -38,6 +38,7 @@ class Organization < ApplicationRecord
   has_many :addresses, as: :locatable
   has_many :temp_packs
   has_many :preseizures, class_name: 'Pack::Report::Preseizure'
+  has_many :temp_preseizures,  class_name: 'Pack::Report::TempPreseizure'
   has_many :pack_pieces, class_name: 'Pack::Piece', inverse_of: 'organization'
   has_many :remote_files
   has_many :temp_documents
@@ -53,6 +54,7 @@ class Organization < ApplicationRecord
   accepts_nested_attributes_for :ibiza
   accepts_nested_attributes_for :coala
   accepts_nested_attributes_for :quadratus
+  accepts_nested_attributes_for :fec_acd
   accepts_nested_attributes_for :fec_agiris
   accepts_nested_attributes_for :cegid
   accepts_nested_attributes_for :exact_online
@@ -178,7 +180,7 @@ class Organization < ApplicationRecord
   end
 
   def uses_non_api_softwares?
-    coala.try(:used?) || quadratus.try(:used?) || cegid.try(:used?) || csv_descriptor.try(:used?) || fec_agiris.try(:used?)
+    coala.try(:used?) || quadratus.try(:used?) || cegid.try(:used?) || csv_descriptor.try(:used?) || fec_agiris.try(:used?) || fec_acd.try(:used?)
   end
 
   def auto_deliver?(_software)
@@ -201,6 +203,16 @@ class Organization < ApplicationRecord
     @software = _software
 
     self.try(software.to_sym).is_analysis_to_validate == 1
+  end
+
+  def get_associated_organization(oid)
+    organization_groups.each do |organization_group|
+      return organization_group.get_organization(oid) if organization_group.belong_to?(oid)
+    end
+  end
+
+  def belongs_to_groups?
+    organization_groups.map {|organization_group| organization_group.multi_organizations?}.uniq.include?(true)
   end
 
   private

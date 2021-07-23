@@ -7,7 +7,7 @@ class PreAssignmentExport < ApplicationRecord
   has_and_belongs_to_many :preseizures, class_name: 'Pack::Report::Preseizure'
 
   validates_presence_of   :pack_name, :state
-  validates_inclusion_of  :for, in: %w(ibiza coala cegid quadratus csv_descriptor fec_agiris)
+  validates_inclusion_of  :for, in: %w(ibiza coala cegid quadratus csv_descriptor fec_agiris fec_acd)
 
   scope :not_notified, -> { where(is_notified: false, state: 'generated') }
 

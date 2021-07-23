@@ -18,14 +18,12 @@ Rails.application.routes.draw do
     get 'operations/:id', to: 'operations#show', as: 'operations_details'
 
     post 'preseizures/update', to: 'preseizures#update', as: 'preseizures_update'
+    post 'preseizures/account/:id/update', to: 'preseizures#update_account', as: 'preseizures_update_account'
+    get 'preseizures/accounts_list/:account_id', to: 'preseizures#accounts_list', as: 'preseizures_accounts_list'
     get 'preseizures/:id', to: 'preseizures#show', as: 'preseizures_details'
   end
   
   namespace :documents do
-    resource :compta_analytics, controller: 'compta_analytics' do
-      post 'update_multiple', on: :collection
-    end
-
     resource :upload, controller: 'uploads'
 
     resource :uploader, controller: 'uploader' do
