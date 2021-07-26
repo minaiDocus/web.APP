@@ -1,9 +1,9 @@
-%nav.navbar.navbar-expand-lg.navbar-light.bg-light.fixed-top.sticky-top
+%nav.navbar.navbar-expand-lg.fixed-top.sticky-top
   .row.w-100.no-margin
     .col-md-1.text-center
       = link_to image_tag('logo/tiny_logo_2.png', alt: 'logo iDocus'), '#', class: 'navbar-brand no-margin', data:{ href: '/' }
       %button.navbar-toggler{"aria-controls" => "navbarNavDropdown", "aria-expanded" => "false", "aria-label" => "Toggle navigation", "data-target" => "#navbarNavDropdown", "data-toggle" => "collapse", :type => "button"}
-    .col-md-9
+    .col-md-9.menu
       %ul.navbar-nav
         %li.nav-item.active
           =link_to t('layouts.home'), '#', class: 'nav-link goto_button bold', data:{ href: '/' }
@@ -35,18 +35,22 @@
             =link_to t('layouts.retriever.historic'), '/retriever/historic', class: 'dropdown-item'
             =link_to t('layouts.retriever.others'), '/retriever/others', class: 'dropdown-item'
         
-    .col-md-2
-      %ul.navbar-nav.notifaction_group
+    .col-md-2.user-menu
+      %ul.navbar-nav.notifaction_group.me-5
+        %li.nav-item
+          =link_to glyphicon('fork', color: "rgba(26, 26, 26, 0.7);", size: '22'), '/admin', class: 'nav-link bold'
+        %li.nav-item
+          =link_to glyphicon('people', color: "rgba(26, 26, 26, 0.7);", size: '22'), '#', class: 'nav-link bold me-1'
         %li.nav-item.dropdown
-          = link_to glyphicon('cog', style: 'width: 21.48px; height: 22px;'), '#configure-profile', class: 'nav-link dropdown-toggle bold', id: 'navbardropdownmenusetting', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-toggle' => 'dropdown'
+          = link_to glyphicon('cog', color: "rgba(26, 26, 26, 0.7);", size: '22'), '#configure-profile', class: 'nav-link dropdown-toggle bold', id: 'navbardropdownmenusetting', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-bs-toggle' => 'dropdown'
           .dropdown-menu.dropdown-menu-setting{"aria-labelledby" => "navbardropdownmenusetting"}
-            = link_to glyphicon('person', {size: '17', color: '#1A1A1A', style: 'margin-top: -2%'}) + ' Mon compte', '#my_profile', class: 'dropdown-item', target: '_blank'
-            = link_to glyphicon('document', {size: '17', color: '#1A1A1A', style: 'margin-top: -2%'}) + ' Documentation', '#documentation', class: 'dropdown-item', target: '_blank'
-            = link_to glyphicon('comment-square', {size: '17', color: '#1A1A1A', style: 'margin-top: -2%'}) + ' Nous contacter', '#contact', class: 'dropdown-item', target: '_blank'
-            = link_to glyphicon('account-logout', {size: '17', color: '#FF4848', style: 'margin-top: -2%'}) + ' Se déconnecter', '#log-out', class: 'dropdown-item account-log-out', target: '_blank'
+            = link_to glyphicon('person', {size: '17', color: '#1A1A1A'}) + ' Mon compte', '#my_profile', class: 'dropdown-item', target: '_blank'
+            = link_to glyphicon('document', {size: '17', color: '#1A1A1A'}) + ' Documentation', '#documentation', class: 'dropdown-item', target: '_blank'
+            = link_to glyphicon('comment-square', {size: '17', color: '#1A1A1A'}) + ' Nous contacter', '#contact', class: 'dropdown-item', target: '_blank'
+            = link_to glyphicon('account-logout', {size: '17', color: '#FF4848'}) + ' Se déconnecter', '#log-out', class: 'dropdown-item red-label  account-log-out', target: '_blank'
         %li.nav-item.dropdown
           %span.badge.badge-alert.fs-origin.float-end.notif-badge
-          = link_to glyphicon('bell', style: 'width: 21.48px; height: 22px;'), '#notification', class: 'nav-link dropdown-toggle', id: 'notification-content', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-toggle' => 'dropdown'
+          = link_to glyphicon('bell', color: "rgba(26, 26, 26, 0.7);", size: '22'), '#notification', class: 'nav-link dropdown-toggle', id: 'notification-content', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-bs-toggle' => 'dropdown'
           .dropdown-menu.dropdown-notifications{"aria-labelledby" => "notification-content"}
             .notification-content-list
               %ul.dropdown-notif-items

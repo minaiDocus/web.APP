@@ -51,12 +51,6 @@ hr
 .semibold
   font-family: Raleway-semiBold
 
-.red-label
-  color: #FF4848 !important
-  
-.green-label
-  color: #C1D837 !important
-
 .hide
   display: none
 
@@ -243,12 +237,23 @@ table td
 .dropdown-item
   padding: 2% 5%
 
-.navbar-nav
-  .active, .nav-link:hover  
-    border-bottom: 3px solid #C1D837
+.navbar
+  background: #FFFFFF
 
-  .active:hover
-    border-bottom: none
+.navbar-brand img
+  max-width: 100%
+  margin: 10% auto
+
+.menu 
+  .navbar-nav 
+    .nav-item a
+      color: #1A1A1A !important
+
+    .active, .nav-link:hover  
+      border-bottom: 3px solid #C1D837
+
+    .active:hover
+      border-bottom: none
 
 .rotate
   transform: rotate(90deg)
@@ -580,3 +585,15 @@ i.remark
   -moz-box-shadow: 0px 0px 0px 0px
   -webkit-box-shadow: 0px 0px 0px 0px
   box-shadow: 0px 0px 0px 0px
+
+.red-label
+  color: #FF4848 !important
+  
+.green-label
+  color: #C1D837 !important
+
+.user-menu 
+  a
+    font-size: 15px
+  .nav-link
+    color: rgba(26, 26, 26, 0.7)

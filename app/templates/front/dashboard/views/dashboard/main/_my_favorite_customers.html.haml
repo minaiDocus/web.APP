@@ -11,9 +11,9 @@
             = infos.try(:name)
             %span.text-muted-light= infos.try(:message)
 
-        .col-md-1.no-padding.text-end
+        .col-md-1.no-padding.semibold.text-end
           %span.state{ class: "state-#{infos.try(:state)}"}= infos.try(:note)
-        .col-md-1
+        .col-md-1.text-center
           = link_to glyphicon('chevron-right', {size: '17', color: '#b5a6a6'}), '#', class: 'favorite-link', id: infos.try(:id)
 
     .favorite-customer-content.hide{id: "details_#{infos.try(:id)}"}
@@ -29,7 +29,7 @@
                 = 'Dossier cloturé'
               %span
                 = link_to glyphicon('cog', {size: '11', color: '#b5a6a6'}), '#todo', class: 'support-chat-link'
-        .col-md-1.no-padding.text-end
+        .col-md-1.no-padding.semibold.text-end
           %span.state.state-good= t('dashboard.good_state')
       %hr.clearfix
       .row
@@ -43,7 +43,7 @@
               %span
                 %span= infos.try(:last_pack).try(:name).try(:gsub, 'all', '') || '-'
                 = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#todo', class: 'support-chat-link'
-        .col-md-1.no-padding.text-end
+        .col-md-1.no-padding.semibold.text-end
           %span.state.state-good= t('dashboard.good_state')
       %hr.clearfix
       .row
@@ -56,7 +56,7 @@
               %span
                 %span= infos.try(:last_pack).try(:updated_at) || '-'
                 = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#todo', class: 'support-chat-link'
-        .col-md-1.no-padding.text-end
+        .col-md-1.no-padding.semibold.text-end
           %span.state.state-good= t('dashboard.good_state')
       %hr.clearfix
       .row
@@ -81,5 +81,5 @@
             .col-md-3.text-end
               %span= infos.try(:duplicated_preseizures_size).to_i
               = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#todo', class: 'support-chat-link'
-        .col-md-1.no-padding.text-end
+        .col-md-1.no-padding.semibold.text-end
           %span.state.state-critical= t('dashboard.critical_state')
