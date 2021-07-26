@@ -32,8 +32,7 @@
 //= require moment
 //= require daterangepicker
 //
-// French translation for bootstrap-datepicker
-// Lola LAI KAM <lailol@directmada.com>
+
 var GLOBAL = {}
 var VARIABLES = {}
 var VARS = {}

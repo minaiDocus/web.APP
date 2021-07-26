@@ -1,6 +1,7 @@
 //= require '../application'
 
-jQuery(function () {
+
+jQuery(function () {  
   /* LOGIN */
   $('input.form-control').unbind('focusout');
   $('input.form-control').bind('focusout',function(e) {
@@ -56,4 +57,21 @@ jQuery(function () {
   });
 
   /* LOGIN */
+
+  /* AS USER */
+  $('a.as_user').unbind('click').bind('click', function(e){
+    e.preventDefault();
+
+    $('.as-user-with-overlay').show();    
+    setTimeout(function(){$('.as-user-notification').show('');}, 100);
+  });
+
+  $('.close_as_user_modal').unbind('click').bind('click', function(e){
+    e.preventDefault();
+
+    $('.as-user-notification').hide('');    
+    setTimeout(function(){$('.as-user-with-overlay').hide();}, 200);
+  });
+
+  /* AS USER */
 });

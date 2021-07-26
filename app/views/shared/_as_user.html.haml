@@ -1,13 +1,26 @@
 - if current_user.is_admin?
-  .row
-    .col-md-12.box
-      - if action_name == 'index' || (controller_name == 'organizations' && action_name == 'show') || (controller_name == 'reporting' && action_name == 'show') || controller_name == 'profiles'
-        %form{ action: current_url, method: 'GET', class: 'form-inline margin0bottom' }
-          = label_tag :user_code, 'Visualiser et agir en tant que :', class: 'mr-sm-2'
-          = text_field_tag :user_code, session[:user_code].presence, class: 'input-medium mr-sm-2', placeholder: 'code utilisateur'
-          = submit_tag t('actions.submit'), class: 'btn btn-primary mr-sm-2'
-          = link_to 'Réinitialiser', current_url(Hash[:user_code, current_user.memberships.first&.code]), class: 'btn btn-light'
-      - else
-        Visualiser et agir en tant que :
-        %span.badge.badge-secondary.fs-origin #{current_user_info}
-        = link_to 'Réinitialiser', current_url(Hash[:user_code, current_user.memberships.first&.code]), class: 'btn btn-light'
+  .as-user-with-overlay
+  .box.as-user-notification
+    - if (action_name == 'index' || (controller_name == 'organizations' && action_name == 'show') || (controller_name == 'reporting' && action_name == 'show') || controller_name == 'profiles')
+      %form{ action: current_url, method: 'GET', class: 'form-inline margin0bottom' }
+        .form-group
+          %label{ for: 'user_code'  } Visualiser et agir en tant que :
+          %input.form-control#user_code{  placeholder: 'code utilisateur', value: session[:user_code].presence, name: 'user_code' }      
+        %hr
+        .row
+          .col-md-4.text-center.for-margin-right.no-margin.ps-0.pe-0.semibold
+            = link_to 'Annuler', '#', class: 'close_as_user_modal' 
+          .col-md-5.text-center.for-margin-right.semibold
+            = link_to 'Réinitialiser', current_url(Hash[:user_code, current_user.memberships.first&.code]), class: ''                    
+          .col-md-3.text-center.semibold.no-padding.no-margin
+            = submit_tag 'OK', class: 'btn btn-default w-100'
+    - else
+      .form-group
+        %label Visualiser et agir en tant que :
+        %br
+        .badge.bg-secondary.semibold #{current_user_info}
+      %hr
+      .form-group.text-end.semibold
+        %span= link_to 'Réinitialiser', current_url(Hash[:user_code, current_user.memberships.first&.code]), class: ''
+        
+

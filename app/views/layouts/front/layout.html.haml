@@ -24,6 +24,7 @@
       != content_for?(:content) ? yield(:content) : yield
   - render partial: 'layouts/front/support_chat'
   = render partial: 'layouts/front/notice_flush_messages'
+  = render partial: 'shared/as_user'
 
   = render partial: 'layouts/front/footer'
 
