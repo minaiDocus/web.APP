@@ -12,16 +12,33 @@
   // list type
   - pieces.each do |piece|
     .preseizures_box
-      - preseizure = piece.preseizures.first
-      - if preseizure
-        .box.list.dynamic_box{ id: "document_#{piece.id}", data: { preseizure_id: preseizure.id, type: 'piece' } }
-          .row.list-content
-            .w-25      
-              .stamp-content.pagethumb 
-                .zoom.pointer
-                  = glyphicon('magnifying-glass', { size: '20', color: 'background: rgba(26, 26, 26, 0.7)'})         
-                .image_piece
-                  = image_tag document_thumb_url(piece)
-            .w-75
-              = render file: Rails.root.join('app/templates/front/documents/views/documents/preseizures/_preseizure_box.html.haml'), locals: { preseizure: preseizure, piece: piece, operation: nil }
+      - preseizures = piece.preseizures      
+      .box.list
+        .row.list-content
+          .w-25
+            .stamp-content.pagethumb.text-center
+              .image_piece.w-100
+                %span.zoom.pdf-viewer.pointer{title: 'Visualiser la pièce', "data-content-url" => piece.cloud_content_object.url}
+                  = glyphicon('magnifying-glass', { size: '20', color: 'background: rgba(26, 26, 26, 0.7)'})
+                = image_tag document_thumb_url(piece), class: 'w-50'
+          - if preseizures.size == 1
+            .w-75.dynamic_box{ id: "document_#{piece.id}", data: { preseizure_id: preseizures.first.id, type: 'piece' } }
+              = render file: Rails.root.join('app/templates/front/documents/views/documents/preseizures/_preseizure_box.html.haml'), locals: { preseizure: preseizures.first, piece: piece, operation: nil }
+          - elsif preseizures.size >= 1
+            .w-75.dynamic_box{ id: "document_#{piece.id}", data: { preseizure_ids: preseizures.ids, type: 'piece' } }
+              %ul.nav.nav-tabs.ms-3{ "role" => "tablist" }
+                - preseizures.each_with_index do |preseizure, index|
+                  %li.nav-item.no-margin{ "role" => "presentation" }
+                    %button.semibold.nav-link{ class: "#{(index == 0) ? 'active' : ''}", "id" => "preseizure-tab-#{preseizure.id}", "data-bs-toggle" => "tab", "data-bs-target" => "#preseizure-#{preseizure.id}", type: :button, "role" => "tab", "aria-controls" => "preseizure-tab-#{preseizure.id}", "aria-selected" => "true" }= preseizure.try(:third_party)
+
+              .tab-content
+                - preseizures.each_with_index do |preseizure, index|
+                  .tab-pane.box.no-margin{ class: "#{(index == 0) ? 'active' : ''}", "id" => "preseizure-#{preseizure.id}", "role" => "tabpanel", "aria-labelledby" => "preseizure-#{preseizure.id}-tab" }
+                    = render file: Rails.root.join('app/templates/front/documents/views/documents/preseizures/_preseizure_box.html.haml'), locals: { preseizure: preseizure, piece: piece, operation: nil }
+          - else
+            .w-75.text-center.no-preseizure
+              %h1 Aucune écriture comptable
+
+
+
 

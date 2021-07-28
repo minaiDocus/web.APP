@@ -2,21 +2,17 @@
   .row.m-1
     .col-md-10
       %h5.pack.semibold= piece.name
-    .col-md-2.text-right.for-dismiss-modal
-      %label.container.pointer
-        %input.select-document{ type: :checkbox }
-        %span.checkmark
-          = glyphicon('check', { size: '14', color: '#FFF'})
+    .col-md-2.text-end
+      %span.form-check                 
+        %input.form-check-input.pointer.float-none.select-document{ type: :checkbox, value: "" } 
 
 - elsif operation
   .row
     .col-md-10
       %h5.pack.semibold= operation.try(:label)
     .col-md-1.action-group
-      %label.container.pointer
-        %input{ type: :checkbox }
-        %span.checkmark
-          = glyphicon('check', { size: '14', color: '#FFF'})
+      %span.form-check                 
+        %input.form-check-input.pointer.float-none{ type: :checkbox, value: "" }      
 
 .row.m-1
   .col-md-5
@@ -30,7 +26,7 @@
   .row.m-1
     .col-md-5
       %span Nom de tiers 
-      %span.semibold= preseizure.third_party
+      %span.semibold= preseizure.try(:third_party)
 .row.m-1
   .col-md-5
     - sending_date = preseizure.pre_assignment_deliveries.where(state: 'sent').first.try(:created_at)
@@ -115,10 +111,10 @@
     - if preseizure.third_party.present?
       %span.badge.bg-dark= preseizure.third_party
 
-  .col-md-3.text-right.p-0
+  .col-md-3.text-end.p-0
     - if piece
-      %span.action-group.update_tags{title: 'Taguer la pièce', data: {ids: piece.id, type: 'piece'}}= glyphicon('tag', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
-    %span.action-group.preseizures_export{title: 'Export écriture comptable', data:{ id: preseizure.id, type: 'preseizure', multi: false }}= glyphicon('cloud-download', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
-    %span.action-group.edit_preseizures{title: 'Edition écriture comptable', data:{ id: preseizure.id }}= glyphicon('pencil', { size: '20', color:'rgba(26, 26, 26, 0.32);', style: 'transform: rotate(90deg)'})
+      %span.ms-2.update_tags{title: 'Taguer la pièce', data: {ids: piece.id, type: 'piece'}}= glyphicon('tag', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+    %span.ms-2.preseizures_export{title: 'Export écriture comptable', data:{ id: preseizure.id, type: 'preseizure', multi: false }}= glyphicon('cloud-download', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+    %span.ms-2.edit_preseizures{title: 'Edition écriture comptable', data:{ id: preseizure.id }}= glyphicon('pencil', { size: '20', color:'rgba(26, 26, 26, 0.32);', style: 'transform: rotate(90deg)'})
     - if preseizure.user.uses_api_softwares? && preseizure.is_not_delivered?
-      %span.action-group.deliver_preseizures{title: 'Livraison écriture comptable', data: {ids: [preseizure.id]}}= glyphicon('loop-circular', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+      %span.ms-2.deliver_preseizures{title: 'Livraison écriture comptable', data: {ids: [preseizure.id]}}= glyphicon('loop-circular', { size: '20', color:'rgba(26, 26, 26, 0.32);'})

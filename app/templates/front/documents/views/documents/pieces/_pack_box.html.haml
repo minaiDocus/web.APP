@@ -29,11 +29,11 @@
           %span.badge.bg-dark Notes de frais
         - if not pack.is_fully_processed
           %span.badge.bg-dark En cours ...
-      .col-md-4.text-right
-        / %span.action-group= glyphicon('flag', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
-        %span.action-group.update_tags{title: 'Taguer le lot', data: {ids: pack.id, type: 'pack'}}= glyphicon('tag', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
-        %span.action-group.download_pack_bundle{title: 'Télécharger', data: {id: pack.id}}= glyphicon('data-transfer-download', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
-        %span.action-group.download_pack_archive{title: 'Télécharger une archive zip', data: {id: pack.id}}= glyphicon('account-logout', { size: '20', color:'rgba(26, 26, 26, 0.32);', style: 'transform: rotate(90deg)'})
-        %span.action-group.preseizures_export{title: 'Export écriture comptable', data:{ id: pack.id, type: 'pack', multi: true }}= glyphicon('cloud-download', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+      .col-md-4.text-end
+        / %span.ms-2= glyphicon('flag', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+        %span.ms-2.update_tags{title: 'Taguer le lot', data: {ids: pack.id, type: 'pack'}}= glyphicon('tag', { size: '16', color:'rgba(26, 26, 26, 0.32);'})
+        %span.ms-2.download_pack_bundle{title: 'Télécharger', data: {id: pack.id}}= glyphicon('data-transfer-download', { size: '16', color:'rgba(26, 26, 26, 0.32);'})
+        %span.ms-2.download_pack_archive{title: 'Télécharger une archive zip', data: {id: pack.id}}= glyphicon('account-logout', { size: '16', color:'rgba(26, 26, 26, 0.32);', style: 'transform: rotate(90deg)'})
+        %span.ms-2.preseizures_export{title: 'Export écriture comptable', data:{ id: pack.id, type: 'pack', multi: true }}= glyphicon('cloud-download', { size: '16', color:'rgba(26, 26, 26, 0.32);'})
         - if pack.user.uses_api_softwares?
-          %span.action-group.deliver_preseizures{title: 'Livraison écriture comptable', data: {id: pack.id, type: 'pack'}}= glyphicon('loop-circular', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+          %span.ms-2.deliver_preseizures{title: 'Livraison écriture comptable', data: {id: pack.id, type: 'pack'}}= glyphicon('loop-circular', { size: '16', color:'rgba(26, 26, 26, 0.32);'})

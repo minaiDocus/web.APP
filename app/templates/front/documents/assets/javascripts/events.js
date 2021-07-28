@@ -131,6 +131,14 @@ function bind_all_events(){
 
   $('table.entries td.entry').mouseover(function(){ $(this).find('.content_amount span').show(); }).mouseout(function(){ $(this).find('.content_amount span').hide(); });
   $('table.entries .debit_or_credit').unbind('click').bind('click', function(){ AppEmit('documents_change_entry_type', {'obj': this}); });
+
+  $(".zoom.pdf-viewer").unbind('click').bind('click', function(){ 
+    var url = $(this).attr('data-content-url');
+    
+    $("#PdfViewerDialog .modal-body .view-content iframe.src-piece").attr("src", url);
+    $("#PdfViewerDialog").modal('show');
+
+  });
 }
 
 jQuery(function() {
