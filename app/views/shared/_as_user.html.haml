@@ -20,7 +20,12 @@
         %br
         .badge.bg-secondary.semibold #{current_user_info}
       %hr
-      .form-group.text-end.semibold
-        %span= link_to 'Réinitialiser', current_url(Hash[:user_code, current_user.memberships.first&.code]), class: ''
+      .form-group.semibold
+        .row
+          .col-md-3.text-center.pt-2.no-margin.ps-0.pe-0.semibold
+            = link_to 'Annuler', '#', class: 'close_as_user_modal'
+          .col-md-1.for-margin-right.no-margin
+          .col-md-7.pt-2.no-margin.text-center
+            = link_to 'Réinitialiser', current_url(Hash[:user_code, current_user.memberships.first&.code]), class: 'ms-3'
         
 

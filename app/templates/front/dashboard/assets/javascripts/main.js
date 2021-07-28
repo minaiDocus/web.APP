@@ -21,7 +21,9 @@ function bind_favorite_clicks(){
 jQuery(function() {
   let applicationJS = new ApplicationJS();
 
-  $('#select-customer-to-favorite').searchableOptionList();
+  $('#select-customer-to-favorite').searchableOptionList({
+    maxHeight: '400px'
+  });
   bind_favorite_clicks();
 
   $('#add-customer-to-favorite.btn-add').unbind('click').bind('click',function(e) {

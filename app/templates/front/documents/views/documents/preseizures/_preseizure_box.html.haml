@@ -94,22 +94,22 @@
     - if piece
       - delivery_state = piece.get_state_to('text')
       - if ['delivery_failed', 'duplication', 'piece_ignored'].include?(delivery_state)
-        %span.badge.badge-danger= t("pieces.delivery_state.#{delivery_state}")
+        %span.badge.badge-danger.semibold= t("pieces.delivery_state.#{delivery_state}")
       - elsif ['awaiting_analytics', 'awaiting_pre_assignment', 'delivery_pending'].include?(delivery_state)
-        %span.badge.badge-warning= t("pieces.delivery_state.#{delivery_state}")
+        %span.badge.badge-warning.semibold= t("pieces.delivery_state.#{delivery_state}")
       - elsif delivery_state != 'none'
-        %span.badge.badge-success= t("pieces.delivery_state.#{delivery_state}")
+        %span.badge.badge-success.semibold= t("pieces.delivery_state.#{delivery_state}")
     - elsif operation
       - delivery_state = preseizure.get_state_to('text')
       - if ['delivery_failed', 'duplication', 'piece_ignored'].include?(delivery_state)
-        %span.badge.badge-danger= t("pieces.delivery_state.#{delivery_state}")
+        %span.badge.badge-danger.semibold= t("pieces.delivery_state.#{delivery_state}")
       - elsif ['awaiting_analytics', 'awaiting_pre_assignment', 'delivery_pending'].include?(delivery_state)
-        %span.badge.badge-warning= t("pieces.delivery_state.#{delivery_state}")
+        %span.badge.badge-warning.semibold= t("pieces.delivery_state.#{delivery_state}")
       - elsif delivery_state != 'none'
-        %span.badge.badge-success= t("pieces.delivery_state.#{delivery_state}")
+        %span.badge.badge-success.semibold= t("pieces.delivery_state.#{delivery_state}")
 
     - if preseizure.third_party.present?
-      %span.badge.bg-dark= preseizure.third_party
+      %span.badge.bg-dark.semibold= preseizure.third_party
 
   .col-md-3.text-end.p-0
     - if piece
