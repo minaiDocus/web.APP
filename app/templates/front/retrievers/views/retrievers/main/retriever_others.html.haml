@@ -1,0 +1,472 @@
+= stylesheet_link_tag 'front/retriever/main'
+
+.container-fluid
+  .row
+    .col-md-7.text-start
+      %h1.bold Autres
+    .col-md-3.p-1
+      %select.form-select#retriever-customers{ name: 'retriever-customers', "aria-label" => "Default select example"  }              
+        %option Choisir un dossier
+        %option customer 1
+        %option customer 2
+        %option customer 3
+        %option customer 4
+
+    .col-md-1.text-start.p-1
+      %button.btn.btn-light.semibold.retriever-filter-others.w-100{ disabled: false }
+        %span.me-3= glyphicon('layers', { size: '15', color: '#72AA42'})
+        %span Filtrer  
+
+  .mb-4
+
+  %ul.nav.nav-tabs.ms-3{ "role" => "tablist" }
+    %li.nav-item.no-margin{ "role" => "presentation" }
+      %button.semibold.nav-link.active#bank-account-selection-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#bank-account-selection", type: :button, "role" => "tab", "aria-controls" => "bank-account-selection", "aria-selected" => "true" } 
+        Sélection des comptes bancaires   
+        %span.ms-1.badge.badge-secondary.regular 475
+    %li.nav-item.no-margin{ "role" => "presentation" }
+      %button.semibold.nav-link#documents-selections-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#documents-selections", type: :button, "role" => "tab", "aria-controls" => "documents-selections", "aria-selected" => "false"} 
+        Séléction de document restant à récupérer
+        %span.ms-1.badge.badge-secondary.regular 86
+    %li.nav-item.no-margin{ "role" => "presentation" }
+      %button.semibold.nav-link#bank-parameters-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#bank-parameters", type: :button, "role" => "tab", "aria-controls" => "bank-parameters", "aria-selected" => "false"} Paramètres bancaires
+
+
+  .tab-content
+    .tab-pane.box.no-margin.active#bank-account-selection{ "role" => "tabpanel", "aria-labelledby" => "bank-account-selection-tab" } 
+      .row
+        .col-md-12
+          %table.table.table-striped.table_integration
+            %thead            
+              %th.text-center
+                .form-check
+                  %input.form-check-input.pointer.float-none.check-all-bank-account{ type: :checkbox, value: "" }
+              %th Banque
+              %th Nom
+              %th Numéro de compte
+            %tbody
+              %tr
+                %td.text-center
+                  .form-check
+                    %input.form-check-input.pointer.float-none.check-bank-account{ type: :checkbox, value: "" }
+                %td Crédit du Nord
+                %td PRÊT EQUIPEMENT
+                %td 0204626105213801                
+              %tr
+                %td.text-center
+                  .form-check
+                    %input.form-check-input.pointer.float-none.check-bank-account{ type: :checkbox, value: "" }
+                %td Crédit du Nord
+                %td PRÊT EQUIPEMENT
+                %td 0204626105213802 
+                
+        .form-group.no-margin
+          .w-100.text-end            
+            %button.btn.btn-primary.bold Valider les changements
+
+    .tab-pane.box.no-margin#documents-selections{ "role" => "tabpanel", "aria-labelledby" => "documents-selections-tab" }
+      .row
+        .col-md-12
+          %table.table.table-striped.table_integration
+            %thead            
+              %th.text-center
+                .form-check
+                  %input.form-check-input.pointer.float-none.check-all-bank-account{ type: :checkbox, value: "" }
+              %th Date de la récupération
+              %th Service
+              %th Date
+              %th Nom original
+              %th Nb. pages
+              %th Montant
+            %tbody
+              %tr
+                %td.text-center
+                  .form-check
+                    %input.form-check-input.pointer.float-none.check-bank-account{ type: :checkbox, value: "" }
+                %td 18/07/2020
+                %td Mailjet
+                %td 24/01/2020                
+                %td
+                  %a{ href: '#' } camille@humancoders.com_FR20201408175.pdf
+                %td 1              
+                %td -954.0 €             
+              %tr
+                %td.text-center
+                  .form-check
+                    %input.form-check-input.pointer.float-none.check-bank-account{ type: :checkbox, value: "" }
+                %td 18/07/2020
+                %td Ovh
+                %td 24/01/2020                
+                %td
+                  %a{ href: '#' } sm114390-ovh.129036585.pdf
+                %td 2             
+                %td -5.99 €
+              %tr
+                %td.text-center
+                  .form-check
+                    %input.form-check-input.pointer.float-none.check-bank-account{ type: :checkbox, value: "" }
+                %td 18/07/2020
+                %td Ovh
+                %td 24/01/2020                
+                %td
+                  %a{ href: '#' } sm114390-ovh.129036559.pdf
+                %td 21         
+                %td -1.19 €
+
+        .form-group
+          .row.pagination
+            .col-md-6
+              .row
+                .col-md-2.text-end.pt-1
+                  %label Afficher par
+                .col-md-2
+                  %select.form-select.form-select-sm{ "aria-label" => ".form-select-sm" }
+                    %option 20
+                    %option 50
+                    %option 100         
+
+            .col-md-6.text-end
+              .row
+                .col-md-10
+                  %label 2-10 de 10 éléments
+                .col-md-1
+                  %span= glyphicon('chevron-left', { size: '15', color: "#1A1A1A" })
+                .col-md-1
+                  %span= glyphicon('chevron-right', { size: '15', color: "#1A1A1A" })
+                
+        .form-group.no-margin
+          .w-100.text-end            
+            %button.btn.btn-primary.bold Intégrer les documents séléctionnés 
+
+    .tab-pane.box.no-margin#bank-parameters{ "role" => "tabpanel", "aria-labelledby" => "bank-parameters-tab" }
+      .row
+        .col-md-8
+          %label.semibold.pt-2 AC0128 - HUMAN CODERS - Matthieu SEGRET
+        .col-md-4.text-end
+          %button.btn.btn-light-primary.semibold.create-manual-bank-account
+            %span.me-3= glyphicon('plus', { size: '15', color: '#0d6efd'})
+            %span Créer un compte bancaire
+
+      .mb-4
+
+      .row
+        .col-md-12
+          %table.table.table-striped.table_integration
+            %thead
+              %th Banque
+              %th Nom
+              %th Numéro de compte
+              %th Code journal
+              %th Compte de trésorerie
+              %th Date historique
+              %th.text-end Action
+            %tbody
+              %tr
+                %td Caisse d'Épargne Professionnels
+                %td Caisse d'Épargne Professionnels
+                %td FR7617515006000800051412652
+                %td CE52
+                %td 512000
+                %td 01/06/2021
+                %td.text-end.pointer
+                  .action.sub-menu-bank-param
+                    %span= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
+                    .sub_menu.text-start.hide
+                      %ul.no-margin.no-padding.regular                      
+                        %li.edit
+                          %span.me-1= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
+                          %span Editer                        
+                        %li.delete.red-label
+                          %span.me-1= glyphicon('trash', { size: '15', color: "#FF4848" })
+                          %span Supprimer
+              %tr
+                %td Caisse d'Épargne Professionnels
+                %td Caisse d'Épargne Professionnels
+                %td FR7617515006000800051412652
+                %td CE52
+                %td 512000
+                %td 01/06/2021
+                %td.text-end.pointer
+                  .action.sub-menu-bank-param
+                    %span= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
+                    .sub_menu.text-start.hide
+                      %ul.no-margin.no-padding.regular                      
+                        %li.edit
+                          %span.me-1= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
+                          %span Editer                        
+                        %li.delete.red-label
+                          %span.me-1= glyphicon('trash', { size: '15', color: "#FF4848" })
+                          %span Supprimer
+        .form-group
+          .row.pagination
+            .col-md-6
+              .row
+                .col-md-2.text-end.pt-1
+                  %label Afficher par
+                .col-md-2
+                  %select.form-select.form-select-sm{ "aria-label" => ".form-select-sm" }
+                    %option 20
+                    %option 50
+                    %option 100         
+
+            .col-md-6.text-end
+              .row
+                .col-md-10
+                  %label 2-10 de 10 éléments
+                .col-md-1
+                  %span= glyphicon('chevron-left', { size: '15', color: "#1A1A1A" })
+                .col-md-1
+                  %span= glyphicon('chevron-right', { size: '15', color: "#1A1A1A" })
+
+  .modal#create-bank-account
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %h5.modal-title.bold Paramètrage manuel d'un compte bancaire
+          %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+        .modal-body
+          .form-group
+            %label.semibold Banque
+            %select.form-select#list-bank{ name: 'list-bank', "aria-label" => "Default select"  }              
+              %option bank 1
+              %option bank 2
+              %option bank 3
+              %option bank 4
+            %i Merci de contacter le support (support@idocus.com), si votre compte bancaire ne fait pas partie de la liste, pour une demande d'ajout
+
+          .form-group
+            %label.semibold Type de compte
+            %select.form-select#account-type{ name: 'account-type', "aria-label" => "Default select"  }              
+              %option account 1
+              %option account 2
+              %option account 3
+              %option account 4
+
+          .form-group
+            %label.semibold Numéro de compte
+            %select.form-select#account-number{ name: 'account-number', "aria-label" => "Default select"  }              
+              %option number 1
+              %option number 2
+              %option number 3
+              %option number 4
+
+          .form-group
+            .row
+              .col-md-6
+                %label.semibold Code journal
+                %select.form-select#book-code{ name: 'book-code', "aria-label" => "Default select"  }              
+                  %option code 1
+                  %option code 2
+                  %option code 3
+                  %option code 4
+              .col-md-6
+                %label.semibold Code journal logiciel
+                %select.form-select#book-code-software{ name: 'book-code-software', "aria-label" => "Default select"  }              
+                  %option code 1
+                  %option code 2
+                  %option code 3
+                  %option code 4
+
+          .form-group
+            .row
+              .col-md-6
+                %label.semibold Devise originale
+                %select.form-select#original-currency{ name: 'original-currency', "aria-label" => "Default select"  }              
+                  %option devise 1
+                  %option devise 2
+                  %option devise 3
+                  %option devise 4
+              .col-md-6
+                %label.semibold Devise
+                %select.form-select#currency{ name: 'currency', "aria-label" => "Default select"  }              
+                  %option currency 1
+                  %option currency 2
+                  %option currency 3
+                  %option currency 4
+                %i Les écritures seront converties vers cette devise avec le taux de change de la date de valeur
+
+          .form-group
+            %label.semibold Compte de trésorerie
+            .select-container.no-padding.w-100
+              %input{ placeholder: "ex : 512000" }
+
+          .form-group
+            %label.semibold  Compte d’attente
+            .select-container.no-padding.w-100
+              %input{ placeholder: "ex : 471000" }
+
+          .form-group
+            %label.semibold Choisir la date de récupération de l'historique bancaire
+            .select-container.no-padding.w-100.date.date-picker
+              %input{ placeholder: "ex : 471000" }
+
+          .form-group.form-check
+            %input.form-check-input.pointer.float-none{ type: :checkbox, value: "" }
+            %label.form-check-label.stay-connect Bloquer les opérations du mois précédent
+            %br
+            %i Ne s'applique qu'après un mois depuis la création de ce compte bancaire dans iDocus
+
+          .form-group
+            %label.semibold Nombre de jour de retard autorisé avant blocage de l'opération
+            .select-container.no-padding.w-100.date.date-picker
+              %input{ placeholder: "ex : 30" }
+          
+        .modal-footer
+          %button.btn.btn-light.semibold.cancel{ type: :button } Annuler
+          %button.btn.btn-primary.semibold{ type: :button, disabled: true } Valider
+
+  .modal#edit-bank-account
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %h5.modal-title.bold 
+            Edition d'un compte bancaire du client
+          %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+        .modal-body
+          .form-group
+            %label.semibold Numéro de compte
+            .select-container.no-padding.w-100
+              %input{ placeholder: "ex : 3002900003" }
+
+          .form-group
+            %label.semibold Code journal
+            .select-container.no-padding.w-100
+              %input{ placeholder: "ex : ?" }
+
+          .form-group
+            %label.semibold Code journal
+            %select.form-select#edit-book-code{ name: 'edit-book-code', "aria-label" => "Default select"  }              
+              %option Code book 1
+              %option Code book 2
+              %option Code book 3
+              %option Code book 4
+            %i.badge.bg-warning.semibold iBiza n'est pas configuré correctement. Veuillez le reconfigurer.
+
+          .form-group
+            %label.semibold Devise
+            %select.form-select#edit-currency{ name: 'edit-currency', "aria-label" => "Default select"  }              
+              %option currency 1
+              %option currency 2
+              %option currency 3
+              %option currency 4
+            %i Les écritures seront converties vers cette devise avec le taux de change de la date de valeur
+
+          .form-group
+            %label.semibold Compte de trésorerie
+            .select-container.no-padding.w-100
+              %input{ placeholder: "ex : 512000" }
+
+          .form-group
+            %label.semibold Compte d’attente
+            .select-container.no-padding.w-100
+              %input{ placeholder: "ex : 471000" }
+            %i si tiers non identifiable
+
+          .form-group
+            %label.semibold Choisir la date de récupération de l'historique bancaire
+            .select-container.no-padding.w-100
+              %input{ placeholder: "ex : ?" }
+
+          .form-group
+            %label.semibold Activer la récuparation EBICS à compter du
+            .select-container.no-padding.w-100
+              %input{ placeholder: "ex : ?" }
+
+          .form-group.form-check
+            %input.form-check-input.pointer.float-none{ type: :checkbox, value: "" }
+            %label.form-check-label.stay-connect Bloquer les opérations du mois précédent
+            %br
+            %i Ne s'applique qu'après un mois depuis la création de ce compte bancaire dans iDocus
+
+          .form-group
+            %label.semibold Nombre de jour de retard autorisé avant blocage de l'opération
+            .select-container.no-padding.w-100.date.date-picker
+              %input{ placeholder: "ex : 30" }
+          
+        .modal-footer
+          %button.btn.btn-light.semibold.cancel{ type: :button } Annuler
+          %button.btn.btn-primary.semibold{ type: :button } Valider
+
+  .modal#filter-bank-account-selection
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %h5.modal-title.bold Filtre séléction compte bancaire
+          %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+        .modal-body
+          .form-group
+            %label.semibold Banque
+            %select.form-select#list-bank{ name: 'list-bank', "aria-label" => "Default select"  }              
+              %option bank 1
+              %option bank 2
+              %option bank 3
+              %option bank 4
+          
+        .modal-footer
+          %button.btn.btn-light.semibold.cancel{ type: :button } Annuler
+          %button.btn.btn-primary.semibold{ type: :button } Valider
+
+  .modal#filter-documents-selections
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %h5.modal-title.bold Filtre séléction document restant
+          %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+        .modal-body
+          .form-group
+            %label.semibold Service
+            .select-container.no-padding.w-100.date.date-picker
+              %input{ type: :text }
+
+          .form-group
+            %label.semibold Date
+            .select-container.no-padding.w-100.date.date-picker
+              %input{ type: :text }
+
+          .form-group
+            %label.semibold Nom original
+            .select-container.no-padding.w-100.date.date-picker
+              %input{ type: :text }
+
+          .form-group
+            %label.semibold Montant
+            .select-container.no-padding.w-100.date.date-picker
+              %input{ type: :text }
+          
+        .modal-footer
+          %button.btn.btn-light.semibold.cancel{ type: :button } Annuler
+          %button.btn.btn-primary.semibold{ type: :button } Valider
+
+  .modal#filter-bank-parameters
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %h5.modal-title.bold Filtre paramètre bancaire
+          %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+        .modal-body
+          .form-group
+            %label.semibold Banque
+            .select-container.no-padding.w-100.date.date-picker
+              %input{ type: :text }
+
+          .form-group
+            %label.semibold Nom
+            .select-container.no-padding.w-100.date.date-picker
+              %input{ type: :text }
+
+          .form-group
+            %label.semibold Code journal
+            .select-container.no-padding.w-100.date.date-picker
+              %input{ type: :text }
+
+          .form-group
+            %label.semibold Compte de trésorerie
+            .select-container.no-padding.w-100.date.date-picker
+              %input{ type: :text }
+          
+        .modal-footer
+          %button.btn.btn-light.semibold.cancel{ type: :button } Annuler
+          %button.btn.btn-primary.semibold{ type: :button, disabled: true } Valider
+
+      
+= javascript_include_tag 'front/retriever/main'

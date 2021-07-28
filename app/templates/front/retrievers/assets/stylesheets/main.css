@@ -1,0 +1,40 @@
+.sub_menu {
+  min-width: 8%;  
+}
+
+.sub_menu li {
+  padding: 7% 6%;  
+}
+
+.retriever-index li{
+  text-align: center;
+  font-size: 13px;  
+  margin: 0 17px 7px 0px;
+  display: inline;
+  font-family: Raleway-semiBold;
+}
+
+.modal#list-retrievers .modal-dialog{
+  min-width: 992px;
+}
+
+.connectors-list li{
+  text-align: center;
+  font-size: 12px;
+  float: left;
+  width: 150px;
+  height: 25px;
+  margin: 0 17px 7px 0px;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  background-color: #fff;
+}
+
+.connectors-list li a{
+  text-decoration: none;
+}
+
+.connectors-list{
+  max-height: 385px;
+  overflow: auto;
+}

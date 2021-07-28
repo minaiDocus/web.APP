@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class RetrieverController < FrontController
-  layout 'layouts/front/account/retrievers'
-
   before_action :verify_rights
   before_action :load_account
 

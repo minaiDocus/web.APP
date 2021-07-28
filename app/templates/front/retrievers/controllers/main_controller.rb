@@ -9,20 +9,20 @@ class Retrievers::MainController < RetrieverController
   append_view_path('app/templates/front/retrievers/views')
 
   def index
+
     retrievers = if @account
                    @account.retrievers
                  else
                    Retriever.where(user: accounts)
                  end
-    @retrievers = Retriever.search_for_collection(retrievers, search_terms(params[:retriever_contains]))
+
+    @retrievers = Retriever.search_for_collection(retrievers, search_terms({ name: params[:name], state: params[:state] }))
                            .joins(:user)
                            .order("#{sort_column} #{sort_direction}")
                            .page(params[:page])
-                           .per(params[:per_page])
-    @is_filter_empty = search_terms(params[:retriever_contains]).empty?
-    if params[:part].present?
-      render partial: 'retrievers', locals: { scope: :account }
-    end
+                           .per(20)
+
+    @retrievers.last.try(:created_at) #WORKAROUND: @retrievers bugs if this line is not present
   end
 
   def list; end

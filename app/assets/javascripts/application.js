@@ -95,13 +95,17 @@ class ApplicationJS {
 
   noticeInternalErrorFrom(page=null, message = null){
     var html = message;
-    if(page)
+    if(page){
       html = $(page).find('.notice-internal-error').html();
+      if(!html)
+        html = page.responseText;
+    }
 
     if(html)
     {
       $('#idocus_notifications_messages .notice-internal-error').html(html);
       $('#idocus_notifications_messages .notice-internal-error').show('');
+      setTimeout(function(){$('#idocus_notifications_messages .notice-internal-error').fadeOut('');}, 10000);
     }
   }
 

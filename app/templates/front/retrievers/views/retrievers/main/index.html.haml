@@ -1,105 +1,37 @@
-= hidden_field_tag :retriever_budgea_config, @bi_config
+= stylesheet_link_tag 'front/retrievers/assets/stylesheets/main'
 
-.box.derivationRight
-  .row
-    .col-md-12
-      %h3
-        Liste de mes automates
-        %span.badge.badge-info.fs-origin= 0 #@retrievers.total_count
-      / Information obsolète
-      / .col-md-6
-      / = link_to "#{@is_filter_empty ? 'Afficher' : 'Cacher'} le filtre", '#', class: 'btn pull-right toggle_filter'
-      / = link_to 'Informations de sécurité', '#retrievers_security_informations', class: 'pull-right btn btn-danger margin1right', data: { toggle: 'modal' }
+.container-fluid
+  .row.derivationLeft
+    .col-md-6.text-start
+      %h1.bold
+        Mes automates
+        %span.badge.badge-secondary.regular.total-count= @retrievers.total_count
+    .col-md-2.text-start
+      = select_tag 'account_id', options_for_select(customers_active.unshift(['Tous', 'all']), @account.try(:id) || 'all'), include_blank: false, class: 'form-select'
+    .col-md-1.text-center
+      %button.btn.btn-light.semibold.retriever-filter.w-100{ disabled: false }
+        %span.me-3= glyphicon('layers', { size: '15', color: '#72AA42'})
+        %span Filtrer
+    .col-md-2.text-center
+      %button.btn.btn-light-primary.semibold.list-retriever.w-100{ disabled: false }
+        %span.me-4= glyphicon('list', { size: '15', color: '#0d6efd'})
+        %span Automates disponibles
+    .col-md-1.text-center
+      %button.btn.btn-primary.semibold.add-retriever.w-100{ disabled: false }
+        %span.me-2= glyphicon('plus', { size: '15', color: '#FFFF'})
+        %span Ajouter
 
-.row.retractable.with-filter.derivationLeft
-  .col-md-12.retractable-content
-    .retrievers_list.box
-  .card.retractable-filter
-    = form_tag '', method: :get, class: 'retriever_search form-filter' do
-      .card-header.clearfix
-        .float-left
-          %h3 Filtres
-        .float-right.margin1left
-          %a.locker{ href: "#", title: "Cacher le Filtre" }= glyphicon('layers')
-      .retractable-filter-content
-        .card-body
-          .form-group.clearfix
-            .label-section
-              = label_tag 'retriever_contains[name]', t('activerecord.models.retriever.attributes.name') + ' :'
-            .control-section
-              = text_field_tag 'retriever_contains[name]', (params[:retriever_contains][:name] rescue '')
-          .form-group.clearfix
-            .label-section
-              = label_tag 'retriever_contains[state]', t('activerecord.models.retriever.attributes.state') + ' :'
-            .control-section
-              = select_tag 'retriever_contains[state]', options_for_select( retriever_states, (params[:retriever_contains][:state] rescue '') )
-        .card-footer
-          .form-actions
-            = submit_tag t('filters.action'), class: 'btn btn-primary retriever_filter'
-            = link_to glyphicon('x'), retrievers_path, class: 'btn btn-light'
+  .mb-4
 
-#syncConfirm.modal.hide.fade{data: { backdrop: "static" }}
-  .modal-dialog
-    .modal-content
-      .modal-header
-        %h3 Synchronisation
-      .modal-body
-        %p Voulez vous vraiment lancer la synchronisation de cet automate ?
-        %strong.badge.badge-warning.fs-origin La synchronisation peut prendre un moment, veuillez ne pas quitter la page avant la fin du processus
-      .modal-footer
-        .controls
-          .loading.float-right.hide
-            .feedback.active
-              %span Traitement en cours veuillez rester sur la page ...
-          .buttonsAction
-            =button_tag "J’accepte la transmission de mes transactions à Idocus", type: 'button', id:'sync_confirm_button', class: 'btn-primary btn float-right'
-            =button_tag "Annuler", type: 'button', id: 'sync_cancel_button', class: 'btn-secondary btn float-right', style: 'margin-right: 7px'
+  .retrievers-list.derivationRight
+    - if @retrievers.size > 0
+      - @retrievers.each_slice(2) do |retrievers|
+        .row.retriever-content
+          - retrievers.each do |retriever|
+            = render partial: 'retriever', locals: { retriever: retriever }
+    - else
+      .no-data-found.box= t('global.no-data-found')
 
-#delConfirm.modal.hide.fade{data: { backdrop: "static" }}
-  .modal-dialog
-    .modal-content
-      .modal-header
-        %h3 Suppression
-      .modal-body
-        %p Voulez vous vraiment supprimer cet automate ?
-        %strong.badge.badge-warning.fs-origin La suppression peut prendre un moment, veuillez ne pas quitter la page avant la fin du processus
-      .modal-footer
-        .controls
-          .loading.float-right.hide
-            .feedback.active
-              %span Traitement en cours veuillez rester sur la page ...
-          .buttonsAction
-            =button_tag "Supprimer!", type: 'button', id:'del_confirm_button', class: 'btn-danger btn float-right'
-            =button_tag "Annuler", type: 'button', id: 'del_cancel_button', class: 'btn-secondary btn float-right', style: 'margin-right: 7px'
-
-#retrievers_security_informations.modal.fade
-  .modal-dialog
-    .modal-content
-      .modal-header
-        %h3 INFORMATIONS DE SECURITE
-        %a{ class: 'close', 'data-dismiss' => 'modal' } ×
-      %form
-        .modal-body
-          %p
-            Toutes vos informations de connexion (identifiants, mots de passe…) sont gérées de façon très sécurisée en utilisant un cryptage extrêmement puissant (RSA 4096) et un stockage géographiquement distinct de celui des informations de déchiffrage.
-            %br
-            En d’autres termes, personne chez iDocus n’est en mesure, à un instant T, de lire ces informations sensibles.
-            %br
-            %br
-            Les téléchargements que nous effectuons sur les sites bancaires sont en lecture seule.
-            %b Aucune opération bancaire ne peut être réalisée !
-            %br
-            %br
-            Les serveurs utilisés pour les transactions d’import automatique sont tous dédiés et hébergés dans des datacenters ultra sécurisés, situés sur le territoire français et évidemment backupés en permanence.
-            %br
-            %br
-            Toutes ces opérations effectuées par internet sont sécurisées par le protocole SSL (Secure Socket Layer), utilisé par la quasi-totalité des banques.
-            %br
-            Cela signifie que nos différents serveurs et votre navigateur créent à chaque connexion un canal crypté spécifique empêchant que l'information puisse être « détournée » en cours de navigation.
-            %br
-            Pour ce faire, serveurs et navigateur s'identifient à chaque fois à l'aide d'un certificat SSL.
-            %br
-            %br
-            Nos outils sont bien sûr également protégés par des firewalls.
-        .modal-footer
-          %a{ class: 'btn btn-light', 'data-dismiss' => 'modal' } Fermer
+= render partial: 'dialogs'
+          
+= javascript_include_tag 'front/retrievers/assets/javascripts/main'

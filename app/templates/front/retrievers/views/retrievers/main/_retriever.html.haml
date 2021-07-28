@@ -1,0 +1,33 @@
+.w-50
+  .box
+    .row
+      .col-md-6
+        %h5.pack.semibold= retriever.user.info
+        %h6.under_pack.regular 
+          - if retriever.provider_and_bank?
+            Doc. et Op. Bancaires
+          - elsif retriever.bank?
+            Op. Bancaires
+          - else
+            Document
+          %span &#124;
+          %span.semibold= retriever.name
+          %span= "(" + retriever.service_name + ")"
+      .col-md-4
+        .created-date
+          %span.semibold Premier ajout le :
+          %span= retriever.created_at.strftime("%d-%m-%Y")
+        .updated-date
+          %span Modifié le :
+          %span= retriever.updated_at.strftime("%d-%m-%Y")
+      .col-md-2.text-center
+        %h3.semibold.p-3= retriever.journal_name.presence || ''
+    %hr
+    .row
+      .col-md-9
+        %span.badge{ class: "badge-#{badge_type_of(retriever)}" }= state_of(retriever)
+      .col-md-3.text-end
+        %span.action-group.ms-1.pointer= glyphicon('info', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+        %span.action-group.ms-1.pointer= glyphicon('loop-circular', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+        %span.action-group.ms-1.pointer= glyphicon('pencil', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+        %span.action-group.ms-1.pointer= glyphicon('trash', { size: '20', color:'red'})
