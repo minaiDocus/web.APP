@@ -39,7 +39,6 @@
                       %i (Suspendu)
                   - else
                     = link_to organization.name, organization_path(organization), class: 'dropdown-item dropdown-item'
-        
         - if @user.active? && @user.organization.is_active
           %li.nav-item
             =link_to t('layouts.reporting'), '/reporting', class: 'nav-link bold'
