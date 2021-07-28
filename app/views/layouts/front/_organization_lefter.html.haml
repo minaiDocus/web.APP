@@ -32,8 +32,8 @@
       %li{ data: { href: "#{@organization.id}/collaborateurs" } }
         %a{href: organization_collaborators_path(@organization) }
           %span.link_principal= t('organizations.collaborators')
-      %li{ data: { href: "#{@organization.id}/clients" } }
-        %a{href: "#" }
+      %li{ data: { href: "#{@organization.id}/customers" } }
+        %a{href: organization_customers_path(@organization) }
           %span.link_principal= t('organizations.customers')
       %li{ data: { href: "#{@organization.id}/journaux_comptables" } }
         %a{href: "#" }

@@ -1,3 +1,5 @@
+= stylesheet_link_tag 'front/customers/assets/stylesheets/main'
+
 #customer
   .row.derivationRight
     .col-md-12
@@ -7,23 +9,23 @@
       .box
         %ul.nav.nav-tabs
           %li.nav-item
-            %a.nav-link{ class: ('active' if params[:tab] == 'information' || params[:tab].blank? ), href: '#information', data: { toggle: 'tab' } } Informations
+            %a.nav-link{ class: ('active' if params[:tab] == 'information' || params[:tab].blank? ), href: '#information', 'data-bs-toogle' => 'tab' } Informations
           - if @customer.active? && !@organization.specific_mission
             %li.nav-item
-              %a.nav-link{ class: ('active' if params[:tab] == 'subscription'), href: '#subscription', data: { toggle: 'tab' } } Forfaits
+              %a.nav-link{ class: ('active' if params[:tab] == 'subscription'), href: '#subscription', 'data-bs-toogle' => 'tab' } Forfaits
             %li.nav-item
-              %a.nav-link{ class: ('active' if params[:tab] == 'orders'), href: '#orders', data: { toggle: 'tab' } } Commandes Kits/Scan
+              %a.nav-link{ class: ('active' if params[:tab] == 'orders'), href: '#orders', 'data-bs-toogle' => 'tab' } Commandes Kits/Scan
             %li.nav-item
-              %a.nav-link{ class: ('active' if params[:tab] == 'addresses'), href: '#addresses', data: { toggle: 'tab' } } Adresses
+              %a.nav-link{ class: ('active' if params[:tab] == 'addresses'), href: '#addresses', 'data-bs-toogle' => 'tab' } Adresses
           - if @customer.active? && @customer.options.is_upload_authorized && !@organization.specific_mission
             %li.nav-item
-              %a.nav-link{ class: ('active' if params[:tab] == 'period_options'), href: '#period_options', data: { toggle: 'tab' } } Option téléversement
+              %a.nav-link{ class: ('active' if params[:tab] == 'period_options'), href: '#period_options', 'data-bs-toogle' => 'tab' } Option téléversement
           - if @organization.specific_mission
             %li.nav-item
-              %a.nav-link{ class: ('active' if params[:tab] == 'journals'), href: '#journals', data: { toggle: 'tab' } } Dossiers
+              %a.nav-link{ class: ('active' if params[:tab] == 'journals'), href: '#journals', 'data-bs-toogle' => 'tab' } Dossiers
           - else
             %li.nav-item
-              %a.nav-link{ class: ('active' if params[:tab] == 'journals'), href: '#journals', data: { toggle: 'tab' } } Journaux comptables
+              %a.nav-link{ class: ('active' if params[:tab] == 'journals'), href: '#journals', 'data-bs-toogle' => 'tab' } Journaux comptables
           - if @customer.active? && @customer.options.is_retriever_authorized && !@organization.specific_mission
             %li.nav-item
               = link_to "iDo'FacBanque", retrievers_path(account_id: @customer.id), class: 'nav-link'
@@ -31,76 +33,76 @@
               = link_to "Paramètres bancaires", bank_settings_path({account_id: @customer.id}), class: 'nav-link'
           - unless @organization.specific_mission
             %li.nav-item{ class: ('active' if params[:tab] == 'compta') }
-              %a.nav-link{ href: '#compta', data: { toggle: 'tab' } } Comptabilité
+              %a.nav-link{ href: '#compta', 'data-bs-toogle' => 'tab' } Comptabilité
             - if @customer.uses?(:ibiza)
               %li.nav-item
-                %a.nav-link{ class: ('active' if params[:tab] == 'ibiza_box'), href: '#ibiza_box', data: { toggle: 'tab' } } Ibiza Box
+                %a.nav-link{ class: ('active' if params[:tab] == 'ibiza_box'), href: '#ibiza_box', 'data-bs-toogle' => 'tab' } Ibiza Box
             %li.nav-item.dropdown
-              %a.nav-link.dropdown-toggle{ class: ('active' if Interfaces::Software::Configuration::SOFTWARES.include? params[:tab]), href: '#', data: {toggle: "dropdown"} } Logiciels comptables / export csv
+              %a.nav-link.dropdown-toggle{ class: ('active' if Interfaces::Software::Configuration::SOFTWARES.include? params[:tab]), href: '#', 'data-bs-toogle' => 'dropdown' } Logiciels comptables / export csv
               %ul.dropdown-menu{ style: "min-width: 195px" }
                 -if software_uses('ibiza')   
                   %li
-                    %a.dropdown-item{ class: ('active' if params[:tab] == 'ibiza'), href: '#ibiza', data: { toggle: 'tab' } }
+                    %a.dropdown-item{ class: ('active' if params[:tab] == 'ibiza'), href: '#ibiza', 'data-bs-toogle' => 'tab' }
                       .float-left iBiza
                       - if @customer.uses?(:ibiza)
                         = glyphicon('check', { class: 'float-right' })
                 -if software_uses('exact_online')
                   %li
-                    %a.dropdown-item{ class: ('active' if params[:tab] == 'exact_online'), href: '#exact_online', data: { toggle: 'tab' } }
+                    %a.dropdown-item{ class: ('active' if params[:tab] == 'exact_online'), href: '#exact_online', 'data-bs-toogle' => 'tab' }
                       .float-left Exact Online
                       - if @customer.uses?(:exact_online)
                         = glyphicon('check', { class: 'float-right' })
                 -if software_uses('my_unisoft')
                   %li
-                    %a.dropdown-item{ class: ('active' if params[:tab] == 'my_unisoft'), href: '#my_unisoft', data: { toggle: 'tab' } }
+                    %a.dropdown-item{ class: ('active' if params[:tab] == 'my_unisoft'), href: '#my_unisoft', 'data-bs-toogle' => 'tab' }
                       .float-left My Unisoft
                       - if @customer.uses?(:my_unisoft)
                         = glyphicon('check', { class: 'float-right' })
                 -if @organization.try(:coala).try(:used?)
                   %li
-                    %a.dropdown-item{ class: ('active' if params[:tab] == 'coala'), href: '#coala', data: { toggle: 'tab' } }
+                    %a.dropdown-item{ class: ('active' if params[:tab] == 'coala'), href: '#coala', 'data-bs-toogle' => 'tab' }
                       .float-left Coala
                       - if @customer.uses?(:coala)
                         = glyphicon('check', { class: 'float-right' })
                 -if @organization.try(:quadratus).try(:used)
                   %li
-                    %a.dropdown-item{ class: ('active' if params[:tab] == 'quadratus'), href: '#quadratus', data: { toggle: 'tab' } }
+                    %a.dropdown-item{ class: ('active' if params[:tab] == 'quadratus'), href: '#quadratus', 'data-bs-toogle' => 'tab' }
                       .float-left Quadratus
                       - if @customer.uses?(:quadratus)
                         = glyphicon('check', { class: 'float-right' })
                 -if @organization.try(:cegid).try(:used?)
                   %li
-                    %a.dropdown-item{ class: ('active' if params[:tab] == 'cegid'), href: '#cegid', data: { toggle: 'tab' } }
+                    %a.dropdown-item{ class: ('active' if params[:tab] == 'cegid'), href: '#cegid', 'data-bs-toogle' => 'tab' }
                       .float-left Cegid
                       - if @customer.uses?(:cegid)
                         = glyphicon('check', { class: 'float-right' })
                 -if @organization.try(:fec_agiris).try(:used?)
                   %li
-                    %a.dropdown-item{ class: ('active' if params[:tab] == 'fec_agiris'), href: '#fec_agiris', data: { toggle: 'tab' } }
+                    %a.dropdown-item{ class: ('active' if params[:tab] == 'fec_agiris'), href: '#fec_agiris', 'data-bs-toogle' => 'tab' }
                       .float-left Fec Agiris
                       - if @customer.uses?(:fec_agiris)
                         = glyphicon('check', { class: 'float-right' })
                 -if @organization.try(:csv_descriptor).try(:used?)
                   %li
-                    %a.dropdown-item{ class: ('active' if params[:tab] == 'csv_descriptor'), href: '#csv_descriptor', data: { toggle: 'tab' } }
+                    %a.dropdown-item{ class: ('active' if params[:tab] == 'csv_descriptor'), href: '#csv_descriptor', 'data-bs-toogle' => 'tab' }
                       .float-left Format d’export (.csv)
                       - if @customer.uses?(:csv_descriptor)
                         = glyphicon('check', { class: 'float-right' })
           - unless @organization.specific_mission
             %li.nav-item
-              %a.nav-link{ class: ('active' if params[:tab] == 'accounting_plan'), href: '#accounting_plan', data: { toggle: 'tab' } } Plan comptable
+              %a.nav-link{ class: ('active' if params[:tab] == 'accounting_plan'), href: '#accounting_plan', 'data-bs-toogle' => 'tab' } Plan comptable
           - if @organization.mcf_settings.try(:access_token).present? || @customer.try(:mcf_documents).try(:not_processable).try(:any?)
             %li.nav-item
-              %a.nav-link{ class: ('active' if params[:tab] == 'mcf'), href: '#mcf', data: { toggle: 'tab' } } My Company Files
+              %a.nav-link{ class: ('active' if params[:tab] == 'mcf'), href: '#mcf', 'data-bs-toogle' => 'tab' } My Company Files
           - if @organization.knowings.try(:ready?)
             %li.nav-item
-              %a.nav-link{ class: ('active' if params[:tab] == 'ged'), href: '#ged', data: { toggle: 'tab' } } Outil GED
+              %a.nav-link{ class: ('active' if params[:tab] == 'ged'), href: '#ged', 'data-bs-toogle' => 'tab' } Outil GED
           - if @customer.is_dematbox_authorized
             %li.nav-item
-              %a.nav-link{ class: ('active' if params[:tab] == 'idocus_box'), href: '#idocus_box', data: { toggle: 'tab' } } iDocus'Box
+              %a.nav-link{ class: ('active' if params[:tab] == 'idocus_box'), href: '#idocus_box', 'data-bs-toogle' => 'tab' } iDocus'Box
           - if @user.is_admin && @customer.active? && !@organization.specific_mission
             %li.nav-item
-              %a.nav-link{ class: ('active' if params[:tab] == 'file_storages'), href: '#file_storages', data: { toggle: 'tab' } } Stockages externes
+              %a.nav-link{ class: ('active' if params[:tab] == 'file_storages'), href: '#file_storages', 'data-bs-toogle' => 'tab' } Stockages externes
 
         .tab-content.box.border-top-0.bg-light
           #information.tab-pane.fade{ class: ('active show' if params[:tab] == 'information' || params[:tab].blank?) }
@@ -775,3 +777,5 @@
             #file_storages.tab-pane.fade{ class: ('active show' if params[:tab] == 'file_storages') }
               = render partial: 'customers/main/file_storages', locals: { user: @customer }
               = link_to t('actions.edit'), edit_organization_customer_file_storage_authorizations_path(@organization, @customer), class: 'btn btn-primary'
+
+= javascript_include_tag 'front/customers/assets/javascripts/main'
