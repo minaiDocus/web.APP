@@ -50,7 +50,7 @@
               =link_to t('layouts.retriever.automates'), retrievers_path, class: 'dropdown-item'
               =link_to t('layouts.retriever.historic'), '/retriever/historic', class: 'dropdown-item'
               =link_to t('layouts.retriever.others'), '/retriever/others', class: 'dropdown-item'
-        
+
     .col-md-2.user-menu
       %ul.navbar-nav.notifaction_group.me-5
         - if current_user.try(:is_admin)

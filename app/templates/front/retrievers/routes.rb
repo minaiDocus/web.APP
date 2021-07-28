@@ -1,8 +1,4 @@
 Rails.application.routes.draw do
-  scope module: 'retrievers' do
-    get '/retriever/historics', to: 'link#historics', as: 'retrievers_historics'
-  end
-
   resources :retrievers, module: 'retrievers', controller: 'main' do
     get 'new_internal', on: :collection
     get 'edit_internal', on: :collection
