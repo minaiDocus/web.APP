@@ -16,7 +16,7 @@
     float: left;
     min-width: 100%;
     background: #fff;
-    margin: 1em 0;    
+    margin: 15px 0;    
     display: none;
     background: #FFFFFF;
     box-shadow: 0px 4px 16px rgba(26, 26, 26, 0.24);
@@ -26,8 +26,8 @@
 
 .multi-select-menuitem {
     display: block;
-    font-size: 1em;
-    padding: 2%;
+    font-size: 14px;
+    padding: 1% 2%;
     white-space: nowrap;
     cursor: pointer;
 }
@@ -61,10 +61,8 @@
     border-bottom: 1px solid #ddd;
 }
 
-.multi-select-menuitem input {
-    position: absolute;
-    margin-top: 0.25em;
-    margin-left: -20px;
+.multi-select-menuitem input {    
+    margin-top: 0.25em;    
 }
 
 .multi-select-button {

@@ -1,36 +1,14 @@
-.chart-container {
-  max-width: 30%;
-  display: block;
-  margin: 3% 1%;
-  padding: 1% 1%;
-  box-shadow: 0px 1px 3px rgba(26, 26, 26, 0.1);
-  border-radius: 16px;
-}
-
-.chart-retriever, .chart-deliver{
-  padding: 8% 0;
-}
-
-.label-canvas {
-  margin: 15% 39%;
-  font-size: 2rem;
+.text-canvas-reporting{
   position: absolute;
+  margin: 46px -24px;
+  font-size: 30px;
 }
 
-.label-retriever {
-  padding-top: 5%;
-  color: rgba(26, 26, 26, 0.7);
+.multi-select-menu{
+  max-height: 200px;
+  overflow: auto;
 }
 
-.table{
-  color: rgba(26, 26, 26, 0.32);
-  margin: 5% 0;
-}
-
-.table th{
-  border: none;
-}
-
-.table td{
-  color: #445E2B;
+.multi-select-menuitem{
+  padding: 2% 4%;
 }

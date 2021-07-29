@@ -1,11 +1,3 @@
-//= require jquery
-//= require jquery_ujs
-//= require jquery-ui
-//= require popper
-//= require bootstrap
-//= require chart.min
-//= require jquery.multi-select
-
 class ReportingMain {
   constructor(){   
   }
@@ -142,11 +134,20 @@ class ReportingMain {
 }
 
 jQuery(function() {
+  $('.daterange').daterangepicker({
+    "autoApply": true,
+    linkedCalendars: false,
+    locale: {
+      format: 'DD/MM/YYYY'
+    }
+  });
+
+  $('#customer_filter').multiSelect({
+    "noneText": "Filtre par dossier"
+  });
+
   let main = new ReportingMain();
   main.reportingFlowChart();
   main.reportingDeliveryAccountChart();
   main.reportingRetrieversChart();
-  $('#customer_filter').multiSelect();
-
-  $('.datepicker').datepicker();
 });

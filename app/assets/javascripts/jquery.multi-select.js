@@ -8,11 +8,11 @@
 
   var pluginName = "multiSelect",
     defaults = {
-      'containerHTML': '<div class="multi-select-container"><span class="arrow float-right"><svg viewBox="0 0 8 8" class="oi-icon  colored" style="width: 20px; height: 20px;fill: rgba(26, 26, 26, 0.7);"><use xlink:href="/assets/open-iconic.min.svg#chevron-right" class="icon icon-chevron-right"></use></svg></span></div>',
+      'containerHTML': '<div class="multi-select-container"><span class="float-end"><svg viewBox="0 0 8 8" class="oi-icon  colored" style="width: 18px; height: 18px;fill: rgba(26, 26, 26, 0.7);"><use xlink:href="/assets/open-iconic.min.svg#chevron-bottom" class="icon icon-chevron-right"></use></svg></span></div>',
       'menuHTML': '<div class="multi-select-menu">',
       'buttonHTML': '<span class="multi-select-button">',
       'menuItemsHTML': '<div class="multi-select-menuitems">',
-      'menuItemHTML': '<label class="multi-select-menuitem container">',
+      'menuItemHTML': '<label class="multi-select-menuitem">',
       'presetsHTML': '<div class="multi-select-presets">',
       'modalHTML': undefined,
       'menuItemTitleClass': 'multi-select-menuitem--titled',
@@ -317,16 +317,10 @@
         .attr({
           'type': 'checkbox',
           'id': unique_id,
-          'value': $option.val()
+          'value': $option.val(),
+          'class': 'form-check-input pointer float-end mt-1'
         })
-        .appendTo($item);
-
-      var $span = $('<span>')
-        .attr({          
-          'class': 'checkmark'
-        })
-        .append('<svg viewBox="0 0 8 8" class="oi-icon  colored" style="width: 14px; height: 14px;fill: #FFF;"><use xlink:href="/assets/open-iconic.min.svg#check" class="icon icon-check"></use></svg>')
-        .appendTo($item);
+        .appendTo($item);        
 
       if ( $option.is(':disabled') ) {
         $input.attr('disabled', 'disabled');

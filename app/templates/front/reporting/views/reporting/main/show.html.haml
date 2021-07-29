@@ -2,44 +2,42 @@
 
 .container-fluid
   .row
-    .col-md-6
+    .col-md-8
       %h1.bold= t('reporting.reporting_text')
-    .col-md-3      
+    .col-md-2
       = select_tag 'customer_filter', options_for_select(['DEVP%001 - TEST - Testa Test', 'DEVP%002 - TEST - Testa Test', 'DEVP%003 - TEST - Testa Test', 'DEVP%004 - TEST - Testa Test']), id: 'customer_filter', multiple: true
-    .col-md-3
-      .select-container
-        .row.date.datepicker
-          .col-md-2= glyphicon('calendar', { size: '20', color: '#b5a6a6'} )
-          .col-md-8.label-titre= t('reporting.filter_by_period')
-          .col-md-2.no-padding= glyphicon('chevron-bottom', { size: '20', color: '#b5a6a6'})
-          %span.add-on.hide{style: 'width: 0px; height:35px'}
-  .row
-    .col-md-4.chart-container.back-white
+    .col-md-2
+      .form-group                    
+        .input-group.mb-3
+          %span.input-group-text#reporting-filter-date= glyphicon('calendar', { size: '14', color: 'background: rgba(26, 26, 26, 0.7)' })          
+          %input.form-control.value-content.date.daterange#reporting-filter{ type: :text, name: 'reporting-filter'}
+          %span.input-group-text-right= glyphicon('chevron-bottom', { size: '12', color: 'background: rgba(26, 26, 26, 0.7)' }) 
+  
+  .row.mt-5.text-center
+    .col-md-4.box
       %h4.bold= t('reporting.reporting_flow')
       .row
         .col-md-12.mt-4
           %canvas#chart_flux_document
-    .col-md-4.chart-container.back-white
+    .col-md-3.box
       %h4.bold= t('reporting.reporting_delivery_account')
       .row.chart-deliver
         .col-md-11
           %canvas#chart_sending
-    .col-md-4.chart-container.back-white
+    .col-md-4.box
       %h4.bold= t('reporting.reporting_retrievers')
-      .row.chart-retriever.mt-5
+      .row.mt-5
         .col-md-6.no-margin.no-padding
-          .label-canvas.bold
-            60%
+          %label.text-canvas-reporting.semibold 60%
           %canvas#chart_retriever_active          
-          %h5.text-center.label-retriever.no-margin= t('reporting.active_retrievers')
+          %h5.text-center.mt-3.semibold= t('reporting.active_retrievers')
         .col-md-6.no-margin.no-padding
-          .label-canvas.bold
-            40%
+          %label.text-canvas-reporting.semibold 40%
           %canvas#chart_retriever_inactive          
-          %h5.text-center.label-retriever.no-margin= t('reporting.failed_retrievers')
+          %h5.text-center.mt-3.semibold= t('reporting.failed_retrievers')
 
   .row
-    .col-md-4.chart-container.back-white
+    .col-md-4.box
       %h4.bold= t('reporting.top_delay_sending_document')
       %table.table.table-striped
         %thead
@@ -52,12 +50,12 @@
           %tr
             %td.text-left IDOC%Client2 - iDocus
             %td.text-right 31/10/20
-    .col-md-4.chart-container.back-white
+    .col-md-3.box
       %h4.bold= t('reporting.top_delivery_waiting_account')
       %table.table.table-striped
-        %thead
-          %th.text-left= t('reporting.folder_name')
-          %th.text-right= t('reporting.share_waiting_account')
+        %thead.w-100
+          %th.text-left.w-75= t('reporting.folder_name')
+          %th.text-right.w-25= t('reporting.share_waiting_account')
         %tbody
           %tr
             %td.text-left IDOC%Client1 - iDocus
@@ -65,7 +63,7 @@
           %tr
             %td.text-left IDOC%Client2 - iDocus
             %td.text-right 20%
-    .col-md-4.chart-container.back-white
+    .col-md-4.box
       %h4.bold= t('reporting.failed_retrievers')
       %table.table.table-striped
         %thead
