@@ -2,8 +2,9 @@ jQuery(function () {
   $(".principal li > span.link_principal, .principal .slave li > span.link_slave").unbind('click');
   $(".principal li > span.link_principal, .principal .slave li > span.link_slave").bind('click',function(e) {
     e.stopPropagation();
-    $('.principal li span.link_principal').removeClass('active');
+    $('.principal li span.link_principal, .principal li span.link_slave').removeClass('active');
     $(this).parent().find('span.link_principal').addClass('active');
+    $(this).parent().find('span.link_slave').addClass('active')
     if ($(this).parent().data('href') == "parametres"){
       $(this).parent().find('.chevron').toggle();
       $(this).parent().find('ul').slideToggle();

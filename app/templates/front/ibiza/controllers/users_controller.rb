@@ -32,8 +32,19 @@ class Ibiza::UsersController < OrganizationController
 
   def verify_rights
     unless @ibiza.try(:configured?)
-      flash[:error] = t('authorization.unessessary_rights')
-      redirect_to organization_path(@organization)
+      # flash[:error] = t('authorization.unessessary_rights')
+      # redirect_to organization_path(@organization)
+
+      respond_to do |format|
+        format.html do
+          flash[:error] = t('authorization.unessessary_rights')
+          redirect_to organization_path(@organization)
+        end
+
+        format.json do
+          render json: { message: t('authorization.unessessary_rights') }
+        end
+      end
     end
   end
 

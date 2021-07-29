@@ -3,7 +3,7 @@
 #csv_descriptors.edit.derivationRight
   - unless @customer.configured?
     .box
-      = render 'account/customers/steps'
+      = render file: Rails.root.join('app/templates/front/customers/views/customers/main/_steps.html.haml')
 
   .card
     .card-header

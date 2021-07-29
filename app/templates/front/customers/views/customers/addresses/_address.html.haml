@@ -1,63 +1,63 @@
-%table.table.table-striped.table-bordered-inner.table-condensed.margin0bottom
-  %thead.label
-    %tr.bg-brown.text-white
-      %th{ colspan: 2 }
-        - if single
-          = t('activerecord.models.address.attributes.' + type)
-        - else
-          .float-left
-            - if address.is_for_paper_return || address.is_for_paper_set_shipping || address.is_for_dematbox_shipping
-              - if address.is_for_paper_return
-                = t('activerecord.models.address.attributes.paper_return')
-                - if address.is_for_paper_set_shipping || address.is_for_dematbox_shipping
-                  %br
-              - if address.is_for_paper_set_shipping
-                = t('activerecord.models.address.attributes.paper_set_shipping')
-                - if address.is_for_dematbox_shipping
-                  %br
-              - if address.is_for_dematbox_shipping
-                = t('activerecord.models.address.attributes.dematbox_shipping')
-            - else
-              Adresse non attribuée
-          .float-right
-            = link_to glyphicon('pencil'), edit_organization_customer_address_path(@organization, @customer,address), class: 'btn btn-light', style: 'color: #3e2f24'
-            = link_to glyphicon('x'), organization_customer_address_path(@organization, @customer,address), :method => :delete, data: { :confirm => t('actions.confirm') }, class: 'btn btn-light', style: 'color: #3e2f24'
-  - if address
-    %tbody
-      %tr
-        %th= t('activerecord.models.address.attributes.company')
-        %td= address.company
-      - if address.is_for_dematbox_shipping && (!single || type == 'dematbox_shipping')
-        %tr
-          %th= t('activerecord.models.address.attributes.company_number')
-          %td= address.company_number
-      %tr
-        %th= t('activerecord.models.address.attributes.first_name')
-        %td= address.first_name
-      %tr
-        %th= t('activerecord.models.address.attributes.last_name')
-        %td= address.last_name
-      - if address.is_for_dematbox_shipping && (!single || type == 'dematbox_shipping')
-        %tr
-          %th= t('activerecord.models.address.attributes.phone')
-          %td= address.phone
-      %tr
-        %th= t('activerecord.models.address.attributes.address_1')
-        %td= address.address_1
-      %tr
-        %th= t('activerecord.models.address.attributes.address_2')
-        %td= address.address_2
-      - if address.is_for_dematbox_shipping && (!single || type == 'dematbox_shipping')
-        %tr
-          %th= t('activerecord.models.address.attributes.place_called_or_postal_box')
-          %td= address.place_called_or_postal_box
-      %tr
-        %th= t('activerecord.models.address.attributes.city')
-        %td= address.city
-      %tr
-        %th= t('activerecord.models.address.attributes.zip')
-        %td= address.zip
-      - if address.is_for_dematbox_shipping && (!single || type == 'dematbox_shipping')
-        %tr
-          %th= t('activerecord.models.address.attributes.building')
-          %td= address.building
+- if address
+  .form-group
+    %label.semibold= t('activerecord.models.address.attributes.company')
+    .select-container.no-padding.w-100
+      = address.company
+  - if address.is_for_dematbox_shipping && (!single || type == 'dematbox_shipping')
+    .form-group
+      %label.semibold= t('activerecord.models.address.attributes.company_number')
+      .select-container.no-padding.w-100
+        = address.company_number
+
+  .form-group
+    %label.semibold= t('activerecord.models.address.attributes.first_name')
+    .select-container.no-padding.w-100
+      = address.first_name
+
+  .form-group
+    %label.semibold= t('activerecord.models.address.attributes.last_name')
+    .select-container.no-padding.w-100
+      = address.last_name
+
+  - if address.is_for_dematbox_shipping && (!single || type == 'dematbox_shipping')
+    .form-group
+      %label.semibold= t('activerecord.models.address.attributes.phone')
+      .select-container.no-padding.w-100
+        = address.phone
+
+  .form-group
+    %label.semibold= t('activerecord.models.address.attributes.address_1')
+    .select-container.no-padding.w-100
+      = address.address_1
+
+  .form-group
+    %label.semibold= t('activerecord.models.address.attributes.address_2')
+    .select-container.no-padding.w-100
+      = address.address_2
+
+  - if address.is_for_dematbox_shipping && (!single || type == 'dematbox_shipping')
+    .form-group
+      %label.semibold= t('activerecord.models.address.attributes.place_called_or_postal_box')
+      .select-container.no-padding.w-100
+        = address.place_called_or_postal_box
+
+  .form-group
+    %label.semibold= t('activerecord.models.address.attributes.city')
+    .select-container.no-padding.w-100
+      = address.city
+
+  .form-group
+    %label.semibold= t('activerecord.models.address.attributes.zip')
+    .select-container.no-padding.w-100
+      = address.zip
+
+  - if address.is_for_dematbox_shipping && (!single || type == 'dematbox_shipping')
+    .form-group
+      %label.semibold= t('activerecord.models.address.attributes.building')
+      .select-container.no-padding.w-100
+        = address.building
+
+  .form-group.no-margin
+    .w-100.text-end
+      = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', organization_customer_address_path(@organization, @customer,address), :method => :delete, data: { :confirm => t('actions.confirm') }, class: 'btn btn-light semibold'
+      = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Editer', edit_organization_customer_address_path(@organization, @customer,address), class: 'btn btn-primary bold'

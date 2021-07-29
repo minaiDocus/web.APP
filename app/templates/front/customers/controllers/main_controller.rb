@@ -61,6 +61,8 @@ class Customers::MainController < OrganizationController
   # GET /organizations/:organization_id/customers/form_with_first_step
   def form_with_first_step
     @customer = User.new(code: "#{@organization.code}%")
+    build_softwares
+    @customer.build_options   if @customer.options.nil?
   end
 
   # GET /organizations/:organization_id/customers/new

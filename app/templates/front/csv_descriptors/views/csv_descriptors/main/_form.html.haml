@@ -29,11 +29,11 @@
             .fields
               %ul.list.clearfix
                 - @csv_descriptor.directive_to_h.each do |part|
-                  = render partial: 'account/csv_descriptors/field', locals: { part: part }
+                  = render partial: 'csv_descriptors/main/field', locals: { part: part }
 
-        .template.hide= render 'account/csv_descriptors/field', locals: { selected: :date }
+        .template.hide= render 'csv_descriptors/main/field', locals: { selected: :date }
       .col-md-6
-        = render partial: 'account/csv_descriptors/legend'
+        = render partial: 'csv_descriptors/main/legend'
   .card-footer
     .form-actions
       - if @customer && !@customer.configured?

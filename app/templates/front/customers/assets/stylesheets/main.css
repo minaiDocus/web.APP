@@ -85,6 +85,20 @@ p{
   color: #FF4848;
 }
 
+.sub_menu .edit a{
+  text-decoration: none;
+  cursor: pointer;
+  color: rgba(26, 26, 26, 0.7);
+}
+
 .modal .back-grey{
   background: rgba(26, 26, 26, 0.04);
+}
+
+.idocus-custom-form-check {
+  display: flex;
+}
+
+#customer-content .tab-content {
+  margin-bottom: 7%
 }
