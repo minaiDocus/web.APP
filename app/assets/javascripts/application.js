@@ -121,21 +121,23 @@ class ApplicationJS {
           $('div.loading_box').removeClass('hide');
         },
         success: function(result) {
-          $('div.loading_box').addClass('hide');
+          
           if (beforeUpdateContent) { beforeUpdateContent(); }
 
           if(target){ $(target).html($(result).find(target).html()); }
 
           if (afterUpdateContent) { afterUpdateContent(); }
 
-          self.noticeFlashMessageFrom(result);
+          self.noticeFlashMessageFrom(result);         
 
           if(success)
             success(result);
-        },
-        error: function(result){
+
           $('div.loading_box').addClass('hide');
+        },
+        error: function(result){          
           self.noticeInternalErrorFrom(result);
+          $('div.loading_box').addClass('hide');
 
           if(success)
             success(result);

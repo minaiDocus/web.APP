@@ -28,5 +28,10 @@
 
   = render partial: 'layouts/front/footer'
 
-  %div.loading_box.hide{style: 'background-color: rgba(0,0,0,0.5); width: 100%; height: 100%; position: absolute; z-index: 1100; top: 0; left: 0'}
-    %span Chargement en cours ...
+  .loading_box.hide
+    .box.text-center
+      %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}
+      %label.mt-2.semibold Chargement
+
+  .scroll-on-top.pointer.hide
+    .scroll-arrow= glyphicon('arrow-top', { size: '16', color: 'rgba(26, 26, 26, 0.7)' }) 
