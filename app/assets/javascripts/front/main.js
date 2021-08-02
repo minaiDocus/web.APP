@@ -20,14 +20,14 @@ jQuery(function () {
     e.preventDefault();
 
     $('.as-user-with-overlay').show();    
-    setTimeout(function(){$('.as-user-notification').show('');}, 100);
+    setTimeout(function(){$('.as-user-notification').slideDown('fast');}, 100);
   });
 
   $('.close_as_user_modal').unbind('click').bind('click', function(e){
     e.preventDefault();
 
-    $('.as-user-notification').hide('');    
-    setTimeout(function(){$('.as-user-with-overlay').hide();}, 200);
+    $('.as-user-notification').slideUp('fast');  
+    setTimeout(function(){$('.as-user-with-overlay').hide();}, 300);
   });
   /* AS USER */
 

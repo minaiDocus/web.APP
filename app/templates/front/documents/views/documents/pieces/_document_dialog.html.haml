@@ -30,7 +30,7 @@
           .form-group
             %label.semibold Période
             = select_tag :file_prev_period_offset, '', id: :file_prev_period_offset, class: 'text_field form-select'
-            - if !@user.is_prescriber && @period_service.prev_expires_at
+            - if !@user.is_prescriber && @period_service.try(:prev_expires_at)
               %span.help-block{ style: 'margin-left: 0' }
                 %span.fs-origin.badge.badge-warning.margin1right
                   Attention :
