@@ -47,7 +47,7 @@
             =link_to t('layouts.my_retrievers'), '', class: 'nav-link dropdown-toggle bold', id: 'navbardropdownmenuretriever', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-bs-toggle' => "dropdown", 'role' => "button"
             .dropdown-menu{"aria-labelledby" => "navbardropdownmenuretriever"}
               =link_to t('layouts.retriever.automates'), retrievers_path, class: 'dropdown-item'
-              =link_to t('layouts.retriever.historic'), '/retriever/historic', class: 'dropdown-item'
+              =link_to t('layouts.retriever.historic'), retrievers_historics_path, class: 'dropdown-item'
               =link_to t('layouts.retriever.others'), '/retriever/others', class: 'dropdown-item'
 
     .col-md-2.user-menu

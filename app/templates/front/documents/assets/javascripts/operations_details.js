@@ -25,5 +25,5 @@ jQuery(function() {
 
   AppListenTo('documents_search_text', (e)=>{ main.load_operations(true); });
 
-  AppListenTo('documents_next_page', (e)=>{ main.load_next_page(); });
+  AppListenTo('on_scroll_end', (e)=>{ main.load_next_page(); });
 });

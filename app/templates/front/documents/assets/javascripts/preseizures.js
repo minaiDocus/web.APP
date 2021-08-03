@@ -1,6 +1,7 @@
 class DocumentsPreseizures{
   constructor(){
     this.applicationJS = new ApplicationJS;
+    this.action_locker = false;
     this.edit_modal    = $('#edit_preseizures.modal');
 
     this.input_can_focusout = true;
@@ -8,25 +9,33 @@ class DocumentsPreseizures{
   }
 
   refresh_view(preseizure_id){
+    if(this.action_locker)
+      return false;
+
+    this.action_locker = true;
     let params =  {
                     'url': `/preseizures/${preseizure_id}`,
                     'data': { view: 'by_type' },
                     'dataType': 'html'
                   }
 
-    this.applicationJS.parseAjaxResponse(params).then((e)=>{
-      let dynamic_box = $(e).find('.dynamic_box');
+    this.applicationJS.parseAjaxResponse(params)
+                      .then((e)=>{
+                        let dynamic_box = $(e).find('.dynamic_box');
 
-      $('.dynamic_box').each((e, self)=>{
-        let tmp_id = $(self).attr('data-preseizure-id');
-        let tmp_type = $(self).attr('data-type');
+                        $('.dynamic_box').each((e, self)=>{
+                          let tmp_id = $(self).attr('data-preseizure-id');
+                          let tmp_type = $(self).attr('data-type');
 
-        if(parseInt(preseizure_id) == parseInt(tmp_id)){
-          $(self).html(dynamic_box.html());
-          bind_all_events();
-        }
-      });
-    });
+                          if(parseInt(preseizure_id) == parseInt(tmp_id)){
+                            $(self).html(dynamic_box.html());
+                            bind_all_events();
+                          }
+                        });
+
+                        this.action_locker = false;
+                      })
+                      .catch(()=>{ this.action_locker = false; });
   }
 
   edit_preseizures(elem){

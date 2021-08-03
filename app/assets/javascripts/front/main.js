@@ -1,19 +1,6 @@
 //= require '../application'
 
 jQuery(function () {
-  $(".body_content").scroll(function(e){
-    var sTop = $(this).scrollTop();
-
-    if (sTop > 200)
-    {
-      $('.scroll-on-top').show('slow');
-    }
-    else
-    {
-      $('.scroll-on-top').hide('slow');
-    }
-  });
-
   /* AS USER */
   $('a.as_user').unbind('click').bind('click', function(e){
     e.preventDefault();
@@ -36,5 +23,20 @@ jQuery(function () {
 
     let body = $(".body_content");
     body.stop().animate({scrollTop:0}, 500, 'swing', function() {});
+  });
+
+  /* SCROLLING TO THE BOTTOM */
+  $('.body_content').scroll(function() {
+    let content_h  = $('.body_content').outerHeight();
+    let content    = document.getElementsByClassName("body_content")[0];
+    let c_position = content.scrollHeight - content.scrollTop
+
+    if(content.scrollTop > 200)
+      $('.scroll-on-top').show('slow');
+    else
+      $('.scroll-on-top').hide('slow');
+
+    if(c_position == content_h)
+      AppEmit('on_scroll_end');
   });
 });

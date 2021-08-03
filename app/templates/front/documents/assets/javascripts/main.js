@@ -17,6 +17,7 @@ function get_all_selected(obj = 'piece'){
 class DocumentsMain{
   constructor(){
     this.applicationJS = new ApplicationJS();
+    this.action_locker = false;
     this.page = 1;
     this.ajax_params = {};
 
@@ -24,6 +25,10 @@ class DocumentsMain{
   }
 
   load_datas(serialize_form=false, append=false){
+    if(this.action_locker)
+      return false
+
+    this.action_locker = true;
     let search_pattern = $('.search-content #search_input').val();
 
     let data = [];
@@ -35,19 +40,20 @@ class DocumentsMain{
     this.ajax_params['data']   = data.join('&');
 
     this.applicationJS.parseAjaxResponse(this.ajax_params, function(){ $('#more-filter.modal').modal('hide'); })
-                 .then((e)=>{
-                    $('.datas_size').html($(e).find('.datas_size').html());
+                       .then((e)=>{
+                          if(append){
+                            if($(e).find('.no-data-found').length > 0){
+                              this.page = -1;
+                            }else{
+                              $('.datas_size').html($(e).find('.datas_size').html());
+                              $('.main-content').append($(e).find('.main-content').html());
+                            }
+                          }
 
-                    if(append){
-                      if($(e).find('.no-data-found').length > 0){
-                        this.page = -1;
-                      }else{
-                        $('.main-content').append($(e).find('.main-content').html());
-                      }
-                    }
-
-                    bind_all_events();
-                  });
+                          this.action_locker = false
+                          bind_all_events();
+                        })
+                       .catch(()=>{ this.action_locker = false; });
   }
 
   load_next_page(){

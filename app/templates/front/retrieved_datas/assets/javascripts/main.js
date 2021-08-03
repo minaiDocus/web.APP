@@ -2,14 +2,16 @@
 
 class RetrievedDatasMain{
   constructor(){
-    this.account_select = $('#account_id');
     this.applicationJS = new ApplicationJS();
+    this.action_locker = false;
+    this.account_select = $('#account_id');
     this.opearations_page = 1;
     this.documents_page = 1;
   }
 
   load_all(){
     this.load_datas('operations');
+    this.action_locker = false;
     this.load_datas('documents');
   }
 
@@ -27,6 +29,10 @@ class RetrievedDatasMain{
   }
 
   load_datas(type='operations', target_page='one'){
+    if(this.action_locker)
+      return false;
+
+    this.action_locker = true;
     let params = [];
     var per_page = $(`.${type}.per-page`).val();
 
@@ -37,7 +43,10 @@ class RetrievedDatasMain{
     else if(target_page == 'one')
       this.page = 1
 
-    if(this.page < 0){ return false }
+    if(this.page < 0){ 
+      this.action_locker = false;
+      return false
+    }
 
     params.push(`page=${this.page}`)
     params.push(`account_id=${this.account_select.val()}`);
@@ -57,8 +66,10 @@ class RetrievedDatasMain{
                         $(`.tab-pane#${type}`).html(html);
                         $(`span#total-${type}`).text( $(`input#${type}-size`).val() );
 
+                        this.action_locker = false;
                         bind_all_events();
-                      });
+                      })
+                      .catch(()=>{ this.action_locker = false; });
   }
 }
 

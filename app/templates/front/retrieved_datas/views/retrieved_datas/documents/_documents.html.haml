@@ -14,15 +14,18 @@
         - if documents.any?
           - documents.each do |document|
             %tr
-              %td 12/07/2020
-              %td Orange
-              %td 12/07/2020
+              %td= l(document.created_at)
               %td 
-                %a{ href: '#' } 9051137835_13072021.pdf
+                - if document.retriever.nil?
+                  %span.label supprimé
+                = document.retriever_name
+              %td= l(document.metadata['date'], format: '%d %b %Y') rescue ''
+              %td 
+                = link_to document.metadata['name'] + '.pdf', '#'
               %td
-                %a{ href: '#' } AC0000_AC_202107_006.pdf
-              %td 10
-              %td -167.04 €
+                = link_to document.piece.cloud_content_object.filename, '#' if document.piece
+              %td= document.pages_number
+              %td= document.metadata['amount'].to_s + ' €'
         - else
           %tr
             %td{ colspan: 7 }= t('global.no-data-found')           

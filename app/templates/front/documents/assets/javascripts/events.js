@@ -140,10 +140,4 @@ function bind_all_events(){
 
 jQuery(function() {
   bind_all_events();
-
-  $(window).scroll(function() {
-    if($(window).scrollTop() + $(window).height() == $(document).height()) {
-      AppEmit('documents_next_page');
-    }
-  });
 });
