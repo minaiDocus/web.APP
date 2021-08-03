@@ -30,7 +30,8 @@
       .row
         .col-md-6
         .col-md-1.action-group.pointer= glyphicon('account-logout', { size: '25', color:'rgba(26, 26, 26, 0.32);', style: 'transform: rotate(90deg)'})
-        .col-md-1.action-group.pointer= glyphicon('loop-circular', { size: '25', color:'rgba(26, 26, 26, 0.32);'})
+        .col-md-1.action-group.pointer.preseizures_export{title: 'Export écriture', data:{ id: @report.id, type: 'special_operation', multi: 'true' }}= glyphicon('cloud-download', { size: '25', color:'rgba(26, 26, 26, 0.32);'})
+        .col-md-1.action-group.pointer.deliver_preseizures{title: 'Livraison écriture comptable', data: {id: @report.id, type: 'special_operation', multi: 'true'}}= glyphicon('loop-circular', { size: '25', color:'rgba(26, 26, 26, 0.32);'})
         .col-md-1.action-group.pointer
           %label.container.pointer
             %input{ type: :checkbox }

@@ -25,6 +25,47 @@ class Documents::PiecesController < FrontController
     @pieces = @pack.pieces.search(params[:text], _options).distinct.order(created_at: :desc).page(_options[:page]).per(_options[:per_page])
   end
 
+  def delete
+    pieces_ids  = Array(params[:ids] || [])
+    pieces_ids  = [] #FOR test
+    pack        = nil
+
+    pieces_ids.each do |piece_id|
+      piece           = Pack::Piece.find piece_id
+      piece.delete_at = DateTime.now
+      piece.delete_by = @user.code
+      piece.save
+
+      temp_document = piece.temp_document
+
+      if temp_document
+        temp_document.original_fingerprint    = nil
+        temp_document.content_fingerprint     = nil
+        temp_document.raw_content_fingerprint = nil
+        temp_document.save
+
+        parents_documents = temp_document.parents_documents
+
+        if parents_documents.any?
+          parents_documents.each do |parent_document|
+            if parent_document.children.size == parent_document.children.fingerprint_is_nil.size
+              parent_document.original_fingerprint    = nil
+              parent_document.content_fingerprint     = nil
+              parent_document.raw_content_fingerprint = nil
+              parent_document.save
+            end
+          end
+        end
+      end
+
+      pack ||= piece.pack
+    end
+
+    pack.delay.try(:recreate_original_document) if pack
+
+    render json: { success: true }, status: 200
+  end
+
   private
 
   def options

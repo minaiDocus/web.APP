@@ -1,3 +1,5 @@
 .w-50.dynamic_box{ data: { preseizure_id: preseizure.id, type: 'operation' }}
   .box
+    %span.form-check.float-end      
+      %input.form-check-input.pointer.float-none.select-operation{ data: { id: preseizure.id }, type: :checkbox, value: "" }
     = render file: Rails.root.join('app/templates/front/documents/views/documents/preseizures/_preseizure_box.html.haml'), locals: { preseizure: preseizure, piece: nil, operation: preseizure.operation }

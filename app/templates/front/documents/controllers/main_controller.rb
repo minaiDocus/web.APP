@@ -6,17 +6,17 @@ class Documents::MainController < FrontController
   append_view_path('app/templates/front/documents/views')
 
   def export_options
-    if params[:ids]
-      obj = Pack::Report::Preseizure.where(id: params[:ids]).limit(1).first
-    elsif params[:id]
-      obj = if params[:type] == 'report'
-              Pack::Report.find params[:id]
-            else
-              Pack.find params[:id]
-            end
+    if params[:type] == 'piece'
+      obj = Pack::Piece.where(id: Array(params[:ids])).first
+    elsif params[:type] == 'preseizure'
+      obj = Pack::Report::Preseizure.where(id: Array(params[:ids])).first
+    elsif params[:pack] == 'pack'
+      obj = Pack.where(id: Array(params[:ids])).first
+    elsif params[:report] == 'report'
+      obj = Pack::Report.where(id: Array(params[:ids])).first
     end
 
-    user    = obj.try(:user)
+    user    = obj.try(:user) || obj.try(:owner)
     options = []
 
     if user
@@ -44,30 +44,31 @@ class Documents::MainController < FrontController
     params64 = JSON.parse(params64)
 
     export_type = params64['type']
-    export_ids  = params64['ids'].presence || params64['id']
+    export_ids  = Array(params64['ids'] || [])
     export_format = params64['format']
 
     preseizures = []
-    if export_ids && export_type == 'preseizure'
-      preseizures = Pack::Report::Preseizure.where(id: export_ids)
-      if preseizures.any?
-        @report = preseizures.first.report
 
+    if export_ids.any?
+      if export_type == 'piece'
+        pieces = Pack::Piece.where(id: export_ids)
+        preseizures = pieces.collect(&:preseizures).flatten.compact if pieces.any?
+      elsif export_type == 'preseizure'
+        preseizures = Pack::Report::Preseizure.where(id: export_ids)
+        if preseizures.any?
+          @report = preseizures.first.report
+          update_report
+          preseizures.reload
+        end
+      elsif export_type == 'pack'
+        pack = Pack.where(id: export_ids).first
+        reports = pack.present? ? assign_report_with(pack) : []
+        preseizures = Pack::Report::Preseizure.not_deleted.where(report_id: reports.collect(&:id))
+      elsif export_type == 'report'
+        @report = Pack::Report.where(id: export_ids).first
         update_report
-
-        preseizures.reload
+        preseizures = Pack::Report.where(id: export_ids).first.preseizures
       end
-    elsif export_ids && export_type == 'report'
-      @report = Pack::Report.where(id: export_ids).first
-
-      update_report
-
-      preseizures = Pack::Report.where(id: export_ids).first.preseizures
-    elsif export_ids && export_type == 'pack'
-      pack    = Pack.where(id: export_ids).first
-      reports = pack.present? ? assign_report_with(pack) : []
-
-      preseizures = Pack::Report::Preseizure.not_deleted.where(report_id: reports.collect(&:id))
     end
 
     supported_format = %w[csv xml_ibiza txt_quadratus zip_quadratus zip_coala xls_coala txt_fec_agiris txt_fec_acd csv_cegid tra_cegid]
@@ -127,9 +128,9 @@ class Documents::MainController < FrontController
 
   def get_tags
     if params[:type] == 'pack'
-      @models = Pack.where(id: params[:ids])
+      @models = Pack.where(id: params[:id])
     else
-      @models = Pack::Piece.where(id: params[:ids])
+      @models = Pack::Piece.where(id: params[:id])
     end
 
     render partial: 'tags'
@@ -143,27 +144,27 @@ class Documents::MainController < FrontController
 
   def deliver_preseizures
     if @user.has_collaborator_action?
-      if params[:ids].present?
-        preseizures = Pack::Report::Preseizure.not_delivered.not_locked.where(id: params[:ids])
-      elsif params[:id]
-        if params[:type] == 'report'
-          reports = Pack::Report.where(id: params[:id])
-          if reports.present?
-            preseizures = Pack::Report::Preseizure.not_delivered.not_locked
-          end
-        else
-          reports = Pack.find(params[:id]).try(:reports)
-          if reports.present?
-            preseizures = Pack::Report::Preseizure.not_deleted.not_delivered.not_locked
-          end
-        end
+      export_type = params[:type]
+      export_ids  = Array(params[:ids] || [])
 
-        if reports.present?
-          preseizures = preseizures.where(report_id: reports.collect(&:id))
+      preseizures = []
+
+      if export_ids.any?
+        if export_type == 'piece'
+          pieces = Pack::Piece.where(id: export_ids)
+          preseizures = pieces.collect(&:preseizures).flatten.compact if pieces.any?
+        elsif export_type == 'preseizure'
+          preseizures = Pack::Report::Preseizure.where(id: export_ids)
+        elsif export_type == 'pack'
+          pack = Pack.where(id: export_ids).first
+          reports = pack.present? ? assign_report_with(pack) : []
+          preseizures = Pack::Report::Preseizure.not_deleted.where(report_id: reports.collect(&:id))
+        elsif export_type == 'report'
+          preseizures = Pack::Report.where(id: export_ids).first.preseizures
         end
       end
 
-      if preseizures.present?
+      if preseizures.any?
         preseizures.group_by(&:report_id).each do |_report_id, preseizures_by_report|
           PreAssignment::CreateDelivery.new(preseizures_by_report, %w[ibiza exact_online my_unisoft]).execute
         end
@@ -177,35 +178,6 @@ class Documents::MainController < FrontController
 
 
 ###################################################################################################
-
-  def reports
-    if params[:view] == 'current_delivery'
-      # send empty ActiveRelation
-      @reports = Pack::Report.where(id: 0).page(params[:page] || 1).per(params[:per_page] || 20)
-    else
-      options = {}
-
-      options[:user_ids] = if params[:view].present? && params[:view] != 'all'
-                             _user = accounts.find(params[:view])
-                             _user ? [_user.id] : []
-                           else
-                             account_ids
-      end
-
-      if params[:by_all].present?
-        params[:by_preseizure] = params[:by_preseizure].present? ? params[:by_preseizure].merge(params[:by_all].permit!) : params[:by_all]
-      end
-
-      options[:name] = params[:by_pack].try(:[], :pack_name)
-
-      if params[:by_preseizure].present?
-        reports_ids = Pack::Report::Preseizure.where(user_id: options[:user_ids]).where('operation_id > 0').filter_by(params[:by_preseizure]).distinct.pluck(:report_id).presence || [0]
-      end
-      options[:ids] = reports_ids if reports_ids.present?
-
-      @reports = Pack::Report.preseizures.joins(:preseizures).where(pack_id: nil).search(options).distinct.order(updated_at: :desc).page(params[:page] || 1).per(params[:per_page] || 20)
-    end
-  end
 
   # GET /account/documents/preseizure_account/:id
   def preseizure_account
@@ -247,42 +219,6 @@ class Documents::MainController < FrontController
     render partial: 'documents/main/preseizures/preseizure_account'
   end
 
-  def edit_preseizure
-    @preseizure = Pack::Report::Preseizure.find params[:id]
-
-    @preseizure_entries = @preseizure.entries
-
-    render partial: 'documents/main/preseizures/edit'
-  end
-
-  def update_preseizure
-    if @user.has_collaborator_action?
-      preseizure = Pack::Report::Preseizure.find params[:id]
-      error = ''
-      if params[:partial_update].present?
-        preseizure.date = params[:date] if params[:date].present?
-        if params[:deadline_date].present?
-          preseizure.deadline_date  = params[:deadline_date]
-        end
-        if params[:third_party].present?
-          preseizure.third_party    = params[:third_party]
-        end
-
-        error = preseizure.errors.full_messages unless preseizure.save
-      else
-        preseizure.assign_attributes params[:pack_report_preseizure].permit(:date, :deadline_date, :third_party, :operation_label, :piece_number, :amount, :currency, :conversion_rate, :observation)
-        if preseizure.conversion_rate_changed? || preseizure.amount_changed?
-          preseizure.update_entries_amount
-        end
-
-        error = preseizure.errors.full_messages unless preseizure.save
-      end
-
-      render json: { error: error }, status: 200
-    else
-      render json: { error: '' }, status: 200
-    end
-  end
 
   def update_multiple_preseizures
     if @user.has_collaborator_action?
@@ -294,41 +230,6 @@ class Documents::MainController < FrontController
         preseizures.update_all(real_params) if real_params.present?
       rescue StandardError => e
         error = 'Impossible de modifier la séléction'
-      end
-
-      render json: { error: error }, status: 200
-    else
-      render json: { error: '' }, status: 200
-    end
-  end
-
-  def edit_preseizure_account
-    @preseizures = Pack::Report::Preseizure.find params[:id]
-
-    render partial: 'documents/main/preseizures/edit_account'
-  end
-
-  def update_preseizure_account
-    if @user.has_collaborator_action?
-      error = ''
-      if params[:type] == 'account'
-        account = Pack::Report::Preseizure::Account.find params[:id_account]
-        unless account.number = params[:new_value]
-          error = account.errors.full_messages
-        end
-        account.save
-      elsif params[:type] == 'entry'
-        entry = Pack::Report::Preseizure::Entry.find params[:id_account]
-        unless entry.amount = params[:new_value]
-          error = entry.errors.full_messages
-        end
-        entry.save
-      else
-        entry = Pack::Report::Preseizure::Entry.find params[:id_account]
-        unless entry.type = params[:new_value]
-          error = entry.errors.full_messages
-        end
-        entry.save
       end
 
       render json: { error: error }, status: 200
@@ -548,47 +449,6 @@ class Documents::MainController < FrontController
     end
   end
 
-  # POST /account/documents/delete_multiple_piece
-  def delete_multiple_piece
-    pieces    = params[:piece_id]
-    pack      = nil
-
-    pieces.each do |piece_id|
-      piece           = Pack::Piece.find piece_id
-      piece.delete_at = DateTime.now
-      piece.delete_by = @user.code
-      piece.save
-
-      temp_document = piece.temp_document
-
-      if temp_document
-        temp_document.original_fingerprint    = nil
-        temp_document.content_fingerprint     = nil
-        temp_document.raw_content_fingerprint = nil
-        temp_document.save
-
-        parents_documents = temp_document.parents_documents
-
-        if parents_documents.any?
-          parents_documents.each do |parent_document|
-            if parent_document.children.size == parent_document.children.fingerprint_is_nil.size
-              parent_document.original_fingerprint    = nil
-              parent_document.content_fingerprint     = nil
-              parent_document.raw_content_fingerprint = nil
-              parent_document.save
-            end
-          end
-        end
-      end
-
-      pack ||= piece.pack
-    end
-
-    pack.delay.try(:recreate_original_document)
-
-    render json: { success: true }, status: 200
-  end
-
   # POST /account/documents/restore_piece
   def restore_piece
     piece = Pack::Piece.unscoped.find params[:piece_id]
@@ -627,12 +487,6 @@ class Documents::MainController < FrontController
     @already_document = Archive::AlreadyExist.where(id: params[:id]).first
   end
 
-  protected
-
-  def current_layout
-    action_name == 'index' ? 'front/layout' : false
-  end
-
   private
 
   def update_multiple_preseizures_params
@@ -646,102 +500,7 @@ class Documents::MainController < FrontController
     }.compact
   end
 
-  def show_pack_pieces
-    pack = Pack.find params[:id]
-
-    if params[:by_all].present?
-      params[:by_piece] = params[:by_piece].present? ? params[:by_piece].merge(params[:by_all].permit!) : params[:by_all]
-    end
-
-    if params[:piece_id].present?
-      @documents = pack.pieces.where(id: params[:piece_id]).includes(:pack).order(position: :desc).page(params[:page]).per(2)
-    else
-      if params[:by_preseizure].present?
-        piece_ids = pack.preseizures.filter_by(params[:by_preseizure]).distinct.pluck(:piece_id).presence || [0]
-      end
-
-      @documents = pack.pieces
-      @documents = @documents.where(id: piece_ids) if piece_ids.present?
-
-      if params[:by_piece].present?
-        if params[:by_piece].try(:[], :content)
-          @documents = @documents.where('pack_pieces.name LIKE ? OR pack_pieces.tags LIKE ? OR pack_pieces.content_text LIKE ?', "%#{params[:by_piece][:content]}%", "%#{params[:by_piece][:content]}%", "%#{params[:by_piece][:content]}%")
-        end
-        if params[:by_piece].try(:[], :created_at)
-          @documents = @documents.where("DATE_FORMAT(created_at, '%Y-%m-%d') #{params[:by_piece][:created_at_operation].tr('012', ' ><')}= ?", params[:by_piece][:created_at])
-        end
-        if params[:by_piece].try(:[], :position)
-          @documents = @documents.where("position #{params[:by_piece][:position_operation].tr('012', ' ><')}= ?", params[:by_piece][:position])
-        end
-        if params[:by_piece].try(:[], :tags)
-          @documents = @documents.where('tags LIKE ?', "%#{params[:by_piece][:tags]}%")
-        end
-        if params[:by_piece].try(:[], :state_piece)
-          @documents = @documents.where(pre_assignment_state: params[:by_piece][:state_piece].try(:split, ','))
-        end
-      end
-
-      @documents = @documents.order(position: :desc).includes(:pack).page(params[:page]).per(5)
-    end
-
-    user = pack.user
-    @ibiza = user.try(:organization).try(:ibiza)
-
-    @pieces_deleted = Pack::Piece.unscoped.where(pack_id: params[:id]).deleted.presence || []
-
-    @software = @software_human_name = ''
-
-    if user.try(:uses?, :ibiza)
-      @software = 'ibiza'
-      @software_human_name = 'Ibiza'
-    elsif user.try(:uses?, :exact_online)
-      @software = 'exact_online'
-      @software_human_name = 'Exact Online'
-    end
-
-    if params[:page].to_i == 1
-      @need_delivery = @user.has_collaborator_action? && pack.reports.not_delivered.not_locked.count > 0 ? 'yes' : 'no'
-    end
-
-    if params[:page].to_i == 1
-      unless pack.is_fully_processed || params[:filter].presence
-        @temp_pack      = TempPack.find_by_name(pack.name)
-        @temp_documents = @temp_pack.temp_documents.not_published
-      end
-    end
-  end
-
-  def show_report_preseizures
-    source = Pack::Report.find params[:id]
-
-    if params[:by_all].present?
-      params[:by_preseizure] = params[:by_preseizure].present? ? params[:by_preseizure].merge(params[:by_all].permit!) : params[:by_all]
-    end
-
-    if params[:preseizure_ids].present?
-      @preseizures = source.preseizures.where(id: params[:preseizure_ids])
-    else
-      @preseizures = source.preseizures
-      @preseizures = @preseizures.filter_by(params[:by_preseizure]).order(position: :desc).distinct.page(params[:page]).per(5)
-    end
-
-    user = @preseizures.first.try(:user)
-    @ibiza = @preseizures.first.try(:organization).try(:ibiza)
-
-    @software = @software_human_name = ''
-
-    if user.try(:uses?, :ibiza)
-      @software = 'ibiza'
-      @software_human_name = 'Ibiza'
-    elsif user.try(:uses?, :exact_online)
-      @software = 'exact_online'
-      @software_human_name = 'Exact Online'
-    end
-
-    if params[:page].to_i == 1
-      @need_delivery = @user.has_collaborator_action? && source.is_not_delivered? && !source.is_locked ? 'yes' : 'no'
-    end
-  end
+  #####################
 
   def assign_report_with(pack)
     reports = Pack::Report.where(name: pack.name.gsub('all', '').strip)
@@ -761,49 +520,5 @@ class Documents::MainController < FrontController
       pack = Pack.where(name: @report.name + ' all').first
       assign_report_with(pack) if pack.present?
     end
-  end
-
-  #####################
-
-  def options
-    if params[:by_all].present?
-      params[:by_piece] = params[:by_piece].present? ? params[:by_piece].merge(params[:by_all].permit!) : params[:by_all]
-    end
-
-    options = { page: params[:page], per_page: 16 } #IMPORTANT: per_page option must be a multiple of 4 and > 4 (needed by grid type view)
-    options[:sort] = true
-
-    options[:piece_created_at] = params[:by_piece].try(:[], :created_at)
-    options[:piece_created_at_operation] = params[:by_piece].try(:[], :created_at_operation)
-
-    options[:piece_position] = params[:by_piece].try(:[], :position)
-    options[:piece_position_operation] = params[:by_piece].try(:[], :position_operation)
-
-    options[:name] = params[:pack_name]
-    options[:tags] = params[:by_piece].try(:[], :tags)
-
-    options[:pre_assignment_state] = params[:by_piece].try(:[], :state_piece)
-
-    options[:owner_ids] = if params[:view].present? && params[:view] != 'all'
-                            _user = accounts.find(params[:view])
-                            _user ? [_user.id] : []
-                          else
-                            account_ids
-                          end
-
-    if params[:by_preseizure].present? && (params[:by_preseizure].try(:[], 'is_delivered').present? || params[:by_preseizure].try(:[], 'delivery_tried_at').present? || params[:by_preseizure].try(:[], 'date').present? || params[:by_preseizure].try(:[], 'amount').present?)
-      piece_ids = Pack::Report::Preseizure.where(user_id: options[:owner_ids], operation_id: ['', nil]).filter_by(params[:by_preseizure]).distinct.pluck(:piece_id).presence || [0]
-    end
-
-    options[:piece_ids] = piece_ids if piece_ids.present?
-
-    options
-  end
-
-  def load_pack
-    @pack = Pack.where(id: params[:id]).first
-    @pack = nil if not account_ids.include? @pack.owner_id
-
-    redirect_to documents_path if not @pack
   end
 end

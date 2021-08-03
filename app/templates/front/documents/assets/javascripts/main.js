@@ -1,10 +1,26 @@
 //= require './events'
 
+function get_all_selected(obj = 'piece'){
+  let array_ids = [];
+  let type      = (obj == 'operation')? 'operation' : 'document';
+
+  $(`.form-check-input.select-${type}`).each(function(e){
+    if($(this).is(':checked')){
+      let id = parseInt($(this).attr('data-id'));
+      if(id > 0){ array_ids.push(id); }
+    }
+  });
+
+  return array_ids;
+}
+
 class DocumentsMain{
   constructor(){
     this.applicationJS = new ApplicationJS();
     this.page = 1;
     this.ajax_params = {};
+
+    this.export_params = {};
   }
 
   load_datas(serialize_form=false, append=false){
@@ -43,16 +59,42 @@ class DocumentsMain{
       this.load_datas(true, true);
   }
 
-  fetch_export_options(){
-    let gl_params = VARIABLES.get('preseizures_export_params');
-    let params = gl_params || {};
+  fetch_export_options(elem){
+    let tmp_params = { 'ids': [elem.attr('data-id')], 'type': elem.attr('data-type'), 'multi': (elem.attr('data-multi') || false) };
+    let params = JSON.parse(JSON.stringify(tmp_params)) || {}; //IMPORTANT: Clone the json object
+    let information = "Vous êtes sur le point d'exporter une écriture comptable";
 
-    if(gl_params.type == 'preseizure')
-      params['ids'] = gl_params.id
-    else
-      params['id'] = gl_params.id
+    if(params['multi'] == 'true')
+    {
+      if(params['type'] == 'special_piece')
+      {
+        params['ids']  = get_all_selected('piece');
+        params['type'] = 'piece';
+        information    = `Vous êtes sur le point d'exporter les écritures comptables de ${params['ids'].length} pièce(s)`;
 
-    this.applicationJS.parseAjaxResponse({ 'url': '/documents/export_options', 'type': 'POST', 'data': params, target: null, dataType: 'json' })
+        if(params['ids'].length == 0){
+          params['ids']  = tmp_params['ids'];
+          params['type'] = 'pack';
+          information    = `Vous êtes sur le point d'exporter toutes les écritures comptables du lot`;
+        }
+      }
+      else
+      {
+        params['ids'] = get_all_selected('operation');
+        params['type'] = 'preseizure';
+        information    = `Vous êtes sur le point d'exporter les écritures comptables de ${params['ids'].length} opération(s)`;
+
+        if(params['ids'].length == 0){
+          params['ids'] = tmp_params['ids'];
+          params['type'] = 'report';
+          information    = `Vous êtes sur le point d'exporter toutes les écritures comptables du lot`;
+        }
+      }
+    }
+
+    this.export_params = params;
+
+    this.applicationJS.parseAjaxResponse({ 'url': '/documents/export_options', 'type': 'POST', 'data': this.export_params, target: null, dataType: 'json' })
                       .then((e)=>{
                         let options = e.options;
                         let html = '';
@@ -62,11 +104,14 @@ class DocumentsMain{
                         });
 
                         $('#preseizures_export #export_type').html(html);
+                        $('#preseizures_export span.information').text(information);
+
+                        $('#preseizures_export').modal('show');
                       });
   }
 
   launch_export(){
-    let params = VARIABLES.get('preseizures_export_params');
+    let params = this.export_params;
     params['format'] = $('#preseizures_export #export_type').val();
 
     let str_params = JSON.stringify(params);
@@ -83,27 +128,47 @@ class DocumentsMain{
   }
 
   deliver_preseizures(elem){
-    let id   = elem.attr('data-id');
-    let ids  = elem.attr('data-ids');
-    let type = elem.attr('data-type');
-    let confirm_message = 'Voulez vous vraiment livrer les écritures comptables non livrées du lot?';
+    let tmp_params = { 'ids': [elem.attr('data-id')], 'type': elem.attr('data-type'), 'multi': elem.attr('data-multi') };
+    let params = JSON.parse(JSON.stringify(tmp_params)) || {}; //IMPORTANT: Clone the json object
+    let information = 'Voulez vous vraiment livrer cette écriture comptable';
 
-    let datas = {type: type, id: id };
-    if(ids){
-      ids = JSON.parse(ids);
-      confirm_message = `Voulez vous vraiment livrer (${ids.length}) écriture(s) comptable(s)?`;
-      datas = { ids: ids };
+    if(params['multi'] == 'true')
+    {
+      if(params['type'] == 'special_piece')
+      {
+        params['ids']  = get_all_selected('piece');
+        params['type'] = 'piece';
+        information    = `Voulez vous vraiment livrer les écritures comptables non livrées de ${params['ids'].length} pièce(s)?`;
+
+        if(params['ids'].length == 0){
+          params['ids']  = tmp_params['ids'];
+          params['type'] = 'pack';
+          information    = `Voulez vous vraiment livrer les écritures comptables non livrées du lot?`;
+        }
+      }
+      else
+      {
+        params['ids'] = get_all_selected('operation');
+        params['type'] = 'preseizure';
+        information    = `Voulez vous vraiment livrer les écritures comptables non livrées de ${params['ids'].length} opération(s)?`;
+
+        if(params['ids'].length == 0){
+          params['ids']  = tmp_params['ids'];
+          params['type'] = 'report';
+          information    = `Voulez vous vraiment livrer les écritures comptables non livrées du lot?`;
+        }
+      }
     }
 
-    let params =  {
-                    'url': '/documents/deliver_preseizures',
-                    'type': 'POST',
-                    'data': datas,
-                    'dataType': 'json'
-                  }
+    let ajax_params =  {
+                          'url': '/documents/deliver_preseizures',
+                          'type': 'POST',
+                          'data': params,
+                          'dataType': 'json'
+                        }
 
-    if(confirm(confirm_message))
-      this.applicationJS.parseAjaxResponse(params).then((e)=>{ this.applicationJS.noticeFlashMessageFrom(null, 'Livraison en cours ...'); });
+    if(confirm(information))
+      this.applicationJS.parseAjaxResponse(ajax_params).then((e)=>{ this.applicationJS.noticeFlashMessageFrom(null, 'Livraison en cours ...'); });
   }
 }
 
@@ -115,6 +180,6 @@ jQuery(function() {
 
   AppListenTo('documents_deliver_preseizures', (e)=>{ main.deliver_preseizures($(e.detail.obj)); });
 
-  $('#preseizures_export.modal').unbind('show.bs.modal').bind('show.bs.modal', function(){ main.fetch_export_options(); });
+  AppListenTo('documents_export_preseizures', (e)=>{ main.fetch_export_options($(e.detail.obj)); });
   $('#preseizures_export.modal #export_button').unbind('click').bind('click', function(){ main.launch_export(); });
 });

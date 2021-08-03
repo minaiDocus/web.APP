@@ -23,9 +23,13 @@
                 = image_tag document_thumb_url(piece), class: 'w-50'
           - if preseizures.size == 1
             .w-75.dynamic_box{ id: "document_#{piece.id}", data: { preseizure_id: preseizures.first.id, type: 'piece' } }
+              %span.form-check.float-end           
+                %input.form-check-input.pointer.float-none.select-document{ data: { id: piece.id }, type: :checkbox, value: "" }
               = render file: Rails.root.join('app/templates/front/documents/views/documents/preseizures/_preseizure_box.html.haml'), locals: { preseizure: preseizures.first, piece: piece, operation: nil }
           - elsif preseizures.size >= 1
-            .w-75.dynamic_box{ id: "document_#{piece.id}", data: { preseizure_ids: preseizures.ids, type: 'piece' } }
+            .w-75
+              %span.form-check.float-end            
+                %input.form-check-input.pointer.float-none.select-document{ data: { id: piece.id }, type: :checkbox, value: "" }
               %ul.nav.nav-tabs.ms-3{ "role" => "tablist" }
                 - preseizures.each_with_index do |preseizure, index|
                   %li.nav-item.no-margin{ "role" => "presentation" }
@@ -34,9 +38,12 @@
               .tab-content
                 - preseizures.each_with_index do |preseizure, index|
                   .tab-pane.box.no-margin{ class: "#{(index == 0) ? 'active' : ''}", "id" => "preseizure-#{preseizure.id}", "role" => "tabpanel", "aria-labelledby" => "preseizure-#{preseizure.id}-tab" }
-                    = render file: Rails.root.join('app/templates/front/documents/views/documents/preseizures/_preseizure_box.html.haml'), locals: { preseizure: preseizure, piece: piece, operation: nil }
+                    .dynamic_box{ id: "document_#{index}_#{piece.id}", data: { preseizure_id: preseizure.id, type: 'piece' } }
+                      = render file: Rails.root.join('app/templates/front/documents/views/documents/preseizures/_preseizure_box.html.haml'), locals: { preseizure: preseizure, piece: piece, operation: nil }
           - else
             .w-75.text-center.no-preseizure
+              %span.form-check.float-end            
+                %input.form-check-input.pointer.float-none.select-document{ data: { id: piece.id }, type: :checkbox, value: "" }
               %h1 Aucune écriture comptable
 
 

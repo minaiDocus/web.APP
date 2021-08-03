@@ -8,12 +8,21 @@ class DocumentsTags{
   }
 
   show_tags(elem){
-    this.ids  = elem.attr('data-ids');
-    this.type = elem.attr('data-type');
+    let multi = elem.attr('multi') || false;
+    let s_id  = 0;
+
+    if(multi == 'true'){
+      this.ids = get_all_selected('piece');
+      this.type = 'piece';
+    }else{
+      s_id = elem.attr('data-id')
+      this.ids = [s_id];
+      this.type = elem.attr('data-type');
+    }
 
     let params =  {
                     'url': '/documents/tags',
-                    'data': { type: this.type, ids: this.ids },
+                    'data': { type: this.type, id: s_id },
                     'dataType': 'html'
                   }
 
@@ -23,7 +32,7 @@ class DocumentsTags{
     });
   }
 
-  update_tags(){
+  update_tags(elem){
     let new_tags = this.tags_modal.find('#selectionsTags').val();
 
     let params =  {

@@ -1,7 +1,5 @@
 //= require '../application'
 
-
-
 jQuery(function () {
   $(".body_content").scroll(function(e){
     var sTop = $(this).scrollTop();
@@ -15,6 +13,7 @@ jQuery(function () {
       $('.scroll-on-top').hide('slow');
     }
   });
+
   /* AS USER */
   $('a.as_user').unbind('click').bind('click', function(e){
     e.preventDefault();

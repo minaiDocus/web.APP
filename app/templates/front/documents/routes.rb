@@ -9,9 +9,10 @@ Rails.application.routes.draw do
     post 'documents/export_options', to: 'main#export_options', as: 'documents_export_options'
     get 'documents/export_preseizures/:q', to: 'main#export_preseizures', as: 'documents_export_preseizures'
     get 'documents/download_archive/:id', to: 'main#download_archive', as: 'documents_download_archive'
-    get 'documents/download_bundle/:id', to: 'main#download_bundle', as: 'documents_download_bundle'
+    get 'documents/download_bundle/:id', to: 'main#download_bundle', as: 'documents_download_bundle' 
 
     get 'documents', to: 'pieces#index', as: 'documents'
+    post 'documents/delete', to: 'pieces#delete', as: 'delete_documents'
     get 'documents/:id', to: 'pieces#show', as: 'documents_details'
 
     get 'operations', to: 'operations#index', as: 'operations'

@@ -17,6 +17,31 @@ class DocumentsDetails extends DocumentsMain{
     this.load_datas(serialize_form, append);
   }
 
+  delete_piece(elem){
+    if(confirm('Voulez vous vraiment supprimer cette(ces) pièce(s)')){
+      let multi = elem.attr('multi') || false;
+      let ids   = []
+
+      if(multi == 'true'){
+        ids = get_all_selected('piece');
+      }
+      else{
+        ids.push( parseInt(elem.attr('data-id')) );
+      }
+
+      if(ids.length > 0){
+        let params =  {
+                        'url': '/documents/delete',
+                        'data': { ids: ids },
+                        'type': 'POST',
+                        'dataType': 'json'
+                      }
+
+        this.applicationJS.parseAjaxResponse(params).then((e)=>{ this.load_pieces(true); this.applicationJS.noticeFlashMessageFrom(null, 'Pièce(s) supprimée(s) avec succès') });
+      }
+    }
+  }
+
   show_preseizures_modal(elem){
     let preseizure_id = elem.attr('data-preseizure-id');
     if(preseizure_id){
@@ -44,6 +69,8 @@ jQuery(function() {
 
   AppListenTo('documents_load_datas', (e)=>{ main.load_pieces(true) });
   AppListenTo('documents_reinit_datas', (e)=>{ main.load_pieces(false) });
+
+  AppListenTo('documents_delete_piece', (e)=>{ main.delete_piece($(e.detail.obj)) });
 
   AppListenTo('documents_search_text', (e)=>{ main.load_pieces(true); });
 

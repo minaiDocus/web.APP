@@ -106,12 +106,6 @@ function bind_all_events(){
     $('#add-document').modal("show");    
   });
 
-  $('.preseizures_export').unbind('click').bind('click',function(e) {
-    e.stopPropagation();
-    VARIABLES.set('preseizures_export_params', { id: $(this).attr('data-id'), type: $(this).attr('data-type'), multi: ($(this).attr('data-multi') || false) });
-    $('#preseizures_export').modal('show');
-  });
-
   $('#more-filter .modal-footer .btn-add').unbind('click').bind('click', function(){ AppEmit('documents_load_datas'); });
   $('#more-filter .modal-footer .btn-reinit').unbind('click').bind('click', function(){ AppEmit('documents_reinit_datas'); });
 
@@ -120,7 +114,11 @@ function bind_all_events(){
   $('.download_pack_archive').unbind('click').bind('click', function(){ AppEmit('download_pack_archive', {'obj': this}); });
   $('.download_pack_bundle').unbind('click').bind('click', function(){ AppEmit('download_pack_bundle', {'obj': this}); });
 
+  $('.preseizures_export').unbind('click').bind('click',function(e) { AppEmit('documents_export_preseizures', {'obj': this}) });
+
   $('.update_tags').unbind('click').bind('click', function(){ AppEmit('documents_update_tags', {'obj': this}); });
+
+  $('.delete_piece').unbind('click').bind('click', function(){ AppEmit('documents_delete_piece', {'obj': this}); });
 
   $('.edit_preseizures').unbind('click').bind('click', function(){ AppEmit('documents_edit_preseizures', {'obj': this}); });
 
@@ -137,7 +135,6 @@ function bind_all_events(){
     
     $("#PdfViewerDialog .modal-body .view-content iframe.src-piece").attr("src", url);
     $("#PdfViewerDialog").modal('show');
-
   });
 }
 
