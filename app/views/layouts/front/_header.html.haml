@@ -51,7 +51,7 @@
               =link_to t('layouts.retriever.parameters'), retriever_parameters_path, class: 'dropdown-item'
 
     .col-md-2.user-menu
-      %ul.navbar-nav.notifaction_group.me-5
+      %ul.navbar-nav.me-2.float-end.mt-2
         - if current_user.try(:is_admin)
           %li.nav-item
             =link_to glyphicon('fork', color: "rgba(26, 26, 26, 0.7);", size: '22'), '/admin', class: 'nav-link bold'
@@ -63,15 +63,13 @@
           
         %li.nav-item.dropdown
           = link_to glyphicon('cog', color: "rgba(26, 26, 26, 0.7);", size: '22'), '#configure-profile', class: 'nav-link dropdown-toggle bold', id: 'navbardropdownmenusetting', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-bs-toggle' => 'dropdown'
-          .dropdown-menu.dropdown-menu-setting{"aria-labelledby" => "navbardropdownmenusetting"}
-            = link_to glyphicon('person', {size: '17', color: '#1A1A1A'}) + ' Mon compte', '#my_profile', class: 'dropdown-item', target: '_blank'
-            = link_to glyphicon('document', {size: '17', color: '#1A1A1A'}) + ' Documentation', '#documentation', class: 'dropdown-item', target: '_blank'
-            = link_to glyphicon('comment-square', {size: '17', color: '#1A1A1A'}) + ' Nous contacter', '#contact', class: 'dropdown-item', target: '_blank'
-            = link_to glyphicon('account-logout', {size: '17', color: '#FF4848'}) + ' Se déconnecter', '#log-out', class: 'dropdown-item red-label  account-log-out', target: '_blank'
+          .dropdown-menu.dropdown-menu-end.box.parameters_notifications.semibold{"aria-labelledby" => "navbardropdownmenusetting"}
+            = link_to glyphicon('person', {size: '17', color: '#1A1A1A'}) + ' Mon compte', '/profiles', class: 'dropdown-item', target: '_blank'
+            = link_to glyphicon('document', {size: '17', color: '#1A1A1A'}) + ' Documentation', docs_download_path(name: 'CGU_iDocus_201805.pdf'), class: 'dropdown-item', target: '_blank'
+            = link_to glyphicon('comment-square', {size: '17', color: '#1A1A1A'}) + ' Nous contacter', 'https://idocus.zendesk.com/hc/fr', class: 'dropdown-item', target: '_blank'
+            = link_to glyphicon('account-logout', {size: '17', color: '#FF4848'}) + ' Se déconnecter', destroy_user_session_path, class: 'dropdown-item red-label  account-log-out', target: '_blank'
         %li.nav-item.dropdown
           %span.badge.badge-alert.fs-origin.float-end.notif-badge
           = link_to glyphicon('bell', color: "rgba(26, 26, 26, 0.7);", size: '22'), '#notification', class: 'nav-link dropdown-toggle', id: 'notification-content', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-bs-toggle' => 'dropdown'
-          .dropdown-menu.dropdown-notifications{"aria-labelledby" => "notification-content"}
-            .notification-content-list
-              %ul.dropdown-notif-items
-
+          .dropdown-menu.dropdown-menu-end.notification-content-list.box{"aria-labelledby" => "notification-content"}
+            %ul.dropdown-notif-items
