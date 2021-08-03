@@ -1,0 +1,31 @@
+%input#documents-size{ type: 'hidden', value: documents.total_count }
+.row
+  .col-md-12
+    %table.table.table-striped.table_integration
+      %thead            
+        %th Date de la récupération              
+        %th Service
+        %th Date
+        %th Nom original
+        %th Nom iDocus
+        %th Nb pages
+        %th Montant
+      %tbody
+        - if documents.any?
+          - documents.each do |document|
+            %tr
+              %td 12/07/2020
+              %td Orange
+              %td 12/07/2020
+              %td 
+                %a{ href: '#' } 9051137835_13072021.pdf
+              %td
+                %a{ href: '#' } AC0000_AC_202107_006.pdf
+              %td 10
+              %td -167.04 €
+        - else
+          %tr
+            %td{ colspan: 7 }= t('global.no-data-found')           
+        
+
+  = render file: Rails.root.join('app/templates/front/retrieved_datas/views/retrieved_datas/main/_pagination.html.haml'), locals: { target: 'documents', total_pages: documents.total_pages }

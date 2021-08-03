@@ -35,4 +35,8 @@ class RetrieverController < FrontController
       super.joins(:options).where('user_options.is_retriever_authorized = ?', true)
     end
   end
+
+  def verif_account
+    @account = accounts.first if not @account
+  end
 end

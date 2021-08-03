@@ -25,13 +25,6 @@ function bind_all_events(){
     $('#filter-'+ $(".tab-pane.active").attr('id')).modal('show');
   });
 
-  $('.retriever-filter-historic').unbind('click')
-  $(".retriever-filter-historic").bind('click',function(e) {
-    e.stopPropagation()
-
-    $('#filter-'+ $(".tab-pane.active").attr('id')).modal('show');
-  });
-
   $('.retriever-filter').unbind('click')
   $(".retriever-filter").bind('click',function(e) {
     e.stopPropagation()

@@ -113,7 +113,7 @@ class ApplicationJS {
     var self = this
 
     return new Promise((success, error) => {
-      var target = params.target;
+      var target = params.target || null;
 
       $.ajax({
         url: params.url,
