@@ -32,53 +32,83 @@
 
 - entries  = preseizure.entries
 - irregular_debit_credit_somme = verif_debit_credit_somme_of entries
-.row.ml-3.mt-3.mb-3.mr-0.content-table
-  %span.color_red.float-right{class: "#{irregular_debit_credit_somme ? '' : 'hide' }"}
-    balance non équilibrée
-  %table.table.entries{data: { preseizure_id: preseizure.id }}
-    %thead
-      %th.no-border N° de compte
-      %th.no-border Débit
-      %th.no-border Crédit
-    %tbody
-      - entries.each_with_index do |entry, index|
-        %tr{ class: (index % 2 == 0)? '' : 'striped' }
-          %td.account
-            .content_account{title: "#{@user.has_collaborator_action? ? 'Cliquez pour modifier' : ''}"}
-              = entry.account.number
-            - if @user.has_collaborator_action?
-              .edit_account.hide
-                %input.edit_account_number.margin0{type: :text, placeholder: entry.account.number , value: entry.account.number}
-                .suggestion_account_list.hide
-          %input.account_id_hidden{type: :hidden, value: entry.account.id}
-          %td.entry.text-center{title: "#{(@user.has_collaborator_action? && entry.type == 1) ? 'Cliquez pour modifier' : ''}", class: "#{irregular_debit_credit_somme ? 'color_red' : '' }"}
-            - if entry.type == 1
-              .content_amount
-                .content_amount_number
-                  = entry.amount.to_f
+.row.ml-3.mt-3.mb-3.mr-0  
+  %div{ class: "col-md-#{(1 == 0) ? '6' : '12'}"}
+    %label.semibold Ecritures
+    %label.red-label.float-end.semibold{class: "#{irregular_debit_credit_somme ? '' : 'hide' }"}
+      balance non équilibrée
+    .preseizures.content-table
+      %table.table.entries{data: { preseizure_id: preseizure.id }}
+        %thead
+          %th.no-border N° de compte
+          %th.no-border.text-center Débit
+          %th.no-border.text-center Crédit
+        %tbody
+          - entries.each_with_index do |entry, index|
+            %tr{ class: (index % 2 == 0)? '' : 'striped' }
+              %td.account
+                .content_account{title: "#{@user.has_collaborator_action? ? 'Cliquez pour modifier' : ''}"}
+                  = entry.account.number
                 - if @user.has_collaborator_action?
-                  %span.debit_or_credit.hide.float-right.pointer
-                    = glyphicon('arrow-thick-right', {size: 20})
-              - if @user.has_collaborator_action?
-                .edit_amount.hide
-                  %input.margin0{type: :text, placeholder: entry.amount, value: entry.amount}
-                  %input.entry_type{type: :hidden, value: entry.type}
+                  .edit_account.hide
+                    %input.edit_account_number.margin0{type: :text, placeholder: entry.account.number , value: entry.account.number}
+                    .suggestion_account_list.hide
+              %input.account_id_hidden{type: :hidden, value: entry.account.id}
+              %td.entry.text-center{title: "#{(@user.has_collaborator_action? && entry.type == 1) ? 'Cliquez pour modifier' : ''}", class: "#{irregular_debit_credit_somme ? 'color_red' : '' }"}
+                - if entry.type == 1
+                  .content_amount
+                    .content_amount_number
+                      %span= entry.amount.to_f
+                      - if @user.has_collaborator_action?
+                        %span.debit_or_credit.hide.pointer.float-end
+                          = glyphicon('arrow-thick-right', {size: 20})
+                  - if @user.has_collaborator_action?
+                    .edit_amount.hide
+                      %input.margin0{type: :text, placeholder: entry.amount, value: entry.amount}
+                      %input.entry_type{type: :hidden, value: entry.type}
 
-          %td.entry.text-center{title: "#{(@user.has_collaborator_action? && entry.type == 2) ? 'Cliquez pour modifier' : ''}", class: "#{irregular_debit_credit_somme ? 'color_red' : '' }"}
-            - if entry.type == 2
-              .content_amount
-                - if @user.has_collaborator_action?
-                  %span.debit_or_credit.hide.float-left.pointer                          
-                    = glyphicon('arrow-thick-left', {size: 20})
-                &nbsp;&nbsp;
-                .content_amount_number
-                  = entry.amount.to_f
+              %td.entry.text-center{title: "#{(@user.has_collaborator_action? && entry.type == 2) ? 'Cliquez pour modifier' : ''}", class: "#{irregular_debit_credit_somme ? 'color_red' : '' }"}
+                - if entry.type == 2
+                  .content_amount
+                    - if @user.has_collaborator_action?
+                      %span.debit_or_credit.hide.float-start.pointer= glyphicon('arrow-thick-left', {size: 20})                    
+                    .content_amount_number
+                      %span.ms-2= entry.amount.to_f
+                  - if @user.has_collaborator_action?
+                    .edit_amount.hide
+                      %input.margin0{type: :text, placeholder: entry.amount, value: entry.amount}
+                      %input.entry_type{type: :hidden, value: entry.type}
               - if @user.has_collaborator_action?
-                .edit_amount.hide
-                  %input.margin0{type: :text, placeholder: entry.amount, value: entry.amount}
-                  %input.entry_type{type: :hidden, value: entry.type}
-          - if @user.has_collaborator_action?
-            %input.entry_id_hidden{type: :hidden, value: entry.id}
+                %input.entry_id_hidden{type: :hidden, value: entry.id}
+  - if 1 == 0
+    .col-md-5
+      %label.ms-5.semibold Analyse comptable
+      .analytics.content-table.ms-5
+        %table.table
+          %thead
+            %tr
+              %th.text-center Analyse
+              %th.text-center Axe
+              %th.text-center Ventilation
+              %th.text-center Montant ventilé
+          %tbody.entries          
+            %tr
+              %td.text-center ANALYTIQUE      
+              %td.text-center
+                %ul                  
+                  %li T           
+              %td.text-center 100.0 %
+              %td.text-center 74.97
+            %tr.striped
+              %td.text-center ANALYTIQUE 2      
+              %td.text-center
+                %ul                  
+                  %li.semibold T        
+                  %li.semibold U        
+              %td.text-center 100.0 %
+              %td.text-center 74.97
+
+
 %hr   
 .row.ml-1.mt-1.mb-1.mr-0
   .col-md-9

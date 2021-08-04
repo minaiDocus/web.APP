@@ -236,6 +236,8 @@ jQuery(function() {
   AppListenTo('documents_edit_entry_amount', (e)=>{ main.edit_entry_amount($(e.detail.obj)); });
   AppListenTo('documents_change_entry_type', (e)=>{ main.change_entry_type($(e.detail.obj)); });
 
-  $('#edit_preseizures.modal').on('shown.bs.modal', function(e){ $('.datepicker').datepicker(); });
+  $('#edit_preseizures.modal').on('shown.bs.modal', function(e){   
+    $('#date-preseizure, #deadline-date-preseizure').daterangepicker({ singleDatePicker: true, locale: { format: 'YYYY-MM-DD' }});    
+  });
   $('#edit_preseizures.modal #preseizures_edit').unbind('click').bind('click', function(e){ main.update_preseizures(); });
 });

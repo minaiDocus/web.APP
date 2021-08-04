@@ -108,14 +108,14 @@
   border-radius: 8px;
 }
 
-.grid .stamp-content.active, .grid .stamp-content:hover {
+.grid .stamp-content.selected, .grid .stamp-content:hover {
   border: 1px solid #C1D837;
   cursor: pointer;
   color: #FFFFFF;
   font-family: Raleway-semiBold;
 }
 
-.grid .stamp-content.active .label-content{
+.grid .stamp-content.selected .label-content{
   background: #C1D837;
   color: #FFFFFF;
   font-family: Raleway-semiBold;
@@ -163,7 +163,7 @@ img{
   z-index: 1;
 }
 
-.border-green{
+.selected{
   border: 1px solid #C1D837;
 }
 

@@ -27,15 +27,15 @@
             .form-group
               %label Date de livraison              
               .input-group.mb-3
-                %span.input-group-text#date-livraiso= glyphicon('calendar', { size: '14', color: 'background: rgba(26, 26, 26, 0.7)' })          
+                %span.show-calendar.input-group-text{ data: { ref: 'delivery-date' } }= glyphicon('calendar', { size: '14', color: 'background: rgba(26, 26, 26, 0.7)' })       
                 %input.form-control.value-content.date.daterange#delivery-date{ type: :text, name: 'by_preseizure[delivery_tried_at]', value: ''}
-                %span.input-group-text-right= glyphicon('chevron-bottom', { size: '12', color: 'background: rgba(26, 26, 26, 0.7)' })             
+                %span.show-calendar.input-group-text-right{ data: { ref: 'delivery-date' } }= glyphicon('chevron-bottom', { size: '12', color: 'background: rgba(26, 26, 26, 0.7)' })             
             .form-group
               %label Date de facture
               .input-group.mb-3
-                %span.input-group-text= glyphicon('calendar', { size: '14', color: 'background: rgba(26, 26, 26, 0.7)' })
+                %span.show-calendar.input-group-text{ data: { ref: 'invoice-date' } }= glyphicon('calendar', { size: '14', color: 'background: rgba(26, 26, 26, 0.7)' })
                 %input.form-control.value-content.date.daterange#invoice-date{ type: :text, name: 'by_preseizure[date]', value: ''}
-                %span.input-group-text-right= glyphicon('chevron-bottom', { size: '12', color: 'background: rgba(26, 26, 26, 0.7)' })
+                %span.show-calendar.input-group-text-right{ data: { ref: 'invoice-date' } }= glyphicon('chevron-bottom', { size: '12', color: 'background: rgba(26, 26, 26, 0.7)' })
           .form-group
             %label Montant
             .row
@@ -63,14 +63,13 @@
         %h5.modal-title.bold Téléchargement d'écritures comptables        
         %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
       .modal-body
-        %span.information
-        %br
-        %br
-        %form#preseizures_export_form{ action: '/documents/export', method: 'POST' }
+        %p.information
+        .mb-4
+        %form.form-group#preseizures_export_form{ action: '/documents/export', method: 'POST' }
           %label Format d'export
-          = select_tag :export_type, '', id: :export_type, class: 'form-control'
+          = select_tag :export_type, '', id: :export_type, class: 'form-select'
       .modal-footer
-        %button.btn.btn-light#export_button{:type => 'button'} Exporter
+        %button.btn.btn-primary.semibold#export_button{:type => 'button'} Exporter
 
 #tags.modal.fade{'aria-hidden' => 'true', :role => 'dialog', :tabindex => '-1'}
   .modal-dialog

@@ -4,10 +4,11 @@
     .row.grid-content
       - pieces.each do |piece|
         .col-md-3
-          .stamp-content{ data: { preseizure_id: piece.preseizures.first.try(:id) } }
+          .stamp-content{ id: "document_grid_#{piece.id}", data: { preseizure_id: piece.preseizures.first.try(:id) } }
             .image_piece.text-center
               = image_tag document_thumb_url(piece)
             .label-content.text-center.p-2= piece.name
+        
   //---------------------------------------------------------------------------------------------------------------------------------------------
   // list type
   - pieces.each do |piece|
@@ -41,7 +42,7 @@
                     .dynamic_box{ id: "document_#{index}_#{piece.id}", data: { preseizure_id: preseizure.id, type: 'piece' } }
                       = render file: Rails.root.join('app/templates/front/documents/views/documents/preseizures/_preseizure_box.html.haml'), locals: { preseizure: preseizure, piece: piece, operation: nil }
           - else
-            .w-75.text-center.no-preseizure
+            .w-75.text-center.no-preseizure{ id: "document_#{piece.id}" }
               %span.form-check.float-end            
                 %input.form-check-input.pointer.float-none.select-document{ data: { id: piece.id }, type: :checkbox, value: "" }
               %h1 Aucune écriture comptable

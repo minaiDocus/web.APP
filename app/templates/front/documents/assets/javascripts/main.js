@@ -110,7 +110,7 @@ class DocumentsMain{
                         });
 
                         $('#preseizures_export #export_type').html(html);
-                        $('#preseizures_export span.information').text(information);
+                        $('#preseizures_export p.information').text(information);
 
                         $('#preseizures_export').modal('show');
                       });

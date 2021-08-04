@@ -1,12 +1,19 @@
 %footer.bg-dark.navbar-fixed-bottom.p-3
   .row
-    .col-md-4
+    .col-md-3
       %p.m-0.text-left.text-white
         = t('footer.copyright_text')
         &copy;
         %span= Time.now.strftime('%Y')
-    .col-md-4
-    .col-md-4.network-link
+    .col-md-6.text-center.text-white
+      %span.semibold Service Commercial : 
+      %span 01 84 250 251
+      %span.ms-1 &#124;
+      %span.semibold.ms-1 Support Client :
+      %span 0 895 233 013 
+      %span.ms-1 &#124;
+      %span.ms-1 8H à 12H - 13H à 17H
+    .col-md-3.network-link
       %p.m-0.text-end.text-white
         %a.facebook.ms-2{ href: 'https://www.facebook.com/idocus/', target: '_blank' }
           %svg{:fill => "none", :height => "16", :viewbox => "0 0 9 16", :width => "9", :xmlns => "http://www.w3.org/2000/svg"}

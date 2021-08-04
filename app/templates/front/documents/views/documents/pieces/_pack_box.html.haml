@@ -20,15 +20,15 @@
     .row
       .col-md-8
         - if pack.created_at >= 1.days.ago
-          %span.badge.badge-success Nouveau
+          %span.badge.badge-success.semibold Nouveau
         - if pack.has_not_delivered_preseizures?
-          %span.badge.badge-danger Ecritures non livrées
+          %span.badge.badge-danger.semibold Ecritures non livrées
         - if pack.pieces.size >= 50
-          %span.badge.badge-warning Inmportant
+          %span.badge.badge-warning.semibold Important
         - if pack.pieces.collect(&:expense).any?
-          %span.badge.bg-dark Notes de frais
+          %span.badge.bg-dark.semibold Notes de frais
         - if not pack.is_fully_processed
-          %span.badge.bg-dark En cours ...
+          %span.badge.bg-dark.semibold En cours ...
       .col-md-4.text-end
         / %span.ms-2= glyphicon('flag', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
         %span.ms-2.update_tags{title: 'Taguer le lot', data: {id: pack.id, type: 'pack'}}= glyphicon('tag', { size: '16', color:'rgba(26, 26, 26, 0.32);'})
