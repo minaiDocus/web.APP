@@ -53,6 +53,12 @@ module RetrieverHelper
     end.map{ |u| [u, u.id] } || []
   end
 
+  def retrievers_of(account)
+    account.retrievers.map do |retriever|
+      [ retriever.service_name, retriever.id ]
+    end || []
+  end
+
   # def link_retriever_options(account)
   #   { class: account.try(:id)? '' : 'disabled', title: account.try(:id)? '' : 'Sélectionnez un dossier pour pouvoir poursuivre' }
   # end

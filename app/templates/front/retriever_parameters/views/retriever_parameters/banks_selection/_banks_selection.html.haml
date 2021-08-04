@@ -1,0 +1,28 @@
+%input#banks-selection-size{ type: 'hidden', value: bank_accounts.size }
+.row
+  .col-md-12
+    %table.table.table-striped.table_integration
+      %thead            
+        %th.text-center
+          .form-check
+            %input.form-check-input.pointer.float-none.check-all-bank-account{ type: :checkbox, value: "" }
+        %th Banque
+        %th Nom
+        %th Numéro de compte
+      %tbody
+        - if bank_accounts.any?
+          - bank_accounts.each do |bank_account|
+            %tr
+              %td.text-center
+                .form-check
+                  %input.form-check-input.pointer.float-none.check-bank-account{ type: :checkbox, value: "1", name: "select_bank_#{bank_account.id}" }
+              %td= bank_account.bank_name
+              %td= bank_account.name
+              %td= bank_account.number
+        - else
+          %tr
+            %td{colspan: 4}= t('global.no-data-found')
+          
+  .form-group.no-margin
+    .w-100.text-end            
+      %button.btn.btn-primary.bold Valider les changements

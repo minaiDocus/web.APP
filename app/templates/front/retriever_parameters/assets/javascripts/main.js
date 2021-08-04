@@ -1,33 +1,30 @@
 //=require './events'
 
-class RetrievedDatasMain{
+class RetrievedParametersMain{
   constructor(){
     this.applicationJS = new ApplicationJS();
     this.action_locker = false;
     this.account_select = $('#account_id');
-    this.per_page_of = { 'operations': 20, 'documents': 20 };
+    this.per_page_of = { 'documents-selection': 20 };
   }
 
   load_all(){
-    this.load_datas('operations');
+    this.load_datas('banks-selection');
     this.action_locker = false;
-    this.load_datas('documents');
+    this.load_datas('documents-selection');
+    this.action_locker = false;
+    this.load_datas('banks-params');
   }
 
-  force_preseizures(){
-    if(confirm('Voulez vous vraiment lancer la pré-afféctation des opérations'))
-    {
-      this.applicationJS.parseAjaxResponse({
-        'url': '/retrieved/force_operations',
-        'type': 'POST',
-        'dataType': 'json',
-      }).then((e)=>{ this.applicationJS.noticeFlashMessageFrom(null, e.message); });
+  filter_page(type, action='validate'){
+    if(action == 'reset')
+      $(`.modal form#filter-${type}-form`)[0].reset();
 
-      this.load_datas('operations');
-    }
+    this.load_datas(type);
+    $(`.modal#filter-${type}`).modal('hide');
   }
 
-  load_datas(type='operations', page=1, per_page=0){
+  load_datas(type='banks-selection', page=1, per_page=0){
     if(this.action_locker)
       return false;
 
@@ -42,10 +39,10 @@ class RetrievedDatasMain{
 
     if(this.per_page_of[type] > 0){ params.push(`per_page=${ this.per_page_of[type] }`); }
 
-    params.push($(`.modal #filter-${type}-form`).serialize().toString());
+    params.push($(`.modal form#filter-${type}-form`).serialize().toString());
 
     let ajax_params =   {
-                          'url': `/retrieved/${type}?${params.join('&')}`,
+                          'url': `/retriever/${type.replaceAll('-', '_')}?${params.join('&')}`,
                           'dataType': 'html',
                           'target': ''
                         };
@@ -62,14 +59,13 @@ class RetrievedDatasMain{
   }
 }
 
+
 jQuery(function() {
-  let main = new RetrievedDatasMain();
+  let main = new RetrievedParametersMain();
   main.load_all();
 
-  AppListenTo('retrieved_datas_reload_all', (e)=>{ main.load_all(); });
-  AppListenTo('retrieved_datas_force_preseizures', (e)=>{ main.force_preseizures(); });
-  AppListenTo('retrieved_datas_filter', (e)=>{ $(`.modal#filter-${e.detail.type}`).modal('hide'); main.load_datas(e.detail.type); });
-  AppListenTo('retrieved_datas_reset_filter', (e)=>{ $(`.modal#filter-${e.detail.type}`).modal('hide'); $(`.modal #filter-${e.detail.type}-form`)[0].reset(); main.load_datas(e.detail.type); });
+  AppListenTo('retriever_parameters_filter_page', (e)=>{ main.filter_page(e.detail.target, e.detail.action); });
+  AppListenTo('retriever_parameters_reload_all', (e)=>{ main.load_all(); });
 
   AppListenTo('window.change-per-page', (e)=>{ main.load_datas(e.detail.name, 1, e.detail.per_page); });
   AppListenTo('window.change-page', (e)=>{ main.load_datas(e.detail.name, e.detail.page); });

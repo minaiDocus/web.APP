@@ -1,0 +1,39 @@
+%input#documents-selection-size{ type: 'hidden', value: documents.total_count }
+.row
+  .col-md-12
+    %table.table.table-striped.table_integration
+      %thead            
+        %th.text-center
+          .form-check
+            %input.form-check-input.pointer.float-none.check-all-bank-account{ type: :checkbox, value: "" }
+        %th Date de la récupération
+        %th Service
+        %th Date
+        %th Nom original
+        %th Nb. pages
+        %th Montant
+      %tbody
+        - if documents.any?
+          - documents.each do |document|
+            %tr
+              %td.text-center
+                .form-check
+                  %input.form-check-input.pointer.float-none.check-bank-account{ type: :checkbox, value: "" }
+              %td= l(document.created_at)
+              %td
+                - if document.retriever.nil?
+                  %span.label supprimé
+                = document.retriever_name
+              %td= l(document.metadata['date'], format: '%d %b %Y') rescue ''               
+              %td= link_to document.metadata['name'] + '.pdf', '#'
+              %td= document.pages_number            
+              %td= document.metadata['amount'].to_s + ' €'
+        - else
+          %tr
+            %td{colspan: 7}= t('global.no-data-found')
+
+  = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { name: 'documents-selection', total_pages: documents.total_pages }
+          
+  .form-group.no-margin
+    .w-100.text-end            
+      %button.btn.btn-primary.bold Intégrer les documents séléctionnés

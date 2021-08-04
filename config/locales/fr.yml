@@ -339,7 +339,7 @@ fr:
     retriever:
       automates: Automates
       historic: Historique de récupération
-      others: Autres
+      parameters: Paramètres divers
 
   views:
     pagination:

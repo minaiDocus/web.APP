@@ -1,0 +1,44 @@
+.row
+  .col-md-8
+  .col-md-4.text-end
+    %button.btn.btn-light-primary.semibold.create-manual-bank-account
+      %span.me-3= glyphicon('plus', { size: '15', color: '#0d6efd'})
+      %span Créer un compte bancaire
+
+.mb-4
+
+.row
+  .col-md-12
+    %table.table.table-striped.table_integration
+      %thead
+        %th Banque
+        %th Nom
+        %th Numéro de compte
+        %th Code journal
+        %th Compte de trésorerie
+        %th Date historique
+        %th.text-end Action
+      %tbody
+        -if bank_accounts.any?
+          - bank_accounts.each do |bank_account|
+            %tr
+              %td= bank_account.bank_name
+              %td= bank_account.name
+              %td= bank_account.number
+              %td= bank_account.journal
+              %td= bank_account.accounting_number
+              %td= bank_account.start_date
+              %td.text-end.pointer
+                .action.sub-menu-bank-param
+                  %span= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
+                  .sub_menu.text-start.hide
+                    %ul.no-margin.no-padding.regular                      
+                      %li.edit
+                        %span.me-1= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
+                        %span Editer                        
+                      %li.delete.red-label
+                        %span.me-1= glyphicon('trash', { size: '15', color: "#FF4848" })
+                        %span Supprimer
+        - else
+          %tr
+            %td{colspan: 7}= t('global.no-data-found')

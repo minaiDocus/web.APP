@@ -17,15 +17,6 @@ function bind_all_events(){
 
   $('button.force-preseizures').unbind('click');
   $('button.force-preseizures').bind('click', function(e){ AppEmit('retrieved_datas_force_preseizures') });
-
-  $('select.per-page').unbind('change');
-  $('select.per-page').bind('change', function(e){ AppEmit('retrieved_datas_per_page', { type: $(this).data('type') }) });
-
-  $('span.previous_page').unbind('click');
-  $('span.previous_page').bind('click', function(e){ AppEmit('retrieved_datas_previous_page', { type: $(this).data('type') }) });
-
-  $('span.next_page').unbind('click');
-  $('span.next_page').bind('click', function(e){ AppEmit('retrieved_datas_next_page', { type: $(this).data('type') }) });
 }
 
 jQuery(function() {

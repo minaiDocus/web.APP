@@ -137,14 +137,21 @@ class ApplicationJS {
           if(success)
             success(result);
 
-          $('div.loading_box').addClass('hide');
+          window.setTimeout((e)=>{ 
+            $('div.loading_box').addClass('hide');
+            bind_globals_events();
+          }, 1000);
         },
         error: function(result){          
           self.noticeInternalErrorFrom(result);
-          $('div.loading_box').addClass('hide');
 
           if(success)
             success(result);
+
+          window.setTimeout((e)=>{
+            $('div.loading_box').addClass('hide');
+            bind_globals_events();
+          }, 1000);
         }
       });
     });

@@ -1,0 +1,33 @@
+.container-fluid
+  .row
+    .col-md-7.text-start
+      %h1.bold Paramètres Divers
+    .col-md-3.p-1
+      = select_tag 'account_id', options_for_select(customers_active, @account.try(:id)), include_blank: false, class: 'form-select'
+    .col-md-1.text-start.p-1
+      %button.btn.btn-light.semibold.retriever-filter-others.w-100{ disabled: false }
+        %span.me-3= glyphicon('layers', { size: '15', color: '#72AA42'})
+        %span Filtrer  
+
+  .mb-4
+
+  %ul.nav.nav-tabs.ms-3{ "role" => "tablist" }
+    %li.nav-item.no-margin{ "role" => "presentation" }
+      %button.semibold.nav-link.active#banks-selection-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#banks-selection", type: :button, "role" => "tab", "aria-controls" => "banks-selection", "aria-selected" => "true" } 
+        Sélection des comptes bancaires   
+        %span.ms-1.badge.badge-secondary.regular#total-banks-selection 0
+    %li.nav-item.no-margin{ "role" => "presentation" }
+      %button.semibold.nav-link#documents-selection-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#documents-selection", type: :button, "role" => "tab", "aria-controls" => "documents-selection", "aria-selected" => "false"} 
+        Séléction de document restant à récupérer
+        %span.ms-1.badge.badge-secondary.regular#total-documents-selection 0
+    %li.nav-item.no-margin{ "role" => "presentation" }
+      %button.semibold.nav-link#banks-params-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#banks-params", type: :button, "role" => "tab", "aria-controls" => "banks-params", "aria-selected" => "false"} Paramètres bancaires
+
+  .tab-content
+    .tab-pane.box.no-margin.active#banks-selection{ "role" => "tabpanel", "aria-labelledby" => "bank-account-selection-tab" } 
+    .tab-pane.box.no-margin#documents-selection{ "role" => "tabpanel", "aria-labelledby" => "documents-selections-tab" }
+    .tab-pane.box.no-margin#banks-params{ "role" => "tabpanel", "aria-labelledby" => "banks-params-tab" }
+
+= render partial: 'dialogs'      
+
+= javascript_include_tag 'front/retriever_parameters/assets/javascripts/main'

@@ -1,0 +1,250 @@
+.modal#create-bank-account
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.modal-title.bold Paramètrage manuel d'un compte bancaire
+        %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+      .modal-body
+        .form-group
+          %label.semibold Banque
+          %select.form-select#list-bank{ name: 'list-bank', "aria-label" => "Default select"  }              
+            %option bank 1
+            %option bank 2
+            %option bank 3
+            %option bank 4
+          %i Merci de contacter le support (support@idocus.com), si votre compte bancaire ne fait pas partie de la liste, pour une demande d'ajout
+
+        .form-group
+          %label.semibold Type de compte
+          %select.form-select#account-type{ name: 'account-type', "aria-label" => "Default select"  }              
+            %option account 1
+            %option account 2
+            %option account 3
+            %option account 4
+
+        .form-group
+          %label.semibold Numéro de compte
+          %select.form-select#account-number{ name: 'account-number', "aria-label" => "Default select"  }              
+            %option number 1
+            %option number 2
+            %option number 3
+            %option number 4
+
+        .form-group
+          .row
+            .col-md-6
+              %label.semibold Code journal
+              %select.form-select#book-code{ name: 'book-code', "aria-label" => "Default select"  }              
+                %option code 1
+                %option code 2
+                %option code 3
+                %option code 4
+            .col-md-6
+              %label.semibold Code journal logiciel
+              %select.form-select#book-code-software{ name: 'book-code-software', "aria-label" => "Default select"  }              
+                %option code 1
+                %option code 2
+                %option code 3
+                %option code 4
+
+        .form-group
+          .row
+            .col-md-6
+              %label.semibold Devise originale
+              %select.form-select#original-currency{ name: 'original-currency', "aria-label" => "Default select"  }              
+                %option devise 1
+                %option devise 2
+                %option devise 3
+                %option devise 4
+            .col-md-6
+              %label.semibold Devise
+              %select.form-select#currency{ name: 'currency', "aria-label" => "Default select"  }              
+                %option currency 1
+                %option currency 2
+                %option currency 3
+                %option currency 4
+              %i Les écritures seront converties vers cette devise avec le taux de change de la date de valeur
+
+        .form-group
+          %label.semibold Compte de trésorerie
+          .select-container.no-padding.w-100
+            %input{ placeholder: "ex : 512000" }
+
+        .form-group
+          %label.semibold  Compte d’attente
+          .select-container.no-padding.w-100
+            %input{ placeholder: "ex : 471000" }
+
+        .form-group
+          %label.semibold Choisir la date de récupération de l'historique bancaire
+          .select-container.no-padding.w-100.date.date-picker
+            %input{ placeholder: "ex : 471000" }
+
+        .form-group.form-check
+          %input.form-check-input.pointer.float-none{ type: :checkbox, value: "" }
+          %label.form-check-label.stay-connect Bloquer les opérations du mois précédent
+          %br
+          %i Ne s'applique qu'après un mois depuis la création de ce compte bancaire dans iDocus
+
+        .form-group
+          %label.semibold Nombre de jour de retard autorisé avant blocage de l'opération
+          .select-container.no-padding.w-100.date.date-picker
+            %input{ placeholder: "ex : 30" }
+        
+      .modal-footer
+        %button.btn.btn-light.semibold.cancel{ type: :button } Annuler
+        %button.btn.btn-primary.semibold{ type: :button, disabled: true } Valider
+
+.modal#edit-bank-account
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.modal-title.bold 
+          Edition d'un compte bancaire du client
+        %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+      .modal-body
+        .form-group
+          %label.semibold Numéro de compte
+          .select-container.no-padding.w-100
+            %input{ placeholder: "ex : 3002900003" }
+
+        .form-group
+          %label.semibold Code journal
+          .select-container.no-padding.w-100
+            %input{ placeholder: "ex : ?" }
+
+        .form-group
+          %label.semibold Code journal
+          %select.form-select#edit-book-code{ name: 'edit-book-code', "aria-label" => "Default select"  }              
+            %option Code book 1
+            %option Code book 2
+            %option Code book 3
+            %option Code book 4
+          %i.badge.bg-warning.semibold iBiza n'est pas configuré correctement. Veuillez le reconfigurer.
+
+        .form-group
+          %label.semibold Devise
+          %select.form-select#edit-currency{ name: 'edit-currency', "aria-label" => "Default select"  }              
+            %option currency 1
+            %option currency 2
+            %option currency 3
+            %option currency 4
+          %i Les écritures seront converties vers cette devise avec le taux de change de la date de valeur
+
+        .form-group
+          %label.semibold Compte de trésorerie
+          .select-container.no-padding.w-100
+            %input{ placeholder: "ex : 512000" }
+
+        .form-group
+          %label.semibold Compte d’attente
+          .select-container.no-padding.w-100
+            %input{ placeholder: "ex : 471000" }
+          %i si tiers non identifiable
+
+        .form-group
+          %label.semibold Choisir la date de récupération de l'historique bancaire
+          .select-container.no-padding.w-100
+            %input{ placeholder: "ex : ?" }
+
+        .form-group
+          %label.semibold Activer la récuparation EBICS à compter du
+          .select-container.no-padding.w-100
+            %input{ placeholder: "ex : ?" }
+
+        .form-group.form-check
+          %input.form-check-input.pointer.float-none{ type: :checkbox, value: "" }
+          %label.form-check-label.stay-connect Bloquer les opérations du mois précédent
+          %br
+          %i Ne s'applique qu'après un mois depuis la création de ce compte bancaire dans iDocus
+
+        .form-group
+          %label.semibold Nombre de jour de retard autorisé avant blocage de l'opération
+          .select-container.no-padding.w-100.date.date-picker
+            %input{ placeholder: "ex : 30" }
+        
+      .modal-footer
+        %button.btn.btn-light.semibold.cancel{ type: :button } Annuler
+        %button.btn.btn-primary.semibold{ type: :button } Valider
+
+.modal#filter-banks-selection
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.modal-title.bold Filtre séléction compte bancaire
+        %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+      .modal-body
+        %form#filter-banks-selection-form
+          .form-group
+            %label.semibold Banque
+            = select_tag "bank_account_contains[retriever_budgea_id]", options_for_select(retrievers_of(@account), params[:bank_account_contains].try(:[], :retriever_budgea_id)), include_blank: true, class: 'form-select'
+      .modal-footer
+        %button.btn.btn-light.semibold.cancel{ type: :button } Annuler
+        %button.btn.btn-primary.semibold.validate{ type: :button } Valider
+
+.modal#filter-documents-selection
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.modal-title.bold Filtre séléction document restant
+        %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+      .modal-body
+        %form#filter-documents-selection-form
+          .form-group
+            %label.semibold Service
+            .select-container.no-padding.w-100.date.date-picker
+              %input{name: 'document_contains[service_name]', type: :text, value: params[:document_contains].try(:[], :service_name) }
+
+          .form-group
+            %label.semibold Date
+            .select-container.no-padding.w-100.date.date-picker
+              %input{name: 'document_contains[date]', type: :text, value: params[:document_contains].try(:[], :date) }
+
+          .form-group
+            %label.semibold Nom original
+            .select-container.no-padding.w-100.date.date-picker
+              %input{name: 'document_contains[original_file_name]', type: :text, value: params[:document_contains].try(:[], :original_file_name) }
+
+          .form-group
+            %label.semibold Montant
+            .select-container.no-padding.w-100.date.date-picker
+              %input{name: 'document_contains[amount]', type: :text, value: params[:document_contains].try(:[], :amount) }
+      .modal-footer
+        %button.btn.btn-light.semibold.cancel{ type: :button } Annuler
+        %button.btn.btn-primary.semibold.validate{ type: :button } Valider
+
+.modal#filter-banks-params
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.modal-title.bold Filtre paramètre bancaire
+        %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+      .modal-body
+        %form#filter-banks-params-form
+          .form-group
+            %label.semibold Banque
+            .select-container.no-padding.w-100.date.date-picker
+              %input{ name: 'bank_account_contains[bank_name]', type: :text, value: params[:bank_account_contains].try(:[], :bank_name) }
+
+          .form-group
+            %label.semibold Nom
+            .select-container.no-padding.w-100.date.date-picker
+              %input{ name: 'bank_account_contains[name]', type: :text, value: params[:bank_account_contains].try(:[], :name) }
+
+          .form-group
+            %label.semibold Numéro de compte
+            .select-container.no-padding.w-100.date.date-picker
+              %input{ name: 'bank_account_contains[number]', type: :text, value: params[:bank_account_contains].try(:[], :number) }
+
+          .form-group
+            %label.semibold Code journal
+            .select-container.no-padding.w-100.date.date-picker
+              %input{ name: 'bank_account_contains[journal]', type: :text, value: params[:bank_account_contains].try(:[], :journal) }
+
+          .form-group
+            %label.semibold Compte de trésorerie
+            .select-container.no-padding.w-100.date.date-picker
+              %input{ name: 'bank_account_contains[accounting_number]', type: :text, value: params[:bank_account_contains].try(:[], :accounting_number) }
+      .modal-footer
+        %button.btn.btn-light.semibold.cancel{ type: :button } Annuler
+        %button.btn.btn-primary.semibold.validate{ type: :button } Valider
