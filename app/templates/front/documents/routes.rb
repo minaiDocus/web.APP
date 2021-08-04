@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     post 'documents/tags/update', to: 'main#update_tags', as: 'documents_update_tags'
 
     post 'documents/export_options', to: 'main#export_options', as: 'documents_export_options'
+    post 'documents/restore/:id', to: 'pieces#restore_piece', as: 'documents_restore'
     get 'documents/export_preseizures/:q', to: 'main#export_preseizures', as: 'documents_export_preseizures'
     get 'documents/download_archive/:id', to: 'main#download_archive', as: 'documents_download_archive'
     get 'documents/download_bundle/:id', to: 'main#download_bundle', as: 'documents_download_bundle' 
@@ -14,6 +15,7 @@ Rails.application.routes.draw do
     get 'documents', to: 'pieces#index', as: 'documents'
     post 'documents/delete', to: 'pieces#delete', as: 'delete_documents'
     get 'documents/:id', to: 'pieces#show', as: 'documents_details'
+    
 
     get 'operations', to: 'operations#index', as: 'operations'
     get 'operations/:id', to: 'operations#show', as: 'operations_details'

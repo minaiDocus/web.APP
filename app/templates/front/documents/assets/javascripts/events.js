@@ -93,6 +93,7 @@ function bind_all_events(){
     e.stopPropagation();
     var piece_id = $(this).attr('id').split('_')[2];
 
+
     if ($(this).hasClass('selected')){
       $(this).removeClass('selected');
       $('.list-content #document_'+ piece_id).closest('.box').removeClass('selected');
@@ -156,6 +157,12 @@ function bind_all_events(){
     
     $("#PdfViewerDialog .modal-body .view-content iframe.src-piece").attr("src", url);
     $("#PdfViewerDialog").modal('show');
+  });
+
+  $(".content-list-pieces-deleted .restore").unbind('click').bind('click', function(){ 
+    var piece_id = $(this).attr('data-piece-id');
+
+    alert('TODO');
   });
 }
 

@@ -88,7 +88,7 @@ class ApplicationJS {
     if(is_present.length > 0){
       $('#idocus_notifications_messages .notice-internal-success').html(html);
 
-      $('#idocus_notifications_messages .notice-internal-success').show('');
+      $('#idocus_notifications_messages .notice-internal-success').slideDown('fast');
       setTimeout(function(){$('.notice-internal-success').fadeOut('');}, 5000);
     }
   }
@@ -104,7 +104,7 @@ class ApplicationJS {
     if(html)
     {
       $('#idocus_notifications_messages .notice-internal-error').html(html);
-      $('#idocus_notifications_messages .notice-internal-error').show('');
+      $('#idocus_notifications_messages .notice-internal-error').slideDown('fast');
       setTimeout(function(){$('#idocus_notifications_messages .notice-internal-error').fadeOut('');}, 10000);
     }
   }

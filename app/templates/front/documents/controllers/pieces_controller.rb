@@ -22,12 +22,14 @@ class Documents::PiecesController < FrontController
     #_options[:piece_created_at] = params[:by_piece].try(:[], :created_at)
     #_options[:piece_created_at_operation] = params[:by_piece].try(:[], :created_at_operation)
 
+    @pieces_deleted = Pack::Piece.unscoped.where(pack_id: params[:id]).deleted.presence || []
+
     @pieces = @pack.pieces.search(params[:text], _options).distinct.order(created_at: :desc).page(_options[:page]).per(_options[:per_page])
   end
 
   def delete
     pieces_ids  = Array(params[:ids] || [])
-    pieces_ids  = [] #FOR test
+    # pieces_ids  = [] #FOR test
     pack        = nil
 
     pieces_ids.each do |piece_id|
@@ -62,6 +64,39 @@ class Documents::PiecesController < FrontController
     end
 
     pack.delay.try(:recreate_original_document) if pack
+
+    render json: { success: true }, status: 200
+  end
+
+  def restore_piece
+    piece = Pack::Piece.unscoped.find params[:piece_id]
+
+    piece.delete_at = nil
+    piece.delete_by = nil
+
+    piece.save
+
+    temp_document = piece.temp_document
+
+    parents_documents = temp_document.parents_documents
+
+    temp_document.original_fingerprint = DocumentTools.checksum(temp_document.cloud_content_object.path)
+    temp_document.save
+
+    if parents_documents.any?
+      parents_documents.each do |parent_document|
+        parent_document.original_fingerprint = DocumentTools.checksum(parent_document.cloud_content_object.path)
+        parent_document.save
+      end
+    end
+
+    pack = piece.pack
+
+    pack.delay.try(:recreate_original_document)
+
+    temp_pack = TempPack.find_by_name(pack.name)
+
+    piece.waiting_pre_assignment if temp_pack.is_compta_processable? && piece.preseizures.size == 0 && piece.temp_document.try(:api_name) != 'invoice_auto' && !piece.pre_assignment_waiting_analytics?
 
     render json: { success: true }, status: 200
   end

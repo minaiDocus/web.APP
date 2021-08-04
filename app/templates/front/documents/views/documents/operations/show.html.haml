@@ -39,7 +39,7 @@
           - _preseizures.each do |preseizure|
             = render partial: 'operation_box', locals: { preseizure: preseizure }
     - else
-      .no-data-found.box= t('global.no-data-found')
+      .no-data-found.grey-label.semibold.box= t('global.no-data-found')
 
 
 = render file: Rails.root.join('app/templates/front/documents/views/documents/_dialog_box.html.haml')

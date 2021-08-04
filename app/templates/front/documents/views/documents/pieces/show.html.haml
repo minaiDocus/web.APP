@@ -11,6 +11,14 @@
       %h3.bold.mt-2
         %span.me-2= @pack.name.gsub('all', '')
         %span.badge.badge-secondary.regular.datas_size= @pieces.total_count
+        %span.badge.badge-danger.semibold.deleted-piece-count
+          = @pieces_deleted.count.to_s + " pièce(s) supprimée(s)"
+          .content-list-pieces-deleted.text-start.regular.hide
+            %ul
+              - @pieces_deleted.each do |piece_deleted|
+                %li.pointer{"data-content" => html_piece_view(piece_deleted), id: piece_deleted.id}
+                  %span #{piece_deleted.name} supprimée le #{piece_deleted.delete_at.try(:to_date)} par #{piece_deleted.delete_by}
+                  %span.float-end.restore{ data: {"piece-id": piece_deleted.id}} Restaurer
     .col-md-3   
       .search-content
         .row.no-margin
@@ -42,7 +50,7 @@
     - if @pieces.size > 0
       = render partial: 'piece_box'
     - else
-      .no-data-found.box= t('global.no-data-found')
+      .no-data-found.grey-label.semibold.box= t('global.no-data-found')
 
 = render partial: 'document_dialog'
 = render file: Rails.root.join('app/templates/front/documents/views/documents/preseizures/_preseizures_dialog.html.haml')

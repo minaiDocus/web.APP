@@ -38,12 +38,12 @@
     %label.red-label.float-end.semibold{class: "#{irregular_debit_credit_somme ? '' : 'hide' }"}
       balance non équilibrée
     .preseizures.content-table
-      %table.table.entries{data: { preseizure_id: preseizure.id }}
+      %table.table.entries.mb-0{data: { preseizure_id: preseizure.id }}
         %thead
-          %th.no-border N° de compte
-          %th.no-border.text-center Débit
-          %th.no-border.text-center Crédit
-        %tbody
+          %th.no-border.table-three-column N° de compte
+          %th.no-border.table-three-column Débit
+          %th.no-border.table-three-column Crédit
+        %tbody.semibold
           - entries.each_with_index do |entry, index|
             %tr{ class: (index % 2 == 0)? '' : 'striped' }
               %td.account
@@ -54,7 +54,7 @@
                     %input.edit_account_number.margin0{type: :text, placeholder: entry.account.number , value: entry.account.number}
                     .suggestion_account_list.hide
               %input.account_id_hidden{type: :hidden, value: entry.account.id}
-              %td.entry.text-center{title: "#{(@user.has_collaborator_action? && entry.type == 1) ? 'Cliquez pour modifier' : ''}", class: "#{irregular_debit_credit_somme ? 'color_red' : '' }"}
+              %td.entry{title: "#{(@user.has_collaborator_action? && entry.type == 1) ? 'Cliquez pour modifier' : ''}", class: "#{irregular_debit_credit_somme ? 'color_red' : '' }"}
                 - if entry.type == 1
                   .content_amount
                     .content_amount_number
@@ -66,8 +66,10 @@
                     .edit_amount.hide
                       %input.margin0{type: :text, placeholder: entry.amount, value: entry.amount}
                       %input.entry_type{type: :hidden, value: entry.type}
+                - else
+                  &#45;
+              %td.entry{title: "#{(@user.has_collaborator_action? && entry.type == 2) ? 'Cliquez pour modifier' : ''}", class: "#{irregular_debit_credit_somme ? 'color_red' : '' }"}
 
-              %td.entry.text-center{title: "#{(@user.has_collaborator_action? && entry.type == 2) ? 'Cliquez pour modifier' : ''}", class: "#{irregular_debit_credit_somme ? 'color_red' : '' }"}
                 - if entry.type == 2
                   .content_amount
                     - if @user.has_collaborator_action?
@@ -78,6 +80,8 @@
                     .edit_amount.hide
                       %input.margin0{type: :text, placeholder: entry.amount, value: entry.amount}
                       %input.entry_type{type: :hidden, value: entry.type}
+                - else
+                  &#45;
               - if @user.has_collaborator_action?
                 %input.entry_id_hidden{type: :hidden, value: entry.id}
   - if 1 == 0
@@ -137,7 +141,7 @@
 
   .col-md-3.text-end.p-0
     - if piece
-      %span.ms-2.delete_piece{title: 'Supprimer la pièce', data: {id: piece.id}}= glyphicon('trash', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+      %span.ms-2.delete_piece{title: 'Supprimer la pièce', data: {id: piece.id}}= glyphicon('trash', { size: '20', color:'#FF4848'})
       %span.ms-2.update_tags{title: 'Taguer la pièce', data: {id: piece.id, type: 'piece'}}= glyphicon('tag', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
     %span.ms-2.preseizures_export{title: 'Export écriture comptable', data:{ id: preseizure.id, type: 'preseizure' }}= glyphicon('cloud-download', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
     %span.ms-2.edit_preseizures{title: 'Edition écriture comptable', data:{ id: preseizure.id }}= glyphicon('pencil', { size: '20', color:'rgba(26, 26, 26, 0.32);', style: 'transform: rotate(90deg)'})
