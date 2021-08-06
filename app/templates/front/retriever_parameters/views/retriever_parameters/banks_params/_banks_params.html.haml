@@ -9,7 +9,7 @@
 
 .row
   .col-md-12
-    %table.table.table-striped.table_integration
+    %table.table.table-striped.banks_params_list
       %thead
         %th Banque
         %th Nom
@@ -32,13 +32,19 @@
                 .action.sub-menu-bank-param
                   %span= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
                   .sub_menu.text-start.hide
-                    %ul.no-margin.no-padding.regular                      
-                      %li.edit
-                        %span.me-1= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                        %span Editer                        
-                      %li.delete.red-label
-                        %span.me-1= glyphicon('trash', { size: '15', color: "#FF4848" })
-                        %span Supprimer
+                    %ul.no-margin.no-padding.regular
+                      - if not bank_account.is_to_be_disabled?           
+                        %li.edit{ data: { id: bank_account.id } }
+                          %span.me-1= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
+                          %span Editer
+                      - if bank_account.can_be_deleted?
+                        %li.activation{ data: { id: bank_account.id, type: 'disable' } }
+                          %span.red-label.me-1= glyphicon('trash', { size: '15', color: "#FF4848" })
+                          %span Supprimer
+                      - elsif bank_account.can_be_reopened?
+                        %li.activation{ data: { id: bank_account.id, type: 'enable' } }
+                          %span.me-1= glyphicon('check', { size: '15', color: "#72AA42" })
+                          %span Activer
         - else
           %tr
             %td{colspan: 7}= t('global.no-data-found')

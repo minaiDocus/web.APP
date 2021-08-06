@@ -20,6 +20,30 @@ class RetrieverParameters::DocumentsSelectionController < RetrieverController
     render partial: 'documents_selection', locals: { documents: @documents }
   end
 
+  def integrate
+    documents = @account.temp_documents.where(id: params[:document_ids] || [])
+
+    if documents.count == 0
+      message = 'Aucun document sélectionné.'
+    else
+      documents.map(&:retriever).compact.uniq.each do |retriever|
+        retriever.ready if retriever.waiting_selection?
+      end
+
+      documents.each do |document|
+        document.ready if document.wait_selection?
+      end
+
+      if documents.count > 1
+        message = "Les #{documents.count} documents sélectionnés seront intégrés."
+      else
+        message = 'Le document sélectionné sera intégré.'
+      end
+    end
+    
+    render json: { message: message }, status: 200
+  end
+
   private
 
   def sort_column

@@ -16,9 +16,7 @@ function bind_all_events(){
 
   $('.create-manual-bank-account').unbind('click')
   $(".create-manual-bank-account").bind('click',function(e) {
-    e.stopPropagation()
-
-    $('#create-bank-account').modal('show');
+    AppEmit('retriever_bank_edition', { id: 0 });
   });
 
   $('.retriever-filter-others').unbind('click')
@@ -26,13 +24,6 @@ function bind_all_events(){
     e.stopPropagation()
 
     $('#filter-'+ $(".tab-pane.active").attr('id')).modal('show');
-  });
-
-  $('.sub-menu-bank-param li.edit').unbind('click');
-  $(".sub-menu-bank-param li.edit").bind('click',function(e) {
-    e.stopPropagation()
-
-    $('#edit-bank-account').modal('show');
   });
 
   $('span.chevron-show').unbind('click');
@@ -50,13 +41,23 @@ function bind_all_events(){
     }
   });
 
-  $('.modal#filter-banks-selection button.validate').unbind().bind('click', (e)=>{ AppEmit('retriever_parameters_filter_page', { target: 'banks-selection', action: 'validate'}); });
-  $('.modal#filter-documents-selection button.validate').unbind().bind('click', (e)=>{ AppEmit('retriever_parameters_filter_page', { target: 'documents-selection', action: 'validate'}); });
-  $('.modal#filter-banks-params button.validate').unbind().bind('click', (e)=>{ AppEmit('retriever_parameters_filter_page', { target: 'banks-params', action: 'validate'}); });
+  $('table.banks_params_list tbody td .action .activation').unbind('click').bind('click', function(e){
+    AppEmit('retriever_bank_activation', { id: $(this).data('id'), type: $(this).data('type') });
+  });
 
-  $('.modal#filter-banks-selection button.cancel').unbind().bind('click', (e)=>{ AppEmit('retriever_parameters_filter_page', { target: 'banks-selection', action: 'reset'}); });
-  $('.modal#filter-documents-selection button.cancel').unbind().bind('click', (e)=>{ AppEmit('retriever_parameters_filter_page', { target: 'documents-selection', action: 'reset'}); });
-  $('.modal#filter-banks-params button.cancel').unbind().bind('click', (e)=>{ AppEmit('retriever_parameters_filter_page', { target: 'banks-params', action: 'reset'}); });
+  $('table.banks_params_list tbody td .action .edit').unbind('click').bind('click', function(e){
+    AppEmit('retriever_bank_edition', { id: $(this).data('id') });
+  });
+
+  $('#integrate_documents').unbind('click').bind('click', (e)=>{ AppEmit('retriever_integrate_documents'); });
+
+  $('.modal#filter-banks-selection button.validate').unbind('click').bind('click', (e)=>{ AppEmit('retriever_parameters_filter_page', { target: 'banks-selection', action: 'validate'}); });
+  $('.modal#filter-documents-selection button.validate').unbind('click').bind('click', (e)=>{ AppEmit('retriever_parameters_filter_page', { target: 'documents-selection', action: 'validate'}); });
+  $('.modal#filter-banks-params button.validate').unbind('click').bind('click', (e)=>{ AppEmit('retriever_parameters_filter_page', { target: 'banks-params', action: 'validate'}); });
+
+  $('.modal#filter-banks-selection button.cancel').unbind('click').bind('click', (e)=>{ AppEmit('retriever_parameters_filter_page', { target: 'banks-selection', action: 'reset'}); });
+  $('.modal#filter-documents-selection button.cancel').unbind('click').bind('click', (e)=>{ AppEmit('retriever_parameters_filter_page', { target: 'documents-selection', action: 'reset'}); });
+  $('.modal#filter-banks-params button.cancel').unbind('click').bind('click', (e)=>{ AppEmit('retriever_parameters_filter_page', { target: 'banks-params', action: 'reset'}); });
 
 }
 

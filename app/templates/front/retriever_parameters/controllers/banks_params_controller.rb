@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class RetrieverParameters::BanksParamsController < RetrieverController
   before_action :verif_account
+  before_action :load_bank_account, only: %w[edit update bank_activation]
   append_view_path('app/templates/front/retriever_parameters/views')
 
   def index
@@ -19,7 +20,108 @@ class RetrieverParameters::BanksParamsController < RetrieverController
     render partial: 'banks_params', locals: { bank_accounts: @bank_accounts }
   end
 
+  def new
+    @bank_account = BankAccount.new
+    render partial: 'new'
+  end
+
+  def create
+    @bank_account = BankAccount.create(bank_account_params)
+
+    if @bank_account.persisted?
+      success = true
+      message = 'Créé avec succès.'
+    else
+      _error_messages = @bank_account.errors.messages
+      html_ul_content = "Erreur lors de la création du compte bancaire : <ul>"
+      _error_messages.each {|key, value| html_ul_content += "<li>#{key} : #{value.join(', ')}</li>"}
+      html_ul_content += "</ul>"
+
+      success = false
+      message = html_ul_content.html_safe
+    end
+
+    render json: { success: success, message: message }, status: 200
+  end
+
+
+  def edit
+    render partial: 'edit'
+  end
+
+  def update
+    @bank_account.assign_attributes(bank_setting_params)
+    changes = @bank_account.changes.dup
+    @bank_account.is_for_pre_assignment = true
+    start_date_changed = @bank_account.start_date_changed?
+
+    if @bank_account.save
+      if start_date_changed && @bank_account.start_date.present?
+        @bank_account.operations.not_duplicated.where('is_locked = ? and is_coming = ? and date >= ?', true, false, @bank_account.start_date).update_all(is_locked: false)
+      end
+
+      PreAssignment::UpdateAccountNumbers.delay.execute(@bank_account.id.to_s, changes)
+      success = true
+      message = "Modifié avec succès."
+    else
+      _error_messages = @bank_account.errors.messages
+      html_ul_content = "Erreur lors de l'édition du compte bancaire : <ul>"
+      _error_messages.each {|key, value| html_ul_content += "<li>#{key} : #{value.join(', ')}</li>"}
+      html_ul_content += "</ul>"
+
+      success = false
+      message = html_ul_content.html_safe
+    end
+
+    render json: { success: success, message: message.to_s }, status: 200
+  end
+
+  def bank_activation
+    @bank_account.update(is_to_be_disabled: (params[:type] == 'disable'))
+
+    if params[:type] == 'disable'
+      message = "sera désactivé le mois prochain."
+    else
+      message = "est maintenant actif."
+    end
+
+    if @bank_account.save
+      render json: { success: true, message: "Compte bancaire : #{@bank_account.number} #{message}" }, status: 200
+    else
+      render json: { success: false, message: "Impossible de supprimer le compte bancaire : #{@bank_account.number}" }, status: 200
+    end
+  end
+
   private
+
+  def bank_setting_params
+    params.require(:bank_account).permit(:number, :journal, :currency, :accounting_number, :foreign_journal, :temporary_account, :start_date, :lock_old_operation, :permitted_late_days, :ebics_enabled_starting)
+  end
+
+  def bank_account_params
+    params.require(:bank_account).permit(
+      :user_id,
+      :bank_name,
+      :is_used,
+      :name,
+      :type_name,
+      :number,
+      :journal,
+      :currency,
+      :foreign_journal,
+      :accounting_number,
+      :temporary_account,
+      :start_date,
+      :lock_old_operation,
+      :permitted_late_days,
+      :api_name,
+      :ebics_enabled_starting,
+      :original_currency => [:id, :symbol, :prefix, :crypto, :precision, :marketcap, :datetime, :name])
+  end
+
+  def load_bank_account
+    @bank_account = @account.bank_accounts.find(params[:id])
+  end
 
   def search_by(field)
     params[:bank_account_contains].try(:[], field)

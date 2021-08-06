@@ -18,7 +18,7 @@
             %tr
               %td.text-center
                 .form-check
-                  %input.form-check-input.pointer.float-none.check-bank-account{ type: :checkbox, value: "" }
+                  %input.selected_document.form-check-input.pointer.float-none.check-bank-account{ type: :checkbox, data: { value: document.id } }
               %td= l(document.created_at)
               %td
                 - if document.retriever.nil?
@@ -36,4 +36,4 @@
           
   .form-group.no-margin
     .w-100.text-end            
-      %button.btn.btn-primary.bold Intégrer les documents séléctionnés
+      %button#integrate_documents.btn.btn-primary.bold Intégrer les documents séléctionnés
