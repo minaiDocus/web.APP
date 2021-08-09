@@ -30,7 +30,7 @@ class Customer{
     this.get_subscription_edit_view();
     this.get_accounting_plan_view();
     this.filter_customer();
-    this.check_software();
+    this.set_ckeck_box_state();
 
     this.get_customer_edit_view();
 
@@ -40,9 +40,217 @@ class Customer{
 
     this.show_ibiza_customer();
 
+    if ($('#personalize_subscription_package_form').length > 0 ) {
+      this.check_input_number();
+      this.update_price()
+      this.show_subscription_option();
+    }
+
     this.hide_sub_menu();
   }
 
+
+  check_input_number(){
+    let self = this;
+
+    $('#personalize_subscription_package_form .subscription_number_of_journals .special_input').focus();
+
+    $('#personalize_subscription_package_form .subscription_number_of_journals .special_input').unbind('click').bind('click', function(e) {
+      e.stopPropagation();
+      self.update_price();
+    })
+
+    $('#personalize_subscription_package_form .subscription_number_of_journals .special_input').unbind('keypress').bind('keypress', function(e) { 
+      e.preventDefault();
+      e.stopPropagation();
+    });
+  }
+
+
+  update_price() {
+    let prices_list = JSON.parse($('#subscription_packages_price').val());
+    let selected_options = [];
+    let price = 0;
+    let options = [];
+
+    if ($('#subscription_subscription_option_ido_x').is(':checked')) {
+      options.push('ido_x');
+    }
+    if ($('#subscription_subscription_option_ido_nano').is(':checked')) {
+      options.push('ido_nano');
+    }
+    if ($('#subscription_subscription_option_ido_micro').is(':checked')) {
+      options.push('ido_micro');
+    }
+    if ($('#subscription_subscription_option_ido_mini').is(':checked')) {
+      options.push('ido_mini', 'signing_piece', 'pre_assignment_option');
+    }
+    if ($('#subscription_subscription_option_ido_classique').is(':checked')) {
+      options.push('ido_classique', 'signing_piece', 'pre_assignment_option');
+    }
+    if ($('.active_option#subscription_mail_option').is(':checked')) {
+      options.push('mail_option');
+    }
+    if ($('.active_option#subscription_digitize_option').is(':checked') || $('#subscription_subscription_option_digitize_option').is(':checked')) {
+      options.push('digitize_option');
+    }
+    if ($('.active_option#subscription_retriever_option').is(':checked')) {
+      if ($('.active_option#subscription_retriever_option').data('retriever-price-option') === 'reduced_retriever') {
+        options.push('retriever_option_reduced');
+      } else {
+        options.push('retriever_option');
+      }
+    }
+    if ($('#subscription_subscription_option_retriever_option').is(':checked')) {
+      if ($('#subscription_subscription_option_retriever_option').data('retriever-price-option') === 'reduced_retriever') {
+        options.push('retriever_option_reduced');
+      } else {
+        options.push('retriever_option');
+      }
+    }
+    for (let i = 0; i < options.length; i++) {
+      let option = options[i];
+      if (option === 'pre_assignment_option') {
+        if ($('#subscription_is_pre_assignment_active').is(':checked')) {
+          selected_options.push('pre_assignment_option');
+        }
+      } else {
+        selected_options.push(option);
+      }
+    }
+    if (options.length > 0) {
+      let number_of_journals = parseInt($('input[name="subscription[number_of_journals]"]').val());
+      if (number_of_journals > 5) {
+        price += number_of_journals - 5;
+      }
+    }
+    for (let j = 0; j < selected_options.length; j++) {
+      let option = selected_options[j];
+      price += prices_list[option];
+    }
+    
+    $('.total_price').html(price + ",00€ HT");
+  }
+
+
+  clone_subscription_option(class_list, email_option, retriever_option, digitization_option){
+    if (retriever_option.length > 0 ) {
+      retriever_option.html($('.input-retriever-option').html());
+
+      if (retriever_option.closest('.retriever-option').data('active')) {
+        retriever_option.find('.option_checkbox').addClass('active_option');
+      }
+      if (retriever_option.closest('.retriever-option').data('notify')) {
+        retriever_option.find('.form-check-inline').addClass('notify-warning');
+      }
+
+      retriever_option.find('.option_checkbox').attr({
+        'checked': retriever_option.closest('.retriever-option').data('active'),
+        // 'disabled': retriever_option.closest('.retriever-option').data('disabled')
+      });
+    }
+    if (email_option.length > 0) {
+      email_option.html($('.input-mail-option').html());
+
+      if (email_option.closest('.mail-option').data('active')) {
+        email_option.find('.option_checkbox').addClass('active_option');
+      }
+      if (email_option.closest('.mail-option').data('notify')) {
+        email_option.find('.form-check-inline').addClass('notify-warning');
+      }
+
+      email_option.find('.option_checkbox').attr({
+        'checked': email_option.closest('.mail-option').data('active'),
+        // 'disabled': email_option.closest('.mail-option').data('disabled')
+      });
+    }
+    if (digitization_option.length > 0 ) {
+      digitization_option.html($('.input-retriever-option').html());
+
+      if (digitization_option.closest('.retriever-option').data('active')) {
+        digitization_option.find('.option_checkbox').addClass('active_option');
+      }
+      if (digitization_option.closest('.retriever-option').data('notify')) {
+        digitization_option.find('.form-check-inline').addClass('notify-warning');
+      }
+
+      digitization_option.find('.option_checkbox').attr({
+        'checked': digitization_option.closest('.retriever-option').data('active'),
+        // 'disabled': digitization_option.closest('.retriever-option').data('disabled')
+      });
+    }
+
+    if (class_list.indexOf("ido_x") > -1) {
+      $('input.ido_x_option').removeAttr('disabled');
+    }
+
+    if (class_list.indexOf("ido_nano") > -1) {
+      email_option.find('.option_checkbox').addClass('ido_nano_option');
+      digitization_option.find('.option_checkbox').addClass('ido_nano_option');
+    }
+
+    if (class_list.indexOf("ido_micro") > -1) {
+      email_option.find('.option_checkbox').addClass('ido_micro_option');
+      digitization_option.find('.option_checkbox').addClass('ido_micro_option');
+    }
+
+    if (class_list.indexOf("ido_classique") > -1) {
+      email_option.find('.option_checkbox').addClass('ido_classique_option');
+      retriever_option.find('.option_checkbox').addClass('ido_classique_option');
+      digitization_option.find('.option_checkbox').addClass('ido_classique_option');
+    }
+  }
+
+
+  check_subscription_option(){
+
+  }
+
+
+  show_subscription_option(){
+    let self = this;
+    let class_list = [];
+    let email_option = null;
+    let retriever_option = null;
+    let digitization_option = null;
+
+    $('.radio-button').unbind('click').bind('click', function(e){
+      e.stopPropagation();
+
+      email_option = $(this).parents().eq(4).find('.mail-option');
+      retriever_option = $(this).parents().eq(4).find('.retriever-option');
+      digitization_option = $(this).parents().eq(4).find('.digitization-option');
+
+      $('#personalize_subscription_package_form .package-options').addClass('hide');
+
+      $(this).parents().eq(4).find('.package-options').removeClass('hide');
+      $(this).parents().eq(4).find('.journal-numbers').html($('.input-journal-numbers').html());
+
+      class_list = $(this).attr('class').split(/\s+/);
+
+      self.clone_subscription_option(class_list, email_option, retriever_option, digitization_option)
+      self.set_ckeck_box_state();
+      
+      self.check_input_number();
+      self.update_price();
+    });
+
+    if ($('#personalize_subscription_package_form input[type="radio"].radio-button').is(':checked')) {
+      let current_active = $('#personalize_subscription_package_form input[type="radio"].radio-button:checked');
+      class_list = current_active.attr('class').split(/\s+/);
+      current_active.parents().eq(4).find('.package-options').removeClass('hide');
+
+      current_active.parents().eq(4).find('.journal-numbers').html($('.input-journal-numbers').html());
+      
+      email_option = current_active.parents().eq(4).find('.package-options .mail-option');
+      retriever_option = current_active.parents().eq(4).find('.package-options .retriever-option');
+      digitization_option = current_active.parents().eq(4).find('.package-options .digitization-option');
+      self.clone_subscription_option(class_list, email_option, retriever_option, digitization_option)
+
+      self.check_input_number();
+      self.update_price();
+    }
+  }
 
 
   get_customer_edit_view(){
@@ -119,19 +327,52 @@ class Customer{
 
 
   set_ckeck_box_state(){
+    let class_list = [];
+    let self = this;
+
     $('.input-toggle').change(function() {
+      class_list = $(this).attr('class').split(/\s+/);
+
       if ($(this).is(':checked')){
-        $(this).parent().find('label').text('Oui');
-        $(this).attr('value', true);
         $(this).attr('checked', true);
+
+        if (class_list.indexOf("ido-custom-checkbox") > -1) { $(this).parents().eq(3).find('label.ido-custom-label').text('Oui'); }
+        else { $(this).parent().find('label').text('Oui'); }
+
+        if (class_list.indexOf("check-software") > -1) { $(this).attr('value', 1); }
+        else { $(this).attr('value', true); }
+
+        if (class_list.indexOf("option_checkbox") > -1) { $(this).addClass('active_option'); }
+
       }
       else {
-        $(this).parent().find('label').text('Non');
-        $(this).attr('value', false);
         $(this).attr('checked', false);
-        // $(this).removeAttr("checked");
-      }        
+
+        if (class_list.indexOf("ido-custom-checkbox") > -1) { $(this).parents().eq(3).find('label.ido-custom-label').text('Non'); }
+        else { $(this).parent().find('label').text('Non'); }
+
+        if (class_list.indexOf("check-software") > -1) { $(this).attr('value', 0); }
+        else { $(this).attr('value', false); }
+
+        if (class_list.indexOf("option_checkbox") > -1) { $(this).removeClass('active_option'); }
+      }
+
+      self.check_input_number();
+      self.update_price();        
     });
+
+
+    if ($('.input-toggle').is(':checked')) {
+      let selected = $('.input-toggle:checked');
+
+      class_list = selected.attr('class').split(/\s+/);
+
+      if (class_list.indexOf("ido-custom-checkbox") > -1) {
+        selected = $('.ido-custom-checkbox.input-toggle:checked');
+        selected.parents().eq(3).find('label.ido-custom-label').text('Oui');
+      }
+      else { selected.parent().find('label').text('Oui'); }
+    }
   }
 
 
@@ -199,21 +440,6 @@ class Customer{
   }
 
 
-  check_software(){
-    $('.check-software').change(function() {
-      if ($(this).is(':checked')){
-        $(this).parent().find('label').text('Oui');
-        $(this).attr('value', 1);
-        $(this).attr('checked', true);
-      }
-      else {
-        $(this).parent().find('label').text('Non');
-        $(this).attr('value', 0);
-        $(this).attr('checked', false);
-      }        
-    });
-  }
-
 
   set_pre_assignment_view(){
     var self = this;
@@ -224,6 +450,12 @@ class Customer{
       self.do_submit_customer();
 
       self.set_ckeck_box_state();
+
+      if ($('#personalize_subscription_package_form').length > 0 ) {
+        self.check_input_number();
+        self.show_subscription_option();
+        self.set_ckeck_box_state();
+      }
     });
   }
 
