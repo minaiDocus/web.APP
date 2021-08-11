@@ -23,7 +23,7 @@
             - @journals.each do |journal|
               %tr
                 %td.check_box= check_box_tag 'journal_ids[]', journal.id, false, id: "journals_ids_#{journal.id}"
-                %td.aligncenter= label_tag "journals_ids_#{journal.id}", journal.is_default ? icon_ok : ''
+                %td.aligncenter= label_tag "journals_ids_#{journal.id}", journal.is_default ? icon_ok({ size: '15', color: 'rgba(26, 26, 26, 0.7);'}) : ''
                 %td= label_tag "journals_ids_#{journal.id}", journal.name
                 %td= label_tag "journals_ids_#{journal.id}", journal.description
                 %td= label_tag "journals_ids_#{journal.id}", t("activerecord.models.account_book_type.attributes.entry_type_#{journal.entry_type}")

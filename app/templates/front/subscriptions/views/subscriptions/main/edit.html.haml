@@ -3,16 +3,6 @@
 #subscriptions.edit
   = form_tag organization_customer_subscription_path(@organization, @customer), method: :patch, class: 'simple_form form form-horizontal margin0', :data => {:"is_recently_created" => @customer.recently_created? } do
     .box
-      .w-100.text-center
-        - if @customer.configured?
-          %h5
-            Edition de l'abonnement du client :
-            = link_to @customer, organization_customer_path(@organization, @customer, tab: 'subscription-tab'), class: 'fs-origin'
-        - else
-          %h5
-            Sélection forfait(s)/option(s) pour le dossier :
-            %span.text-info.fs-origin= @customer
-      / = render 'customers/main/subscription_options'
       = render file: Rails.root.join('app/templates/front/customers/views/customers/main/_subscription_options.html.haml')
 
       .form-group.no-margin
@@ -20,4 +10,5 @@
           = link_to 'Annuler', organization_customer_path(@organization, @customer, tab: 'subscription-tab'), class: 'btn btn-light semibold'
           = submit_tag "Valider les modifications", class: 'btn btn-primary bold'
 
-= javascript_include_tag 'front/subscriptions/assets/javascripts/main'
+  = javascript_include_tag 'front/customers/assets/javascripts/main'
+/ = javascript_include_tag 'front/subscriptions/assets/javascripts/main'

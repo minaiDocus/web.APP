@@ -42,8 +42,9 @@ class Customer{
 
     if ($('#personalize_subscription_package_form').length > 0 ) {
       this.check_input_number();
-      this.update_price()
       this.show_subscription_option();
+
+      this.update_price()
     }
 
     this.hide_sub_menu();
@@ -55,16 +56,24 @@ class Customer{
 
     $('#personalize_subscription_package_form .subscription_number_of_journals .special_input').focus();
 
-    $('#personalize_subscription_package_form .subscription_number_of_journals .special_input').unbind('click').bind('click', function(e) {
+    $('#personalize_subscription_package_form .subscription_number_of_journals .special_input').bind('click', function(e) {
       e.stopPropagation();
       self.update_price();
     })
 
-    $('#personalize_subscription_package_form .subscription_number_of_journals .special_input').unbind('keypress').bind('keypress', function(e) { 
+    $('.subscription_number_of_journals input[type="number"].special_input').unbind('keyup keydown change').bind('keyup keydown change', function(e) {
+      e.stopPropagation();
+      self.update_price();
+    });
+
+    $('#personalize_subscription_package_form .subscription_number_of_journals .special_input').bind('keypress', function(e) { 
       e.preventDefault();
       e.stopPropagation();
     });
   }
+
+
+
 
 
   update_price() {
@@ -108,14 +117,13 @@ class Customer{
         options.push('retriever_option');
       }
     }
-    for (let i = 0; i < options.length; i++) {
-      let option = options[i];
-      if (option === 'pre_assignment_option') {
+    for (let o in options) {
+      if (options[o] === 'pre_assignment_option') {
         if ($('#subscription_is_pre_assignment_active').is(':checked')) {
           selected_options.push('pre_assignment_option');
         }
       } else {
-        selected_options.push(option);
+        selected_options.push(options[o]);
       }
     }
     if (options.length > 0) {
@@ -124,9 +132,8 @@ class Customer{
         price += number_of_journals - 5;
       }
     }
-    for (let j = 0; j < selected_options.length; j++) {
-      let option = selected_options[j];
-      price += prices_list[option];
+    for (let so in selected_options) {
+      price += prices_list[selected_options[so]];
     }
     
     $('.total_price').html(price + ",00€ HT");
@@ -145,8 +152,7 @@ class Customer{
       }
 
       retriever_option.find('.option_checkbox').attr({
-        'checked': retriever_option.closest('.retriever-option').data('active'),
-        // 'disabled': retriever_option.closest('.retriever-option').data('disabled')
+        'checked': retriever_option.closest('.retriever-option').data('active')
       });
     }
     if (email_option.length > 0) {
@@ -160,23 +166,21 @@ class Customer{
       }
 
       email_option.find('.option_checkbox').attr({
-        'checked': email_option.closest('.mail-option').data('active'),
-        // 'disabled': email_option.closest('.mail-option').data('disabled')
+        'checked': email_option.closest('.mail-option').data('active')
       });
     }
     if (digitization_option.length > 0 ) {
-      digitization_option.html($('.input-retriever-option').html());
+      digitization_option.html($('.input-digitization-option').html());
 
-      if (digitization_option.closest('.retriever-option').data('active')) {
+      if (digitization_option.closest('.digitization-option').data('active')) {
         digitization_option.find('.option_checkbox').addClass('active_option');
       }
-      if (digitization_option.closest('.retriever-option').data('notify')) {
+      if (digitization_option.closest('.digitization-option').data('notify')) {
         digitization_option.find('.form-check-inline').addClass('notify-warning');
       }
 
       digitization_option.find('.option_checkbox').attr({
-        'checked': digitization_option.closest('.retriever-option').data('active'),
-        // 'disabled': digitization_option.closest('.retriever-option').data('disabled')
+        'checked': digitization_option.closest('.digitization-option').data('active')
       });
     }
 
@@ -199,11 +203,11 @@ class Customer{
       retriever_option.find('.option_checkbox').addClass('ido_classique_option');
       digitization_option.find('.option_checkbox').addClass('ido_classique_option');
     }
-  }
 
 
-  check_subscription_option(){
-
+    this.set_ckeck_box_state();
+    this.check_input_number();
+    this.update_price();
   }
 
 
@@ -214,13 +218,17 @@ class Customer{
     let retriever_option = null;
     let digitization_option = null;
 
-    $('.radio-button').unbind('click').bind('click', function(e){
+    $('#personalize_subscription_package_form .radio-button').unbind('click').bind('click', function(e){
       e.stopPropagation();
 
       email_option = $(this).parents().eq(4).find('.mail-option');
       retriever_option = $(this).parents().eq(4).find('.retriever-option');
       digitization_option = $(this).parents().eq(4).find('.digitization-option');
 
+      $('#personalize_subscription_package_form .package-options .mail-option').html('');
+      $('#personalize_subscription_package_form .package-options .retriever-option').html('');
+      $('#personalize_subscription_package_form .package-options .digitization-option').html('');
+      $('#personalize_subscription_package_form .package-options .journal-numbers').html('');
       $('#personalize_subscription_package_form .package-options').addClass('hide');
 
       $(this).parents().eq(4).find('.package-options').removeClass('hide');
@@ -229,10 +237,6 @@ class Customer{
       class_list = $(this).attr('class').split(/\s+/);
 
       self.clone_subscription_option(class_list, email_option, retriever_option, digitization_option)
-      self.set_ckeck_box_state();
-      
-      self.check_input_number();
-      self.update_price();
     });
 
     if ($('#personalize_subscription_package_form input[type="radio"].radio-button').is(':checked')) {
@@ -246,9 +250,6 @@ class Customer{
       retriever_option = current_active.parents().eq(4).find('.package-options .retriever-option');
       digitization_option = current_active.parents().eq(4).find('.package-options .digitization-option');
       self.clone_subscription_option(class_list, email_option, retriever_option, digitization_option)
-
-      self.check_input_number();
-      self.update_price();
     }
   }
 
@@ -276,7 +277,7 @@ class Customer{
   get_subscription_edit_view(){
     let self = this;
     let customer_id = $('input:hidden[name="customer_id"]').val();
-    $('.tab-pane#subscription .subscription-edit').unbind('click').bind('click',function(e) {
+    $('#customer-content #subscription-tab').unbind('click').bind('click',function(e) {
       e.preventDefault();
       
       self.applicationJS.parseAjaxResponse({ 'url': '/organizations/' + self.organization_id + '/customers/' + customer_id + '/subscription/edit' }).then((element)=>{
@@ -301,11 +302,6 @@ class Customer{
         self.get_vat_accounts_view(customer_id);
       });
     });
-  }
-
-
-  get_external_file_storages(){
-    
   }
 
 
@@ -452,6 +448,7 @@ class Customer{
       self.set_ckeck_box_state();
 
       if ($('#personalize_subscription_package_form').length > 0 ) {
+        self.update_price();
         self.check_input_number();
         self.show_subscription_option();
         self.set_ckeck_box_state();
@@ -479,6 +476,17 @@ class Customer{
   }
 
 
+  select_journals(){
+    this.applicationJS.parseAjaxResponse({ 'url': '/organizations/' + this.organization_id + '/customers/' + $('input:hidden[name="customer_id"]').val() + '/journals/select' }).then((result)=>{
+      this.create_customer_modal.find('.accounting-plan-base-form .copy-select-journals').html($(result).find('#journals.select').html());
+      this.set_custom_remove_class('.next', 'do-submit');
+      this.set_custom_add_class('.next', 'load-journal-form');
+      this.create_customer_modal.find('.modal-footer .previous').attr('disabled','disabled');
+      $('#create-customer.modal.show .modal-title').text('Paramètrage: journaux comptables');
+    });
+  }
+
+
   set_custom_add_class(target, new_class){
     this.create_customer_modal.find(target).addClass(new_class);
   }
@@ -501,24 +509,14 @@ class Customer{
 
     this.applicationJS.parseAjaxResponse(params).then((result)=>{
       this.applicationJS.noticeFlashMessageFrom(null, 'Ajout avec succès');
-      // if(result.error.toString() == '')
-      // {
-      //   this.applicationJS.noticeFlashMessageFrom(null, 'Ajout avec succès');
-      // }
-      // else
-      // {
-      //   this.applicationJS.noticeInternalErrorFrom(null, result.error);
-      // }
 
-
-      this.create_customer_modal.find('.accounting-plan-base-form').html($(result).find('.accounting-plan-base-form').html());
-      this.set_custom_remove_class('.next', 'do-submit');
-      this.set_custom_add_class('.next', 'load-journal-form');
-      this.create_customer_modal.find('.modal-footer .previous').attr('disabled','disabled');
-      $('#create-customer.modal.show .modal-title').text('Paramètrage: journaux comptables');
+      this.create_customer_modal.find('.modal-content').html($(result).find('#book_type .modal-content').html());
+      $('select#copy-journals-into-customer').searchableOptionList({
+        'noneText': 'Selectionner un/des journaux',
+        'allText': 'Tous séléctionnés'
+      });
     });
   }
-
 
 
   active_deactive_previous() {
@@ -536,8 +534,6 @@ class Customer{
     let self = this;
     $('.do-next').unbind('click').bind('click',function(e) {
       e.stopPropagation();
-
-      console.log('LOAD');
 
       self.set_custom_remove_class('.next', 'do-next');
       self.set_custom_add_class('.next', 'do-submit');
@@ -558,8 +554,6 @@ class Customer{
     $('.previous.active').unbind('click').bind('click', function(e){ 
       e.stopPropagation();
 
-      console.log('DEACTIVE');
-
       self.set_custom_remove_class('.next', 'do-submit');
       self.set_custom_add_class('.next', 'do-next');
       self.create_customer_modal.find('.modal-title').text('Créer un nouveau client');
@@ -577,7 +571,7 @@ class Customer{
       self.set_custom_remove_class('.previous', 'active');
       self.set_custom_remove_class('.next', 'do-submit');
       self.active_deactive_previous();
-      // self.create();
+      self.create();
     });
   }
 

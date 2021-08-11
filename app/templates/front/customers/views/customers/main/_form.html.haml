@@ -138,64 +138,7 @@
           .carousel-item
             .accounting-plan-base-form
               / = render partial: 'customers/main/book_type'
-              .form-group
-                %table.table.table-striped
-                  %thead
-                    %th Nom journal comptable
-                    %th Code
-                    %th Par défaut ?
-                    %th Type de pré-saisie
-                    %th Type de compte
-                    %th Compte Tiers
-                    %th Compte de charge/produit
-                    %th.text-end Action
-                  %tbody
-                    %tr
-                      %td.semibold Achats
-                      %td AC
-                      %td Oui
-                      %td Achat
-                      %td Compte d’attente
-                      %td FREAFFECT
-                      %td 65899999
-                      %td.text-end.pointer
-                        .action.sub_edit_delete.list-collaborators
-                          %span.glyph= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
-                        .sub_menu.text-start.hide
-                          %ul.no-margin.no-padding.regular
-                            %li.edit
-                              %span= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                              &nbsp;Editer
-                            %li.delete.red-label
-                              %span= glyphicon('trash', { size: '15', color: "#FF4848" })
-                              &nbsp;Supprimer
-
-                    %tr
-                      %td.semibold Note de frais
-                      %td NDF
-                      %td Oui
-                      %td Aucun
-                      %td -
-                      %td -
-                      %td -
-                      %td.text-end.pointer
-                        .action.sub_edit_delete.list-collaborators
-                          %span.glyph= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
-                        .sub_menu.text-start.hide
-                          %ul.no-margin.no-padding.regular
-                            %li.edit
-                              %span= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                              &nbsp;Editer
-                            %li.delete.red-label
-                              %span= glyphicon('trash', { size: '15', color: "#FF4848" })
-                              &nbsp;Supprimer
-              .form-group
-                %label.semibold Ajouter un journal
-                %select.form-control#add-book-customer{ name: 'add-book-customer', multiple: true }              
-                  %option book 1
-                  %option book 2
-                  %option book 3
-                  %option book 4
+              loading Journal comptables ...
 
     .modal-footer
       .row.w-100.carousel-item-action
