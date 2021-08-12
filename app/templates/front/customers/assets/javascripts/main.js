@@ -73,9 +73,6 @@ class Customer{
   }
 
 
-
-
-
   update_price() {
     let prices_list = JSON.parse($('#subscription_packages_price').val());
     let selected_options = [];
@@ -335,7 +332,7 @@ class Customer{
         if (class_list.indexOf("ido-custom-checkbox") > -1) { $(this).parents().eq(3).find('label.ido-custom-label').text('Oui'); }
         else { $(this).parent().find('label').text('Oui'); }
 
-        if (class_list.indexOf("check-software") > -1) { $(this).attr('value', 1); }
+        if ((class_list.indexOf("check-software") > -1) || (class_list.indexOf("filter-customer") > -1)) { $(this).attr('value', 1); }
         else { $(this).attr('value', true); }
 
         if (class_list.indexOf("option_checkbox") > -1) { $(this).addClass('active_option'); }
@@ -347,7 +344,7 @@ class Customer{
         if (class_list.indexOf("ido-custom-checkbox") > -1) { $(this).parents().eq(3).find('label.ido-custom-label').text('Non'); }
         else { $(this).parent().find('label').text('Non'); }
 
-        if (class_list.indexOf("check-software") > -1) { $(this).attr('value', 0); }
+        if ((class_list.indexOf("check-software") > -1) || (class_list.indexOf("filter-customer") > -1)) { $(this).attr('value', 0); }
         else { $(this).attr('value', false); }
 
         if (class_list.indexOf("option_checkbox") > -1) { $(this).removeClass('active_option'); }
@@ -604,12 +601,22 @@ class Customer{
         'allText': 'Tous séléctionnés'
       });
 
-      $('#collaborator-filter').multiSelect({
-        'noneText': 'Selectionner un/des collaborateurs',
-        'allText': 'Tous séléctionnés'
-      });
-
       $('#customers-filter').modal('show');
+
+
+      $('#customers-filter .form-filter input.filter-field').unbind('keyup keydown change').bind('keyup keydown change', function(e) {
+        // e.stopPropagation();
+        let empty = false;
+
+        $('#customers-filter .form-filter input.filter-field').each(function() {
+          empty = $(this).val().length == 0;
+        });
+
+        if (empty)
+          $('.modal-footer .btn-filter').attr('disabled', 'disabled');
+        else
+          $('.modal-footer .btn-filter').attr('disabled', false);
+      });
     });
   }
 }

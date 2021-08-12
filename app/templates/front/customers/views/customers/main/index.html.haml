@@ -2,7 +2,7 @@
 
 .customers
   %input#organization_id{type: :hidden, value: @organization.id, name: 'organization_id'}
-  %input#customer_id{type: :hidden, value: @customers.last.id, name: 'customer_id'}
+  %input#customer_id{type: :hidden, value: @customers.last&.id, name: 'customer_id'}
   .list-customers.derivationRight
     .row
       .col-md-6
@@ -73,29 +73,49 @@
       .modal-header
         %h5.modal-title.bold Filtrer les clients
         %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
-      .modal-body
-        .form-group
-          %label.semibold Filtrer par groupe
-          %select.form-control#group-filter{ name: 'group-filter', multiple: true }              
-            %option{ value: 'grp-1'} Groupe 1
-            %option{ value: 'grp-2'} Groupe 2
+      = form_tag organization_customers_path(@organization), method: :get, class: 'form-filter' do
+        = hidden_field_tag :direction, sort_direction
+        = hidden_field_tag :sort, sort_column
+        = hidden_field_tag :per_page, per_page
+        = hidden_field_tag :with_details, params[:with_details] || true
+        .modal-body
+          .form-group
+            = label_tag 'user_contains[company]', t('activerecord.models.user.attributes.company'), class: 'col-form-label semibold'
+            .select-container.no-padding.w-100
+              = text_field_tag 'user_contains[company]', (params[:user_contains][:company] rescue ''), class: 'form-control filter-field'
+          .form-group
+            = label_tag 'user_contains[code]', t('activerecord.models.user.attributes.code'), class: 'col-form-label semibold'
+            .select-container.no-padding.w-100
+              = text_field_tag 'user_contains[code]', (params[:user_contains][:code] rescue ''), class: 'form-control filter-field'
+          .form-group
+            = label_tag 'user_contains[last_name]', t('activerecord.models.user.attributes.last_name'), class: 'col-form-label semibold'
+            .select-container.no-padding.w-100
+              = text_field_tag 'user_contains[last_name]', (params[:user_contains][:last_name] rescue ''), class: 'form-control filter-field'
+          .form-group
+            = label_tag 'user_contains[first_name]', t('activerecord.models.user.attributes.first_name'), class: 'col-form-label semibold'
+            .select-container.no-padding.w-100
+              = text_field_tag 'user_contains[first_name]', (params[:user_contains][:first_name] rescue ''), class: 'form-control filter-field'
+          .form-group
+            = label_tag 'user_contains[email]', t('activerecord.models.user.attributes.email'), class: 'col-form-label semibold'
+            .select-container.no-padding.w-100
+              = text_field_tag 'user_contains[email]', (params[:user_contains][:email] rescue ''), class: 'form-control filter-field'
+          .form-group
+            = label_tag 'group_ids[]', 'Filtrer par groupe', class: 'semibold'
+            = select_tag 'group_ids[]', options_from_collection_for_select(@user.groups.order(name: :asc), :id, :name, (params[:group_ids] rescue '')), include_blank: true, class: 'form-control form-select form-select-sm filter-field', id: 'group-filter', multiple: true
+          .form-group
+            = label_tag 'user_contains[collaborator_id]', 'Filtrer par collaborateur', class: 'semibold'
+            = select_tag 'user_contains[collaborator_id]', options_from_collection_for_select(@organization.collaborators.order(code: :asc), :id, :code, (params[:user_contains][:collaborator_id] rescue '')), include_blank: true, class: 'form-control form-select form-select-sm filter-field', id: 'collaborator-filter', multiple: false
 
-        .form-group
-          %label.semibold Filtrer par collaborateur
-          %select.form-control#collaborator-filter{ name: 'collaborator-filter', multiple: true }              
-            %option{ value: 'colab-1'} Collab 1
-            %option{ value: 'colab-2'} Collab 2
+          .form-group.row
+            .col-md-10
+              = label_tag 'user_contains[is_inactive]', t('activerecord.models.user.attributes.is_inactive'), class: 'semibold'
+            .col-md-2.form-check.form-switch
+              %label.form-check-label Non
+              = check_box_tag 'user_contains[is_inactive]', 0, (params[:user_contains][:is_inactive].present? && params[:user_contains][:is_inactive] == 1 rescue false), class: "form-check-input input-toggle filter-customer filter-field"
 
-        .form-group.row
-          .col-md-10
-            %label.semibold Dossier cloturé ?
-          .col-md-2.form-check.form-switch
-            %label.form-check-label Oui
-            %input.form-check-input{ type: :checkbox, checked: true }
-        
-      .modal-footer
-        %button.btn.btn-light.semibold.cancel{ type: :button } Annuler
-        %button.btn.btn-primary.semibold{ type: :button, disabled: true } Filtrer
+        .modal-footer
+          = link_to 'Annuler', organization_customers_path(@organization), class: 'btn btn-light semibold cancel'
+          = submit_tag t('filters.action'), class: 'btn btn-primary semibold btn-filter'
 
 .modal#create-customer
   .modal-dialog
