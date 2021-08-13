@@ -1,3 +1,5 @@
+= stylesheet_link_tag 'front/customers/assets/stylesheets/main'
+
 #addresses
   .row.derivationRight
     .col-md-12
@@ -18,3 +20,5 @@
               - if address
                 .col-md-4
                   = render partial: 'address', locals: { address: address, single: false }
+
+= javascript_include_tag 'front/customers/assets/javascripts/main'

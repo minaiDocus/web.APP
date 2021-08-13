@@ -1,10 +1,6 @@
+= stylesheet_link_tag 'front/customers/assets/stylesheets/main'
+
 #address.edit.derivationRight
-  .card
-    .card-header.clearfix
-      .float-left
-        %h3 
-          Edition d'adresse pour le client : 
-          = link_to @customer, organization_customer_path(@organization, @customer, tab: 'addresses'), class: 'fs-origin'
-      .float-right
-        = link_to 'Nouvelle adresse', new_organization_customer_address_path(@organization, @customer), class: 'btn btn-primary'
-    = render partial: 'form'
+  = render partial: 'form'
+
+= javascript_include_tag 'front/customers/assets/javascripts/main'

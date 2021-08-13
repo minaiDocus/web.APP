@@ -1,34 +1,77 @@
 = simple_form_for @address, url: customer_address_form_url(@organization, @customer, @address), html: { class: 'form form-horizontal margin0' } do |f|
-  .card-body
-    .row
-      .col-md-6
-        = f.input :company
-        = f.input :first_name, required: true
-        = f.input :last_name,  required: true
-        = f.input :address_1,  required: true
-        = f.input :address_2
-        = f.input :city
-        = f.input :zip
-      .col-md-6
-        = f.input :is_for_paper_return,       as: :boolean
-        = f.input :is_for_paper_set_shipping, as: :boolean
-        - if @address.is_for_dematbox_shipping || @customer.is_dematbox_authorized
-          = f.input :is_for_dematbox_shipping,  as: :boolean
-    .row
-      .col-md-12
-        - if @address.is_for_dematbox_shipping || @customer.is_dematbox_authorized
-          .dematbox_only{ style: 'display:none;' }
-            .box.bg-light
-              %h4 Pour la livraison de l'iDocus Box uniquement
-              %hr
-              = f.input :company_number
-              = f.input :phone
-              = f.input :place_called_or_postal_box
-              = f.input :building
-              = f.input :door_code
-              = f.input :other
-  .card-footer
-    .form-actions
-      = f.submit t('actions.submit'), class: 'btn btn-primary'
-      - link_name = action_name == 'new' ? t('actions.return').capitalize : t('actions.cancel').capitalize
-      = link_to link_name, organization_customer_addresses_path(@organization, @customer), class: 'btn btn-light'
+  = f.label :company, class: 'semibold'
+  .select-container.no-padding.w-100
+    = f.input :company, label: false
+  = f.label :first_name, class: 'semibold'
+  .select-container.no-padding.w-100
+    = f.input :first_name, label: false, required: true
+  = f.label :last_name, class: 'semibold'
+  .select-container.no-padding.w-100
+    = f.input :last_name, label: false, required: true
+  = f.label :address_1, class: 'semibold'
+  .select-container.no-padding.w-100
+    = f.input :address_1, label: false, required: true
+  = f.label :address_2, class: 'semibold'
+  .select-container.no-padding.w-100
+    = f.input :address_2, label: false
+  = f.label :city, class: 'semibold'
+  .select-container.no-padding.w-100
+    = f.input :city, label: false
+  = f.label :zip, class: 'semibold'
+  .select-container.no-padding.w-100
+    = f.input :zip, label: false
+  - if action_name == 'new'
+    .form-group.row
+      .col-md-10
+        = label_tag 'address[is_for_paper_return]', 'Pour la facturation ?', class: 'control-label semibold'
+      .col-md-2
+        .form-check.form-switch.idocus-custom-form-check
+          = f.input :is_for_paper_return, as: :boolean, label: false, input_html: { class: 'form-check-input input-toggle ido-custom-checkbox', id: 'check-paper-return' }
+          %label.semibold{class: 'form-check-label ido-custom-label', for: 'check-paper-return'} Non
+    .form-group.row
+      .col-md-10
+        = label_tag 'address[is_for_paper_set_shipping]', 'Pour la facturation ?', class: 'control-label semibold'
+      .col-md-2
+        .form-check.form-switch.idocus-custom-form-check
+          = f.input :is_for_paper_set_shipping, as: :boolean, label: false, input_html: { class: 'form-check-input input-toggle ido-custom-checkbox', id: 'check-paper-set-shipping' }
+          %label.semibold{class: 'form-check-label ido-custom-label', for: 'check-paper-set-shipping'} Non
+    - if @address.is_for_dematbox_shipping || @customer.is_dematbox_authorized
+      .form-group.row
+        .col-md-10
+          = label_tag 'address[is_for_dematbox_shipping]', 'Pour la facturation ?', class: 'control-label semibold'
+        .col-md-2
+          .form-check.form-switch.idocus-custom-form-check
+            = f.input :is_for_dematbox_shipping, as: :boolean, label: false, input_html: { class: 'form-check-input input-toggle ido-custom-checkbox', id: 'check-dematbox-shipping' }
+            %label.semibold{class: 'form-check-label ido-custom-label', for: 'check-dematbox-shipping'} Non
+  - if @address.is_for_dematbox_shipping || @customer.is_dematbox_authorized
+    .dematbox_only{ style: 'display:none;' }
+      .box.bg-light
+        %h4 Pour la livraison de l'iDocus Box uniquement
+        %hr
+        = f.label :company_number, class: 'semibold'
+        .select-container.no-padding.w-100
+          = f.input :company_number, label: false
+        = f.label :phone, class: 'semibold'
+        .select-container.no-padding.w-100
+          = f.input :phone, label: false
+        = f.label :place_called_or_postal_box, class: 'semibold'
+        .select-container.no-padding.w-100
+          = f.input :place_called_or_postal_box, label: false
+        = f.label :building, class: 'semibold'
+        .select-container.no-padding.w-100
+          = f.input :building, label: false
+        = f.label :door_code, class: 'semibold'
+        .select-container.no-padding.w-100
+          = f.input :door_code, label: false
+        = f.label :other, class: 'semibold'
+        .select-container.no-padding.w-100
+          = f.input :other, label: false
+  .form-group.no-margin
+    .w-100.text-end
+      - if action_name == 'new'
+        = f.submit t('actions.submit'), class: 'btn btn-primary'
+        - link_name = action_name == 'new' ? t('actions.return').capitalize : t('actions.cancel').capitalize
+        = link_to link_name, organization_customer_addresses_path(@organization, @customer), class: 'btn btn-light'
+      - else
+        = link_to 'Annuler', organization_customer_addresses_path(@organization, @customer), class: 'btn btn-light semibold'
+        = f.submit 'Valider les modifications', class: 'btn btn-primary bold'

@@ -227,6 +227,9 @@
                   = link_to t('actions.edit'), edit_period_options_organization_customer_path(@organization, @customer), class: 'btn btn-primary'
 
     .tab-pane#adresses{ "role" => "tabpanel", "aria-labelledby" => "adresses-tab" }
+      %input#paper_return_addresses{type: :hidden, value: @customer.paper_return_address.id, name: 'paper_return_addresses'}
+      %input#paper_set_shipping_addresses{type: :hidden, value: @customer.paper_set_shipping_address.id, name: 'paper_set_shipping_addresses'}
+      %input#dematbox_shipping_addresses{type: :hidden, value: @customer.dematbox_shipping_address.id, name: 'dematbox_shipping_addresses'}
       .box.no-margin
         - if @customer.active?
           .row
@@ -234,25 +237,26 @@
               .form-group.no-margin
                 .w-100.text-end
                   = link_to 'Configurer', organization_customer_addresses_path(@organization, @customer), class: 'btn btn-primary'
+                  = link_to 'Nouvelle adresse', new_organization_customer_address_path(@organization, @customer), class: 'btn btn-primary'
 
       .box.no-margin
         %h5.semibold.mb-4 Adresse pour le retour des factures papier
-
-        = render partial: 'customers/addresses/address', locals: { address: @customer.paper_return_address,  single: true, type: 'paper_return' }
+        .paper_return_content
+          = render partial: 'customers/addresses/address', locals: { address: @customer.paper_return_address,  single: true, type: 'paper_return' }
       
       .mb-4
 
       .box.no-margin
         %h5.semibold.mb-4 Adresse pour la livraison du kit envoie courrier
-
-        = render partial: 'customers/addresses/address', locals: { address: @customer.paper_set_shipping_address, single: true, type: 'paper_set_shipping' }
+        .paper_set_shipping_content
+          = render partial: 'customers/addresses/address', locals: { address: @customer.paper_set_shipping_address, single: true, type: 'paper_set_shipping' }
 
       .mb-4
       
       .box.no-margin
         %h5.semibold.mb-4 Adresse pour la livraison de l’iDocus Box
-
-        = render partial: 'customers/addresses/address', locals: { address: @customer.dematbox_shipping_address, single: true, type: 'dematbox_shipping' }
+        .dematbox_shipping_content
+          = render partial: 'customers/addresses/address', locals: { address: @customer.dematbox_shipping_address, single: true, type: 'dematbox_shipping' }
 
       .mb-4
 
