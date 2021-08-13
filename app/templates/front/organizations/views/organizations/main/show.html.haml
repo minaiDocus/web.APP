@@ -9,15 +9,15 @@
   .row
     .col-md-12.statistic_board                 
       .col-md-8.left_section
-        .row
-          .col-md-12.collab_customer
-            .col-md-5.collaborator.box
+        .row.no-padding.no-margin
+          .col-md-12.collab_customer.no-margin
+            .col-md-6.collaborator.box.no-margin
               %h2= @organization.collaborators.count
               %h4= t('organizations.collaborators')
-            .col-md-5.float-right.customer.box
+            .col-md-6.customer.box.no-margin.float-end
               %h2= @organization.customers.count
               %h4= t('organizations.active_customers')
-        .row
+        .row.no-padding.no-margin
           .col-md-12.evolution
             %h4= t('organizations.customers_evolution')
             

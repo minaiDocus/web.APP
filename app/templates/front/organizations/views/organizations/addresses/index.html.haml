@@ -10,49 +10,40 @@
           .w-100.text-center
             = link_to glyphicon('+', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Nouvelle adresse', new_organization_address_path(@organization), class: 'btn btn-primary add-adress'
 
-  .box.mt-4
-    %ul.nav.nav-tabs#adresse_facturation{ "role" => "tablist" }
-      %li.nav-item{ "role" => "presentation" }
-        %button.semibold.nav-link.active#home-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#home", type: :button, "role" => "tab", "aria-controls" => "home", "aria-selected" => "true" } Facturation      
-      %li.nav-item{ "role" => "presentation" }
-        %button.semibold.nav-link#profile-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#profile", type: :button, "role" => "tab", "aria-controls" => "profile", "aria-selected" => "false"} Retour factures papier
-      %li.nav-item{ "role" => "presentation" }
-        %button.semibold.nav-link#messages-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#messages", type: :button, "role" => "tab", "aria-controls" => "messages", "aria-selected" => "false" } Kit envoi courrier
+  
+  %ul.nav.nav-tabs.ms-3#adresse_facturation{ "role" => "tablist" }
+    %li.nav-item.no-margin{ "role" => "presentation" }
+      %button.semibold.nav-link.active#home-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#home", type: :button, "role" => "tab", "aria-controls" => "home", "aria-selected" => "true" } Facturation      
+    %li.nav-item.no-margin{ "role" => "presentation" }
+      %button.semibold.nav-link#profile-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#profile", type: :button, "role" => "tab", "aria-controls" => "profile", "aria-selected" => "false"} Retour factures papier
+    %li.nav-item.no-margin{ "role" => "presentation" }
+      %button.semibold.nav-link#messages-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#messages", type: :button, "role" => "tab", "aria-controls" => "messages", "aria-selected" => "false" } Kit envoi courrier
 
     - grouped_addresses = @addresses.in_groups_of(3)
 
-    .tab-content.p-5
-      .tab-pane.active#home{ "role" => "tabpanel", "aria-labelledby" => "home-tab" } 
-        .row.derivationLeft
-          .col-md-12
-            .box
-              - grouped_addresses.each_with_index do |addresses, index|
-                .row{ class: ((index + 1) < grouped_addresses.size ? 'margin1bottom' : '') }
-                  - addresses.each do |address|
-                    - if address && address.is_for_paper_return
-                      .col-md-12
-                        = render partial: 'address', locals: { address: address, single: false }
+  .tab-content
+    .tab-pane.box.no-margin.active#home{ "role" => "tabpanel", "aria-labelledby" => "home-tab" }
+      - grouped_addresses.each_with_index do |addresses, index|
+        .row
+          - addresses.each do |address|
+            - if address && address.is_for_paper_return
+              .col-md-12
+                = render partial: 'address', locals: { address: address, single: false }
 
-      .tab-pane#profile{ "role" => "tabpanel", "aria-labelledby" => "profile-tab" }
-        .row.derivationLeft
-          .col-md-12
-            .box
-              - grouped_addresses.each_with_index do |addresses, index|
-                .row{ class: ((index + 1) < grouped_addresses.size ? 'margin1bottom' : '') }
-                  - addresses.each do |address|
-                    - if address && address.is_for_paper_set_shipping
-                      .col-md-12
-                        = render partial: 'address', locals: { address: address, single: false }
+    .tab-pane.box.no-margin#profile{ "role" => "tabpanel", "aria-labelledby" => "profile-tab" }      
+      - grouped_addresses.each_with_index do |addresses, index|
+        .row
+          - addresses.each do |address|
+            - if address && address.is_for_paper_set_shipping
+              .col-md-12
+                = render partial: 'address', locals: { address: address, single: false }
 
-      .tab-pane#messages{ "role" => "tabpanel", "aria-labelledby" => "messages-tab" }
-        .row.derivationLeft
-          .col-md-12
-            .box
-              - grouped_addresses.each_with_index do |addresses, index|
-                .row{ class: ((index + 1) < grouped_addresses.size ? 'margin1bottom' : '') }
-                  - addresses.each do |address|
-                    - if address && address.is_for_dematbox_shipping
-                      .col-md-12
-                        = render partial: 'address', locals: { address: address, single: false }
+    .tab-pane.box.no-margin#messages{ "role" => "tabpanel", "aria-labelledby" => "messages-tab" }
+      - grouped_addresses.each_with_index do |addresses, index|
+        .row
+          - addresses.each do |address|
+            - if address && address.is_for_dematbox_shipping
+              .col-md-12
+                = render partial: 'address', locals: { address: address, single: false }
 
 = javascript_include_tag 'front/organizations/assets/javascripts/addresses'

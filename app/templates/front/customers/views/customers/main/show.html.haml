@@ -200,6 +200,7 @@
               - else
                 = link_to 'Commander un Kit envoi courrier', new_organization_customer_order_path(@organization, @customer, order: { type: 'paper_set' }), class: 'btn btn-primary'
 
+
     .tab-pane#adresses{ "role" => "tabpanel", "aria-labelledby" => "adresses-tab" }
       %input#paper_return_addresses{type: :hidden, value: @customer.paper_return_address&.id, name: 'paper_return_addresses'}
       %input#paper_set_shipping_addresses{type: :hidden, value: @customer.paper_set_shipping_address&.id, name: 'paper_set_shipping_addresses'}

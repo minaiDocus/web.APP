@@ -25,9 +25,6 @@
   justify-content: center;
   margin-top: 1%;
 }
-.acceuil_organizations .statistic_board .left_section{
-  width: 60%;
-}
 
 .acceuil_organizations .statistic_board .left_section .collab_customer{
   width: 100%;
@@ -43,7 +40,7 @@
   border-radius: 16px;
   text-align: center;
   display: inline-block;
-  max-width: 48%;
+  max-width: 49%;
 }
 
 .acceuil_organizations .statistic_board .left_section .collab_customer .customer h2{
@@ -65,7 +62,6 @@
   margin: 0
 }
 .acceuil_organizations .statistic_board .left_section .evolution{  
-  width: 90%; 
   background: #FFFFFF;
   box-shadow: 0px 1px 3px rgba(26, 26, 26, 0.1);
   border-radius: 16px;       
@@ -77,8 +73,7 @@
   font-family: Raleway-Bold;
   padding-top: 1%;
 }
-.acceuil_organizations .statistic_board .right_section{
-  width: 30%;
+.acceuil_organizations .statistic_board .right_section{  
   margin-left: 2%;
 }      
 .acceuil_organizations .statistic_board .repartition{
@@ -100,7 +95,7 @@
 }
 
 .acceuil_organizations .statistic_board .repartition table{
-  margin-top: 11%;
+  margin-top: 15%;
 }
 
 .acceuil_organizations .statistic_board .repartition table .borderless td, .borderless th{
@@ -120,4 +115,8 @@
   color: rgba(26, 26, 26, 0.7);
   text-align: right;
   padding-top: 3%;
+}
+
+.repartition .table > :not(caption) > * > *{
+  border-bottom-width: 0px;
 }

@@ -132,10 +132,7 @@
       .modal-header
         %h3 Condition générale d'utilisation
       .modal-body
-        #terms
+        %p#terms
       .modal-footer
-        #controls.form-actions.clearfix
-          .float-right
-            .feedback.float-left
-            =button_tag "J'accepte les conditions générales d'utilisation et j’accepte la transmission de mes transactions à Idocus", type: 'button', id: 'cgu_bi_validate', class: 'btn-primary btn'
-            %a{href: '#', id: 'cgu_bi_exit', class: 'btn-danger btn', style: 'margin-left: 10px'} Sortir
+        =button_tag "J'accepte les conditions générales d'utilisation et j’accepte la transmission de mes transactions à Idocus", type: 'button', id: 'cgu_bi_validate', class: 'btn-primary btn semibold'
+        %a{href: '#', id: 'cgu_bi_exit', class: 'btn-danger btn semibold ms-2'} Sortir

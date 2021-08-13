@@ -39,3 +39,7 @@
   max-height: 385px;
   overflow: auto;
 }
+
+.modal#showCguBI .modal-dialog{
+  min-width: 1024px;
+}

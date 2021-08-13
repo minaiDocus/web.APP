@@ -9,12 +9,12 @@
     .box.mt-4
       = hidden_field_tag :part, params[:part]
       - if params[:part] != 'other_software'
-        = f.input :name, label_html: { class: 'semibold custom-label-field' }, input_html: { class: 'select-container no-padding w-100 book-code-software custom-input-field', placeholder: "iDocus" }
+        = f.input :name, input_html: { class: ' book-code-software select-container', placeholder: "iDocus" }
         - unless @organization.specific_mission
-          = f.input :jefacture_api_key, label_html: { class: 'semibold custom-label-field' }, input_html: { class: 'select-container no-padding w-100 book-code-software custom-input-field', placeholder: "ex : T4534638846" }
+          = f.input :jefacture_api_key, input_html: { class: ' book-code-software', placeholder: "ex : T4534638846" }
 
           - if @user.is_admin
-            = f.input :code, label_html: { class: 'semibold custom-label-field' }, input_html: { class: 'select-container no-padding w-100 book-code-software custom-input-field', placeholder: "IDOC" }
+            = f.input :code, label_html: { class: 'semibold custom-label-field' }, input_html: { class: ' book-code-software custom-input-field', placeholder: "IDOC" }
             .form-group.row
               .col-md-11
                 = f.label :is_detail_authorized, class: 'semibold'
@@ -42,7 +42,8 @@
               = f.input :is_duplicate_blocker_activated, as: :boolean, label: "Non", label_html: { class: 'form-check-label' }, input_html: { id: 'flexSwitchCheckDefault', class: 'custom-form-inline form-check-input' }
           .form-group
             .row
-              .col-md-5.semibold Date de l’écriture des opérations bancaires
+              .col-md-5.semibold 
+                %label Date de l’écriture des opérations bancaires
               .col-md-3
                 .form-check.form-check-inline
                   = f.radio_button :preseizure_date_option, preseizure_date_options[0][1], id: 'flexRadioDefault', class: 'form-check-input'
@@ -53,7 +54,8 @@
                   = f.label :preseizure_date_option, preseizure_date_options[1][0], class: 'form-check-label'
           .form-group
             .row
-              .col-md-5.semibold Date de saisie des factures
+              .col-md-5.semibold 
+                %label Date de saisie des factures
               .col-md-3
                 .form-check.form-check-inline
                   = f.radio_button :is_pre_assignment_date_computed, false, id: 'flexRadioDefault', class: 'form-check-input'
@@ -76,7 +78,7 @@
             %input.book-code-software{ placeholder: "11" }
           %i Par exemple le 11 février pour cloturer janvier. Choisir un chiffre de 0 à 28.
 
-        = f.input :invoice_mails, label_html: { class: 'semibold custom-label-field' }, input_html: { class: 'select-container no-padding w-100 book-code-software custom-input-field', placeholder: "Ex : jean.dupont@mail.com, marie.dupuis@mail.com" }, hint: 'Doit être séparé par une virgule (",") si plusieurs'
+        = f.input :invoice_mails, label_html: { class: 'semibold custom-label-field' }, input_html: { class: ' book-code-software custom-input-field', placeholder: "Ex : jean.dupont@mail.com, marie.dupuis@mail.com" }, hint: 'Doit être séparé par une virgule (",") si plusieurs'
         - if @user.is_admin
           - unless @organization.specific_mission
             .form-group.row
@@ -89,7 +91,7 @@
               = f.label :specific_mission, class: 'semibold'
             .col-md-1.form-check.form-switch.custom-form-switch
               = f.input :specific_mission, as: :boolean, label: "Non", label_html: { class: 'form-check-label' }, input_html: { id: 'flexSwitchCheckDefault', class: 'custom-form-inline form-check-input' }
-          = f.input :default_banking_provider, as: :select, label_html: { class: 'semibold custom-label-field' }, collection: default_banking_provider_options_for_select, input_html: { class: 'select-container no-padding w-100 book-code-software custom-input-field' }
+          = f.input :default_banking_provider, as: :select, label_html: { class: 'semibold custom-label-field' }, collection: default_banking_provider_options_for_select, input_html: { class: ' book-code-software custom-input-field' }
       - elsif !@organization.specific_mission
         - ['quadratus', 'coala', 'csv_descriptor'].each do |software|
           = f.simple_fields_for software.to_sym do |sf|
@@ -101,19 +103,19 @@
 
       .form-group.no-margin
         .w-100.text-end
-          = f.submit 'Valider les modifications', class: 'btn btn-primary valid-modification'
+          = f.submit 'Valider les modifications', class: 'btn btn-primary semibold valid-modification'
 
-      .modal#general-modal
-        .modal-dialog
-          .modal-content
-            .modal-header
-              %h5.modal-title.bold Confirmation
-              %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}    
-            .modal-body
-              %p Vous venez de changer les paramètres, voulez-vous enregister les modifications apportées ?
-            .modal-footer
-              .w-100.text-end
-                %button.btn.btn-light{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'} Annuler les modifications
-                %button.btn.btn-primary.valid Valider les modifications
+.modal#general-modal
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.modal-title.bold Confirmation
+        %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}    
+      .modal-body
+        %p Vous venez de changer les paramètres, voulez-vous enregister les modifications apportées ?
+      .modal-footer
+        .w-100.text-end
+          %button.btn.btn-light{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'} Annuler les modifications
+          %button.btn.btn-primary.semibold.valid Valider les modifications
 
 = javascript_include_tag 'front/organizations/assets/javascripts/edit'

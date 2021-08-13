@@ -70,11 +70,6 @@ label{
   margin-bottom: 1%;
 }
 
-.select-container input{
-  padding: 0.5%;
-  font-size: 17px;
-}
-
 .organization_is_detail_authorized,
 .organization_is_test,
 .organization_is_operation_processing_forced,

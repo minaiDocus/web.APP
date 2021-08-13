@@ -1,4 +1,10 @@
 %input#documents-selection-size{ type: 'hidden', value: documents.total_count }
+.form-group.no-margin
+  .w-100.text-end            
+    %button#integrate_documents.btn.btn-light-primary.bold Intégrer les documents séléctionnés
+
+.mb-4
+
 .row
   .col-md-12
     %table.table.table-striped.table_integration
@@ -34,6 +40,3 @@
 
   = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { name: 'documents-selection', total_pages: documents.total_pages }
           
-  .form-group.no-margin
-    .w-100.text-end            
-      %button#integrate_documents.btn.btn-primary.bold Intégrer les documents séléctionnés

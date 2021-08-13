@@ -23,7 +23,6 @@
         %th= t('activerecord.models.address.attributes.zip')
         %td= address.zip
 
-.form-group.no-margin
-  .w-100.text-end
-    = link_to glyphicon('trash', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Supprimer', organization_address_path(@organization, address), method: 'delete', data: { confirm: t('actions.confirm') }, class: 'btn btn-light red-label delete-address'
-    = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Editer', edit_organization_address_path(@organization, address), class: 'btn btn-primary valid-adresse-modification'
+.form-group.no-margin.text-end  
+  = link_to glyphicon('trash', { size: '15', color: '#FF4848'}) + ' Supprimer', organization_address_path(@organization, address), method: 'delete', data: { confirm: t('actions.confirm') }, class: 'red-label btn btn-default-danger semibold delete-address'
+  = link_to glyphicon('pencil', { size: '15', color: '#FFF'}) + ' Editer', edit_organization_address_path(@organization, address), class: 'btn btn-primary semibold valid-adresse-modification'

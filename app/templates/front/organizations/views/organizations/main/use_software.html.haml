@@ -5,18 +5,18 @@
     .col-md-8
       %h3.bold Paramètres : Logiciels comptables et CSV
 
-  .box.mt-4
-    %ul.nav.nav-tabs{ "role" => "tablist" }
-      %li.nav-item{ "role" => "presentation" }
+  
+    %ul.nav.nav-tabs.ms-4{ "role" => "tablist" }
+      %li.nav-item.no-margin{ "role" => "presentation" }
         %button.semibold.nav-link.active#ibiza-software-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#ibiza-software", type: :button, "role" => "tab", "aria-controls" => "ibiza-software", "aria-selected" => "true" } iBiZa      
-      %li.nav-item{ "role" => "presentation" }
+      %li.nav-item.no-margin{ "role" => "presentation" }
         %button.semibold.nav-link#other-software-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#other-software", type: :button, "role" => "tab", "aria-controls" => "other-software", "aria-selected" => "false"} Autres logiciels      
 
-    .tab-content.p-5
-      .tab-pane.active#ibiza-software{ "role" => "tabpanel", "aria-labelledby" => "ibiza-software-tab" }
+    .tab-content
+      .tab-pane.box.no-margin.active#ibiza-software{ "role" => "tabpanel", "aria-labelledby" => "ibiza-software-tab" }
         = render file: Rails.root.join('app/templates/front/ibiza/views/ibiza/main/edit.html.haml')
 
-      .tab-pane#other-software{ "role" => "tabpanel", "aria-labelledby" => "other-software-tab" }
+      .tab-pane.box.no-margin#other-software{ "role" => "tabpanel", "aria-labelledby" => "other-software-tab" }
         %p Activer l'option d'export des écritures comptables en cliquant sur le logo et pièces pour :
         .row
           .col-md-4.box-software#quadratus{class: "#{'selected' if (@organization.try(:quadratus).try(:used?))}"}
