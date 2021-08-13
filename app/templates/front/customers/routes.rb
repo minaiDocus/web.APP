@@ -22,6 +22,8 @@ Rails.application.routes.draw do
           patch 'reopen_account'
           get   'edit_compta_options'
           get   'edit_period_options'
+          get   'edit_configuration_options'
+          patch 'update_configuration_options'
           patch 'update_compta_options'
           patch 'update_period_options'
           get   'edit_knowings_options'

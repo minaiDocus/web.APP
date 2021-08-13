@@ -33,7 +33,7 @@
         %button.semibold.nav-link#bank-setting-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#bank-setting", type: :button, "role" => "tab", "aria-controls" => "bank-setting", "aria-selected" => "false", account_id: @customer.id} Paramètres bancaires
     - unless @organization.specific_mission
       %li.nav-item.no-margin{ "role" => "presentation" }
-        %button.semibold.nav-link#compta-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#compta", type: :button, "role" => "tab", "aria-controls" => "compta", "aria-selected" => "false" } Comptabilité
+        %button.semibold.nav-link#compta-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#compta", type: :button, "role" => "tab", "aria-controls" => "compta", "aria-selected" => "false" } Paramètres
       - if @customer.uses?(:ibiza)
         %li.nav-item.no-margin{ "role" => "presentation" }
           %button.semibold.nav-link#ibiza-box-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#ibiza-box", type: :button, "role" => "tab", "aria-controls" => "ibiza-box", "aria-selected" => "false" } iBiza Box

@@ -28,6 +28,7 @@ class Customer{
     this.add_customer();
     this.edit_customer();
     this.get_subscription_edit_view();
+    this.load_configuraation_otpion_view();
     this.get_accounting_plan_view();
     this.filter_customer();
     this.set_ckeck_box_state();
@@ -308,6 +309,21 @@ class Customer{
     });
   }
 
+
+  load_configuraation_otpion_view(){
+    let self = this;
+    let customer_id = $('input:hidden[name="customer_id"]').val();
+    $('#customer-content #compta-tab').unbind('click').bind('click',function(e) {
+      e.preventDefault();
+      
+      self.applicationJS.parseAjaxResponse({ 'url': '/organizations/' + self.organization_id + '/customers/' + customer_id + '/edit_configuration_options' }).then((element)=>{
+        $('#customer-content .tab-content .tab-pane#compta').html($(element).find('#customer.edit').html());
+
+        self.set_ckeck_box_state();
+      });
+    });
+  }
+
   add_customer(){
     var self = this;
     $('.new-customer').unbind('click').bind('click',function(e) {
@@ -350,8 +366,10 @@ class Customer{
         if (class_list.indexOf("option_checkbox") > -1) { $(this).removeClass('active_option'); }
       }
 
-      self.check_input_number();
-      self.update_price();        
+      if(class_list.indexOf("option_checkbox") > -1){
+        self.check_input_number();
+        self.update_price(); 
+      }       
     });
 
 

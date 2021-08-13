@@ -245,6 +245,33 @@ class Customers::MainController < OrganizationController
     end
   end
 
+
+  # GET /organizations/:organization_id/customers/:id/parameterize_options
+  def edit_configuration_options; end
+
+  # PUT /organizations/:organization_id/customers/:id/update_configuration_options
+  def update_configuration_options
+    debugger
+    
+    if params[:pairing_code].present?
+      @dematbox = @user.dematbox || Dematbox.create(user_id: @user.id)
+      @dematbox.subscribe(params[:pairing_code])
+      flash[:notice] = "Configuration de iDocus'Box en cours..."
+    end
+
+    if @customer.update(period_options_params) && @customer.update(compta_options_params)
+      if @customer.configured?
+        flash[:success] = 'Modifié avec succès.'
+        redirect_to organization_customer_path(@organization, @customer, tab: 'compta')
+      else
+        next_configuration_step
+      end
+    else
+      render 'edit_configuration_options'
+    end
+
+  end
+
   # GET /account/organizations/:organization_id/customers/:id/edit_period_options
   def edit_period_options; end
 
@@ -474,6 +501,10 @@ class Customers::MainController < OrganizationController
 
   def my_unisoft_params
     params.require(:user).permit(my_unisoft_attributes: %i[id is_used auto_deliver encrypted_api_token check_api_token])
+  end
+
+  def configuration_options_params
+    # TODO ...
   end
 
   def period_options_params
