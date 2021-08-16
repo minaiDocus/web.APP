@@ -1,4 +1,5 @@
 = stylesheet_link_tag 'front/customers/assets/stylesheets/main'
+= stylesheet_link_tag 'front/customers/assets/stylesheets/addresses'
 
 #addresses
   .row.derivationRight
@@ -12,13 +13,14 @@
           = link_to 'Nouvelle adresse', new_organization_customer_address_path(@organization, @customer), class: 'btn btn-primary'
   .row.derivationLeft
     .col-md-12
-      .box
+      .box.addresses-box-content
         - grouped_addresses = @addresses.in_groups_of(3)
         - grouped_addresses.each_with_index do |addresses, index|
           .row{ class: ((index + 1) < grouped_addresses.size ? 'margin1bottom' : '') }
             - addresses.each do |address|
               - if address
-                .col-md-4
-                  = render partial: 'address', locals: { address: address, single: false }
+                / .col-md-
+                = render partial: 'address', locals: { address: address, single: false }
 
 = javascript_include_tag 'front/customers/assets/javascripts/main'
+= javascript_include_tag 'front/customers/assets/javascripts/addresses'

@@ -222,14 +222,20 @@ class Customer{
       e.preventDefault();
       that.applicationJS.parseAjaxResponse({ 'url': '/organizations/' + that.organization_id + '/customers/' + customer_id + '/addresses/' + paper_return_id + '/edit' }).then((element)=>{
         $('#customer-content .tab-content .tab-pane#adresses .paper_return_content').html($(element).find('#address.edit').html());
+        $('#customer-content .tab-content .tab-pane#adresses .paper_return_content .address-for-paper-set-shipping').html('');
+        $('#customer-content .tab-content .tab-pane#adresses .paper_return_content .address-for-dematbox-shipping').html('');
       });
 
       that.applicationJS.parseAjaxResponse({ 'url': '/organizations/' + that.organization_id + '/customers/' + customer_id + '/addresses/' + paper_set_shipping_id + '/edit' }).then((element)=>{
         $('#customer-content .tab-content .tab-pane#adresses .paper_set_shipping_content').html($(element).find('#address.edit').html());
+        $('#customer-content .tab-content .tab-pane#adresses .paper_set_shipping_content .address-for-paper-return').html('');
+        $('#customer-content .tab-content .tab-pane#adresses .paper_set_shipping_content .address-for-dematbox-shipping').html('');
       });
 
       that.applicationJS.parseAjaxResponse({ 'url': '/organizations/' + that.organization_id + '/customers/' + customer_id + '/addresses/' + dematbox_shipping_id + '/edit' }).then((element)=>{
         $('#customer-content .tab-content .tab-pane#adresses .dematbox_shipping_content').html($(element).find('#address.edit').html());
+        $('#customer-content .tab-content .tab-pane#adresses .dematbox_shipping_content .address-for-paper-set-shipping').html('');
+        $('#customer-content .tab-content .tab-pane#adresses .dematbox_shipping_content .address-for-paper-return').html('');
       });
     });
   }
@@ -292,6 +298,8 @@ class Customer{
           'noneText': 'Selectionner un/des groupe(s)',
           'allText': 'Tous séléctionnés'
         });
+
+        this.set_ckeck_box_state();
 
         this.show_ibiza_customer();
       });

@@ -1,7 +1,4 @@
-#customer.derivationRight
-  .card
-    .card-header
-      %h3
-        Edition du client : 
-        = link_to @customer, organization_customer_path(@organization, @customer), class: 'fs-origin'
-    = render partial: 'form'
+#customer.edit.derivationRight
+  = stylesheet_link_tag 'front/customers/assets/stylesheets/main'
+  = render partial: 'form'
+  = javascript_include_tag 'front/customers/assets/javascripts/main'
