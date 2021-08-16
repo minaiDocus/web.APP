@@ -1,14 +1,12 @@
 jQuery(function () {
-  $(".principal li > span.link_principal, .principal .slave li > span.link_slave").unbind('click');
-  $(".principal li > span.link_principal, .principal .slave li > span.link_slave").bind('click',function(e) {
-    e.stopPropagation();
+  $(".principal li span.link_principal, .principal .slave li span.link_slave").unbind('click.lefter').bind('click.lefter',function(e) {
     $('.principal li span.link_principal, .principal li span.link_slave').removeClass('active');
-    $(this).parent().find('span.link_principal').addClass('active');
-    $(this).parent().find('span.link_slave').addClass('active')
+    $(this).addClass('active');
     if ($(this).parent().data('href') == "parametres"){
       $(this).parent().find('.chevron').toggle();
       $(this).parent().find('ul').slideToggle();
       $('.principal li span.link_slave').removeClass('active');
+      $(this).addClass('active');
     }
     else{
       $(".organizations .content").html('');
