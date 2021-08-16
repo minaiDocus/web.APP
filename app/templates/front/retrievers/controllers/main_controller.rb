@@ -1,15 +1,13 @@
 # frozen_string_literal: true
 class Retrievers::MainController < RetrieverController
-  before_action :verif_account, except: %w[index edit export_connector_to_xls get_connector_xls new_internal]
-  before_action :load_budgea_config, except: %w[export_connector_to_xls get_connector_xls]
-  before_action :load_retriever, except: %w[index list new export_connector_to_xls get_connector_xls new_internal create]
-  before_action :verify_retriever_state, except: %w[index list new export_connector_to_xls get_connector_xls new_internal edit_internal create]
+  before_action :verif_account, except: %w[index edit export_connector_to_xls get_connector_xls new_internal api_config]
+  before_action :load_retriever, except: %w[index list new export_connector_to_xls get_connector_xls new_internal create api_config]
+  before_action :verify_retriever_state, except: %w[index list new export_connector_to_xls get_connector_xls new_internal edit_internal create api_config]
   before_action :load_retriever_edition, only: %w[new edit]
 
   append_view_path('app/templates/front/retrievers/views')
 
   def index
-
     retrievers = if @account
                    @account.retrievers
                  else
@@ -74,7 +72,7 @@ class Retrievers::MainController < RetrieverController
     array_bank     = params[:banks].to_s.split(/\;/)
     file           = nil
 
-    CustomUtils.mktmpdir('retrievers_controller', '/nfs/tmp', false) do |dir|
+    CustomUtils.mktmpdir('retrievers_controller', nil, false) do |dir|
       file           = OpenStruct.new({path: "#{dir}/list_des_automates.xls", close: nil})
       xls_data       = []
 
@@ -159,17 +157,6 @@ class Retrievers::MainController < RetrieverController
     return '[0-9]' if params[:index] == 'number'
 
     params[:index].to_s
-  end
-
-  def load_budgea_config
-    bi_config = {
-      url: "https://#{Budgea.config.domain}/2.0",
-      c_id: Budgea.config.client_id,
-      c_ps: Budgea.config.client_secret,
-      c_ky: Budgea.config.encryption_key ? Base64.encode64(Budgea.config.encryption_key.to_json.to_s) : '',
-      proxy: Budgea.config.proxy
-    }.to_json
-    @bi_config = Base64.encode64(bi_config.to_s)
   end
 
   def verif_account

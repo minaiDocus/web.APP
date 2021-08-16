@@ -41,6 +41,12 @@ function bind_all_events(){
     }
   });
 
+  $('#retriever_selector').unbind('change');
+  $('#retriever_selector').bind('change', function(e){ AppEmit('retriever_change_retriever_selection', { budgea_id: $(this).val() }); });
+
+  $('.tab-pane#banks-selection .validate_banks_selection').unbind('click');
+  $('.tab-pane#banks-selection .validate_banks_selection').bind('click', function(e){ AppEmit('retriever_validate_retriever_selection'); });
+
   $('table.banks_params_list tbody td .action .activation').unbind('click').bind('click', function(e){
     AppEmit('retriever_bank_activation', { id: $(this).data('id'), type: $(this).data('type') });
   });

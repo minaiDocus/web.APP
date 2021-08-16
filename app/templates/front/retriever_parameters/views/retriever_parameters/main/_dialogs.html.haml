@@ -9,21 +9,6 @@
         %button.btn.btn-light.semibold.cancel{ type: :button } Annuler
         %button.btn.btn-primary.semibold.validate{ type: :button } Valider
 
-.modal#filter-banks-selection
-  .modal-dialog
-    .modal-content
-      .modal-header
-        %h5.modal-title.bold Filtre séléction compte bancaire
-        %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
-      .modal-body
-        %form#filter-banks-selection-form
-          .form-group
-            %label.semibold Banque
-            = select_tag "bank_account_contains[retriever_budgea_id]", options_for_select(retrievers_of(@account), params[:bank_account_contains].try(:[], :retriever_budgea_id)), include_blank: true, class: 'form-select'
-      .modal-footer
-        %button.btn.btn-light.semibold.cancel{ type: :button } Annuler
-        %button.btn.btn-primary.semibold.validate{ type: :button } Valider
-
 .modal#filter-documents-selection
   .modal-dialog
     .modal-content

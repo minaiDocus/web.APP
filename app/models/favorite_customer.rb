@@ -14,7 +14,7 @@ class FavoriteCustomer < ApplicationRecord
 
       result.temp_docs_error_size = customer.temp_documents.where(state: 'unreadable').count
 
-      if customer.subscription.periods.last.is_active?(:retriever_option)
+      if customer.subscription.periods.last.try(:is_active?, :retriever_option)
         result.retriever_option_active = true
         result.retriever_error_size = customer.retrievers.where(state: 'error').count
       end

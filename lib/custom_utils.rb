@@ -116,5 +116,35 @@ class CustomUtils
 
       ["IDOC", "MCN", "CEN"].include?(organization.code)
     end
+
+    def arrStr_to_array(data)
+      return [] if data.blank?
+
+      is_array = true
+      begin
+        data.size
+      rescue
+        is_array = false
+      end
+
+      if is_array
+        data
+      else
+        exist   = true
+        i       = 0
+        result  = []
+        while exist
+          dt = data[i.to_s]
+          i += 1
+          if dt.present?
+            result << dt
+          else
+            exist = false
+          end
+        end
+
+        result
+      end
+    end
   end
 end

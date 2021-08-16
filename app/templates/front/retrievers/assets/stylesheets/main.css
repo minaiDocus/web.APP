@@ -24,6 +24,7 @@
   float: left;
   width: 150px;
   height: 25px;
+  overflow: hidden;
   margin: 0 17px 7px 0px;
   border: 1px solid #eee;
   border-radius: 3px;

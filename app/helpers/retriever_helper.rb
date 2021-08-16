@@ -55,11 +55,26 @@ module RetrieverHelper
 
   def retrievers_of(account)
     account.retrievers.map do |retriever|
-      [ retriever.service_name, retriever.id ]
-    end || []
+      name = (retriever.name != retriever.service_name)? "#{retriever.name}(#{retriever.service_name})" : retriever.name
+      [ name, retriever.budgea_id ] if retriever.budgea_id.present?
+    end.compact || []
   end
 
   # def link_retriever_options(account)
   #   { class: account.try(:id)? '' : 'disabled', title: account.try(:id)? '' : 'Sélectionnez un dossier pour pouvoir poursuivre' }
   # end
+
+  def retriever_journals_of(account)
+    account.account_book_types.map do |journal|
+      [ journal.name, journal.id ]
+    end || []
+  end
+
+  def parse_options_with(values=nil)
+    options = CustomUtils.arrStr_to_array(values)
+
+    options.map do |opt|
+      [opt[:label], opt[:value]]
+    end || []
+  end
 end

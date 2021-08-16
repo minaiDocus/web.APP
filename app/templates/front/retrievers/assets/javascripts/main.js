@@ -1,8 +1,12 @@
 //=require './events'
+//=require './budgea_api'
+//=require './retrievers_list'
+//=require './budgea_steps/configuration_steps'
 
 class RetrieverMain{
   constructor(){
-    this.applicationJS = new ApplicationJS();
+    this.applicationJS  = new ApplicationJS();
+
     this.action_locker = false;
     this.account_select = $('#account_id');
     this.search_name    = $('#filter-retriever #search_name');
@@ -22,7 +26,7 @@ class RetrieverMain{
     else if(target_page == 'one')
       this.page = 1
 
-    if(this.page < 0){ 
+    if(this.page < 0){
       this.action_locker = false;
       return false
     }
@@ -44,12 +48,13 @@ class RetrieverMain{
                         if(this.page > 1)
                         {
                           if($(e).find('.no-data-found').length == 0){
-                            $('.total-count').text($(e).find('.total-count').text());
                             $('.retrievers-list').append( $(e).find('.retrievers-list').html() );
                           }
                           else{
                             this.page = -1
                           }
+                        }else{
+                          $('.total-count').text($(e).find('.total-count').text());
                         }
 
                         this.action_locker = false;

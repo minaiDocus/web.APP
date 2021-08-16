@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 class RetrievedDatas::DocumentsController < RetrieverController
-  before_action :load_document, only: %w[show piece]
   before_action :verif_account
-
+  before_action :load_document, only: %w[show piece]
   append_view_path('app/templates/front/retrieved_datas/views')
 
   def index

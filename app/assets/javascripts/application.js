@@ -157,9 +157,33 @@ class ApplicationJS {
     });
   }
 
-
   displayListPer(params={}, afterUpdateContent=function(e){}){
     if (afterUpdateContent !== null) { this.parseAjaxResponse(params, null, afterUpdateContent); }
+  }
+
+  serializeToJson(form){
+    let data = form.serializeArray();
+    let result = {};
+
+    data.forEach((obj)=>{
+      if(obj.name.match(/\[\]/)){
+        let obj_index = obj.name.replace(/\[\]/g, '');
+        let obj_val = result[obj_index];
+
+        if(obj_val != '' && obj_val != undefined && obj_val != null){
+          if(obj.value != undefined && obj.value != '' && obj.value != null)
+            result[obj_index].push(obj.value)
+        }else{
+          if(obj.value != undefined && obj.value != '' && obj.value != null)
+            result[obj_index] = [obj.value];
+        }
+      }else{
+        if(obj.value != undefined && obj.value != '' && obj.value != null)
+          result[obj.name] = obj.value
+      }
+    });
+
+    return result
   }
 
   getFrom(url, success, error){

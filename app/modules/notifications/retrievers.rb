@@ -241,7 +241,7 @@ class Notifications::Retrievers < Notifications::Notifier
   end
 
   def url_for(user)
-    account_retrievers_url(account_id: @retriever.user.id)
+    retrievers_url(account_id: @retriever.user.id)
   end
 
   def default_url_options

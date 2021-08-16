@@ -45,10 +45,11 @@ class DocumentsMain{
                             if($(e).find('.no-data-found').length > 0){
                               this.page = -1;
                             }else{
-                              $('.datas_size').html($(e).find('.datas_size').html());
                               $('.main-content').append($(e).find('.main-content').html());
                             }
-                          }
+                          }else{
+                            $('.datas_size').html($(e).find('.datas_size').html());
+                          } 
 
                           this.action_locker = false
                           bind_all_events();

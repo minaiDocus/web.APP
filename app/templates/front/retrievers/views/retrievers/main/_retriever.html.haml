@@ -23,11 +23,12 @@
       .col-md-2.text-center
         %h3.semibold.p-3= retriever.journal_name.presence || ''
     %hr
-    .row
+    .row.retriever_actions
       .col-md-9
         %span.badge{ class: "badge-#{badge_type_of(retriever)}" }= state_of(retriever)
       .col-md-3.text-end
         %span.action-group.ms-1.pointer= glyphicon('info', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
-        %span.action-group.ms-1.pointer= glyphicon('loop-circular', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
-        %span.action-group.ms-1.pointer= glyphicon('pencil', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
-        %span.action-group.ms-1.pointer= glyphicon('trash', { size: '20', color:'red'})
+        %span.action-group.ms-1.pointer.trigger_connection{ title: 'Synchronisation', data: { id: retriever.id }}= glyphicon('loop-circular', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+        - if retriever.budgea_id
+          %span.action-group.ms-1.pointer.edit_connection{ title: 'Edition', data: { retriever: retriever.to_json } }= glyphicon('pencil', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+        %span.action-group.ms-1.pointer.delete_connection{ title: 'Suppression', data: { id: retriever.id }}= glyphicon('trash', { size: '20', color:'red'})

@@ -1,4 +1,20 @@
 function bind_all_events(){
+  $('.retriever_actions .delete_connection').unbind('click');
+  $('.retriever_actions .delete_connection').bind('click', function(e){
+    AppEmit('retriever_delete_connection', { id: $(this).data('id') });
+  });
+
+  $('.retriever_actions .trigger_connection').unbind('click');
+  $('.retriever_actions .trigger_connection').bind('click', function(e){
+    AppEmit('retriever_trigger_connection', { id: $(this).data('id') });
+  });
+
+  $('.retriever_actions .edit_connection').unbind('click');
+  $('.retriever_actions .edit_connection').bind('click', function(e){
+    AppEmit('retriever_edit_connection', { retriever: $(this).data('retriever') });
+  });
+
+
   $('.action.sub-menu-bank-param').unbind('click');
   $(".action.sub-menu-bank-param").bind('click',function(e) {
     e.stopPropagation();
@@ -34,9 +50,8 @@ function bind_all_events(){
 
   $('.add-retriever').unbind('click')
   $(".add-retriever").bind('click',function(e) {
-    e.stopPropagation()
-
-    $('#add-retriever').modal('show');
+    e.stopPropagation();
+    AppEmit('retriever_edit_connection', { retriever: null });
   });
 
   $('.sub-menu-bank-param li.edit').unbind('click');
@@ -63,9 +78,19 @@ function bind_all_events(){
 
   $('.list-retriever').unbind('click');
   $(".list-retriever").bind('click',function(e) {
-    e.stopPropagation()
+    AppEmit('retrievers_list');
+  });
 
-    $('#list-retrievers').modal('show');
+  $('ul.retriever-index li a').unbind('click');
+  $('ul.retriever-index li a').bind('click', function(e){
+    e.preventDefault();
+    AppEmit('retrievers_list_filter', { pattern: $(this).data('index') });
+  });
+
+  $('#connectors-list #export_connectors').unbind('click');
+  $('#connectors-list #export_connectors').bind('click', function(e){
+    e.preventDefault();
+    AppEmit('retrievers_list_export');
   });
 
   $('select#account_id').unbind('change');
@@ -75,7 +100,32 @@ function bind_all_events(){
   $('#filter-retriever #filter_button').bind('click', function(e){ $('#filter-retriever').modal('hide'); AppEmit('retriever_reload_all') });
 
   $('#filter-retriever #filter_cancel').unbind('click');
-  $('#filter-retriever #filter_cancel').bind('click', function(e){ $('#filter-retriever').modal('hide'); $('#filter-retriever #search_name').val(''); $('#filter-retriever #search_state').val(''); AppEmit('retriever_reload_all') });
+  $('#filter-retriever #filter_cancel').bind('click', function(e){ $('#filter-retriever').modal('hide'); $('#filter-retriever #search_name').val(''); $('#filter-retriever #search_state').val(''); AppEmit('retriever_reload_all') })
+
+  $('#add-retriever .step1 #choose-selector').unbind('change');
+  $('#add-retriever .step1 #choose-selector').bind('change', function(e){
+    AppEmit('add_retriever_search_connector');
+  });
+
+  $('#add-retriever .step1 #connector-search-name').unbind('keyup');
+  $('#add-retriever .step1 #connector-search-name').bind('keyup', function(e){
+    AppEmit('add_retriever_search_connector');
+  });
+
+  $('#add-retriever .step1 select#connectors-list').unbind('change');
+  $('#add-retriever .step1 select#connectors-list').bind('change', function(e){
+    AppEmit('add_retriever_connector_selection');
+  });
+
+  $('#add-retriever button.primary').unbind('click');
+  $('#add-retriever button.primary').bind('click', function(e){
+    AppEmit('add_retriever_primary_action');
+  });
+
+  $('#add-retriever button.secondary').unbind('click');
+  $('#add-retriever button.secondary').bind('click', function(e){
+    AppEmit('add_retriever_secondary_action');
+  });
 }
 
 jQuery(function() {

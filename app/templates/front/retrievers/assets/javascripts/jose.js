@@ -1789,8 +1789,3 @@ JoseJWS.Verifier.prototype.verify = function () {
   return Promise.all(promises);
 };
 }(window, window.crypto, window.Promise, window.Error, window.Uint8Array));
-
-
-jQuery(function(){
-  console.log('ici');
-});
