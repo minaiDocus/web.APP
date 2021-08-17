@@ -49,6 +49,14 @@ class Customer{
       this.update_price()
     }
 
+    if ($('#journals select#copy-journals-into-customer').length > 0) {
+      $('#journals select#copy-journals-into-customer').removeClass('form-control');
+      $('#journals select#copy-journals-into-customer').searchableOptionList({
+        'noneText': 'Selectionner un/des journaux',
+        'allText': 'Tous séléctionnés'
+      });
+    }
+
     this.hide_sub_menu();
   }
 

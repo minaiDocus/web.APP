@@ -336,10 +336,11 @@
               = link_to 'Ajouter nouveau', '#', class: 'btn btn-primary', disabled: 'disabled'
               - unless @organization.specific_mission
                 = link_to 'Copier depuis base existante', '#', class: 'btn btn-primary', disabled: 'disabled'
-            - elsif @customer.active?
-              = link_to 'Ajouter nouveau', new_organization_customer_journal_path(@organization, @customer), class: 'btn btn-primary'
-              - unless @organization.specific_mission
-                = link_to 'Copier depuis base existante', select_organization_customer_journals_path(@organization, @customer), class: 'btn btn-primary'
+            / TODO HERE
+            / - elsif @customer.active?
+            /   = link_to 'Ajouter nouveau', new_organization_customer_journal_path(@organization, @customer), class: 'btn btn-primary'
+            /   - unless @organization.specific_mission
+            /     = link_to 'Copier depuis base existante', select_organization_customer_journals_path(@organization, @customer), class: 'btn btn-primary'
       
       - if @customer.account_book_types.count < @customer.options.max_number_of_journals
         - journals = @organization.account_book_types.order(is_default: :desc, name: :asc)
@@ -352,8 +353,9 @@
 
           .form-group.no-margin
             .w-100.text-end
-              = link_to t('actions.cancel'), organization_customer_path(@organization, @customer, tab: 'journals'), class: 'btn btn-light semibold'
-              = submit_tag 'Valider les modifications', class: 'btn btn-primary bold'
+              - unless @organization.specific_mission
+                = link_to t('actions.cancel'), organization_customer_path(@organization, @customer, tab: 'journals'), class: 'btn btn-light semibold'
+                = submit_tag 'Valider les modifications', class: 'btn btn-primary bold'
 
     .tab-pane.box.no-margin#bank-setting{ "role" => "tabpanel", "aria-labelledby" => "bank-setting-tab" }
       .form-group
