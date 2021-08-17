@@ -32,7 +32,6 @@ class Customer{
     this.load_configuraation_otpion_view();
     this.get_accounting_plan_view();
     this.filter_customer();
-    this.set_ckeck_box_state();
 
     this.get_customer_edit_view();
 
@@ -58,6 +57,7 @@ class Customer{
     }
 
     this.hide_sub_menu();
+    this.set_ckeck_box_state();
   }
 
 
@@ -339,7 +339,7 @@ class Customer{
         self.set_sub_menu_toggle();
         self.set_ckeck_box_state();
 
-        self.get_vat_accounts_view(customer_id);
+        // self.get_vat_accounts_view(customer_id);
       });
     });
   }
@@ -415,16 +415,21 @@ class Customer{
     });
 
 
-    if ($('.input-toggle').is(':checked')) {
-      let selected = $('.input-toggle:checked');
+    if ($('.input-toggle:checked').length > 0) {
+      const selected = $('.input-toggle:checked');
 
-      class_list = selected.attr('class').split(/\s+/);
+      $.each(selected, function() {
+        class_list = $(this).attr('class').split(/\s+/);
+        let element = $(this);
 
-      if (class_list.indexOf("ido-custom-checkbox") > -1) {
-        selected = $('.ido-custom-checkbox.input-toggle:checked');
-        selected.parents().eq(3).find('label.ido-custom-label').text('Oui');
-      }
-      else { selected.parent().find('label').text('Oui'); }
+        if (class_list.indexOf("ido-custom-checkbox") > -1) {
+          element = $('.ido-custom-checkbox.input-toggle:checked');
+          element.parents().eq(3).find('label.ido-custom-label').text('Oui');
+        }
+        else {
+          element.parent().find('label').text('Oui');
+        }
+      });
     }
   }
 

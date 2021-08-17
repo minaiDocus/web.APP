@@ -6,10 +6,7 @@
     .row.form-group
       - if @customer.configured?
         .col-md-6
-          %h3
-            Plan comptable du client :
-            = link_to @customer, organization_customer_path(@organization, @customer, tab: 'accounting_plan'), class: 'fs-origin'
-        .col-md-6{style: "padding-top: 3px;padding-left: 50px;border-radius: 3px;background-color: #f8f9fa;"}
+        .col-md-6
           .w-100.text-end
             = form_tag import_fec_organization_customer_accounting_plan_path(@organization, @customer), method: 'patch', multipart: true, class: 'form-horizontal clearfix label-auto' do
               .row
@@ -37,6 +34,8 @@
           = link_to t('actions.complete_later'), complete_later_organization_customer_setup_path(@organization, @customer), class: 'btn btn-secondary'
           = link_to t('actions.next_step'), next_organization_customer_setup_path(@organization, @customer), class: 'btn btn-primary'
 
+  .mb-4
+
   .box.no-margin.derivationLeft
     - if @customer.try(:ibiza).try(:ibiza_id?) && @customer.uses?(:ibiza)
       - to_show        = true
@@ -49,7 +48,7 @@
       - software_value = @customer.my_unisoft.try(:auto_update_accounting_plan?)
       - software_id    = @customer.my_unisoft.society_id
 
-    - if true
+    - if to_show
       = form_tag "#", class: 'form-horizontal clearfix label-auto', id: 'auto_update_accounting_plan' do
         = hidden_field_tag 'user[software_id]', software_id
         .row.form-group
@@ -58,8 +57,8 @@
             %br
             %i.help-block Attention: si cette option est activée, les modifications manuelles du plan comptable seront écrasées automatiquement par la mise à jour auto.
           .col-md-2.form-check.form-switch
-            %label.form-check-label Oui
-            = check_box_tag 'user[software]', true, software_value, info: "#{@organization.id}-#{@customer.id}-#{software}", class: 'form-check-input input-toggle'
+            %label.form-check-label Non
+            = check_box_tag 'user[software]', true, software_value, info: "#{@organization.id}-#{@customer.id}-#{software}", class: 'form-check-input input-toggle auto-update-accounting-plan', id: 'auto-update-accounting-plan'
   .mb-4
 
   .box.no-margin
