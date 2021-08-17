@@ -644,8 +644,8 @@ class Customer{
 
 
   filter_customer(){
-    $('.customer-filter').unbind('click');
-    $(".customer-filter").bind('click',function(e) {
+    let here = this;
+    $('.customer-filter').unbind('click').bind('click',function(e) {
       e.stopPropagation();
 
       $('#group-filter').multiSelect({
@@ -654,6 +654,9 @@ class Customer{
       });
 
       $('#customers-filter').modal('show');
+
+
+      here.set_ckeck_box_state();
 
 
       $('#customers-filter .form-filter input.filter-field').unbind('keyup keydown change').bind('keyup keydown change', function(e) {

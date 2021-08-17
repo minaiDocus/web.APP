@@ -17,9 +17,6 @@
         %button.semibold.nav-link#orders-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#orders", type: :button, "role" => "tab", "aria-controls" => "orders", "aria-selected" => "false" } Commandes Kits/Scan
       %li.nav-item.no-margin{ "role" => "presentation" }
         %button.semibold.nav-link#adresses-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#adresses", type: :button, "role" => "tab", "aria-controls" => "adresses", "aria-selected" => "false" } Adresses
-    - if @customer.active? && (@customer.options.is_upload_authorized || @customer.subscription.is_retriever_only? ) && !@organization.specific_mission
-      %li.nav-item.no-margin{ "role" => "presentation" }
-        %button.semibold.nav-link#period_options-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#period_options", type: :button, "role" => "tab", "aria-controls" => "period_options", "aria-selected" => "false" } Option téléversement
     - if @organization.specific_mission
       %li.nav-item.no-margin{ "role" => "presentation" }
         %button.semibold.nav-link#journals-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#journals", type: :button, "role" => "tab", "aria-controls" => "journals", "aria-selected" => "false" } Dossiers
@@ -131,9 +128,6 @@
     - if @organization.knowings.try(:ready?)
       %li.nav-item.no-margin{ "role" => "presentation" }
         %button.semibold.nav-link#ged-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#ged", type: :button, "role" => "tab", "aria-controls" => "ged", "aria-selected" => "false" } Outil GED
-    - if @customer.is_dematbox_authorized
-      %li.nav-item.no-margin{ "role" => "presentation" }
-        %button.semibold.nav-link#idocus-box-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#idocus-box", type: :button, "role" => "tab", "aria-controls" => "idocus-box", "aria-selected" => "false" } iDocus'Box
     - if @user.is_admin && @customer.active? && !@organization.specific_mission
       %li.nav-item.no-margin{ "role" => "presentation" }
         %button.semibold.nav-link#file-storages-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#file-storages", type: :button, "role" => "tab", "aria-controls" => "file-storages", "aria-selected" => "false" } Stockages externes
@@ -205,26 +199,6 @@
                 = link_to 'Générer un kit de numérisation', select_organization_file_sending_kit_path(@organization, order_customer_id: @customer.id), class: 'btn btn-primary'
               - else
                 = link_to 'Commander un Kit envoi courrier', new_organization_customer_order_path(@organization, @customer, order: { type: 'paper_set' }), class: 'btn btn-primary'
-
-      - if (@customer.options.is_upload_authorized || @customer.subscription.is_retriever_only?)
-        .tab-pane.box.no-margin#period_options{ "role" => "tabpanel", "aria-labelledby" => "period_options-tab" }
-          %table.table.table-striped.table-condensed
-            %tbody
-              %tr
-                %th= t('activerecord.models.user.attributes.authd_prev_period')
-                %td= @customer.authd_prev_period
-              %tr
-                %th= t('activerecord.models.user.attributes.auth_prev_period_until_day')
-                %td= @customer.auth_prev_period_until_day
-              - if @user.is_admin
-                %tr
-                  %th= t('activerecord.models.user.attributes.auth_prev_period_until_month')
-                  %td= @customer.auth_prev_period_until_month
-          .row
-            .col-md-12
-              .form-group.no-margin
-                .w-100.text-end
-                  = link_to t('actions.edit'), edit_period_options_organization_customer_path(@organization, @customer), class: 'btn btn-primary'
 
     .tab-pane#adresses{ "role" => "tabpanel", "aria-labelledby" => "adresses-tab" }
       %input#paper_return_addresses{type: :hidden, value: @customer.paper_return_address.id, name: 'paper_return_addresses'}
@@ -1112,44 +1086,6 @@
             .form-group.no-margin
               .w-100.text-end
                 = link_to t('actions.edit'), edit_knowings_options_organization_customer_path(@organization, @customer), class: 'btn btn-primary'
-
-    - if @customer.is_dematbox_authorized
-      .tab-pane.box.no-margin#idocus-box{ "role" => "tabpanel", "aria-labelledby" => "idocus-box-tab" }
-        - if @customer.dematbox.try(:is_configured)
-          %h4.margin1bottom Liste des services
-          - if @customer.dematbox.try(:services).try(:any?)
-            %table.table.table-striped.table-bordered-inner.table-condensed.margin0bottom
-              %thead
-                %tr.bg-brown.text-white
-                  %th Groupe
-                  %th Nom
-              %tbody
-                - @customer.dematbox.services.order(group_name: :asc, name: :asc).each do |service|
-                  %tr
-                    %td= service.group_name
-                    %td= service.name
-          - elsif @customer.account_book_types.size == 0
-            %p Pas de journaux paramétrés.
-          = link_to 'Déconnecter le Scanner', organization_customer_dematbox_path(@organization, @customer), method: :delete, class: 'btn btn-danger margin1top', data: { confirm: 'Etes-vous sûr de vouloir déconnecter le scanner ?' }
-        - elsif @customer.dematbox.try(:beginning_configuration_at).present?
-          Configuration en cours...veuillez recharger votre page dans quelques secondes.
-        - else
-          Appairez ici un scanner iDocus'Box (Produit Sagemcom). Si vous n'avez pas de scanner,
-          = link_to 'vous pouvez en commander un.', new_organization_customer_order_path(@organization, @customer, order: { type: 'dematbox' })
-          %br
-          Afin d'appairer le scanner, merci de suivre les instructions du
-          = link_to "mode d'emploi Sagemcom", docs_download_path(name: 'Livret_utilisation_Dematbox.pdf')
-          fournit lors de la livraison.
-          %br
-          Merci d'inscrire le code d'appairage dans le champ ci-dessous :
-          = form_tag organization_customer_dematbox_path(@organization, @customer), method: :post, class: 'margin2top form-horizontal label-auto' do
-            .form-group.clearfix
-              .label-section
-                = label_tag :pairing_code, 'Code appairage'
-              .control-section
-                = text_field_tag :pairing_code, '', style: 'width:75px;'
-            .form-actions
-              = submit_tag t('actions.submit'), class: 'btn btn-primary'
 
     - if @user.is_admin && @customer.active?
       .tab-pane.box.no-margin#file-storages{ "role" => "tabpanel", "aria-labelledby" => "file-storages-tab" }
