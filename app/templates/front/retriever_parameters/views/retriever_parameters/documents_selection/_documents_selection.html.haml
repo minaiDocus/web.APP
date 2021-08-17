@@ -1,7 +1,9 @@
 %input#documents-selection-size{ type: 'hidden', value: documents.total_count }
 .form-group.no-margin
   .w-100.text-end            
-    %button#integrate_documents.btn.btn-light-primary.bold Intégrer les documents séléctionnés
+    %button#integrate_documents.btn.btn-light-primary.bold 
+      %span.me-2= glyphicon('action-undo', { size: '15', color: "#0d6efd" })
+      %span Intégrer les documents séléctionnés
 
 .mb-4
 

@@ -43,3 +43,23 @@
 .modal#showCguBI .modal-dialog{
   min-width: 1024px;
 }
+
+.modal#showCguBI .modal-body{
+  max-height: 700px;
+  overflow: auto;
+  font-size: 13px;
+}
+
+.sub-menu-bank-param .sub_menu{
+  min-width: 8% !important;
+}
+
+.sub-menu-bank-param .sub_menu li{
+  padding: 8% 6%;
+}
+
+
+.modal#form-bank-account .modal-body{
+  max-height: 700px;
+  overflow: auto;  
+}

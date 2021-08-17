@@ -84,6 +84,7 @@ Rails.application.routes.draw do
   front_draw('paper_processes')
   front_draw('suspended')
   front_draw('analytics')
+  front_draw('profiles')
 
   get 'admin/', to: redirect('/admin/dashboard')
   back_draw('dashboard')

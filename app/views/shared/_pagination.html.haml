@@ -2,7 +2,7 @@
   - if total_pages.to_i > 0
     .col-md-6
       .row
-        .col-md-2.text-end.pt-1
+        .col-md-2.text-end
           %label Afficher par
         .col-md-2
           = select_tag "per-page-#{name}", options_for_select([[20, 20], [50, 50], [100, 100]], params[:per_page].presence || 20), class: "per-page #{name} form-select form-select-sm", data: { name: name }, "aria-label" => ".form-select-sm"

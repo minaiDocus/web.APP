@@ -250,13 +250,16 @@ table td
 .menu 
   .navbar-nav 
     .nav-item a
-      color: #1A1A1A !important
+      color: #1A1A1A
 
     .active, .nav-link:hover  
       border-bottom: 3px solid #C1D837
 
     .active:hover
       border-bottom: none
+  .dropdown-item:active
+    background-color: #C1D837
+    color: #FFFFFF !important
 
 .rotate
   transform: rotate(90deg)
@@ -659,3 +662,8 @@ i.remark
   padding: 0.5%
   border-radius: 50%
   .scroll-arrow
+
+.oi-icon.colored:hover
+  fill: #C1D837 !important
+  cursor: pointer
+

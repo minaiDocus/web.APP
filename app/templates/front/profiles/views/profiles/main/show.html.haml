@@ -4,17 +4,12 @@
   .alerts
     = render partial: 'shared/messages'
 
-  .row.retractable.with-menu.derivationRight
-    .retractable-menu
-      .row
-        .col-md-12
-          = render partial: 'layouts/front/account/me/navigation'
-
+  .row.derivationRight
     .col-md-12.retractable-content
       - unless organizations_suspended? && @user.active?
         #change_password.row.pan{ class: (@active_panel == 'change_password' ? 'active' : '')}
           .col-md-12
-            = form_for true_user, url: profile_path do |f|
+            = form_for true_user, url: profiles_path do |f|
               .card
                 .card-header
                   %h3 Changer mon mot de passe
@@ -337,7 +332,7 @@
 
             #subscription_options.row.pan{ class: (@active_panel == 'subscription_options' ? 'active' : '')}
               .col-md-12
-                = simple_form_for true_user, url: profile_path, html: { id: 'subscription_options' } do |f|
+                = simple_form_for true_user, url: profiles_path, html: { id: 'subscription_options' } do |f|
                   .card
                     .card-header
                       %h3 Notifications et remontées d'alertes

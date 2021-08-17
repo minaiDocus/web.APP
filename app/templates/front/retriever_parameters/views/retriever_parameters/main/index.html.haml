@@ -1,6 +1,8 @@
+= stylesheet_link_tag 'front/retrievers/assets/stylesheets/main'
+
 .container-fluid
   .row.derivationLeft
-    .col-md-7.text-start
+    .col-md-8.text-start
       %h1.bold Paramètres Divers
     .col-md-3.p-1
       = select_tag 'account_id', options_for_select(customers_active, @account.try(:id)), include_blank: false, class: 'form-select'
