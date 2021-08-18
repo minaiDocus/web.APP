@@ -56,8 +56,8 @@ class Customer{
       });
     }
 
-    this.hide_sub_menu();
-    this.set_ckeck_box_state();
+    ApplicationJS.hide_submenu();
+    ApplicationJS.set_checkbox_radio(this);
   }
 
 
@@ -212,7 +212,7 @@ class Customer{
     }
 
 
-    this.set_ckeck_box_state();
+    ApplicationJS.set_checkbox_radio(this);
     this.check_input_number();
     this.update_price();
   }
@@ -307,7 +307,7 @@ class Customer{
           'allText': 'Tous séléctionnés'
         });
 
-        this.set_ckeck_box_state();
+        ApplicationJS.set_checkbox_radio(this);
 
         this.show_ibiza_customer();
       });
@@ -337,7 +337,7 @@ class Customer{
         self.get_vat_accounts_view(customer_id);
 
         self.set_sub_menu_toggle();
-        self.set_ckeck_box_state();
+        ApplicationJS.set_checkbox_radio(self);
 
         // self.get_vat_accounts_view(customer_id);
       });
@@ -361,7 +361,7 @@ class Customer{
       self.applicationJS.parseAjaxResponse({ 'url': '/organizations/' + self.organization_id + '/customers/' + customer_id + '/edit_configuration_options' }).then((element)=>{
         $('#customer-content .tab-content .tab-pane#compta').html($(element).find('#customer.edit').html());
 
-        self.set_ckeck_box_state();
+        ApplicationJS.set_checkbox_radio(self);
       });
     });
   }
@@ -374,63 +374,6 @@ class Customer{
 
       self.set_pre_assignment_view();
     });
-  }
-
-
-  set_ckeck_box_state(){
-    let class_list = [];
-    let self = this;
-
-    $('.input-toggle').change(function() {
-      class_list = $(this).attr('class').split(/\s+/);
-
-      if ($(this).is(':checked')){
-        $(this).attr('checked', true);
-
-        if (class_list.indexOf("ido-custom-checkbox") > -1) { $(this).parents().eq(3).find('label.ido-custom-label').text('Oui'); }
-        else { $(this).parent().find('label').text('Oui'); }
-
-        if ((class_list.indexOf("check-software") > -1) || (class_list.indexOf("filter-customer") > -1)) { $(this).attr('value', 1); }
-        else { $(this).attr('value', true); }
-
-        if (class_list.indexOf("option_checkbox") > -1) { $(this).addClass('active_option'); }
-
-      }
-      else {
-        $(this).attr('checked', false);
-
-        if (class_list.indexOf("ido-custom-checkbox") > -1) { $(this).parents().eq(3).find('label.ido-custom-label').text('Non'); }
-        else { $(this).parent().find('label').text('Non'); }
-
-        if ((class_list.indexOf("check-software") > -1) || (class_list.indexOf("filter-customer") > -1)) { $(this).attr('value', 0); }
-        else { $(this).attr('value', false); }
-
-        if (class_list.indexOf("option_checkbox") > -1) { $(this).removeClass('active_option'); }
-      }
-
-      if(class_list.indexOf("option_checkbox") > -1){
-        self.check_input_number();
-        self.update_price(); 
-      }       
-    });
-
-
-    if ($('.input-toggle:checked').length > 0) {
-      const selected = $('.input-toggle:checked');
-
-      $.each(selected, function() {
-        class_list = $(this).attr('class').split(/\s+/);
-        let element = $(this);
-
-        if (class_list.indexOf("ido-custom-checkbox") > -1) {
-          element = $('.ido-custom-checkbox.input-toggle:checked');
-          element.parents().eq(3).find('label.ido-custom-label').text('Oui');
-        }
-        else {
-          element.parent().find('label').text('Oui');
-        }
-      });
-    }
   }
 
 
@@ -507,13 +450,13 @@ class Customer{
       self.show_previous();
       self.do_submit_customer();
 
-      self.set_ckeck_box_state();
+      ApplicationJS.set_checkbox_radio(self);
 
       if ($('#personalize_subscription_package_form').length > 0 ) {
         self.update_price();
         self.check_input_number();
         self.show_subscription_option();
-        self.set_ckeck_box_state();
+        ApplicationJS.set_checkbox_radio(self);
       }
     });
   }
@@ -637,14 +580,6 @@ class Customer{
     });
   }
 
-  hide_sub_menu() {
-    $(document).click(function(e) {
-      if ($('.sub_menu').is(':visible')) {
-        $('.sub_menu').addClass('hide');
-      }
-    });
-  }
-
 
   edit_customer(){
     $('.sub_menu .edit-customer').unbind('click').bind('click',function(e) {
@@ -657,7 +592,7 @@ class Customer{
 
 
   filter_customer(){
-    let here = this;
+    let self = this;
     $('.customer-filter').unbind('click').bind('click',function(e) {
       e.stopPropagation();
 
@@ -669,7 +604,7 @@ class Customer{
       $('#customers-filter').modal('show');
 
 
-      here.set_ckeck_box_state();
+      ApplicationJS.set_checkbox_radio(self);
 
 
       $('#customers-filter .form-filter input.filter-field').unbind('keyup keydown change').bind('keyup keydown change', function(e) {

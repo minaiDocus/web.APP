@@ -95,15 +95,7 @@ class Collaborator{
 
     $('select.display').on('change', function() {self.load_per_page($("option:selected", this).val());});
 
-    self.hide_sub_menu();
-  }
-
-  hide_sub_menu() {
-    $(document).click(function(e) {
-      if ($('.sub_menu').is(':visible')) {
-        $('.sub_menu').addClass('hide');
-      }
-    });
+    ApplicationJS.hide_submenu();
   }
 }
 

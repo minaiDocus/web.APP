@@ -186,6 +186,73 @@ class ApplicationJS {
     return result
   }
 
+
+  static set_checkbox_radio(that = null){
+    let class_list = [];
+
+    $('.input-toggle').change(function() {
+      class_list = $(this).attr('class').split(/\s+/);
+
+      if ($(this).is(':checked')){
+        $(this).attr('checked', true);
+
+        if (class_list.indexOf("ido-custom-checkbox") > -1) { $(this).parents().eq(3).find('label.ido-custom-label').text('Oui'); }
+        else { $(this).parent().find('label').text('Oui'); }
+
+        if ((class_list.indexOf("check-software") > -1) || (class_list.indexOf("filter-customer") > -1)) { $(this).attr('value', 1); }
+        else { $(this).attr('value', true); }
+
+        if (class_list.indexOf("option_checkbox") > -1) { $(this).addClass('active_option'); }
+
+      }
+      else {
+        $(this).attr('checked', false);
+
+        if (class_list.indexOf("ido-custom-checkbox") > -1) { $(this).parents().eq(3).find('label.ido-custom-label').text('Non'); }
+        else { $(this).parent().find('label').text('Non'); }
+
+        if ((class_list.indexOf("check-software") > -1) || (class_list.indexOf("filter-customer") > -1)) { $(this).attr('value', 0); }
+        else { $(this).attr('value', false); }
+
+        if (class_list.indexOf("option_checkbox") > -1) { $(this).removeClass('active_option'); }
+      }
+
+      if (that !== null) {
+        console.log(that);
+        if(class_list.indexOf("option_checkbox") > -1){
+          that.check_input_number();
+          that.update_price();
+        }
+      }
+    });
+
+
+    if ($('.input-toggle:checked').length > 0) {
+      const selected = $('.input-toggle:checked');
+
+      $.each(selected, function() {
+        class_list = $(this).attr('class').split(/\s+/);
+        let element = $(this);
+
+        if (class_list.indexOf("ido-custom-checkbox") > -1) {
+          element = $('.ido-custom-checkbox.input-toggle:checked');
+          element.parents().eq(3).find('label.ido-custom-label').text('Oui');
+        }
+        else {
+          element.parent().find('label').text('Oui');
+        }
+      });
+    }
+  }
+
+  static hide_submenu() {
+    $(document).click(function(e) {
+      if ($('.sub_menu').is(':visible')) {
+        $('.sub_menu').addClass('hide');
+      }
+    });
+  }
+
   getFrom(url, success, error){
     return new Promise((success, error) => {
       let self = this

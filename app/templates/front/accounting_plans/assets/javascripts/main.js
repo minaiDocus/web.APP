@@ -1,9 +1,9 @@
 class AccountingPlan {
   constructor(){
-    this.applicationJS = new ApplicationJS;
-    this.organization_id = $('input:hidden[name="organization_id"]').val();
+    this.applicationJS       = new ApplicationJS;
+    this.organization_id     = $('input:hidden[name="organization_id"]').val();
     this.edit_provider_modal = $('#edit-provider-customer.modal');
-    this.customer_id = $('input:hidden[name="customer_id"]').val();
+    this.customer_id         = $('input:hidden[name="customer_id"]').val();
   }
 
   set_auto_update(){
@@ -56,16 +56,16 @@ class AccountingPlan {
 
 
   edit_provider_customer(){
-    let that = this;
+    let self = this;
     $('.sub_menu .edit').unbind('click').bind('click', function(e) {
       e.stopPropagation();
       e.preventDefault();
 
-      if ($(this).hasClass('provider')) { that.get_edit_view('.customer-form'); }
-      else if ($(this).hasClass('customer')) { that.get_edit_view('.provider-form'); }
+      if ($(this).hasClass('provider')) { self.get_edit_view('.customer-form'); }
+      else if ($(this).hasClass('customer')) { self.get_edit_view('.provider-form'); }
 
-      that.edit_provider_modal.modal('show');
-      that.set_ckeck_box_state();
+      self.edit_provider_modal.modal('show');
+      ApplicationJS.set_checkbox_radio();
     })
   }
 
@@ -76,19 +76,19 @@ class AccountingPlan {
 
     this.edit_provider_customer();
     this.handle_edit_delete_sub_menu();
-    this.set_ckeck_box_state();
-    this.hide_sub_menu();
+    ApplicationJS.set_checkbox_radio();
+    ApplicationJS.hide_submenu();
   }
 
 
   get_edit_view(target){
-    let that = this;  
+    let self = this;
 
-    that.applicationJS.parseAjaxResponse({ 'url': '/organizations/' + that.organization_id + '/customers/' + that.customer_id + '/accounting_plan/edit' }).then((element)=>{
-      that.edit_provider_modal.find('.modal-body').html($(element).find('#accounting_plan').html());
-      that.edit_provider_modal.find(target).remove();
-      if (target === '.provider-form') { that.edit_provider_modal.find('.modal-title').text('Éditer un client'); }
-      that.set_ckeck_box_state();
+    self.applicationJS.parseAjaxResponse({ 'url': '/organizations/' + self.organization_id + '/customers/' + self.customer_id + '/accounting_plan/edit' }).then((element)=>{
+      self.edit_provider_modal.find('.modal-body').html($(element).find('#accounting_plan').html());
+      self.edit_provider_modal.find(target).remove();
+      if (target === '.provider-form') { self.edit_provider_modal.find('.modal-title').text('Éditer un client'); }
+      ApplicationJS.set_checkbox_radio();
     });
   }
 
@@ -103,70 +103,6 @@ class AccountingPlan {
 
       $(this).parent().find('.sub_menu').removeClass('hide');
     });
-  }
-
-  hide_sub_menu() {
-    $(document).click(function(e) {
-      if ($('.sub_menu').is(':visible')) {
-        $('.sub_menu').addClass('hide');
-      }
-    });
-  }
-
-  set_ckeck_box_state(){
-    let class_list = [];
-    let self = this;
-
-    $('.input-toggle').change(function() {
-      class_list = $(this).attr('class').split(/\s+/);
-
-      if ($(this).is(':checked')){
-        $(this).attr('checked', true);
-
-        if (class_list.indexOf("ido-custom-checkbox") > -1) { $(this).parents().eq(3).find('label.ido-custom-label').text('Oui'); }
-        else { $(this).parent().find('label').text('Oui'); }
-
-        if ((class_list.indexOf("check-software") > -1) || (class_list.indexOf("filter-customer") > -1)) { $(this).attr('value', 1); }
-        else { $(this).attr('value', true); }
-
-        if (class_list.indexOf("option_checkbox") > -1) { $(this).addClass('active_option'); }
-
-      }
-      else {
-        $(this).attr('checked', false);
-
-        if (class_list.indexOf("ido-custom-checkbox") > -1) { $(this).parents().eq(3).find('label.ido-custom-label').text('Non'); }
-        else { $(this).parent().find('label').text('Non'); }
-
-        if ((class_list.indexOf("check-software") > -1) || (class_list.indexOf("filter-customer") > -1)) { $(this).attr('value', 0); }
-        else { $(this).attr('value', false); }
-
-        if (class_list.indexOf("option_checkbox") > -1) { $(this).removeClass('active_option'); }
-      }
-
-      if(class_list.indexOf("option_checkbox") > -1){
-        self.check_input_number();
-        self.update_price(); 
-      }       
-    });
-
-
-    if ($('.input-toggle:checked').length > 0) {
-      const selected = $('.input-toggle:checked');
-
-      $.each(selected, function() {
-        class_list = $(this).attr('class').split(/\s+/);
-        let element = $(this);
-
-        if (class_list.indexOf("ido-custom-checkbox") > -1) {
-          element = $('.ido-custom-checkbox.input-toggle:checked');
-          element.parents().eq(3).find('label.ido-custom-label').text('Oui');
-        }
-        else {
-          element.parent().find('label').text('Oui');
-        }
-      });
-    }
   }
 }
 
