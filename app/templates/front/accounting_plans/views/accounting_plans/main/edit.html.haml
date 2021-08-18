@@ -1,49 +1,58 @@
+= stylesheet_link_tag 'front/accounting_plans/assets/stylesheets/main'
+= stylesheet_link_tag 'front/customers/assets/stylesheets/main'
+
 #accounting_plan.derivationRight
   - unless @customer.configured?
     .box
       = render 'account/customers/steps'
-  .card
-    .card-header
-      - if @customer.configured?
-        %h3
-          Edition du
-          = link_to 'plan comptable', organization_customer_accounting_plan_path(@organization, @customer), class: 'fs-origin'
-          du client :
-          = link_to @customer, organization_customer_path(@organization, @customer, tab: 'accounting_plan'), class: 'fs-origin'
-      - else
-        %h3 Plan comptable
+  = simple_nested_form_for @accounting_plan, url: organization_customer_accounting_plan_path(@organization, @customer), html: { class: 'form form-horizontal margin0', novalidate: true }, wrapper: false do |f|
+    .box.no-margin
+      .provider-form
+        = f.fields_for :providers do |provider|
+          = provider.label :third_party_account, label: t('activerecord.models.accounting_plan_item.attributes.third_party_account'), class: 'semibold'
+          .select-container.no-padding.w-100
+            = provider.input :third_party_account, label: false
+          = provider.label :third_party_name, label: t('activerecord.models.accounting_plan_item.attributes.third_party_name'), class: 'semibold'
+          .select-container.no-padding.w-100
+            = provider.input :third_party_name, label: false
+          = provider.label :conterpart_account, label: t('activerecord.models.accounting_plan_item.attributes.conterpart_account'), class: 'semibold'
+          .select-container.no-padding.w-100
+            = provider.input :conterpart_account, label: false
+          = provider.label :code, label: t('activerecord.models.accounting_plan_item.attributes.code'), class: 'semibold'
+          .select-container.no-padding.w-100
+            = provider.input :code, label: false
+          = provider.label :vat_autoliquidation_debit_account, label: t('activerecord.models.accounting_plan_item.attributes.vat_autoliquidation_debit_account'), class: 'semibold'
+          .select-container.no-padding.w-100
+            = provider.input :vat_autoliquidation_debit_account, label: false
+          = provider.label :vat_autoliquidation_credit_account, label: t('activerecord.models.accounting_plan_item.attributes.vat_autoliquidation_credit_account'), class: 'semibold'
+          .select-container.no-padding.w-100
+            = provider.input :vat_autoliquidation_credit_account, label: false
+          .form-group
+            .row
+              .col-md-10.form-group.no-margin
+                = provider.label :vat_autoliquidation, label: t('activerecord.models.accounting_plan_item.attributes.vat_autoliquidation'), class: 'control-label semibold form-check-label'
+              .col-md-2
+                .form-check.form-switch.idocus-custom-form-check
+                  = provider.input :vat_autoliquidation, as: :boolean, label: false, input_html: { class: 'form-check-input input-toggle ido-custom-checkbox check-vat-autoliquidation', id: 'check-vat-autoliquidation' }
+                  %label.semibold{class: 'form-check-label ido-custom-label', for: 'check-vat-autoliquidation'} Non
 
-    = simple_nested_form_for @accounting_plan, url: organization_customer_accounting_plan_path(@organization, @customer), html: { class: 'form form-horizontal margin0', novalidate: true }, wrapper: false do |f|
-      .card-body
-        .row
-          .col-md-6
-            .box.bg-light
-              %h4 Fournisseurs
-              %hr
-              = f.fields_for :providers do |provider|
-                .box
-                  = provider.link_to_remove glyphicon('x'), class: 'btn btn-light', style: "position: absolute; right: 48px;"
-                  = provider.input :third_party_account, label: t('activerecord.models.accounting_plan_item.attributes.third_party_account')
-                  = provider.input :third_party_name, label: t('activerecord.models.accounting_plan_item.attributes.third_party_name')
-                  = provider.input :conterpart_account, label: t('activerecord.models.accounting_plan_item.attributes.conterpart_account')
-                  = provider.input :code, label: t('activerecord.models.accounting_plan_item.attributes.code')
-                  = provider.input :vat_autoliquidation, label: t('activerecord.models.accounting_plan_item.attributes.vat_autoliquidation')
-                  = provider.input :vat_autoliquidation_debit_account, label: t('activerecord.models.accounting_plan_item.attributes.vat_autoliquidation_debit_account')
-                  = provider.input :vat_autoliquidation_credit_account, label: t('activerecord.models.accounting_plan_item.attributes.vat_autoliquidation_credit_account')
-              = f.link_to_add 'Ajouter un fournisseur', :providers, class: 'btn btn-secondary'
-          .col-md-6
-            .box.bg-light
-              %h4 Clients
-              %hr
-              = f.fields_for :customers do |customer|
-                .box
-                  = customer.link_to_remove glyphicon('x'), class: 'btn btn-light', style: "position: absolute; right: 48px;"
-                  = customer.input :third_party_account, label: t('activerecord.models.accounting_plan_item.attributes.third_party_account')
-                  = customer.input :third_party_name, label: t('activerecord.models.accounting_plan_item.attributes.third_party_name')
-                  = customer.input :conterpart_account, label: t('activerecord.models.accounting_plan_item.attributes.conterpart_account')
-                  = customer.input :code, label: t('activerecord.models.accounting_plan_item.attributes.code')
-              = f.link_to_add 'Ajouter un client', :customers, class: 'btn btn-secondary'
-      .card-footer
-        .form-actions
-          = f.submit t('actions.submit'), class: 'btn btn-primary'
+      .customer-form
+        = f.fields_for :customers do |customer|
+          = customer.label :third_party_account, label: t('activerecord.models.accounting_plan_item.attributes.third_party_account'), class: 'semibold'
+          .select-container.no-padding.w-100
+            = customer.input :third_party_account, label: false
+          = customer.label :third_party_name, label: t('activerecord.models.accounting_plan_item.attributes.third_party_name'), class: 'semibold'
+          .select-container.no-padding.w-100
+            = customer.input :third_party_name, label: false
+          = customer.label :code, label: t('activerecord.models.accounting_plan_item.attributes.code'), class: 'semibold'
+          .select-container.no-padding.w-100
+            = customer.input :code, label: false
+          = customer.label :third_party_account, label: t('activerecord.models.accounting_plan_item.attributes.third_party_account'), class: 'semibold'
+          .select-container.no-padding.w-100
+            = customer.input :third_party_account, label: false
+      .form-group.no-margin
+        .w-100.text-end
           = link_to t('actions.cancel'), organization_customer_accounting_plan_path(@organization, @customer), class: 'btn btn-light'
+          = f.submit 'Editer', class: 'btn btn-primary'
+
+= javascript_include_tag 'front/accounting_plans/assets/javascripts/main'

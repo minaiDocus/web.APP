@@ -1,0 +1,20 @@
+/* #accounting_plan {
+  margin-bottom: 10% !important;
+} */
+
+#accounting_plan .sub_menu {
+  position: relative;
+  min-width: 10em !important;
+}
+
+.sub_menu .delete a {
+  text-decoration: none;
+  cursor: pointer;
+  color: #FF4848 !important;
+}
+
+.sub_menu .edit a{
+  text-decoration: none;
+  cursor: pointer;
+  color: rgba(26, 26, 26, 0.7) !important;
+}

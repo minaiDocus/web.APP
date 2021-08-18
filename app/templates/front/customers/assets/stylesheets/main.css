@@ -82,13 +82,13 @@ p{
 .sub_menu .delete a {
   text-decoration: none;
   cursor: pointer;
-  color: #FF4848;
+  color: #FF4848 !important;
 }
 
 .sub_menu .edit a{
   text-decoration: none;
   cursor: pointer;
-  color: rgba(26, 26, 26, 0.7);
+  color: rgba(26, 26, 26, 0.7) !important;
 }
 
 .modal .back-grey{
