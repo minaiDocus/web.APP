@@ -1,0 +1,106 @@
+#create-customer .modal-dialog {
+  min-width: 1200px;
+}
+
+#customers-filter .modal-dialog {
+  min-width: 720px;
+}
+
+.label-package{
+  padding-top: 5%;
+  font-size: 1.8rem;
+}
+
+.label-ido-x {
+  color: #C1D837;
+}
+
+.label-ido-micro {
+  color: #72AA42;
+}
+
+.label-ido-basic {
+  color: #445E2B;
+}
+
+.label-ido-retriever {
+  color: #1A1A1A;
+}
+
+.description{
+  font-size: 0.8rem;
+}
+
+p{
+  font-size: 0.75rem;
+}
+
+.price{
+  font-size: 22px;
+  font-weight: bold;
+  color: rgba(26, 26, 26, 0.32);  
+}
+
+.no-price{
+  text-decoration-line: line-through;
+}
+
+#subscription .form-check-input[type="radio"] {
+  padding: 18%;
+  margin: 25%;
+}
+
+#vat_accounts .sub_menu{
+  position: relative !important;
+  min-width: 13% !important;
+}
+
+
+.border-right{
+  border-right: 1px solid rgba(26, 26, 26, 0.1);  
+}
+
+.tab-pane .form-group{
+  margin-bottom: 1% !important;
+}
+
+.tab-pane.box{  
+  padding-bottom: 3px !important
+}
+
+.tab-pane label{  
+  font-size: 13px;
+}
+
+.tab-pane .select-container input{
+  padding: 0.5% !important;
+}
+
+.notif-booktype{
+  color: rgba(26, 26, 26, 0.7);
+  font-size: 13px;
+}
+
+.sub_menu .delete a {
+  text-decoration: none;
+  cursor: pointer;
+  color: #FF4848 !important;
+}
+
+.sub_menu .edit a{
+  text-decoration: none;
+  cursor: pointer;
+  color: rgba(26, 26, 26, 0.7) !important;
+}
+
+.modal .back-grey{
+  background: rgba(26, 26, 26, 0.04);
+}
+
+.idocus-custom-form-check {
+  display: flex;
+}
+
+#customer-content .tab-content {
+  margin-bottom: 7%
+}

@@ -9,47 +9,65 @@
     .box.no-margin
       .provider-form
         = f.fields_for :providers do |provider|
-          = provider.label :third_party_account, label: t('activerecord.models.accounting_plan_item.attributes.third_party_account'), class: 'semibold'
-          .select-container.no-padding.w-100
-            = provider.input :third_party_account, label: false
-          = provider.label :third_party_name, label: t('activerecord.models.accounting_plan_item.attributes.third_party_name'), class: 'semibold'
-          .select-container.no-padding.w-100
-            = provider.input :third_party_name, label: false
-          = provider.label :conterpart_account, label: t('activerecord.models.accounting_plan_item.attributes.conterpart_account'), class: 'semibold'
-          .select-container.no-padding.w-100
-            = provider.input :conterpart_account, label: false
-          = provider.label :code, label: t('activerecord.models.accounting_plan_item.attributes.code'), class: 'semibold'
-          .select-container.no-padding.w-100
-            = provider.input :code, label: false
-          = provider.label :vat_autoliquidation_debit_account, label: t('activerecord.models.accounting_plan_item.attributes.vat_autoliquidation_debit_account'), class: 'semibold'
-          .select-container.no-padding.w-100
-            = provider.input :vat_autoliquidation_debit_account, label: false
-          = provider.label :vat_autoliquidation_credit_account, label: t('activerecord.models.accounting_plan_item.attributes.vat_autoliquidation_credit_account'), class: 'semibold'
-          .select-container.no-padding.w-100
-            = provider.input :vat_autoliquidation_credit_account, label: false
-          .form-group
-            .row
-              .col-md-10.form-group.no-margin
-                = provider.label :vat_autoliquidation, label: t('activerecord.models.accounting_plan_item.attributes.vat_autoliquidation'), class: 'control-label semibold form-check-label'
-              .col-md-2
-                .form-check.form-switch.idocus-custom-form-check
-                  = provider.input :vat_autoliquidation, as: :boolean, label: false, input_html: { class: 'form-check-input input-toggle ido-custom-checkbox check-vat-autoliquidation', id: 'check-vat-autoliquidation' }
-                  %label.semibold{class: 'form-check-label ido-custom-label', for: 'check-vat-autoliquidation'} Non
+          .form-group.row
+            .col-md-11
+              .w-100.text-start
+              = provider.label :third_party_account, label: t('activerecord.models.accounting_plan_item.attributes.third_party_account'), class: 'semibold'
+              .select-container.no-padding.w-100
+                = provider.input :third_party_account, label: false
+              = provider.label :third_party_name, label: t('activerecord.models.accounting_plan_item.attributes.third_party_name'), class: 'semibold'
+              .select-container.no-padding.w-100
+                = provider.input :third_party_name, label: false
+              = provider.label :conterpart_account, label: t('activerecord.models.accounting_plan_item.attributes.conterpart_account'), class: 'semibold'
+              .select-container.no-padding.w-100
+                = provider.input :conterpart_account, label: false
+              = provider.label :code, label: t('activerecord.models.accounting_plan_item.attributes.code'), class: 'semibold'
+              .select-container.no-padding.w-100
+                = provider.input :code, label: false
+              = provider.label :vat_autoliquidation_debit_account, label: t('activerecord.models.accounting_plan_item.attributes.vat_autoliquidation_debit_account'), class: 'semibold'
+              .select-container.no-padding.w-100
+                = provider.input :vat_autoliquidation_debit_account, label: false
+              = provider.label :vat_autoliquidation_credit_account, label: t('activerecord.models.accounting_plan_item.attributes.vat_autoliquidation_credit_account'), class: 'semibold'
+              .select-container.no-padding.w-100
+                = provider.input :vat_autoliquidation_credit_account, label: false
+              .form-group
+                .row
+                  .col-md-10.form-group.no-margin
+                    = provider.label :vat_autoliquidation, label: t('activerecord.models.accounting_plan_item.attributes.vat_autoliquidation'), class: 'control-label semibold form-check-label'
+                  .col-md-2
+                    .form-check.form-switch.idocus-custom-form-check
+                      = provider.input :vat_autoliquidation, as: :boolean, label: false, input_html: { class: 'form-check-input input-toggle ido-custom-checkbox check-vat-autoliquidation', id: 'check-vat-autoliquidation' }
+                      %label.semibold{class: 'form-check-label ido-custom-label', for: 'check-vat-autoliquidation'} Non
+            .col-md-1
+              .w-10.text-start
+                = provider.link_to_remove glyphicon('x', { size: '15', color: "#FF4848" })
+        .form-group.w-100
+          .text-start
+            = f.link_to_add 'Ajouter un fournisseur', :providers, class: 'btn btn-primary bold'
 
       .customer-form
         = f.fields_for :customers do |customer|
-          = customer.label :third_party_account, label: t('activerecord.models.accounting_plan_item.attributes.third_party_account'), class: 'semibold'
-          .select-container.no-padding.w-100
-            = customer.input :third_party_account, label: false
-          = customer.label :third_party_name, label: t('activerecord.models.accounting_plan_item.attributes.third_party_name'), class: 'semibold'
-          .select-container.no-padding.w-100
-            = customer.input :third_party_name, label: false
-          = customer.label :code, label: t('activerecord.models.accounting_plan_item.attributes.code'), class: 'semibold'
-          .select-container.no-padding.w-100
-            = customer.input :code, label: false
-          = customer.label :third_party_account, label: t('activerecord.models.accounting_plan_item.attributes.third_party_account'), class: 'semibold'
-          .select-container.no-padding.w-100
-            = customer.input :third_party_account, label: false
+          .form-group.row
+            .col-md-11
+              .w-100.text-start
+                = customer.label :third_party_account, label: t('activerecord.models.accounting_plan_item.attributes.third_party_account'), class: 'semibold'
+                .select-container.no-padding.w-100
+                  = customer.input :third_party_account, label: false
+                = customer.label :third_party_name, label: t('activerecord.models.accounting_plan_item.attributes.third_party_name'), class: 'semibold'
+                .select-container.no-padding.w-100
+                  = customer.input :third_party_name, label: false
+                = customer.label :code, label: t('activerecord.models.accounting_plan_item.attributes.code'), class: 'semibold'
+                .select-container.no-padding.w-100
+                  = customer.input :code, label: false
+                = customer.label :third_party_account, label: t('activerecord.models.accounting_plan_item.attributes.third_party_account'), class: 'semibold'
+                .select-container.no-padding.w-100
+                  = customer.input :third_party_account, label: false
+            .col-md-1
+              .w-10.text-start
+                = customer.link_to_remove glyphicon('x', { size: '15', color: "#FF4848" })
+        .form-group.w-100
+          .text-start
+            = f.link_to_add 'Ajouter un client', :customers, class: 'btn btn-primary bold'
       .form-group.no-margin
         .w-100.text-end
           = link_to t('actions.cancel'), organization_customer_accounting_plan_path(@organization, @customer), class: 'btn btn-light'
