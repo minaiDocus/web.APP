@@ -1,12 +1,9 @@
-#journal.edit.derivationRight
-  .card
-    .card-header.clearfix
-      .float-left
-        %h3
-          Edition du journal : #{@journal.name}
-          - if @customer
-            = link_to @customer, organization_customer_path(@organization, @customer, tab: 'journals'), class: 'fs-origin'
-      - if @customer.try(:uses_ibiza_analytics?)
-        .float-right
-          = link_to 'Edition Compta Analytique', edit_analytics_organization_customer_journals_path(@organization, @customer, id: @journal), class: 'btn btn-primary'
-    = render partial: 'form'
+= stylesheet_link_tag 'front/customers/assets/stylesheets/main'
+
+#journal.edit
+  - if @customer.try(:uses_ibiza_analytics?)
+    .w-100.text-end
+      = link_to 'Edition Compta Analytique', edit_analytics_organization_customer_journals_path(@organization, @customer, id: @journal), class: 'btn btn-primary'
+  = render partial: 'form'
+
+= javascript_include_tag 'front/journals/assets/javascripts/main'

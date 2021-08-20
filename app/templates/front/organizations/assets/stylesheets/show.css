@@ -120,3 +120,11 @@
 .repartition .table > :not(caption) > * > *{
   border-bottom-width: 0px;
 }
+
+a.add_vat_account_field{
+  float: inline-end;
+}
+
+a.remove_vat_accounts_field:hover {
+  color: #FF4848 !important;
+}

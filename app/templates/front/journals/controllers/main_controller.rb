@@ -11,7 +11,7 @@ class Journals::MainController < OrganizationController
 
   # GET /organizations/:organization_id/journals
   def index
-    @journals = @organization.account_book_types.order(is_default: :desc, name: :asc)
+    @journals = @organization.account_book_types.order(is_default: :desc, name: :asc).page(params[:page]).per(params[:per_page])
   end
 
   # GET /organizations/:organization_id/journals/new
@@ -131,7 +131,7 @@ class Journals::MainController < OrganizationController
 
   # GET /organizations/:organization_id/journals/:journal_id/select
   def select
-    @journals = @organization.account_book_types.order(is_default: :desc).order(name: :asc)
+    @journals = @organization.account_book_types.order(is_default: :desc).order(name: :asc).page(params[:page]).per(params[:per_page])
   end
 
   # GET /organizations/:organization_id/journals/:journal_id/copy
