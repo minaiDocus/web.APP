@@ -53,7 +53,7 @@ class ConfigurationStep1{
     }
     else
     {
-      let cache_connectors = this.mainConfig.get_cache('connectors_list');
+      let cache_connectors = GetCache('connectors_list');
       if(cache_connectors.length > 0)
       {
         this.connectors = cache_connectors;
@@ -63,8 +63,12 @@ class ConfigurationStep1{
       {
         this.mainConfig.budgeaApi.get_connectors()
                                   .then((connectors)=>{
-                                    this.connectors = connectors;
-                                    this.mainConfig.set_cache('connectors_list', connectors);
+                                    let distinct = (value, index, self)=>{
+                                      return self.findIndex((e)=>{ return value['id'] == e['id'] }) == index
+                                    }
+
+                                    this.connectors = connectors.filter(distinct);
+                                    SetCache('connectors_list', this.connectors);
                                     this.fill_connectors();
                                   })
                                   .catch((e)=>{ this.mainConfig.applicationJS.noticeInternalErrorFrom(null, e.toString()); })
@@ -84,16 +88,24 @@ class ConfigurationStep1{
     let select = this.mainConfig.main_modal.find('.step1 select#connectors-list');
     select.html('');
 
+    this.connectors = this.connectors.sort((a,b)=>{
+      if(a['name'].toLowerCase() < b['name'].toLowerCase())
+        return -1;
+      if(a['name'].toLowerCase() > b['name'].toLowerCase())
+        return 1;
+      return 0;
+    });
+
     this.connectors.forEach((connector)=>{
       if( filter == '' || filter == null || filter == 'undefined' || regEx.test(connector['name']) ){
         if(type == 'all' || connector['capabilities'].find((e)=>{ return e == type })){
           total_size++;
 
-          let select = '';
+          let selected = '';
           if(this.retriever['budgea_connector_id'] && this.retriever['budgea_connector_id'] > 0 && this.retriever['budgea_connector_id'] == connector['id'])
-            select = 'selected="selected"';
+            selected = 'selected="selected"';
 
-          options += `<option value="${connector['id']}" ${select}>${connector['name']}</option>`;
+          options += `<option value="${connector['id']}" ${selected}>${connector['name']}</option>`;
         }
       }
     });

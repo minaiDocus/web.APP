@@ -30,37 +30,6 @@ class ConfigurationSteps{
     this.current_step_object.secondary_action();
   }
 
-  set_cache(name, value, lifeTime){
-    localStorage[name] = JSON.stringify({ dataSet: value, timeSet: new Date().getTime(), lifeTime: (lifeTime || 30) }) //lifeTime in minutes
-  }
-
-  get_cache(name){
-    if(localStorage[name] == undefined || localStorage[name] == '' || localStorage[name] == null){
-      console.log('init')
-      return ''
-    }else{
-      let dataCache = JSON.parse(localStorage[name])
-      let dataSet = dataCache.dataSet
-      let lifeTime = dataCache.lifeTime
-      let timeSet = dataCache.timeSet
-
-      if( (dataSet == undefined || dataSet == '' || dataSet == null) || (lifeTime == undefined || lifeTime == '' || lifeTime == null) ){
-        return ''
-      }else{
-        let endTime = new Date().getTime()
-        let timeDiff = ((endTime - timeSet) / 1000) / 60 //timeDiff in minutes
-
-        if(timeDiff >= lifeTime){
-          console.log('reset')
-          return ''
-        }else{
-          console.log('cache')
-          return dataSet
-        }
-      }
-    }
-  }
-
   goto(step=1, params={}){
     this.current_step = step;
     this.main_modal.find('.steps').addClass('hide');

@@ -56,6 +56,37 @@ AppEmit = (event_name, params=null) => {
   document.dispatchEvent(event);
 }
 
+SetCache = (name, value, lifeTime) => {
+  localStorage[name] = JSON.stringify({ dataSet: value, timeSet: new Date().getTime(), lifeTime: (lifeTime || 30) }) //lifeTime in minutes
+}
+
+GetCache = (name) => {
+  if(localStorage[name] == undefined || localStorage[name] == '' || localStorage[name] == null){
+    console.log('init')
+    return ''
+  }else{
+    let dataCache = JSON.parse(localStorage[name])
+    let dataSet = dataCache.dataSet
+    let lifeTime = dataCache.lifeTime
+    let timeSet = dataCache.timeSet
+
+    if( (dataSet == undefined || dataSet == '' || dataSet == null) || (lifeTime == undefined || lifeTime == '' || lifeTime == null) ){
+      return ''
+    }else{
+      let endTime = new Date().getTime()
+      let timeDiff = ((endTime - timeSet) / 1000) / 60 //timeDiff in minutes
+
+      if(timeDiff >= lifeTime){
+        console.log('reset')
+        return ''
+      }else{
+        console.log('cache')
+        return dataSet
+      }
+    }
+  }
+}
+
 class ApplicationJS {
   constructor(){
     this.parseJsVar();
