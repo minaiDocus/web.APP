@@ -21,9 +21,16 @@ class Customer{
     });
   }
 
+  remove_class(name='control-section'){
+    console.log($('.control-section').length);
+    console.log($('.control-section'));
+    // $('div').removeClass(name);
+  }
+
 
   main(){
     this.set_sub_menu_toggle();
+    this.remove_class();
 
     this.add_customer();
     this.edit_customer();
