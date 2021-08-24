@@ -20,7 +20,7 @@ class RetrievedParametersMain{
     this.bank_select_object = new ConfigurationStep4(this, null, true);
   }
 
-  load_all(bank_select){
+  load_all(){
     this.load_datas('banks-selection');
     this.action_locker = false;
     this.load_datas('documents-selection');

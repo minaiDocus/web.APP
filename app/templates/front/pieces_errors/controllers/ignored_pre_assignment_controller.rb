@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
-class PreAssignments::IgnoredController < FrontController
-  append_view_path('app/templates/front/pre_assignments/views')
+class PiecesErrors::IgnoredPreAssignmentController < FrontController
+  append_view_path('app/templates/front/pieces_errors/views')
 
-  # GET /pre_assignment_ignored
   def index
     @ignored_list = Pack::Piece.pre_assignment_ignored
                                .where(user_id: account_ids)
@@ -11,16 +10,18 @@ class PreAssignments::IgnoredController < FrontController
                                .order("#{sort_column} #{sort_direction}")
                                .page(params[:page])
                                .per(params[:per_page])
+
+    render partial: 'index'
   end
 
   def update_ignored_pieces
     if params[:confirm_ignorance].present?
-      confirm_ignored_pieces
+      message = confirm_ignored_pieces
     elsif params[:force_pre_assignment].present?
-      force_pre_assignment
+      message = force_pre_assignment
     end
 
-    redirect_to pre_assignment_ignored_path
+    render json: { success: true, message: message }, state: 200
   end
 
   private
@@ -31,9 +32,9 @@ class PreAssignments::IgnoredController < FrontController
     if !pieces.empty?
       pieces.each(&:force_processing_pre_assignment)
 
-      flash[:success] = 'Renvoi en pré-affectation en cours ...'
+      message = 'Renvoi en pré-affectation en cours ...'
     else
-      flash[:error] = 'Vous devez sélectionner au moins une pièce.'
+      message = 'Vous devez sélectionner au moins une pièce.'
     end
   end
 
@@ -43,9 +44,9 @@ class PreAssignments::IgnoredController < FrontController
     if !pieces.empty?
       pieces.each(&:confirm_ignorance_pre_assignment)
 
-      flash[:success] = 'Modifié avec succès.'
+      message = 'Modifié avec succès.'
     else
-      flash[:error] = 'Impossible de traiter la demande.'
+      message = 'Impossible de traiter la demande.'
     end
   end
 

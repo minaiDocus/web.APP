@@ -1,0 +1,35 @@
+.container-fluid
+  .row
+    .col-md-11.text-start
+      %h1.bold Mes pieces
+    .col-md-1.text-start.p-1
+      %button.btn.btn-light.semibold.piece-errors-filter.w-100{ disabled: false }
+        %span.me-3= glyphicon('layers', { size: '15', color: '#72AA42'})
+        %span Filtrer
+
+  .mb-4
+
+  %ul.nav.nav-tabs.ms-3{ "role" => "tablist" }
+    %li.nav-item.no-margin{ "role" => "presentation" }
+      %button.semibold.nav-link.active#ignored-pre-assignment-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#ignored-pre-assignment", type: :button, "role" => "tab", "aria-controls" => "ignored-pre-assignment", "aria-selected" => "true" } 
+        Ignorées à la pré-affectation   
+        %span.ms-1.badge.badge-secondary.regular#total-ignored-pre-assignment 0
+    %li.nav-item.no-margin{ "role" => "presentation" }
+      %button.semibold.nav-link#duplicated-pre-assignment-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#duplicated-pre-assignment", type: :button, "role" => "tab", "aria-controls" => "duplicated-pre-assignment", "aria-selected" => "false"} 
+        Ecritures comptables en doublon
+        %span.ms-1.badge.badge-secondary.regular#total-duplicated-pre-assignment 0
+    %li.nav-item.no-margin{ "role" => "presentation" }
+      %button.semibold.nav-link#failed-delivery-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#failed-delivery", type: :button, "role" => "tab", "aria-controls" => "failed-delivery", "aria-selected" => "false"} 
+        Erreur livraison d'écritures comptables
+        %span.ms-1.badge.badge-secondary.regular#total-failed-delivery 0
+
+  .tab-content
+    .tab-pane.box.no-margin.active#ignored-pre-assignment{ "role" => "tabpanel", "aria-labelledby" => "ignored-pre-assignment-tab" }
+                
+    .tab-pane.box.no-margin#duplicated-pre-assignment{ "role" => "tabpanel", "aria-labelledby" => "duplicated-pre-assignment-tab" }
+                
+    .tab-pane.box.no-margin#failed-delivery{ "role" => "tabpanel", "aria-labelledby" => "failed-delivery-tab" }
+
+= render partial: 'dialogs'
+
+= javascript_include_tag 'front/pieces_errors/assets/javascripts/main'

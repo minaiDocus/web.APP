@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-class PreAssignments::BlockedDuplicatesController < FrontController
-  append_view_path('app/templates/front/pre_assignments/views')
+class PiecesErrors::DuplicatedPreAssignmentController < FrontController
+  append_view_path('app/templates/front/pieces_errors/views')
 
   # GET /account/pre_assignment_blocked_duplicates
   def index
@@ -13,31 +13,34 @@ class PreAssignments::BlockedDuplicatesController < FrontController
                   .order("#{sort_real_column} #{sort_direction}")
                   .page(params[:page])
                   .per(params[:per_page])
+
+    render partial: 'index'
   end
 
-  # POST /account/pre_assignment_blocked_duplicates/update_multiple
-  def update_multiple
+  def update_duplicated_preseizures
     preseizures = Pack::Report::Preseizure.unscoped.blocked_duplicates.where(user_id: account_ids, id: params[:duplicate_ids])
 
     if !preseizures.empty?
+      success = true
       if params.keys.include?('unblock') && !params.keys.include?('approve_block')
         count = PreAssignment::Unblock.new(preseizures.map(&:id), @user).execute
 
-        flash[:success] = '1 pré-affectation a été débloqué.' if count == 1
-        flash[:success] ||= "#{count} pré-affectations ont été débloqués."
+        message = '1 pré-affectation a été débloqué.' if count == 1
+        message ||= "#{count} pré-affectations ont été débloqués."
       elsif params.keys.include?('approve_block') && !params.keys.include?('unblock')
         count = preseizures.update_all(marked_as_duplicate_at: Time.now, marked_as_duplicate_by_user_id: @user.id)
 
         if count == 1
-          flash[:success] = '1 pré-affectation a été marqué comme étant un doublon.'
+          message = '1 pré-affectation a été marqué comme étant un doublon.'
         end
-        flash[:success] ||= "#{count} pré-affectations ont été marqués comme étant des doublons."
+        message ||= "#{count} pré-affectations ont été marqués comme étant des doublons."
       end
     else
-      flash[:error] = 'Vous devez sélectionner au moins une pré-affectation.'
+      success = false
+      message = 'Vous devez sélectionner au moins une pré-affectation.'
     end
 
-    redirect_to pre_assignment_blocked_duplicates_path
+    render json: { success: success, message: message }, state: 200
   end
 
   private
