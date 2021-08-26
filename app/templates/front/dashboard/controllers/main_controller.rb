@@ -3,16 +3,16 @@ class Dashboard::MainController < FrontController
   append_view_path('app/templates/front/dashboard/views')
 
   def index
-    @favorites = current_user.favorite_customers.try(:customer_ids) || []
+    @favorites = @user.favorite_customers.try(:customer_ids) || []
   end
 
   def add_customer_to_favorite
-    favorite              = current_user.favorite_customers || FavoriteCustomer.new
-    favorite.user         = current_user
+    favorite              = @user.favorite_customers || FavoriteCustomer.new
+    favorite.user         = @user.try(:user) || @user
     favorite.customer_ids = params.try(:[], 'favorite_customers') || []
     favorite.save
 
-    @favorites = current_user.reload.favorite_customers.try(:customer_ids) || []
+    @favorites = @user.reload.favorite_customers.try(:customer_ids) || []
 
     flash['success'] = 'Dossier favoris mis à jour avec succès'
 

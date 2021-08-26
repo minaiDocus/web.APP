@@ -12,7 +12,7 @@
             %span.text-muted-light= infos.try(:message)
 
         .col-md-1.no-padding.semibold.text-end
-          %span.state{ class: "state-#{infos.try(:state)}"}= infos.try(:note)
+          = tag_state infos.try(:document_state)
         .col-md-1.text-center
           = link_to glyphicon('chevron-right', {size: '17', color: '#b5a6a6'}), '#', class: 'favorite-link', id: infos.try(:id)
 
@@ -28,12 +28,12 @@
               - else
                 = 'Dossier cloturé'
               %span
-                = link_to glyphicon('cog', {size: '11', color: '#b5a6a6'}), '#todo', class: 'support-chat-link'
+                = link_to glyphicon('cog', {size: '11', color: '#b5a6a6'}), '#', class: 'support-chat-link'
         .col-md-1.no-padding.semibold.text-end
-          %span.state.state-good= t('dashboard.good_state')
+          = tag_state ( infos.try(:active)? 'good' : 'critical' )
       %hr.clearfix
       .row
-        .col-md-10
+        .col-md-12
           %h6.bold= t('dashboard.folder_activity')
           .row              
             .col-md-4
@@ -41,23 +41,20 @@
                 %span= t('dashboard.last_pack_added') + ' :'
             .col-md-3.text-end
               %span
-                %span= infos.try(:last_pack).try(:name).try(:gsub, 'all', '') || '-'
-                = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#todo', class: 'support-chat-link'
-        .col-md-1.no-padding.semibold.text-end
-          %span.state.state-good= t('dashboard.good_state')
+                %span= infos.try(:last_pack).try(:name).try(:gsub, ' all', '') || '-'
+                = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#', class: 'support-chat-link'
       %hr.clearfix
       .row
-        .col-md-10
+        .col-md-12
           .row
             .col-md-4
               %span
                 %span= t('dashboard.last_activity') + ' :'
             .col-md-3.text-end
               %span
-                %span= infos.try(:last_pack).try(:updated_at) || '-'
-                = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#todo', class: 'support-chat-link'
-        .col-md-1.no-padding.semibold.text-end
-          %span.state.state-good= t('dashboard.good_state')
+                %span= infos.try(:last_pack).try(:updated_at).try(:strftime, '%d/%m/%Y %H:%M:%S') || '-'
+                = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#', class: 'support-chat-link'
+
       %hr.clearfix
       .row
         .col-md-10
@@ -67,19 +64,20 @@
               %span= t('dashboard.errors_found') + ' :'
             .col-md-3.text-end
               %span= infos.try(:temp_docs_error_size).to_i
-              = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#todo', class: 'support-chat-link'
+              = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#', class: 'support-chat-link'
           - if infos.try(:retriever_option_active)
             .row
               .col-md-4
                 %span= t('dashboard.retrievers_failing') + ' :'
               .col-md-3.text-end
-                %span 1
-                = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#todo', class: 'support-chat-link'
+                %span= infos.try(:retriever_error_size).to_i
+                = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#', class: 'support-chat-link'
           .row
             .col-md-4
               %span= t('dashboard.pre_assignement_duplicated') + ' :'
             .col-md-3.text-end
               %span= infos.try(:duplicated_preseizures_size).to_i
-              = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#todo', class: 'support-chat-link'
+              = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#', class: 'support-chat-link'
         .col-md-1.no-padding.semibold.text-end
-          %span.state.state-critical= t('dashboard.critical_state')
+          = tag_state infos.try(:anomaly_state)
+          
