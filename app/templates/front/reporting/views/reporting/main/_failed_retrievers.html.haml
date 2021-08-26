@@ -1,0 +1,14 @@
+%h4.bold= t('reporting.failed_retrievers')
+%table.table.table-striped
+  %thead
+    %th.text-left= t('reporting.folder_name')
+    %th.text-center= t('reporting.retriever')
+    %th.text-right= t('reporting.status')
+  %tbody
+    - @retrievers.each do |retriever|
+      %tr
+        %td.text-left= retriever.user.info
+        %td.text-center= retriever.service_name
+        %td.text-right 
+          .badge.badge-secondary
+            = retriever.error_message

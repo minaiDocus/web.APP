@@ -229,7 +229,10 @@ fr:
     top_delay_sending_document: Top retard envoi de document
     top_delivery_waiting_account: Top livraison compte d'attente
     share_waiting_account: Part de compte d'attente
+    share_anomaly_account: Part de compte anomalie
+    share_default_account: Part de compte par défaut
     folder_name: Nom du dossier
+    pack_name: Nom du lot
     last_document_date: Date du dernier doc.
     retriever: Automate
     state: Status

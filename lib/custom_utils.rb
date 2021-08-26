@@ -1,7 +1,7 @@
 class CustomUtils
 
   class << self
-    def parse_between_date_of(date='')
+    def parse_date_range_of(date='')
       parsed_date = date.gsub(' ', '').split('-')
 
       begin
@@ -17,7 +17,7 @@ class CustomUtils
         date2 = 10.years.ago.strftime('%Y-%m-%d')
       end
 
-      "'#{date1.to_s} 00:00:00' AND '#{date2} 23:59:59'"
+      ["#{date1.to_s} 00:00:00", "#{date2.to_s} 23:59:59"]
     end
 
     def replace_code_of(code) #replace old code 'AC0162' with 'MVN%GRHCONSULT'

@@ -74,8 +74,8 @@ class Pack::Report::Preseizure < ApplicationRecord
     # preseizures = preseizures.where("DATE_FORMAT(pack_report_preseizures.date, '%Y-%m-%d') #{options[:date_operation].tr('012', ' ><')}= ?", options[:date])                                          if options[:date].present?
     # preseizures = preseizures.where("DATE_FORMAT(pack_report_preseizures.delivery_tried_at, '%Y-%m-%d') #{options[:delivery_tried_at_operation].tr('012', ' ><')}= ?", options[:delivery_tried_at])   if options[:delivery_tried_at].present?
 
-    preseizures = preseizures.where("pack_report_preseizures.date BETWEEN #{CustomUtils.parse_between_date_of(options[:date])}")                            if options[:date].present?
-    preseizures = preseizures.where("pack_report_preseizures.delivery_tried_at BETWEEN #{CustomUtils.parse_between_date_of(options[:delivery_tried_at])}")  if options[:delivery_tried_at].present?
+    preseizures = preseizures.where("pack_report_preseizures.date BETWEEN '#{CustomUtils.parse_date_range_of(options[:date]).join("' AND '")}'")                            if options[:date].present?
+    preseizures = preseizures.where("pack_report_preseizures.delivery_tried_at BETWEEN '#{CustomUtils.parse_date_range_of(options[:delivery_tried_at]).join("' AND '")}'")  if options[:delivery_tried_at].present?
 
     preseizures = preseizures.where("pack_report_preseizures.cached_amount #{options[:amount_operation].tr('012', ' ><')}= ?", options[:amount]) if options[:amount].present?
     preseizures = preseizures.where("pack_report_preseizures.position #{options[:position_operation].tr('012', ' ><')}= ?", options[:position])  if options[:position].present?

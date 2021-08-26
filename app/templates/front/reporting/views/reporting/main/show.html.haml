@@ -5,12 +5,12 @@
     .col-md-8
       %h1.bold= t('reporting.reporting_text')
     .col-md-2
-      = select_tag 'customer_filter', options_for_select(['DEVP%001 - TEST - Testa Test', 'DEVP%002 - TEST - Testa Test', 'DEVP%003 - TEST - Testa Test', 'DEVP%004 - TEST - Testa Test']), id: 'customer_filter', multiple: true
+      = select_tag 'customer_filter', options_for_select(accounts_options), id: 'customer_filter', multiple: true
     .col-md-2
       .form-group                    
         .input-group.mb-3
           %span.input-group-text#reporting-filter-date= glyphicon('calendar', { size: '14', color: 'background: rgba(26, 26, 26, 0.7)' })          
-          %input.form-control.value-content.date.daterange#reporting-filter{ type: :text, name: 'reporting-filter'}
+          %input.form-control.value-content.date.daterange#date_filter{ type: :text, name: 'date_filter'}
           %span.input-group-text-right= glyphicon('chevron-bottom', { size: '12', color: 'background: rgba(26, 26, 26, 0.7)' }) 
   
   .row.mt-5.text-center
@@ -28,61 +28,20 @@
       %h4.bold= t('reporting.reporting_retrievers')
       .row.mt-5
         .col-md-6.no-margin.no-padding
-          %label.text-canvas-reporting.semibold 60%
+          %label.text-canvas-reporting.semibold.actif_retrievers_percentage 0%
           %canvas#chart_retriever_active          
           %h5.text-center.mt-3.semibold= t('reporting.active_retrievers')
         .col-md-6.no-margin.no-padding
-          %label.text-canvas-reporting.semibold 40%
+          %label.text-canvas-reporting.semibold.failed_retrievers_percentage 0%
           %canvas#chart_retriever_inactive          
           %h5.text-center.mt-3.semibold= t('reporting.failed_retrievers')
 
   .row
-    .col-md-4.box
-      %h4.bold= t('reporting.top_delay_sending_document')
-      %table.table.table-striped
-        %thead
-          %th.text-left= t('reporting.folder_name')
-          %th.text-right= t('reporting.last_document_date')
-        %tbody
-          %tr
-            %td.text-left IDOC%Client1 - iDocus
-            %td.text-right 30/10/20
-          %tr
-            %td.text-left IDOC%Client2 - iDocus
-            %td.text-right 31/10/20
-    .col-md-3.box
-      %h4.bold= t('reporting.top_delivery_waiting_account')
-      %table.table.table-striped
-        %thead.w-100
-          %th.text-left.w-75= t('reporting.folder_name')
-          %th.text-right.w-25= t('reporting.share_waiting_account')
-        %tbody
-          %tr
-            %td.text-left IDOC%Client1 - iDocus
-            %td.text-right 30%
-          %tr
-            %td.text-left IDOC%Client2 - iDocus
-            %td.text-right 20%
-    .col-md-4.box
-      %h4.bold= t('reporting.failed_retrievers')
-      %table.table.table-striped
-        %thead
-          %th.text-left= t('reporting.folder_name')
-          %th.text-center= t('reporting.retriever')
-          %th.text-right= t('reporting.status')
-        %tbody
-          %tr
-            %td.text-left IDOC%Client1 - iDocus
-            %td.text-center Crédit du nord
-            %td.text-right 
-              .badge.badge-secondary
-                SCA Required
-          %tr
-            %td.text-left IDOC%Client2 - iDocus
-            %td.text-center Crédit du nord
-            %td.text-right 
-              .badge.badge-secondary
-                SCA Required
+    .col-md-4.box#lastest_sending_docs
+      
+    .col-md-3.box#pre_assignment_accounts
+      
+    .col-md-4.box#failed_retrievers
 
     .mb-4
 = javascript_include_tag 'front/reporting/assets/javascripts/main'
