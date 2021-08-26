@@ -1,3 +1,5 @@
+= render file: Rails.root.join('app/templates/front/documents/views/documents/_dialog_box.html.haml')
+
 #view-document-content.modal.fade{'aria-hidden' => 'true', :role => 'dialog', :tabindex => '-1'}
   .modal-dialog
     .modal-content
@@ -5,7 +7,15 @@
         %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
       .modal-body.m-2.document-content.no-padding
 
-= render file: Rails.root.join('app/templates/front/documents/views/documents/_dialog_box.html.haml')
+#PdfViewerDialog.modal.fade{'aria-hidden' => 'true', :role => 'dialog', :tabindex => '-1'}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.modal-title.bold Visionner le document
+        %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+      .modal-body{style: "max-height: none !important; padding:0;"}
+        .view-content
+          %iframe.src-piece{ src: "" }
 
 #add-document.modal.fade{'aria-hidden' => 'true', :role => 'dialog', :tabindex => '-1'}
   .modal-dialog
@@ -157,15 +167,3 @@
           </script>
 
 = render file: Rails.root.join('app/templates/front/compta_analytics/views/compta_analytics/main/_dialog_box.html.haml'), locals: { without_hidden_fields: true }
-
-
-
-#PdfViewerDialog.modal.fade{'aria-hidden' => 'true', :role => 'dialog', :tabindex => '-1'}
-  .modal-dialog
-    .modal-content
-      .modal-header
-        %h5.modal-title.bold Visionner le document
-        %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
-      .modal-body{style: "max-height: none !important; padding:0;"}
-        .view-content
-          %iframe.src-piece{ src: ""}

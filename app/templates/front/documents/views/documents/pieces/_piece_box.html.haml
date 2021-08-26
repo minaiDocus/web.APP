@@ -19,7 +19,7 @@
           .w-25
             .stamp-content.pagethumb.text-center
               .image_piece.w-100
-                %span.zoom.pdf-viewer.pointer{title: 'Visualiser la pièce', "data-content-url" => piece.cloud_content_object.url}
+                %span.zoom.pdf-viewer.pointer{title: 'Visualiser la pièce', "data-content-url" => piece.get_access_url}
                   = glyphicon('magnifying-glass', { size: '20', color: 'background: rgba(26, 26, 26, 0.7)'})
                 = image_tag document_thumb_url(piece), class: 'w-50'
           - if preseizures.size == 1

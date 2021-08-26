@@ -54,8 +54,6 @@ function bind_all_events(){
     {
       if ($('.select-all').is(':checked')) {$('.select-all').prop('checked', false);}
 
-      console.log($('.select-document').closest('.box.selected').length);
-
       if ($('.select-document').closest('.box.selected').length > 1) {
         $('.action-selected-hide').addClass('hide');
         $('.action-selected').removeClass('hide');

@@ -24,6 +24,8 @@ Rails.application.routes.draw do
     post 'preseizures/account/:id/update', to: 'preseizures#update_account', as: 'preseizures_update_account'
     get 'preseizures/accounts_list/:account_id', to: 'preseizures#accounts_list', as: 'preseizures_accounts_list'
     get 'preseizures/:id', to: 'preseizures#show', as: 'preseizures_details'
+
+    get 'account/documents/pieces/:id/download/(:style)', to: 'pieces#get_piece_file', as: 'get_piece_file'
   end
   
   namespace :documents do

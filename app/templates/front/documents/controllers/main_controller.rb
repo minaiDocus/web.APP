@@ -178,66 +178,6 @@ class Documents::MainController < FrontController
 
 
 ###################################################################################################
-
-  # GET /account/documents/preseizure_account/:id
-  def preseizure_account
-    @preseizure = Pack::Report::Preseizure.find params[:id]
-
-    user = @preseizure.try(:user)
-    @ibiza = user.try(:organization).try(:ibiza)
-    @software = @software_human_name = ''
-    if user.try(:uses?, :ibiza)
-      @software = 'ibiza'
-      @software_human_name = 'Ibiza'
-    elsif user.try(:uses?, :exact_online)
-      @software = 'exact_online'
-      @software_human_name = 'Exact Online'
-    end
-
-    @unit = @preseizure.try(:unit) || 'EUR'
-    @preseizure_entries = @preseizure.entries
-
-    @pre_tax_amount = @preseizure_entries.select { |entry| entry.account.type == 2 }.try(:first).try(:amount) || 0
-    analytics = @preseizure.analytic_reference
-    @data_analytics = []
-    if analytics
-      3.times do |i|
-        j = i + 1
-        references = analytics.send("a#{j}_references")
-        name       = analytics.send("a#{j}_name")
-        next unless references.present?
-
-        references = JSON.parse(references)
-        references.each do |ref|
-          if name.present? && ref['ventilation'].present? && (ref['axis1'].present? || ref['axis2'].present? || ref['axis3'].present?)
-            @data_analytics << { name: name, ventilation: ref['ventilation'], axis1: ref['axis1'], axis2: ref['axis2'], axis3: ref['axis3'] }
-            end
-        end
-      end
-    end
-
-    render partial: 'documents/main/preseizures/preseizure_account'
-  end
-
-
-  def update_multiple_preseizures
-    if @user.has_collaborator_action?
-      preseizures = Pack::Report::Preseizure.where(id: params[:ids])
-
-      real_params = update_multiple_preseizures_params
-      begin
-        error = ''
-        preseizures.update_all(real_params) if real_params.present?
-      rescue StandardError => e
-        error = 'Impossible de modifier la séléction'
-      end
-
-      render json: { error: error }, status: 200
-    else
-      render json: { error: '' }, status: 200
-    end
-  end
-
   def multi_pack_download
     CustomUtils.add_chmod_access_into("/nfs/tmp/")
     _tmp_archive = Tempfile.new(['archive', '.zip'], '/nfs/tmp/')
@@ -310,49 +250,6 @@ class Documents::MainController < FrontController
     if File.exist?(filepath) && (owner.in?(accounts) || current_user.try(:is_admin))
       mime_type = File.extname(filepath) == '.png' ? 'image/png' : 'application/pdf'
       send_file(filepath, type: mime_type, filename: document.cloud_content_object.filename, x_sendfile: true, disposition: 'inline')
-    else
-      render body: nil, status: 404
-    end
-  end
-
-  # GET /account/documents/:id/download/:style
-  def download
-    begin
-      document = params[:id].size > 20 ? Document.find_by_mongo_id(params[:id]) : Document.find(params[:id])
-      owner    = document.pack.owner
-      filepath = document.cloud_content_object.path(params[:style].presence)
-    rescue StandardError
-      document = params[:id].size > 20 ? TempDocument.find_by_mongo_id(params[:id]) : TempDocument.find(params[:id])
-      owner    = document.temp_pack.user
-      filepath = document.cloud_content_object.path(params[:style].presence)
-    end
-
-    if File.exist?(filepath) && (owner.in?(accounts) || current_user.try(:is_admin) || params[:token] == document.get_token)
-      mime_type = File.extname(filepath) == '.png' ? 'image/png' : 'application/pdf'
-      send_file(filepath, type: mime_type, filename: document.cloud_content_object.filename, x_sendfile: true, disposition: 'inline')
-    else
-      render body: nil, status: 404
-    end
-  end
-
-  # GET /account/documents/pieces/:id/download
-  def piece
-    # NOTE : support old MongoDB id for pieces uploaded to iBiZa, in CSV export or others
-    auth_token = params[:token]
-    auth_token ||= request.original_url.partition('token=').last
-
-    @piece = params[:id].length > 20 ? Pack::Piece.find_by_mongo_id(params[:id]) : Pack::Piece.unscoped.find(params[:id])
-    filepath = @piece.cloud_content_object.path(params[:style].presence || :original)
-
-    if !File.exist?(filepath.to_s) && !@piece.cloud_content.attached?
-      sleep 1
-      @piece.try(:recreate_pdf)
-      filepath = @piece.cloud_content_object.reload.path(params[:style].presence || :original)
-    end
-
-    if File.exist?(filepath.to_s) && (@piece.pack.owner.in?(accounts) || current_user.try(:is_admin) || auth_token == @piece.get_token)
-      mime_type = File.extname(filepath) == '.png' ? 'image/png' : 'application/pdf'
-      send_file(filepath, type: mime_type, filename: @piece.cloud_content_object.filename, x_sendfile: true, disposition: 'inline')
     else
       render body: nil, status: 404
     end
