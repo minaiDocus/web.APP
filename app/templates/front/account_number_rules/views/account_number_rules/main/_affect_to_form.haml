@@ -1,38 +1,20 @@
-.box.bg-light
-  %h6 Choisir le(s) groupe(s) et/ou client(s) affectés par la règle.
+.form-group.affect_to
+  %h6.head_affect_to.hide Choisir le(s) groupe(s) et/ou client(s) affectés par la règle.
   %hr
-  .form-group
-    .controls.users.row
-      .col-md-6
-        Groupes
-        %br
-        (
-        = link_to 'Tous', '#', class: 'all_groups'
-        \/
-        = link_to 'Aucun', '#', class: 'no_groups'
-        )
-        %br
-        %ul.padding0{ style: "list-style: none" }
-          - @organization.groups.includes(:members).order(name: :asc).each do |group|
-            %li.clearfix
-              .float-left{ style: "padding-top: 5px; width: 7%" }
-                = check_box_tag 'account_number_rule[group][]', group.members.map{ |m| m.id.to_s }, false, id: "account_number_rule_group_#{group.id}"
-              .float-left{ style: "width: 92%" }
-                %label{ for: "account_number_rule_group_#{group.id}" }= group.name
-      .col-md-6
-        = t('activerecord.models.account_number_rule.attributes.users')
-        %br
-        (
-        = link_to 'Tous', '#', class: 'all_users'
-        \/
-        = link_to 'Aucun', '#', class: 'no_users'
-        )
-        %br
-        - users = @account_number_rule.present? ? @account_number_rule.users : []
-        %ul.padding0{ style: "list-style: none" }
-          - @organization.customers.active.order(code: :asc).each do |user|
-            %li.clearfix
-              .float-left{ style: "padding-top: 5px; width: 7%" }
-                = check_box_tag 'account_number_rule[user_ids][]', user.id, users.include?(user),id: "account_number_rule_user_ids_#{user.id}"
-              .float-left{ style: "width: 92%" }
-                %label{ for: "account_number_rule_user_ids_#{user.id}" }= user.info
+  .controls.users.row
+    .col-md-6
+      .form-group.customers-list.hide
+        .label-section
+          = label_tag 'account_number_rule[user_ids][]', t('activerecord.models.account_number_rule.attributes.users'), class: 'control-label semibold', for: 'customers-list'
+        .control-section
+          - users = @account_number_rule.present? ? @account_number_rule.users : []
+          - customers = @organization.customers.active.order(code: :asc)
+          = select_tag 'account_number_rule[user_ids][]', options_from_collection_for_select(customers, 'id', 'info', (customers.map{ |user| "#{ user.id}" if users.include?(user) })), class: 'select form-select-sm optional', id: 'customers-list', include_blank: true, multiple: true
+
+    .col-md-6
+      .form-group.groups-list.hide
+        .label-section
+          = label_tag 'account_number_rule[group][]', "Groupes", class: 'control-label semibold', for: 'groups-list'
+        .control-section
+          - groups = @organization.groups.includes(:members).order(name: :asc)
+          = select_tag 'account_number_rule[group][]', options_for_select(groups.collect{ |group| [group.name, group.members.map{ |m| m.id.to_s }.join(' ')] }), class: 'select form-select-sm optional', id: 'groups-list', include_blank: true, multiple: true

@@ -324,6 +324,8 @@ class ApplicationJS {
       if ($('.sub_menu').is(':visible')) {
         $('.sub_menu').addClass('hide');
       }
+
+      if ($('.sub_rule_menu').is(':visible')) { $('.sub_rule_menu').addClass('hide'); }
     });
   }
 

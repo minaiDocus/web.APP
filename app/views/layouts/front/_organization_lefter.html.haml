@@ -38,8 +38,9 @@
       %li{ data: { href: "#{@organization.id}/journals" } }
         %a{href: organization_journals_path(@organization) }
           %span.link_principal= t('organizations.journals')
-      %li{ data: { href: "#{@organization.id}/bank_affectation" } }
-        %span.link_principal= t('organizations.bank_assignment')
+      %li{ data: { href: "#{@organization.id}/account_number_rules" } }
+        %a{href: organization_account_number_rules_path(@organization) }
+          %span.link_principal= t('organizations.bank_assignment')
       %li{ data: { href: "#{@organization.id}/account_sharing" } }
         %a{href: "#" }
           %span.link_principal= t('folders.shared_folders')

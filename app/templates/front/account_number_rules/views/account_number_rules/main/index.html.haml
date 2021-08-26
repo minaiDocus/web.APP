@@ -1,46 +1,65 @@
-= stylesheet_link_tag 'front/account_number_rules/assets/stylesheets/main'
+= stylesheet_link_tag 'front/organizations/assets/stylesheets/show'
 
-#account_number_rules.select_to_download
-  .row.derivationRight
-    .col-md-12
-      .box.clearfix
-        .float-left
-          %h3
-            Liste des règles d'affectations bancaires - iDo'FacBanque
-            %span.badge.badge-info= @account_number_rules_count
-        .float-right
-          = link_to 'Ajouter une règle ', new_organization_account_number_rule_path(@organization), class: 'btn btn-primary'
-          = link_to 'Importer des règles  ', import_form_organization_account_number_rules_path(@organization), class: 'btn btn-primary'
-  .row.retractable.with-filter.derivationLeft
-    .col-md-12.retractable-content
-      .box
-        = form_tag(export_or_destroy_organization_account_number_rules_path(@organization), method: :post) do
-          .head.clearfix
-            .float-left
-              %p Les règles ci-dessous s'appliquent aux opérations récupérées depuis les automates. Vous pouvez exporter les règles sélectionnées ou les supprimer.
-            .float-right
-              %button(type="submit" name="export_or_destroy" value="export" class="btn btn-primary")
-                = 'Exporter sur Excel'
-              %button(type="submit" name="export_or_destroy" value="destroy" class="btn btn-danger" data-confirm="Etes-vous sûr de vouloir supprimer les règles sélectionnées ?")
-                = 'Supprimer les règles'
-              %a{ href:'#skipAccountingPlan', title:'Paramètres avancées', style: 'margin-left: 20px', class: 'btn btn-secondary btn-filter', data: {toggle: :modal} }
-                = 'Paramètres avancés'
-          = render partial: 'shared/list_options', locals: { collection: @account_number_rules }
-          %table.table.table-condensed.table-striped.margin1top.margin1bottom.table-detachable-head.table-bordered-inner
+%input#organization_id{type: :hidden, value: @organization.id, name: 'organization_id'}
+
+.bank-affectation
+  .row
+    .col-md-6
+      %h3.bold
+        Règle d'affectation bancaires
+        %span.badge.badge-secondary.badge-sm.regular= @account_number_rules_count
+    .col-md-3.no-padding
+      .input-group.mb-3
+        %span.input-group-text#basic-addon1= glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })          
+        %input.form-control{ type: :text, "aria-label" => "Rechercher", "aria-describedby" => "basic-addon1"  }
+    .col-md-1.text-center.no-padding
+      %button.btn.btn-light.more-filter.semibold
+        %span.me-2 Filtrer
+        %span
+          = glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
+    .col-md-2.no-padding
+      %button.btn.btn-primary.semibold.add-rule
+        %span.me-2 Ajouter une règle     
+        %span.chevron-add-rule= glyphicon('chevron-bottom', { size: '15', color: '#FFFF'})
+        .sub_rule_menu.text-start.hide
+          %ul.no-margin.no-padding.regular
+            %li.add
+              %span.me-1= glyphicon('plus', { size: '12', color: 'rgba(26, 26, 26, 0.7);'})
+              %span Créer une règle
+            %li.download
+              %span.me-1= glyphicon('cloud-download', { size: '12', color: 'rgba(26, 26, 26, 0.7);'})
+              %span Importer une règle      
+  .box
+    = form_tag(export_or_destroy_organization_account_number_rules_path(@organization), method: :post) do
+      .row
+        .col-md-8
+          %h6.mt-3
+            Les règles ci-dessous s'appliquent aux opérations récupérées dans les automates.
+            %br Vous pouvez exporter les règles sélectionnées ou les supprimer.
+        .col-md-4.text-end
+          %button.btn.btn-light-secondary.add-document.m-1#export-rule{type: 'submit', name: 'export_or_destroy', value: 'export', disabled: 'disabled'} Exporter sur Excel
+          %button.btn.btn-light-secondary.add-document.m-1#delete-rule{type: 'submit', name: 'export_or_destroy', value: 'destroy', 'data-confirm' => 'Etes-vous sûr de vouloir supprimer les règles sélectionnées ?', disabled: 'disabled'} Supprimer
+          
+      .row.mt-5
+        .col-md-12
+          %table.table.table-striped.table_integration
             %thead
-              %tr.bg-brown.text-white
-                %th= check_box_tag 'master_checkbox', 0, false, style: 'top:0;'
-                %th= sortable :name, t('activerecord.models.account_number_rule.attributes.name')
-                %th= sortable :affect, t('activerecord.models.account_number_rule.attributes.affect')
-                %th= t('activerecord.models.account_number_rule.attributes.rule_type')
-                %th= sortable :categorization, t('activerecord.models.account_number_rule.attributes.categorization')
-                %th= sortable :content, t('activerecord.models.account_number_rule.attributes.content')
-                %th= t('activerecord.models.account_number_rule.attributes.third_party_account')
-                %th Actions
-            %tbody.retractable.slidedown
+              %th.text-center
+                .form-check
+                  = check_box_tag 'master_checkbox', 0, false, class: 'form-check-input pointer float-none check-all-bank-rule'
+              %th Nom de la règle
+              %th Affecté à
+              %th Type de règle
+              %th Catégorisation
+              %th Contenu recherche
+              %th N° de compte
+              %th.text-end Action
+            %tbody
               - @account_number_rules.each do |rule|
                 %tr
-                  %td= check_box_tag 'rules[rule_ids][]', rule.id, false, id: "rule_#{rule.id}", style: 'top:0;', class: 'checkbox'
+                  %td.text-center
+                    .form-check
+                      = check_box_tag 'rules[rule_ids][]', rule.id, false, id: "rule_#{rule.id}", class: 'form-check-input pointer float-none check-bank-rule checkbox'
                   %td= rule.name
                   %td
                     = t('activerecord.models.account_number_rule.attributes.affect_values.' + rule.affect)
@@ -53,12 +72,114 @@
                   %td= rule.categorization
                   %td= rule.content
                   %td= rule.third_party_account
-                  %td
-                    = link_to glyphicon('plus'), new_organization_account_number_rule_path(@organization, template: rule), class: 'btn btn-light', title: 'Créer une règle en se basant sur cette règle'
-                    = link_to glyphicon('eye'), organization_account_number_rule_path(@organization, rule), class: 'btn btn-light', title: 'Voir'
-                    = link_to glyphicon('pencil'), edit_organization_account_number_rule_path(@organization, rule), class: 'btn btn-light', title: 'Editer'
-                    = link_to glyphicon('x'), organization_account_number_rule_path(@organization, rule), class: 'btn btn-light', method: :delete, data: { confirm: t('actions.confirm') }, title: 'Supprimer'
-        = render partial: 'shared/list_options', locals: { collection: @account_number_rules }
-    = render partial: 'sidebar'
-  = render partial: 'modal_form_skip_accounting_plan'
-  = javascript_include_tag 'front/account_number_rules/assets/javascripts/main'
+                  %td.text-end.pointer
+                    .action.sub-menu-bank-affectation
+                      %span= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
+                    .sub_menu.text-start.hide
+                      %ul.no-margin.no-padding.regular                      
+                        %li.edit
+                          = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Éditer', edit_organization_account_number_rule_path(@organization, rule), class: 'edit-account-number-rule', title: 'Éditer'
+                        %li.duplicate
+                          %span.me-1= glyphicon('layers', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
+                          %span Dupliquer
+                        %li.delete.red-label
+                          = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', organization_account_number_rule_path(@organization, rule), class: 'delete-account-number', method: :delete, data: { confirm: t('actions.confirm') }, title: 'Supprimer'
+
+        .form-group
+          .row.pagination
+            .col-md-6
+              .row
+                .col-md-3.text-end.pt-1
+                  %label Afficher par
+                .col-md-2
+                  %select.form-select.form-select-sm{ "aria-label" => ".form-select-sm" }
+                    %option 20
+                    %option 50
+                    %option 100         
+
+            .col-md-6.text-end
+              .row
+                .col-md-10
+                  %label 2-10 de 10 éléments
+                .col-md-1
+                  %span= glyphicon('chevron-left', { size: '15', color: "#1A1A1A" })
+                .col-md-1
+                  %span= glyphicon('chevron-right', { size: '15', color: "#1A1A1A" })
+  
+  .modal#add-new-rule
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %h5.modal-title.bold Ajouter une règle
+          %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+        .modal-body
+          
+        .modal-footer
+          %button.btn.btn-light.cancel{ type: :button, 'aria-label' => 'Close', 'data-bs-dismiss' => 'modal' } Annuler
+          %button.btn.btn-primary.share.validate-account-number-rule{ type: :button, disabled: true } Ajouter
+
+  .modal#import-rule
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %h5.modal-title.bold Importer une règle
+          %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+        .modal-body
+          .form-group
+            %h6.p-2 Une règle d'affectation doit avoir un nom unique. Si des règles dans le fichier d'import portent le même nom qu'une règle déjà existante, ces règles seront auto incrémentées.
+            .upload-content.text-center
+              .import-process.p-5
+                .w-100
+                  %span= glyphicon('cloud-download', { size: '22', color: 'rgba(26, 26, 26, 0.7)'})
+                .w-100 Déposez un fichiers CSV ici
+                .w-100
+                  %span ou 
+                  %span.pointer.green-label séléctionnez-les depuis votre ordinateur
+              .import-success.p-5.m-3.hide
+                .w-100
+                  %span= glyphicon('check', { size: '22', color: '#72AA42'})
+                .w-100 Importation terminée !
+            .file-import-name.row.p-1.m-1
+              .col-md-2.semibold.no-padding anytime.csv
+              .col-md-2.regular 150KB
+              .col-md-8.text-end.no-padding.pointer= glyphicon('x', { size: '10', color: 'rgba(26, 26, 26, 0.32)'})
+
+          .form-group
+            %label.semibold Affecté à
+            %select.form-control#affect-rule-to{ name: 'affect-rule-to', multiple: true }              
+              %option{ value: 'organization'} Organisation
+              %option{ value: 'customer'} Client
+            %i Ne pourra plus être changé par la suite
+          
+        .modal-footer
+          %button.btn.btn-light.cancel{ type: :button } Annuler
+          %button.btn.btn-secondary.share{ type: :button, disabled: true } Suivant
+
+  .modal#filter-rule
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %h5.modal-title.bold Importer une règle
+          %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}        
+        .modal-body
+          .form-group
+            %label.semibold Affecté à
+            %select.form-control#filter-affect-to{ name: 'filter-affect-to', multiple: true }              
+              %option{ value: 'organization'} Organisation
+              %option{ value: 'customer'} Client
+          .form-group
+            %label.semibold Type de règle
+            %select.form-control#filter-rule-type{ name: 'filter-rule-type', multiple: true }              
+              %option{ value: '1'} Type 1
+              %option{ value: '2'} Type 2
+          .form-group
+            %label.semibold Catégorisation
+            %select.form-control#rule-categories{ name: 'rule-categories', multiple: true }              
+              %option{ value: '1'} Catégorie 1
+              %option{ value: '2'} Catégorie 2
+          
+        .modal-footer
+          %button.btn.btn-light.cancel{ type: :button } Annuler
+          %button.btn.btn-primary.filter{ type: :button, disabled: true } Filtrer
+
+= javascript_include_tag 'front/account_number_rules/assets/javascripts/main'
