@@ -31,7 +31,6 @@
 //= require jquery.multi-select
 //= require moment
 //= require daterangepicker
-//
 
 var GLOBAL = {}
 var VARIABLES = {}
@@ -103,6 +102,11 @@ class ApplicationJS {
     });
   }
 
+  noticeAllMessageFrom(page=null){
+    this.noticeFlashMessageFrom(page);
+    this.noticeInternalErrorFrom(page);
+  }
+
   noticeFlashMessageFrom(page=null, message = null){
     var html = message;
     var is_present = null;
@@ -126,17 +130,22 @@ class ApplicationJS {
 
   noticeInternalErrorFrom(page=null, message = null){
     var html = message;
-    if(page){
-      html = $(page).find('.notice-internal-error').html();
-      if(!html)
-        html = page.responseText;
+    var is_present = null;
+    if(message)
+    {
+      is_present = 'true';
+    }
+    else
+    {
+      html = $(page).find('.notice-internal-error .message-alert').html();
+      is_present = $(page).find('.notice-internal-error .msg_present');
     }
 
-    if(html)
-    {
-      $('#idocus_notifications_messages .notice-internal-error').html(html);
+    if(is_present.length > 0){
+      $('#idocus_notifications_messages .notice-internal-error .message-alert').html(html);
+
       $('#idocus_notifications_messages .notice-internal-error').slideDown('fast');
-      setTimeout(function(){$('#idocus_notifications_messages .notice-internal-error').fadeOut('');}, 10000);
+      setTimeout(function(){$('.notice-internal-error').fadeOut('');}, 10000);
     }
   }
 
@@ -156,14 +165,27 @@ class ApplicationJS {
           $('div.loading_box').removeClass('hide');
         },
         success: function(result) {
-          
           if (beforeUpdateContent) { beforeUpdateContent(); }
 
           if(target){ $(target).html($(result).find(target).html()); }
 
           if (afterUpdateContent) { afterUpdateContent(); }
 
-          self.noticeFlashMessageFrom(result);         
+          self.noticeAllMessageFrom(result);         
+
+          try{
+            if(result.json_flash.success){
+              self.noticeFlashMessageFrom(null, result.json_flash.success)
+            }
+          }catch(e){}
+
+          try{
+            if(result.json_flash.error){
+              $('#idocus_notifications_messages .notice-internal-error .error_title').text('Attention');
+              self.noticeInternalErrorFrom(null, result.json_flash.error)
+            }
+          }catch(e){}
+
 
           if(success)
             success(result);
@@ -174,7 +196,7 @@ class ApplicationJS {
           }, 1000);
         },
         error: function(result){          
-          self.noticeInternalErrorFrom(result);
+          self.noticeInternalErrorFrom(null, result.responseText);
 
           if(success)
             success(result);
@@ -249,7 +271,6 @@ class ApplicationJS {
       }
 
       if (that !== null) {
-        console.log(that);
         if(class_list.indexOf("option_checkbox") > -1){
           that.check_input_number();
           that.update_price();

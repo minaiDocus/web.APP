@@ -6,15 +6,15 @@ class Dematboxes::MainController < FrontController
   # POST /account/dematboxes
   def create
     @dematbox.subscribe(params[:pairing_code])
-    flash[:notice] = "Configuration de iDocus'Box en cours..."
-    redirect_to account_profile_path(panel: 'idocus_box')
+    flash[:success] = "Configuration de iDocus'Box en cours..."
+    redirect_to profiles_path
   end
 
   # DELETE /account/dematboxes
   def destroy
     @dematbox.unsubscribe
-    flash[:notice] = 'Supprimé avec succèss.'
-    redirect_to account_profile_path(panel: 'idocus_box')
+    flash[:success] = 'Supprimé avec succèss.'
+    redirect_to profiles_path
   end
 
   private
@@ -22,7 +22,7 @@ class Dematboxes::MainController < FrontController
   def verify_access
     unless @user.is_dematbox_authorized
       flash[:error] = t('authorization.unessessary_rights')
-      redirect_to account_profile_path
+      redirect_to profiles_path
     end
   end
 

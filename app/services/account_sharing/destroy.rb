@@ -7,7 +7,7 @@ class AccountSharing::Destroy
   def execute
     if @account_sharing.destroy
       FileImport::Dropbox.changed([@account_sharing.collaborator])
-      url = Rails.application.routes.url_helpers.account_profile_url({ panel: 'account_sharing' }.merge(ActionMailer::Base.default_url_options))
+      url = Rails.application.routes.url_helpers.profiles_url({ panel: 'account_sharing' }.merge(ActionMailer::Base.default_url_options))
       if @account_sharing.is_approved
 
         Notifications::Notifier.new.create_notification({
@@ -32,8 +32,7 @@ class AccountSharing::Destroy
           @account_sharing.account.organization.admins
         end
 
-        url = Rails.application.routes.url_helpers.account_organization_account_sharings_url(
-          @account_sharing.account.organization,
+        url = Rails.application.routes.url_helpers.profiles_url(
           ActionMailer::Base.default_url_options
         )
 

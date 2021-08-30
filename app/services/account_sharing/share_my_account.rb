@@ -17,7 +17,7 @@ class AccountSharing::ShareMyAccount
         FileImport::Dropbox.changed([@account_sharing.collaborator])
 
         Notifications::Notifier.new.create_notification({
-          url: Rails.application.routes.url_helpers.account_profile_url({ panel: 'account_sharing' }.merge(ActionMailer::Base.default_url_options)),
+          url: Rails.application.routes.url_helpers.profiles_url({ panel: 'account_sharing' }.merge(ActionMailer::Base.default_url_options)),
           user: @account_sharing.collaborator,
           notice_type: 'share_account',
           title: 'Accès à un compte',

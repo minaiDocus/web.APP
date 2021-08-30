@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   scope module: 'dematboxes' do
-    resource :dematbox, only: %w(create destroy), controller: 'main'
+    delete '/dematbox/destroy', to: 'main#destroy', as: 'delete_dematbox'
+    post '/dematbox/create', to: 'main#create', as: 'create_dematbox'
   end
 end

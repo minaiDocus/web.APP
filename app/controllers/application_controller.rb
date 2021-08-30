@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
+  attr_accessor :json_flash
+
   protect_from_forgery
 
   helper_method :format_price, :format_price_00
@@ -123,7 +125,12 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def json_flash=(index, data)
+    @json_flash[index] = data
+  end
+
   def set_raven_context
+    @json_flash = {}
     Raven.user_context(id: session[:current_user_id]) # or anything else in session
     Raven.extra_context(params: params.to_unsafe_h, url: request.url)
   end

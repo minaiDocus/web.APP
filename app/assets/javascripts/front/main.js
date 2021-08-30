@@ -53,8 +53,15 @@ function bind_globals_events(){
   });
 }
 
+function check_flash_messages(){
+  let app = new ApplicationJS();
+  app.noticeAllMessageFrom(document);
+}
+
 jQuery(function () {
   bind_globals_events();
+
+  check_flash_messages();
 
   /* SCROLLING TO THE BOTTOM */
   $('.body_content').scroll(function() {

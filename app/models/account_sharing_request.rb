@@ -23,8 +23,7 @@ class AccountSharingRequest
         end
 
         collaborators.each do |collaborator|
-          url = Rails.application.routes.url_helpers.account_organization_account_sharings_url(
-           account.organization,
+          url = Rails.application.routes.url_helpers.profiles_url(
            ActionMailer::Base.default_url_options
           )
 

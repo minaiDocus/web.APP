@@ -2,16 +2,25 @@
   .notice.notice-internal-error.hide
     .icon-alert
       = glyphicon('warning', {size: '16', color: '#FF4848'})
-      %span.bold
-        = t('flush_notifications.bug_error')
+      %span.error_title.bold
+        - if flash.present?
+          Attention
+        - else
+          = t('flush_notifications.bug_error')
       %span.float-end.pointer
         = glyphicon('x', {size: '16', color: '#8e8e8e'})
     .message-alert
-      Nous faisons tout notre possible pour régler le problème au plus vite. Merci de votre patience
+      - if flash.present?
+        - flash.each do |name, msg|
+          %ul
+            - if msg.present? && name.to_s == 'error'
+              %li.msg_present= msg
+      - else
+        Nous faisons tout notre possible pour régler le problème au plus vite. Merci de votre patience
   .notice.notice-internal-success.text-center.text-white.hide
     .message-alert.bold
       - flash.each do |name, msg|
-        - if msg.present?
+        - if msg.present? && name.to_s == 'success'
           .row-fluid.derivationLeft.msg_present
             .col-sm-12              
               - if msg.is_a?(String)

@@ -23,33 +23,50 @@ class Profiles::MainController < FrontController
 
   # PUT /profiles
   def update
-    if params[:user][:current_password]
-      if @user.valid_password?(params[:user][:current_password])
-        @user.password =              params[:user][:password]
-        @user.password_confirmation = params[:user][:password_confirmation]
+    if params[:user].try(:[], :h_change_password)
+      if @user.valid_password?(params[:user].try(:[], :current_password))
+        @user.password =              params[:user].try(:[], :password)
+        @user.password_confirmation = params[:user].try(:[], :password_confirmation)
 
         if @user.save
-          flash[:notice] = 'Votre mot de passe a été mis à jour avec succès'
+          json_flash[:success] = 'Votre mot de passe a été mis à jour avec succès'
         else
-          flash[:alert] = 'Une erreur est survenue lors de la mise à jour de votre mot de passe'
+          json_flash[:error] = 'Une erreur est survenue lors de la mise à jour de votre mot de passe'
         end
       else
-        flash[:alert] = "Votre ancien mot de passe n'a pas été saisi correctement"
+        json_flash[:error] = "Votre ancien mot de passe n'a pas été saisi correctement"
       end
-    elsif @user.active?
+    elsif params[:user].try(:[], :h_change_notifications) && @user.active?
       params[:user].reject! { |key, _value| key == 'password' || key == 'password_confirmation' }
 
       if @user.update(user_params)
-        flash[:success] = 'Modifié avec succès.'
+        json_flash[:success] = 'Modifié avec succès.'
       else
-        flash[:error] = 'Impossible de sauvegarder.'
+        json_flash[:error] = 'Impossible de sauvegarder.'
       end
     end
 
-    if params[:panel]
-      redirect_to profile_path(panel: params[:panel])
+    render json: { json_flash: json_flash }, status: 200
+  end
+
+  def regenerate_email_code
+    if params[:customer].present?
+      customer = User.find Base64.decode64(params[:customer])
+      if customer && customer.options.try(:is_upload_authorized) && customer.active? && customer.update_email_code
+        flash[:success] = 'Code régénéré avec succès.'
+      else
+        flash[:error] = "Impossible d'effectuer l'opération demandée"
+      end
+
+      redirect_to upload_email_infos_organization_customer_path(customer.organization, customer)
     else
-      redirect_top profile_path
+      if !(@user.is_admin || @user.is_prescriber || @user.inactive?) && @user.update_email_code
+        flash[:success] = 'Code régénéré avec succès.'
+      else
+        flash[:error] = "Impossible d'effectuer l'opération demandée"
+      end
+
+      redirect_to profiles_path
     end
   end
 

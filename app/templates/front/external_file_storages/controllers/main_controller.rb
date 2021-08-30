@@ -12,10 +12,7 @@ class ExternalFileStorages::MainController < FrontController
                  @external_file_storage.unuse(service)
                end
 
-    respond_to do |format|
-      format.json { render json: response.to_json, status: :ok }
-      format.html { redirect_to account_profile_path }
-    end
+    render json: { response: response.to_json }, status: 200
   end
 
   def update
@@ -24,15 +21,12 @@ class ExternalFileStorages::MainController < FrontController
     end.first
 
     if service_name && @external_file_storage.send(service_name).update(path: params[service_name][:path])
-      flash[:success] = 'Modifié avec succés.'
+      json_flash[:success] = 'Modifié avec succés.'
     else
-      flash[:error] = 'Donnée(s) saisie(s) non valide.'
+      json_flash[:error] = 'Donnée(s) saisie(s) non valide.'
     end
 
-    respond_to do |format|
-      format.json { render json: result.to_json, status: :ok }
-      format.html { redirect_to account_profile_path(panel: 'efs_management', anchor: anchor_name(service_name)) }
-    end
+    render json: { json_flash: json_flash }, status: 200
   end
 
   private

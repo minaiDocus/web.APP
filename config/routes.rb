@@ -68,9 +68,7 @@ Rails.application.routes.draw do
   front_draw('reporting')
   front_draw('customers')
   front_draw('periods')
-  front_draw('dropboxes')
   front_draw('boxes')
-  front_draw('google_drives')
   front_draw('external_file_storages')
   front_draw('ftps')
   front_draw('payments')
@@ -79,7 +77,6 @@ Rails.application.routes.draw do
   front_draw('retrievers')
   front_draw('retrieved_datas')
   front_draw('retriever_parameters')
-  front_draw('emailed_documents')
   front_draw('exact_online')
   front_draw('paper_processes')
   front_draw('suspended')
@@ -144,9 +141,6 @@ Rails.application.routes.draw do
   get  '/scans/return_labels/new/:year/:month/:day', controller: 'return_labels', action: 'new'
 
   get '/paper_set_orders', controller: 'paper_set_orders', action: 'index'
-
-  post 'dropbox/webhook', controller: 'dropboxes', action: 'webhook'
-  get  'dropbox/webhook', controller: 'dropboxes', action: 'verify'
 
   get 'bridge/callback',   controller: 'bridge', action: 'callback'
   get 'bridge/setup_item', controller: 'bridge', action: 'setup_item'
