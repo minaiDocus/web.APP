@@ -102,3 +102,7 @@ p{
 #customer-content .tab-content {
   margin-bottom: 7%
 }
+
+#customer-content ul li.nav-item{
+  border-bottom: 1px solid rgba(26, 26, 26, 0.04);
+}

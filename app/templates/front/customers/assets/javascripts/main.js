@@ -1,14 +1,14 @@
 class Customer{
 
   constructor(){
-    this.applicationJS = new ApplicationJS;
+    this.applicationJS         = new ApplicationJS;
     this.create_customer_modal = $('#create-customer.modal');
-    this.filter_customer_modal = $('#customers-filter');
-    this.organization_id = $('input:hidden[name="organization_id"]').val();
+    this.filter_customer_modal = $('#customers-filter');    
+    this.organization_id       = $('input:hidden[name="organization_id"]').val();
   }
 
-
-  set_sub_menu_toggle(){
+  set_customer_event(){
+    let self = this;
     $('.action.sub_edit_delete, .edit_group').unbind('click');
     $('.action.sub_edit_delete, .edit_group').bind('click',function(e) {
       e.stopPropagation();
@@ -19,18 +19,35 @@ class Customer{
 
       $(this).parent().find('.sub_menu').removeClass('hide');
     });
-  }
 
-  remove_class(name='control-section'){
-    console.log($('.control-section').length);
-    console.log($('.control-section'));
-    // $('div').removeClass(name);
-  }
+    $('.customer-close').unbind('click').bind('click',function(e) {
+      e.preventDefault();
 
+      self.applicationJS.parseAjaxResponse({ 'url': '/organizations/' + self.organization_id + '/customers/' + $(this).attr('data-customer-id') + '/account_close_confirm'}).then((element)=>{       
+        
+        $('#close-customer.modal').modal('show');
+        $('.modal-header .modal-title').html('Clôturer le dossier');
+        $('#close-customer.modal .modal-body').html($(element).find('.close-confirm-content').html());
+        self.set_customer_event();
+      });
+    });
+    
+    $('.customer-reopen').unbind('click').bind('click',function(e) {
+      e.preventDefault();
+
+      self.applicationJS.parseAjaxResponse({ 'url': '/organizations/' + self.organization_id + '/customers/' + $(this).attr('data-customer-id') + '/account_reopen_confirm'}).then((element)=>{       
+        
+        $('#close-customer.modal').modal('show');
+        $('.modal-header .modal-title').html('Réouvrir le dossier');
+        $('#close-customer.modal .modal-body').html($(element).find('.reopen-confirm-content').html());
+        self.set_customer_event();
+      });
+    });
+
+  }
 
   main(){
-    this.set_sub_menu_toggle();
-    this.remove_class();
+    this.set_customer_event();
 
     this.add_customer();
     this.edit_customer();
@@ -343,7 +360,7 @@ class Customer{
         $('#customer-content .tab-content .tab-pane#accounting-plan').html($(element).find('#accounting_plan').html());
         self.get_vat_accounts_view(customer_id);
 
-        self.set_sub_menu_toggle();
+        self.set_customer_event();
         ApplicationJS.set_checkbox_radio(self);
 
         // self.get_vat_accounts_view(customer_id);

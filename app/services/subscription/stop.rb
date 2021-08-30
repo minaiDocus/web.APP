@@ -3,9 +3,8 @@
 class Subscription::Stop
   def initialize(user, close_now = false)
     @user = user
-    @close_now = close_now == '1' ? true : false
+    @close_now = close_now == 'on' ? true : false
   end
-
 
   def execute
     period = @user.subscription.find_period(Date.today)

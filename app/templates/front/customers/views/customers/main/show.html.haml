@@ -34,91 +34,54 @@
       - if @customer.uses?(:ibiza)
         %li.nav-item.no-margin{ "role" => "presentation" }
           %button.semibold.nav-link#ibiza-box-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#ibiza-box", type: :button, "role" => "tab", "aria-controls" => "ibiza-box", "aria-selected" => "false" } iBiza Box
-      %li.nav-item.dropdown
-        %button.semibold.nav-link.dropdown-toggle#softwares-list{ "data-bs-toggle" => "dropdown", "aria-expanded" => "false", type: :button } Logiciels comptables / export csv
-        %ul.dropdown-menu{ "aria-labelledby" => "softwares-list" }
+      %li.nav-item.dropdown.no-margin
+        %button.semibold.nav-link.dropdown-toggle#softwares-list{ "data-bs-toggle" => "dropdown", "aria-expanded" => "false", type: :button } Logiciels comptables / Export csv
+        %ul.dropdown-menu.pointer{ "aria-labelledby" => "softwares-list" }
           - if software_uses('ibiza')   
-            %li
-              %button.semibold.nav-link.dropdown-item#ibiza-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#ibiza", type: :button, "role" => "tab", "aria-controls" => "ibiza", "aria-selected" => "false" } 
-              .row
-                .col-md-6.text-center
-                  %span iBiza
-                .col-md-6.text-center
-                  - if @customer.uses?(:ibiza)
-                    = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
+            %li.nav-link.dropdown-item{ class: "#{@customer.uses?(:ibiza) ? 'semibold' : ''}"}
+              %a#ibiza-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#ibiza", type: :button, "role" => "tab", "aria-controls" => "ibiza", "aria-selected" => "false" } iBiza
+              - if @customer.uses?(:ibiza)                         
+                %span.float-end= glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
           - if software_uses('exact_online')
-            %li
-              %button.semibold.nav-link.dropdown-item#exact-online-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#exact-online", type: :button, "role" => "tab", "aria-controls" => "exact-online", "aria-selected" => "false" } 
-              .row
-                .col-md-6.text-center
-                  %span Exact Online
-                .col-md-6.text-center
-                  - if @customer.uses?(:exact_online)
-                    = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
+            %li.nav-link.dropdown-item{ class: "#{@customer.uses?(:exact_online) ? 'semibold' : ''}"}
+              %a#exact-online-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#exact-online", type: :button, "role" => "tab", "aria-controls" => "exact-online", "aria-selected" => "false" } Exact Online
+              - if @customer.uses?(:exact_online)
+                %span.float-end= glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
           - if software_uses('my_unisoft')
-            %li
-              %button.semibold.nav-link.dropdown-item#my-unisoft-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#my-unisoft", type: :button, "role" => "tab", "aria-controls" => "my-unisoft", "aria-selected" => "false" } 
-              .row
-                .col-md-6.text-center
-                  %span My Unisoft
-                .col-md-6.text-center
-                  - if @customer.uses?(:my_unisoft)
-                    = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
+            %li.nav-link.dropdown-item{ class: "#{@customer.uses?(:my_unisoft) ? 'semibold' : ''}"}
+              %a#my-unisoft-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#my-unisoft", type: :button, "role" => "tab", "aria-controls" => "my-unisoft", "aria-selected" => "false" } My Unisoft
+              - if @customer.uses?(:my_unisoft)
+                = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })                    
           - if @organization.try(:coala).try(:used?)  
-            %li
-              %button.semibold.nav-link.dropdown-item#coala-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#coala", type: :button, "role" => "tab", "aria-controls" => "coala", "aria-selected" => "false" } 
-              .row
-                .col-md-6.text-center
-                  %span Coala
-                .col-md-6.text-center
-                  - if @customer.uses?(:coala)
-                    = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
+            %li.nav-link.dropdown-item{ class: "#{@customer.uses?(:coala) ? 'semibold' : ''}"}
+              %a#coala-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#coala", type: :button, "role" => "tab", "aria-controls" => "coala", "aria-selected" => "false" } Coala
+              - if @customer.uses?(:coala)
+                %span.float-end= glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
           - if @organization.try(:quadratus).try(:used)
-            %li
-              %button.semibold.nav-link.dropdown-item#quadratus-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#quadratus", type: :button, "role" => "tab", "aria-controls" => "quadratus", "aria-selected" => "false" } 
-              .row
-                .col-md-6.text-center
-                  %span Quadratus
-                .col-md-6.text-center
-                  - if @customer.uses?(:quadratus)
-                    = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
+            %li.nav-link.dropdown-item{ class: "#{@customer.uses?(:quadratus) ? 'semibold' : ''}"}
+              %a#quadratus-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#quadratus", type: :button, "role" => "tab", "aria-controls" => "quadratus", "aria-selected" => "false" } Quadratus
+              - if @customer.uses?(:quadratus)
+                %span.float-end= glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
           - if @organization.try(:cegid).try(:used?)
-            %li
-              %button.semibold.nav-link.dropdown-item#cegid-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#cegid", type: :button, "role" => "tab", "aria-controls" => "cegid", "aria-selected" => "false" } 
-              .row
-                .col-md-6.text-center
-                  %span Cegid
-                .col-md-6.text-center
-                  - if @customer.uses?(:cegid)
-                    = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
+            %li.nav-link.dropdown-item{ class: "#{@customer.uses?(:cegid) ? 'semibold' : ''}"}
+              %a#cegid-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#cegid", type: :button, "role" => "tab", "aria-controls" => "cegid", "aria-selected" => "false" } Cegid
+              - if @customer.uses?(:cegid)
+                %span.float-end= glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
           - if @organization.try(:fec_agiris).try(:used?)
-            %li
-              %button.semibold.nav-link.dropdown-item#fec-agiris-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#fec-agiris", type: :button, "role" => "tab", "aria-controls" => "fec-agiris", "aria-selected" => "false" } 
-              .row
-                .col-md-6.text-center
-                  %span Fec Agiris
-                .col-md-6.text-center
-                  - if @customer.uses?(:fec_agiris)
-                    = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
+            %li.nav-link.dropdown-item{ class: "#{@customer.uses?(:fec_agiris) ? 'semibold' : ''}"}
+              %a#fec-agiris-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#fec-agiris", type: :button, "role" => "tab", "aria-controls" => "fec-agiris", "aria-selected" => "false" } Fec Agiris
+              - if @customer.uses?(:fec_agiris)
+                %span.float-end= glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
           - if @organization.try(:fec_acd).try(:used?)
-            %li
-              %button.semibold.nav-link.dropdown-item#fec-acd-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#fec-acd", type: :button, "role" => "tab", "aria-controls" => "fec-acd", "aria-selected" => "false" } 
-              .row
-                .col-md-6.text-center
-                  %span Fec ACD
-                .col-md-6.text-center
-                  - if @customer.uses?(:fec_acd)
-                    = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
+            %li.nav-link.dropdown-item{ class: "#{@customer.uses?(:fec_acd) ? 'semibold' : ''}"}
+              %a#fec-acd-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#fec-acd", type: :button, "role" => "tab", "aria-controls" => "fec-acd", "aria-selected" => "false" } Fec ACD              
+              - if @customer.uses?(:fec_acd)
+                %span.float-end= glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
           - if @organization.try(:csv_descriptor).try(:used?)
-            %li
-              %button.semibold.nav-link.dropdown-item#csv-descriptor-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#csv-descriptor", type: :button, "role" => "tab", "aria-controls" => "csv-descriptor", "aria-selected" => "false" } 
-              .row
-                .col-md-6.text-center
-                  %span Format d’export (.csv)
-                .col-md-6.text-center
-                  - if @customer.uses?(:csv_descriptor)
-                    = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
-
+            %li.nav-link.dropdown-item{ class: "#{@customer.uses?(:csv_descriptor) ? 'semibold' : ''}"}
+              %a#csv-descriptor-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#csv-descriptor", type: :button, "role" => "tab", "aria-controls" => "csv-descriptor", "aria-selected" => "false" } Format d’export (.csv)
+              - if @customer.uses?(:csv_descriptor)
+                %span.float-end= glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
     - unless @organization.specific_mission    
       %li.nav-item.no-margin{ "role" => "presentation" }
         %button.semibold.nav-link#accounting-plan-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#accounting-plan", type: :button, "role" => "tab", "aria-controls" => "accounting-plan", "aria-selected" => "false" } Plan comptable
@@ -1097,4 +1060,5 @@
           .w-100.text-end
             = link_to t('actions.edit'), edit_organization_customer_file_storage_authorizations_path(@organization, @customer), class: 'btn btn-primary bold'
 
+= render partial: 'customer_dialog'
 = javascript_include_tag 'front/customers/assets/javascripts/main'
