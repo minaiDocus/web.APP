@@ -9,6 +9,31 @@ class AccountNumberRule{
   }
 
 
+  load_data(type='account_number_rules', page=1, per_page=0){
+    if(this.action_locker) { return false; }
+
+    this.action_locker = true;
+    let params = [];
+
+    params.push(`page=${page}`);
+
+    if (per_page > 0) { params.push(`per_page=${ per_page }`); }
+
+    let ajax_params =   {
+                          'url': `/organizations/${this.organization_id}/account_number_rules?${params.join('&')}`,
+                          'dataType': 'html',
+                          'target': ''
+                        };
+
+    this.applicationJS.parseAjaxResponse(ajax_params)
+                      .then((html)=>{
+                        this.action_locker = false;
+                        bind_all_events_account_number_rules();
+                      })
+                      .catch(()=>{ this.action_locker = false; });
+  }
+
+
   get_account_number_rule_view(id=0){
     let url  = `/organizations/${this.organization_id}/account_number_rules/new`;
 
@@ -17,7 +42,6 @@ class AccountNumberRule{
     this.applicationJS.parseAjaxResponse({ 'url': url }).catch((error)=> { 
       console.log(error)
     }).then((element)=>{
-      console.log(element);
       let from        = '#account_number_rule.new';
       let modal_title = 'Ajouter une règle';
 
@@ -64,4 +88,7 @@ jQuery(function() {
   AppListenTo('add_account_number_rule', (e)=>{ account_number_rule.add_account_number_rule(); });
   AppListenTo('edit_account_number_rule', (e)=>{ account_number_rule.edit_account_number_rule(e.detail.id); });
   AppListenTo('validate_account_number_rule_fields', (e)=>{ account_number_rule.validate_account_number_rule_fields(); });
+
+  AppListenTo('window.change-per-page', (e)=>{ account_number_rule.load_data(e.detail.name, 1, e.detail.per_page); });
+  AppListenTo('window.change-page', (e)=>{ account_number_rule.load_data(e.detail.name, e.detail.page); });
 });

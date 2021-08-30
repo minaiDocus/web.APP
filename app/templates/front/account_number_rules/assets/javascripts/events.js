@@ -14,12 +14,17 @@ function bind_all_events_account_number_rules(){
 
     if (target === 'filter-modal') {
       $('select#filter-affect-to').searchableOptionList({
-        'noneText': 'Selectionner un/des affectations',
+        'noneText': 'Selectionner une affectations',
         'allText': 'Tous séléctionnés'
       });
 
       $('select#filter-rule-type').searchableOptionList({
-        'noneText': 'Selectionner un/des types de règles',
+        'noneText': 'Selectionner un type de règles',
+        'allText': 'Tous séléctionnés'
+      });
+
+      $('select#rule-categories').searchableOptionList({
+        'noneText': 'Selectionner une catégorisation de règles',
         'allText': 'Tous séléctionnés'
       });
     }
@@ -44,6 +49,16 @@ function bind_all_events_account_number_rules(){
       $('.head_affect_to').addClass('hide');
       $('.customers-list').addClass('hide');
       $('.groups-list').addClass('hide');
+    }
+  }
+
+
+  function set_third_party_account(selected_rule_type_value) {
+    if (selected_rule_type_value === 'truncate'){
+      $('.third_party_account-section').addClass('hide');
+    }
+    else{
+      $('.third_party_account-section').removeClass('hide');
     }
   }
 
@@ -101,6 +116,7 @@ function bind_all_events_account_number_rules(){
 
   $('.edit-account-number-rule').unbind('click').bind('click', function(e) {
     e.stopPropagation();
+    e.preventDefault();
 
     let elements = $(this).attr('href').split('/');
 
@@ -116,6 +132,15 @@ function bind_all_events_account_number_rules(){
     AppEmit('validate_account_number_rule_fields');
   });
 
+  const rule_type_selector = $('select#rule-type');
+  set_third_party_account(rule_type_selector.val());
+  $(rule_type_selector)
+  .unbind('change').bind('change', function(e) {
+    e.stopPropagation();
+
+    set_third_party_account($(this).val());
+  });
+
   $('.validate-account-number-rule').unbind('click').bind('click', function(e) {
     e.stopPropagation();
 
@@ -124,19 +149,20 @@ function bind_all_events_account_number_rules(){
 
   
   show_affect_to($('select#affect-to').val());
-  $('#affect-to').unbind('change').bind('change',function(e) {
+  $('select#affect-to, select#affect-rule-to').unbind('change').bind('change',function(e) {
     e.stopPropagation();
 
     show_affect_to($(this).val());
   });
 
   
-  multi_select_for('download-modal');
+  show_affect_to($('select#affect-rule-to').val());
+  /*multi_select_for('download-modal');*/
   $('.sub_rule_menu li.download')
   .unbind('click').bind('click',function(e) {
     e.stopPropagation();
 
-    multi_select_for('download-modal');
+    /*multi_select_for('download-modal');*/
 
     $('#import-rule').modal('show');
   });

@@ -32,7 +32,7 @@
         = f.label :priority, :class => "semibold"
         .select-container.no-padding.w-100
           = f.input :priority, as: :integer, label: false, input_html: { class: 'account-number-rules-priority required_field', placeholder: "ex: 0" }, hint: "Quand deux règles sont similaires, indiquer laquelle est prioritaire sur l'autre. 0 étant prioritaire sur 1, 1 étant prioritaire sur 2..."
-      .col-md-6
+      .col-md-6.third_party_account-section
         = f.label :third_party_account, :class => "semibold"
         .select-container.no-padding.w-100
           = f.input :third_party_account, label: false, input_html: { class: 'account-number-rules-third-party-account', placeholder: "ex: 627000" }, required: true, hint: "Le numéro qui sera assigné si la recherche est un succès."
