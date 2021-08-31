@@ -19,7 +19,7 @@
           = glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
     .col-md-2.no-padding
       %button.btn.btn-primary.semibold.add-rule
-        %span.me-2 Ajouter une règle     
+        %span.me-2 Ajouter une règle    
         %span.chevron-add-rule= glyphicon('chevron-bottom', { size: '15', color: '#FFFF'})
         .sub_rule_menu.text-start.hide
           %ul.no-margin.no-padding.regular
@@ -32,13 +32,16 @@
   .box
     = form_tag(export_or_destroy_organization_account_number_rules_path(@organization), method: :post) do
       .row
-        .col-md-8
+        .col-md-7
           %h6.mt-3
             Les règles ci-dessous s'appliquent aux opérations récupérées dans les automates.
             %br Vous pouvez exporter les règles sélectionnées ou les supprimer.
-        .col-md-4.text-end
+        .col-md-3.text-end
           %button.btn.btn-light-secondary.add-document.m-1#export-rule{type: 'submit', name: 'export_or_destroy', value: 'export', disabled: 'disabled'} Exporter sur Excel
           %button.btn.btn-light-secondary.add-document.m-1#delete-rule{type: 'submit', name: 'export_or_destroy', value: 'destroy', 'data-confirm' => 'Etes-vous sûr de vouloir supprimer les règles sélectionnées ?', disabled: 'disabled'} Supprimer
+        .col-md-2
+          %button.btn.btn-secondary.skip_accounting_plan
+            %span.me-2 Paramètres avancés
           
       .row.mt-5
         .col-md-12
@@ -194,5 +197,7 @@
           .modal-footer
             %button.btn.btn-light.cancel{ type: :button, 'aria-label' => 'Close', 'data-bs-dismiss' => 'modal' } Annuler
             = submit_tag t('filters.action'), name: nil, class: 'btn btn-primary filter'
+
+  = render partial: 'modal_form_skip_accounting_plan'
 
 = javascript_include_tag 'front/account_number_rules/assets/javascripts/main'

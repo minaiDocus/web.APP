@@ -79,6 +79,15 @@ class AccountNumberRule{
   edit_account_number_rule(id){
     this.get_account_number_rule_view(id);
   }
+
+  skip_accounting_plan(url, account_list, account_validation){
+    this.applicationJS.parseAjaxResponse({
+        'url': url,
+        'data': { account_list: account_list, account_validation: account_validation },
+        'type': 'POST',
+        'dataType': 'json',
+      }).then((e)=>{ /*this.applicationJS.noticeFlashMessageFrom(null, e.message);*/ })
+  }
 }
 
 jQuery(function() {
@@ -88,6 +97,8 @@ jQuery(function() {
   AppListenTo('add_account_number_rule', (e)=>{ account_number_rule.add_account_number_rule(); });
   AppListenTo('edit_account_number_rule', (e)=>{ account_number_rule.edit_account_number_rule(e.detail.id); });
   AppListenTo('validate_account_number_rule_fields', (e)=>{ account_number_rule.validate_account_number_rule_fields(); });
+
+  AppListenTo('skip_accounting_plan', (e)=>{ account_number_rule.skip_accounting_plan(e.detail.url, e.detail.account_list, e.detail.account_validation); });
 
   AppListenTo('window.change-per-page', (e)=>{ account_number_rule.load_data(e.detail.name, 1, e.detail.per_page); });
   AppListenTo('window.change-page', (e)=>{ account_number_rule.load_data(e.detail.name, e.detail.page); });

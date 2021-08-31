@@ -188,6 +188,41 @@ function bind_all_events_account_number_rules(){
     $(this).parent().find('.sub_menu').removeClass('hide');
   });
 
+
+  $('.skip_accounting_plan').unbind('click').bind('click', function(e) {
+    e.stopPropagation();
+    e.preventDefault();
+
+    $('#skipAccountingPlan').modal('show');
+  });
+
+  $('#skipAccountingPlan #skipAccountingPlanButton')
+  .unbind('click').bind('click', function(e) {
+    e.stopPropagation();
+
+    const accounts = $('#skipAccountingPlan #account_list').val();
+    const account_validation = $('#skipAccountingPlan #account_validation').val();
+    const url = $('#skipAccountingPlan #skipAccountingPlanForm').attr('action');
+
+    AppEmit('skip_accounting_plan', { url: url, account_list: accounts, account_validation: account_validation });
+  })
+
+
+  if ($('#skipAccountingPlan .searchable-option-list').length > 0) {
+    $('#skipAccountingPlan .searchable-option-list').searchableOptionList({
+      showSelectionBelowList: true,
+      showSelectAll: true,
+      maxHeight: '300px',
+      texts: {
+        noItemsAvailable: 'Aucune entrée trouvée',
+        selectAll: 'Sélectionner tout',
+        selectNone: 'Désélectionner tout',
+        quickDelete: '&times;',
+        searchplaceholder: 'Cliquer ici pour rechercher'
+      }
+    });
+  }
+
   ApplicationJS.set_checkbox_radio();
   ApplicationJS.hide_submenu();
 }
