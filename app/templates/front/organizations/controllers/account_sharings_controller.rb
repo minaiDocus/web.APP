@@ -3,7 +3,7 @@
 class Organizations::AccountSharingsController < OrganizationController
   before_action :load_account_sharing, only: %i[accept destroy]
 
-  append_view_path('app/templates/front/organizations/views')
+  prepend_view_path('app/templates/front/organizations/views')
 
   def index
     @account_sharings = AccountSharing.unscoped.where(account_id: customers).search(search_terms(params[:account_sharing_contains]))

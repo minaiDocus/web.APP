@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Admin::ScanningProviders::MainController < BackController
-  append_view_path('app/templates/back/scanning_providers/views')
+  prepend_view_path('app/templates/back/scanning_providers/views')
 before_action :load_scanning_provider, except: %w[index new create]
 
   # GET /admin/scanning_providers

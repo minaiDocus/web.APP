@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Admin::PreAssignmentDeliveries::MainController < BackController
-  append_view_path('app/templates/back/pre_assignment_deliveries/views')
+  prepend_view_path('app/templates/back/pre_assignment_deliveries/views')
 
  # GET /admin/pre_assignment_deliveries
   def index

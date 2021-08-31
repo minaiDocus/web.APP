@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Admin::Notifications::MainController < BackController
-  append_view_path('app/templates/back/notifications/views')
+  prepend_view_path('app/templates/back/notifications/views')
 
   def index
     @notifications = Notification.search(search_terms(params[:notification_contains])).order(sort_column => sort_direction).page(params[:page]).per(params[:per_page])

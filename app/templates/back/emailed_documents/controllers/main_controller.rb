@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Admin::EmailedDocuments::MainController < BackController
-  append_view_path('app/templates/back/emailed_documents/views')
+  prepend_view_path('app/templates/back/emailed_documents/views')
 
   # GET /admin/emailed_documents
   def index

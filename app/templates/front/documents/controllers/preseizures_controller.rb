@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Documents::PreseizuresController < FrontController
-  append_view_path('app/templates/front/documents/views')
+  prepend_view_path('app/templates/front/documents/views')
 
   before_action :load_preseizure, except: %w[accounts_list]
 

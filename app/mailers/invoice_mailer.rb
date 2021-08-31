@@ -1,5 +1,5 @@
 # -*- encoding : UTF-8 -*-
-class InvoiceMailer < ActionMailer::Base
+class InvoiceMailer < BaseMailer
   def notify(invoice)
     organization = invoice.organization
     attachments[invoice.cloud_content_object.filename] = File.read(invoice.cloud_content_object.path)

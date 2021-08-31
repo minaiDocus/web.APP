@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Admin::AccountSharings::MainController < BackController
-  append_view_path('app/templates/back/account_sharings/views')
+  prepend_view_path('app/templates/back/account_sharings/views')
 
   def index
     @account_sharings = AccountSharing.unscoped

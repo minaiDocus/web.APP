@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Admin::Retrievers::ArchivesController < BackController
-  append_view_path('app/templates/back/retrievers/views')
+  prepend_view_path('app/templates/back/retrievers/views')
 
  def budgea_users
     @budgea_users = Archive::BudgeaUser.search(search_terms(params[:archive_budgea_users_contains])).order(sort_column => sort_direction).page(params[:page]).per(params[:per_page])

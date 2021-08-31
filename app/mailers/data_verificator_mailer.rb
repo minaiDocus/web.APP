@@ -1,4 +1,4 @@
-class DataVerificatorMailer < ActionMailer::Base
+class DataVerificatorMailer < BaseMailer
   def notify(notify_content)
     @notify_content = notify_content
 

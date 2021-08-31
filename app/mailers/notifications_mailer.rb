@@ -1,4 +1,4 @@
-class NotificationsMailer < ActionMailer::Base
+class NotificationsMailer < BaseMailer
   def notify(notification)
     @notification = notification
     @markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML)

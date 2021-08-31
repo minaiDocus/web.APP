@@ -3,7 +3,7 @@ class GroupOrganizations::MainController < FrontController
   before_action :verify_if_an_admin?
   before_action :load_organization_group, except: %w[index new create]
 
-  append_view_path('app/templates/front/group_organizations/views')
+  prepend_view_path('app/templates/front/group_organizations/views')
 
   def index
     @organization_groups = OrganizationGroup.all.page(params[:page]).per(params[:per_page]).order(created_at: :desc)

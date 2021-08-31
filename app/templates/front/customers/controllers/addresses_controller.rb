@@ -6,7 +6,7 @@ class Customers::AddressesController < OrganizationController
   before_action :redirect_to_current_step
   before_action :load_address, only: %w[edit update destroy]
 
-  append_view_path('app/templates/front/customers/views')
+  prepend_view_path('app/templates/front/customers/views')
 
   # GET /account/organizations/:organization_id/customers/:customer_id/addresses
   def index

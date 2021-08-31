@@ -1,5 +1,5 @@
 # -*- encoding : UTF-8 -*-
-class NotificationMailer < ActionMailer::Base
+class NotificationMailer < BaseMailer
   def notify(addresses, subject = '', content = '')
     @content = content
 

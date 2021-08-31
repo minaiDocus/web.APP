@@ -5,7 +5,7 @@ class Organizations::NewProviderRequestsController < RetrieverController
   before_action :verify_if_modifiable
   before_action :redirect_to_new_page
 
-  append_view_path('app/templates/front/organizations/views')
+  prepend_view_path('app/templates/front/organizations/views')
 
   def index
     @new_provider_requests = @customer.new_provider_requests.not_processed_or_recent.order(sort_column => sort_direction).page(params[:page]).per(params[:per_page])

@@ -3,7 +3,7 @@
 class Organizations::PeriodOptionsController < OrganizationController
   before_action :verify_rights
 
-  append_view_path('app/templates/front/organizations/views')
+  prepend_view_path('app/templates/front/organizations/views')
 
   # GET /account/organizations/:organization_id/period_options/edit
   def edit; end

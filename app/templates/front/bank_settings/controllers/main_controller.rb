@@ -4,7 +4,7 @@ class BankSettings::MainController < RetrieverController
   before_action :load_budgea_config, only: %w[index]
   before_action :verif_account
 
-  append_view_path('app/templates/front/bank_settings/views')
+  prepend_view_path('app/templates/front/bank_settings/views')
 
   def index
     @bank_accounts = @account.retrievers.collect(&:bank_accounts).flatten! || []

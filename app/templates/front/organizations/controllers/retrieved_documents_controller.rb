@@ -4,7 +4,7 @@ class Organizations::RetrievedDocumentsController < RetrieverController
   before_action :load_document, except: %w[index select validate]
   before_action :redirect_to_new_page
 
-  append_view_path('app/templates/front/organizations/views')
+  prepend_view_path('app/templates/front/organizations/views')
 
   def index
     @documents = TempDocument.search_for_collection(

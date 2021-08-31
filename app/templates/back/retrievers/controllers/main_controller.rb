@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Admin::Retrievers::MainController < BackController
-  append_view_path('app/templates/back/retrievers/views')
+  prepend_view_path('app/templates/back/retrievers/views')
 
     def index
     @retrievers = Retriever.search(search_terms(params[:retriever_contains])).order(sort_column => sort_direction).includes(:user, :journal)

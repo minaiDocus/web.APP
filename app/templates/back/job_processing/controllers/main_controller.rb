@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Admin::JobProcessing::MainController < BackController
-  append_view_path('app/templates/back/job_processing/views')
+  prepend_view_path('app/templates/back/job_processing/views')
 
   # GET /admin/job_processing
   def index

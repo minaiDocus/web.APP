@@ -5,7 +5,7 @@ class Retrievers::MainController < RetrieverController
   before_action :verify_retriever_state, except: %w[index list new export_connector_to_xls get_connector_xls new_internal edit_internal create api_config]
   before_action :load_retriever_edition, only: %w[new edit]
 
-  append_view_path('app/templates/front/retrievers/views')
+  prepend_view_path('app/templates/front/retrievers/views')
 
   def index
     retrievers = if @account

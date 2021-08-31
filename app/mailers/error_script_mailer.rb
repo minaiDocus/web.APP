@@ -1,4 +1,4 @@
-class ErrorScriptMailer < ActionMailer::Base
+class ErrorScriptMailer < BaseMailer
 	def error_notification(script, options={})
     return true if Rails.env != 'production'
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Admin::CounterErrorScriptMailer::MainController < BackController
-  append_view_path('app/templates/back/counter_error_script_mailer/views')
+  prepend_view_path('app/templates/back/counter_error_script_mailer/views')
 
   # GET /admin/counter_error_script_mailer
   def index

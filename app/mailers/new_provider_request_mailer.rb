@@ -1,5 +1,5 @@
 # -*- encoding : UTF-8 -*-
-class NewProviderRequestMailer < ActionMailer::Base
+class NewProviderRequestMailer < BaseMailer
   def notify(user, accepted, rejected, processing)
     @user       = user
     @accepted   = accepted

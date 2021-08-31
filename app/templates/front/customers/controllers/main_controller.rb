@@ -8,7 +8,7 @@ class Customers::MainController < OrganizationController
   before_action :redirect_to_current_step
   before_action :verify_if_account_can_be_closed, only: %w[account_close_confirm close_account]
 
-  append_view_path('app/templates/front/customers/views')
+  prepend_view_path('app/templates/front/customers/views')
 
   # GET /organizations/:organization_id/customers
   def index

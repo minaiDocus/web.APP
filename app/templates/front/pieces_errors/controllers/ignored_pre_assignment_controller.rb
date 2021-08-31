@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class PiecesErrors::IgnoredPreAssignmentController < FrontController
-  append_view_path('app/templates/front/pieces_errors/views')
+  prepend_view_path('app/templates/front/pieces_errors/views')
 
   def index
     @ignored_list = Pack::Piece.pre_assignment_ignored

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Admin::PreAssignmentBlockedDuplicates::MainController < BackController
-  append_view_path('app/templates/back/pre_assignment_blocked_duplicates/views')
+  prepend_view_path('app/templates/back/pre_assignment_blocked_duplicates/views')
 
   # GET /admin/pre_assignment_blocked_duplicates
   def index

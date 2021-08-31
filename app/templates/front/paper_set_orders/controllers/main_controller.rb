@@ -5,7 +5,7 @@ class PaperSetOrders::MainController < OrganizationController
   before_action :verify_if_customer_can_order_paper_sets, only: %w[edit update]
   before_action :verify_editability, only: %w[edit update destroy]
 
-  append_view_path('app/templates/front/paper_set_orders/views')
+  prepend_view_path('app/templates/front/paper_set_orders/views')
 
   # GET /organizations/:organization_id/paper_set_orders
   def index

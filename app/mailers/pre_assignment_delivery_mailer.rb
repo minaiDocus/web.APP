@@ -1,5 +1,5 @@
 # -*- encoding : UTF-8 -*-
-class PreAssignmentDeliveryMailer < ActionMailer::Base
+class PreAssignmentDeliveryMailer < BaseMailer
   def notify_deliveries(deliveries, addresses)
     @deliveries = deliveries
     @deliver_to = @deliveries.first.deliver_to

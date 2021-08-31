@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Admin::BudgeaRetriever::MainController < BackController
-  append_view_path('app/templates/back/budgea_retriever/views')
+  prepend_view_path('app/templates/back/budgea_retriever/views')
 
   def index; end
 

@@ -4,7 +4,7 @@ class Documents::PiecesController < FrontController
   skip_before_action :login_user!, only: %w[download piece handle_bad_url temp_document get_tag already_exist_document], raise: false
   before_action :load_pack, only: %w[show]
 
-  append_view_path('app/templates/front/documents/views')
+  prepend_view_path('app/templates/front/documents/views')
 
   # GET /documents
   def index

@@ -2,7 +2,7 @@
 class RetrieverParameters::BanksParamsController < RetrieverController
   before_action :verif_account
   before_action :load_bank_account, only: %w[edit update bank_activation]
-  append_view_path('app/templates/front/retriever_parameters/views')
+  prepend_view_path('app/templates/front/retriever_parameters/views')
 
   def index
     @bank_accounts = []

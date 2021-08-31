@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Admin::Orders::MainController < BackController
-  append_view_path('app/templates/back/orders/views')
+  prepend_view_path('app/templates/back/orders/views')
 
   helper_method :sort_column, :sort_direction
 

@@ -5,7 +5,7 @@ class CsvDescriptors::UseController < OrganizationController
   before_action :load_customer
   before_action :redirect_to_current_step
 
-  append_view_path('app/templates/front/csv_descriptors/views')
+  prepend_view_path('app/templates/front/csv_descriptors/views')
 
   # FIXME : check if needed
   def edit; end

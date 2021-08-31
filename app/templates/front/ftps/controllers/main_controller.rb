@@ -3,7 +3,7 @@ class Ftps::MainController < FrontController
   before_action :verify_authorization
   before_action :load_ftp
 
-  append_view_path('app/templates/front/ftps/views')
+  prepend_view_path('app/templates/front/ftps/views')
 
   def edit; end
 

@@ -4,7 +4,7 @@ class Organizations::SftpsController < OrganizationController
   before_action :verify_rights
   before_action :load_sftp
 
-  append_view_path('app/templates/front/organizations/views')
+  prepend_view_path('app/templates/front/organizations/views')
 
   def edit; end
 

@@ -5,7 +5,7 @@ class FileStorageAuthorizations::MainController < OrganizationController
   before_action :verify_if_someone_is_active
   before_action :load_url_path
 
-  append_view_path('app/templates/front/file_storage_authorizations/views')
+  prepend_view_path('app/templates/front/file_storage_authorizations/views')
 
   # GET /account/organizations/:organization_id/collaborators/:collaborator_id/file_storage_authorizations/edit
   def edit; end

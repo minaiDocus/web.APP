@@ -1,5 +1,5 @@
 # -*- encoding : UTF-8 -*-
-class ReminderMailer < ActionMailer::Base
+class ReminderMailer < BaseMailer
   default reply_to: nil
 
   def remind(mail, user)

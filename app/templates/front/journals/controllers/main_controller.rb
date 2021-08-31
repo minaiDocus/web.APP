@@ -7,7 +7,7 @@ class Journals::MainController < OrganizationController
   before_action :load_journal, only: %w[edit update destroy edit_analytics update_analytics delete_analytics sync_analytics]
   before_action :verify_max_number, only: %w[new create select copy]
 
-  append_view_path('app/templates/front/journals/views')
+  prepend_view_path('app/templates/front/journals/views')
 
   # GET /organizations/:organization_id/journals
   def index

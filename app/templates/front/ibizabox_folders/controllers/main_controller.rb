@@ -4,7 +4,7 @@ class IbizaboxFolders::MainController < OrganizationController
   before_action :verify_rights
   before_action :verify_if_customer_is_active
 
-  append_view_path('app/templates/front/ibizabox_folders/views')
+  prepend_view_path('app/templates/front/ibizabox_folders/views')
 
   def update
     @folder = @customer.ibizabox_folders.find params[:id]

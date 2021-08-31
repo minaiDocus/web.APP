@@ -1,5 +1,5 @@
 # -*- encoding : UTF-8 -*-
-class PackMailer < ActionMailer::Base
+class PackMailer < BaseMailer
   def new_document_available(user, packs, start_at, end_at)
     @url      = Settings.first.inner_url + '/account/documents'
     @user     = user

@@ -2,7 +2,7 @@
 class News::MainController < FrontController
   layout false
 
-  append_view_path('app/templates/front/news/views')
+  prepend_view_path('app/templates/front/news/views')
 
   def index
     @news = ::News.published.where(target_audience: target_audience).order(created_at: :desc).limit(5)

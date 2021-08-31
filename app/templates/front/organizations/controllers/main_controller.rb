@@ -8,7 +8,7 @@ class Organizations::MainController < OrganizationController
   before_action :apply_membership
   before_action :verify_rights
 
-  append_view_path('app/templates/front/organizations/views')
+  prepend_view_path('app/templates/front/organizations/views')
 
   # GET /account/organizations/:id/update_options
   def edit_options; end

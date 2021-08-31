@@ -6,7 +6,7 @@ class MyCompanyFiles::SettingsController < OrganizationController
   before_action :set_state,   only: :authorize
   after_action  :reset_state, only: :callback
 
-  append_view_path('app/templates/front/my_company_files/views')
+  prepend_view_path('app/templates/front/my_company_files/views')
 
 
   def edit; end

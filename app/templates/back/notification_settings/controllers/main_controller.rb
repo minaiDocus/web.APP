@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Admin::NotificationSettings::MainController < BackController
-  append_view_path('app/templates/back/notification_settings/views')
+  prepend_view_path('app/templates/back/notification_settings/views')
 
   # GET /admin/notification_settings
   def index; end

@@ -3,7 +3,7 @@ class Groups::MainController < OrganizationController
   before_action :verify_rights, except: %w[index show]
   before_action :load_group, except: %w[index new create]
 
-  append_view_path('app/templates/front/groups/views')
+  prepend_view_path('app/templates/front/groups/views')
 
   # GET /organizations/:organization_id/groups
   def index

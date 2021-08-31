@@ -1,5 +1,5 @@
 # -*- encoding : UTF-8 -*-
-class WelcomeMailer < ActionMailer::Base
+class WelcomeMailer < BaseMailer
   def welcome_customer(user, token)
     @user   = user
     @token = token

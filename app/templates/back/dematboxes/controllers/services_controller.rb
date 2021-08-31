@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Admin::Dematboxes::ServicesController < BackController
-  append_view_path('app/templates/back/dematboxes/views')
+  prepend_view_path('app/templates/back/dematboxes/views')
 
   before_action :load_dematbox_service, only: 'destroy'
 

@@ -1,9 +1,10 @@
 = stylesheet_link_tag 'front/reporting/assets/stylesheets/main'
+%input#organization_id{ type: 'hidden', name: 'organization_id', value: params[:organization_id] || @organization.try(:id) || @user.organizations.first.try(:id) || @user.organization.try(:id) }
 
 .container-fluid
   .row
     .col-md-8
-      %h1.bold= t('reporting.reporting_text')
+      %h1.bold= "#{t('reporting.reporting_text')} ( #{ @organization.name } )"
     .col-md-2
       = select_tag 'customer_filter', options_for_select(accounts_options), id: 'customer_filter', multiple: true
     .col-md-2

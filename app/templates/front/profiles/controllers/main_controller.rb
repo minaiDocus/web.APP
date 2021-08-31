@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Profiles::MainController < FrontController
-  append_view_path('app/templates/front/profiles/views')
+  prepend_view_path('app/templates/front/profiles/views')
 
   # GET /profiles
   def show

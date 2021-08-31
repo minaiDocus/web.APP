@@ -5,7 +5,7 @@ class CsvDescriptors::MainController < OrganizationController
   before_action :redirect_to_current_step
   before_action :load_csv_descriptor
 
-  append_view_path('app/templates/front/csv_descriptors/views')
+  prepend_view_path('app/templates/front/csv_descriptors/views')
 
   # GET /organizations/:organization_id/csv_descriptor/edit
   def edit

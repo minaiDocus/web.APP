@@ -1,5 +1,5 @@
 # -*- encoding : UTF-8 -*-
-class OrderMailer < ActionMailer::Base
+class OrderMailer < BaseMailer
   def notify_dematbox_order(order)
     @order     = order
     @address = order.address

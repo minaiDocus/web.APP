@@ -2,7 +2,7 @@
 class PackReports::MainController < OrganizationController
   before_action :load_report, except: :index
 
-  append_view_path('app/templates/front/pack_reports/views')
+  prepend_view_path('app/templates/front/pack_reports/views')
 
   # GET /organizations/:organization_id/pack_reports
   def index

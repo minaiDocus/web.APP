@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Admin::Reporting::MainController < BackController
-  append_view_path('app/templates/back/reporting/views')
+  prepend_view_path('app/templates/back/reporting/views')
 
   def index
     @year = begin

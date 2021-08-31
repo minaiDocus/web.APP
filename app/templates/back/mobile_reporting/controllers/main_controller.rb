@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Admin::MobileReporting::MainController < BackController
-  append_view_path('app/templates/back/mobile_reporting/views')
+  prepend_view_path('app/templates/back/mobile_reporting/views')
 
   def index
     date_params

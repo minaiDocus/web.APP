@@ -112,35 +112,37 @@ Rails.application.routes.draw do
 
   #### --------------- native resources -----------------------------###
 
-  resources :compta
+  scope module: 'ppp' do
+    resources :compta
 
-  resources :kits, only: %w(index create)
-  get 'kits/:year/:month/:day', controller: 'kits', action: 'index', constraints: { year: /\d{4}/, month: /\d{1,2}/, day: /\d{1,2}/ }
-
-
-  resources :receipts, only: %w(index create)
-  get 'receipts/:year/:month/:day', controller: 'receipts', action: 'index', constraints: { year: /\d{4}/, month: /\d{1,2}/, day: /\d{1,2}/ }
+    resources :kits, only: %w(index create)
+    get 'kits/:year/:month/:day', controller: 'kits', action: 'index', constraints: { year: /\d{4}/, month: /\d{1,2}/, day: /\d{1,2}/ }
 
 
-  resources :scans, only: %w(index create) do
-    patch :add,       on: :member
-    get   :cancel,    on: :collection
-    patch :overwrite, on: :member
+    resources :receipts, only: %w(index create)
+    get 'receipts/:year/:month/:day', controller: 'receipts', action: 'index', constraints: { year: /\d{4}/, month: /\d{1,2}/, day: /\d{1,2}/ }
+
+
+    resources :scans, only: %w(index create) do
+      patch :add,       on: :member
+      get   :cancel,    on: :collection
+      patch :overwrite, on: :member
+    end
+    get 'scans/:year/:month/:day', controller: 'scans', action: 'index', constraints: { year: /\d{4}/, month: /\d{1,2}/, day: /\d{1,2}/ }
+
+
+    resources :returns, only: %w(index create)
+    get 'returns/:year/:month/:day', controller: 'returns', action: 'index', constraints: { year: /\d{4}/, month: /\d{1,2}/, day: /\d{1,2}/ }
+
+
+    scope '/scans' do
+      resource :return_labels
+    end
+    post '/scans/return_labels/:year/:month/:day',     controller: 'return_labels', action: 'create'
+    get  '/scans/return_labels/new/:year/:month/:day', controller: 'return_labels', action: 'new'
+
+    get '/paper_set_orders', controller: 'paper_set_orders', action: 'index'
   end
-  get 'scans/:year/:month/:day', controller: 'scans', action: 'index', constraints: { year: /\d{4}/, month: /\d{1,2}/, day: /\d{1,2}/ }
-
-
-  resources :returns, only: %w(index create)
-  get 'returns/:year/:month/:day', controller: 'returns', action: 'index', constraints: { year: /\d{4}/, month: /\d{1,2}/, day: /\d{1,2}/ }
-
-
-  scope '/scans' do
-    resource :return_labels
-  end
-  post '/scans/return_labels/:year/:month/:day',     controller: 'return_labels', action: 'create'
-  get  '/scans/return_labels/new/:year/:month/:day', controller: 'return_labels', action: 'new'
-
-  get '/paper_set_orders', controller: 'paper_set_orders', action: 'index'
 
   get 'bridge/callback',   controller: 'bridge', action: 'callback'
   get 'bridge/setup_item', controller: 'bridge', action: 'setup_item'

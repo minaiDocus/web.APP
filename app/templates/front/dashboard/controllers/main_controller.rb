@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Dashboard::MainController < FrontController
-  append_view_path('app/templates/front/dashboard/views')
+  prepend_view_path('app/templates/front/dashboard/views')
 
   def index
     @favorites = @user.favorite_customers.try(:customer_ids) || []

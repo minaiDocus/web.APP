@@ -3,7 +3,7 @@
 class Documents::MainController < FrontController
   skip_before_action :login_user!, only: %w[download piece handle_bad_url temp_document get_tag already_exist_document], raise: false
 
-  append_view_path('app/templates/front/documents/views')
+  prepend_view_path('app/templates/front/documents/views')
 
   def export_options
     if params[:type] == 'piece'

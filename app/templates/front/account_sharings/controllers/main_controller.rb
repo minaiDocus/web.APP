@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class AccountSharings::MainController < FrontController
-  append_view_path('app/templates/front/account_sharings/views')
+  prepend_view_path('app/templates/front/account_sharings/views')
 
   def create
     # WARNING : flash success must be a falsh not a json_flash due to JS redirection

@@ -3,7 +3,7 @@ class FileSendingKits::MainController < OrganizationController
   before_action :verify_rights
   before_action :load_file_sending_kit
 
-  append_view_path('app/templates/front/file_sending_kits/views')
+  prepend_view_path('app/templates/front/file_sending_kits/views')
 
   # GET /organizations/:organization_id/file_sending_kit/edit
   def edit; end

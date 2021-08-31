@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Admin::SubscriptionOptions::MainController < BackController
-  append_view_path('app/templates/back/subscription_options/views')
+  prepend_view_path('app/templates/back/subscription_options/views')
 
   before_action :load_subscription_option, except: %w[new create index]
 

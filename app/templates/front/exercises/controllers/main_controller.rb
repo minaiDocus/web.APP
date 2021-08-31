@@ -6,7 +6,7 @@ class Exercises::MainController < OrganizationController
   before_action :redirect_to_current_step
   before_action :load_exercise, except: %w[index new create]
 
-  append_view_path('app/templates/front/exercises/views')
+  prepend_view_path('app/templates/front/exercises/views')
 
   # GET  /organizations/:organization_id/customers/:customer_id/exercises
   def index

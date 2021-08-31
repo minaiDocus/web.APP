@@ -1,4 +1,4 @@
-class MobileReportMailer < ActionMailer::Base
+class MobileReportMailer < BaseMailer
   def report(data_report)
     @data_report = data_report
     

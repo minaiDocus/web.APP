@@ -2,7 +2,7 @@
 class AccountNumberRules::MainController < OrganizationController
   before_action :load_account_number_rule, only: %w[show edit update destroy]
 
-  append_view_path('app/templates/front/account_number_rules/views')
+  prepend_view_path('app/templates/front/account_number_rules/views')
 
   # GET /account/organizations/:organization_id/account_number_rules
   def index

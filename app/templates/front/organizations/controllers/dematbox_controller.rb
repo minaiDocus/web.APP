@@ -5,7 +5,7 @@ class Organizations::DematboxController < OrganizationController
   before_action :verify_access
   before_action :load_dematbox
 
-  append_view_path('app/templates/front/organizations/views')
+  prepend_view_path('app/templates/front/organizations/views')
 
   # POST /account/organizations/:organization_id/customers/:customer_id/dematbox
   def create

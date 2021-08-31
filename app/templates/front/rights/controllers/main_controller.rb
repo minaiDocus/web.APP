@@ -3,7 +3,7 @@ class Rights::MainController < OrganizationController
   before_action :verify_rights
   before_action :load_member
 
-  append_view_path('app/templates/front/rights/views')
+  prepend_view_path('app/templates/front/rights/views')
 
   # GET /account/organizations/:organization_id/collaborators/:collaborator_id/rights/edit
   def edit; end

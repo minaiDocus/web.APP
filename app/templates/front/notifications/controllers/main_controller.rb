@@ -4,7 +4,7 @@ class Notifications::MainController < FrontController
   skip_before_action :verify_if_active, raise: false
   before_action :load_notifications, except: :link_through
 
-  append_view_path('app/templates/front/notifications/views')
+  prepend_view_path('app/templates/front/notifications/views')
 
   def index
     @notifications.update_all is_read: true, updated_at: Time.now

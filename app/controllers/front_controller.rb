@@ -1,5 +1,5 @@
 class FrontController < ApplicationController
-  XHR_TOKEN = 'dHkgbnkgdG9rZW4gYW5sZSBhamF4'
+  XHR_TOKEN  = 'dHkgbnkgdG9rZW4gYW5sZSBhamF4'
   before_action :login_user!
   before_action :load_user_and_role
   before_action :verify_suspension

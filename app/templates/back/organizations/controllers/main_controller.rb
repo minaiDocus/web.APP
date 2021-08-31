@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Admin::Organizations::MainController < OrganizationController
-  append_view_path('app/templates/back/organizations/views')
+  prepend_view_path('app/templates/back/organizations/views')
   layout ('back/layout')
 
   skip_before_action :verify_if_active

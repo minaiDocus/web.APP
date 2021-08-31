@@ -3,7 +3,7 @@ class Collaborators::MainController < OrganizationController
   before_action :verify_rights
   before_action :load_member, except: %w[index new create]
 
-  append_view_path('app/templates/front/collaborators/views')
+  prepend_view_path('app/templates/front/collaborators/views')
 
   # GET /organizations/:organization_id/collaborators
   def index

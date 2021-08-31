@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Admin::Dematboxes::FilesController < BackController
-  append_view_path('app/templates/back/dematboxes/views')
+  prepend_view_path('app/templates/back/dematboxes/views')
 
     helper_method :sort_column, :sort_direction, :page_contains
 

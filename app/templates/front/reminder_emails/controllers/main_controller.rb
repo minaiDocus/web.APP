@@ -3,7 +3,7 @@ class ReminderEmails::MainController < OrganizationController
   before_action :verify_rights
   before_action :load_reminder_email, except: %w[index new create]
 
-  append_view_path('app/templates/front/reminder_emails/views')
+  prepend_view_path('app/templates/front/reminder_emails/views')
 
   def index
     base_content

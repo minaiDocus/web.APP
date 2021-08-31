@@ -3,7 +3,7 @@
 class Organizations::RetrievedBankingOperationsController < RetrieverController
   before_action :redirect_to_new_page
 
-  append_view_path('app/templates/front/organizations/views')
+  prepend_view_path('app/templates/front/organizations/views')
 
   def index
     @operations = operations

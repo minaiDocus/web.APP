@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Invoices::MainController < OrganizationController
-  append_view_path('app/templates/front/invoices/views')
+  prepend_view_path('app/templates/front/invoices/views')
 
   def show
     base_content

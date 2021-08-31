@@ -3,7 +3,7 @@ class BankAccounts::MainController < RetrieverController
   before_action :load_budgea_config
   before_action :verif_account
 
-  append_view_path('app/templates/front/bank_accounts/views')
+  prepend_view_path('app/templates/front/bank_accounts/views')
 
   def index
     if bank_account_contains && bank_account_contains[:retriever_budgea_id]

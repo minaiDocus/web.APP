@@ -3,7 +3,7 @@ class Retrievers::ConfigurationStepsController < RetrieverController
   before_action :load_retriever, only: %i[destroy trigger retriever_infos update_budgea_error_message]
   before_action :verif_account
 
-  append_view_path('app/templates/front/retrievers/views')
+  prepend_view_path('app/templates/front/retrievers/views')
 
   def api_config
     bi_config = {

@@ -3,7 +3,7 @@
 class Collaborators::GuestController < OrganizationController
   before_action :load_guest_collaborator, only: %w[edit update destroy]
 
-  append_view_path('app/templates/front/collaborators/views')
+  prepend_view_path('app/templates/front/collaborators/views')
 
   def index
     @account_sharings = AccountSharing.unscoped.where(account_id: customers)

@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 class Reporting::MainController < FrontController
+  before_action :load_organization
   before_action :load_params, except: %w(show)
-  append_view_path('app/templates/front/reporting/views')
+  prepend_view_path('app/templates/front/reporting/views')
 
   def injected_documents
     respond_to do |format|
@@ -73,39 +74,42 @@ class Reporting::MainController < FrontController
   end
 
   def show
-    if Collaborator.new(@user).has_many_organization? && !params[:organization_id].present?
-      redirect_to reporting_index_path(organization_id: @user.organizations.first.id)
-    else
-      @year = begin
-                Integer(params[:year])
-              rescue StandardError
-                Time.now.year
-              end
+  end
 
-      date = Date.parse("#{@year}-01-01")
-      periods = Period.includes(:billings, :user, :subscription).where(user_id: account_ids)
-                      .where('start_date >= ? AND end_date <= ?', date, date.end_of_year)
-                      .order(start_date: :asc)
-      @periods_by_users = periods.group_by { |period| period.user.id }.each do |_user, periods|
-        periods.sort_by!(&:start_date)
-      end
+  def backup_show
+    @year = begin
+              Integer(params[:year])
+            rescue StandardError
+              Time.now.year
+            end
 
-      respond_to do |format|
-        format.html
-        format.xls do
-          data = Subscription::PeriodsToXls.new(periods).execute
-          send_data data, type: 'application/vnd.ms-excel', filename: "reporting_iDocus_#{@year}.xls"
-        end
+    date = Date.parse("#{@year}-01-01")
+    periods = Period.includes(:billings, :user, :subscription).where(user_id: account_ids)
+                    .where('start_date >= ? AND end_date <= ?', date, date.end_of_year)
+                    .order(start_date: :asc)
+    @periods_by_users = periods.group_by { |period| period.user.id }.each do |_user, periods|
+      periods.sort_by!(&:start_date)
+    end
+
+    respond_to do |format|
+      format.html
+      format.xls do
+        data = Subscription::PeriodsToXls.new(periods).execute
+        send_data data, type: 'application/vnd.ms-excel', filename: "reporting_iDocus_#{@year}.xls"
       end
     end
   end
 
   private
 
+  def load_organization
+    @organization  ||= (params[:organization_id])? Organization.where(id: params[:organization_id]).first : nil
+  end
+
   def load_params
-    @customers_ids = account_ids
+    @customers_ids = (@organization)? @organization.customers.where(id: account_ids).collect(&:id) : account_ids
     # @date_range    = CustomUtils.parse_date_range_of(params[:date_range])
-    @date_range    = ['2012-01-01 00:00:00', '2021-08-01 23:59:59'] #For test
+    @date_range    = ['2021-07-01 00:00:00', '2021-08-01 23:59:59'] #For test
 
     if params[:ids].present? && params[:ids] != "null"
       if params[:ids].is_a?(Array)

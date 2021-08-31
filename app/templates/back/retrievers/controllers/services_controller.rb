@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Admin::Retrievers::ServicesController < BackController
-  append_view_path('app/templates/back/retrievers/views')
+  prepend_view_path('app/templates/back/retrievers/views')
 
   before_action :load_budgea_config
 

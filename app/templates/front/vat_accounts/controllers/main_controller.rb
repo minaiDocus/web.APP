@@ -6,7 +6,7 @@ class VatAccounts::MainController < OrganizationController
   before_action :load_accounting_plan
   before_action :verify_rights
 
-  append_view_path('app/templates/front/vat_accounts/views')
+  prepend_view_path('app/templates/front/vat_accounts/views')
 
   # GET /organizations/:organization_id/customers/:customer_id/accounting_plan/vat_accounts
   def index

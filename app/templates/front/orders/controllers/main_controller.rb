@@ -6,7 +6,7 @@ class Orders::MainController < OrganizationController
   before_action :load_order, only: %w[edit update destroy]
   before_action :verify_editability, only: %w[edit update destroy]
 
-  append_view_path('app/templates/front/orders/views')
+  prepend_view_path('app/templates/front/orders/views')
 
   # GET /organizations/:organization_id/customers/:customer_id/orders/new
   def new

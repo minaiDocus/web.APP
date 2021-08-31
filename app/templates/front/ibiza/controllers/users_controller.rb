@@ -4,7 +4,7 @@ class Ibiza::UsersController < OrganizationController
   before_action :load_ibiza
   before_action :verify_rights
 
-  append_view_path('app/templates/front/ibiza/views')
+  prepend_view_path('app/templates/front/ibiza/views')
 
   # GET /account/organizations/:organization_id/ibiza_users
   def index

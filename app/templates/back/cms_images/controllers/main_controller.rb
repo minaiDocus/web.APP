@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Admin::CmsImages::MainController < BackController
-  append_view_path('app/templates/back/cms_images/views')
+  prepend_view_path('app/templates/back/cms_images/views')
 
   skip_before_action :verify_authenticity_token, only: %w[create]
 

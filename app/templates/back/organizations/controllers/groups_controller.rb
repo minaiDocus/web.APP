@@ -1,5 +1,5 @@
 class Admin::Organizations::GroupsController < BackController
-  append_view_path('app/templates/back/organizations/views')
+  prepend_view_path('app/templates/back/organizations/views')
 
   before_action :load_organization_group, except: %w[index new create]
 

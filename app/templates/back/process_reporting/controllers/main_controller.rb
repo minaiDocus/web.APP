@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Admin::ProcessReporting::MainController < BackController
-  append_view_path('app/templates/back/process_reporting/views')
+  prepend_view_path('app/templates/back/process_reporting/views')
 
   # GET /admin/process_reporting
   def index

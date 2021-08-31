@@ -3,7 +3,7 @@ class Preseizures::AccountsController < OrganizationController
   before_action :account_params, only: :udpate
   skip_before_action :load_organization, only: :accounts_list, raise: false
 
-  append_view_path('app/templates/front/preseizures/views')
+  prepend_view_path('app/templates/front/preseizures/views')
 
   def index
     if params[:pack_report_id].present?

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Admin::Events::MainController < BackController
-  append_view_path('app/templates/back/events/views')
+  prepend_view_path('app/templates/back/events/views')
 
   # GET /admin/events
   def index

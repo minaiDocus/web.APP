@@ -4,7 +4,7 @@ class MyCompanyFiles::UsersController < OrganizationController
   before_action :load_mcf_settings
   before_action :verify_rights
 
-  # append_view_path('app/templates/front/my_company_files/views')
+  # prepend_view_path('app/templates/front/my_company_files/views')
 
   # GET /organizations/:organization_id/mcf_users
   def index

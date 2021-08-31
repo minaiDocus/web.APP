@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Documents::OperationsController < FrontController
-  append_view_path('app/templates/front/documents/views')
+  prepend_view_path('app/templates/front/documents/views')
 
   before_action :set_is_operation
   before_action :load_report, except: %w[index]

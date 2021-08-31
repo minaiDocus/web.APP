@@ -4,7 +4,7 @@ class Organizations::BankAccountsController < RetrieverController
   before_action :load_bank_account, except: %w[index update_multiple]
   before_action :bank_setting_retriever
 
-  append_view_path('app/templates/front/organizations/views')
+  prepend_view_path('app/templates/front/organizations/views')
 
   def index
     redirect_to retrievers_path(account_id: @customer.id)

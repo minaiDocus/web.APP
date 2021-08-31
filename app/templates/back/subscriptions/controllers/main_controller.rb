@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Admin::Subscriptions::MainController < BackController
-  append_view_path('app/templates/back/subscriptions/views')
+  prepend_view_path('app/templates/back/subscriptions/views')
 
   before_action :load_accounts_ids
   # GET /admin/subscriptions

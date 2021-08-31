@@ -3,7 +3,7 @@ class FileNamingPolicies::MainController < OrganizationController
   before_action :verify_rights
   before_action :load_file_naming_policy
 
-  append_view_path('app/templates/front/file_naming_policies/views')
+  prepend_view_path('app/templates/front/file_naming_policies/views')
 
   # GET /organizations/:organization_id/file_naming_policy/edit
   def edit; end

@@ -2,7 +2,7 @@
 class PaperProcesses::MainController < FrontController
   before_action :verify_rights
 
-  append_view_path('app/templates/front/paper_processes/views')
+  prepend_view_path('app/templates/front/paper_processes/views')
 
   # GET /account/paper_processes
   def index

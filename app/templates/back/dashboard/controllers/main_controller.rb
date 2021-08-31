@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Admin::Dashboard::MainController < BackController
-  append_view_path('app/templates/back/dashboard/views')
+  prepend_view_path('app/templates/back/dashboard/views')
 
   def index
     @new_provider_requests = NewProviderRequest.not_processed.order(created_at: :desc).includes(:user).limit(5)

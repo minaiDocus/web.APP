@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Admin::News::MainController < BackController
-  append_view_path('app/templates/back/news/views')
+  prepend_view_path('app/templates/back/news/views')
 
 before_action :load_news, except: %w[index new create]
 

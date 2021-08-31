@@ -90,6 +90,7 @@ class ApplicationJS {
   constructor(){
     this.parseJsVar();
 
+    console.log( VARIABLES.get('controller_path') );
     this.parseJsVar = this.parseJsVar.bind(this);
   }
 

@@ -3,7 +3,7 @@ class Ibiza::MainController < OrganizationController
   before_action :verify_rights
   before_action :load_ibiza, except: :create
 
-  append_view_path('app/templates/front/ibiza/views')
+  prepend_view_path('app/templates/front/ibiza/views')
 
   # POST /organizations/:organization_id/ibiza
   def create

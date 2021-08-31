@@ -3,7 +3,7 @@
 class Preseizures::MainController < OrganizationController
   before_action :load_preseizure, except: :index
 
-  append_view_path('app/templates/front/preseizures/views')
+  prepend_view_path('app/templates/front/preseizures/views')
 
   def index
     if params[:pack_report_id].present?

@@ -6,7 +6,7 @@ class AccountingPlans::MainController < OrganizationController
   before_action :redirect_to_current_step
   before_action :load_accounting_plan
 
-  append_view_path('app/templates/front/accounting_plans/views')
+  prepend_view_path('app/templates/front/accounting_plans/views')
 
 
   # GET /organizations/:organization_id/customers/:customer_id/accounting_plan

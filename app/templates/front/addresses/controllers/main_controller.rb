@@ -4,7 +4,7 @@ class Addresses::MainController < FrontController
   before_action :verify_access
   before_action :load_address, only: %w[edit update destroy]
 
-  append_view_path('app/templates/front/addresses/views')
+  prepend_view_path('app/templates/front/addresses/views')
 
   # GET /account/addresses
   def index

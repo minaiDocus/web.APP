@@ -2,7 +2,7 @@
 class RetrievedDatas::DocumentsController < RetrieverController
   before_action :verif_account
   before_action :load_document, only: %w[show piece]
-  append_view_path('app/templates/front/retrieved_datas/views')
+  prepend_view_path('app/templates/front/retrieved_datas/views')
 
   def index
     @documents = TempDocument.search_for_collection(

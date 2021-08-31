@@ -3,7 +3,7 @@ class NewProviderRequests::MainController < RetrieverController
   before_action :load_budgea_config
   before_action :verif_account
 
-  append_view_path('app/templates/front/new_provider_requests/views')
+  prepend_view_path('app/templates/front/new_provider_requests/views')
 
   def index
     @new_provider_requests = @account.new_provider_requests.not_processed_or_recent.order(sort_column => sort_direction).page(params[:page]).per(params[:per_page])

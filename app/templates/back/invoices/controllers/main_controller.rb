@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Admin::Invoices::MainController < BackController
-  append_view_path('app/templates/back/invoices/views')
+  prepend_view_path('app/templates/back/invoices/views')
 
   before_action :load_invoice, only: %w[show update]
 

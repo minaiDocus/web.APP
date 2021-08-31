@@ -20,8 +20,8 @@ class ReportingMain {
 
   load_all(){
     this.data_params =  {
-                          json_type: { ids: $('#customer_filter').val(), date_range: $('#date_filter').val() },
-                          html_type: `ids=${encodeURIComponent($('#customer_filter').val())}&date_range=${$('#date_filter').val()}`,
+                          json_type: { organization_id: $('input#organization_id').val(), ids: $('#customer_filter').val(), date_range: $('#date_filter').val() },
+                          html_type: `organization_id=${$('input#organization_id').val()}&ids=${encodeURIComponent($('#customer_filter').val())}&date_range=${$('#date_filter').val()}`,
                         }
 
     this.injected_documents();
