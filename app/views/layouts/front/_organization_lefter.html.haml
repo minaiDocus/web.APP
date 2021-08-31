@@ -29,27 +29,32 @@
           %li{ data: { href: "#{@organization.id}/edit_payment" } }
             %a{href: edit_payment_organization_path(@organization) }
               %span.link_slave= t('organizations.payment_method')
-      %li{ data: { href: "#{@organization.id}/collaborateurs" } }
-        %a{href: organization_collaborators_path(@organization) }
-          %span.link_principal= t('organizations.collaborators')
+      - if @user.leader? || @user.manage_collaborators
+        %li{ data: { href: "#{@organization.id}/collaborateurs" } }
+          %a{href: organization_collaborators_path(@organization) }
+            %span.link_principal= t('organizations.collaborators')
       %li{ data: { href: "#{@organization.id}/customers" } }
         %a{href: organization_customers_path(@organization) }
           %span.link_principal= t('organizations.customers')
-      %li{ data: { href: "#{@organization.id}/journals" } }
-        %a{href: organization_journals_path(@organization) }
-          %span.link_principal= t('organizations.journals')
-      %li{ data: { href: "#{@organization.id}/account_number_rules" } }
-        %a{href: organization_account_number_rules_path(@organization) }
-          %span.link_principal= t('organizations.bank_assignment')
+      - if @organization.is_active
+        - if (@user.leader? || @user.manage_journals) && !@organization.specific_mission
+          %li{ data: { href: "#{@organization.id}/journals" } }
+            %a{href: organization_journals_path(@organization) }
+              %span.link_principal= t('organizations.journals')
+      - if @organization.is_active && !@organization.specific_mission
+        %li{ data: { href: "#{@organization.id}/account_number_rules" } }
+          %a{href: organization_account_number_rules_path(@organization) }
+            %span.link_principal= t('organizations.bank_assignment')
       %li{ data: { href: "#{@organization.id}/account_sharing" } }
         %a{href: "#" }
           %span.link_principal= t('folders.shared_folders')
       %li{ data: { href: "#{@organization.id}/invoices" } }
         %a{href: organization_invoices_path(@organization) }
           %span.link_principal= t('organizations.invoices')
-      %li{ data: { href: "#{@organization.id}/kits" } }
-        %a{href: "#" }
-          %span.link_principal= t('organizations.idocus_box_and_order')
+      - unless @organization.specific_mission
+        %li{ data: { href: "#{@organization.id}/paper_set_orders" } }
+          %a{href: organization_paper_set_orders_path(@organization) }
+            %span.link_principal= t('organizations.idocus_box_and_order')
 
   .content
     != content_for?(:content) ? yield(:content) : yield

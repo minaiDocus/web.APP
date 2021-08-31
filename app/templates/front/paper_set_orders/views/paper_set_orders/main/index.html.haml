@@ -1,44 +1,225 @@
-#paper_set_orders
-  .row.derivationRight
-    .col-md-12
-      .box.clearfix
-        .float-left
-          %h3
-            Liste des commandes de Kit Courriers 
-            %span.badge.badge-info= @orders_count
-        .float-right
-          = link_to 'Nouvelles Commandes ', select_for_orders_organization_paper_set_orders_path, class: 'btn btn-primary'
+.kits
+  .row
+    .col-md-8
+      %h3.bold
+        Kit courrier
+        %span.badge.badge-secondary.badge-sm.regular 2
+    .col-md-4.text-end
+      %button.btn.btn-primary.commande-kit.semibold
+        Commander kit courrier
 
-  .row.retractable.with-filter.derivationLeft
-    .col-md-12.retractable-content
-      .box
-        = render partial: 'shared/list_options', locals: { collection: @orders }
-        %table.table.table-condensed.table-striped.margin1top.margin1bottom.table-detachable-head.table-bordered-inner
-          %thead
-            %tr.bg-brown.text-white
-              %th= sortable :created_at, t('activerecord.models.common.attributes.created_at').downcase
-              %th= sortable :user_code, 'code'
-              %th= sortable :company, 'société'
-              %th commandes
-              %th= sortable :state, t('activerecord.models.order.attributes.state').downcase
-              %th= t('activerecord.models.paper_process.attributes.tracking_number').downcase
-              %th actions
-          %tbody.retractable.slidedown
-            - @orders.each do |order|
-              %tr
-                %td= l order.created_at, format: :standard
-                %td= link_to "#{order.user_code}", organization_customer_path(@organization, order.user_id, tab: 'orders')
-                %td= truncate(order.company, length: 20, separator: ' ')
-                %td
-                  = order.paper_set_casing_size.to_s + 'g - ' + order.paper_set_casing_count.to_s + ' env - ' + order.paper_set_folder_count.to_s + ' chm - '
-                  = paper_set_date_to_name(order.period_duration, order.paper_set_start_date)
-                  à
-                  = paper_set_date_to_name(order.period_duration, order.paper_set_end_date)
-                %td= Order.state_machine.states[order.state].human_name
-                %td= link_to_paper_tracking(order.kit) if order.kit.try(:tracking_number)
-                %td
-                  = link_to glyphicon('plus'), new_organization_paper_set_order_path(@organization, template: order), class: 'btn btn-light', title: 'Recommander le même kit'
-                  = link_to glyphicon('pencil'), edit_organization_paper_set_order_path(@organization, order), class: 'btn btn-light', title: 'Editer'
-                  = link_to glyphicon('x'), organization_paper_set_order_path(@organization, order), class: 'btn btn-light', method: :delete, data: { confirm: t('actions.confirm') }, title: 'Supprimer'
-        = render partial: 'shared/list_options', locals: { collection: @orders }
-    = render partial: 'sidebar'
+  .box.mt-4
+    %table.table.table-striped
+      %thead
+        %th Dossier
+        %th Date de commande
+        %th Société
+        %th Commande
+        %th N° de suivi
+        %th Statut
+        %th.text-end Action
+      %tbody
+        %tr
+          %td.text-table-green.semibold IDOC%002 - support - John Doe
+          %td 25/11/20
+          %td iDocus
+          %td 34
+          %td.text-table-green 43256488879
+          %td
+            .badge.bg-dark.semibold En transit          
+          %td.text-end.pointer
+            .action.sub-menu-kit
+              %span= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
+              .sub_menu.text-start.hide
+                %ul.no-margin.no-padding.regular
+                  %li.edit
+                    %span= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
+                    &nbsp;Editer
+                  %li.delete.red-label
+                    %span= glyphicon('trash', { size: '15', color: "#FF4848" })
+                    &nbsp;Supprimer
+        %tr
+          %td.text-table-green.semibold IDOC%002 - support - John Doe
+          %td 14/10/20
+          %td iDocus
+          %td 34
+          %td.text-table-green 2565458754
+          %td
+            .badge.badge-success.semibold Reçu        
+          %td.text-end
+            .action.sub-menu-kit
+              %span= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
+              .sub_menu.text-start.hide
+                %ul.no-margin.no-padding.regular
+                  %li.edit
+                    %span= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
+                    &nbsp;Editer
+                  %li.delete.red-label
+                    %span= glyphicon('trash', { size: '15', color: "#FF4848" })
+                    &nbsp;Supprimer 
+    .form-group
+      .row.pagination
+        .col-md-6
+          .row
+            .col-md-3.text-end.pt-1
+              %label Afficher par
+            .col-md-2
+              %select.form-select.form-select-sm{ "aria-label" => ".form-select-sm" }
+                %option 20
+                %option 50
+                %option 100         
+
+        .col-md-6.text-end
+          .row
+            .col-md-10
+              %label 2-10 de 10 éléments
+            .col-md-1
+              %span= glyphicon('chevron-left', { size: '15', color: "#1A1A1A" })
+            .col-md-1
+              %span= glyphicon('chevron-right', { size: '15', color: "#1A1A1A" })
+          
+  .mb-5
+
+  .row
+    .col-md-8
+      %h3.bold
+        iDocus'Box
+        %span.badge.badge-secondary.badge-sm.regular 2
+    .col-md-4.text-end
+      %button.btn.btn-primary.commande-ido-box.semibold
+        Commander iDocus'box
+
+  .box.mt-4
+    %table.table.table-striped.table_integration
+      %thead
+        %th Dossier
+        %th Date de commande
+        %th Société
+        %th Commande
+        %th N° de suivi
+        %th Statut
+        %th.text-end Action
+      %tbody
+        %tr
+          %td.text-table-green.semibold IDOC%002 - support - John Doe
+          %td 25/11/20
+          %td iDocus
+          %td 34
+          %td.text-table-green 43256488879
+          %td
+            .badge.bg-dark.semibold En transit          
+          %td.text-end.pointer
+            .action.sub-menu-box
+              %span= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
+              .sub_menu.text-start.hide
+                %ul.no-margin.no-padding.regular
+                  %li.edit
+                    %span= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
+                    &nbsp;Editer
+                  %li.delete.red-label
+                    %span= glyphicon('trash', { size: '15', color: "#FF4848" })
+                    &nbsp;Supprimer
+        %tr
+          %td.text-table-green.semibold IDOC%002 - support - John Doe
+          %td 14/10/20
+          %td iDocus
+          %td 34
+          %td.text-table-green 2565458754
+          %td
+            .badge.badge-success.semibold Reçu        
+          %td.text-end.pointer
+            .action.sub-menu-box
+              %span= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
+              .sub_menu.text-start.hide
+                %ul.no-margin.no-padding.regular
+                  %li.edit
+                    %span= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
+                    &nbsp;Editer
+                  %li.delete.red-label
+                    %span= glyphicon('trash', { size: '15', color: "#FF4848" })
+                    &nbsp;Supprimer
+    .form-group
+      .row.pagination
+        .col-md-6
+          .row
+            .col-md-3.text-end.pt-1
+              %label Afficher par
+            .col-md-2
+              %select.form-select.form-select-sm{ "aria-label" => ".form-select-sm" }
+                %option 20
+                %option 50
+                %option 100         
+
+        .col-md-6.text-end
+          .row
+            .col-md-10
+              %label 2-10 de 10 éléments
+            .col-md-1
+              %span= glyphicon('chevron-left', { size: '15', color: "#1A1A1A" })
+            .col-md-1
+              %span= glyphicon('chevron-right', { size: '15', color: "#1A1A1A" })
+
+
+.modal.fade#commande-courrier{'aria-hidden' => 'true', 'aria-labelledby' => 'myFavoriteModalLabel', :role => 'dialog', :tabindex => '-1'}
+  .modal-dialog{:role => 'document'}
+    .modal-content
+      .modal-header
+        %h5.modal-title.bold Commande des kits courriers
+        %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+      .modal-body
+        = form_tag('', method: :post, id: 'send_customer_to_favorite', multipart: true) do |f|
+          .form-group
+            .label-section
+              = label_tag 'search_customer', 'Code client', class: 'select control-label'
+            .control-section
+              = select_tag 'search_customer_list form-control', options_for_select(['DEVP%001 - TEST - Testa Test', 'DEVP%002 - TEST - Testa Test', 'DEVP%003 - TEST - Testa Test', 'DEVP%004 - TEST - Testa Test'], 'DEVP%004 - TEST - Testa Test'), class: 'select-customer searchable-option-list', id: 'select-kit', include_blank: false, multiple: true
+      .modal-footer
+        %button.btn.btn-light{'data-dismiss' => 'modal', :type => 'button'} Annuler
+        %button.btn.btn-secondary.btn-add{:type => 'button', id: 'add-customer-to-favorite'} Commander
+
+
+.modal#edit-kit-box
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.modal-title.bold Modifications
+        %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+      .modal-body
+        .form-group
+          %label.semibold Dossier          
+          .select-container.no-padding.w-100
+            %input{ placeholder: "IDOC%002 - support - John Doe" }
+
+        .form-group
+          %label.semibold Date de commande      
+          .select-container.no-padding.w-100
+            %input{ placeholder: "25/11/20" }
+
+        .form-group
+          %label.semibold Société        
+          .select-container.no-padding.w-100
+            %input{ placeholder: "iDocus" }
+
+        .form-group
+          %label.semibold Commande       
+          .select-container.no-padding.w-100
+            %input{ placeholder: "34" }
+
+
+        .form-group
+          %label.semibold N° de suivi      
+          .select-container.no-padding.w-100
+            %input{ placeholder: "43256488879" }
+
+
+        .form-group
+          %label.semibold Statut         
+          %select.form-control#kit-state{ name: 'kit-state', multiple: false }              
+            %option En transit
+            %option Reçu
+
+      .modal-footer
+        %button.btn.btn-light.semibold.cancel{ type: :button } Annuler        
+        %button.btn.btn-primary.semibold{ type: :button } Valider les modifications
+
+= javascript_include_tag 'front/paper_set_orders/assets/javascripts/main'
