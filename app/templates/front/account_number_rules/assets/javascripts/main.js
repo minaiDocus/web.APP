@@ -9,7 +9,7 @@ class AccountNumberRule{
   }
 
 
-  load_data(type='account_number_rules', page=1, per_page=0){
+  load_data(search_pattern=false, type='account_number_rules', page=1, per_page=0){
     if(this.action_locker) { return false; }
 
     this.action_locker = true;
@@ -19,6 +19,13 @@ class AccountNumberRule{
 
     if (per_page > 0) { params.push(`per_page=${ per_page }`); }
 
+    let search_text = '';
+
+    if (search_pattern) {
+      search_text = $('.search-content #search_input').val();
+      if(search_text && search_text != ''){ params.push(`account_number_rule_contains[text]=${encodeURIComponent(search_text)}`); }
+    }
+
     let ajax_params =   {
                           'url': `/organizations/${this.organization_id}/account_number_rules?${params.join('&')}`,
                           'dataType': 'html',
@@ -27,6 +34,10 @@ class AccountNumberRule{
 
     this.applicationJS.parseAjaxResponse(ajax_params)
                       .then((html)=>{
+                        if (search_pattern && search_text != '') {
+                          $('.bank-affectation').html($(html).find('.bank-affectation').html());
+                          $('.search-content #search_input').val(search_text);
+                        }
                         this.action_locker = false;
                         bind_all_events_account_number_rules();
                       })
@@ -100,6 +111,9 @@ jQuery(function() {
 
   AppListenTo('skip_accounting_plan', (e)=>{ account_number_rule.skip_accounting_plan(e.detail.url, e.detail.account_list, e.detail.account_validation); });
 
-  AppListenTo('window.change-per-page', (e)=>{ account_number_rule.load_data(e.detail.name, 1, e.detail.per_page); });
-  AppListenTo('window.change-page', (e)=>{ account_number_rule.load_data(e.detail.name, e.detail.page); });
+  
+  AppListenTo('account_number_rule_contains_search_text', (e)=>{ account_number_rule.load_data(true); });
+
+  AppListenTo('window.change-per-page', (e)=>{ account_number_rule.load_data(true, e.detail.name, 1, e.detail.per_page); });
+  AppListenTo('window.change-page', (e)=>{ account_number_rule.load_data(true, e.detail.name, e.detail.page); });
 });

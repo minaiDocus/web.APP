@@ -96,6 +96,15 @@ class AccountNumberRule < ApplicationRecord
     return collection if collection.empty?
     organization = collection.first.organization
 
+    text = contains[:text]
+
+    if text.present?
+      collection = collection.where('name LIKE ? OR affect LIKE ? OR rule_type LIKE ? OR rule_target LIKE ? OR content LIKE ? OR categorization LIKE ? OR third_party_account LIKE ?' , "%#{text}%", "%#{text}%", "%#{text}%",  "%#{text}%", "%#{text}%", "%#{text}%", "%#{text}%")
+    
+      user_ids = organization.customers.where("code LIKE ?", "%#{text}%").pluck(:id) if collection.empty?
+      collection = collection.joins(:users).where('users.id IN (?)', user_ids) if user_ids
+    end
+
     collection = collection.where("name LIKE ?", "%#{contains[:name]}%") if contains[:name].present?
     collection = collection.where(affect:    contains[:affect])      if contains[:affect].present?
     collection = collection.where(rule_type: contains[:rule_type])   if contains[:rule_type].present?

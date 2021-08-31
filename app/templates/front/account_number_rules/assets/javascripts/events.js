@@ -223,6 +223,9 @@ function bind_all_events_account_number_rules(){
     });
   }
 
+  $('.search-content #search_input').unbind('keyup').bind('keyup', function(e){ if(e.key == 'Enter'){ /*e.keyCode == 13*/ AppEmit('account_number_rule_contains_search_text'); } });
+  $('.bank-affectation #basic-addon1').unbind('click').bind('click', function(e){ AppEmit('account_number_rule_contains_search_text'); });
+
   ApplicationJS.set_checkbox_radio();
   ApplicationJS.hide_submenu();
 }

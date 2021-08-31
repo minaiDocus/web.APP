@@ -9,9 +9,9 @@
         Règle d'affectation bancaires
         %span.badge.badge-secondary.badge-sm.regular= @account_number_rules_count
     .col-md-3.no-padding
-      .input-group.mb-3
+      .input-group.mb-3.search-content
         %span.input-group-text#basic-addon1= glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })          
-        %input.form-control{ type: :text, "aria-label" => "Rechercher", "aria-describedby" => "basic-addon1"  }
+        %input.form-control#search_input{ type: :text, "aria-label" => "Rechercher", "aria-describedby" => "basic-addon1", name:'account_number_rule_contains[search_text]', placeholder: 'Rechercher' }  }
     .col-md-1.text-center.no-padding
       %button.btn.btn-light.more-filter.semibold
         %span.me-2 Filtrer
