@@ -16,9 +16,9 @@ module Account::CollaboratorsHelper
 
   def organization_invoice_path(invoice_id, organization_id = nil)
     unless organization_id.nil?
-      return "/account/organizations/#{organization_id}/invoices/download/#{invoice_id}"
+      return "/organizations/#{organization_id}/invoices/download/#{invoice_id}"
     end
 
-    "#{download_account_organization_invoices_path}/#{invoice_id}"
+    "#{download_organization_invoices_path}/#{invoice_id}"
   end
 end
