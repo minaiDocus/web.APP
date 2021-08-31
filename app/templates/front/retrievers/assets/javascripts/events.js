@@ -11,7 +11,12 @@ function bind_all_events(){
 
   $('.retriever_actions .edit_connection').unbind('click');
   $('.retriever_actions .edit_connection').bind('click', function(e){
-    AppEmit('retriever_edit_connection', { retriever: $(this).data('retriever') });
+    if($(this).data('banking_provider') == 'budgea'){
+      AppEmit('retriever_edit_connection', { retriever: $(this).data('retriever') });
+    }
+    else{
+      AppEmit('retriever_specific_setup', { banking_provider: 'internal', retriever_id: $(this).data('retriever')['id'] });
+    }
   });
 
 
@@ -20,39 +25,58 @@ function bind_all_events(){
     e.stopPropagation();
 
     if ($(this).find('.sub_menu').hasClass('hide')){
-      $(this).find('.sub_menu').removeClass('hide')
+      $(this).find('.sub_menu').removeClass('hide');
     }
     else {
-      $(this).find('.sub_menu').addClass('hide')
+      $(this).find('.sub_menu').addClass('hide');
     }
   });
 
-  $('.create-manual-bank-account').unbind('click')
+  $('.create-manual-bank-account').unbind('click');
   $(".create-manual-bank-account").bind('click',function(e) {
     e.stopPropagation()
 
     $('#create-bank-account').modal('show');
   });
 
-  $('.retriever-filter-others').unbind('click')
+  $('.retriever-filter-others').unbind('click');
   $(".retriever-filter-others").bind('click',function(e) {
     e.stopPropagation()
 
     $('#filter-'+ $(".tab-pane.active").attr('id')).modal('show');
   });
 
-  $('.retriever-filter').unbind('click')
+  $('.retriever-filter').unbind('click');
   $(".retriever-filter").bind('click',function(e) {
     e.stopPropagation()
 
     $('#filter-retriever').modal('show');
   });
 
-  $('.add-retriever').unbind('click')
+  $('.add-retriever').unbind('click');
   $(".add-retriever").bind('click',function(e) {
     e.stopPropagation();
     AppEmit('retriever_edit_connection', { retriever: null });
   });
+
+  $('.add-bridge-retriever').unbind('click');
+  $(".add-bridge-retriever").bind('click',function(e) {
+    e.stopPropagation();
+    AppEmit('retriever_specific_setup', { banking_provider: 'bridge' });
+  });
+
+  $('.add-internal-retriever').unbind('click');
+  $(".add-internal-retriever").bind('click',function(e) {
+    e.stopPropagation();
+    AppEmit('retriever_specific_setup', { banking_provider: 'internal' });
+  });
+
+  $('.modal#add-internal-retriever button.validate').unbind('click');
+  $('.modal#add-internal-retriever button.validate').bind('click', function(e){
+    e.stopPropagation();
+    AppEmit('retriever_specific_setup_validate', { banking_provider: 'internal' });
+  });
+
 
   $('.sub-menu-bank-param li.edit').unbind('click');
   $(".sub-menu-bank-param li.edit").bind('click',function(e) {

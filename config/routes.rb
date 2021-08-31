@@ -144,10 +144,6 @@ Rails.application.routes.draw do
     get '/paper_set_orders', controller: 'paper_set_orders', action: 'index'
   end
 
-  get 'bridge/callback',   controller: 'bridge', action: 'callback'
-  get 'bridge/setup_item', controller: 'bridge', action: 'setup_item'
-  get 'bridge/delete_item', controller: 'bridge', action: 'delete_item'
-
   # post 'retriever/callback', controller: 'retrievers', action: 'callback'
   # get  'retriever/callback', controller: 'retrievers', action: 'callback'
   # post 'retriever/fetch_webauth_url', controller: 'retrievers', action: 'fetch_webauth_url'

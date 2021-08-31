@@ -17,6 +17,11 @@ Rails.application.routes.draw do
     post 'retriever/destroy', to: "configuration_steps#destroy", as: 'retriever_destroy'
     post 'retriever/trigger', to: "configuration_steps#trigger", as: 'retriever_trigger'
     post 'retriever/update_budgea_error_message', to: "configuration_steps#update_budgea_error_message", as: 'retriever_update_budgea_error_message'
+
+
+    get 'bridge/callback',   to: 'bridge#callback', as: 'bridge_callback'
+    get 'bridge/setup_item', to: 'bridge#setup_item', as: 'bridge_setup'
+    get 'bridge/delete_item', to: 'bridge#delete_item', as: 'bridge_delete'
   end
 
   resources :retrievers, module: 'retrievers', controller: 'main' do

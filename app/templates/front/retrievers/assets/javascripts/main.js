@@ -62,10 +62,61 @@ class RetrieverMain{
                       })
                       .catch(()=>{ this.action_locker = false; });
   }
+
+  specific_setup(banking_provider, retriever_id=0){
+    let account_id = this.account_select.val();
+
+    if(account_id > 0){
+      if(banking_provider == 'bridge'){
+        window.location.href = `/bridge/setup_item?account_id=${account_id}`
+      }else{
+        let url = '/retrievers/new_internal';
+        if(retriever_id > 0)
+          url = `/retrievers/edit_internal?id=${retriever_id}`;
+        this.applicationJS.parseAjaxResponse({ url: url, type: 'GET', dataType: 'html' })
+                          .then((e)=>{
+                            $('.modal#add-internal-retriever .modal-body').html(e);
+                            $('.modal#add-internal-retriever').modal('show');
+                          });
+      }
+    }else{
+      this.applicationJS.noticeInternalErrorFrom(null, 'Veuillez selectionnez un dossier!');
+    }
+  }
+
+  specific_setup_validate(banking_provider){
+    if(banking_provider != 'internal'){ return false }
+
+    let retriever_id = $('#internal-retrievers #retriever_id').val();
+    let url          = '/retrievers';
+    let type         = 'POST';
+
+    if(retriever_id > 0){
+      url  = `/retrievers/${retriever_id}`;
+      type = 'PUT';
+    }
+
+    let data         = this.applicationJS.serializeToJson( $(`#internal-retrievers form#internal-retriever-form`) );
+    let ajax_params  =   {
+                            'url': url,
+                            'type': type,
+                            'data': data,
+                            'dataType': 'json'
+                          };
+
+    this.applicationJS.parseAjaxResponse(ajax_params)
+                      .then((e)=>{
+                        if(e.json_flash.success)
+                          $('.modal#add-internal-retriever').modal('hide');
+                      })
+  }
 }
 
 jQuery(function() {
   let main = new RetrieverMain();
+
+  AppListenTo('retriever_specific_setup', (e)=>{ main.specific_setup(e.detail.banking_provider, e.detail.retriever_id); })
+  AppListenTo('retriever_specific_setup_validate', (e)=>{ main.specific_setup_validate(e.detail.banking_provider); })
 
   AppListenTo('retriever_reload_all', (e)=>{ main.load_retrievers('one'); });
   AppListenTo('on_scroll_end', (e)=>{ main.load_retrievers('next_page'); });

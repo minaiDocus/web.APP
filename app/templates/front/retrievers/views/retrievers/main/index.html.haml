@@ -12,14 +12,25 @@
       %button.btn.btn-light.semibold.retriever-filter.w-100{ disabled: false }
         %span.me-3= glyphicon('layers', { size: '15', color: '#72AA42'})
         %span Filtrer
-    .col-md-2.text-center
-      %button.btn.btn-light-primary.semibold.list-retriever.w-100{ disabled: false }
-        %span.me-4= glyphicon('list', { size: '15', color: '#0d6efd'})
-        %span Automates disponibles
-    .col-md-1.text-center
-      %button.btn.btn-primary.semibold.add-retriever.w-100{ disabled: false }
-        %span.me-2= glyphicon('plus', { size: '15', color: '#FFFF'})
-        %span Ajouter
+    - if @is_budgea
+      .col-md-2.text-center
+        %button.btn.btn-light-primary.semibold.list-retriever.w-100{ disabled: false }
+          %span.me-4= glyphicon('list', { size: '15', color: '#0d6efd'})
+          %span Automates disponibles
+      .col-md-1.text-center
+        %button.btn.btn-primary.semibold.add-retriever.w-100{ disabled: false }
+          %span.me-2= glyphicon('plus', { size: '15', color: '#FFFF'})
+          %span Ajouter
+    - if @is_bridge
+      .col-md-3.text-center
+        %button.btn.btn-primary.add-bridge-retriever.semibold.w-100
+          %span.me-2= glyphicon('plus', { size: '15', color: '#FFFF'})
+          %span Ajouter un automate bancaire
+    - if @is_specific_mission
+      .col-md-3.text-center
+        %button.btn.btn-primary.add-internal-retriever.semibold.w-100
+          %span.me-2= glyphicon('plus', { size: '15', color: '#FFFF'})
+          %span Ajouter un automate spécifique
 
   .mb-4
 

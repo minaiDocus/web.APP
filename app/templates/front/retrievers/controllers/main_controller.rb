@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Retrievers::MainController < RetrieverController
   before_action :verif_account, except: %w[index edit export_connector_to_xls get_connector_xls new_internal api_config]
+  before_action :get_banking_provider
   before_action :load_retriever, except: %w[index list new export_connector_to_xls get_connector_xls new_internal create api_config]
   before_action :verify_retriever_state, except: %w[index list new export_connector_to_xls get_connector_xls new_internal edit_internal create api_config]
   before_action :load_retriever_edition, only: %w[new edit]
@@ -35,36 +36,45 @@ class Retrievers::MainController < RetrieverController
   def new_internal
     @retriever = Retriever.new
     @connectors = Connector.idocus
+
+    render partial: 'form_internal'
   end
 
   def create
     @retriever = Retriever.new(retriever_params)
 
-    @retriever.user = @account
-    @retriever.service_name = @retriever.connector.name
-    @retriever.capabilities = @retriever.connector.capabilities
+    @retriever.user         = @account
+    @retriever.service_name = @retriever.connector.try(:name)
+    @retriever.capabilities = @retriever.connector.try(:capabilities)
 
     if @retriever.save
-      redirect_to retrievers_path
+      json_flash[:success] = 'Automate créer avec succès'
     else
-      render 'new_internal'
+      json_flash[:error] = @retriever.errors.messages
     end
+
+    render json: { json_flash: json_flash }, status: 200
   end
 
   def edit; end
 
   def edit_internal
     @retriever = Retriever.find(params[:id])
+    @connectors = Connector.idocus
+
+    render partial: 'form_internal'
   end
 
   def update
     @retriever = Retriever.find(params[:id])
 
     if @retriever.update(retriever_params)
-      redirect_to retrievers_path
+      json_flash[:success] = 'Automate mis à jours avec succès'
     else
-      render 'edit_internal'
+      json_flash[:error] = @retriever.errors.messages
     end
+
+    render json: { json_flash: json_flash }, status: 200
   end
 
   def export_connector_to_xls
@@ -167,5 +177,12 @@ class Retrievers::MainController < RetrieverController
 
   def retriever_params
     params.require(:retriever).permit(:connector_id, :user_id, :journal_id, :login, :password, :name, :connector_id)
+  end
+
+  def get_banking_provider
+    @is_budgea = @account && @account.options.banking_provider == 'budget_insight'
+    @is_bridge = @account && @account.options.banking_provider == 'bridge'
+
+    @is_specific_mission = @user.organization.specific_mission
   end
 end
