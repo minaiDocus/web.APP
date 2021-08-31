@@ -308,7 +308,7 @@
                     %td= @organization.mcf_settings.try(:delivery_path_pattern) || McfSettings.new.delivery_path_pattern
               - if @organization.mcf_settings.try(:access_token).present?
                 = link_to 'Supprimer mes paramètres', account_organization_mcf_settings_path(@organization), class: 'btn btn-danger', method: :delete, data: { confirm: 'Êtes-vous sûr de vouloir supprimer vos paramètres pour My Company Files ?' }
-                = link_to 'Editer', edit_account_organization_mcf_settings_path(@organization), class: 'btn btn-primary'
+                = link_to 'Éditer', edit_account_organization_mcf_settings_path(@organization), class: 'btn btn-primary'
               - else
                 = link_to 'Configurer la liaison', authorize_account_organization_mcf_settings_path(@organization), class: 'btn btn-primary', method: :post
             #ibiza.tab-pane.fade{ class: ('active show' if params[:tab] == 'ibiza') }
@@ -740,7 +740,7 @@
                       %td
                         = link_to glyphicon('plus'), new_account_organization_reminder_email_path(@organization, template: reminder_email), class: 'btn btn-light', title: 'Configurer un nouveau e-mail de rappel en se basant sur cet e-mail'
                         = link_to glyphicon('eye'), account_organization_reminder_email_path(@organization, reminder_email), class: 'btn btn-light', target: :_blank, title: "Voir"
-                        = link_to glyphicon('pencil'), edit_account_organization_reminder_email_path(@organization, reminder_email), class: 'btn btn-light', title: 'Editer'
+                        = link_to glyphicon('pencil'), edit_account_organization_reminder_email_path(@organization, reminder_email), class: 'btn btn-light', title: 'Éditer'
                         = link_to glyphicon('x'), account_organization_reminder_email_path(@organization, reminder_email), class: 'btn btn-light', method: :delete, data: { confirm: t('actions.confirm') }, title: 'Supprimer'
                         = link_to glyphicon('envelope-open'), deliver_account_organization_reminder_email_path(@organization, reminder_email), class: 'btn btn-light', data: { confirm: t('activerecord.models.reminder_email.actions.send_confirmation') }, method: :post, title: 'Envoyer'
               = link_to t('actions.new'), new_account_organization_reminder_email_path(@organization), class: 'btn btn-primary'

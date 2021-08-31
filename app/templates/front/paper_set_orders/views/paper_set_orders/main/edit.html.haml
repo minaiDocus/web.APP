@@ -2,7 +2,7 @@
   .card
     .card-header
       %h3
-        Edition de la commande de Kit envoi courrier pour le client : 
+        Édition de la commande de Kit envoi courrier pour le client : 
         = link_to @customer, organization_customer_path(@organization, @customer, tab: 'orders'), class: 'fs-origin'
     = simple_form_for @order, url: organization_paper_set_order_path(@organization, @order), html: { class: 'form-horizontal' } do |f|
       = render partial: 'form', locals: { f: f }

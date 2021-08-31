@@ -1,8 +1,8 @@
-.modal.fade{ :id=>"preseizureEdition" }
+.modal.fade{ :id=>"preseizureÉdition" }
   .modal-dialog
     .modal-content
       .modal-header
-        %h3 Edition écriture comptable
+        %h3 Édition écriture comptable
         %a{ :class=>"close", "data-dismiss"=>"modal" } ×
       .modal-body
       .modal-footer
@@ -14,11 +14,11 @@
             %a{ :class=>"modal-close btn btn-light" } Fermer
             %input#editPreseizureSubmit.btn.btn-primary{ :type => "submit", :value => "Valider" }
 
-.modal.fade{ :id=>"preseizureAccountEdition" }
+.modal.fade{ :id=>"preseizureAccountÉdition" }
   .modal-dialog
     .modal-content
       .modal-header
-        %h3 Edition Compte
+        %h3 Édition Compte
         %a{ :class=>"close", "data-dismiss"=>"modal" } ×
       .modal-body
       .modal-footer
@@ -30,11 +30,11 @@
             %a{ :class=>"modal-close btn btn-light" } Fermer
             %input#editPreseizureAccountSubmit.btn.btn-primary{ :type => "submit", :value => "Valider" }
 
-.modal.fade{ :id=>"preseizureEntryEdition" }
+.modal.fade{ :id=>"preseizureEntryÉdition" }
   .modal-dialog
     .modal-content
       .modal-header
-        %h3 Edition Montant
+        %h3 Édition Montant
         %a{ :class=>"close", "data-dismiss"=>"modal" } ×
       .modal-body
       .modal-footer
@@ -50,12 +50,12 @@
   .modal-dialog
     .modal-content
       .modal-header
-        %h3 Edition multiple de la séléction
+        %h3 Édition multiple de la séléction
         %a{ :class=>"close", "data-dismiss"=>"modal" } ×
       .modal-body
         .fs-origin.badge.badge-warning{style: 'margin-bottom: 15px'}
           Laissez un champ vide pour ne pas le modifier.
-        %form#preseizuresEditionForm.form-horizontal
+        %form#preseizuresÉditionForm.form-horizontal
           .form-group.clearfix.date.datepicker
             .label-section
               = label_tag 'date', t('simple_form.badges.pack_report_preseizure.date'), class: 'control-label'
@@ -95,7 +95,7 @@
               Aucun traitement.
           .float-right
             %a{ :class=>"modal-close btn btn-light" } Fermer
-            %input#validatePreseizuresEdition.btn.btn-primary{ :type => "submit", :value => "Valider" }
+            %input#validatePreseizuresÉdition.btn.btn-primary{ :type => "submit", :value => "Valider" }
 
 .modal.fade{ :id=>"exportSelectedPreseizures" }
   .modal-dialog

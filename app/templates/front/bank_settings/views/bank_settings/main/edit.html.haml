@@ -6,7 +6,7 @@
   .card
     .card-header
       %h3
-        Edition d'un compte bancaire du client :
+        Édition d'un compte bancaire du client :
         = link_to @account, bank_settings_path({account_id: @account.try(:id)}), class: 'fs-origin'
     = simple_form_for @bank_account, url: bank_setting_path, html: { class: 'form-horizontal label-medium' } do |f|
       .card-body

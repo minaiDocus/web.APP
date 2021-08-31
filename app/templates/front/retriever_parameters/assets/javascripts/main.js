@@ -103,7 +103,7 @@ jQuery(function() {
     });
   });
 
-  AppListenTo('retriever_bank_edition', (e)=>{ bank_params.edit_bank_account(e.detail.id) });
+  AppListenTo('retriever_bank_Édition', (e)=>{ bank_params.edit_bank_account(e.detail.id) });
   $('#form-bank-account.modal button.validate').unbind('click').bind('click', (e)=>{ bank_params.update_bank_account(); });
   $('#form-bank-account.modal button.cancel').unbind('click').bind('click', (e)=>{ $('#form-bank-account.modal').modal('hide'); });
 });

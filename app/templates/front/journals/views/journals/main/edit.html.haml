@@ -3,7 +3,7 @@
 #journal.edit
   - if @customer.try(:uses_ibiza_analytics?)
     .w-100.text-end
-      = link_to 'Edition Compta Analytique', edit_analytics_organization_customer_journals_path(@organization, @customer, id: @journal), class: 'btn btn-primary'
+      = link_to 'Édition Compta Analytique', edit_analytics_organization_customer_journals_path(@organization, @customer, id: @journal), class: 'btn btn-primary'
   = render partial: 'form'
 
 = javascript_include_tag 'front/journals/assets/javascripts/main'

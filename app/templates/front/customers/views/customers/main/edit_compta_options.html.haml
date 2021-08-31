@@ -6,7 +6,7 @@
     .card-header
       - if @customer.configured?
         %h3 
-          Edition des options de comptabilité du client : 
+          Édition des options de comptabilité du client : 
           = link_to @customer, organization_customer_path(@organization, @customer, tab: 'compta'), class: 'fs-origin'
       - else
         %h3

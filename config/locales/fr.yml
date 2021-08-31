@@ -202,7 +202,7 @@ fr:
     add_folder_to_favorite: Ajouter un dossier aux favoris
     no_favorite_customer: Veuillez ajoutés vos dossiers favories
     search_folder: Rechercher un dossier
-    edit_action: Editer vos dossiers favories
+    edit_action: Éditer vos dossiers favories
     cancel_action: Annuler
     configuration_state: État de la configuration
     configuration_text: Le dossier client est configuré de façon optimale
@@ -374,7 +374,7 @@ fr:
     show: Voir
     new: Nouveau
     add: Ajouter
-    edit: Editer
+    edit: Éditer
     destroy: Supprimer
     cancel_destroy: Annuler la suppression
     cancel: Annuler

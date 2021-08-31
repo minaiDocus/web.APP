@@ -84,7 +84,7 @@
               .float-left.margin1bottom
                 %h3 Fournisseurs
               .float-left.margin1bottom.margin1left
-                = link_to glyphicon('pencil'), edit_account_organization_customer_accounting_plan_path(@organization, @customer), class: 'btn btn-secondary', title: 'editer'
+                = link_to glyphicon('pencil'), edit_account_organization_customer_accounting_plan_path(@organization, @customer), class: 'btn btn-secondary', title: 'Éditer'
               .float-left.margin1bottom
                 = link_to glyphicon('x'), destroy_providers_account_organization_customer_accounting_plan_path(@organization, @customer), class: 'btn btn-secondary margin1left', title: 'supprimer tous les fournisseurs', data: { method: :delete, confirm: 'Vous êtes sur le point de supprimer tous les fournisseurs, êtes-vous sûr ?' }
               .float-right.alignright.margin1bottom
@@ -121,7 +121,7 @@
               .float-left.margin1bottom
                 %h3 Clients
               .float-left.margin1bottom.margin1left
-                = link_to glyphicon('pencil'), edit_account_organization_customer_accounting_plan_path(@organization, @customer), class: 'btn btn-secondary', title: 'editer'
+                = link_to glyphicon('pencil'), edit_account_organization_customer_accounting_plan_path(@organization, @customer), class: 'btn btn-secondary', title: 'Éditer'
               .float-left.margin1bottom
                 = link_to glyphicon('x'), destroy_customers_account_organization_customer_accounting_plan_path(@organization, @customer), class: 'btn btn-secondary margin1left', title: 'supprimer tous les clients', data: { method: :delete, confirm: 'Vous êtes sur le point de supprimer tous les clients, êtes-vous sûr ?' }
               .float-right.alignright.margin1bottom

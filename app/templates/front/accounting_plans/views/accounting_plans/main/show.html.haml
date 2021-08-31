@@ -104,7 +104,7 @@
                   .sub_menu.text-start.hide
                     %ul.no-margin.no-padding.regular
                       %li.edit.provider
-                        = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Editer', edit_organization_customer_accounting_plan_path(@organization, @customer), title: 'Editer'
+                        = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Éditer', edit_organization_customer_accounting_plan_path(@organization, @customer), title: 'Éditer'
                       %li.delete.red-label
                         = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', destroy_providers_organization_customer_accounting_plan_path(@organization, @customer), title: 'Supprimer tous les fournisseurs', data: { method: :delete, confirm: 'Vous êtes sur le point de supprimer tous les fournisseurs, êtes-vous sûr ?' }
 
@@ -145,7 +145,7 @@
                     %ul.no-margin.no-padding.regular
                       %li.edit.customer
                         %span= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                        &nbsp;Editer
+                        &nbsp;Éditer
                       %li.delete.red-label
                         %span= glyphicon('trash', { size: '15', color: "#FF4848" })
                         &nbsp;Supprimer

@@ -53,7 +53,7 @@ class DocumentsPreseizures{
   }
 
   update_preseizures(){
-    let datas = this.edit_modal.find('#preseizure_edition_form').serialize();
+    let datas = this.edit_modal.find('#preseizure_Édition_form').serialize();
     datas += `&id=${this.id}`;
 
     let params =  {

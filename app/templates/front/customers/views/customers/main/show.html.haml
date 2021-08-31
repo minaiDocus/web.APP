@@ -9,98 +9,134 @@
 
   %ul.nav.nav-tabs.ms-3.derivationLeft{ "role" => "tablist" }
     %li.nav-item.no-margin{ "role" => "presentation" }
-      %button.semibold.nav-link.active#information-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#information", type: :button, "role" => "tab", "aria-controls" => "information", "aria-selected" => "true" } Informations générales
+      %button.semibold.nav-link#information-tab{ class: ('active' if params[:tab] == 'information' || params[:tab].blank? ), "data-bs-toggle" => "tab", "data-bs-target" => "#information", type: :button, "role" => "tab", "aria-controls" => "information", "aria-selected" => "#{params[:tab] == 'information' || params[:tab].blank?}" } Informations générales
     - if @customer.active? && !@organization.specific_mission
       %li.nav-item.no-margin{ "role" => "presentation" }
-        %button.semibold.nav-link#subscription-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#subscription", type: :button, "role" => "tab", "aria-controls" => "subscription", "aria-selected" => "false" } Forfait 
+        %button.semibold.nav-link#subscription-tab{ class: ('active' if params[:tab] == 'subscription'), "data-bs-toggle" => "tab", "data-bs-target" => "#subscription", type: :button, "role" => "tab", "aria-controls" => "subscription", "aria-selected" => "false" } Forfait 
       %li.nav-item.no-margin{ "role" => "presentation" }
-        %button.semibold.nav-link#orders-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#orders", type: :button, "role" => "tab", "aria-controls" => "orders", "aria-selected" => "false" } Commandes Kits/Scan
+        %button.semibold.nav-link#orders-tab{ class: ('active' if params[:tab] == 'orders'), "data-bs-toggle" => "tab", "data-bs-target" => "#orders", type: :button, "role" => "tab", "aria-controls" => "orders", "aria-selected" => "#{params[:tab] == 'orders'}" } Commandes Kits/Scan
       %li.nav-item.no-margin{ "role" => "presentation" }
-        %button.semibold.nav-link#adresses-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#adresses", type: :button, "role" => "tab", "aria-controls" => "adresses", "aria-selected" => "false" } Adresses
+        %button.semibold.nav-link#adresses-tab{ class: ('active' if params[:tab] == 'addresses'), "data-bs-toggle" => "tab", "data-bs-target" => "#adresses", type: :button, "role" => "tab", "aria-controls" => "adresses", "aria-selected" => "#{params[:tab] == 'addresses'}" } Adresses
     - if @organization.specific_mission
       %li.nav-item.no-margin{ "role" => "presentation" }
-        %button.semibold.nav-link#journals-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#journals", type: :button, "role" => "tab", "aria-controls" => "journals", "aria-selected" => "false" } Dossiers
+        %button.semibold.nav-link#journals-tab{ class: ('active' if params[:tab] == 'journals'), "data-bs-toggle" => "tab", "data-bs-target" => "#journals", type: :button, "role" => "tab", "aria-controls" => "journals", "aria-selected" => "#{params[:tab] == 'journals'}" } Dossiers
     - else
       %li.nav-item.no-margin{ "role" => "presentation" }
-        %button.semibold.nav-link#journals-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#journals", type: :button, "role" => "tab", "aria-controls" => "journals", "aria-selected" => "false" } Journaux comptables
+        %button.semibold.nav-link#journals-tab{ class: ('active' if params[:tab] == 'journals'), "data-bs-toggle" => "tab", "data-bs-target" => "#journals", type: :button, "role" => "tab", "aria-controls" => "journals", "aria-selected" => "#{params[:tab] == 'journals'}" } Journaux comptables
     - if @customer.active? && @customer.options.is_retriever_authorized && !@organization.specific_mission
       %li.nav-item.no-margin{ "role" => "presentation" }
-        %button.semibold.nav-link#ido-fac-bank-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#ido-fac-bank", type: :button, "role" => "tab", "aria-controls" => "ido-fac-bank", "aria-selected" => "false", account_id: @customer.id } iDo'FacBanque
+        %button.semibold.nav-link#ido-fac-bank-tab{ class: ('active' if params[:tab] == 'ido_fac_bank'), "data-bs-toggle" => "tab", "data-bs-target" => "#ido-fac-bank", type: :button, "role" => "tab", "aria-controls" => "ido-fac-bank", "aria-selected" => "#{params[:tab] == 'ido_fac_bank'}", account_id: @customer.id } iDo'FacBanque
       %li.nav-item.no-margin{ "role" => "presentation" }
-        %button.semibold.nav-link#bank-setting-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#bank-setting", type: :button, "role" => "tab", "aria-controls" => "bank-setting", "aria-selected" => "false", account_id: @customer.id} Paramètres bancaires
+        %button.semibold.nav-link#bank-setting-tab{ class: ('active' if params[:tab] == 'bank_setting'), "data-bs-toggle" => "tab", "data-bs-target" => "#bank-setting", type: :button, "role" => "tab", "aria-controls" => "bank-setting", "aria-selected" => "#{params[:tab] == 'bank_setting'}", account_id: @customer.id} Paramètres bancaires
     - unless @organization.specific_mission
       %li.nav-item.no-margin{ "role" => "presentation" }
-        %button.semibold.nav-link#compta-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#compta", type: :button, "role" => "tab", "aria-controls" => "compta", "aria-selected" => "false" } Paramètres
+        %button.semibold.nav-link#compta-tab{ class: ('active' if params[:tab] == 'compta'), "data-bs-toggle" => "tab", "data-bs-target" => "#compta", type: :button, "role" => "tab", "aria-controls" => "compta", "aria-selected" => "#{params[:tab] == 'compta'}" } Paramètres
       - if @customer.uses?(:ibiza)
         %li.nav-item.no-margin{ "role" => "presentation" }
-          %button.semibold.nav-link#ibiza-box-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#ibiza-box", type: :button, "role" => "tab", "aria-controls" => "ibiza-box", "aria-selected" => "false" } iBiza Box
-      %li.nav-item.dropdown.no-margin
-        %button.semibold.nav-link.dropdown-toggle#softwares-list{ "data-bs-toggle" => "dropdown", "aria-expanded" => "false", type: :button } Logiciels comptables / Export csv
-        %ul.dropdown-menu.pointer{ "aria-labelledby" => "softwares-list" }
+          %button.semibold.nav-link#ibiza-box-tab{ class: ('active' if params[:tab] == 'ibiza_box'), "data-bs-toggle" => "tab", "data-bs-target" => "#ibiza-box", type: :button, "role" => "tab", "aria-controls" => "ibiza-box", "aria-selected" => "#{params[:tab] == 'ibiza_box'}" } iBiza Box
+      %li.nav-item.dropdown
+        %button.semibold.nav-link.dropdown-toggle#softwares-list{ "data-bs-toggle" => "dropdown", "aria-expanded" => "false", type: :button } Logiciels comptables / export csv
+        %ul.dropdown-menu{ "aria-labelledby" => "softwares-list" }
           - if software_uses('ibiza')   
-            %li.nav-link.dropdown-item{ class: "#{@customer.uses?(:ibiza) ? 'semibold' : ''}"}
-              %a#ibiza-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#ibiza", type: :button, "role" => "tab", "aria-controls" => "ibiza", "aria-selected" => "false" } iBiza
-              - if @customer.uses?(:ibiza)                         
-                %span.float-end= glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
+            %li
+              %button.semibold.nav-link.dropdown-item#ibiza-tab{ class: ('active' if params[:tab] == 'ibiza'), "data-bs-toggle" => "tab", "data-bs-target" => "#ibiza", type: :button, "role" => "tab", "aria-controls" => "ibiza", "aria-selected" => "#{params[:tab] == 'ibiza'}" } 
+              .row
+                .col-md-6.text-center
+                  %span iBiza
+                .col-md-6.text-center
+                  - if @customer.uses?(:ibiza)
+                    = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
           - if software_uses('exact_online')
-            %li.nav-link.dropdown-item{ class: "#{@customer.uses?(:exact_online) ? 'semibold' : ''}"}
-              %a#exact-online-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#exact-online", type: :button, "role" => "tab", "aria-controls" => "exact-online", "aria-selected" => "false" } Exact Online
-              - if @customer.uses?(:exact_online)
-                %span.float-end= glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
+            %li
+              %button.semibold.nav-link.dropdown-item#exact-online-tab{ class: ('active' if params[:tab] == 'exact_online'), "data-bs-toggle" => "tab", "data-bs-target" => "#exact-online", type: :button, "role" => "tab", "aria-controls" => "exact-online", "aria-selected" => "#{params[:tab] == 'exact_online'}" } 
+              .row
+                .col-md-6.text-center
+                  %span Exact Online
+                .col-md-6.text-center
+                  - if @customer.uses?(:exact_online)
+                    = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
           - if software_uses('my_unisoft')
-            %li.nav-link.dropdown-item{ class: "#{@customer.uses?(:my_unisoft) ? 'semibold' : ''}"}
-              %a#my-unisoft-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#my-unisoft", type: :button, "role" => "tab", "aria-controls" => "my-unisoft", "aria-selected" => "false" } My Unisoft
-              - if @customer.uses?(:my_unisoft)
-                = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })                    
+            %li
+              %button.semibold.nav-link.dropdown-item#my-unisoft-tab{ class: ('active' if params[:tab] == 'my_unisoft'), "data-bs-toggle" => "tab", "data-bs-target" => "#my-unisoft", type: :button, "role" => "tab", "aria-controls" => "my-unisoft", "aria-selected" => "#{params[:tab] == 'my_unisoft'}" } 
+              .row
+                .col-md-6.text-center
+                  %span My Unisoft
+                .col-md-6.text-center
+                  - if @customer.uses?(:my_unisoft)
+                    = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
           - if @organization.try(:coala).try(:used?)  
-            %li.nav-link.dropdown-item{ class: "#{@customer.uses?(:coala) ? 'semibold' : ''}"}
-              %a#coala-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#coala", type: :button, "role" => "tab", "aria-controls" => "coala", "aria-selected" => "false" } Coala
-              - if @customer.uses?(:coala)
-                %span.float-end= glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
+            %li
+              %button.semibold.nav-link.dropdown-item#coala-tab{ class: ('active' if params[:tab] == 'coala'), "data-bs-toggle" => "tab", "data-bs-target" => "#coala", type: :button, "role" => "tab", "aria-controls" => "coala", "aria-selected" => "#{params[:tab] == 'coala'}" } 
+              .row
+                .col-md-6.text-center
+                  %span Coala
+                .col-md-6.text-center
+                  - if @customer.uses?(:coala)
+                    = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
           - if @organization.try(:quadratus).try(:used)
-            %li.nav-link.dropdown-item{ class: "#{@customer.uses?(:quadratus) ? 'semibold' : ''}"}
-              %a#quadratus-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#quadratus", type: :button, "role" => "tab", "aria-controls" => "quadratus", "aria-selected" => "false" } Quadratus
-              - if @customer.uses?(:quadratus)
-                %span.float-end= glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
+            %li
+              %button.semibold.nav-link.dropdown-item#quadratus-tab{ class: ('active' if params[:tab] == 'quadratus'), "data-bs-toggle" => "tab", "data-bs-target" => "#quadratus", type: :button, "role" => "tab", "aria-controls" => "quadratus", "aria-selected" => "#{params[:tab] == 'quadratus'}" } 
+              .row
+                .col-md-6.text-center
+                  %span Quadratus
+                .col-md-6.text-center
+                  - if @customer.uses?(:quadratus)
+                    = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
           - if @organization.try(:cegid).try(:used?)
-            %li.nav-link.dropdown-item{ class: "#{@customer.uses?(:cegid) ? 'semibold' : ''}"}
-              %a#cegid-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#cegid", type: :button, "role" => "tab", "aria-controls" => "cegid", "aria-selected" => "false" } Cegid
-              - if @customer.uses?(:cegid)
-                %span.float-end= glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
+            %li
+              %button.semibold.nav-link.dropdown-item#cegid-tab{ class: ('active' if params[:tab] == 'cegid'), "data-bs-toggle" => "tab", "data-bs-target" => "#cegid", type: :button, "role" => "tab", "aria-controls" => "cegid", "aria-selected" => "#{params[:tab] == 'cegid'}" } 
+              .row
+                .col-md-6.text-center
+                  %span Cegid
+                .col-md-6.text-center
+                  - if @customer.uses?(:cegid)
+                    = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
           - if @organization.try(:fec_agiris).try(:used?)
-            %li.nav-link.dropdown-item{ class: "#{@customer.uses?(:fec_agiris) ? 'semibold' : ''}"}
-              %a#fec-agiris-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#fec-agiris", type: :button, "role" => "tab", "aria-controls" => "fec-agiris", "aria-selected" => "false" } Fec Agiris
-              - if @customer.uses?(:fec_agiris)
-                %span.float-end= glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
+            %li
+              %button.semibold.nav-link.dropdown-item#fec-agiris-tab{ class: ('active' if params[:tab] == 'fec_agiris'), "data-bs-toggle" => "tab", "data-bs-target" => "#fec-agiris", type: :button, "role" => "tab", "aria-controls" => "fec-agiris", "aria-selected" => "#{params[:tab] == 'fec_agiris'}" } 
+              .row
+                .col-md-6.text-center
+                  %span Fec Agiris
+                .col-md-6.text-center
+                  - if @customer.uses?(:fec_agiris)
+                    = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
           - if @organization.try(:fec_acd).try(:used?)
-            %li.nav-link.dropdown-item{ class: "#{@customer.uses?(:fec_acd) ? 'semibold' : ''}"}
-              %a#fec-acd-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#fec-acd", type: :button, "role" => "tab", "aria-controls" => "fec-acd", "aria-selected" => "false" } Fec ACD              
-              - if @customer.uses?(:fec_acd)
-                %span.float-end= glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
+            %li
+              %button.semibold.nav-link.dropdown-item#fec-acd-tab{ class: ('active' if params[:tab] == 'fec_acd'), "data-bs-toggle" => "tab", "data-bs-target" => "#fec-acd", type: :button, "role" => "tab", "aria-controls" => "fec-acd", "aria-selected" => "#{params[:tab] == 'fec_acd'}" } 
+              .row
+                .col-md-6.text-center
+                  %span Fec ACD
+                .col-md-6.text-center
+                  - if @customer.uses?(:fec_acd)
+                    = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
           - if @organization.try(:csv_descriptor).try(:used?)
-            %li.nav-link.dropdown-item{ class: "#{@customer.uses?(:csv_descriptor) ? 'semibold' : ''}"}
-              %a#csv-descriptor-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#csv-descriptor", type: :button, "role" => "tab", "aria-controls" => "csv-descriptor", "aria-selected" => "false" } Format d’export (.csv)
-              - if @customer.uses?(:csv_descriptor)
-                %span.float-end= glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
+            %li
+              %button.semibold.nav-link.dropdown-item#csv-descriptor-tab{ class: ('active' if params[:tab] == 'csv_descriptor'), "data-bs-toggle" => "tab", "data-bs-target" => "#csv-descriptor", type: :button, "role" => "tab", "aria-controls" => "csv-descriptor", "aria-selected" => "#{params[:tab] == 'csv_descriptor'}" } 
+              .row
+                .col-md-6.text-center
+                  %span Format d’export (.csv)
+                .col-md-6.text-center
+                  - if @customer.uses?(:csv_descriptor)
+                    = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
     - unless @organization.specific_mission    
       %li.nav-item.no-margin{ "role" => "presentation" }
-        %button.semibold.nav-link#accounting-plan-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#accounting-plan", type: :button, "role" => "tab", "aria-controls" => "accounting-plan", "aria-selected" => "false" } Plan comptable
+        %button.semibold.nav-link#accounting-plan-tab{ class: ('active' if params[:tab] == 'accounting_plan'), "data-bs-toggle" => "tab", "data-bs-target" => "#accounting-plan", type: :button, "role" => "tab", "aria-controls" => "accounting-plan", "aria-selected" => "#{params[:tab] == 'accounting_plan'}" } Plan comptable
     - if @organization.mcf_settings.try(:access_token).present? || @customer.try(:mcf_documents).try(:not_processable).try(:any?)
       %li.nav-item.no-margin{ "role" => "presentation" }
-        %button.semibold.nav-link#mcf-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#mcf", type: :button, "role" => "tab", "aria-controls" => "mcf", "aria-selected" => "false" } My Company Files
+        %button.semibold.nav-link#mcf-tab{ class: ('active' if params[:tab] == 'mcf'), "data-bs-toggle" => "tab", "data-bs-target" => "#mcf", type: :button, "role" => "tab", "aria-controls" => "mcf", "aria-selected" => "#{params[:tab] == 'mcf'}" } My Company Files
     - if @organization.knowings.try(:ready?)
       %li.nav-item.no-margin{ "role" => "presentation" }
-        %button.semibold.nav-link#ged-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#ged", type: :button, "role" => "tab", "aria-controls" => "ged", "aria-selected" => "false" } Outil GED
+        %button.semibold.nav-link#ged-tab{ class: ('active' if params[:tab] == 'ged'), "data-bs-toggle" => "tab", "data-bs-target" => "#ged", type: :button, "role" => "tab", "aria-controls" => "ged", "aria-selected" => "#{params[:tab] == 'ged'}" } Outil GED
     - if @user.is_admin && @customer.active? && !@organization.specific_mission
       %li.nav-item.no-margin{ "role" => "presentation" }
-        %button.semibold.nav-link#file-storages-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#file-storages", type: :button, "role" => "tab", "aria-controls" => "file-storages", "aria-selected" => "false" } Stockages externes
+        %button.semibold.nav-link#file-storages-tab{ class: ('active' if params[:tab] == 'file_storage'), "data-bs-toggle" => "tab", "data-bs-target" => "#file-storages", type: :button, "role" => "tab", "aria-controls" => "file-storages", "aria-selected" => "#{params[:tab] == 'file_storage'}" } Stockages externes
 
   .tab-content
-    .tab-pane.box.no-margin.active#information{ "role" => "tabpanel", "aria-labelledby" => "information-tab" }
+    .tab-pane.box.no-margin#information{ class: ('active' if params[:tab] == 'information' || params[:tab].blank?), "role" => "tabpanel", "aria-labelledby" => "information-tab" }
       %span loading...
 
     - if @customer.active?
-      .tab-pane.box.no-margin#subscription{ "role" => "tabpanel", "aria-labelledby" => "subscription-tab" }
+      .tab-pane.box.no-margin#subscription{class: ('active' if params[:tab] == 'subscription'),  "role" => "tabpanel", "aria-labelledby" => "subscription-tab" }
         %h4.text-start
           Périodicité
           - if @subscription.period_duration == 1
@@ -115,7 +151,7 @@
           .w-100.text-end
             = link_to t('actions.edit'), edit_organization_customer_subscription_path(@organization, @customer), class: 'btn btn-primary bold subscription-edit'
 
-      .tab-pane.box.no-margin#orders{ "role" => "tabpanel", "aria-labelledby" => "orders-tab" }
+      .tab-pane.box.no-margin#orders{ class: ('active' if params[:tab] == 'orders'), "role" => "tabpanel", "aria-labelledby" => "orders-tab" }
         %table.table.table-condensed.table-striped.table-bordered-inner.margin2bottom.table-detachable-head
           %thead
             %tr.bg-brown.text-white
@@ -164,7 +200,7 @@
                 = link_to 'Commander un Kit envoi courrier', new_organization_customer_order_path(@organization, @customer, order: { type: 'paper_set' }), class: 'btn btn-primary'
 
 
-    .tab-pane#adresses{ "role" => "tabpanel", "aria-labelledby" => "adresses-tab" }
+    .tab-pane#adresses{ class: ('active' if params[:tab] == 'addresses'), "role" => "tabpanel", "aria-labelledby" => "adresses-tab" }
       %input#paper_return_addresses{type: :hidden, value: @customer.paper_return_address&.id, name: 'paper_return_addresses'}
       %input#paper_set_shipping_addresses{type: :hidden, value: @customer.paper_set_shipping_address&.id, name: 'paper_set_shipping_addresses'}
       %input#dematbox_shipping_addresses{type: :hidden, value: @customer.dematbox_shipping_address&.id, name: 'dematbox_shipping_addresses'}
@@ -198,7 +234,7 @@
 
       .mb-4
 
-    .tab-pane.box.no-margin#journals{ "role" => "tabpanel", "aria-labelledby" => "journals-tab" }
+    .tab-pane.box.no-margin#journals{ class: ('active' if params[:tab] == 'journals'), "role" => "tabpanel", "aria-labelledby" => "journals-tab" }
       - if @pending_journals.present?
         .alert
           %strong Attention!
@@ -394,10 +430,10 @@
           %button.btn.btn-light.semibold Annuler
           %button.btn.btn-primary.bold Valider les modifications
 
-    .tab-pane.box.no-margin#ido-fac-bank{ "role" => "tabpanel", "aria-labelledby" => "ido-fac-bank-tab" }
+    .tab-pane.box.no-margin#ido-fac-bank{ class: ('active' if params[:tab] == 'ido_fac_bank'), "role" => "tabpanel", "aria-labelledby" => "ido-fac-bank-tab" }
       iDo fac bank TODO ...
 
-    .tab-pane.box.no-margin#compta{ "role" => "tabpanel", "aria-labelledby" => "compta-tab" }
+    .tab-pane.box.no-margin#compta{ class: ('active' if params[:tab] == 'compta'), "role" => "tabpanel", "aria-labelledby" => "compta-tab" }
       %table.table.table-striped.table-condensed
         %tbody
           %tr
@@ -422,14 +458,14 @@
               = link_to t('actions.edit'), edit_compta_options_organization_customer_path(@organization, @customer), class: 'btn btn-primary'
 
     - if @customer.uses?(:ibiza)
-      .tab-pane.box.no-margin#ibiza-box{ "role" => "tabpanel", "aria-labelledby" => "ibiza-box-tab" }
+      .tab-pane.box.no-margin#ibiza-box{ class: ('active' if params[:tab] == 'ibiza_box'), "role" => "tabpanel", "aria-labelledby" => "ibiza-box-tab" }
         - if @organization.ibiza.first_configured?
           = render 'ibiza_box'
         - else
           = render 'shared/ibiza_not_configured_warning'
 
     - if @organization.try(:ibiza).try(:used?)
-      .tab-pane.box.no-margin#ibiza{ "role" => "tabpanel", "aria-labelledby" => "ibiza-tab" }
+      .tab-pane.box.no-margin#ibiza{ class: ('active' if params[:tab] == 'ibiza'), "role" => "tabpanel", "aria-labelledby" => "ibiza-tab" }
         %h4.margin1bottom Activation Ibiza
         = simple_form_for @customer, url: customer_form_url(@organization, @customer), html: { id: 'form_ibiza', class: 'form form-horizontal label-auto' } do |c|
           = hidden_field_tag :part, 'ibiza'
@@ -488,7 +524,7 @@
                 = link_to t('actions.edit'), '#', class: 'btn btn-primary float-right', disabled: true
 
     - if @organization.try(:exact_online).try(:used?)
-      .tab-pane.box.no-margin#exact-online{ "role" => "tabpanel", "aria-labelledby" => "exact-online-tab" }
+      .tab-pane.box.no-margin#exact-online{ class: ('active' if params[:tab] == 'exact_online'), "role" => "tabpanel", "aria-labelledby" => "exact-online-tab" }
         %h4.margin1bottom Activation Exact Online
         = simple_form_for @customer, url: customer_form_url(@organization, @customer), html: { id: 'form_exact_online', class: 'form form-horizontal label-auto' } do |c|
           = hidden_field_tag :part, 'exact_online'
@@ -537,7 +573,7 @@
               = link_to t('actions.edit'), edit_exact_online_organization_customer_path(@organization, @customer), class: 'btn btn-primary float-right'
 
     - if @customer.organization.try(:my_unisoft).try(:used?)
-      .tab-pane.box.no-margin#my-unisoft{ "role" => "tabpanel", "aria-labelledby" => "my-unisoft-tab" }
+      .tab-pane.box.no-margin#my-unisoft{ class: ('active' if params[:tab] == 'my_unisoft'), "role" => "tabpanel", "aria-labelledby" => "my-unisoft-tab" }
         %h4.margin1bottom Activation My Unisoft
         = simple_form_for @customer, url: customer_form_url(@organization, @customer), html: { id: 'form_my_unisoft', class: 'form form-horizontal label-auto' } do |c|
           = hidden_field_tag :part, 'my_unisoft'
@@ -598,7 +634,7 @@
               = link_to t('actions.edit'), edit_my_unisoft_organization_customer_path(@organization, @customer), class: 'btn btn-secondary float-right'
 
     - if @organization.try(:coala).try(:used?)
-      .tab-pane.box.no-margin#coala{ "role" => "tabpanel", "aria-labelledby" => "coala-tab" }
+      .tab-pane.box.no-margin#coala{ class: ('active' if params[:tab] == 'coala'), "role" => "tabpanel", "aria-labelledby" => "coala-tab" }
         %h4.margin1bottom Activation Coala
         = simple_form_for @customer, url: customer_form_url(@organization, @customer), html: { id: 'form_coala', class: 'form form-horizontal label-auto' } do |c|
           = hidden_field_tag :part, 'coala'
@@ -637,7 +673,7 @@
                 = link_to t('actions.edit'), edit_software_organization_customer_path(@organization, @customer, software: 'coala'), class: 'btn btn-primary float-right'
 
     - if @organization.try(:quadratus).try(:used?)
-      .tab-pane.box.no-margin#quadratus{ "role" => "tabpanel", "aria-labelledby" => "quadratus-tab" }
+      .tab-pane.box.no-margin#quadratus{ class: ('active' if params[:tab] == 'quadratus'), "role" => "tabpanel", "aria-labelledby" => "quadratus-tab" }
         %h4.margin1bottom Activation Quadratus
         = simple_form_for @customer, url: customer_form_url(@organization, @customer), html: { id: 'form_quadratus', class: 'form form-horizontal label-auto' } do |c|
           = hidden_field_tag :part, 'quadratus'
@@ -667,7 +703,7 @@
                 = link_to t('actions.edit'), edit_software_organization_customer_path(@organization, @customer, software: 'quadratus'), class: 'btn btn-primary float-right'
 
     - if @organization.try(:cegid).try(:used?)
-      .tab-pane.box.no-margin#cegid{ "role" => "tabpanel", "aria-labelledby" => "cegid-tab" }
+      .tab-pane.box.no-margin#cegid{ class: ('active' if params[:tab] == 'cegid'), "role" => "tabpanel", "aria-labelledby" => "cegid-tab" }
         %h4.margin1bottom Activation Cegid
         = simple_form_for @customer, url: customer_form_url(@organization, @customer), html: { id: 'form_cegid', class: 'form form-horizontal margin0' } do |c|
           = hidden_field_tag :part, 'cegid'
@@ -697,7 +733,7 @@
                 = link_to icon_edit + ' ' + 'Modifier', edit_software_organization_customer_path(@organization, @customer, software: 'cegid'), class: 'btn btn-primary float-right'
 
     - if @organization.try(:fec_agiris).try(:used?)
-      .tab-pane.box.no-margin#fec-agiris{ "role" => "tabpanel", "aria-labelledby" => "fec-agiris-tab" }
+      .tab-pane.box.no-margin#fec-agiris{ class: ('active' if params[:tab] == 'fec_agiris'), "role" => "tabpanel", "aria-labelledby" => "fec-agiris-tab" }
         %h4.margin1bottom Activation Fec Agiris
         = simple_form_for @customer, url: customer_form_url(@organization, @customer), html: { id: 'form_fec_agiris', class: 'form form-horizontal margin0' } do |c|
           = hidden_field_tag :part, 'fec_agiris'
@@ -727,7 +763,7 @@
                 = link_to icon_edit + ' ' + 'Modifier', edit_software_organization_customer_path(@organization, @customer, software: 'fec_agiris'), class: 'btn btn-primary float-right'
 
     - if @organization.try(:fec_acd).try(:used?)
-      .tab-pane.box.no-margin#fec-acd{ "role" => "tabpanel", "aria-labelledby" => "fec-acd-tab" }
+      .tab-pane.box.no-margin#fec-acd{ class: ('active' if params[:tab] == 'fec_acd'), "role" => "tabpanel", "aria-labelledby" => "fec-acd-tab" }
         %h4.margin1bottom Activation Fec ACD
         = simple_form_for @customer, url: customer_form_url(@organization, @customer), html: { id: 'form_fec_acd', class: 'form form-horizontal margin0' } do |c|
           = hidden_field_tag :part, 'fec_acd'
@@ -757,7 +793,7 @@
                 = link_to icon_edit + ' ' + 'Modifier', edit_software_organization_customer_path(@organization, @customer, software: 'fec_acd'), class: 'btn btn-primary float-right'
 
     - if @organization.try(:csv_descriptor).try(:used?)
-      .tab-pane.box.no-margin#csv-descriptor{ "role" => "tabpanel", "aria-labelledby" => "csv-descriptor-tab" }
+      .tab-pane.box.no-margin#csv-descriptor{ class: ('active' if params[:tab] == 'csv_descriptor'), "role" => "tabpanel", "aria-labelledby" => "csv-descriptor-tab" }
         %h4.margin1bottom Activation Fichier d'export personnalisé (.csv)
         = simple_form_for @customer, url: customer_form_url(@organization, @customer), html: { id: 'form_csv_descriptor', class: 'form form-horizontal label-auto' } do |c|
           = hidden_field_tag :part, 'csv_descriptor'
@@ -804,7 +840,7 @@
                       - else
                         = link_to 'Créer un format propre au dossier', activate_organization_customer_csv_descriptor_path(@organization, @customer), method: :patch, class: 'btn btn-primary'
 
-    .tab-pane#accounting-plan{ "role" => "tabpanel", "aria-labelledby" => "accounting-plan-tab" }
+    .tab-pane#accounting-plan{ class: ('active' if params[:tab] == 'accounting_plan'), "role" => "tabpanel", "aria-labelledby" => "accounting-plan-tab" }
       .box.no-margin
         .form-group
           .row
@@ -856,7 +892,7 @@
                         %ul.no-margin.no-padding.regular
                           %li.edit
                             %span= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                            &nbsp;Editer
+                            &nbsp;Éditer
                           %li.delete.red-label
                             %span= glyphicon('trash', { size: '15', color: "#FF4848" })
                             &nbsp;Supprimer
@@ -875,7 +911,7 @@
                         %ul.no-margin.no-padding.regular
                           %li.edit
                             %span= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                            &nbsp;Editer
+                            &nbsp;Éditer
                           %li.delete.red-label
                             %span= glyphicon('trash', { size: '15', color: "#FF4848" })
                             &nbsp;Supprimer
@@ -918,7 +954,7 @@
                         %ul.no-margin.no-padding.regular
                           %li.edit
                             %span= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                            &nbsp;Editer
+                            &nbsp;Éditer
                           %li.delete.red-label
                             %span= glyphicon('trash', { size: '15', color: "#FF4848" })
                             &nbsp;Supprimer
@@ -934,7 +970,7 @@
                         %ul.no-margin.no-padding.regular
                           %li.edit
                             %span= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                            &nbsp;Editer
+                            &nbsp;Éditer
                           %li.delete.red-label
                             %span= glyphicon('trash', { size: '15', color: "#FF4848" })
                             &nbsp;Supprimer
@@ -973,7 +1009,7 @@
                         %ul.no-margin.no-padding.regular
                           %li.edit
                             %span= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                            &nbsp;Editer
+                            &nbsp;Éditer
                           %li.delete.red-label
                             %span= glyphicon('trash', { size: '15', color: "#FF4848" })
                             &nbsp;Supprimer
@@ -988,7 +1024,7 @@
                         %ul.no-margin.no-padding.regular
                           %li.edit
                             %span= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                            &nbsp;Editer
+                            &nbsp;Éditer
                           %li.delete.red-label
                             %span= glyphicon('trash', { size: '15', color: "#FF4848" })
                             &nbsp;Supprimer
@@ -1002,7 +1038,7 @@
             %button.btn.btn-primary.bold Valider les modifications
 
     - if @organization.mcf_settings.try(:access_token).present? || @customer.try(:mcf_documents).try(:not_processable).try(:any?)
-      .tab-pane.box.no-margin#mcf{ "role" => "tabpanel", "aria-labelledby" => "mcf-tab" }
+      .tab-pane.box.no-margin#mcf{ class: ('active' if params[:tab] == 'mcf'), "role" => "tabpanel", "aria-labelledby" => "mcf-tab" }
         - if @organization.mcf_settings.try(:access_token).present?
           %h4 Paramètre de compte
           %table.table.table-striped.table-condensed
@@ -1037,7 +1073,7 @@
               = link_to 'Détails des erreurs', show_mcf_errors_organization_customer_path(@organization, @customer), class: 'btn btn-primary'
 
     - if @organization.knowings.try(:ready?)
-      .tab-pane.box.no-margin#ged{ "role" => "tabpanel", "aria-labelledby" => "ged-tab" }
+      .tab-pane.box.no-margin#ged{ class: ('active' if params[:tab] == 'ged'), "role" => "tabpanel", "aria-labelledby" => "ged-tab" }
         %table.table.table-striped.table-condensed
           %thead
             %tbody
@@ -1054,7 +1090,7 @@
                 = link_to t('actions.edit'), edit_knowings_options_organization_customer_path(@organization, @customer), class: 'btn btn-primary'
 
     - if @user.is_admin && @customer.active?
-      .tab-pane.box.no-margin#file-storages{ "role" => "tabpanel", "aria-labelledby" => "file-storages-tab" }
+      .tab-pane.box.no-margin#file-storages{ class: ('active' if params[:tab] == 'file_storage'), "role" => "tabpanel", "aria-labelledby" => "file-storages-tab" }
         = render partial: 'customers/main/file_storages', locals: { user: @customer }
         .form-group.no-margin
           .w-100.text-end

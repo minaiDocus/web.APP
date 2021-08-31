@@ -9,7 +9,7 @@
     .card-header
       - if @customer.configured?
         %h3 
-          Edition du format d’export .csv du client : 
+          Édition du format d’export .csv du client : 
           = link_to @customer, organization_customer_path(@organization, @customer, tab: 'csv_descriptor'), class: 'fs-origin'
       - else
         %h3

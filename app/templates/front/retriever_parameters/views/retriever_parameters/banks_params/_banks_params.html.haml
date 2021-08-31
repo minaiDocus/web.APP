@@ -36,7 +36,7 @@
                       - if not bank_account.is_to_be_disabled?           
                         %li.edit{ data: { id: bank_account.id } }
                           %span.me-1= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                          %span Editer
+                          %span Éditer
                       - if bank_account.can_be_deleted?
                         %li.activation{ data: { id: bank_account.id, type: 'disable' } }
                           %span.red-label.me-1= glyphicon('trash', { size: '15', color: "#FF4848" })

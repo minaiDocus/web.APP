@@ -62,7 +62,7 @@
                     .sub_menu.text-start.hide
                       %ul.no-margin.no-padding.regular
                         %li.edit.edit-customer
-                          = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Editer', organization_customer_path(@organization, customer)
+                          = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Éditer', organization_customer_path(@organization, customer)
                         %li.delete.red-label
                           = link_to glyphicon('ban', { size: '15', color: "#FF4848" }) + ' Clôturer le dossier', account_close_confirm_organization_customer_path(@organization, customer)
 

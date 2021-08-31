@@ -3,7 +3,7 @@
     .col-md-8
       %h3.bold
         Kit courrier
-        %span.badge.badge-secondary.badge-sm.regular 2
+        %span.badge.badge-secondary.badge-sm.regular= @orders_count
     .col-md-4.text-end
       %button.btn.btn-primary.commande-kit.semibold
         Commander kit courrier
@@ -15,68 +15,33 @@
         %th Date de commande
         %th Société
         %th Commande
-        %th N° de suivi
-        %th Statut
+        %th= t('activerecord.models.paper_process.attributes.tracking_number').downcase
+        %th= t('activerecord.models.order.attributes.state').downcase
         %th.text-end Action
       %tbody
-        %tr
-          %td.text-table-green.semibold IDOC%002 - support - John Doe
-          %td 25/11/20
-          %td iDocus
-          %td 34
-          %td.text-table-green 43256488879
-          %td
-            .badge.bg-dark.semibold En transit          
-          %td.text-end.pointer
-            .action.sub-menu-kit
-              %span= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
+        - @orders.each do |order|
+          %tr
+            %td.text-table-green.semibold= link_to "#{order.user.info}", organization_customer_path(@organization, order.user_id, tab: 'orders')
+            %td= order.created_at.strftime('%d/%m/%y')
+            %td= truncate(order.company, length: 20, separator: ' ')
+            %td
+              = order.paper_set_casing_size.to_s + 'g - ' + order.paper_set_casing_count.to_s + ' env - ' + order.paper_set_folder_count.to_s + ' chm - '
+              = paper_set_date_to_name(order.period_duration, order.paper_set_start_date)
+              à
+              = paper_set_date_to_name(order.period_duration, order.paper_set_end_date)
+            %td.text-table-green= link_to_paper_tracking(order.kit) if order.kit.try(:tracking_number)
+            %td
+              .badge.bg-dark.semibold= Order.state_machine.states[order.state].human_name
+            %td.text-end.pointer
+              .action.sub-menu-kit
+                %span= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
               .sub_menu.text-start.hide
                 %ul.no-margin.no-padding.regular
                   %li.edit
-                    %span= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                    &nbsp;Editer
+                    = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Éditer', edit_organization_paper_set_order_path(@organization, order), class: 'btn btn-light', title: 'Éditer'
                   %li.delete.red-label
-                    %span= glyphicon('trash', { size: '15', color: "#FF4848" })
-                    &nbsp;Supprimer
-        %tr
-          %td.text-table-green.semibold IDOC%002 - support - John Doe
-          %td 14/10/20
-          %td iDocus
-          %td 34
-          %td.text-table-green 2565458754
-          %td
-            .badge.badge-success.semibold Reçu        
-          %td.text-end
-            .action.sub-menu-kit
-              %span= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
-              .sub_menu.text-start.hide
-                %ul.no-margin.no-padding.regular
-                  %li.edit
-                    %span= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                    &nbsp;Editer
-                  %li.delete.red-label
-                    %span= glyphicon('trash', { size: '15', color: "#FF4848" })
-                    &nbsp;Supprimer 
-    .form-group
-      .row.pagination
-        .col-md-6
-          .row
-            .col-md-3.text-end.pt-1
-              %label Afficher par
-            .col-md-2
-              %select.form-select.form-select-sm{ "aria-label" => ".form-select-sm" }
-                %option 20
-                %option 50
-                %option 100         
-
-        .col-md-6.text-end
-          .row
-            .col-md-10
-              %label 2-10 de 10 éléments
-            .col-md-1
-              %span= glyphicon('chevron-left', { size: '15', color: "#1A1A1A" })
-            .col-md-1
-              %span= glyphicon('chevron-right', { size: '15', color: "#1A1A1A" })
+                    = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', organization_paper_set_order_path(@organization, order), class: 'btn btn-light', method: :delete, data: { confirm: t('actions.confirm') }, title: 'Supprimer'
+    = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { name: 'orders', total_pages: @orders.total_pages }
           
   .mb-5
 
@@ -115,7 +80,7 @@
                 %ul.no-margin.no-padding.regular
                   %li.edit
                     %span= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                    &nbsp;Editer
+                    &nbsp;Éditer
                   %li.delete.red-label
                     %span= glyphicon('trash', { size: '15', color: "#FF4848" })
                     &nbsp;Supprimer
@@ -134,7 +99,7 @@
                 %ul.no-margin.no-padding.regular
                   %li.edit
                     %span= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                    &nbsp;Editer
+                    &nbsp;Éditer
                   %li.delete.red-label
                     %span= glyphicon('trash', { size: '15', color: "#FF4848" })
                     &nbsp;Supprimer

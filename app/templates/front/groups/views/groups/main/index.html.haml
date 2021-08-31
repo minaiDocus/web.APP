@@ -32,7 +32,7 @@
 /                 %td
 /                   - if @organization.is_active
 /                     - if @user.leader? || @user.manage_groups
-/                       = link_to 'editer', edit_organization_group_path(@organization, group), class: 'btn btn-light'
+/                       = link_to 'Éditer', edit_organization_group_path(@organization, group), class: 'btn btn-light'
 /                     - if @user.leader?
 /                       - if group.is_dropbox_authorized
 /                         - confirm = "Attention ! la suppression de ce groupe entraîne l'arrêt du déversement automatique de ses documents dans votre dropbox. Voulez-vous continuer ?"
@@ -58,7 +58,7 @@
                   - if @user.leader? || @user.manage_groups
                     %li.edit.member-group.add-or-edit
                       %span= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                      &nbsp;Editer
+                      &nbsp;Éditer
                   - if @user.leader?
                     - if group.is_dropbox_authorized
                       - confirm = "Attention ! la suppression de ce groupe entraîne l'arrêt du déversement automatique de ses documents dans votre dropbox. Voulez-vous continuer ?"

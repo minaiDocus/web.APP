@@ -32,7 +32,7 @@
                 %td
                   - if @organization.is_active
                     - if @user.leader? || @user.manage_groups
-                      = link_to 'editer', edit_account_organization_group_path(@organization, group), class: 'btn btn-light'
+                      = link_to 'Éditer', edit_account_organization_group_path(@organization, group), class: 'btn btn-light'
                     - if @user.leader?
                       - if group.is_dropbox_authorized
                         - confirm = "Attention ! la suppression de ce groupe entraîne l'arrêt du déversement automatique de ses documents dans votre dropbox. Voulez-vous continuer ?"

@@ -6,7 +6,7 @@
     .card-header
       - if @customer.configured?
         %h3
-          Edition des options Knowings du client :
+          Édition des options Knowings du client :
           = link_to @customer, account_organization_customer_path(@organization, @customer, tab: 'ged'), class: 'fs-origin'
       - else
         %h3

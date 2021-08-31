@@ -38,5 +38,5 @@
                 %td= journal.meta_account_number
                 %td= journal.meta_charge_account
                 %td
-                  = link_to 'Editer', edit_account_organization_journal_path(@organization, journal), class: 'btn btn-light'
+                  = link_to 'Éditer', edit_account_organization_journal_path(@organization, journal), class: 'btn btn-light'
                   = link_to 'Supprimer', account_organization_journal_path(@organization, journal), method: 'delete', data: { confirm: t('actions.confirm') }, class: 'btn btn-light'

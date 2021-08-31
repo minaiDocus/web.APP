@@ -431,14 +431,14 @@ $('#preseizuresFilterForm #initPreseizuresFilter').click(function(e){
   getPreseizures(window.currentLink, 1, null, false);
 });
 
-$('#preseizuresModals #preseizureEdition #editPreseizureSubmit').click(function(e){
+$('#preseizuresModals #preseizureÉdition #editPreseizureSubmit').click(function(e){
   e.preventDefault();
 
-  var id = $('#preseizuresModals #preseizureEdition #pack_report_preseizure_id').val();
+  var id = $('#preseizuresModals #preseizureÉdition #pack_report_preseizure_id').val();
  
   $.ajax({
     url: '/account/documents/preseizure/'+id+'/update',
-    data: $('#preseizuresModals #preseizureEdition form').serialize(),
+    data: $('#preseizuresModals #preseizureÉdition form').serialize(),
     dataType: "json",
     type: "POST",
     beforeSend: function() {
@@ -453,25 +453,25 @@ $('#preseizuresModals #preseizureEdition #editPreseizureSubmit').click(function(
         refreshPreseizures([id]);
 
       if(data.error == '')
-        $('#preseizuresModals #preseizureEdition').modal('hide');
+        $('#preseizuresModals #preseizureÉdition').modal('hide');
       else
-        $('#preseizuresModals #preseizureEdition .modal-body').prepend("<div class='row-fluid'><div class='span12 alert alert-danger'><a class='close' data-dismiss='alert'> × </a><span>"+data.error+"</span></div></div>");
+        $('#preseizuresModals #preseizureÉdition .modal-body').prepend("<div class='row-fluid'><div class='span12 alert alert-danger'><a class='close' data-dismiss='alert'> × </a><span>"+data.error+"</span></div></div>");
     },
     error: function(data){
       logAfterAction();
-      $('#preseizuresModals #preseizureEdition .modal-body').prepend("<div class='row-fluid'><div class='span12 alert alert-danger'><a class='close' data-dismiss='alert'> × </a><span> Une erreur est survenue et l'administrateur a été prévenu.</span></div></div>");
+      $('#preseizuresModals #preseizureÉdition .modal-body').prepend("<div class='row-fluid'><div class='span12 alert alert-danger'><a class='close' data-dismiss='alert'> × </a><span> Une erreur est survenue et l'administrateur a été prévenu.</span></div></div>");
     }
   });
 });
 
-$('#preseizuresModals #preseizureAccountEdition #editPreseizureAccountSubmit').click(function(e){
+$('#preseizuresModals #preseizureAccountÉdition #editPreseizureAccountSubmit').click(function(e){
   e.preventDefault();
 
-  var id = $('#preseizuresModals #preseizureAccountEdition #preseizure_id').val();
+  var id = $('#preseizuresModals #preseizureAccountÉdition #preseizure_id').val();
 
   $.ajax({
     url: '/account/documents/preseizure/account/'+id+'/update',
-    data: $('#preseizuresModals #preseizureAccountEdition form').serialize(),
+    data: $('#preseizuresModals #preseizureAccountÉdition form').serialize(),
     dataType: "json",
     type: "POST",
     beforeSend: function() {
@@ -486,26 +486,26 @@ $('#preseizuresModals #preseizureAccountEdition #editPreseizureAccountSubmit').c
         refreshPreseizures([id]);
 
       if(data.error == ''){
-        $('#preseizuresModals #preseizureAccountEdition').modal('hide');        
+        $('#preseizuresModals #preseizureAccountÉdition').modal('hide');        
       }
       else{
-        $('#preseizuresModals #preseizureAccountEdition .modal-body').prepend("<div class='row-fluid'><div class='span12 alert alert-danger'><a class='close' data-dismiss='alert'> × </a><span>"+data.error+"</span></div></div>");
+        $('#preseizuresModals #preseizureAccountÉdition .modal-body').prepend("<div class='row-fluid'><div class='span12 alert alert-danger'><a class='close' data-dismiss='alert'> × </a><span>"+data.error+"</span></div></div>");
       }
     },
     error: function(data){
       logAfterAction();
-      $('#preseizuresModals #preseizureAccountEdition .modal-body').prepend("<div class='row-fluid'><div class='span12 alert alert-danger'><a class='close' data-dismiss='alert'> × </a><span> Une erreur est survenue et l'administrateur a été prévenu.</span></div></div>");
+      $('#preseizuresModals #preseizureAccountÉdition .modal-body').prepend("<div class='row-fluid'><div class='span12 alert alert-danger'><a class='close' data-dismiss='alert'> × </a><span> Une erreur est survenue et l'administrateur a été prévenu.</span></div></div>");
     }
   });
 });
 
-$('#preseizuresModals #preseizureEntryEdition #editPreseizureEntrySubmit').click(function(e){
+$('#preseizuresModals #preseizureEntryÉdition #editPreseizureEntrySubmit').click(function(e){
   e.preventDefault();
 
-  var id = $('#preseizuresModals #preseizureEntryEdition #pack_report_preseizure_entry_id').val()
+  var id = $('#preseizuresModals #preseizureEntryÉdition #pack_report_preseizure_entry_id').val()
   $.ajax({
     url: '/account/documents/preseizure/entry/'+id+'/update',
-    data: $('#preseizuresModals #preseizureEntryEdition form').serialize(),
+    data: $('#preseizuresModals #preseizureEntryÉdition form').serialize(),
     dataType: "json",
     type: "POST",
     beforeSend: function() {
@@ -514,24 +514,24 @@ $('#preseizuresModals #preseizureEntryEdition #editPreseizureEntrySubmit').click
     success: function(data){
       logAfterAction();
       if(data.error == ''){
-        $('#preseizuresModals #preseizureEntryEdition').modal('hide');
+        $('#preseizuresModals #preseizureEntryÉdition').modal('hide');
       }
       else{
-        $('#preseizuresModals #preseizureEntryEdition .modal-body').prepend("<div class='row-fluid'><div class='span12 alert alert-danger'><a class='close' data-dismiss='alert'> × </a><span>"+data.error+"</span></div></div>");
+        $('#preseizuresModals #preseizureEntryÉdition .modal-body').prepend("<div class='row-fluid'><div class='span12 alert alert-danger'><a class='close' data-dismiss='alert'> × </a><span>"+data.error+"</span></div></div>");
       }
     },
     error: function(data){
       logAfterAction();
-      $('#preseizuresModals #preseizureEntryEdition .modal-body').prepend("<div class='row-fluid'><div class='span12 alert alert-danger'><a class='close' data-dismiss='alert'> × </a><span> Une erreur est survenue et l'administrateur a été prévenu.</span></div></div>");
+      $('#preseizuresModals #preseizureEntryÉdition .modal-body').prepend("<div class='row-fluid'><div class='span12 alert alert-danger'><a class='close' data-dismiss='alert'> × </a><span> Une erreur est survenue et l'administrateur a été prévenu.</span></div></div>");
     }
   });
 });
 
-$("#preseizuresModals #editSelectedPreseizures #validatePreseizuresEdition").click(function(e){
+$("#preseizuresModals #editSelectedPreseizures #validatePreseizuresÉdition").click(function(e){
   e.preventDefault();
   $.ajax({
     url: '/account/documents/update_multiple_preseizures',
-    data: { ids: window.preseizuresSelected, preseizures_attributes: $('#preseizuresModals #editSelectedPreseizures #preseizuresEditionForm').serializeObject() },
+    data: { ids: window.preseizuresSelected, preseizures_attributes: $('#preseizuresModals #editSelectedPreseizures #preseizuresÉditionForm').serializeObject() },
     dataType: "json",
     type: "POST",
     beforeSend: function() {

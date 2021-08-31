@@ -25,4 +25,4 @@
 
 .form-group.no-margin.text-end  
   = link_to glyphicon('trash', { size: '15', color: '#FF4848'}) + ' Supprimer', organization_address_path(@organization, address), method: 'delete', data: { confirm: t('actions.confirm') }, class: 'red-label btn btn-default-danger semibold delete-address'
-  = link_to glyphicon('pencil', { size: '15', color: '#FFF'}) + ' Editer', edit_organization_address_path(@organization, address), class: 'btn btn-primary semibold valid-adresse-modification'
+  = link_to glyphicon('pencil', { size: '15', color: '#FFF'}) + ' Éditer', edit_organization_address_path(@organization, address), class: 'btn btn-primary semibold valid-adresse-modification'

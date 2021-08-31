@@ -3,7 +3,7 @@
     .card-header
       .float-left
         %h3
-          Edition d'analyse par défaut : #{@journal.name}
+          Édition d'analyse par défaut : #{@journal.name}
           - if @customer
             = link_to @customer, organization_customer_path(@organization, @customer, tab: 'journals'), class: 'fs-origin'
       .float-right
@@ -12,7 +12,7 @@
     = simple_form_for 'compta_analytics', url: update_analytics_organization_customer_journals_path(@organization, @customer), html: { class: 'form-horizontal', id: 'compta_analytics_journal' } do |f|
       .card-body
         - if @customer.uses_ibiza_analytics?
-          %h4 Edition Compta Analytique par défaut du journal
+          %h4 Édition Compta Analytique par défaut du journal
           %span.badge.badge-warning.fs-origin Attention : 
           Configurer une analyse comptable par défaut sur un journal permet d'attribuer automatiquement l'analyse sur les futures pièces du journal
           %br

@@ -204,7 +204,7 @@ function getPreseizureAccount(manual_id=[]){
 }
 
 function editPreseizure(id){
-  $('#preseizuresModals #preseizureEdition').modal('show');
+  $('#preseizuresModals #preseizureÉdition').modal('show');
 
   $.ajax({
     url: '/account/documents/preseizure/'+id+'/edit',
@@ -216,21 +216,21 @@ function editPreseizure(id){
     },
     success: function(data){
       logAfterAction();
-      $('#preseizuresModals #preseizureEdition .modal-body').html(data);
+      $('#preseizuresModals #preseizureÉdition .modal-body').html(data);
 
       //add and initialize datepicker
-      $('#preseizuresModals #preseizureEdition .modal-body .datepicker').find('input').after('<span class="add-on" style="width: 0px; height: 35px"></span>');
-      $('#preseizuresModals #preseizureEdition .modal-body .datepicker').datepicker({ format: 'yyyy-mm-dd', language: 'fr', orientation: 'bottom auto' });
+      $('#preseizuresModals #preseizureÉdition .modal-body .datepicker').find('input').after('<span class="add-on" style="width: 0px; height: 35px"></span>');
+      $('#preseizuresModals #preseizureÉdition .modal-body .datepicker').datepicker({ format: 'yyyy-mm-dd', language: 'fr', orientation: 'bottom auto' });
     },
     error: function(data){
       logAfterAction();
-      $('#preseizuresModals #preseizureEdition .modal-body').html("<div class='row-fluid'><div class='span12 alert alert-danger'><a class='close' data-dismiss='alert'> × </a><span> Une erreur est survenue et l'administrateur a été prévenu.</span></div></div>");
+      $('#preseizuresModals #preseizureÉdition .modal-body').html("<div class='row-fluid'><div class='span12 alert alert-danger'><a class='close' data-dismiss='alert'> × </a><span> Une erreur est survenue et l'administrateur a été prévenu.</span></div></div>");
     }
   });
 }
 
 function editPreseizureAccount(id){
-  $('#preseizuresModals #preseizureAccountEdition').modal('show');
+  $('#preseizuresModals #preseizureAccountÉdition').modal('show');
 
   $.ajax({
     url: '/account/documents/preseizure/account/'+id+'/edit',
@@ -242,18 +242,18 @@ function editPreseizureAccount(id){
     },
     success: function(data){
       logAfterAction();
-      $('#preseizuresModals #preseizureAccountEdition').css({'width': '80%', 'left': '25%'});
-      $('#preseizuresModals #preseizureAccountEdition .modal-body').html(data)
+      $('#preseizuresModals #preseizureAccountÉdition').css({'width': '80%', 'left': '25%'});
+      $('#preseizuresModals #preseizureAccountÉdition .modal-body').html(data)
     },
     error: function(data){
       logAfterAction();
-      $('#preseizuresModals #preseizureAccountEdition .modal-body').html("<div class='row-fluid'><div class='span12 alert alert-danger'><a class='close' data-dismiss='alert'> × </a><span> Une erreur est survenue et l'administrateur a été prévenu.</span></div></div>");
+      $('#preseizuresModals #preseizureAccountÉdition .modal-body').html("<div class='row-fluid'><div class='span12 alert alert-danger'><a class='close' data-dismiss='alert'> × </a><span> Une erreur est survenue et l'administrateur a été prévenu.</span></div></div>");
     }
   });
 }
 
 function editPreseizureEntry(id){
-  $('#preseizuresModals #preseizureEntryEdition').modal('show');
+  $('#preseizuresModals #preseizureEntryÉdition').modal('show');
 
   $.ajax({
     url: '/account/documents/preseizure/entry/'+id+'/edit',
@@ -265,12 +265,12 @@ function editPreseizureEntry(id){
     },
     success: function(data){
       logAfterAction();
-      $('#preseizuresModals #preseizureEntryEdition .modal-body').html(data);
+      $('#preseizuresModals #preseizureEntryÉdition .modal-body').html(data);
       custom_radio_buttons();
     },
     error: function(data){
       logAfterAction();
-      $('#preseizuresModals #preseizureEntryEdition .modal-body').html("<div class='row-fluid'><div class='span12 alert alert-danger'><a class='close' data-dismiss='alert'> × </a><span> Une erreur est survenue et l'administrateur a été prévenu.</span></div></div>");
+      $('#preseizuresModals #preseizureEntryÉdition .modal-body').html("<div class='row-fluid'><div class='span12 alert alert-danger'><a class='close' data-dismiss='alert'> × </a><span> Une erreur est survenue et l'administrateur a été prévenu.</span></div></div>");
     }
   });
 }
