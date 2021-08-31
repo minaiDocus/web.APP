@@ -32,8 +32,10 @@
 
 - entries  = preseizure.entries
 - irregular_debit_credit_somme = verif_debit_credit_somme_of entries
+- data_analytics = data_analytic_of(preseizure)
+
 .row.ml-3.mt-3.mb-3.mr-0  
-  %div{ class: "col-md-#{(1 == 0) ? '6' : '12'}"}
+  %div{ class: "col-md-#{(data_analytics.any?) ? '6' : '12'}"}
     %label.semibold Ecritures
     %label.red-label.float-end.semibold{class: "#{irregular_debit_credit_somme ? '' : 'hide' }"}
       balance non équilibrée
@@ -84,7 +86,8 @@
                   &#45;
               - if @user.has_collaborator_action?
                 %input.entry_id_hidden{type: :hidden, value: entry.id}
-  - if 1 == 0
+
+  - if data_analytics.any?
     .col-md-5
       %label.ms-5.semibold Analyse comptable
       .analytics.content-table.ms-5
@@ -95,23 +98,20 @@
               %th.text-center Axe
               %th.text-center Ventilation
               %th.text-center Montant ventilé
-          %tbody.entries          
-            %tr
-              %td.text-center ANALYTIQUE      
-              %td.text-center
-                %ul                  
-                  %li T           
-              %td.text-center 100.0 %
-              %td.text-center 74.97
-            %tr.striped
-              %td.text-center ANALYTIQUE 2      
-              %td.text-center
-                %ul                  
-                  %li.semibold T        
-                  %li.semibold U        
-              %td.text-center 100.0 %
-              %td.text-center 74.97
-
+          %tbody.entries
+            - data_analytics.each_with_index do |analysis, index|
+              %tr{ class: (index % 2 == 0)? '' : 'striped' }
+                %td.text-center= analysis[:name]
+                %td.text-center
+                  %ul
+                    -if analysis[:axis1].present?
+                      %li.semibold= analysis[:axis1]
+                    -if analysis[:axis2].present?
+                      %li.semibold= analysis[:axis2]
+                    -if analysis[:axis3].present?
+                      %li.semibold= analysis[:axis3]
+                %td.text-center= analysis[:ventilation].to_f.to_s + " %"
+                %td.text-center= @pre_tax_amount.to_f * (analysis[:ventilation].to_f / 100)
 
 %hr   
 .row.ml-1.mt-1.mb-1.mr-0
@@ -145,5 +145,5 @@
       %span.ms-2.update_tags{title: 'Taguer la pièce', data: {id: piece.id, type: 'piece'}}= glyphicon('tag', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
     %span.ms-2.preseizures_export{title: 'Export écriture comptable', data:{ id: preseizure.id, type: 'preseizure' }}= glyphicon('cloud-download', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
     %span.ms-2.edit_preseizures{title: 'Edition écriture comptable', data:{ id: preseizure.id }}= glyphicon('pencil', { size: '20', color:'rgba(26, 26, 26, 0.32);', style: 'transform: rotate(90deg)'})
-    - if 1==1 || (preseizure.user.uses_api_softwares? && preseizure.is_not_delivered?)
+    - if preseizure.user.uses_api_softwares? && preseizure.is_not_delivered?
       %span.ms-2.deliver_preseizures{title: 'Livraison écriture comptable', data: { id: preseizure.id, type: 'preseizure' }}= glyphicon('loop-circular', { size: '20', color:'rgba(26, 26, 26, 0.32);'})

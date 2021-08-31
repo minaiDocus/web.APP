@@ -286,4 +286,27 @@ module DocumentsHelper
 
     debit_value.to_f != credit_value.to_f
   end
+
+  def data_analytic_of(preseizure)
+    analytics = preseizure.analytic_reference
+    data_analytics = []
+
+    if analytics
+      3.times do |i|
+        j = i + 1
+        references = analytics.send("a#{j}_references")
+        name       = analytics.send("a#{j}_name")
+        next unless references.present?
+
+        references = JSON.parse(references)
+        references.each do |ref|
+          if name.present? && ref['ventilation'].present? && (ref['axis1'].present? || ref['axis2'].present? || ref['axis3'].present?)
+            data_analytics << { name: name, ventilation: ref['ventilation'], axis1: ref['axis1'], axis2: ref['axis2'], axis3: ref['axis3'] }
+            end
+        end
+      end
+    end
+
+    data_analytics
+  end
 end

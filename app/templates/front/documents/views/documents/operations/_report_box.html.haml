@@ -23,7 +23,7 @@
           %span.badge.badge-success.semibold Nouveau
         - if report.has_not_delivered_preseizures?
           %span.badge.badge-danger.semibold Ecritures non livrées
-        - if report.preseizures.size >= 50
+        - if report.preseizures.where(created_at: [7.days.ago..Time.now]).size >= 20
           %span.badge.badge-warning.semibold Important
         - if report.expenses.size > 0
           %span.badge.bg-dark.semibold Notes de frais
