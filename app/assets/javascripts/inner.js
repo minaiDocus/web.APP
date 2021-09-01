@@ -1,5 +1,3 @@
-//= require backbone_init
-
 var ActionPerformCount = 0;
 
 $(document).ajaxSend(function(e, xhr, options) {
