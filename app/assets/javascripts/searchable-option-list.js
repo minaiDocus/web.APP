@@ -246,7 +246,7 @@
             this.$loadingData = $('<div class="sol-loading-data"/>').html(this.config.texts.loadingData);
             this.$xItemsSelected = $('<div class="sol-results-count"/>');
 
-            this.$caret = $('<div class="sol-caret-container"><svg viewBox="0 0 8 8" class="oi-icon  colored" style="width: 20px; height: 20px;fill: #b5a6a6;"><use xlink:href="/assets/open-iconic.min.svg#chevron-right" class="icon icon-chevron-right"></use></svg></div>').click(function (e) {
+            this.$caret = $('<div class="sol-caret-container"><svg viewBox="0 0 8 8" class="oi-icon  colored" style="width: 15px; height: 15px;fill: #b5a6a6;"><use xlink:href="/assets/open-iconic.min.svg#chevron-right" class="icon icon-chevron-right"></use></svg></div>').click(function (e) {
                 self.toggle();
                 e.preventDefault();
                 return false;

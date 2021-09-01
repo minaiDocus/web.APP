@@ -1,11 +1,11 @@
-%table.table.table-striped.table-bordered.table-condensed.bg-light.margin0bottom
+%table.table.table-striped
   %thead
-    %tr.bg-brown.text-white
+    %tr
       %th{ colspan: 2 }
         - if single
           = t('activerecord.models.address.attributes.' + type)
         - else
-          .float-left
+          .float-start
             - if address.is_for_paper_return || address.is_for_paper_set_shipping || address.is_for_dematbox_shipping
               - if address.is_for_paper_return
                 = t('activerecord.models.address.attributes.paper_return')
@@ -19,7 +19,7 @@
                 = t('activerecord.models.address.attributes.dematbox_shipping')
             - else
               Adresse non attribuée
-          .float-right
+          .float-end
             = link_to glyphicon('pencil', { style: 'color: #3e2f24' }), edit_account_address_path(address), class: 'btn btn-light'
             = link_to glyphicon('x', { style: 'color: #3e2f24' }), account_address_path(address), :method => :delete, data: { :confirm => t('actions.confirm') }, class: 'btn btn-light'
   - if address

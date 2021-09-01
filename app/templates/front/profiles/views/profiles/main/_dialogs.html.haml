@@ -4,25 +4,22 @@
       .modal-header
         %h5.modal-title.bold Changer mon mot de passe
         %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
-      .modal-body.back-grey
+      .modal-body
         .col-md-12
           = form_for true_user, url: profiles_path do |f|
             %input{ type: 'hidden', name: 'user[h_change_password]', value: 'true' }
-            .form-group.clearfix
-              .label-section
-                = f.label 'Mot de passe actuel :'
-              .control-section
-                = f.password_field :current_password, label: 'Mot de passe actuel', class: 'form-control'
-            .form-group.clearfix
-              .label-section
-                = f.label 'Nouveau mot de passe :'
-              .control-section
-                = f.password_field :password, label: 'Nouveau mot de passe', class: 'form-control'
-            .form-group.clearfix
-              .label-section
-                = f.label 'Confirmation du mot de passe :'
-              .control-section
-                = f.password_field :password_confirmation, label: 'Confirmation du nouveau mot de passe', class: 'form-control'
+            .form-group.clearfix              
+              = f.label 'Mot de passe actuel :'
+              .select-container.no-padding.w-100
+                = f.password_field :current_password, label: 'Mot de passe actuel'
+            .form-group.clearfix              
+              = f.label 'Nouveau mot de passe :'
+              .select-container.no-padding.w-100
+                = f.password_field :password, label: 'Nouveau mot de passe'
+            .form-group.clearfix              
+              = f.label 'Confirmation du mot de passe :'
+              .select-container.no-padding.w-100
+                = f.password_field :password_confirmation, label: 'Confirmation du nouveau mot de passe'
       .modal-footer
         %button.validate.btn.btn-primary.semibold Valider
 
