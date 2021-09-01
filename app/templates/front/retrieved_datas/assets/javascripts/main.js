@@ -71,6 +71,6 @@ jQuery(function() {
   AppListenTo('retrieved_datas_filter', (e)=>{ $(`.modal#filter-${e.detail.type}`).modal('hide'); main.load_datas(e.detail.type); });
   AppListenTo('retrieved_datas_reset_filter', (e)=>{ $(`.modal#filter-${e.detail.type}`).modal('hide'); $(`.modal #filter-${e.detail.type}-form`)[0].reset(); main.load_datas(e.detail.type); });
 
-  AppListenTo('window.change-per-page', (e)=>{ main.load_datas(e.detail.name, 1, e.detail.per_page); });
-  AppListenTo('window.change-page', (e)=>{ main.load_datas(e.detail.name, e.detail.page); });
+  AppListenTo('window.change-per-page.retrieved_data', (e)=>{ main.load_datas(e.detail.name, 1, e.detail.per_page); });
+  AppListenTo('window.change-page.retrieved_data', (e)=>{ main.load_datas(e.detail.name, e.detail.page); });
 });

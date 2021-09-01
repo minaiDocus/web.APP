@@ -92,8 +92,8 @@ jQuery(function() {
   AppListenTo('retriever_parameters_filter_page', (e)=>{ main.filter_page(e.detail.target, e.detail.action); });
   AppListenTo('retriever_parameters_reload_all', (e)=>{ main.load_all(); });
 
-  AppListenTo('window.change-per-page', (e)=>{ main.load_datas(e.detail.name, 1, e.detail.per_page); });
-  AppListenTo('window.change-page', (e)=>{ main.load_datas(e.detail.name, e.detail.page); });
+  AppListenTo('window.change-per-page.retriever_parameters', (e)=>{ main.load_datas(e.detail.name, 1, e.detail.per_page); });
+  AppListenTo('window.change-page.retriever_parameters', (e)=>{ main.load_datas(e.detail.name, e.detail.page); });
 
   AppListenTo('retriever_change_retriever_selection', (e)=>{ main.bank_select_object.init_form({ id: e.detail.budgea_id }) });
   AppListenTo('retriever_validate_retriever_selection', (e)=>{ 

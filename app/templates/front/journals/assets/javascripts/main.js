@@ -352,6 +352,6 @@ jQuery(function () {
   let journal = new Journal();
   journal.main();
 
-  AppListenTo('window.change-per-page', (e)=>{ journal.load_journals(e.detail.name, 1, e.detail.per_page); });
-  AppListenTo('window.change-page', (e)=>{ journal.load_journals(e.detail.name, e.detail.page); });
+  AppListenTo('window.change-per-page.journales', (e)=>{ journal.load_journals(e.detail.name, 1, e.detail.per_page); });
+  AppListenTo('window.change-page.journales', (e)=>{ journal.load_journals(e.detail.name, e.detail.page); });
 });

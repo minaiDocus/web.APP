@@ -68,8 +68,8 @@ jQuery(function() {
 
   main.load_all();
 
-  AppListenTo('window.change-per-page', (e)=>{ main.load_datas(e.detail.name, 1, e.detail.per_page); });
-  AppListenTo('window.change-page', (e)=>{ main.load_datas(e.detail.name, e.detail.page); });
+  AppListenTo('window.change-per-page.pieces_errors', (e)=>{ main.load_datas(e.detail.name, 1, e.detail.per_page); });
+  AppListenTo('window.change-page.pieces_errors', (e)=>{ main.load_datas(e.detail.name, e.detail.page); });
 
   AppListenTo('pieces_errors_filter_page', (e)=>{ main.filter_page(e.detail.target, e.detail.action); });
   AppListenTo('pieces_errors_update_ignored_pieces', (e)=>{ ignored.update_ignored_pieces(e.detail.type); })

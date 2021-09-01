@@ -8,14 +8,12 @@ class Notifications::MainController < FrontController
 
   def index
     @notifications.update_all is_read: true, updated_at: Time.now
+
+    render partial: 'index'
   end
 
   def latest
-    if organizations_suspended?
-      render body: nil
-    else
-      render partial: 'notifications', layout: false, locals: { notifications: @notifications }
-    end
+    render partial: 'notifications'
   end
 
   def link_through
@@ -33,6 +31,6 @@ class Notifications::MainController < FrontController
   private
 
   def load_notifications
-    @notifications = @user.notifications.order(is_read: :asc, created_at: :desc).page(params[:page]).per(params[:per_page])
+    @notifications = @user.notifications.order(is_read: :asc, created_at: :desc).page(params[:page] || 1).per(params[:per_page])
   end
 end

@@ -52,4 +52,4 @@
           %tr
             %td{colspan: 8}= t('global.no-data-found')
 
-  = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { name: 'ignored-pre-assignment', total_pages: @ignored_list.total_pages }
+  = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { name: 'ignored-pre-assignment', target: 'pieces_errors', total_pages: @ignored_list.total_pages }

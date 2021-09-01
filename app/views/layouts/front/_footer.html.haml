@@ -1,3 +1,11 @@
+.modal#all_notifications{'aria-hidden' => 'true', :role => 'dialog', :tabindex => '-1'}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.modal-title.bold Notifications 
+        %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+      .modal-body
+
 %footer.bg-dark.navbar-fixed-bottom.p-3
   .row
     .col-md-3

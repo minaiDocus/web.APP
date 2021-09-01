@@ -27,6 +27,7 @@ Rails.application.routes.draw do
 
   get '/', to: redirect('/dashboard')
   front_draw('dashboard')
+  front_draw('documentations')
   front_draw('notifications')
   front_draw('news')
   front_draw('account_number_rules')
@@ -160,8 +161,6 @@ Rails.application.routes.draw do
   # post 'retriever/user_synced', controller: 'retrievers', action: 'user_synced'
   # post 'retriever/user_deleted', controller: 'retrievers', action: 'user_deleted'
   # post 'retriever/connection_deleted', controller: 'retrievers', action: 'connection_deleted'
-
-  get '/docs/download', controller: 'account/docs', action: 'download'
 
   post 'my_company_files/upload', controller: :my_company_files, action: 'upload'
 
