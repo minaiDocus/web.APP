@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class MyCompanyFiles::CallbacksController < ApplicationController
   skip_before_action :verify_authenticity_token
-  
+
   def upload
     if valid_params?
       mcf_document = McfDocument.create_or_initialize_with(

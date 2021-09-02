@@ -19,6 +19,17 @@ class UploadedDocumentPresenter
     else
       file[:name]  = @uploaded_document.original_file_name
       file[:error] = @uploaded_document.full_error_messages.presence || 'Internal error (507 - Try again later)'
+      if @uploaded_document.link.present?
+        file[:link] = @uploaded_document.link
+        file[:original_file_name] = @uploaded_document.original_file_name
+        file[:user_code] = @uploaded_document.code
+        file[:journal] = @uploaded_document.journal
+        file[:prev_period_offset] = @uploaded_document.prev_period_offset
+        file[:api_name] = @uploaded_document.api_name
+        file[:analytic] = @uploaded_document.analytic
+      end
+
+      file[:file_corrupted] = file[:error].match /Votre document est en-cours/
     end
 
     data << file

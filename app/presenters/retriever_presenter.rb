@@ -34,7 +34,7 @@ class RetrieverPresenter < BasePresenter
       # if scope == :account
       #   content + h.link_to("Demander la création d'un automate", h.new_account_new_provider_request_path, class: 'btn btn-light')
       # elsif scope == :collaborator
-      #   content + h.link_to("Demander la création d'un automate", h.new_organization_customer_new_provider_request_path(user.organization, user), class: 'btn btn-light')
+      #   content + h.link_to("Demander la création d'un automate", h.new_account_organization_customer_new_provider_request_path(user.organization, user), class: 'btn btn-light')
       # elsif scope == :admin
       #   content + h.content_tag(:span, "Demander la création d'un automate", class: 'badge fs-origin badge-secondary')
       # end
