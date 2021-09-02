@@ -21,7 +21,7 @@ class PiecesErrors::IgnoredPreAssignmentController < FrontController
       message = force_pre_assignment
     end
 
-    render json: { success: true, message: message }, state: 200
+    render json: { json_flash: message }, state: 200
   end
 
   private
@@ -32,10 +32,12 @@ class PiecesErrors::IgnoredPreAssignmentController < FrontController
     if !pieces.empty?
       pieces.each(&:force_processing_pre_assignment)
 
-      message = 'Renvoi en pré-affectation en cours ...'
+      json_flash[:success] = 'Renvoi en pré-affectation en cours ...'
     else
-      message = 'Vous devez sélectionner au moins une pièce.'
+      json_flash[:error] = 'Vous devez sélectionner au moins une pièce.'
     end
+
+    json_flash
   end
 
   def confirm_ignored_pieces
@@ -44,10 +46,12 @@ class PiecesErrors::IgnoredPreAssignmentController < FrontController
     if !pieces.empty?
       pieces.each(&:confirm_ignorance_pre_assignment)
 
-      message = 'Modifié avec succès.'
+      json_flash[:success] = 'Modifié avec succès.'
     else
-      message = 'Impossible de traiter la demande.'
+      json_flash[:error] = 'Impossible de traiter la demande.'
     end
+
+    json_flash
   end
 
   def sort_column

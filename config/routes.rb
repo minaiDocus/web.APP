@@ -25,6 +25,7 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => '/sidekiq'
   end
 
+  ### ------------------------ front ---------------------------- ###
   get '/', to: redirect('/dashboard')
   front_draw('dashboard')
   front_draw('documentations')
@@ -84,6 +85,8 @@ Rails.application.routes.draw do
   front_draw('analytics')
   front_draw('profiles')
 
+  ### --------------------------- admin ---------------------------- ###
+
   get 'admin/', to: redirect('/admin/dashboard')
   back_draw('dashboard')
   back_draw('reporting')
@@ -111,7 +114,7 @@ Rails.application.routes.draw do
   back_draw('counter_error_script_mailer')
   back_draw('budgea_retriever')
 
-  #### --------------- native resources -----------------------------###
+  #### -------------------------------- native resources -----------------------------###
 
   scope module: 'ppp' do
     resources :compta
@@ -145,25 +148,6 @@ Rails.application.routes.draw do
     get '/paper_set_orders', controller: 'paper_set_orders', action: 'index'
   end
 
-  # post 'retriever/callback', controller: 'retrievers', action: 'callback'
-  # get  'retriever/callback', controller: 'retrievers', action: 'callback'
-  # post 'retriever/fetch_webauth_url', controller: 'retrievers', action: 'fetch_webauth_url'
-  # post 'retriever/create', controller: 'retrievers', action: 'create'
-  # post 'retriever/add_infos', controller: 'retrievers', action: 'add_infos'
-  # post 'retriever/create_bank_accounts', controller: 'retrievers', action: 'create_bank_accounts'
-  # post 'retriever/get_my_accounts', controller: 'retrievers', action: 'get_my_accounts'
-  # post 'retriever/destroy', controller: 'retrievers', action: 'destroy'
-  # post 'retriever/trigger', controller: 'retrievers', action: 'trigger'
-  # post 'retriever/create_budgea_user', controller: 'retrievers', action: 'create_budgea_user'
-  # post 'retriever/get_retriever_infos', controller: 'retrievers', action: 'get_retriever_infos'
-  # post 'retriever/update_budgea_error_message', controller: 'retrievers', action: 'update_budgea_error_message'
-
-  # post 'retriever/user_synced', controller: 'retrievers', action: 'user_synced'
-  # post 'retriever/user_deleted', controller: 'retrievers', action: 'user_deleted'
-  # post 'retriever/connection_deleted', controller: 'retrievers', action: 'connection_deleted'
-
-  post 'my_company_files/upload', controller: :my_company_files, action: 'upload'
-
   namespace :api, defaults: { format: 'json' } do
     namespace :v2 do
       resources :users, only: %w() do
@@ -188,7 +172,6 @@ Rails.application.routes.draw do
           get :last_operation
         end
       end
-
     end
 
     namespace :v1 do

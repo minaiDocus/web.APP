@@ -96,9 +96,9 @@ class ConfigurationSteps{
 jQuery(function() {
   let main = new ConfigurationSteps();
 
-  AppListenTo('retriever_delete_connection', (e)=>{ main.delete_connection(e.detail.id) });
+  AppListenTo('retriever_delete_connection',  (e)=>{ main.delete_connection(e.detail.id) });
   AppListenTo('retriever_trigger_connection', (e)=>{ main.trigger_connection(e.detail.id) });
-  AppListenTo('retriever_edit_connection',            (e)=>{ main.edit_retriever(e.detail.retriever); });
+  AppListenTo('retriever_edit_connection',    (e)=>{ main.edit_retriever(e.detail.retriever); });
 
   AppListenTo('add_retriever_primary_action',   (e)=>{ main.primary_action(); });
   AppListenTo('add_retriever_secondary_action', (e)=>{ main.secondary_action(); });

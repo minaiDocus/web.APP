@@ -180,8 +180,8 @@ class Retrievers::MainController < RetrieverController
   end
 
   def get_banking_provider
-    @is_budgea = @account && @account.options.banking_provider == 'budget_insight'
-    @is_bridge = @account && @account.options.banking_provider == 'bridge'
+    @is_budgea = (@account && @account.options.banking_provider == 'budget_insight') || @user.organization.banking_provider == 'budget_insight'
+    @is_bridge = (@account && @account.options.banking_provider == 'bridge') || @user.organization.banking_provider == 'bridge'
 
     @is_specific_mission = @user.organization.specific_mission
   end

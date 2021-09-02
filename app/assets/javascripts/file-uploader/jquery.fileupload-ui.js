@@ -562,8 +562,6 @@
     _forceHandler: function (e) {
       e.preventDefault();
 
-      console.log('force handler');
-
       if(confirm("Voulez vous vraiment forcer l'intégration du document?")){
         console.log('confirm');
         self = $(e.currentTarget);

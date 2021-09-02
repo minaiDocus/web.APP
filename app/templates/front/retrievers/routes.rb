@@ -18,6 +18,12 @@ Rails.application.routes.draw do
     post 'retriever/trigger', to: "configuration_steps#trigger", as: 'retriever_trigger'
     post 'retriever/update_budgea_error_message', to: "configuration_steps#update_budgea_error_message", as: 'retriever_update_budgea_error_message'
 
+    get  'retriever/callback', to: 'budgea_callbacks#callback', as: 'retriever_callback'
+    post 'retriever/callback', to: 'budgea_callbacks#callback'
+    post 'retriever/fetch_webauth_url', to: 'budgea_callbacks#fetch_webauth_url', as: 'retriever_fetch_webauth_url'
+    post 'retriever/user_synced', to: 'budgea_callbacks#user_synced', as: 'retriever_user_synced'
+    post 'retriever/user_deleted', to: 'budgea_callbacks#user_deleted', as: 'retriever_user_deleted'
+    post 'retriever/connection_deleted', to: 'budgea_callbacks#connection_deleted', as: 'retriever_connection_deleted'
 
     get 'bridge/callback',   to: 'bridge#callback', as: 'bridge_callback'
     get 'bridge/setup_item', to: 'bridge#setup_item', as: 'bridge_setup'

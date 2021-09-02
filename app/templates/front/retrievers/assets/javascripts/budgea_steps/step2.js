@@ -74,10 +74,12 @@ class ConfigurationStep2{
       let oauth_presence = this.form.find('.oauth').val();
 
       if(oauth_presence){
-        // if(this.budgea_id > 0)
-        //   Idocus.budgeaApi.webauth(@budgea_id, false)
-        // else
-        //   Idocus.budgeaApi.webauth(@connector.get('id'), true)
+        let account_id = $('#account_id').val();
+
+        if(this.budgea_id > 0)
+          this.mainConfig.budgeaApi.webauth(account_id, this.budgea_id, false);
+        else
+          this.mainConfig.budgeaApi.webauth(account_id, this.mainConfig.current_connector['id'], true);
       }else{
         let all_datas   = this.mainConfig.applicationJS.serializeToJson( this.form );
         let data_remote = JSON.parse(JSON.stringify(all_datas)); //Cloning all_datas

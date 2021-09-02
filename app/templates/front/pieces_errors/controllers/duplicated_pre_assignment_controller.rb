@@ -21,26 +21,24 @@ class PiecesErrors::DuplicatedPreAssignmentController < FrontController
     preseizures = Pack::Report::Preseizure.unscoped.blocked_duplicates.where(user_id: account_ids, id: params[:duplicate_ids])
 
     if !preseizures.empty?
-      success = true
       if params.keys.include?('unblock') && !params.keys.include?('approve_block')
         count = PreAssignment::Unblock.new(preseizures.map(&:id), @user).execute
 
-        message = '1 pré-affectation a été débloqué.' if count == 1
-        message ||= "#{count} pré-affectations ont été débloqués."
+        json_flash[:success] = '1 pré-affectation a été débloqué.' if count == 1
+        json_flash[:success] ||= "#{count} pré-affectations ont été débloqués."
       elsif params.keys.include?('approve_block') && !params.keys.include?('unblock')
         count = preseizures.update_all(marked_as_duplicate_at: Time.now, marked_as_duplicate_by_user_id: @user.id)
 
         if count == 1
-          message = '1 pré-affectation a été marqué comme étant un doublon.'
+          json_flash[:success] = '1 pré-affectation a été marqué comme étant un doublon.'
         end
-        message ||= "#{count} pré-affectations ont été marqués comme étant des doublons."
+        json_flash[:success] ||= "#{count} pré-affectations ont été marqués comme étant des doublons."
       end
     else
-      success = false
-      message = 'Vous devez sélectionner au moins une pré-affectation.'
+      json_flash[:error] = 'Vous devez sélectionner au moins une pré-affectation.'
     end
 
-    render json: { success: success, message: message }, state: 200
+    render json: { json_flash: json_flash }, state: 200
   end
 
   private

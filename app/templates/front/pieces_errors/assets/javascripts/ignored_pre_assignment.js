@@ -27,7 +27,7 @@ class IgnoredPreAssignment{
                           'dataType': 'json'
                         };
 
-      this.main.applicationJS.parseAjaxResponse(ajax_params).then((e)=>{ this.main.load_datas('ignored-pre-assignment'); this.main.applicationJS.noticeFlashMessageFrom(null, e.message); });
+      this.main.applicationJS.parseAjaxResponse(ajax_params).then((e)=>{ this.main.load_datas('ignored-pre-assignment'); });
     }
   }
 }

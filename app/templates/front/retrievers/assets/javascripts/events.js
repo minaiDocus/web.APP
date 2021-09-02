@@ -11,7 +11,7 @@ function bind_all_events(){
 
   $('.retriever_actions .edit_connection').unbind('click');
   $('.retriever_actions .edit_connection').bind('click', function(e){
-    if($(this).data('banking_provider') == 'budgea'){
+    if($(this).data('banking-provider') == 'budgea'){
       AppEmit('retriever_edit_connection', { retriever: $(this).data('retriever') });
     }
     else{

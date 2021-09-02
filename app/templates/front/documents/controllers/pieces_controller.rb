@@ -124,6 +124,22 @@ class Documents::PiecesController < FrontController
     end
   end
 
+  # GET /account/documents/temp_documents/:id/download/:style
+  def get_temp_document_file
+    auth_token = params[:token]
+    auth_token ||= request.original_url.partition('token=').last
+
+    @temp_document = TempDocument.find(params[:id])
+    filepath = @temp_document.cloud_content_object.reload.path(params[:style].presence || :original)
+
+    if File.exist?(filepath.to_s) && (@temp_document.user.in?(accounts) || current_user.try(:is_admin) || auth_token == @temp_document.get_token)
+      mime_type = File.extname(filepath) == '.png' ? 'image/png' : 'application/pdf'
+      send_file(filepath, type: mime_type, filename: @temp_document.cloud_content_object.filename, x_sendfile: true, disposition: 'inline')
+    else
+      render body: nil, status: 404
+    end
+  end
+
   private
 
   def options

@@ -150,6 +150,18 @@ class ApplicationJS {
     }
   }
 
+  // Type must be 'show' or 'hide'
+  toggleLoading(type='show'){
+    if(type == 'show'){
+      $('div.loading_box').addClass('force');
+      $('div.loading_box').removeClass('hide');
+    }
+    else{
+      $('div.loading_box').removeClass('force');
+      $('div.loading_box').addClass('hide');
+    }
+  }
+
   parseAjaxResponse(params={}, beforeUpdateContent=function(e){}, afterUpdateContent=function(e){}){
     var self = this
 
@@ -163,7 +175,10 @@ class ApplicationJS {
         contentType: params.contentType || 'application/x-www-form-urlencoded; charset=UTF-8',
         dataType: params.dataType || 'html',
         beforeSend: function(){
-          $('div.loading_box').removeClass('hide');
+          if(params.no_loading !== true){
+            if( !($('div.loading_box').hasClass('force')) )
+              $('div.loading_box').removeClass('hide');
+          }
         },
         success: function(result) {
           if (beforeUpdateContent) { beforeUpdateContent(); }
@@ -192,7 +207,10 @@ class ApplicationJS {
             success(result);
 
           window.setTimeout((e)=>{ 
-            $('div.loading_box').addClass('hide');
+            if(params.no_loading !== true){
+              if( !($('div.loading_box').hasClass('force')) )
+                $('div.loading_box').addClass('hide');
+            }
             bind_globals_events();
           }, 1000);
         },
@@ -203,7 +221,10 @@ class ApplicationJS {
             success(result);
 
           window.setTimeout((e)=>{
-            $('div.loading_box').addClass('hide');
+            if(params.no_loading !== true){
+              if( !($('div.loading_box').hasClass('force')) )
+                $('div.loading_box').addClass('hide');
+            }
             bind_globals_events();
           }, 1000);
         }

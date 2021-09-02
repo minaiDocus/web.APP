@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 class OrganizationController < ApplicationController
-  include ConfigurationSteps
-
   before_action :is_organization_layout
   before_action :login_user!
   before_action :load_user_and_role

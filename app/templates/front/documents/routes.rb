@@ -26,6 +26,7 @@ Rails.application.routes.draw do
     get 'preseizures/:id', to: 'preseizures#show', as: 'preseizures_details'
 
     get 'account/documents/pieces/:id/download/(:style)', to: 'pieces#get_piece_file', as: 'get_piece_file'
+    get 'account/documents/temp_documents/:id/download/(:style)', to: 'pieces#get_temp_document_file', as: 'get_temp_document_file'
   end
   
   namespace :documents do

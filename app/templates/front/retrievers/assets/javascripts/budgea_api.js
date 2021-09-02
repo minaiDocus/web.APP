@@ -610,23 +610,15 @@ class BudgeaApi{
     });
   };
 
-  webauth(id, is_new) {
-    var error, field_ido_capabilities, field_ido_custom_name, ido_connector_id, ido_connector_name, state, success, url, user_id;
-    if ($('#account_id_' + id).length > 0) {
-      user_id = $('#account_id_' + id).val();
-      field_ido_capabilities = $('#field_ido_capabilities_' + id);
-      ido_connector_id = $('#ido_connector_id_' + id);
-      field_ido_custom_name = $('#field_ido_custom_name_' + id);
-      ido_connector_name = $('#ido_connector_name_' + id);
-    } else {
-      user_id = $('#account_id').val();
-      field_ido_capabilities = $('#field_ido_capabilities');
-      ido_connector_id = $('#ido_connector_id');
-      field_ido_custom_name = $('#field_ido_custom_name');
-      ido_connector_name = $('#ido_connector_name');
-    }
-    state = btoa("{ \"user_id\": \"" + user_id + "\", \"ido_capabilities\": \"" + (field_ido_capabilities.val().replace('"', '\'')) + "\", \"ido_connector_id\": \"" + (ido_connector_id.val().replace('"', '\'')) + "\", \"ido_custom_name\": \"" + (field_ido_custom_name.val().replace('"', '\'')) + "\", \"ido_connector_name\": \"" + (ido_connector_name.val().replace('"', '\'')) + "\" }");
-    url = '/retriever/fetch_webauth_url';
+  webauth(user_id, id, is_new) {
+    var error, field_ido_capabilities, field_ido_custom_name, ido_connector_id, ido_connector_name, state, success;
+
+    ido_capabilities = $('#ido_capabilities');
+    ido_connector_id = $('#ido_connector_id');
+    ido_custom_name = $('#ido_custom_name');
+    ido_connector_name = $('#ido_connector_name');
+    state = btoa("{ \"user_id\": \"" + user_id + "\", \"ido_capabilities\": \"" + (ido_capabilities.val().replace('"', '\'')) + "\", \"ido_connector_id\": \"" + (ido_connector_id.val().replace('"', '\'')) + "\", \"ido_custom_name\": \"" + (ido_custom_name.val().replace('"', '\'')) + "\", \"ido_connector_name\": \"" + (ido_connector_name.val().replace('"', '\'')) + "\" }");
+
     error = function(response) {
       $('#budgea_information_fields .feedparagraph').remove();
       $('#budgea_information_fields .actions').show();
@@ -647,10 +639,11 @@ class BudgeaApi{
         });
       }
     };
+
     $('#budgea_information_fields .actions').hide();
     $('#budgea_information_fields .actions').after('<p class="feedparagraph">Redirection en cours ... </p>');
-    return this.local_fetch({
-      url: url,
+    this.local_fetch({
+      url: '/retriever/fetch_webauth_url',
       type: 'POST',
       data: {
         id: id,
@@ -685,10 +678,12 @@ class BudgeaApi{
       data: params,
       type: method,
       beforeSend: function(){
-        $('div.loading_box').removeClass('hide');
+        if( !($('div.loading_box').hasClass('force')) )
+          $('div.loading_box').removeClass('hide');
       },
       success: function(data) {
-        $('div.loading_box').addClass('hide');
+        if( !($('div.loading_box').hasClass('force')) )
+          $('div.loading_box').addClass('hide');
 
         if (data.success) {
           return onSuccess(data);
@@ -697,7 +692,8 @@ class BudgeaApi{
         }
       },
       error: function(data) {
-        $('div.loading_box').addClass('hide');
+        if( !($('div.loading_box').hasClass('force')) )
+          $('div.loading_box').addClass('hide');
         return onError("Service interne non disponible");
       }
     });
@@ -744,7 +740,7 @@ class BudgeaApi{
       }
     };
     xhr.onload = function() {
-      setTimeout(function(){ $('div.loading_box').addClass('hide'); }, 3000);
+      setTimeout(function(){ if( !($('div.loading_box').hasClass('force')) ){ $('div.loading_box').addClass('hide'); } }, 3000);
       var data_collect, error_message, message, response, success;
       if ([200, 202, 204, 400, 403, 500, 503].includes(xhr.status)) {
         try {
@@ -815,7 +811,8 @@ class BudgeaApi{
       }
     };
     xhr.onerror = function() {
-      $('div.loading_box').addClass('hide');
+      if( !($('div.loading_box').hasClass('force')) )
+        $('div.loading_box').addClass('hide');
       return parse_error(xhr.status);
     };
     auth_params = {
@@ -827,7 +824,8 @@ class BudgeaApi{
     }
     body = JSON.stringify(body);
 
-    $('div.loading_box').removeClass('hide');
+    if( !($('div.loading_box').hasClass('force')) )
+      $('div.loading_box').removeClass('hide');
     return xhr.send(body);
   };
 

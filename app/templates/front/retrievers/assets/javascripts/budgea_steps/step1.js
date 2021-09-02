@@ -23,7 +23,7 @@ class ConfigurationStep1{
 
     if(this.retriever['id'] && this.retriever['id'] > 0){
       current_account = this.retriever['user_id'];
-      $('#account_id').val(current_account);
+      $('#account_id').val(current_account).change();
 
       $('.step1 #connector-search-name').val('');
       this.mainConfig.main_modal.find('.step1 select#connectors-list').attr('disabled', 'disabled');
@@ -36,6 +36,7 @@ class ConfigurationStep1{
     if( current_account != 'all' && parseInt(current_account) > 0 ){
       this.mainConfig.main_modal.modal('show');
 
+      this.mainConfig.applicationJS.toggleLoading('show');
       this.mainConfig.budgeaApi.get_user_tokens()
                                 .then((e)=>{
                                   this.fetch_connectors();
@@ -110,6 +111,8 @@ class ConfigurationStep1{
       }
     });
 
+    this.mainConfig.applicationJS.toggleLoading('hide');
+
     select.html(options);
     $('.step1 .connectors-size').text(total_size);
 
@@ -130,6 +133,10 @@ class ConfigurationStep1{
 
     html += '</ul>'
 
+    //Add field exception for Paypal API REST
+    if(this.mainConfig.current_connector['name'] == 'Paypal REST API'){
+      this.mainConfig.current_connector['fields'] = [{ label: '', name: 'paypal_oauth', value: 'true', regex: null, required: false, type: "oauth" }];
+    }
     console.log(this.mainConfig.current_connector);
 
     this.mainConfig.main_modal.find('.step1 .urls-box').html(html);
