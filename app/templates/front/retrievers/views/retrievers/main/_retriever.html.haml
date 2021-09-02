@@ -25,7 +25,7 @@
     %hr
     .row.retriever_actions
       .col-md-9
-        %span.badge{ class: "badge-#{badge_type_of(retriever)}" }= state_of(retriever)
+        %span.badge.semibold{ class: "badge-#{badge_type_of(retriever)}" }= state_of(retriever)
       .col-md-3.text-end
         %span.action-group.ms-1.pointer.retriever_infos{ title: "Créer le : #{retriever.created_at.strftime('%d-%m-%Y %H:%M:%S')} / Modifier le: #{retriever.updated_at.strftime('%d-%m-%Y %H:%M:%S')}"}= glyphicon('info', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
         %span.action-group.ms-1.pointer.trigger_connection{ title: 'Synchronisation', data: { id: retriever.id }}= glyphicon('loop-circular', { size: '20', color:'rgba(26, 26, 26, 0.32);'})

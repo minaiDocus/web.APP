@@ -8,13 +8,13 @@
         %form#filter-operations-form
           .form-group
             %label.semibold Date opération
-            .select-container.no-padding.w-100.date.date-picker
-              %input{ name: 'banking_operation_contains[date]', type: :text }
+            .select-container.no-padding.w-100
+              %input.date.daterange#operation-date{ name: 'banking_operation_contains[date]', type: :text }
 
           .form-group
             %label.semibold Date valeur
-            .select-container.no-padding.w-100.date.date-picker
-              %input{ name: 'banking_operation_contains[value_date]', type: :text }
+            .select-container.no-padding.w-100
+              %input.date.daterange#value-date{ name: 'banking_operation_contains[value_date]', type: :text }
 
           .form-group
             %label.semibold Catégorie
@@ -53,8 +53,8 @@
 
           .form-group
             %label.semibold Date
-            .select-container.no-padding.w-100.date.date-picker
-              %input{ name: 'document_contains[date]', type: :text }
+            .select-container.no-padding.w-100
+              %input.date.daterange#document-date{ name: 'document_contains[date]', type: :text }
 
           .form-group
             %label.semibold Nom original

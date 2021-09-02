@@ -1,9 +1,19 @@
 function bind_all_events(){
+
+
   $('.retriever-filter-historic').unbind('click')
   $(".retriever-filter-historic").bind('click',function(e) {
     e.stopPropagation()
 
     $('#filter-'+ $(".tab-pane.active").attr('id')).modal('show');
+
+    $('#operation-date.daterange, #value-date.daterange, #document-date.daterange').daterangepicker({     
+      "autoApply": true,
+      linkedCalendars: false,
+      locale: {
+        format: 'DD/MM/YYYY'
+      }
+    });
   });
 
   $('select#account_id').unbind('change');
