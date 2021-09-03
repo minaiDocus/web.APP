@@ -6,26 +6,26 @@
         %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
       .modal-body.no-padding
 
-%footer.bg-dark.navbar-fixed-bottom.p-2
+%footer.bg-dark.navbar-fixed-bottom.p-3
   .row
-    .col-md-6.text-start.text-white
-      .comm
-        %span.semibold Service Commercial :
-        %span 01 84 250 251
-      .customer
-        %span.semibold Support Client :
-        %span 0 895 233 013
-        %span.ms-1 &#124;
-        %span.ms-1 8H à 12H - 13H à 17H
-        %span.ms-1
-          %i (Service 0.80€ + prix d'appel)
-    .col-md-3
-      %p.m-0.text-left.text-white.p-2
+    .col-md-5.text-start.text-white
+      .contact-number
+        .commercial-contact.d-inline
+          %span.semibold Service Commercial :
+          %span.open-time.semibold 01 84 250 251
+        .client-contact.d-inline
+          &#124;
+          %span.semibold.mt-2.d-inline  Support Client :
+          .number.d-inline
+            = image_tag('application/contact_number.png', alt: 'contact', class: 'contact_number')
+            %span.open-time.semibold 8h à 12h - 13h à 17h
+    .col-md-4.text-center
+      %p.m-0.text-white
         = t('footer.copyright_text')
         &copy;
         %span.semibold= Time.now.strftime('%Y')
     .col-md-3.network-link
-      %p.m-0.text-center.text-white.p-2
+      %p.m-0.text-center.text-white
         %a.facebook.ms-4{ href: 'https://www.facebook.com/idocus/', target: '_blank' }
           %svg{:fill => "none", :height => "16", :viewbox => "0 0 9 16", :width => "9", :xmlns => "http://www.w3.org/2000/svg"}
             %path{"clip-rule" => "evenodd", :d => "M5.73256 3.86286C5.73256 3.14286 5.80456 2.75771 6.89256 2.75771H8.34742V0H6.01942C3.22513 0 2.23999 1.33829 2.23999 3.58743V5.24229H0.497131V8H2.23999V16H5.72799V8H8.05485L8.36342 5.24229H5.72799L5.73256 3.86286Z", :fill => "white", "fill-rule" => "evenodd"}
