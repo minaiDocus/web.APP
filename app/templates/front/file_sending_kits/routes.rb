@@ -9,6 +9,7 @@ Rails.application.routes.draw do
 		    post 'generate',        on: :member
 		    get  'customer_labels', on: :member
 		    get  'workshop_labels', on: :member
+		    get  'get_logo',        on: :member
 		  end
 		end
   end

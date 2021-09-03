@@ -97,7 +97,7 @@ class AccountNumberRule{
         'data': { account_list: account_list, account_validation: account_validation },
         'type': 'POST',
         'dataType': 'json',
-      }).then((e)=>{ /*this.applicationJS.noticeFlashMessageFrom(null, e.message);*/ })
+      }).then((e)=>{ /*this.applicationJS.noticeFlashMessageFrom(null, e.message);*/ });
   }
 }
 
