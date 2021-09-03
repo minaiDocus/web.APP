@@ -1,12 +1,3 @@
-//= require jquery
-//= require jquery_ujs
-//= require jquery-ui
-//= require chart.min
-//= require bootstrap
-//= require searchable-option-list
-//= require jquery.livequery.min
-
-//***GLOBALS***
 class Test{
   constructor(){
     console.log('yes')

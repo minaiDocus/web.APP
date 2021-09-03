@@ -8,7 +8,5 @@ Rails.application.routes.draw do
 	      post 'create_multiple', on: :collection
 	    end
 	  end
-
-	  get '/paper_set_orders', to: 'main#index'
   end
 end

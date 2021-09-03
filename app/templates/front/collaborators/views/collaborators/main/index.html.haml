@@ -9,10 +9,10 @@
           Liste des collaborateurs
           %span.badge.badge-secondary.badge-sm.regular= @members.count
       .col-md-2.no-padding
-        .input-group.mb-3
+        .input-group.mb-3.w-100
           %span.input-group-text#basic-addon1= glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })          
           %input.form-control{ type: :text, "aria-label" => "Rechercher", "aria-describedby" => "basic-addon1", placeholder: 'Rechercher'  }    
-      .col-md-3.text-end.collaborator-column
+      .col-md-4.text-end.collaborator-column
         %button.btn.btn-primary.add-collaborator.member.add-or-edit.semibold
           %span.me-3= glyphicon('plus', { size: '14', color: '#FFFF'})
           %span Ajouter un collaborateur

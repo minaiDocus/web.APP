@@ -30,7 +30,7 @@ class OrganizationController < ApplicationController
 
   def load_organization
     if @user.admin?
-      @organization = ::Organization.find organization_id
+      @organization = ::Organization.find organization_id if organization_id
     elsif organization_id.present?
       @membership = Member.find_by!(user_id: @user.id, organization_id: organization_id.to_i)
       @organization = @membership.organization

@@ -1,6 +1,3 @@
-//= require jquery
-//= require searchable-option-list
-
 function bind_favorite_clicks(){
   $('.favorite-link').unbind('click');
   $('.favorite-link').bind('click',function(e) {

@@ -194,7 +194,7 @@ module ApplicationHelper
     if column.to_s == sort_column
       direction = sort_direction == 'asc' ? 'desc' : 'asc'
       icon_direction = sort_direction == 'asc' ? 'bottom' : 'top'
-      icon = glyphicon('chevron-'+icon_direction) + " "
+      icon = glyphicon('chevron-'+icon_direction, size: '12') + " "
     end
 
     options = params.merge(contains)
