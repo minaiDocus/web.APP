@@ -2,7 +2,6 @@
 class CsvDescriptors::MainController < OrganizationController
   before_action :verify_rights
   before_action :load_customer
-  before_action :redirect_to_current_step
   before_action :load_csv_descriptor
 
   prepend_view_path('app/templates/front/csv_descriptors/views')
@@ -25,8 +24,6 @@ class CsvDescriptors::MainController < OrganizationController
         flash[:success] = 'Modifié avec succès.'
 
         redirect_to organization_customer_path(@organization, @customer, tab: 'csv_descriptor')
-      else
-        next_configuration_step
       end
     else
       render 'edit'

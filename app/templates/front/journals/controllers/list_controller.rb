@@ -2,7 +2,6 @@
 
 class Journals::ListController < OrganizationController
   before_action :load_customer
-  before_action :redirect_to_current_step
 
   # GET /organizations/:organization_id/customers/:customer_id/list_journals
   def index

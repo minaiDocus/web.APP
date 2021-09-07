@@ -59,7 +59,6 @@ Rails.application.routes.draw do
   front_draw('accounting_plans')
   front_draw('vat_accounts')
   front_draw('csv_descriptors')
-  front_draw('use_csv_descriptors')
   front_draw('subscriptions')
   front_draw('group_organizations')
   front_draw('organizations')

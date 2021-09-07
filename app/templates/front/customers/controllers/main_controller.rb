@@ -5,7 +5,6 @@ class Customers::MainController < OrganizationController
   before_action :load_customer, except: %w[index info form_with_first_step new create search]
   before_action :verify_rights, except: 'index'
   before_action :verify_if_customer_is_active, only: %w[edit update edit_period_options update_period_options edit_knowings_options update_knowings_options edit_compta_options update_compta_options]
-  before_action :redirect_to_current_step
   before_action :verify_if_account_can_be_closed, only: %w[account_close_confirm close_account]
 
   prepend_view_path('app/templates/front/customers/views')
@@ -154,7 +153,7 @@ class Customers::MainController < OrganizationController
 
   def update_softwares_selection
     software = @customer.create_or_update_software({columns: user_params[softwares_attributes.to_sym], software: params[:part]})
-    next_configuration_step
+    # TODO ... REMOVE STEP
   end
 
   # GET /account/organizations/:organization_id/customers/:id/edit_exact_online
@@ -181,7 +180,7 @@ class Customers::MainController < OrganizationController
           redirect_to organization_customer_path(@organization, @customer, tab: 'exact_online')
         end
       else
-        next_configuration_step
+        # TODO ... REMOVE STEP
       end
     else
       flash[:error] = 'Impossible de modifier'
@@ -210,7 +209,7 @@ class Customers::MainController < OrganizationController
 
         redirect_to organization_customer_path(@organization, @customer, tab: 'my_unisoft')
       else
-        next_configuration_step
+        # TODO ... REMOVE STEP
       end
     else
       flash[:error] = 'Impossible de modifier'
@@ -237,7 +236,7 @@ class Customers::MainController < OrganizationController
 
         redirect_to organization_customer_path(@organization, @customer, tab: 'ibiza')
       else
-        next_configuration_step
+        # TODO ... REMOVE STEP
       end
     else
       flash[:error] = 'Impossible de modifier'
@@ -264,7 +263,7 @@ class Customers::MainController < OrganizationController
         flash[:success] = 'Modifié avec succès.'
         redirect_to organization_customer_path(@organization, @customer, tab: 'compta')
       else
-        next_configuration_step
+        # TODO ... REMOVE STEP
       end
     else
       render 'edit_configuration_options'
@@ -282,7 +281,7 @@ class Customers::MainController < OrganizationController
         flash[:success] = 'Modifié avec succès.'
         redirect_to organization_customer_path(@organization, @customer, tab: 'period_options')
       else
-        next_configuration_step
+        # TODO ... REMOVE STEP
       end
     else
       render 'edit_period_options'
@@ -300,7 +299,7 @@ class Customers::MainController < OrganizationController
 
         redirect_to organization_customer_path(@organization, @customer, tab: 'ged')
       else
-        next_configuration_step
+        # TODO ... REMOVE STEP
       end
     else
       render 'edit_knowings_options'
@@ -318,7 +317,7 @@ class Customers::MainController < OrganizationController
 
         redirect_to organization_customer_path(@organization, @customer, tab: 'compta')
       else
-        next_configuration_step
+        # TODO ... REMOVE STEP
       end
     else
       render 'edit_compta_options'

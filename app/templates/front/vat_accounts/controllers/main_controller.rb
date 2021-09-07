@@ -2,7 +2,6 @@
 class VatAccounts::MainController < OrganizationController
   before_action :load_customer
   before_action :verify_if_customer_is_active
-  before_action :redirect_to_current_step
   before_action :load_accounting_plan
   before_action :verify_rights
 

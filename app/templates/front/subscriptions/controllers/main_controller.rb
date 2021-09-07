@@ -3,7 +3,6 @@ class Subscriptions::MainController < OrganizationController
   before_action :verify_rights
   before_action :load_customer
   before_action :verify_if_customer_is_active
-  before_action :redirect_to_current_step
   before_action :load_subscription
 
   prepend_view_path('app/templates/front/subscriptions/views')

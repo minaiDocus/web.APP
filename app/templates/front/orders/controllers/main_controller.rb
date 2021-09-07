@@ -2,7 +2,6 @@
 class Orders::MainController < OrganizationController
   before_action :load_customer
   before_action :verify_rights
-  before_action :redirect_to_current_step
   before_action :load_order, only: %w[edit update destroy]
   before_action :verify_editability, only: %w[edit update destroy]
 
@@ -57,8 +56,6 @@ class Orders::MainController < OrganizationController
                                                                             end} iDocus'Box est enregistrée. Vous pouvez la modifier/annuler pendant encore 24 heures."
 
         redirect_to organization_customer_path(@organization, @customer, tab: 'orders')
-      else
-        next_configuration_step
       end
     elsif @order.paper_set? && Order::PaperSet.new(@customer, @order).execute
       copy_back_address
@@ -67,12 +64,10 @@ class Orders::MainController < OrganizationController
         flash[:success] = 'Votre commande de Kit envoi courrier a été prise en compte.'
 
         redirect_to organization_customer_path(@organization, @customer, tab: 'orders')
-      else
-        next_configuration_step
       end
     else
       if @order.period_duration == 3 && !@customer.configured?
-        next_configuration_step
+        redirect_to organization_customer_path(@organization, @customer)
       else
         render :new
       end
@@ -99,7 +94,7 @@ class Orders::MainController < OrganizationController
         flash[:success] = 'Votre commande a été modifiée avec succès.'
         redirect_to organization_customer_path(@organization, @customer, tab: 'orders')
       else
-        next_configuration_step
+        redirect_to organization_customer_path(@organization, @customer)
       end
     else
       render :edit

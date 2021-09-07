@@ -3,7 +3,6 @@
 class Customers::AddressesController < OrganizationController
   before_action :load_customer
   before_action :verify_if_customer_is_active
-  before_action :redirect_to_current_step
   before_action :load_address, only: %w[edit update destroy]
 
   prepend_view_path('app/templates/front/customers/views')

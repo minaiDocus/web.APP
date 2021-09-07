@@ -3,7 +3,6 @@
 class CsvDescriptors::UseController < OrganizationController
   before_action :verify_rights
   before_action :load_customer
-  before_action :redirect_to_current_step
 
   prepend_view_path('app/templates/front/csv_descriptors/views')
 
@@ -12,7 +11,7 @@ class CsvDescriptors::UseController < OrganizationController
 
   def update
     if @customer.update(user_params)
-      next_configuration_step
+      redirect_to organization_customer_path(@organization, @customer, tab: 'csv-descriptor')
     else
       render :edit
     end

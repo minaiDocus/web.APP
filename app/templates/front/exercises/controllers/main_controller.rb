@@ -3,7 +3,6 @@ class Exercises::MainController < OrganizationController
   before_action :load_customer
   before_action :verify_rights
   before_action :verify_access
-  before_action :redirect_to_current_step
   before_action :load_exercise, except: %w[index new create]
 
   prepend_view_path('app/templates/front/exercises/views')
