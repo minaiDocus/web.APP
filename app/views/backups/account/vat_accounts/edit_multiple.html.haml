@@ -21,7 +21,7 @@
     .card
       .card-header
         %h3
-          Édition des 
+          Edition des 
           = link_to 'TVA', account_organization_customer_accounting_plan_vat_accounts_path(@organization, @customer), class: 'fs-origin'
           du client : 
           = link_to @customer.info, account_organization_customer_path(@organization, @customer, tab: 'accounting_plan'), class: 'fs-origin'

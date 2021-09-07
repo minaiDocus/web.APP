@@ -54,7 +54,7 @@
                   %td
                     = link_to glyphicon('plus'), new_account_organization_account_number_rule_path(@organization, template: rule), class: 'btn btn-light', title: 'Créer une règle en se basant sur cette règle'
                     = link_to glyphicon('eye'), account_organization_account_number_rule_path(@organization, rule), class: 'btn btn-light', title: 'Voir'
-                    = link_to glyphicon('pencil'), edit_account_organization_account_number_rule_path(@organization, rule), class: 'btn btn-light', title: 'Éditer'
+                    = link_to glyphicon('pencil'), edit_account_organization_account_number_rule_path(@organization, rule), class: 'btn btn-light', title: 'Editer'
                     = link_to glyphicon('x'), account_organization_account_number_rule_path(@organization, rule), class: 'btn btn-light', method: :delete, data: { confirm: t('actions.confirm') }, title: 'Supprimer'
         = render partial: 'shared/list_options', locals: { collection: @account_number_rules }
     = render partial: 'sidebar'

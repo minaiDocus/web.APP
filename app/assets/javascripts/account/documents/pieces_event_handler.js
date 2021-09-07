@@ -62,8 +62,8 @@ var initEventOnPiecesRefresh = function(){
       // $('.composer').show();
       $(".composer").hide()
 
-    $(".compta_analysis_Édition, .delete_piece_composition").show();
-    $(".delete_piece_composition, .piece_tag, .compta_analysis_Édition, .composer, .download").addClass('border_piece_action');
+    $(".compta_analysis_edition, .delete_piece_composition").show();
+    $(".delete_piece_composition, .piece_tag, .compta_analysis_edition, .composer, .download").addClass('border_piece_action');
   });
 
   $(".do-unselectAllPages").unbind('click');
@@ -76,7 +76,7 @@ var initEventOnPiecesRefresh = function(){
       removePage($(li));
     });
     window.preseizuresSelected = [];
-    $(".compta_analysis_Édition, .composer, .delete_piece_composition").hide();
+    $(".compta_analysis_edition, .composer, .delete_piece_composition").hide();
     $(".delete_piece_composition, .piece_tag, .composer, .do-deliverAllPreseizure, .download").removeClass('border_piece_action');
     $(".do-exportSelectedPreseizures, .do-deliverAllPreseizure, .tip_edit_multiple, .do-exportSelectedPreseizures").removeClass('border_action_preseizure');
     $(".content_preseizure, .tab").removeClass('preseizure_selected active');
@@ -278,7 +278,7 @@ $('#uploadDialog').on('hidden.bs.modal', function() {
   clearInterval(lock_or_unlock_file_upload_params_interval);
 });
 
-$('#comptaAnalysisÉdition').on('show.bs.modal', function() {
+$('#comptaAnalysisEdition').on('show.bs.modal', function() {
   if(window.analytic_target_form != '#fileupload')
   {
     $('#analysis_validate').removeClass('hide');
@@ -291,8 +291,8 @@ $('#comptaAnalysisÉdition').on('show.bs.modal', function() {
   }
 });
 
-$('#comptaAnalysisÉdition').on('hidden.bs.modal', function() {
-  $("#comptaAnalysisÉdition .length_alert").html('');
+$('#comptaAnalysisEdition').on('hidden.bs.modal', function() {
+  $("#comptaAnalysisEdition .length_alert").html('');
 
   if(window.analytic_target_form == '#fileupload'){
     $("#uploadDialog .analytic_resume_box").html(window.getAnalyticsResume());
@@ -308,11 +308,11 @@ $('#analysis_validate').on('click', function(){
 
   if (document_ids.length <= 0)
   {
-    $("#comptaAnalysisÉdition .length_alert").html("<div class='alert alert-danger'><a class='close' data-dismiss='alert'> × </a><span>Veuillez sélectionner au moins un document.</span></div>");
+    $("#comptaAnalysisEdition .length_alert").html("<div class='alert alert-danger'><a class='close' data-dismiss='alert'> × </a><span>Veuillez sélectionner au moins un document.</span></div>");
   }
   else 
   {
-    var data = $('#comptaAnalysisÉdition #compta_analytic_form_modal').serialize()
+    var data = $('#comptaAnalysisEdition #compta_analytic_form_modal').serialize()
     data += '&document_ids='+document_ids.join(',')
     $.ajax({
       url: "/account/documents/compta_analytics/update_multiple",
@@ -321,11 +321,11 @@ $('#analysis_validate').on('click', function(){
       type: "POST",
       beforeSend: function() {
         logBeforeAction("Traitement en cours");
-        $('#comptaAnalysisÉdition .analytic_validation_loading').removeClass('hide');
+        $('#comptaAnalysisEdition .analytic_validation_loading').removeClass('hide');
       },
       success: function(data){
         logAfterAction();
-        $('#comptaAnalysisÉdition .analytic_validation_loading').addClass('hide');
+        $('#comptaAnalysisEdition .analytic_validation_loading').addClass('hide');
 
         full_message = ""
 
@@ -336,15 +336,15 @@ $('#analysis_validate').on('click', function(){
         if(data.error_message.length > 0) {
           full_message += "<div class='alert alert-danger'><a class='close' data-dismiss='alert'> × </a><span>" + data.error_message + "</span></div>";
         } else {
-          setTimeout(function(){ $('#comptaAnalysisÉdition').modal('hide') }, 2000)
+          setTimeout(function(){ $('#comptaAnalysisEdition').modal('hide') }, 2000)
         }
 
-        $("#comptaAnalysisÉdition .length_alert").html(full_message);
+        $("#comptaAnalysisEdition .length_alert").html(full_message);
       },
       error: function(data){
         logAfterAction();
-        $('#comptaAnalysisÉdition .analytic_validation_loading').addClass('hide');
-        $("#comptaAnalysisÉdition .length_alert").html("<div class='alert alert-danger'><a class='close' data-dismiss='alert'> × </a><span> Une erreur est survenue et l'administrateur a été prévenu.</span></div>");
+        $('#comptaAnalysisEdition .analytic_validation_loading').addClass('hide');
+        $("#comptaAnalysisEdition .length_alert").html("<div class='alert alert-danger'><a class='close' data-dismiss='alert'> × </a><span> Une erreur est survenue et l'administrateur a été prévenu.</span></div>");
       }
     });
   }

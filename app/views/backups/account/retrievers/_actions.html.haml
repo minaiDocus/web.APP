@@ -3,7 +3,7 @@
   - if (retriever.ready? || retriever.waiting_additionnal_info?) || (retriever.error? && !retriever.budgea_error_message.in?(['SCARequired', 'decoupled', 'webauthRequired']))
     - if retriever.budgea_id.present?
       = retriever_presenter.action_link
-    = link_to glyphicon('pencil'), edit_account_retriever_path(retriever), title: 'Éditer', rel: 'tooltip', class: 'btn btn-light'
+    = link_to glyphicon('pencil'), edit_account_retriever_path(retriever), title: 'Editer', rel: 'tooltip', class: 'btn btn-light'
   - if retriever.ready? || retriever.error? || retriever.unavailable? || retriever.waiting_additionnal_info? || retriever.destroying?
     = link_to glyphicon('x'), '#', class: "destroy_retriever destroy_retriever_#{retriever.id} btn btn-light", data: { id: retriever.id }, title: 'Supprimer', rel: 'tooltip'
   - case retriever.budgea_error_message
@@ -34,5 +34,5 @@
   = link_to glyphicon('info'), '#', class: 'btn btn-light', rel: 'popover', data: { 'original-title' => 'Date de création / modification', content: "#{l(retriever.created_at)} / #{l(retriever.updated_at)}", placement: 'left' }
   = link_to "Lancer la procédure d'authentification", Bridge::OtpItem.new(retriever.user, retriever).execute, class: 'btn.btn-primary.scarequire_decoupled_button', target: '_blank' if retriever.bridge_status == 1010
   = link_to "Lancer la procédure d'authentification", Bridge::ValidateProItem.new(retriever.user).execute, class: 'btn.btn-primary.scarequire_decoupled_button', target: '_blank' if retriever.bridge_status == 1100
-  = link_to glyphicon('pencil'), Bridge::EditItem.new(retriever.user, retriever).execute, title: 'Éditer', class: 'btn btn-light', target: '_blank', rel: 'tooltip'
+  = link_to glyphicon('pencil'), Bridge::EditItem.new(retriever.user, retriever).execute, title: 'Editer', class: 'btn btn-light', target: '_blank', rel: 'tooltip'
   = link_to glyphicon('x'), bridge_delete_item_path(retriever_id: retriever.id), title: 'Supprimer', class: 'btn btn-light', target: '_blank', rel: 'tooltip'

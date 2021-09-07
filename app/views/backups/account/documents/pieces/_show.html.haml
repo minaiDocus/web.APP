@@ -36,7 +36,7 @@
             = glyphicon('trash')
           %a.composer.margin3.do-tooltip.hide{"data-toggle" => "modal", :href => "#compositionDialog", :title => "Composer"}
             = glyphicon('random')
-          %a.compta_analysis_Édition.margin3.do-tooltip.hide{"data-toggle" => "modal", :href => "#comptaAnalysisÉdition", :title => "Éditer compta analytique" }
+          %a.compta_analysis_edition.margin3.do-tooltip.hide{"data-toggle" => "modal", :href => "#comptaAnalysisEdition", :title => "Editer compta analytique" }
             = glyphicon('pencil')
           %a.download.margin3.do-tooltip{ :title => "Télécharger", :target => "_blank" }
             = glyphicon('data-transfer-download')
@@ -47,7 +47,7 @@
             %a.do-deliverAllPreseizure.do-tooltip.margin3{href: '#', title: "Livraison écriture comptable (#{@software_human_name})"}
               = glyphicon('loop-circular')
           - if (@user.has_collaborator_action?)
-            %a.tip_edit_multiple.do-editSelectedPreseizures.do-tooltip.margin3.hide{"data-toggle"=>"modal", :href => "#editSelectedPreseizures", :title => "Édition multiple"}
+            %a.tip_edit_multiple.do-editSelectedPreseizures.do-tooltip.margin3.hide{"data-toggle"=>"modal", :href => "#editSelectedPreseizures", :title => "Edition multiple"}
               = glyphicon('brush')
           - if @user.pre_assignement_displayed?
             %a.do-exportSelectedPreseizures.do-tooltip.margin3{href: '#exportSelectedPreseizures', title: 'Export écritures comptables', data: { toggle: 'modal' } }

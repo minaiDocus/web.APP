@@ -2,7 +2,7 @@
   .edit_software_users
     .card
       .card-header
-        %h3 Édition des utilisateurs : #{@software_name}
+        %h3 Edition des utilisateurs : #{@software_name}
       = form_tag update_software_users_account_organization_path(@organization), method: 'patch', multipart: true, class: 'form-horizontal' do |f|
         .card-body.clearfix
           = hidden_field_tag :software, @software

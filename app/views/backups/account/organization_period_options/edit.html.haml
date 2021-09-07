@@ -1,7 +1,7 @@
 .edit.derivationRight
   .card
     .card-header
-      %h3 Édition des options des périodes
+      %h3 Edition des options des périodes
     = simple_form_for @organization, url: account_organization_period_options_path(@organization), html: { class: 'form-organization-period form-horizontal label-large' } do |f|
       .card-body
         = f.input :authd_prev_period,          as: :integer, input_html: { min: 0 }

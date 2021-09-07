@@ -6,7 +6,7 @@
     .card-header
       - if @customer.configured?
         %h3 
-          Édition des options des périodes du client : 
+          Edition des options des périodes du client : 
           = link_to @customer, account_organization_customer_path(@organization, @customer, tab: 'period_options'), class: 'fs-origin'
       - else
         %h3

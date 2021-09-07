@@ -21,7 +21,7 @@
                 - @budgea_users.each do |budgea_user|
                   %tr{id: "row-#{budgea_user.id}", class: 'row-budgea-users'}
                     %td= l(budgea_user.signin, format: '%d %b %Y', default: '-')
-                    %td= link_to budgea_user.identifier, archives_budgea_retrievers_admin_retrievers_path(tab: 'budgea_retrievers', archive_budgea_retrievers_contains: { owner_id: budgea_user.id }), target: "_blank"
+                    %td= link_to budgea_user.identifier, budgea_retrievers_admin_archives_path(tab: 'budgea_retrievers', archive_budgea_retrievers_contains: { owner_id: budgea_user.id }), target: "_blank"
                     %td.show_tooltip{title: budgea_user.access_token, data: { toggle: 'tooltip', placement: 'right' }}= truncate(sanitize(budgea_user.access_token[0..50]))
                     %td= budgea_user.exist ? t('yes_value') : t('no_value')
                     %td= budgea_user.is_updated ? t('yes_value') : t('no_value')
@@ -30,7 +30,7 @@
 
         = render partial: 'shared/list_options', locals: { collection: @budgea_users }
 
-    = form_tag archives_budgea_users_admin_retrievers_path(tab: 'budgea_users'), method: :get, class: 'form-filter' do
+    = form_tag budgea_users_admin_archives_path(tab: 'budgea_users'), method: :get, class: 'form-filter' do
       = hidden_field_tag :direction, sort_direction
       = hidden_field_tag :sort, sort_column
       = hidden_field_tag :per_page, per_page
@@ -90,4 +90,4 @@
           .card-footer
             .form-actions
               = submit_tag t('filters.action'), class: 'btn btn-primary'
-              = link_to glyphicon('x'), archives_budgea_users_admin_retrievers_path(tab: 'budgea_users'), class: 'btn btn-light', title: t('filters.reset')
+              = link_to glyphicon('x'), budgea_users_admin_archives_path(tab: 'budgea_users'), class: 'btn btn-light', title: t('filters.reset')

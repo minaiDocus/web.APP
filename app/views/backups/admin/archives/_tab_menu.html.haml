@@ -10,6 +10,6 @@
         %h3 Archives Budgea:&nbsp;
       %ul.nav.nav-tabs
         %li.nav-item
-          = link_to 'Utilisateurs', archives_budgea_users_admin_retrievers_path(tab: 'budgea_users'), class: "nav-link #{('active' if params[:tab] == 'budgea_users' || params[:tab].blank? )}"
+          = link_to 'Utilisateurs', budgea_users_admin_archives_path(tab: 'budgea_users'), class: "nav-link #{('active' if params[:tab] == 'budgea_users' || params[:tab].blank? )}"
         %li.nav-item
-          = link_to 'Automates', archives_budgea_retrievers_admin_retrievers_path(tab: 'budgea_retrievers'), class: "nav-link #{('active' if params[:tab] == 'budgea_retrievers' )}"
+          = link_to 'Automates', budgea_retrievers_admin_archives_path(tab: 'budgea_retrievers'), class: "nav-link #{('active' if params[:tab] == 'budgea_retrievers' )}"

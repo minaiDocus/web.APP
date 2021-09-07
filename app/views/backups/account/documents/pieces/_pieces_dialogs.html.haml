@@ -64,8 +64,8 @@
                 .label-section
                   = label_tag nil, 'Compta Analytique : ', class: 'control-label'
                 .control-section
-                  %a{ "data-toggle"=>"modal", :href => "#comptaAnalysisÉdition", class: "btn btn-primary" }
-                    Éditer l'analyse
+                  %a{ "data-toggle"=>"modal", :href => "#comptaAnalysisEdition", class: "btn btn-primary" }
+                    Editer l'analyse
                   %br
                   %span.with_default_analysis.help-block.hide
                     %span.fs-origin.badge.badge-warning.margin1right
@@ -271,11 +271,11 @@
           %a#deliverButton.btn.btn-primary{ :href => "#" }
             Valider
 
-.modal.fade{ :id=>"comptaAnalysisÉdition" }
+.modal.fade{ :id=>"comptaAnalysisEdition" }
   .modal-dialog
     .modal-content
       .modal-header
-        %h3 Édition Compta Analytique
+        %h3 Edition Compta Analytique
         %a{ :class=>"close", "data-dismiss"=>"modal" } ×
       .modal-body
         %p.length_alert

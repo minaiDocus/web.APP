@@ -8,7 +8,7 @@
         = @preseizure.piece_name
   %span.choose_action_preseizure
     - if @user.has_collaborator_action?
-      %a.float-right.tip_edit.margin3.do-tooltip{href: '#', title: "Édition", data: {id: @preseizure.id}}
+      %a.float-right.tip_edit.margin3.do-tooltip{href: '#', title: "Edition", data: {id: @preseizure.id}}
         = glyphicon('pencil', {color: "fill: rgb(62, 47, 36);"})
     - if (@user.has_collaborator_action? && @software != '' && @preseizure.is_not_delivered? && !@preseizure.is_locked)
       %a.tip_deliver.float-right.margin3.do-tooltip{href: '#', title: "Livraison (#{@software_human_name})", data: {id: @preseizure.id}}

@@ -133,7 +133,7 @@ load_vat_function= (id, controlleur) ->
   $(table_div).on 'click', (e) ->
     e.stopPropagation()
     clas = $(this).attr('class')   
-    input_edit  = $(this).parent('td').find('.input_Édition').removeClass('hide')
+    input_edit  = $(this).parent('td').find('.input_edition').removeClass('hide')
     input_edit.attr('placeholder', $(this).text().trim() )
     content = $(this).hide()
     input_edit.unbind('focusout')
@@ -189,7 +189,7 @@ verify_before_validate= (link, controlleur) ->
   if(tr.hasClass('verify'))
     value_counter = 0
     tr.removeClass('verify')
-    inputs = tr.find('td .input_Édition')
+    inputs = tr.find('td .input_edition')
 
     inputs.each (e)->
       if($(this).val() != null && $(this).val() != 'undefined' && $(this).val() != '')
@@ -219,9 +219,9 @@ verify_before_validate= (link, controlleur) ->
           data = { id: entry_id_input.val(), destroy: 'destroy', type: entry_type }
       else
         if(controlleur == 'vats_accounts')
-          data = { accounting_plan: { vat_accounts_attributes: { id: entry_id_input.val(), code: tr.find('.input_Édition.code:first').val(), nature: tr.find('.input_Édition.nature:first').val(), account_number: tr.find('.input_Édition.number:first').val() } } }
+          data = { accounting_plan: { vat_accounts_attributes: { id: entry_id_input.val(), code: tr.find('.input_edition.code:first').val(), nature: tr.find('.input_edition.nature:first').val(), account_number: tr.find('.input_edition.number:first').val() } } }
         else
-          attributes = { id: entry_id_input.val(), third_party_account: tr.find('.input_Édition.tp_account:first').val(), third_party_name: tr.find('.input_Édition.tp_name:first').val(), conterpart_account: tr.find('.input_Édition.conterpart:first').val(), code: tr.find('.input_Édition.vat_code').val() }
+          attributes = { id: entry_id_input.val(), third_party_account: tr.find('.input_edition.tp_account:first').val(), third_party_name: tr.find('.input_edition.tp_name:first').val(), conterpart_account: tr.find('.input_edition.conterpart:first').val(), code: tr.find('.input_edition.vat_code').val() }
 
           if(entry_type == 'provider')
             data = { type: entry_type, accounting_plan: { providers_attributes: attributes } }
@@ -398,6 +398,9 @@ update_price = ->
   if $('.active_option#subscription_mail_option').is(':checked')
     options.push 'mail_option'
 
+  if ($('.active_option#subscription_digitize_option').is(':checked') || $('#subscription_subscription_option_digitize_option').is(':checked'))
+    options.push 'digitize_option'
+
   if $('.active_option#subscription_retriever_option').is(':checked')
     if $('.active_option#subscription_retriever_option').data('retriever-price-option') == 'reduced_retriever'
       options.push 'retriever_option_reduced'
@@ -498,6 +501,9 @@ jQuery ->
     check_input_number()
     check_commitment()
     update_price()
+
+    if $('.notify-warning').length > 1
+      $('.notify-alert-message').removeClass('hide')
 
     $('#personalize_subscription_package_form .radio-button').on 'click', (e) ->
       package_name = $(this).data('package')

@@ -223,7 +223,7 @@
                 - @new_provider_requests.each do |new_provider_request|
                   %tr
                     %td= l(new_provider_request.created_at, format: '%e %b %H:%M')
-                    %td= link_to new_provider_request.user.code, new_provider_requests_path(user_code: new_provider_request.user.code)
+                    %td= link_to new_provider_request.user.code, account_new_provider_requests_path(user_code: new_provider_request.user.code)
                     %td= new_provider_request.name
                     %td= new_provider_request_state(new_provider_request)
         .row

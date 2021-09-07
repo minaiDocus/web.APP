@@ -138,7 +138,7 @@
           .col-12
             = render partial: 'shared/list_options', locals: { collection: @statistics }
     .card.retractable-filter
-      = form_tag admin_subscriptions_index_path, method: :get, class: 'form-filter' do
+      = form_tag admin_subscriptions_path, method: :get, class: 'form-filter' do
         .card-header.clearfix
           .float-left
             %h3 Filtres
@@ -169,7 +169,7 @@
           .card-footer
             .form-actions
               = submit_tag t('filters.compare'), name: nil, class: 'btn btn-primary'
-              = link_to glyphicon('x'), admin_subscriptions_index_path, class: 'btn btn-light', title: t('filters.reset')
+              = link_to glyphicon('x'), admin_subscriptions_path, class: 'btn btn-light', title: t('filters.reset')
 
   #showAccounts.modal.fade
     .modal-dialog.modal-dialog-centered

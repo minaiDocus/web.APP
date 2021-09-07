@@ -12,8 +12,8 @@ class DocumentsAnalytics{
     $('.analytic_select').on('change', (e)=>{ this.handle_analysis_select($(e.currentTarget)); });
     $('.analytic_group .section_map').on('click', (e)=>{ this.toogle_section_group($(e.currentTarget)); });
 
-    $('#comptaAnalysisÉdition').on('hidden.bs.modal', function() {
-      $("#comptaAnalysisÉdition .length_alert").html('');
+    $('#comptaAnalysisEdition').on('hidden.bs.modal', function() {
+      $("#comptaAnalysisEdition .length_alert").html('');
 
       if(VARIABLES.get('analytic_target_form') == '#fileupload'){
         $("#fileupload .analytic_resume_box").html(me.get_analytics_resume());

@@ -16,7 +16,7 @@ function bind_all_events(){
 
   $('.create-manual-bank-account').unbind('click')
   $(".create-manual-bank-account").bind('click',function(e) {
-    AppEmit('retriever_bank_Édition', { id: 0 });
+    AppEmit('retriever_bank_edition', { id: 0 });
   });
 
   $('.retriever-filter-others').unbind('click')
@@ -60,7 +60,7 @@ function bind_all_events(){
   });
 
   $('table.banks_params_list tbody td .action .edit').unbind('click').bind('click', function(e){
-    AppEmit('retriever_bank_Édition', { id: $(this).data('id') });
+    AppEmit('retriever_bank_edition', { id: $(this).data('id') });
   });
 
   $('#integrate_documents').unbind('click').bind('click', (e)=>{ AppEmit('retriever_integrate_documents'); });

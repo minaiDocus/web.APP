@@ -2,7 +2,7 @@
   .card
     .card-header
       %h3
-        Édition des autorisations des stockages externes pour le client :
+        Edition des autorisations des stockages externes pour le client :
         = link_to @someone.info, @url_path, class: 'fs-origin'
 
     = simple_form_for @someone, url: @put_url_path, html: { class: 'form-horizontal' } do |f|

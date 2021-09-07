@@ -1,5 +1,5 @@
 .edit.preseizure
-  = simple_form_for @preseizure, url: '', method: 'get', html: { class: 'form-group', id: 'preseizure_Édition_form' } do |f|
+  = simple_form_for @preseizure, url: '', method: 'get', html: { class: 'form-group', id: 'preseizure_edition_form' } do |f|
     = f.hidden_field :id
     = f.input :date, as: :string, disabled: (@user.has_collaborator_action? ? false : true), input_html: { :value => f.object.date.try(:to_date), class: 'daterange form-control', id: 'date-preseizure' }
     = f.input :deadline_date, as: :string, disabled: (@user.has_collaborator_action? ? false : true), input_html: { :value => f.object.deadline_date.try(:to_date), class: 'daterange form-control', id: 'deadline-date-preseizure' }

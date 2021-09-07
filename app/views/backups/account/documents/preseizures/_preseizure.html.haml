@@ -12,7 +12,7 @@
           - else
             = preseizure.piece_name
     .col-md-1.actionbox.padding1
-      %a.tip_edit.float-right.do-tooltip{href: '#', title: "Édition", data: {id: preseizure.id}}
+      %a.tip_edit.float-right.do-tooltip{href: '#', title: "Edition", data: {id: preseizure.id}}
         = glyphicon('pencil')
       - if (@user.has_collaborator_action? && @software != '' && preseizure.is_not_delivered? && !preseizure.is_locked)
         %a.tip_deliver.float-right.do-tooltip{href: '#', title: "Livraison (#{@software_human_name})", data: {id: preseizure.id}}

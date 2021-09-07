@@ -1,7 +1,7 @@
 #file_naming_policy.edit.derivationRight
   .card
     .card-header
-      %h3 Édition de la charte de nommage PDF
+      %h3 Edition de la charte de nommage PDF
     = simple_form_for (@file_naming_policy || FileNamingPolicy.new), url: account_organization_file_naming_policy_path(@organization), html: { class: 'form-horizontal' } do |f|
       .card-body
         .row

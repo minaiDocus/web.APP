@@ -4,7 +4,7 @@ class Retrievers::MainController < RetrieverController
   before_action :get_banking_provider
   before_action :load_retriever, except: %w[index list new export_connector_to_xls get_connector_xls new_internal create api_config]
   before_action :verify_retriever_state, except: %w[index list new export_connector_to_xls get_connector_xls new_internal edit_internal create api_config]
-  before_action :load_retriever_Édition, only: %w[new edit]
+  before_action :load_retriever_edition, only: %w[new edit]
 
   prepend_view_path('app/templates/front/retrievers/views')
 
@@ -152,7 +152,7 @@ class Retrievers::MainController < RetrieverController
     end
   end
 
-  def load_retriever_Édition
+  def load_retriever_edition
     @user_token = @account.get_authentication_token
     @bi_token = @account.try(:budgea_account).try(:access_token)
     @journals = @account.account_book_types.map do |journal|

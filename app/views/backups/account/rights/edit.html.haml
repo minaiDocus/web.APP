@@ -2,7 +2,7 @@
   .card
     .card-header
       %h3
-        Édition des autorisations du collaborateur : 
+        Edition des autorisations du collaborateur : 
         = link_to @member.info, account_organization_collaborator_path(@organization, @member, tab: 'authorization'), class: 'fs-origin'
     = simple_form_for @member, url: account_organization_collaborator_rights_url(@organization, @member), html: { class: 'form form-horizontal margin0' } do |f|
       .card-body

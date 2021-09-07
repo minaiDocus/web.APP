@@ -165,9 +165,9 @@ function initParameters(link) {
   window.pack_journal         = link.data('pack-journal');
 
   if(window.uses_ibiza_analytics > 0)
-    $('#selectionsBox .compta_analysis_Édition').removeClass('hide');
+    $('#selectionsBox .compta_analysis_edition').removeClass('hide');
   else
-    $('#selectionsBox .compta_analysis_Édition').addClass('hide');
+    $('#selectionsBox .compta_analysis_edition').addClass('hide');
 }
 
 // show the preview of page given by link
@@ -224,13 +224,13 @@ function selectPage(link) {
 
     $(".composer").hide();
 
-    $(".compta_analysis_Édition, .delete_piece_composition").show();
-    $(".delete_piece_composition, .piece_tag, .compta_analysis_Édition, .composer, .download").addClass('border_piece_action');
+    $(".compta_analysis_edition, .delete_piece_composition").show();
+    $(".delete_piece_composition, .piece_tag, .compta_analysis_edition, .composer, .download").addClass('border_piece_action');
   }
   else 
   {
-    $(".compta_analysis_Édition, .composer, .delete_piece_composition").hide();
-    $(".delete_piece_composition, .piece_tag, .compta_analysis_Édition, .composer, .download").removeClass('border_piece_action');
+    $(".compta_analysis_edition, .composer, .delete_piece_composition").hide();
+    $(".delete_piece_composition, .piece_tag, .compta_analysis_edition, .composer, .download").removeClass('border_piece_action');
   } 
 
   if (li.hasClass('selected'))

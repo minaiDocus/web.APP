@@ -1,10 +1,12 @@
-#order.edit.derivationRight
-  .box
-    - unless @customer.configured?
-      = render 'account/customers/steps'
+= stylesheet_link_tag 'front/orders/assets/stylesheets/main'
 
-  .card
-    .card-header
+#order.edit.derivationRight
+  / .box
+  /   - unless @customer.configured?
+  /     TODO ... STEP
+
+  .order-content
+    .w-100.text-center
       %h3
         - if @order.dematbox?
           Édition de la commande du scanner iDocus’Box
@@ -18,5 +20,8 @@
           pour le dossier : 
           %span.text-info.fs-origin= @customer
 
-    = simple_form_for @order, url: organization_customer_order_path(@organization, @customer, @order), html: { class: 'form form-horizontal margin0' } do |f|
-      = render partial: 'form', locals: { f: f }
+    .box.order-form-content
+      = simple_form_for @order, url: organization_customer_order_path(@organization, @customer, @order), html: { class: 'form form-horizontal margin0' } do |f|
+        = render partial: 'form', locals: { f: f }
+
+= javascript_include_tag 'front/orders/assets/javascripts/main'

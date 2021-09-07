@@ -6,7 +6,7 @@
     .card-header
       - if @customer.configured?
         %h3
-          Édition des options iBiza du client : 
+          Edition des options iBiza du client : 
           = link_to @customer, account_organization_customer_path(@organization, @customer, tab: 'ibiza'), class: 'fs-origin'
       - else
         %h3
