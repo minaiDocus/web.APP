@@ -1,6 +1,11 @@
-.card.derivationRight
-  .card-header
-    %h3
-      Édition de l'email de rappel : 
-      %span.fs-origin.text-info= @reminder_email.name
-  = render partial: 'form'
+= stylesheet_link_tag 'front/customers/assets/stylesheets/main'
+
+.container-fluid
+  .row.derivationLeft
+    .col-md-6.text-start
+      %h3.bold
+        Édition de l'email de rappel
+        %span.badge.badge-secondary.regular.total-count= @reminder_email.name
+
+  .box
+    = render partial: 'form'

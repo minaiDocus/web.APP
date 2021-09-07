@@ -106,3 +106,7 @@ p{
 #customer-content ul li.nav-item{
   border-bottom: 1px solid rgba(26, 26, 26, 0.04);
 }
+
+.form-group{
+  margin-bottom: 1% !important;
+}

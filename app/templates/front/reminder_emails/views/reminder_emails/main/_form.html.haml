@@ -1,9 +1,17 @@
 = simple_form_for [@organization, @reminder_email || ReminderEmail.new], html: { class: 'form form-horizontal margin0' } do |f|
   .modal-body
-    = f.input :name, :placeholder => 'Exemple: Envoi 1'
-    = f.input :delivery_day, as: :integer, required: true, hint: 'Choisir un chiffre de 0 à 28.', input_html: { min: 0, max: 20, placeholder: "Ex : 1" }
-    = f.input :subject, input_html: { class: 'input-xxlarge' }
-    = f.input :content, :as => :ckeditor, :input_html => {class: 'ckeditor', :ckeditor => {:toolbar => 'mini'}}
+    .form-group
+      .select-container.no-padding.w-100
+        = f.input :name, input_html: { class: '', placeholder: 'Exemple: Envoi 1' }
+    .form-group
+      .select-container.no-padding.w-100
+        = f.input :delivery_day, as: :integer, required: true, hint: 'Choisir un chiffre de 0 à 28.', input_html: { min: 0, max: 20, placeholder: "Ex : 1" }
+    .form-group
+      .select-container.no-padding.w-100
+        = f.input :subject, input_html: { class: 'input-xxlarge' }
+    .form-group
+      .select-container.no-padding.w-100
+        = f.input :content, :as => :ckeditor, :input_html => {class: 'ckeditor', :ckeditor => {:toolbar => 'mini'}}
 
     .form-group
       %label.semibold Envoyez à
@@ -12,14 +20,14 @@
 
     .form-group
       .row
-        .col-md-7.semibold Envoyez tous les...
-        .col-md-2
+        .col-md-8.semibold Envoyez tous les...
+        .col-md-2.text-end
           .form-check.form-check-inline
-            = f.radio_button :period, 1, id: 'flexRadioDefault', class: 'form-check-input'
+            = f.radio_button :period, 1, id: '', class: 'form-check-input'
             = f.label :period, t('activerecord.models.reminder_email.attributes.period_options.monthly'), class: 'form-check-label'
-        .col-md-3
+        .col-md-2.text-end
           .form-check.form-check-inline
-            = f.radio_button :period, 3, id: 'flexRadioDefault', class: 'form-check-input'
+            = f.radio_button :period, 3, id: '', class: 'form-check-input'
             = f.label :period, t('activerecord.models.reminder_email.attributes.period_options.quarterly'), class: 'form-check-label'
 
   .modal-footer
