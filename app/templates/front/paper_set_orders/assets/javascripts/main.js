@@ -326,6 +326,6 @@ jQuery(function () {
 
   AppListenTo('generate_manual_paper_set_order', (e)=>{ file_sending_kit.generate_manual_paper_set_order(e.detail.url, e.detail.data); file_sending_kits_main_events(); });
 
-  AppListenTo('window.change-per-page', (e)=>{ order.load_data(true, e.detail.name, 1, e.detail.per_page); });
-  AppListenTo('window.change-page', (e)=>{ order.load_data(true, e.detail.name, e.detail.page); });
+  AppListenTo('window.change-per-page.paper_set_orders', (e)=>{ order.load_data(true, e.detail.name, 1, e.detail.per_page); });
+  AppListenTo('window.change-page.paper_set_orders', (e)=>{ order.load_data(true, e.detail.name, e.detail.page); });
 });
