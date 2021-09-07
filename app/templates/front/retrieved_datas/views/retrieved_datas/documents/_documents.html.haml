@@ -1,34 +1,35 @@
-%input#documents-size{ type: 'hidden', value: documents.total_count }
-.row
-  .col-md-12
-    %table.table.table-striped.table_integration
-      %thead            
-        %th Date de la récupération              
-        %th Service
-        %th Date
-        %th Nom original
-        %th Nom iDocus
-        %th Nb pages
-        %th Montant
-      %tbody
-        - if documents.any?
-          - documents.each do |document|
+.derivationRight
+  %input#documents-size{ type: 'hidden', value: documents.total_count }
+  .row
+    .col-md-12
+      %table.table.table-striped.table_integration
+        %thead            
+          %th Date de la récupération              
+          %th Service
+          %th Date
+          %th Nom original
+          %th Nom iDocus
+          %th Nb pages
+          %th Montant
+        %tbody
+          - if documents.any?
+            - documents.each do |document|
+              %tr
+                %td= l(document.created_at)
+                %td 
+                  - if document.retriever.nil?
+                    %span.label supprimé
+                  = document.retriever_name
+                %td= l(document.metadata['date'], format: '%d %b %Y') rescue ''
+                %td 
+                  = link_to document.metadata['name'] + '.pdf', '#'
+                %td
+                  = link_to document.piece.cloud_content_object.filename, '#' if document.piece
+                %td= document.pages_number
+                %td= document.metadata['amount'].to_s + ' €'
+          - else
             %tr
-              %td= l(document.created_at)
-              %td 
-                - if document.retriever.nil?
-                  %span.label supprimé
-                = document.retriever_name
-              %td= l(document.metadata['date'], format: '%d %b %Y') rescue ''
-              %td 
-                = link_to document.metadata['name'] + '.pdf', '#'
-              %td
-                = link_to document.piece.cloud_content_object.filename, '#' if document.piece
-              %td= document.pages_number
-              %td= document.metadata['amount'].to_s + ' €'
-        - else
-          %tr
-            %td{ colspan: 7 }= t('global.no-data-found')           
-        
+              %td{ colspan: 7 }= t('global.no-data-found')           
+          
 
-  = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { name: 'documents', target: 'retrieved_data', total_pages: documents.total_pages }
+    = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { name: 'documents', target: 'retrieved_data', total_pages: documents.total_pages }

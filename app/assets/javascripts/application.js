@@ -31,6 +31,7 @@
 //= require jquery.multi-select
 //= require moment
 //= require daterangepicker
+//= require custom_popover
 
 var GLOBAL = {}
 var VARIABLES = {}
@@ -53,6 +54,18 @@ AppEmit = (event_name, params=null) => {
   event.initEvent(event_name, true, true);
 
   document.dispatchEvent(event);
+}
+
+// Type must be 'show' or 'hide'
+AppToggleLoading = (type='show') => {
+  if(type == 'show'){
+    $('div.loading_box').addClass('force');
+    $('div.loading_box').removeClass('hide');
+  }
+  else{
+    $('div.loading_box').removeClass('force');
+    $('div.loading_box').addClass('hide');
+  }
 }
 
 SetCache = (name, value, lifeTime) => {
@@ -147,18 +160,6 @@ class ApplicationJS {
 
       $('#idocus_notifications_messages .notice-internal-error').slideDown('fast');
       setTimeout(function(){$('.notice-internal-error').fadeOut('');}, 10000);
-    }
-  }
-
-  // Type must be 'show' or 'hide'
-  toggleLoading(type='show'){
-    if(type == 'show'){
-      $('div.loading_box').addClass('force');
-      $('div.loading_box').removeClass('hide');
-    }
-    else{
-      $('div.loading_box').removeClass('force');
-      $('div.loading_box').addClass('hide');
     }
   }
 

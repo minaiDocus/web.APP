@@ -1,42 +1,43 @@
-- if waiting_operations_count > 0
+.derivationLeft
+  - if waiting_operations_count > 0
+    .row
+      .col-md-8
+      .col-md-4.text-end
+        %button.btn.btn-danger.semibold.force-preseizures
+          %span.me-2= glyphicon('aperture', { size: '15', color: '#FF4848'})
+          %span Forcer la pré-affectation de
+          %span.count-operation= waiting_operations_count
+          %span opération(s)
+
+  .mb-4
+
+  %input#operations-size{ type: 'hidden', value: operations.total_count }
   .row
-    .col-md-8
-    .col-md-4.text-end
-      %button.btn.btn-danger.semibold.force-preseizures
-        %span.me-2= glyphicon('aperture', { size: '15', color: '#FF4848'})
-        %span Forcer la pré-affectation de
-        %span.count-operation= waiting_operations_count
-        %span opération(s)
-
-.mb-4
-
-%input#operations-size{ type: 'hidden', value: operations.total_count }
-.row
-  .col-md-12
-    %table.table.table-striped.table_integration
-      %thead            
-        %th Date Opé
-        %th Date Valeur
-        %th Service
-        %th Compte
-        %th Catégorie
-        %th Libellé
-        %th Montant
-        %th Pré-affecté
-      %tbody
-        - if operations.any?
-          - operations.each do |operation|
+    .col-md-12
+      %table.table.table-striped.table_integration
+        %thead            
+          %th Date Opé
+          %th Date Valeur
+          %th Service
+          %th Compte
+          %th Catégorie
+          %th Libellé
+          %th Montant
+          %th Pré-affecté
+        %tbody
+          - if operations.any?
+            - operations.each do |operation|
+              %tr
+                %td= operation.date.strftime('%d/%m/%Y')
+                %td= operation.value_date.strftime('%d/%m/%Y')
+                %td= operation.bank_account.try(:retriever).try(:service_name)
+                %td.semibold= operation.bank_account.try(:number)
+                %td -
+                %td= operation.label
+                %td= operation.amount.to_s + " €"
+                %td Oui
+          - else
             %tr
-              %td= operation.date.strftime('%d/%m/%Y')
-              %td= operation.value_date.strftime('%d/%m/%Y')
-              %td= operation.bank_account.try(:retriever).try(:service_name)
-              %td.semibold= operation.bank_account.try(:number)
-              %td -
-              %td= operation.label
-              %td= operation.amount.to_s + " €"
-              %td Oui
-        - else
-          %tr
-            %td{colspan: 8}= t('global.no-data-found')
+              %td{colspan: 8}= t('global.no-data-found')
 
-  = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { name: 'operations', target: 'retrieved_data', total_pages: operations.total_pages }
+    = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { name: 'operations', target: 'retrieved_data', total_pages: operations.total_pages }

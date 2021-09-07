@@ -1,44 +1,45 @@
-%input#documents-selection-size{ type: 'hidden', value: documents.total_count }
-.form-group.no-margin
-  .w-100.text-end            
-    %button#integrate_documents.btn.btn-light-primary.bold 
-      %span.me-2= glyphicon('action-undo', { size: '15', color: "#0d6efd" })
-      %span Intégrer les documents séléctionnés
+.derivationLeft
+  %input#documents-selection-size{ type: 'hidden', value: documents.total_count }
+  .form-group.no-margin
+    .w-100.text-end            
+      %button#integrate_documents.btn.btn-light-primary.bold 
+        %span.me-2= glyphicon('action-undo', { size: '15', color: "#0d6efd" })
+        %span Intégrer les documents séléctionnés
 
-.mb-4
+  .mb-4
 
-.row
-  .col-md-12
-    %table.table.table-striped.table_integration
-      %thead            
-        %th.text-center
-          .form-check
-            %input.form-check-input.pointer.float-none.check-all-bank-account{ type: :checkbox, value: "" }
-        %th Date de la récupération
-        %th Service
-        %th Date
-        %th Nom original
-        %th Nb. pages
-        %th Montant
-      %tbody
-        - if documents.any?
-          - documents.each do |document|
+  .row
+    .col-md-12
+      %table.table.table-striped.table_integration
+        %thead            
+          %th.text-center
+            .form-check
+              %input.form-check-input.pointer.float-none.check-all-bank-account{ type: :checkbox, value: "" }
+          %th Date de la récupération
+          %th Service
+          %th Date
+          %th Nom original
+          %th Nb. pages
+          %th Montant
+        %tbody
+          - if documents.any?
+            - documents.each do |document|
+              %tr
+                %td.text-center
+                  .form-check
+                    %input.selected_document.form-check-input.pointer.float-none.check-bank-account{ type: :checkbox, data: { value: document.id } }
+                %td= l(document.created_at)
+                %td
+                  - if document.retriever.nil?
+                    %span.label supprimé
+                  = document.retriever_name
+                %td= l(document.metadata['date'], format: '%d %b %Y') rescue ''               
+                %td= link_to document.metadata['name'] + '.pdf', '#'
+                %td= document.pages_number            
+                %td= document.metadata['amount'].to_s + ' €'
+          - else
             %tr
-              %td.text-center
-                .form-check
-                  %input.selected_document.form-check-input.pointer.float-none.check-bank-account{ type: :checkbox, data: { value: document.id } }
-              %td= l(document.created_at)
-              %td
-                - if document.retriever.nil?
-                  %span.label supprimé
-                = document.retriever_name
-              %td= l(document.metadata['date'], format: '%d %b %Y') rescue ''               
-              %td= link_to document.metadata['name'] + '.pdf', '#'
-              %td= document.pages_number            
-              %td= document.metadata['amount'].to_s + ' €'
-        - else
-          %tr
-            %td{colspan: 7}= t('global.no-data-found')
+              %td{colspan: 7}= t('global.no-data-found')
 
-  = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { name: 'documents-selection', target: 'retriever_parameters', total_pages: documents.total_pages }
+    = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { name: 'documents-selection', target: 'retriever_parameters', total_pages: documents.total_pages }
           

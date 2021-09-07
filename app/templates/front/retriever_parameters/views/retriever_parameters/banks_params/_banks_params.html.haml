@@ -1,50 +1,51 @@
-.row
-  .col-md-8
-  .col-md-4.text-end
-    %button.btn.btn-light-primary.semibold.create-manual-bank-account
-      %span.me-3= glyphicon('plus', { size: '15', color: '#0d6efd'})
-      %span Créer un compte bancaire
+.derivationRight
+  .row
+    .col-md-8
+    .col-md-4.text-end
+      %button.btn.btn-light-primary.semibold.create-manual-bank-account
+        %span.me-3= glyphicon('plus', { size: '15', color: '#0d6efd'})
+        %span Créer un compte bancaire
 
-.mb-4
+  .mb-4
 
-.row
-  .col-md-12
-    %table.table.table-striped.banks_params_list
-      %thead
-        %th Banque
-        %th Nom
-        %th Numéro de compte
-        %th Code journal
-        %th Compte de trésorerie
-        %th Date historique
-        %th.text-end Action
-      %tbody
-        -if bank_accounts.any?
-          - bank_accounts.each do |bank_account|
+  .row
+    .col-md-12
+      %table.table.table-striped.banks_params_list
+        %thead
+          %th Banque
+          %th Nom
+          %th Numéro de compte
+          %th Code journal
+          %th Compte de trésorerie
+          %th Date historique
+          %th.text-end Action
+        %tbody
+          -if bank_accounts.any?
+            - bank_accounts.each do |bank_account|
+              %tr
+                %td= bank_account.bank_name
+                %td= bank_account.name
+                %td= bank_account.number
+                %td= bank_account.journal
+                %td= bank_account.accounting_number
+                %td= bank_account.start_date
+                %td.text-end.pointer
+                  .action.sub-menu-bank-param
+                    %span= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
+                    .sub_menu.text-start.hide
+                      %ul.no-margin.no-padding.regular
+                        - if not bank_account.is_to_be_disabled?           
+                          %li.edit{ data: { id: bank_account.id } }
+                            %span.me-1= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
+                            %span Editer
+                        - if bank_account.can_be_deleted?
+                          %li.activation{ data: { id: bank_account.id, type: 'disable' } }
+                            %span.red-label.me-1= glyphicon('trash', { size: '15', color: "#FF4848" })
+                            %span Supprimer
+                        - elsif bank_account.can_be_reopened?
+                          %li.activation{ data: { id: bank_account.id, type: 'enable' } }
+                            %span.me-1= glyphicon('check', { size: '15', color: "#72AA42" })
+                            %span Activer
+          - else
             %tr
-              %td= bank_account.bank_name
-              %td= bank_account.name
-              %td= bank_account.number
-              %td= bank_account.journal
-              %td= bank_account.accounting_number
-              %td= bank_account.start_date
-              %td.text-end.pointer
-                .action.sub-menu-bank-param
-                  %span= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
-                  .sub_menu.text-start.hide
-                    %ul.no-margin.no-padding.regular
-                      - if not bank_account.is_to_be_disabled?           
-                        %li.edit{ data: { id: bank_account.id } }
-                          %span.me-1= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                          %span Éditer
-                      - if bank_account.can_be_deleted?
-                        %li.activation{ data: { id: bank_account.id, type: 'disable' } }
-                          %span.red-label.me-1= glyphicon('trash', { size: '15', color: "#FF4848" })
-                          %span Supprimer
-                      - elsif bank_account.can_be_reopened?
-                        %li.activation{ data: { id: bank_account.id, type: 'enable' } }
-                          %span.me-1= glyphicon('check', { size: '15', color: "#72AA42" })
-                          %span Activer
-        - else
-          %tr
-            %td{colspan: 7}= t('global.no-data-found')
+              %td{colspan: 7}= t('global.no-data-found')

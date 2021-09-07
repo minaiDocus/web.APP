@@ -1,0 +1,16 @@
+%h4.bold= t('reporting.top_delivery_waiting_account')
+%table.table.table-striped
+  %thead.w-100
+    %th.text-left.w-75= t('reporting.pack_name')
+    %th.text-right= t('reporting.share_anomaly_account')
+    %th.text-right= t('reporting.share_waiting_account')
+    %th.text-right= t('reporting.share_default_account')
+  %tbody
+    - @reports.each do |report|
+      - all_accounts_size, anomaly_accounts_size, waiting_accounts_size, default_accounts_size = accounts_repartition_stat(report.user)
+
+      %tr
+        %td.text-left= report.name
+        %td.text-right= ((all_accounts_size > 0)? (anomaly_accounts_size * 100) / all_accounts_size : 0).to_s + '%'
+        %td.text-right= ((all_accounts_size > 0)? (waiting_accounts_size * 100) / all_accounts_size : 0).to_s + '%'
+        %td.text-right= ((all_accounts_size > 0)? (default_accounts_size * 100) / all_accounts_size : 0).to_s + '%'

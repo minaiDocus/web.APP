@@ -1,28 +1,29 @@
-%input#failed-delivery-size{ type: 'hidden', value: @errors.size }
+.derivationLeft
+  %input#failed-delivery-size{ type: 'hidden', value: @errors.size }
 
-.row
-  .col-md-12
-    %table.table.table-striped.table_integration
-      %thead
-        %th Date
-        %th Lot
-        %th Nb.
-        %th Erreur             
-      %tbody
-        - if @errors.any?
-          - @errors.each do |object|
-            %tr
-              %td
-                - if object.date
-                  - if object.date.today?
-                    = l(object.date, format: '%H:%M')
+  .row
+    .col-md-12
+      %table.table.table-striped.table_integration
+        %thead
+          %th Date
+          %th Lot
+          %th Nb.
+          %th Erreur             
+        %tbody
+          - if @errors.any?
+            - @errors.each do |object|
+              %tr
+                %td
+                  - if object.date
+                    - if object.date.today?
+                      = l(object.date, format: '%H:%M')
+                    - else
+                      = l(object.date, format: '%d %b %Y %H:%M')
                   - else
-                    = l(object.date, format: '%d %b %Y %H:%M')
-                - else
-                  \-
-              %td= object.name
-              %td= object.document_count
-              %td= object.message == false ? '-' : sanitize(object.message, :tags => %w(br))
-        - else
-          %tr
-            %td{ colspan: 4 }= t('global.no-data-found')
+                    \-
+                %td= object.name
+                %td= object.document_count
+                %td= object.message == false ? '-' : sanitize(object.message, :tags => %w(br))
+          - else
+            %tr
+              %td{ colspan: 4 }= t('global.no-data-found')

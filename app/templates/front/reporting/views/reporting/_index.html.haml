@@ -1,0 +1,30 @@
+= stylesheet_link_tag 'front/reporting/assets/stylesheets/main'
+
+%input#organization_id{ type: 'hidden', name: 'organization_id', value: @report_organization.id }
+
+.container-fluid.reporting
+  .row
+    .col-md-8
+      %h1.bold= "#{t('reporting.reporting_text')} ( #{ @report_organization.name } )"
+    .col-md-2
+      = select_tag 'customer_filter', options_for_select(accounts_options), id: 'customer_filter', multiple: true
+    .col-md-2
+      .form-group                    
+        .input-group.mb-3
+          %span.input-group-text#reporting-filter-date= glyphicon('calendar', { size: '14', color: 'background: rgba(26, 26, 26, 0.7)' })          
+          %input.form-control.value-content.date.daterange#date_filter{ type: :text, name: 'date_filter'}
+          %span.input-group-text-right= glyphicon('chevron-bottom', { size: '12', color: 'background: rgba(26, 26, 26, 0.7)' })
+  %ul.nav.nav-tabs.ms-3{ "role" => "tablist" }
+    %li.nav-item.no-margin{ "role" => "presentation" }
+      %button.semibold.nav-link.active#statistics-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#statistics", type: :button, "role" => "tab", "aria-controls" => "statistics", "aria-selected" => "true" } 
+        Statistiques
+    %li.nav-item.no-margin{ "role" => "presentation" }
+      %button.semibold.nav-link#documents-selection-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#invoices", type: :button, "role" => "tab", "aria-controls" => "invoices", "aria-selected" => "false"} 
+        Facturations
+  
+  .tab-content
+    .tab-pane.box.no-margin.active#statistics{ "role" => "tabpanel", "aria-labelledby" => "statistics-tab" }
+      = render file: Rails.root.join('app/templates/front/reporting/views/reporting/statistics/_index.html.haml')
+    .tab-pane.box.no-margin#invoices{ "role" => "tabpanel", "aria-labelledby" => "invoices-tab" }
+
+= javascript_include_tag 'front/reporting/assets/javascripts/main'

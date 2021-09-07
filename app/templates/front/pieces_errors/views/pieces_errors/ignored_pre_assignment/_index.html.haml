@@ -1,55 +1,56 @@
-%input#ignored-pre-assignment-size{ type: 'hidden', value: @ignored_list.total_count }
+.derivationLeft
+  %input#ignored-pre-assignment-size{ type: 'hidden', value: @ignored_list.total_count }
 
-.form-group
-  .w-100.text-end            
-    %button.btn.btn-danger.semibold#resend-to-pre-assignment
-      %span.me-2= glyphicon('aperture', { size: '15', color: '#FF4848'})
-      %span Renvoyer et forcer la pré-affectation
-    %button.btn.btn-light-primary.semibold#confirm-ignorance
-      %span.me-2= glyphicon('circle-check', { size: '15', color: '#0d6efd'})
-      %span Marquer la séléction comme vu
+  .form-group
+    .w-100.text-end            
+      %button.btn.btn-danger.semibold#resend-to-pre-assignment
+        %span.me-2= glyphicon('aperture', { size: '15', color: '#FF4848'})
+        %span Renvoyer et forcer la pré-affectation
+      %button.btn.btn-light-primary.semibold#confirm-ignorance
+        %span.me-2= glyphicon('circle-check', { size: '15', color: '#0d6efd'})
+        %span Marquer la séléction comme vu
 
-.row
-  .col-md-12
-    %table.table.table-striped.table_ignored_pre_assignment
-      %thead            
-        %th.text-center
-          .form-check
-            %input.form-check-input.pointer.float-none.check-all-piece-ignored{ type: :checkbox, value: '' }
-        %th Date de création
-        %th N° pièce
-        %th N° facture
-        %th Nom de lot
-        %th Remarque
-        %th Statut
-        %th.text-end Action
-      %tbody
-        - if @ignored_list.any?
-          - @ignored_list.each do |piece|
+  .row
+    .col-md-12
+      %table.table.table-striped.table_ignored_pre_assignment
+        %thead            
+          %th.text-center
+            .form-check
+              %input.form-check-input.pointer.float-none.check-all-piece-ignored{ type: :checkbox, value: '' }
+          %th Date de création
+          %th N° pièce
+          %th N° facture
+          %th Nom de lot
+          %th Remarque
+          %th Statut
+          %th.text-end Action
+        %tbody
+          - if @ignored_list.any?
+            - @ignored_list.each do |piece|
+              %tr
+                %td.text-center
+                  .form-check
+                    %input.form-check-input.pointer.float-none.check-piece-ignored{ type: :checkbox, data: { value: piece.id } }
+                %td= piece.created_at.strftime('%d-%m-%Y')
+                %td= piece.name
+                %td= piece.number                
+                %td= piece.pack.name            
+                %td= piece.pre_assignment_comment         
+                %td.text-table-green
+                  - if piece.pre_assignment_ignored?
+                    %b Pré-affectation ignorée
+                  - else
+                    %b En cours de renvoi à la pré-affectation
+                %td.text-end.pointer
+                  .action.sub-menu-piece-ignored
+                    %span= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
+                    .sub_menu.text-start.hide
+                      %ul.no-margin.no-padding.regular                      
+                        %li.edit
+                          %span.me-1= glyphicon('eye', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
+                          %span Voir
+          - else
             %tr
-              %td.text-center
-                .form-check
-                  %input.form-check-input.pointer.float-none.check-piece-ignored{ type: :checkbox, data: { value: piece.id } }
-              %td= piece.created_at.strftime('%d-%m-%Y')
-              %td= piece.name
-              %td= piece.number                
-              %td= piece.pack.name            
-              %td= piece.pre_assignment_comment         
-              %td.text-table-green
-                - if piece.pre_assignment_ignored?
-                  %b Pré-affectation ignorée
-                - else
-                  %b En cours de renvoi à la pré-affectation
-              %td.text-end.pointer
-                .action.sub-menu-piece-ignored
-                  %span= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
-                  .sub_menu.text-start.hide
-                    %ul.no-margin.no-padding.regular                      
-                      %li.edit
-                        %span.me-1= glyphicon('eye', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                        %span Voir
-        - else
-          %tr
-            %td{colspan: 8}= t('global.no-data-found')
+              %td{colspan: 8}= t('global.no-data-found')
 
-  = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { name: 'ignored-pre-assignment', target: 'pieces_errors', total_pages: @ignored_list.total_pages }
+    = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { name: 'ignored-pre-assignment', target: 'pieces_errors', total_pages: @ignored_list.total_pages }
