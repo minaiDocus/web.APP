@@ -382,7 +382,7 @@ class Customer{
     $('#customer-content #compta-tab').unbind('click').bind('click',function(e) {
       e.preventDefault();
       
-      self.applicationJS.parseAjaxResponse({ 'url': '/organizations/' + self.organization_id + '/customers/' + customer_id + '/edit_configuration_options' }).then((element)=>{
+      self.applicationJS.parseAjaxResponse({ 'url': '/organizations/' + self.organization_id + '/customers/' + customer_id + '/edit_setting_options' }).then((element)=>{
         $('#customer-content .tab-content .tab-pane#compta').html($(element).find('#customer.edit').html());
 
         ApplicationJS.set_checkbox_radio(self);

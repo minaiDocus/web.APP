@@ -455,7 +455,7 @@
         .col-md-12
           .form-group.no-margin
             .w-100.text-end
-              = link_to t('actions.edit'), edit_compta_options_organization_customer_path(@organization, @customer), class: 'btn btn-primary'
+              = link_to t('actions.edit'), edit_setting_options_organization_customer_path(@organization, @customer), class: 'btn btn-primary'
 
     - if @customer.uses?(:ibiza)
       .tab-pane.box.no-margin#ibiza-box{ class: ('active' if params[:tab] == 'ibiza_box'), "role" => "tabpanel", "aria-labelledby" => "ibiza-box-tab" }

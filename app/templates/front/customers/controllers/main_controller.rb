@@ -245,13 +245,11 @@ class Customers::MainController < OrganizationController
   end
 
 
-  # GET /organizations/:organization_id/customers/:id/parameterize_options
-  def edit_configuration_options; end
+  # GET /organizations/:organization_id/customers/:id/edit_setting_options
+  def edit_setting_options; end
 
-  # PUT /organizations/:organization_id/customers/:id/update_configuration_options
-  def update_configuration_options
-    debugger
-    
+  # PUT /organizations/:organization_id/customers/:id/update_setting_options
+  def update_setting_options    
     if params[:pairing_code].present?
       @dematbox = @user.dematbox || Dematbox.create(user_id: @user.id)
       @dematbox.subscribe(params[:pairing_code])
@@ -262,30 +260,11 @@ class Customers::MainController < OrganizationController
       if @customer.configured?
         flash[:success] = 'Modifié avec succès.'
         redirect_to organization_customer_path(@organization, @customer, tab: 'compta')
-      else
-        # TODO ... REMOVE STEP
       end
     else
-      render 'edit_configuration_options'
+      render 'edit_setting_options'
     end
 
-  end
-
-  # GET /account/organizations/:organization_id/customers/:id/edit_period_options
-  def edit_period_options; end
-
-  # PUT /account/organizations/:organization_id/customers/:id/update_period_options
-  def update_period_options
-    if @customer.update(period_options_params)
-      if @customer.configured?
-        flash[:success] = 'Modifié avec succès.'
-        redirect_to organization_customer_path(@organization, @customer, tab: 'period_options')
-      else
-        # TODO ... REMOVE STEP
-      end
-    else
-      render 'edit_period_options'
-    end
   end
 
   # GET /account/organizations/:organization_id/customers/:id/edit_knowings_options
@@ -303,24 +282,6 @@ class Customers::MainController < OrganizationController
       end
     else
       render 'edit_knowings_options'
-    end
-  end
-
-  # GET /account/organizations/:organization_id/customers/:id/edit_compta_options
-  def edit_compta_options; end
-
-  # PUT /account/organizations/:organization_id/customers/:id/update_compta_options
-  def update_compta_options
-    if @customer.update(compta_options_params)
-      if @customer.configured?
-        flash[:success] = 'Modifié avec succès.'
-
-        redirect_to organization_customer_path(@organization, @customer, tab: 'compta')
-      else
-        # TODO ... REMOVE STEP
-      end
-    else
-      render 'edit_compta_options'
     end
   end
 
