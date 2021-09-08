@@ -1,7 +1,3 @@
-//= require jquery
-//= require jquery_ujs
-//= require jquery-ui
-
 jQuery(function () {
 
   var organization_options = JSON.parse($('#organization_options').val() || '{}');
