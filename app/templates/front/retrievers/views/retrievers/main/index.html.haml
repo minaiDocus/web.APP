@@ -10,8 +10,8 @@
       = select_tag 'account_id', options_for_select(customers_active.unshift(['Tous', 'all']), @account.try(:id) || 'all'), include_blank: false, class: 'form-select'
     .col-md-1.text-center
       %button.btn.btn-light.semibold.retriever-filter.w-100{ disabled: false }
-        %span.me-3= glyphicon('layers', { size: '15', color: '#72AA42'})
-        %span Filtrer
+        %span.me-2 Filtrer
+        %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
     - if @is_budgea
       .col-md-2.text-center
         %button.btn.btn-light-primary.semibold.list-retriever.w-100{ disabled: false }

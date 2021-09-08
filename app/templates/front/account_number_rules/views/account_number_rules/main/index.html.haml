@@ -11,12 +11,11 @@
     .col-md-3.no-padding
       .input-group.mb-3.search-content
         %span.input-group-text#basic-addon1= glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })          
-        %input.form-control#search_input{ type: :text, "aria-label" => "Rechercher", "aria-describedby" => "basic-addon1", name:'account_number_rule_contains[search_text]', placeholder: 'Rechercher' }  }
+        %input.form-control#search_input{ type: :text, "aria-label" => "Rechercher", "aria-describedby" => "basic-addon1", name:'account_number_rule_contains[search_text]', placeholder: 'Rechercher' }
     .col-md-1.text-center.no-padding
       %button.btn.btn-light.more-filter.semibold
         %span.me-2 Filtrer
-        %span
-          = glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
+        %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
     .col-md-2.no-padding
       %button.btn.btn-primary.semibold.add-rule
         %span.me-2 Ajouter une règle    

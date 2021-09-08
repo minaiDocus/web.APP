@@ -15,8 +15,8 @@
           %input.form-control#search_input{ type: :text, "aria-label" => "Rechercher", "aria-describedby" => "basic-addon1", name:'user_contains[text]', placeholder: 'Rechercher' }
       .col-md-1.text-center.no-padding
         %button.btn.btn-light.customer-filter.semibold
-          %span Filtrer
-          %span= glyphicon('transfer', { size: '16', color: '#72AA42', style: 'transform: rotate(90deg)'})
+          %span.me-2 Filtrer
+          %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
       .col-md-2.no-padding
         - if (@user.leader? || @user.manage_customers) && @organization.is_active
           %button.btn.btn-primary.new-customer.semibold.add-edit
