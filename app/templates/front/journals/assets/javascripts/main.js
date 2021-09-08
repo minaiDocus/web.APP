@@ -7,7 +7,6 @@ class Journal{
     this.action_locker              = false;
   }
 
-
   set_carousel_content_on_slide(){
     let self = this;
     self.select_entry_type();
@@ -75,8 +74,6 @@ class Journal{
     });
   }
 
-
-
   add_vat_account_field(rate, vat_account){
     let self = this;
 
@@ -132,7 +129,6 @@ class Journal{
     });
   }
 
-
   serialize_vat_accounts(form){
     let self = this;
     let vat_accounts = {};
@@ -183,7 +179,6 @@ class Journal{
     }
   }
 
-
   required_fields(){
     let self = this;
     let required_fields_count = 0;
@@ -197,13 +192,11 @@ class Journal{
     if (required_fields_count === 2) { self.journal_form_modal.find('.previous-next-controls .next').removeAttr('disabled'); }
   }
 
-
   validate_first_slide_form(){
     let self = this;
 
     $('input[type="text"].required_field').unbind('keypress input').bind('keypress input', function(e) { self.required_fields(); });
   }
-
 
   update_form(){
     if (parseInt($("#account_book_type_entry_type").val()) > 1 && parseInt($("#account_book_type_entry_type").val()) < 4){
@@ -222,7 +215,6 @@ class Journal{
     }
   }
 
-
   add_journal(){
     let self = this;
     $('.new-journal').unbind('click').bind('click', function(e) {
@@ -236,7 +228,6 @@ class Journal{
       self.set_carousel_content_on_slide();
     });
   }
-
 
   edit_journal(){
    let self = this;
@@ -254,6 +245,24 @@ class Journal{
     });
   }
 
+  edit_analytics(id, customer_id, code){
+    $('#comptaAnalysisEdition.modal').modal('show');
+    this.analytic_journal_id = id;
+    this.analytic_customer_id = customer_id;
+
+    AppEmit('compta_analytics.main_loading', { code: code, pattern: id, type: 'journal', is_used: true });
+  }
+
+  update_analytics(data){
+    let params =  {
+                    url: `/organizations/${this.organization_id}/customers/${this.analytic_customer_id}/journals/update_analytics`,
+                    type: 'POST',
+                    data: { id: this.analytic_journal_id, analysis: data },
+                    dataType: 'json'
+                  }
+
+    this.applicationJS.parseAjaxResponse(params).then((e)=>{ $('#comptaAnalysisEdition.modal').modal('hide'); });
+  }
 
   load_journals(type='journals', page=1, per_page=0){
     if(this.action_locker) { return false; }
@@ -279,7 +288,6 @@ class Journal{
                       .catch(()=>{ this.action_locker = false; });
   }
 
-
   main() {
     let self = this;
     self.add_journal();
@@ -291,7 +299,6 @@ class Journal{
     self.set_carousel_content_on_slide();
     ApplicationJS.hide_submenu();
   }
-
 
   get_journal_view_of(journal_id=null){
     let self = this;
@@ -322,7 +329,6 @@ class Journal{
     });
   }
 
-
   toggle_required_field(type){
     if (type === 'enable'){
       $('#new_account_book_type .can_be_required').attr('required', 'required');
@@ -331,7 +337,6 @@ class Journal{
       $('#new_account_book_type .can_be_required').removeAttr('required');
     }
   }
-
 
   handle_edit_delete_submenu(){
     $('.action.sub-menu-book').unbind('click').bind('click',function(e) {
@@ -346,11 +351,18 @@ class Journal{
   }
 }
 
-
-
 jQuery(function () {
   let journal = new Journal();
   journal.main();
+
+  $('#journal .edit_journal_analytics').unbind('click').bind('click', function(e){ 
+    let journal_id = $(this).data('journal-id');
+    let customer_id = $(this).data('customer-id');
+    let code = $(this).data('code');
+    journal.edit_analytics(journal_id, customer_id, code);
+  });
+
+  AppListenTo('compta_analytics.validate_analysis', (e)=>{ journal.update_analytics(e.detail.data) });
 
   AppListenTo('window.change-per-page.journales', (e)=>{ journal.load_journals(e.detail.name, 1, e.detail.per_page); });
   AppListenTo('window.change-page.journales', (e)=>{ journal.load_journals(e.detail.name, e.detail.page); });

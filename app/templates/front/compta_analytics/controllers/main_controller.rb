@@ -21,7 +21,7 @@ class ComptaAnalytics::MainController < FrontController
 
   def load_default_analytic_by_pattern
     if @a_customer
-      @journal  = params[:pattern].present? && params[:type] == 'journal' ? @a_customer.account_book_types.where(name: params[:pattern]).first : nil
+      @journal  = params[:pattern].present? && params[:type] == 'journal' ? @a_customer.account_book_types.where(id: params[:pattern]).first : nil
       @pieces   = params[:pattern].present? && params[:type] == 'piece' ? Pack::Piece.where(id: params[:pattern]) : nil
 
       if @pieces

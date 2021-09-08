@@ -53,9 +53,9 @@
                         - if option.title.present?
                           %br
                           %i= option.title
-                  %td.text-center.align-middle= customer.subscription.is_package?('pre_assignment_option') ? 'Activé' : '-'
-                  %td.text-center.align-middle= customer.subscription.is_package?('retriever_option') ? "Récupération banque +\nFactures sur Internet" : "-"
-                  %td.align-middle= customer.subscription.number_of_journals
+                  %td.text-center.align-middle= customer.subscription.try(:is_package?, 'pre_assignment_option') ? 'Activé' : '-'
+                  %td.text-center.align-middle= customer.subscription.try(:is_package?, 'retriever_option') ? "Récupération banque +\nFactures sur Internet" : "-"
+                  %td.align-middle= customer.subscription.try(:number_of_journals)
                   %td.text-end.pointer.align-middle
                     .action.sub_edit_delete.list-collaborators
                       %span.glyph= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})

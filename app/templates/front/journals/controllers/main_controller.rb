@@ -1,9 +1,10 @@
 # frozen_string_literal: true
+
 class Journals::MainController < OrganizationController
   before_action :load_customer, except: %w[index]
   before_action :verify_rights
   before_action :verify_if_customer_is_active
-  before_action :load_journal, only: %w[edit update destroy edit_analytics update_analytics delete_analytics sync_analytics]
+  before_action :load_journal, only: %w[edit update destroy update_analytics delete_analytics sync_analytics]
   before_action :verify_max_number, only: %w[new create select copy]
 
   prepend_view_path('app/templates/front/journals/views')
@@ -43,28 +44,20 @@ class Journals::MainController < OrganizationController
     end
   end
 
-  # GET /organizations/:organization_id/journals/edit_analytics
-  def edit_analytics
-    unless @customer
-      flash[:error] = t('authorization.unessessary_rights')
-      redirect_to organization_journals_path(@organization)
-    end
-  end
-
   # PUT /organizations/:organization_id/journals/:journal_id/edit_analytics
   def update_analytics
     if @customer
       analytic_reference = Journal::AnalyticReferences.new(@journal)
-      if analytic_reference.add(params[:analytic])
-        flash[:success] = 'Modifié avec succès.'
+      if analytic_reference.add(params[:analysis][:analytic])
+        json_flash[:success] = 'Modifié avec succès.'
       else
-        flash[:error] = analytic_reference.error_messages
+        json_flash[:error] = analytic_reference.error_messages
       end
-      redirect_to edit_analytics_organization_customer_journals_path(@organization, @customer, id: @journal)
     else
-      flash[:error] = t('authorization.unessessary_rights')
-      redirect_to organization_journals_path(@organization)
+      json_flash[:error] = t('authorization.unessessary_rights')
     end
+
+    render json: { json_flash: json_flash }, status: 200
   end
 
   def sync_analytics

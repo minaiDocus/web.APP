@@ -143,7 +143,7 @@ class Documents::PiecesController < FrontController
   def update_analytics
     pieces = Pack::Piece.where(id: params[:pieces_ids].presence || 0).where("pre_assignment_state != 'ready'")
 
-    messages = PiecesAnalyticReferences.new(pieces, params[:analytic]).update_analytics
+    messages = PiecesAnalyticReferences.new(pieces, params[:analysis][:analytic]).update_analytics
 
     render json: { json_flash: { error: messages[:error_message], success: messages[:sending_message] } }, status: 200
   end

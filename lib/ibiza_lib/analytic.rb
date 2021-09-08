@@ -65,7 +65,7 @@ module IbizaLib
       return false unless list
       3.times do |e|
         i = (e+1).to_s
-        if data[i][:name].present?
+        if data[i].try(:[], :name).present?
           analytic = list.select { |analytic| analytic[:name] == data[i][:name] }.first
           return false unless analytic
 
@@ -92,15 +92,15 @@ module IbizaLib
 
         3.times do |e|
           i = (e+1).to_s
-          analytics["a#{i}_name"] = analytic[i][:name].presence
+          analytics["a#{i}_name"] = analytic[i].try(:[], :name).presence
           references = []
           3.times do |a|
             j = (a+1).to_s
             references << {
-                            ventilation: analytic["#{i}#{j}"][:ventilation].presence,
-                            axis1:       analytic["#{i}#{j}"][:axis1].presence,
-                            axis2:       analytic["#{i}#{j}"][:axis2].presence,
-                            axis3:       analytic["#{i}#{j}"][:axis3].presence,
+                            ventilation: analytic["#{i}#{j}"].try(:[], :ventilation).presence,
+                            axis1:       analytic["#{i}#{j}"].try(:[], :axis1).presence,
+                            axis2:       analytic["#{i}#{j}"].try(:[], :axis2).presence,
+                            axis3:       analytic["#{i}#{j}"].try(:[], :axis3).presence,
                           }
           end
           analytics["a#{i}_references"] = references.to_json.to_s

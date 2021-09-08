@@ -28,7 +28,10 @@ class DocumentsAnalytics{
     this.clear_analytics();
 
     if(is_used)
-    {
+    { 
+      $('.journal_hint').addClass('hide');
+      if(type == 'journal')
+        $('.journal_hint').removeClass('hide');
       $.ajax({
         url: '/compta_analytics/analytics',
         data: { code: code, pattern: pattern, type: type },

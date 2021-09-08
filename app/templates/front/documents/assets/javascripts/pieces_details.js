@@ -71,7 +71,7 @@ class DocumentsDetails extends DocumentsMain{
     let params =  {
                     url: '/pieces/update_analytics',
                     type: 'POST',
-                    data: { analytic: data['analytic'], pieces_ids: get_all_selected('piece') },
+                    data: { analysis: data, pieces_ids: get_all_selected('piece') },
                     dataType: 'json'
                   }
 

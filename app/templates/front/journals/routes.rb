@@ -8,7 +8,6 @@ Rails.application.routes.draw do
 		  	resources :journals, except: %w(index show), controller: 'main' do
           post    'copy',              on: :collection
           get     'select',            on: :collection
-          get     'edit_analytics',    on: :collection
           post    'update_analytics',  on: :collection
           post    'sync_analytics',    on: :collection
         end
