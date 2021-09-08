@@ -42,7 +42,7 @@ class ConfigurationStep3{
     let self = this;
     if(this.valid_fields()){
       let data_local  = { budgea_id: this.connector['id'] };
-      let data_remote = this.mainConfig.applicationJS.serializeToJson( this.form );
+      let data_remote = SerializeToJson( this.form );
 
       this.mainConfig.budgeaApi.update_additionnal_infos(this.connector['id'], data_remote, data_local)
                                 .then((e)=>{ self.mainConfig.goto(4, this.connector); })

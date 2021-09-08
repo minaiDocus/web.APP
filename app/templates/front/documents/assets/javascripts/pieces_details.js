@@ -37,9 +37,45 @@ class DocumentsDetails extends DocumentsMain{
                         'dataType': 'json'
                       }
 
-        this.applicationJS.parseAjaxResponse(params).then((e)=>{ this.load_pieces(true); this.applicationJS.noticeFlashMessageFrom(null, 'Pièce(s) supprimée(s) avec succès') });
+        this.applicationJS.parseAjaxResponse(params).then((e)=>{ this.load_pieces(true); });
       }
     }
+  }
+
+  restore_piece(id){
+     if(confirm('Voulez vous vraiment restaurer cette pièce')){
+        let params =  {
+                        'url': '/documents/restore',
+                        'data': { id: id },
+                        'type': 'POST',
+                        'dataType': 'json'
+                      }
+
+        this.applicationJS.parseAjaxResponse(params).then((e)=>{ this.load_pieces(true); });
+    }
+  }
+
+  edit_analysis(code, is_used=false){
+    let selected_pieces = get_all_selected('piece');
+    let id = ''
+    if(selected_pieces.length == 1)
+      id = selected_pieces[0]
+
+    if(is_used){
+      $('#comptaAnalysisEdition.modal').modal('show');
+      AppEmit('compta_analytics.main_loading', { code: code, pattern: id, type: 'piece', is_used: true });
+    }
+  }
+
+  update_analytics(data={}){
+    let params =  {
+                    url: '/pieces/update_analytics',
+                    type: 'POST',
+                    data: { analytic: data['analytic'], pieces_ids: get_all_selected('piece') },
+                    dataType: 'json'
+                  }
+
+    this.applicationJS.parseAjaxResponse(params).then((e)=>{ this.load_pieces(true); });
   }
 
   show_preseizures_modal(elem){
@@ -71,8 +107,13 @@ jQuery(function() {
   AppListenTo('documents_reinit_datas', (e)=>{ main.load_pieces(false) });
 
   AppListenTo('documents_delete_piece', (e)=>{ main.delete_piece($(e.detail.obj)) });
+  AppListenTo('documents_restore_piece', (e)=>{ main.restore_piece(e.detail.id) });
+
+  AppListenTo('documents_edit_analysis', (e)=>{ main.edit_analysis(e.detail.code, e.detail.is_used) });
 
   AppListenTo('documents_search_text', (e)=>{ main.load_pieces(true); });
+
+  AppListenTo('compta_analytics.validate_analysis', (e)=>{ main.update_analytics(e.detail.data) });
 
   AppListenTo('on_scroll_end', (e)=>{ main.load_next_page(); });
 });

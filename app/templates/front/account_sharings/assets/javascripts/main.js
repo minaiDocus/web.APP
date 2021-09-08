@@ -6,7 +6,7 @@ class AccountSharingsMain{
   }
 
   account_sharings_new(){
-    let data = this.applicationJS.serializeToJson( $(`.modal#account-sharing-new form#new_user`) );
+    let data = SerializeToJson( $(`.modal#account-sharing-new form#new_user`) );
     let ajax_params = {
                         url: '/account_sharings',
                         type: 'POST',
@@ -27,7 +27,7 @@ class AccountSharingsMain{
   }
 
   account_sharings_new_request(){
-    let data = this.applicationJS.serializeToJson( $(`.modal#account-sharing-new-request form#new_account_sharing_request`) );
+    let data = SerializeToJson( $(`.modal#account-sharing-new-request form#new_account_sharing_request`) );
     let ajax_params = {
                         url: '/account_sharings/create_request',
                         type: 'POST',

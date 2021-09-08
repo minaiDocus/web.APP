@@ -81,7 +81,7 @@ class ConfigurationStep2{
         else
           this.mainConfig.budgeaApi.webauth(account_id, this.mainConfig.current_connector['id'], true);
       }else{
-        let all_datas   = this.mainConfig.applicationJS.serializeToJson( this.form );
+        let all_datas   = SerializeToJson( this.form );
         let data_remote = JSON.parse(JSON.stringify(all_datas)); //Cloning all_datas
 
         delete data_remote.ido_connector_id;
@@ -118,7 +118,7 @@ class ConfigurationStep2{
         }
 
         if(this.with_contact){
-          let data_contact = this.mainConfig.applicationJS.serializeToJson( this.contact_form );
+          let data_contact = SerializeToJson( this.contact_form );
           delete data_contact.local_company;
           delete data_contact.local_name;
           delete data_contact.local_first_name;

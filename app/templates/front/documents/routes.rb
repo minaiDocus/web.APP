@@ -7,7 +7,7 @@ Rails.application.routes.draw do
     post 'documents/tags/update', to: 'main#update_tags', as: 'documents_update_tags'
 
     post 'documents/export_options', to: 'main#export_options', as: 'documents_export_options'
-    post 'documents/restore/:id', to: 'pieces#restore_piece', as: 'documents_restore'
+    post 'documents/restore/:id', to: 'pieces#restore', as: 'restore_document'
     get 'documents/export_preseizures/:q', to: 'main#export_preseizures', as: 'documents_export_preseizures'
     get 'documents/download_archive/:id', to: 'main#download_archive', as: 'documents_download_archive'
     get 'documents/download_bundle/:id', to: 'main#download_bundle', as: 'documents_download_bundle' 
@@ -25,6 +25,7 @@ Rails.application.routes.draw do
     get 'preseizures/accounts_list/:account_id', to: 'preseizures#accounts_list', as: 'preseizures_accounts_list'
     get 'preseizures/:id', to: 'preseizures#show', as: 'preseizures_details'
 
+    post 'pieces/update_analytics', to: 'pieces#update_analytics', as: 'update_pieces_analytics'
     get 'account/documents/pieces/:id/download/(:style)', to: 'pieces#get_piece_file', as: 'get_piece_file'
     get 'account/documents/temp_documents/:id/download/(:style)', to: 'pieces#get_temp_document_file', as: 'get_temp_document_file'
   end

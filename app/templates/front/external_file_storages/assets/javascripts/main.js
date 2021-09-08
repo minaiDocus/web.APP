@@ -6,7 +6,7 @@ class EFSMain{
   }
 
   update_storage(class_name){
-    let data = this.applicationJS.serializeToJson( $(`.storage_form form.edit_${class_name}`) );
+    let data = SerializeToJson( $(`.storage_form form.edit_${class_name}`) );
     let ajax_params = {
                         url: '/external_file_storage',
                         type: 'POST',

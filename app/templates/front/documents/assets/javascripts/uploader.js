@@ -37,7 +37,9 @@ class DocumentsUploader{
     if(this.upload_params[this.current_code] != undefined)
       use_analytics = this.upload_params[this.current_code]['is_analytic_used'];
 
-    AppEmit('compta_analytics_main_loading', { code: this.current_code, pattern: this.input_journal.val(), type: 'journal', is_used: use_analytics });
+    $('#add-document form#fileupload .hidden_analytic_fields').html('');
+    $(".analytic_resume_box").html('');
+    AppEmit('compta_analytics.main_loading', { code: this.current_code, pattern: this.input_journal.val(), type: 'journal', is_used: use_analytics });
   }
 
   fill_journals_and_periods(){
@@ -94,6 +96,26 @@ jQuery(function() {
     $('#add-document .btn-add').unbind('click.addition').bind('click.addition', function(e){ VARIABLES.set('can_reload_packs', true); });
   });
 
-  uploader.base_modal.on('shown.bs.modal', function(e){ VARIABLES.set('analytic_target_form', '#fileupload'); uploader.initialize_params();});
+  uploader.base_modal.on('shown.bs.modal', function(e){ uploader.initialize_params();});
   uploader.base_modal.on('hide.bs.modal', function(e){ uploader.reload_packs(); });
+
+  AppListenTo('compta_analytics.hide_modal', (e)=>{
+    $('.analytic_resume_box').html(e.detail.resume);
+
+    //clone all hidden analytics fields to fileupload form
+    let hidden_fields = $('#comptaAnalysisEdition form#compta_analytic_form_modal .hidden_fields').html();
+    $('#add-document form#fileupload .hidden_analytic_fields').html(hidden_fields);
+  });
+
+  AppListenTo('compta_analytics.after_load', function(e){
+    if(e.detail.type == 'success')
+    {
+      if(e.detail.with_default){ $('.with_default_analysis').show(); }
+      $('.with_compta_analysis').show();
+    }
+    else
+    {
+      $('.with_default_analysis, .with_compta_analysis').hide();
+    }
+  });
 });

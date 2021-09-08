@@ -59,7 +59,7 @@ class ConfigurationStep4{
   submit_selected_accounts(callback=null){
     if(confirm('Etes vous sûr?')){
       let self = this
-      let data = this.mainConfig.applicationJS.serializeToJson( this.target_html.find(`form#account-selection`) );
+      let data = SerializeToJson( this.target_html.find(`form#account-selection`) );
 
       let selected_accounts  = this.remote_accounts.filter((account)=>{ return data['bank_accounts'].find(d=>{ return d == account['id'] }); });
 

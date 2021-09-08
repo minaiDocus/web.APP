@@ -44,7 +44,7 @@ class RPBanksSelection{
   submit_selected_accounts(){
     if(confirm('Etes vous sûr?')){
       let self = this
-      let data = this.mainConfig.applicationJS.serializeToJson( this.mainConfig.main_modal.find('.step4 form#account-selection') );
+      let data = SerializeToJson( this.mainConfig.main_modal.find('.step4 form#account-selection') );
 
       let selected_accounts  = this.remote_accounts.filter((account)=>{ return data['bank_accounts'].find(d=>{ return d == account['id'] }); });
 

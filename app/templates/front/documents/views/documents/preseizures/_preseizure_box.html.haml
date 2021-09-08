@@ -136,6 +136,12 @@
       - elsif delivery_state != 'none'
         %span.badge.badge-success.semibold= t("pieces.delivery_state.#{delivery_state}")
 
+    - if delivery_state == 'none'
+      - if preseizure.is_exported?
+        %span.badge.badge-success.semibold Téléchargé
+      - else
+        %span.badge.badge-warning.semibold Non récupéré
+
     - if preseizure.third_party.present?
       %span.badge.bg-dark.semibold= preseizure.third_party
 

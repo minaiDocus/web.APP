@@ -96,7 +96,7 @@ class RetrieverMain{
       type = 'PUT';
     }
 
-    let data         = this.applicationJS.serializeToJson( $(`#internal-retrievers form#internal-retriever-form`) );
+    let data         = SerializeToJson( $(`#internal-retrievers form#internal-retriever-form`) );
     let ajax_params  =   {
                             'url': url,
                             'type': type,

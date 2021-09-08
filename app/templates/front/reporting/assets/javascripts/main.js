@@ -34,7 +34,7 @@ function handle_customer_change(statistics){
     setTimeout(()=>{
       AppToggleLoading('show');
 
-      // load_reporting_invoices();
+      load_reporting_invoices();
       statistics.load_all();
 
     }, 2000);

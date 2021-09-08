@@ -38,7 +38,7 @@
     .col-md-2.text-end  
       %span.pointer.ms-2.action-selected.delete_piece.hide{title: 'Supprimer', multi: 'true'}= glyphicon('trash', { size: '18',  color:'#FF4848'})
       %span.pointer.ms-2.action-selected.update_tags.hide{title: 'Tagger', multi: 'true'}= glyphicon('tag', { size: '18', color:'rgba(26, 26, 26, 0.32);'})
-      %span.pointer.ms-2.action-selected.hide{title: 'Éditer', multi: 'true'}= glyphicon('pencil', { size: '18', color:'rgba(26, 26, 26, 0.32);'})
+      %span.pointer.ms-2.action-selected.edit_compta_analysis.hide{ title: 'Édition compta. analytiques', data: { code: @pack.owner.code, is_used: @pack.owner.uses_ibiza_analytics?.to_s } }= glyphicon('pencil', { size: '18', color:'rgba(26, 26, 26, 0.32);'})
       %span.pointer.ms-2.download_pack_bundle{title: 'Télécharger', data: {id: @pack.id}}= glyphicon('data-transfer-download', { size: '18', color:'rgba(26, 26, 26, 0.32);'})
       %span.pointer.ms-2.download_pack_archive{title: 'Télécharger une archive zip', data: {id: @pack.id}}= glyphicon('account-logout', { size: '18', color:'rgba(26, 26, 26, 0.32);', style: 'transform: rotate(90deg)'})
       %span.pointer.ms-2.preseizures_export{title: 'Export écriture', data:{ id: @pack.id, type: 'special_piece', multi: 'true' }}= glyphicon('cloud-download', { size: '18', color:'rgba(26, 26, 26, 0.32);'})
@@ -54,5 +54,6 @@
 
 = render partial: 'document_dialog'
 = render file: Rails.root.join('app/templates/front/documents/views/documents/preseizures/_preseizures_dialog.html.haml')
+= render file: Rails.root.join('app/templates/front/compta_analytics/views/compta_analytics/_analytics.html.haml'), locals: { with_validate_button: true }
 
 = javascript_include_tag 'front/documents/assets/javascripts/pieces_details'

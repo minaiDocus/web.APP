@@ -4,27 +4,19 @@ class DocumentsAnalytics{
     this.defaults  = null;
   }
 
-  bind_events(){
-    let me = this;
+  form_target(){
+    return '#compta_analytic_form_modal'
+  }
 
+  bind_events(){
     $('.analytic_name').on('change', (e)=>{ this.handle_analysis_change($(e.currentTarget)); });
     $('.analytic_ventilation').on('change', (e)=>{ this.handle_analysis_ventilation($(e.currentTarget)); });
     $('.analytic_select').on('change', (e)=>{ this.handle_analysis_select($(e.currentTarget)); });
-    $('.analytic_group .section_map').on('click', (e)=>{ this.toogle_section_group($(e.currentTarget)); });
-
-    $('#comptaAnalysisEdition').on('hidden.bs.modal', function() {
-      $("#comptaAnalysisEdition .length_alert").html('');
-
-      if(VARIABLES.get('analytic_target_form') == '#fileupload'){
-        $("#fileupload .analytic_resume_box").html(me.get_analytics_resume());
-        $('#analytic_user_fields .with_default_analysis').hide();
-      }
-    });
+    $('.analytic_group .section_map').unbind('click').bind('click', (e)=>{ this.toogle_section_group($(e.currentTarget)); });
   }
 
   clear_analytics(){
     $('.analytic_box').addClass('hide');
-    $(".analytic_resume_box").html('');
 
     $('.analytic_select').html('');
     $('.analytic_select').val('').change();
@@ -43,8 +35,9 @@ class DocumentsAnalytics{
         dataType: 'json',
         type: 'POST',
         beforeSend: function(){
-          $('#analytic .fields, .no_compta_analysis, .with_default_analysis, .with_compta_analysis, .analytic_resume_box, .help-block').hide();
-          $('.analytic_loading').show();
+          me.bind_events();
+          $('#analytic .fields, .no_compta_analysis, .help-block').hide();
+          AppToggleLoading('show');
         },
         success: function(data){
           me.analytics = data['analytics'];
@@ -57,31 +50,36 @@ class DocumentsAnalytics{
             });
             $('.analytic_name').html(analytic_options);
 
-            $('#analytic .fields, .with_compta_analysis, .analytic_resume_box, .help-block').show();
+            $('#analytic .fields, .help-block').show();
             me.set_default_analytics(data['defaults']);
-
-            if(VARIABLES.get('analytic_target_form') == '#fileupload')
-              $("#fileupload .analytic_resume_box").html(me.get_analytics_resume());
+            AppEmit('compta_analytics.after_load', { type: 'success', with_default:  (data['defaults'] != undefined && data['defaults'] != null && data['defaults'] != '') });
           }
           else
           {
             $('.no_compta_analysis').show();
-            $('.with_compta_analysis, .analytic_resume_box, .help-block').hide();
+            $('.help-block').hide();
+            AppEmit('compta_analytics.after_load', { type: 'error', message: 'no_analytics' });
           }
 
-          $('.analytic_loading').hide();
           me.bind_events();
+
+          AppToggleLoading('hide');
         },
         error: function(data){
-          $('#analytic .fields, .analytic_loading, .with_default_analysis, .with_compta_analysis, .analytic_resume_box, .help-block').hide();
+          AppToggleLoading('hide');
+          $('#analytic .fields, .help-block').hide();
           $('.no_compta_analysis').show();
+
+          AppEmit('compta_analytics.after_load', { type: 'error', message: data });
         }
       });
     }
     else
     {
-      $('#analytic .fields, .analytic_loading, .with_default_analysis, .with_compta_analysis, .analytic_resume_box, .help-block').hide();
+      $('#analytic .fields, .help-block').hide();
       $('.no_compta_analysis').show();
+
+      AppEmit('compta_analytics.after_load', { type: 'error', message: 'not_used' });
     }
   }
 
@@ -90,10 +88,9 @@ class DocumentsAnalytics{
 
     if(defaults != undefined && defaults != null && defaults != '')
     {
-      $('.with_default_analysis').show();
-
       for(var i=1; i <= 3; i++)
       {
+        let j = 0;
         let a_name        = defaults[`a${i}_name`];
         let a_references  = defaults[`a${i}_references`];
         if(a_name != undefined && a_name != null && a_name != '')
@@ -124,7 +121,7 @@ class DocumentsAnalytics{
   get_analytics_resume(){
     let html =  '<div class="analytic_resume"><div class="analytic_title">Analyse en cours :</div>';
     let axis_option_name = '';
-    let target = VARIABLES.get('analytic_target_form');
+    let target = this.form_target();
 
     for(var i=1; i<=3; i++){
       let axis_value = $(`${target} .analytic_${i}_name`).val();
@@ -166,7 +163,7 @@ class DocumentsAnalytics{
   }
 
   handle_analysis_change(current_analytic){
-    let target = VARIABLES.get('analytic_target_form');
+    let target = this.form_target();
     let number = current_analytic.data('analytic-number');
     let value  = current_analytic.val() || '';
 
@@ -236,7 +233,7 @@ class DocumentsAnalytics{
 
   handle_analysis_ventilation(elem){
     let number    = elem.data('ventilation-number');
-    let target    = VARIABLES.get('analytic_target_form');
+    let target    = this.form_target();
     let ss_target = elem.data('target');
 
     $(target + ' .' + ss_target).val( elem.val() );
@@ -252,7 +249,7 @@ class DocumentsAnalytics{
   }
 
   handle_analysis_select(elem){
-    let target    =  VARIABLES.get('analytic_target_form');
+    let target    =  this.form_target();
     let ss_target = elem.data('target');
     $(target + ' .' + ss_target).val( elem.val() );
   }
@@ -264,5 +261,15 @@ jQuery(function() {
 
   $('document').livequery(function(){ main.bind_events(); });
 
-  AppListenTo('compta_analytics_main_loading', (e)=>{ main.load_analytics(e.detail.code, e.detail.pattern, e.detail.type, e.detail.is_used); });
+  $('#comptaAnalysisEdition .btn#validate_analysis').unbind('click').bind('click', function(){ 
+    let data = SerializeToJson($('#comptaAnalysisEdition form#compta_analytic_form_modal'));
+    AppEmit('compta_analytics.validate_analysis', { data: data });
+  });
+
+  $('.modal#comptaAnalysisEdition').on('hide.bs.modal', function(e){
+    let data = SerializeToJson($('#comptaAnalysisEdition form#compta_analytic_form_modal'));
+    AppEmit('compta_analytics.hide_modal', { data: data, resume: main.get_analytics_resume() });
+  });
+
+  AppListenTo('compta_analytics.main_loading', (e)=>{ main.load_analytics(e.detail.code, e.detail.pattern, e.detail.type, e.detail.is_used); });
 });

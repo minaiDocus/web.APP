@@ -1,4 +1,5 @@
 .notification-profile
+  %input{ type: 'hidden', name: 'user[h_change_notifications]', value: 'true' }
   %h3 Notifications et remontées d'alertes
   = f.simple_fields_for :notify do |o|  
     %ul.nav.nav-tabs.ms-3{ "role" => "tablist" }

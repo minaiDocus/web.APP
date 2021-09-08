@@ -44,24 +44,20 @@ function bind_all_events(){
     if($(this).is(':checked')){
       $(this).closest('.box').addClass('selected');
       $('.grid .stamp-content#document_grid_' + piece_id).addClass('selected');
-
-      if ($('.select-document').closest('.box.selected').length <= 1) {
-        $('.action-selected-hide').removeClass('hide');
-        $('.action-selected').addClass('hide');
-      }
-    }
-    else
-    {
-      if ($('.select-all').is(':checked')) {$('.select-all').prop('checked', false);}
-
-      if ($('.select-document').closest('.box.selected').length > 1) {
-        $('.action-selected-hide').addClass('hide');
-        $('.action-selected').removeClass('hide');
-      }
+    }else{
+      if ($('.select-all').is(':checked')) { $('.select-all').prop('checked', false); }
 
       $(this).closest('.box').removeClass('selected');
       $('.grid .stamp-content#document_grid_' + piece_id).removeClass('selected');
-    }    
+    }
+
+    if ($('.box.list.selected').length < 1) {
+      $('.action-selected-hide').removeClass('hide');
+      $('.action-selected').addClass('hide');
+    }else{
+      $('.action-selected-hide').addClass('hide');
+      $('.action-selected').removeClass('hide');
+    }
   });
 
   $('.more-filter').unbind('click').bind('click',function(e) {
@@ -138,7 +134,10 @@ function bind_all_events(){
 
   $('.update_tags').unbind('click').bind('click', function(){ AppEmit('documents_update_tags', {'obj': this}); });
 
+  $('.edit_compta_analysis').unbind('click').bind('click', function(){ AppEmit('documents_edit_analysis', { 'code': $(this).data('code'), is_used: $(this).data('is-used') }); });
+
   $('.delete_piece').unbind('click').bind('click', function(){ AppEmit('documents_delete_piece', {'obj': this}); });
+  $(".content-list-pieces-deleted .restore").unbind('click').bind('click', function(){ AppEmit('documents_restore_piece', { id: $(this).attr('data-piece-id') }); });
 
   $('.edit_preseizures').unbind('click').bind('click', function(){ AppEmit('documents_edit_preseizures', {'obj': this}); });
 
@@ -155,12 +154,6 @@ function bind_all_events(){
     
     $("#PdfViewerDialog .modal-body .view-content iframe.src-piece").attr("src", url);
     $("#PdfViewerDialog").modal('show');
-  });
-
-  $(".content-list-pieces-deleted .restore").unbind('click').bind('click', function(){ 
-    var piece_id = $(this).attr('data-piece-id');
-
-    alert('TODO');
   });
 }
 

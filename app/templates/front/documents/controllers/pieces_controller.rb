@@ -65,11 +65,11 @@ class Documents::PiecesController < FrontController
 
     pack.delay.try(:recreate_original_document) if pack
 
-    render json: { success: true }, status: 200
+    render json: { success: true, json_flash: { success: 'Pièce(s) supprimée(s) avec succès' } }, status: 200
   end
 
-  def restore_piece
-    piece = Pack::Piece.unscoped.find params[:piece_id]
+  def restore
+    piece = Pack::Piece.unscoped.find params[:id]
 
     piece.delete_at = nil
     piece.delete_by = nil
@@ -98,7 +98,7 @@ class Documents::PiecesController < FrontController
 
     piece.waiting_pre_assignment if temp_pack.is_compta_processable? && piece.preseizures.size == 0 && piece.temp_document.try(:api_name) != 'invoice_auto' && !piece.pre_assignment_waiting_analytics?
 
-    render json: { success: true }, status: 200
+    render json: { success: true, json_flash: { success: 'Pièce réstorée avec succès' } }, status: 200
   end
 
   # GET /account/documents/:id/download/:style
@@ -138,6 +138,14 @@ class Documents::PiecesController < FrontController
     else
       render body: nil, status: 404
     end
+  end
+
+  def update_analytics
+    pieces = Pack::Piece.where(id: params[:pieces_ids].presence || 0).where("pre_assignment_state != 'ready'")
+
+    messages = PiecesAnalyticReferences.new(pieces, params[:analytic]).update_analytics
+
+    render json: { json_flash: { error: messages[:error_message], success: messages[:sending_message] } }, status: 200
   end
 
   private

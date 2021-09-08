@@ -81,7 +81,6 @@ Rails.application.routes.draw do
   front_draw('exact_online')
   front_draw('paper_processes')
   front_draw('suspended')
-  front_draw('analytics')
   front_draw('profiles')
 
   ### --------------------------- admin ---------------------------- ###

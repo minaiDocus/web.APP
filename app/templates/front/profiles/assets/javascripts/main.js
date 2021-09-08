@@ -6,7 +6,7 @@ class ProfilesMain{
   }
 
   change_password(){
-    let data = this.applicationJS.serializeToJson( $('.modal#change-password').find('form.edit_user') );
+    let data = SerializeToJson( $('.modal#change-password').find('form.edit_user') );
     let ajax_params = {
                         url: '/profiles',
                         type: 'PUT',
@@ -17,7 +17,7 @@ class ProfilesMain{
   }
 
   change_notifications(){
-    let data = this.applicationJS.serializeToJson( $('form#subscription_options') );
+    let data = SerializeToJson( $('form#subscription_options') );
     let ajax_params = {
                         url: '/profiles',
                         type: 'PUT',
