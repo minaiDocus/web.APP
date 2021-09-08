@@ -97,6 +97,10 @@ function bind_all_events_paper_set_orders(){
 
     $('select').unbind('change').bind('change', function(e) {
       if ($(this).attr('id') === 'order_paper_set_start_date' || $(this).attr('id') === 'order_paper_set_end_date' ) {
+        AppEmit('update_casing_counts');
+      }
+
+      else if ($(this).attr('id') === 'order_paper_set_casing_count') {
         AppEmit('check_casing_size_and_count');
       }
 
