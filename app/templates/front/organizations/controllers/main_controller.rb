@@ -74,12 +74,23 @@ class Organizations::MainController < OrganizationController
 
   # GET /account/organizations/:id/
   def show
-    @members = @organization.customers.page(params[:page]).per(params[:per])
-    @periods = Period.where(user_id: @organization.customers.pluck(:id)).where('start_date < ? AND end_date > ?', Date.today, Date.today).includes(:billings)
+    @organization_statistic = SubscriptionStatistic.where(organization_id: @organization.id).first
+    @stat_customers_labels = []
+    @stat_customers_values = []
 
-    @subscription         = @organization.find_or_create_subscription
-    @subscription_options = @subscription.options.sort_by(&:position)
-    @total                = Billing::OrganizationBillingAmount.new(@organization).execute
+    date = Time.now.beginning_of_month
+    6.times do |i|
+      date = date - 1.month
+
+      @stat_customers_labels << date.strftime('%m/%Y')
+      @stat_customers_values << @organization.customers.active.where("DATE_FORMAT(created_at, '%Y%m') <= #{date.strftime('%Y%m')}").size
+    end
+    # @members = @organization.customers.page(params[:page]).per(params[:per])
+    # @periods = Period.where(user_id: @organization.customers.pluck(:id)).where('start_date < ? AND end_date > ?', Date.today, Date.today).includes(:billings)
+
+    # @subscription         = @organization.find_or_create_subscription
+    # @subscription_options = @subscription.options.sort_by(&:position)
+    # @total                = Billing::OrganizationBillingAmount.new(@organization).execute
   end
 
   # GET /account/organizations/:id/edit

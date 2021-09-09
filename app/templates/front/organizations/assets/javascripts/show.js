@@ -1,6 +1,8 @@
 jQuery(function () {
 
-  var organization_options = JSON.parse($('#organization_options').val() || '{}');
+  var organization_options = JSON.parse($('#organization_options').val() || '{}') || {};
+  var stat_customers_labels = JSON.parse($('#stat_customers_labels').val() || '[]') || [];
+  var stat_customers_values = JSON.parse($('#stat_customers_values').val() || '[]') || [];
 
   var chart_abonnement = document.getElementById('chart_abonnement').getContext('2d')
 
@@ -41,9 +43,9 @@ jQuery(function () {
   var chart_dossiers = document.getElementById('chart_dossiers').getContext('2d')  
 
   var mychart_2 = new Chart(chart_dossiers, {type: 'line', data: {
-    labels: ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jui', 'Jul', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec'],
+    labels: stat_customers_labels,
     datasets: [{      
-      data: [65, 59, 80, 81, 56, 55, 40, 25, 87, 45, 32, 49],
+      data: stat_customers_values,
       fill: false,
       borderColor: '#72AA42',      
       backgroundColor: 'rgba(75, 192, 192, 0.2)',   
