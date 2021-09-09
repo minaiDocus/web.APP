@@ -12,7 +12,7 @@
     .notify-warning.fs-origin.mb-3{ class: "#{(@subscription && @subscription.futur_packages.present? && @subscription.futur_packages != '[]') ? '' : 'hide' }" }
       Disparaîtra le mois prochain
   .ido_x_content
-    .row.box
+    .row
       .col-md-3.text-center
         .form-check.form-check-inline{ class: "#{'notify-warning' if notify_warning(@subscription, 'ido_x')}", title: Subscription::Package.infos_of(:ido_x)[:tooltip], data: { toggle: 'tooltip', placement: 'right' }}
           .label-package.label-ido-x.bold iDo'X

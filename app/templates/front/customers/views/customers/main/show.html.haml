@@ -7,6 +7,9 @@
     .col-md-12
       = render 'header'
 
+  %span.auto-scroll-span-left
+    %button.btn= glyphicon('arrow-left', { size: '13' })
+  
   %ul.nav.nav-tabs.ms-3.derivationLeft{ "role" => "tablist" }
     %li.nav-item.no-margin{ "role" => "presentation" }
       %button.semibold.nav-link#information-tab{ class: ('active' if params[:tab] == 'information' || params[:tab].blank? ), "data-bs-toggle" => "tab", "data-bs-target" => "#information", type: :button, "role" => "tab", "aria-controls" => "information", "aria-selected" => "#{params[:tab] == 'information' || params[:tab].blank?}" } Informations générales
@@ -34,7 +37,7 @@
       - if @customer.uses?(:ibiza)
         %li.nav-item.no-margin{ "role" => "presentation" }
           %button.semibold.nav-link#ibiza-box-tab{ class: ('active' if params[:tab] == 'ibiza_box'), "data-bs-toggle" => "tab", "data-bs-target" => "#ibiza-box", type: :button, "role" => "tab", "aria-controls" => "ibiza-box", "aria-selected" => "#{params[:tab] == 'ibiza_box'}" } iBiza Box
-      %li.nav-item.dropdown
+      %li.nav-item.dropdown.no-margin
         %button.semibold.nav-link.dropdown-toggle#softwares-list{ "data-bs-toggle" => "dropdown", "aria-expanded" => "false", type: :button } Logiciels comptables / export csv
         %ul.dropdown-menu{ "aria-labelledby" => "softwares-list" }
           - if software_uses('ibiza')   
@@ -131,15 +134,22 @@
       %li.nav-item.no-margin{ "role" => "presentation" }
         %button.semibold.nav-link#file-storages-tab{ class: ('active' if params[:tab] == 'file_storage'), "data-bs-toggle" => "tab", "data-bs-target" => "#file-storages", type: :button, "role" => "tab", "aria-controls" => "file-storages", "aria-selected" => "#{params[:tab] == 'file_storage'}" } Stockages externes
 
+  %span.auto-scroll-span-right
+    %button.btn= glyphicon('arrow-right', { size: '13' })
+
   .tab-content
+<<<<<<< HEAD
     .tab-pane.box.no-margin#information{ class: ('active' if params[:tab] == 'information' || params[:tab].blank?), "role" => "tabpanel", "aria-labelledby" => "information-tab" }
       - if @customer.inactive?
         %span.badge.bg-danger.text-start.closed_account Information non disponible car le dossier est clôturé
       - else
         %span loading...
+=======
+    .tab-pane.box.no-margin#information{ class: ('active' if params[:tab] == 'information' || params[:tab].blank?), "role" => "tabpanel", "aria-labelledby" => "information-tab" }      
+>>>>>>> bd3c86d... NewDesign: Organization next
 
     - if @customer.active?
-      .tab-pane.box.no-margin#subscription{class: ('active' if params[:tab] == 'subscription'),  "role" => "tabpanel", "aria-labelledby" => "subscription-tab" }
+      .tab-pane.no-margin#subscription{class: ('active' if params[:tab] == 'subscription'),  "role" => "tabpanel", "aria-labelledby" => "subscription-tab" }
         %h4.text-start
           Périodicité
           - if @subscription.period_duration == 1

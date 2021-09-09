@@ -1,15 +1,15 @@
 - options = { size: '15', color: 'rgba(26, 26, 26, 0.7);'}
-.row.box.clearfix
+.row.clearfix
   .col-md-6.text-start    
     - if @customer.inactive?
       %span.badge.bg-danger.text-start.closed_account Dossier clôturé
     %h3.bold.text-start
-      Clients :
-      %span.customer-name= @customer.info    
+      %span.me-2 Clients
+      %span.badge.badge-secondary.regular.customer-name= @customer.info
   .col-md-6.text-end.no-padding
     - if @customer.active?
       = link_to glyphicon('ban', { size: '15', color: '#FF4848'}) + ' Clôturer le dossier', account_close_confirm_organization_customer_path(@organization, @customer), class: 'btn btn-danger semibold close_customer'
     - else
-      = link_to glyphicon('folder', { size: '15', color: '#72AA42'}) + ' Réouvrir le dossier', account_reopen_confirm_organization_customer_path(@organization, @customer), class: 'btn btn-primary semibold reopen_customer'
-    - if @user.is_admin && (@customer.active? || @customer.inactive_at > Time.now)
-      = link_to glyphicon('ban', { size: '15', color: '#FF4848'}) + ' Clôturer le dossier maintenant !', account_close_confirm_organization_customer_path(@organization, @customer, close_now: 1), class: 'btn btn-danger semibold close_customer_now'   
+      %button.btn.btn-light.semibold.customer-reopen{ data: { customer_id: @customer.id }}
+        %span.me-2=glyphicon('folder', { size: '15', color: '#72AA42'})
+        %span Réouvrir le dossier

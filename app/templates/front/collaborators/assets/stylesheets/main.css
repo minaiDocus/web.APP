@@ -20,3 +20,8 @@
 .collaborators.page-content {
   margin-bottom: 7%;
 }
+
+.padding-group-collaborator {
+  margin: 0 1% !important;
+  width: 30%;
+}

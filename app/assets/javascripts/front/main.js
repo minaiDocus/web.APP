@@ -67,6 +67,15 @@ function bind_globals_events(){
       let body = $(".body_content");
       body.stop().animate({scrollTop:0}, 500, 'swing', function() {});
     });
+  /* SCROLL ON TOP */
+
+  /* SCROLL */
+  $('span[class^="auto-scroll-span"]').click(function(e){    
+    var class_name = $(this).attr('class').split(' ')[0];
+    var direction  = class_name.split('-')[3];
+    ApplicationJS.generate_auto_scroll_for_div($(this), direction);
+  });
+  /* SCROLL */
 }
 
 function check_flash_messages(){

@@ -58,10 +58,6 @@ p{
   border-right: 1px solid rgba(26, 26, 26, 0.1);  
 }
 
-.tab-pane .form-group{
-  margin-bottom: 1% !important;
-}
-
 .tab-pane.box{  
   padding-bottom: 3px !important
 }
@@ -71,7 +67,7 @@ p{
 }
 
 .tab-pane .select-container input{
-  padding: 0.5% !important;
+  padding: 1% 2% !important;
 }
 
 .notif-booktype{
@@ -105,8 +101,4 @@ p{
 
 #customer-content ul li.nav-item{
   border-bottom: 1px solid rgba(26, 26, 26, 0.04);
-}
-
-.form-group{
-  margin-bottom: 1% !important;
 }
