@@ -1,46 +1,3 @@
-/ #groups
-/   .row.derivationRight
-/     .col-md-12
-/       .box.clearfix
-/         .float-left
-/           %h3
-/             Liste des groupes 
-/             %span.badge.badge-info= @groups.total_count
-/         .float-right
-/           - if @user.leader? && @organization.is_active
-/             = link_to icon_new + ' ' + t('actions.new'), new_organization_group_path(@organization), class: 'btn btn-primary'
-
-/   .row.retractable.with-filter.derivationLeft
-/     .col-md-12
-/       .box
-/         = render partial: 'shared/list_options', locals: { collection: @groups }
-/         %table.table.table-condensed.table-striped.margin1top.margin1bottom.table-detachable-head.table-bordered-inner
-/           %thead
-/             %tr.bg-brown.text-white
-/               %th= sortable :created_at, t('activerecord.models.common.attributes.created_at')
-/               %th= sortable :name, t('activerecord.models.group.attributes.name')
-/               %th= t('activerecord.models.group.attributes.collaborators_count')
-/               %th= t('activerecord.models.group.attributes.customers_count')
-/               %th= t('actions.name')
-/           %tbody.retractable.slidedown
-/             - @groups.each do |group|
-/               %tr
-/                 %td= l(group.created_at)
-/                 %td= link_to group.name, organization_group_path(@organization, group)
-/                 %td= group.collaborators.count
-/                 %td= group.customers.count
-/                 %td
-/                   - if @organization.is_active
-/                     - if @user.leader? || @user.manage_groups
-/                       = link_to 'Éditer', edit_organization_group_path(@organization, group), class: 'btn btn-light'
-/                     - if @user.leader?
-/                       - if group.is_dropbox_authorized
-/                         - confirm = "Attention ! la suppression de ce groupe entraîne l'arrêt du déversement automatique de ses documents dans votre dropbox. Voulez-vous continuer ?"
-/                       - else
-/                         - confirm = 'Etês vous sûr ?'
-/                       = link_to 'supprimer', organization_group_path(@organization, group), class: 'btn btn-light', data: { method: 'DELETE', confirm: confirm }
-/         = render partial: 'shared/list_options', locals: { collection: @groups }
-/     = render partial: 'sidebar'
 - @groups.each_slice(3) do |groups|
   .row.mt-3
     - groups.each do |group|
@@ -50,13 +7,13 @@
             .title.semibold= link_to group.name, organization_group_path(@organization, group)
             .content-box= group.created_at.strftime('%d%m%Y')
           .col-md-1
-            .action.edit_group.pointer.list-groupe
+            .action.submenu_action.edit_group.pointer.list-groupe
               %span.glyph= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
             .sub_menu.text-start.hide
               %ul.no-margin.no-padding.regular.edit-delete{id: "group-#{group.id}"}
                 - if @organization.is_active
                   - if @user.leader? || @user.manage_groups
-                    %li.edit.member-group.add-or-edit
+                    %li.edit.group.new_edit
                       %span= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
                       &nbsp;Éditer
                   - if @user.leader?
@@ -84,6 +41,14 @@
               %span.badge.badge-secondary.badge-sm.semibold= group.customers.count
 
 
-.modal#edit-group
+.modal#add_edit_group
   .modal-dialog
     .modal-content
+      .modal-header
+        %h5.modal-title.bold Intégration automatique des factures
+        %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+      .modal-body
+        
+      .modal-footer
+        %button.btn.btn-light{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'} Annuler
+        %button.btn.btn-primary{ type: :button } Valider

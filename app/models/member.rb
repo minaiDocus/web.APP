@@ -52,6 +52,13 @@ class Member < ApplicationRecord
 
   def self.search(contains)
     members = self.all.joins(:user)
+
+    text = contains[:text]
+
+    if text.present?
+      members = members.where('members.code LIKE ? OR users.email LIKE ? OR users.company LIKE ? OR users.last_name LIKE ? OR users.first_name LIKE ?' , "%#{text}%", "%#{text}%", "%#{text}%",  "%#{text}%", "%#{text}%")
+    end
+
     members = members.where(role: contains[:role])                                   if contains[:role].present?
     members = members.where("members.code LIKE ?",     "%#{contains[:code]}%")       if contains[:code].present?
     members = members.where("users.email LIKE ?",      "%#{contains[:email]}%")      if contains[:email].present?

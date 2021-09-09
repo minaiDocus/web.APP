@@ -12,7 +12,7 @@
             .form-group
               .w-100.text-end{id: "group-#{@group.id}"}
                 - if (@user.leader? || @user.manage_groups) && @organization.is_active
-                  %button.btn.btn-primary.edit.member-group.add-or-edit.semibold= t('actions.edit')
+                  %button.btn.btn-primary.edit.group.new_edit.semibold= t('actions.edit')
 
   .row.derivationLeft
     .col-md-12

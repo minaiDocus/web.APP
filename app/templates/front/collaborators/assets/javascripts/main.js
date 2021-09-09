@@ -1,106 +1,132 @@
-class Collaborator{
+//= require './events'
+
+class Main{
   constructor () {
-    this.applicationJS = new ApplicationJS;
-    this.collaborator_modal = $('#add-edit-collaborator.modal');
-    this.member_group_modal = $('#edit-group.modal');
+    this.applicationJS   = new ApplicationJS;
+    this.member_modal    = $('#add_edit_collaborator.modal');
+    this.group_modal     = $('#add_edit_group');
+    this.member_filter_modal = $('#search_collaborator_filter');
     this.organization_id = $('input:hidden[name="organization_id"]').val();
-  }
-
-  get_collaborator_view(params){
-    this.applicationJS.parseAjaxResponse(params).then((element)=>{
-      this.collaborator_modal.find('.modal-content').html($(element).find('.modal-content').html());
-      $('#select-collaborator-role').removeClass('form-control');
-      $('#select-organization-group-list').removeClass('form-control');
-      $('#select-collaborator-role').searchableOptionList();
-      $('#select-organization-group-list').searchableOptionList();
-      this.collaborator_modal.modal('show');
-    });
-  }
-
-  get_group_view(params){
-    this.applicationJS.parseAjaxResponse(params).then((element)=>{
-      this.member_group_modal.find('.modal-content').html($(element).find('.modal-content').html());
-      $('#select-collaborators-list').removeClass('form-control');
-      $('#select-customers-collaborators-list').removeClass('form-control');
-      $('#select-collaborators-list').searchableOptionList();
-      $('#select-customers-collaborators-list').searchableOptionList();
-      this.member_group_modal.modal('show');
-    });
-  }
-
-  add(target){
-    let params =  { 'url': '/organizations/' + this.organization_id + '/' + target + '/new' };
-
-    if (target == 'collaborators') {
-      this.get_collaborator_view(params);
-    }
-    else if (target == 'groups') {
-      this.get_group_view(params);
-    }
-  }
-
-  edit(target, id){
-    let params =  { 'url': '/organizations/' + this.organization_id + '/' + target + '/' + id + '/edit' };
-
-    if (target == 'collaborators') {
-      this.get_collaborator_view(params);
-    }
-    else if (target == 'groups') {
-      this.get_group_view(params);
-    }
+    this.action_locker   = false;
   }
 
 
-  load_per_page(per_page) {
-    let self = this;
-    let params =  {
-      'url': '/organizations/' + this.organization_id + '/collaborators?per_page=' + per_page,
-      'target': '.collaborators-content'
-    };
-
-    var after_update_content = function(){
-      self.main();
-      $('select.display option[value="' + per_page + '"]').attr('selected','selected');
-    };
-
-    this.applicationJS.parseAjaxResponse(params, null, after_update_content);
-  }
-
-  main() {
-    var self = this;
-
-    $('.action.sub_edit_delete, .edit_group').unbind('click');
-    $('.action.sub_edit_delete, .edit_group').bind('click',function(e) {
-      e.stopPropagation();
-
-      $('.sub_menu').not(this).each(function(){
-        $(this).addClass('hide');
+  show_modal(target, params){
+    if (target === 'collaborators') {
+      this.applicationJS.parseAjaxResponse(params).then((element)=>{
+        this.member_modal.find('.modal-body').html($(element).find('.form_content').html());
+        this.member_modal.find('.modal-title').html($(element).find('.form_content').attr('text'));
+        apply_searchable_option('collaborators');
+        this.member_modal.modal('show');
       });
+    }
+    else if (target === 'groups') {
+      this.applicationJS.parseAjaxResponse(params).then((element)=>{
+        this.group_modal.find('.modal-body').html($(element).find('.form_content').html());
+        this.group_modal.find('.modal-title').html($(element).find('.form_content').attr('text').html());
+        apply_searchable_option('groups')
+        this.group_modal.modal('show');
+      });
+    }
+  }
 
-      $(this).parent().find('.sub_menu').removeClass('hide');
-    });
+  new_edit(target, action_name, id=0){
+    if (id === 0) {
+      let params =  { 'url': `/organizations/${this.organization_id}/${target}/${action_name}` };
 
-    $('.add-or-edit').unbind('click').bind('click', function(e) {
-      e.stopPropagation();
-      if ($(this).hasClass('member')) {
-        if ($(this).hasClass('add-collaborator')) { self.add('collaborators'); }
-        else if ($(this).hasClass('edit')) { self.edit('collaborators', $(this).parent().attr('id').split('-')[1]); }
-      }
-      else if ($(this).hasClass('member-group')) {
-        if ($(this).hasClass('create-group')) { self.add('groups'); }
-        else if ($(this).hasClass('edit')) { self.edit('groups', $(this).parent().attr('id').split('-')[1]); }
+      this.show_modal(target, params);
+      $('.modal-footer .create_update').text('Ajouter');
+    }
+    else{
+      let params =  { 'url': `/organizations/${this.organization_id}/${target}/${id}/${action_name}` };
 
-      }
-    });
+      this.show_modal(target, params);
+      $('.modal-footer .create_update').text('Éditer');
+    }
 
-    $('select.display').on('change', function() {self.load_per_page($("option:selected", this).val());});
-
+    bind_collaborator_events();
+    ApplicationJS.handle_submenu();
     ApplicationJS.hide_submenu();
+  }
+
+  create_update(url, data){
+    this.applicationJS.parseAjaxResponse({
+      'url': url,
+      'data': data,
+      'type': 'POST',
+      'dataType': 'html',
+    }).then((response)=>{
+      $('.collaborators.page-content').html($(response).find('.collaborators.page-content').html());
+      this.member_modal.modal('hide');
+      bind_collaborator_events();
+      ApplicationJS.handle_submenu();
+      ApplicationJS.hide_submenu();
+    }).catch((response)=>{ this.member_modal.modal('hide'); });
+  }
+
+
+  load_data(search_pattern=false, type='members', page=1, per_page=0){
+    if(this.action_locker) { return false; }
+
+    this.action_locker = true;
+    let params = [];
+
+    let search_text = '';
+
+    if (search_pattern) {
+      search_text = $('.search-content #search_input').val();
+      if(search_text && search_text != ''){ params.push(`user_contains[text]=${encodeURIComponent(search_text)}`); }
+    }
+
+    if (type === 'members') { type = 'collaborators'; }
+
+    params.push(`page=${page}`);
+
+    if (per_page > 0) { params.push(`per_page=${ per_page }`); }
+
+    let ajax_params =   {
+                          'url': `/organizations/${this.organization_id}/${type}?${params.join('&')}`,
+                          'dataType': 'html',
+                          'target': ''
+                        };
+
+    this.applicationJS.parseAjaxResponse(ajax_params)
+                      .then((html)=>{
+                        this.action_locker = false;
+                        bind_collaborator_events();
+                        ApplicationJS.handle_submenu();
+                        ApplicationJS.hide_submenu();
+                      })
+                      .catch(()=>{ this.action_locker = false; });
+  }
+
+
+  search_contains_filter(url, data){
+    this.applicationJS.parseAjaxResponse({
+      'url': url,
+      'data': data,
+      'type': 'GET',
+      'dataType': 'html',
+    }).then((response)=>{
+      $('.collaborators.page-content').html($(response).find('.collaborators.page-content').html());
+      this.member_filter_modal.modal('hide');
+      bind_collaborator_events();
+      ApplicationJS.handle_submenu();
+      ApplicationJS.hide_submenu();
+    }).catch((response)=>{ this.member_filter_modal.modal('hide'); });
   }
 }
 
 
 jQuery(function() {
-  var collaborator = new Collaborator();
-  collaborator.main();
+  var main = new Main();
+
+  AppListenTo('new_edit', (e)=>{ main.new_edit(e.detail.target, e.detail.action_name, e.detail.id); });
+  AppListenTo('create_update', (e)=>{ main.create_update(e.detail.url, e.detail.data); });
+
+  AppListenTo('user_contains_search_text', (e)=>{ main.load_data(true); });
+  AppListenTo('search_contains_filter', (e)=>{ main.search_contains_filter(e.detail.url, e.detail.data); });
+  
+  AppListenTo('window.change-per-page.members', (e)=>{ main.load_data(true, e.detail.name, 1, e.detail.per_page); });
+  AppListenTo('window.change-page.members', (e)=>{ main.load_data(true, e.detail.name, e.detail.page); });
 });

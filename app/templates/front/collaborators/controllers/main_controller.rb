@@ -33,9 +33,9 @@ class Collaborators::MainController < OrganizationController
     @member = User::Collaborator::Create.new(member_params, @organization).execute
     if @member.persisted?
       flash[:success] = 'Créé avec succès.'
-      redirect_to organization_collaborator_path(@organization, @member)
+      redirect_to organization_collaborators_path(@organization)
     else
-      render :new
+      redirect_to organization_collaborators_path(@organization)
     end
   end
 
@@ -44,12 +44,19 @@ class Collaborators::MainController < OrganizationController
 
   # PUT /organizations/:organization_id/collaborators/:id
   def update
+    from_show = params[:from_show].present?
+
     updater = User::Collaborator::Update.new(@member, member_params)
     if updater.execute
       flash[:success] = 'Modifié avec succès.'
-      redirect_to organization_collaborator_path(@organization, @member)
+
+      if from_show
+        redirect_to organization_collaborator_path(@organization, @member, tab: 'information')
+      else
+        redirect_to organization_collaborators_path(@organization)
+      end
     else
-      render :edit
+      redirect_to organization_collaborators_path(@organization)
     end
   end
 

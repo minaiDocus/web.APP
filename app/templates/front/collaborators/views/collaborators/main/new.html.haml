@@ -1,8 +1,2 @@
-.modal#collaborator
-  .modal-dialog
-    .modal-content
-      .modal-header
-        %h5.modal-title.bold Nouveau collaborateur
-        %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
-
-      = render partial: 'form'
+#collaborator.new.form_content{text: "Nouveau collaborateur"}
+  = render partial: 'form'
