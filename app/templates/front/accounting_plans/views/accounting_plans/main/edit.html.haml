@@ -36,8 +36,8 @@
                     = provider.label :vat_autoliquidation, label: t('activerecord.models.accounting_plan_item.attributes.vat_autoliquidation'), class: 'control-label semibold form-check-label'
                   .col-md-2
                     .form-check.form-switch.idocus-custom-form-check
-                      = provider.input :vat_autoliquidation, as: :boolean, label: false, input_html: { class: 'form-check-input input-toggle ido-custom-checkbox check-vat-autoliquidation', id: 'check-vat-autoliquidation' }
-                      %label.semibold{class: 'form-check-label ido-custom-label', for: 'check-vat-autoliquidation'} Non
+                      = provider.input :vat_autoliquidation, as: :boolean, label: false, input_html: { class: 'form-check-input input_switch input_check_field check-vat-autoliquidation', id: 'check-vat-autoliquidation' }
+                      %label.semibold{class: 'form-check-label label_check_field', for: 'check-vat-autoliquidation'} Non
             .col-md-1
               .w-10.text-start
                 = provider.link_to_remove glyphicon('x', { size: '15', color: "#FF4848" })

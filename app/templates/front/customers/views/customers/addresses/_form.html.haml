@@ -25,23 +25,23 @@
       = label_tag 'address[is_for_paper_return]', 'Pour la facturation ?', class: 'control-label semibold'
     .col-md-2
       .form-check.form-switch.idocus-custom-form-check
-        = f.input :is_for_paper_return, as: :boolean, label: false, input_html: { class: 'form-check-input input-toggle ido-custom-checkbox', id: 'check-paper-return' }
-        %label.semibold{class: 'form-check-label ido-custom-label', for: 'check-paper-return'} Non
+        = f.input :is_for_paper_return, as: :boolean, label: false, input_html: { class: 'form-check-input input_switch input_check_field', id: 'check-paper-return' }
+        %label.semibold{class: 'form-check-label label_check_field', for: 'check-paper-return'} Non
   .form-group.row.address-for-paper-set-shipping
     .col-md-10
       = label_tag 'address[is_for_paper_set_shipping]', 'Pour la livraison du kit envoi courrier ?', class: 'control-label semibold'
     .col-md-2
       .form-check.form-switch.idocus-custom-form-check
-        = f.input :is_for_paper_set_shipping, as: :boolean, label: false, input_html: { class: 'form-check-input input-toggle ido-custom-checkbox', id: 'check-paper-set-shipping' }
-        %label.semibold{class: 'form-check-label ido-custom-label', for: 'check-paper-set-shipping'} Non
+        = f.input :is_for_paper_set_shipping, as: :boolean, label: false, input_html: { class: 'form-check-input input_switch input_check_field', id: 'check-paper-set-shipping' }
+        %label.semibold{class: 'form-check-label label_check_field', for: 'check-paper-set-shipping'} Non
   - if @address.is_for_dematbox_shipping || @customer.is_dematbox_authorized
     .form-group.row.address-for-dematbox-shipping
       .col-md-10
         = label_tag 'address[is_for_dematbox_shipping]', 'Pour la livraison de l’iDocus Box ?', class: 'control-label semibold'
       .col-md-2
         .form-check.form-switch.idocus-custom-form-check
-          = f.input :is_for_dematbox_shipping, as: :boolean, label: false, input_html: { class: 'form-check-input input-toggle ido-custom-checkbox', id: 'check-dematbox-shipping' }
-          %label.semibold{class: 'form-check-label ido-custom-label', for: 'check-dematbox-shipping'} Non
+          = f.input :is_for_dematbox_shipping, as: :boolean, label: false, input_html: { class: 'form-check-input input_switch input_check_field', id: 'check-dematbox-shipping' }
+          %label.semibold{class: 'form-check-label label_check_field', for: 'check-dematbox-shipping'} Non
   - if @address.is_for_dematbox_shipping || @customer.is_dematbox_authorized
     .dematbox_only{ style: 'display:none;' }
       .box.bg-light

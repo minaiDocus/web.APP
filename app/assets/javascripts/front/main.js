@@ -74,6 +74,9 @@ function check_flash_messages(){
 jQuery(function () {
   bind_globals_events();
 
+  ApplicationJS.set_checkbox_radio();
+  ApplicationJS.hide_submenu();
+
   check_flash_messages();
 
   /* SCROLLING TO THE BOTTOM */

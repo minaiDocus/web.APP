@@ -475,7 +475,7 @@
                 = label_tag 'user[ibiza_attributes][is_used]', "Ce dossier utilise Ibiza ?", class: 'control-label semibold'
               .col-md-2.form-check.form-switch
                 = label_tag 'user[ibiza_attributes][is_used]', 'Oui', class: 'semibold'
-                = check_box_tag 'user[ibiza_attributes][is_used]', 1, @customer.try(:ibiza).try(:used?), class: 'custom-form-inline form-check-input input-toggle check-software'
+                = check_box_tag 'user[ibiza_attributes][is_used]', 1, @customer.try(:ibiza).try(:used?), class: 'custom-form-inline form-check-input input_switch check-software'
               .col-md-2
                 - if @user.leader? || @user.manage_customers
                   .form-group.no-margin
@@ -534,7 +534,7 @@
                 = label_tag 'user[exact_online_attributes][is_used]', "Ce dossier utilise Exact Online ?", class: 'control-label semibold'
               .col-md-2.form-check.form-switch
                 = label_tag 'user[exact_online_attributes][is_used]', 'Oui', class: 'semibold'
-                = check_box_tag 'user[exact_online_attributes][is_used]', 1, @customer.try(:exact_online).try(:used?), class: 'custom-form-inline form-check-input input-toggle check-software'
+                = check_box_tag 'user[exact_online_attributes][is_used]', 1, @customer.try(:exact_online).try(:used?), class: 'custom-form-inline form-check-input input_switch check-software'
               .col-md-2
                 - if @user.leader?
                   .form-group.no-margin
@@ -583,7 +583,7 @@
                 = label_tag 'user[my_unisoft_attributes][is_used]', "Ce dossier utilise My Unisoft ?", class: 'control-label semibold'
               .col-md-2.form-check.form-switch
                 = label_tag 'user[my_unisoft_attributes][is_used]', 'Oui', class: 'semibold'
-                = check_box_tag 'user[my_unisoft_attributes][is_used]', 1, @customer.uses?(:my_unisoft), class: 'custom-form-inline form-check-input input-toggle check-software'
+                = check_box_tag 'user[my_unisoft_attributes][is_used]', 1, @customer.uses?(:my_unisoft), class: 'custom-form-inline form-check-input input_switch check-software'
               .col-md-2
                 - if @user.leader?
                   .form-group.no-margin
@@ -644,7 +644,7 @@
                 = label_tag 'user[coala_attributes][is_used]', "Ce dossier utilise Coala ?", class: 'control-label semibold'
               .col-md-2.form-check.form-switch
                 = label_tag 'user[coala_attributes][is_used]', 'Oui', class: 'semibold'
-                = check_box_tag 'user[coala_attributes][is_used]', 1, @customer.try(:coala).try(:used?), class: 'custom-form-inline form-check-input input-toggle check-software'
+                = check_box_tag 'user[coala_attributes][is_used]', 1, @customer.try(:coala).try(:used?), class: 'custom-form-inline form-check-input input_switch check-software'
             .form-group.row
               .col-md-10
                 .label-section
@@ -683,7 +683,7 @@
                 = label_tag 'user[quadratus_attributes][is_used]', "Ce dossier utilise Quadratus ?", class: 'control-label semibold'
               .col-md-2.form-check.form-switch
                 = label_tag 'user[quadratus_attributes][is_used]', 'Oui', class: 'semibold'
-                = check_box_tag 'user[quadratus_attributes][is_used]', 1, @customer.try(:quadratuis).try(:used?), class: 'custom-form-inline form-check-input input-toggle check-software'
+                = check_box_tag 'user[quadratus_attributes][is_used]', 1, @customer.try(:quadratuis).try(:used?), class: 'custom-form-inline form-check-input input_switch check-software'
               .col-md-2
                 - if @user.leader? || @user.manage_customers
                   .form-group.no-margin
@@ -713,7 +713,7 @@
                 = label_tag 'user[cegid_attributes][is_used]', "Ce dossier utilise Cegid ?", class: 'control-label semibold'
               .col-md-2.form-check.form-switch
                 = label_tag 'user[cegid_attributes][is_used]', 'Oui', class: 'semibold'
-                = check_box_tag 'user[cegid_attributes][is_used]', 1, @customer.try(:cegid).try(:used?), class: 'custom-form-inline form-check-input input-toggle check-software'
+                = check_box_tag 'user[cegid_attributes][is_used]', 1, @customer.try(:cegid).try(:used?), class: 'custom-form-inline form-check-input input_switch check-software'
               .col-md-2
                 - if @user.leader? || @user.manage_customers
                   .form-group.no-margin
@@ -743,7 +743,7 @@
                 = label_tag 'user[fec_agiris_attributes][is_used]', "Ce dossier utilise Fec Agiris ?", class: 'control-label semibold'
               .col-md-2.form-check.form-switch
                 = label_tag 'user[fec_agiris_attributes][is_used]', 'Oui', class: 'semibold'
-                = check_box_tag 'user[fec_agiris_attributes][is_used]', 1, @customer.try(:fec_agiris).try(:used?), class: 'custom-form-inline form-check-input input-toggle check-software'
+                = check_box_tag 'user[fec_agiris_attributes][is_used]', 1, @customer.try(:fec_agiris).try(:used?), class: 'custom-form-inline form-check-input input_switch check-software'
               .col-md-2
                 - if @user.leader? || @user.manage_customers
                   .form-group.no-margin
@@ -773,7 +773,7 @@
                 = label_tag 'user[fec_acd_attributes][is_used]', "Ce dossier utilise Fec ACD ?", class: 'control-label semibold'
               .col-md-2.form-check.form-switch
                 = label_tag 'user[fec_acd_attributes][is_used]', 'Oui', class: 'semibold'
-                = check_box_tag 'user[fec_acd_attributes][is_used]', 1, @customer.try(:fec_acd).try(:used?), class: 'custom-form-inline form-check-input input-toggle check-software'
+                = check_box_tag 'user[fec_acd_attributes][is_used]', 1, @customer.try(:fec_acd).try(:used?), class: 'custom-form-inline form-check-input input_switch check-software'
               .col-md-2
                 - if @user.leader? || @user.manage_customers
                   .form-group.no-margin
@@ -803,7 +803,7 @@
                 = label_tag 'user[csv_descriptor_attributes][is_used]', "Ce dossier utilise un format d'export personnalisé ?", class: 'control-label semibold'
               .col-md-2.form-check.form-switch
                 = label_tag 'user[csv_descriptor_attributes][is_used]', 'Oui', class: 'semibold'
-                = check_box_tag 'user[csv_descriptor_attributes][is_used]', 1, @customer.try(:csv_descriptor).try(:used?), class: 'custom-form-inline form-check-input input-toggle check-software'
+                = check_box_tag 'user[csv_descriptor_attributes][is_used]', 1, @customer.try(:csv_descriptor).try(:used?), class: 'custom-form-inline form-check-input input_switch check-software'
               .col-md-2
                 - if @user.leader? || @user.manage_customers
                   .form-group.no-margin

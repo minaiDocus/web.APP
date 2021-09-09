@@ -11,7 +11,7 @@
                   %hr
                   = f.input :company, label_html: { class: 'required semibold' }, input_html: { class: 'select-container no-padding w-100', placeholder: "ex : iDocus", :required => true }
                   - unless @organization.specific_mission
-                    = f.input :jefacture_account_id, label_html: { class: 'semibold custom-label-field' }, input_html: { class: 'select-container no-padding w-100', placeholder: "ex : T4534638846" }
+                    = f.input :jefacture_account_id, label_html: { class: 'semibold ' }, input_html: { class: 'select-container no-padding w-100', placeholder: "ex : T4534638846" }
                   = f.input :code, hint: "Doit impérativement commencer par : #{@organization.code}%, 15 caractères alphanumériques maximum, code cabinet inclus.", label_html: { class: 'required semibold' }, input_html: { class: 'select-container no-padding w-100', placeholder: "IDOC%CLIENT10", disabled: ('disabled' if action_name.in? %w(edit update)) }, :required => true
                   = f.input :first_name, label_html: { class: 'semibold' }, input_html: { class: 'select-container no-padding w-100', placeholder: "ex : Clément" }
                   = f.input :last_name, label_html: { class: 'semibold' }, input_html: { class: 'select-container no-padding w-100', placeholder: "ex : Lefebure" }
@@ -27,15 +27,15 @@
                         = label_tag 'user[is_pre_assignement_displayed]', t('activerecord.models.user.attributes.is_pre_assignement_displayed'), class: 'control-label required semibold'
                       .col-md-2
                         .form-check.form-switch.idocus-custom-form-check
-                          = f.input :is_pre_assignement_displayed, as: :boolean, label: false, label_html: { class: 'required semibold form-check-label' }, input_html: { class: 'form-check-input input-toggle ido-custom-checkbox', id: 'check-displayed-pre-assignment' }, required: true
-                          %label.semibold{class: 'form-check-label ido-custom-label', for: 'check-displayed-pre-assignment'} Non
+                          = f.input :is_pre_assignement_displayed, as: :boolean, label: false, label_html: { class: 'required semibold form-check-label' }, input_html: { class: 'form-check-input input_switch input_check_field', id: 'check-displayed-pre-assignment' }, required: true
+                          %label.semibold{class: 'form-check-label label_check_field', for: 'check-displayed-pre-assignment'} Non
                     .form-group.row
                       .col-md-10
                         = label_tag 'user[act_as_a_collaborator_into_pre_assignment]', t('activerecord.models.user.attributes.act_as_a_collaborator_into_pre_assignment'), class: 'control-label required semibold'
                       .col-md-2
                         .form-check.form-switch.idocus-custom-form-check
-                          = f.input :act_as_a_collaborator_into_pre_assignment, as: :boolean, label: false, label_html: { class: 'required semibold form-check-label', id: 'check-collaborator-pre-assignment' }, input_html: { class: 'form-check-input input-toggle ido-custom-checkbox' }, required: true
-                          %label.semibold{class: 'form-check-label ido-custom-label', for: 'check-collaborator-pre-assignment'} Non
+                          = f.input :act_as_a_collaborator_into_pre_assignment, as: :boolean, label: false, label_html: { class: 'required semibold form-check-label', id: 'check-collaborator-pre-assignment' }, input_html: { class: 'form-check-input input_switch input_check_field' }, required: true
+                          %label.semibold{class: 'form-check-label label_check_field', for: 'check-collaborator-pre-assignment'} Non
                   = f.input :group_ids, collection: @user.groups.order(name: :asc), label: 'A quel groupe, le dossier doit-il être attribué ?', label_html: { class: 'control-label required semibold' }, input_html: { class: 'form-control select optional', id: 'select-group-list', include_blank: true, multiple: true } 
                   = f.association :manager, collection: managers_options_for_select, include_blank: false, label: 'Quel est le collaborateur en charge du dossier?', hint: 'IMPORTANT! Indiquer le collaborateur en charge du dossier permettra à iDocus de le contacter en cas de soucis. Autrement tous les mails seront adressés à l’administrateur de l’organisation.', label_html: { class: 'control-label required semibold' }, input_html: { class: 'form-control select form-select form-select-sm optional', id: 'select-customer-list'}
                   - unless @organization.specific_mission
@@ -48,8 +48,8 @@
                         = f.simple_fields_for :options do |o|
                           = o.hidden_field :id
                           .form-check.form-switch.idocus-custom-form-check
-                            = o.input :is_taxable, as: :boolean, label: false, label_html: { class: 'required semibold form-check-label' }, input_html: { class: 'form-check-input input-toggle ido-custom-checkbox', id: 'check-taxable-options' }
-                            %label.semibold{class: 'form-check-label ido-custom-label', for: 'check-taxable-options'} Non
+                            = o.input :is_taxable, as: :boolean, label: false, label_html: { class: 'required semibold form-check-label' }, input_html: { class: 'form-check-input input_switch input_check_field', id: 'check-taxable-options' }
+                            %label.semibold{class: 'form-check-label label_check_field', for: 'check-taxable-options'} Non
                   
                   - unless @organization.specific_mission
                     %h5 Logiciels comptables utilisés:

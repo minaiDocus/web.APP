@@ -31,8 +31,8 @@
                   = f.label :use_pseudonym_for_import, :class => "semibold"
                 .col-md-2
                   .form-check.form-switch.idocus-custom-form-check
-                    = f.input :use_pseudonym_for_import, as: :boolean, label: false, label_html: { class: 'semibold form-check-label' }, wrapper_html: { class: 'form-check-input input-toggle ido-custom-checkbox pseudonyme_for_import', id: 'account_book_type_pseudonyme_for_import' }, hint: "Utiliser le code journal comptable comme répértoire d'import (Ibiza box), Si non, utiliser le code journal iDocus"
-                    %label.semibold{class: 'form-check-label ido-custom-label', for: 'account_book_type_pseudonyme_for_import'} Non
+                    = f.input :use_pseudonym_for_import, as: :boolean, label: false, label_html: { class: 'semibold form-check-label' }, wrapper_html: { class: 'form-check-input input_switch input_check_field pseudonyme_for_import', id: 'account_book_type_pseudonyme_for_import' }, hint: "Utiliser le code journal comptable comme répértoire d'import (Ibiza box), Si non, utiliser le code journal iDocus"
+                    %label.semibold{class: 'form-check-label label_check_field', for: 'account_book_type_pseudonyme_for_import'} Non
             - else
               .form-group.clearfix
                 .label-section
@@ -128,8 +128,8 @@
                   = f.label :is_expense_categories_editable, :class => "semibold"
                 .col-md-2
                   .form-check.form-switch.idocus-custom-form-check
-                    = f.input :is_expense_categories_editable, as: :boolean, label: false, label_html: { class: 'semibold form-check-label' }, wrapper_html: { class: 'form-check-input input-toggle ido-custom-checkbox pseudonyme_for_import', id: 'account_book_type_is_expense_categories_editable' }
-                    %label.semibold{class: 'form-check-label ido-custom-label', for: 'account_book_type_is_expense_categories_editable'} Non
+                    = f.input :is_expense_categories_editable, as: :boolean, label: false, label_html: { class: 'semibold form-check-label' }, wrapper_html: { class: 'form-check-input input_switch input_check_field pseudonyme_for_import', id: 'account_book_type_is_expense_categories_editable' }
+                    %label.semibold{class: 'form-check-label label_check_field', for: 'account_book_type_is_expense_categories_editable'} Non
             - if false && @journal.persisted? && @journal.is_expense_categories_editable && is_preassignment_authorized?
               .control-group
                 %label.control-label.semibold= t('simple_form.labels.account_book_type.expense_categories')
@@ -153,8 +153,8 @@
                 = f.label :jefacture_enabled, :class => "semibold"
               .col-md-2
                 .form-check.form-switch.idocus-custom-form-check
-                  = f.input :jefacture_enabled, as: :boolean, label: false, label_html: { class: 'semibold form-check-label' }, input_html: { class: 'form-check-input input-toggle ido-custom-checkbox', id: 'book-type-jefacture-enabled' }
-                  %label.semibold{class: 'form-check-label ido-custom-label', for: 'book-type-jefacture-enabled'} Non
+                  = f.input :jefacture_enabled, as: :boolean, label: false, label_html: { class: 'semibold form-check-label' }, input_html: { class: 'form-check-input input_switch input_check_field', id: 'book-type-jefacture-enabled' }
+                  %label.semibold{class: 'form-check-label label_check_field', for: 'book-type-jefacture-enabled'} Non
 
       .carousel-item
         - if !@customer || (@customer && @customer.subscription.is_package?('mail_option'))
@@ -170,8 +170,8 @@
                 = f.label :is_default, :class => "semibold"
               .col-md-2
                 .form-check.form-switch.idocus-custom-form-check
-                  = f.input :is_default, as: :boolean, label: false, label_html: { class: 'semibold form-check-label' }, input_html: { class: 'form-check-input input-toggle ido-custom-checkbox', id: 'book-type-default-options' }
-                  %label.semibold{class: 'form-check-label ido-custom-label', for: 'book-type-default-options'} Non
+                  = f.input :is_default, as: :boolean, label: false, label_html: { class: 'semibold form-check-label' }, input_html: { class: 'form-check-input input_switch input_check_field', id: 'book-type-default-options' }
+                  %label.semibold{class: 'form-check-label label_check_field', for: 'book-type-default-options'} Non
 
 .account_book_type_vat_accounts_field.hide
   .form-grou.clearfix.string.optional.account_book_type_vat_accounts

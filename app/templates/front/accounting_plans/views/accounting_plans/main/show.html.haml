@@ -61,7 +61,7 @@
             %i.help-block Attention: si cette option est activée, les modifications manuelles du plan comptable seront écrasées automatiquement par la mise à jour auto.
           .col-md-2.form-check.form-switch
             %label.form-check-label Non
-            = check_box_tag 'user[software]', true, software_value, info: "#{@organization.id}-#{@customer.id}-#{software}", class: 'form-check-input input-toggle auto-update-accounting-plan', id: 'auto-update-accounting-plan'
+            = check_box_tag 'user[software]', true, software_value, info: "#{@organization.id}-#{@customer.id}-#{software}", class: 'form-check-input input_switch auto-update-accounting-plan', id: 'auto-update-accounting-plan'
   .mb-4
 
   .box.no-margin

@@ -111,7 +111,7 @@
               = label_tag 'user_contains[is_inactive]', t('activerecord.models.user.attributes.is_inactive'), class: 'semibold'
             .col-md-2.form-check.form-switch
               %label.form-check-label Non
-              = check_box_tag 'user_contains[is_inactive]', 0, (params[:user_contains][:is_inactive].present? && params[:user_contains][:is_inactive] == 1 rescue false), class: "form-check-input input-toggle filter-customer filter-field"
+              = check_box_tag 'user_contains[is_inactive]', 0, (params[:user_contains][:is_inactive].present? && params[:user_contains][:is_inactive] == 1 rescue false), class: "form-check-input input_switch filter-customer filter-field"
 
         .modal-footer
           = link_to 'Annuler', organization_customers_path(@organization), class: 'btn btn-light semibold cancel'

@@ -265,13 +265,13 @@ class ApplicationJS {
   static set_checkbox_radio(that = null){
     let class_list = [];
 
-    $('.input-toggle').change(function() {
+    $('.input_switch').change(function() {
       class_list = $(this).attr('class').split(/\s+/);
 
       if ($(this).is(':checked')){
         $(this).attr('checked', true);
 
-        if (class_list.indexOf("ido-custom-checkbox") > -1) { $(this).parents().eq(3).find('label.ido-custom-label').text('Oui'); }
+        if (class_list.indexOf("input_check_field") > -1) { $(this).closest('.form-check.form-switch').find('label.label_check_field').text('Oui'); }
         else { $(this).parent().find('label').text('Oui'); }
 
         if ((class_list.indexOf("check-software") > -1) || (class_list.indexOf("filter-customer") > -1)) { $(this).attr('value', 1); }
@@ -283,7 +283,7 @@ class ApplicationJS {
       else {
         $(this).attr('checked', false);
 
-        if (class_list.indexOf("ido-custom-checkbox") > -1) { $(this).parents().eq(3).find('label.ido-custom-label').text('Non'); }
+        if (class_list.indexOf("input_check_field") > -1) { $(this).closest('.form-check.form-switch').find('label.label_check_field').text('Non'); }
         else { $(this).parent().find('label').text('Non'); }
 
         if ((class_list.indexOf("check-software") > -1) || (class_list.indexOf("filter-customer") > -1)) { $(this).attr('value', 0); }
@@ -301,16 +301,16 @@ class ApplicationJS {
     });
 
 
-    if ($('.input-toggle:checked').length > 0) {
-      const selected = $('.input-toggle:checked');
+    if ($('.input_switch:checked').length > 0) {
+      const selected = $('.input_switch:checked');
 
       $.each(selected, function() {
         class_list = $(this).attr('class').split(/\s+/);
         let element = $(this);
 
-        if (class_list.indexOf("ido-custom-checkbox") > -1) {
-          element = $('.ido-custom-checkbox.input-toggle:checked');
-          element.parents().eq(3).find('label.ido-custom-label').text('Oui');
+        if (class_list.indexOf("input_check_field") > -1) {
+          element = $('.input_check_field.input_switch:checked');
+          element.closest('.form-check.form-switch').find('label.label_check_field').text('Oui');
         }
         else {
           element.parent().find('label').text('Oui');

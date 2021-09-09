@@ -90,8 +90,8 @@
                   = f.label :jefacture_enabled, :class => "semibold"
                 .col-md-2
                   .form-check.form-switch.idocus-custom-form-check
-                    = f.input :jefacture_enabled, as: :boolean, label: false, label_html: { class: 'semibold form-check-label' }, input_html: { class: 'form-check-input input-toggle ido-custom-checkbox', id: 'book-type-jefacture-enabled' }
-                    %label.semibold{class: 'form-check-label ido-custom-label', for: 'book-type-jefacture-enabled'} Non
+                    = f.input :jefacture_enabled, as: :boolean, label: false, label_html: { class: 'semibold form-check-label' }, input_html: { class: 'form-check-input input_switch input_check_field', id: 'book-type-jefacture-enabled' }
+                    %label.semibold{class: 'form-check-label label_check_field', for: 'book-type-jefacture-enabled'} Non
 
         .carousel-item
           - if !@customer || @customer.subscription.is_package?('mail_option')
@@ -107,8 +107,8 @@
                   = f.label :is_default, :class => "semibold"
                 .col-md-2
                   .form-check.form-switch.idocus-custom-form-check
-                    = f.input :is_default, as: :boolean, label: false, label_html: { class: 'semibold form-check-label' }, input_html: { class: 'form-check-input input-toggle ido-custom-checkbox', id: 'book-type-default-options' }
-                    %label.semibold{class: 'form-check-label ido-custom-label', for: 'book-type-default-options'} Non
+                    = f.input :is_default, as: :boolean, label: false, label_html: { class: 'semibold form-check-label' }, input_html: { class: 'form-check-input input_switch input_check_field', id: 'book-type-default-options' }
+                    %label.semibold{class: 'form-check-label label_check_field', for: 'book-type-default-options'} Non
 
   .account_book_type_vat_accounts_field.hide
     .form-grou.clearfix.string.optional.account_book_type_vat_accounts

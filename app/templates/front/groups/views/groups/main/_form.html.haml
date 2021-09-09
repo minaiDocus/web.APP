@@ -3,7 +3,7 @@
     - if @user.leader?
       %h4 Informations
       %hr
-      = f.input :name, label: t('activerecord.models.group.attributes.name'), label_html: { class: 'semibold custom-label-field' }, input_html: { class: 'select-container no-padding w-100 book-code-software custom-input-field', placeholder: "Direction" }
+      = f.input :name, label: t('activerecord.models.group.attributes.name'), label_html: { class: 'semibold ' }, input_html: { class: 'select-container no-padding w-100 book-code-software ', placeholder: "Direction" }
       .select-container.no-padding.w-100
         = f.input :description, as: :text, label: t('activerecord.models.group.attributes.description')
       - if @user.is_admin

@@ -112,7 +112,7 @@
                 %label.semibold Pré-saisie comptable
             .col-md-2.form-check.form-switch
               %label.form-check-label.pre-assignment-state{title: 'Pré-saisie comptable activée', data: { toggle: 'tooltip', placement: 'bottom' }} Oui
-              = check_box_tag 'subscription[is_pre_assignment_active]', true, (!@subscription || current_package.include?('pre_assignment_option')), class: "is_pre_assignment_active_true is_pre_assignment_active form-check-input option_checkbox input-toggle", data: { package: "mail_option" }, disabled: (!current_package.include?('ido_classique') && @subscription)
+              = check_box_tag 'subscription[is_pre_assignment_active]', true, (!@subscription || current_package.include?('pre_assignment_option')), class: "is_pre_assignment_active_true is_pre_assignment_active form-check-input option_checkbox input_switch", data: { package: "mail_option" }, disabled: (!current_package.include?('ido_classique') && @subscription)
 
         .col-md-6.journal-numbers
 
@@ -157,7 +157,7 @@
       = label_tag 'subscription[is_to_apply_now]', "Appliquer tout de suite les options à la baisse ?", class: 'semibold'
     .col-md-2.form-check.form-switch
       %label.form-check-labelpre-assignment-state{title: 'Pré-saisie comptable activée', data: { toggle: 'tooltip', placement: 'bottom' }} Oui
-      = check_box_tag 'subscription[is_to_apply_now]', true, true, class: 'form-check-input option_checkbox input-toggle'
+      = check_box_tag 'subscription[is_to_apply_now]', true, true, class: 'form-check-input option_checkbox input_switch'
 
   
   %hr
@@ -185,7 +185,7 @@
       %label.semibold Avec option courrier
   .col-md-2.form-check.form-switch
     %label.form-check-label Non
-    = check_box_tag 'subscription[mail_option]', true, false, class: "form-check-input option_checkbox input-toggle", data: { package: "mail_option" }, disabled: false
+    = check_box_tag 'subscription[mail_option]', true, false, class: "form-check-input option_checkbox input_switch", data: { package: "mail_option" }, disabled: false
 
 .input-retriever-option.hide
   .col-md-10.form-group
@@ -193,7 +193,7 @@
       %label.semibold Avec option  automate
   .col-md-2.form-check.form-switch
     %label.form-check-label Non
-    = check_box_tag 'subscription[retriever_option]', true, false, class: "form-check-input input-toggle option_checkbox", data: { retriever_price_option: @subscription.try(:retriever_price_option).to_s.presence || 'retriever' }, disabled: false
+    = check_box_tag 'subscription[retriever_option]', true, false, class: "form-check-input input_switch option_checkbox", data: { retriever_price_option: @subscription.try(:retriever_price_option).to_s.presence || 'retriever' }, disabled: false
 
 .input-digitization-option.hide
   .col-md-10.form-group
@@ -201,4 +201,4 @@
       %label.semibold Avec option numérisation
   .col-md-2.form-check.form-switch
     %label.form-check-label Non
-    = check_box_tag 'subscription[digitize_option]', true, false, class: "form-check-input input-toggle option_checkbox", data: { package: "digitize_option" }, disabled: false
+    = check_box_tag 'subscription[digitize_option]', true, false, class: "form-check-input input_switch option_checkbox", data: { package: "digitize_option" }, disabled: false

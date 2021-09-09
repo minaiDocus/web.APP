@@ -5,21 +5,21 @@
       .form-group
         .row
           .col-md-6
-            = uf.input :first_name, label_html: { class: 'semibold custom-label-field' }, input_html: { class: 'select-container no-padding w-100 book-code-software custom-input-field', placeholder: "Jean" }
+            = uf.input :first_name, label_html: { class: 'semibold ' }, input_html: { class: 'select-container no-padding w-100 book-code-software ', placeholder: "Jean" }
           .col-md-6
-            = uf.input :last_name, label_html: { class: 'semibold custom-label-field' }, input_html: { class: 'select-container no-padding w-100 book-code-software custom-input-field', placeholder: "Dupont" }
+            = uf.input :last_name, label_html: { class: 'semibold ' }, input_html: { class: 'select-container no-padding w-100 book-code-software ', placeholder: "Dupont" }
 
       .form-group
         .row
           .col-md-6
-            = uf.input :email, label_html: { class: 'semibold custom-label-field' }, input_html: { class: 'select-container no-padding w-100 book-code-software custom-input-field', placeholder: "jean.dupont@mail.fr" }, hint: "Correspond à l'identifiant de connexion de votre collaborateur", disabled: @member.user.admin?
+            = uf.input :email, label_html: { class: 'semibold ' }, input_html: { class: 'select-container no-padding w-100 book-code-software ', placeholder: "jean.dupont@mail.fr" }, hint: "Correspond à l'identifiant de connexion de votre collaborateur", disabled: @member.user.admin?
           .col-md-6
-            = uf.input :company, label_html: { class: 'semibold custom-label-field' }, input_html: { class: 'select-container no-padding w-100 book-code-software custom-input-field', placeholder: "iDocus", value: company_value }
+            = uf.input :company, label_html: { class: 'semibold ' }, input_html: { class: 'select-container no-padding w-100 book-code-software ', placeholder: "iDocus", value: company_value }
 
-    = f.input :code, label_html: { class: 'semibold custom-label-field' }, input_html: { class: 'select-container no-padding w-100 book-code-software custom-input-field', placeholder: "IDOC%JEAN-D" }, hint: "Doit impérativement commencer par : #{@organization.code}%", required: true
+    = f.input :code, label_html: { class: 'semibold ' }, input_html: { class: 'select-container no-padding w-100 book-code-software ', placeholder: "IDOC%JEAN-D" }, hint: "Doit impérativement commencer par : #{@organization.code}%", required: true
     - if @user.leader?
-      = f.input :role, collection: organization_role_options, label_html: { class: 'select semibold custom-label-field' }, input_html: { class: 'select-collaborator-role', id: 'select-collaborator-role' }, required: true, prompt: '', multiple: false
-    = f.input :group_ids, collection: @organization.groups, label_html: { class: 'semibold custom-label-field' }, label: t('activerecord.models.group.name').pluralize, input_html: { class: 'select-organization-group-list', id: 'select-organization-group-list', 'multiple' => 'multiple' }
+      = f.input :role, collection: organization_role_options, label_html: { class: 'select semibold ' }, input_html: { class: 'select-collaborator-role', id: 'select-collaborator-role' }, required: true, prompt: '', multiple: false
+    = f.input :group_ids, collection: @organization.groups, label_html: { class: 'semibold ' }, label: t('activerecord.models.group.name').pluralize, input_html: { class: 'select-organization-group-list', id: 'select-organization-group-list', 'multiple' => 'multiple' }
     
   .modal-footer
     .form-group.no-margin

@@ -108,8 +108,8 @@
               %i.help-block Non (aucune TVA ne sera reportée en pré-saisie)
           .col-md-2
             .form-check.form-switch.idocus-custom-form-check
-              = o.input :is_taxable, as: :boolean, label: false, input_html: { class: 'form-check-input input-toggle ido-custom-checkbox check-taxable-user-options', id: 'check-taxable-user-options' }, required: true
-              %label.semibold{class: 'form-check-label ido-custom-label', for: 'check-displayed-pre-assignment'} Non
+              = o.input :is_taxable, as: :boolean, label: false, input_html: { class: 'form-check-input input_switch input_check_field check-taxable-user-options', id: 'check-taxable-user-options' }, required: true
+              %label.semibold{class: 'form-check-label label_check_field', for: 'check-displayed-pre-assignment'} Non
       .form-group
         .row
           .col-md-6
