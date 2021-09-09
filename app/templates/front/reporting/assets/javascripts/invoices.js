@@ -312,5 +312,9 @@ $(document).ready(function(){
   $('select#user_filter').chosen({
     search_contains: true,
     no_results_text: 'Aucun résultat correspondant à'
-  })
+  });
+
+  $('.reporting-invoice-filter').click(function(){
+    $('#reporting-invoice-filter').modal('show');
+  });
 });

@@ -20,12 +20,15 @@
         %label.text-canvas-reporting.semibold.failed_retrievers_percentage 0%
         %canvas#chart_retriever_inactive          
         %h5.text-center.mt-3.semibold= t('reporting.failed_retrievers')
-
+%hr
+.mb-4
 .row.derivationRight
-  .col-md-4.box#lastest_sending_docs
-    
-  .col-md-3.box#pre_assignment_accounts
-    
-  .col-md-4.box#failed_retrievers
+  .col-md-6.p-2
+    #pre_assignment_accounts.box
+  
+  .col-md-6.p-2
+    #lastest_sending_docs.box
+    %hr
+    #failed_retrievers.box
 
   .mb-4

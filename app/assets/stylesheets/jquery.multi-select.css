@@ -14,7 +14,7 @@
     top: 85%;
     z-index: 1;
     float: left;
-    min-width: 100%;
+    min-width: 150%;
     background: #fff;
     margin: 15px 0;    
     display: none;
@@ -27,8 +27,7 @@
 .multi-select-menuitem {
     display: block;
     font-size: 14px;
-    padding: 1% 2%;
-    white-space: nowrap;
+    padding: 1% 2%;    
     cursor: pointer;
 }
 
