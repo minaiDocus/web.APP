@@ -237,7 +237,6 @@ module IbizaLib
           @params_valid = false if counter_false >= 3
         end
       end
-
     end
   end
 end

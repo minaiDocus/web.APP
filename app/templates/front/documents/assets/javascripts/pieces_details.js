@@ -98,6 +98,10 @@ class DocumentsDetails extends DocumentsMain{
 }
 
 
+AppToggleLoading('show');
+
+AppToggleLoading('hide');
+
 jQuery(function() {
   let main = new DocumentsDetails();
 
