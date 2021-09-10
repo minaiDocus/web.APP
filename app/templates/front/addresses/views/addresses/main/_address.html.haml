@@ -1,63 +1,66 @@
-%table.table.table-striped
-  %thead
-    %tr
-      %th{ colspan: 2 }
-        - if single
-          = t('activerecord.models.address.attributes.' + type)
-        - else
+- address = address rescue nil
+
+%form.adresses_form{class: "#{type}_form"}
+  %table.table.table-striped
+    %thead
+      %tr
+        %th{ colspan: 2 }
           .float-start
-            - if address.is_for_paper_return || address.is_for_paper_set_shipping || address.is_for_dematbox_shipping
-              - if address.is_for_paper_return
-                = t('activerecord.models.address.attributes.paper_return')
-                - if address.is_for_paper_set_shipping || address.is_for_dematbox_shipping
-                  %br
-              - if address.is_for_paper_set_shipping
-                = t('activerecord.models.address.attributes.paper_set_shipping')
-                - if address.is_for_dematbox_shipping
-                  %br
-              - if address.is_for_dematbox_shipping
-                = t('activerecord.models.address.attributes.dematbox_shipping')
-            - else
-              Adresse non attribuée
+            - if type == 'paper_return'
+              = t('activerecord.models.address.attributes.paper_return')
+            - if type == 'paper_set_shipping'
+              = t('activerecord.models.address.attributes.paper_set_shipping')
+            - if type == 'dematbox_shipping'
+              = t('activerecord.models.address.attributes.dematbox_shipping')
           .float-end
-            = link_to glyphicon('pencil', { style: 'color: #3e2f24' }), edit_account_address_path(address), class: 'btn btn-light'
-            = link_to glyphicon('x', { style: 'color: #3e2f24' }), account_address_path(address), :method => :delete, data: { :confirm => t('actions.confirm') }, class: 'btn btn-light'
-  - if address
-    %tbody
-      %tr
-        %th= t('activerecord.models.address.attributes.company')
-        %td= address.company
-      - if address.is_for_dematbox_shipping && (!single || type == 'dematbox_shipping')
+            - if address.try(:id).to_i > 0
+              = link_to glyphicon('x'), '#', data: { id: address.try(:id).to_i, type: type }, class: 'btn btn-light destroy_address', style: 'width: 40px'
+      %tbody
         %tr
-          %th= t('activerecord.models.address.attributes.company_number')
-          %td= address.company_number
-      %tr
-        %th= t('activerecord.models.address.attributes.first_name')
-        %td= address.first_name
-      %tr
-        %th= t('activerecord.models.address.attributes.last_name')
-        %td= address.last_name
-      - if address.is_for_dematbox_shipping && (!single || type == 'dematbox_shipping')
+          %th= t('activerecord.models.address.attributes.company')
+          %td
+            %input{ type: 'text', name: "company", class: "#{type} input", value: address.try(:company) }
+        - if type == 'dematbox_shipping'
+          %tr
+            %th= t('activerecord.models.address.attributes.company_number')
+            %td
+              %input{ type: 'text', name: "company_number", class: "#{type} input", value: address.try(:company_number) }
         %tr
-          %th= t('activerecord.models.address.attributes.phone')
-          %td= address.phone
-      %tr
-        %th= t('activerecord.models.address.attributes.address_1')
-        %td= address.address_1
-      %tr
-        %th= t('activerecord.models.address.attributes.address_2')
-        %td= address.address_2
-      - if address.is_for_dematbox_shipping && (!single || type == 'dematbox_shipping')
+          %th= t('activerecord.models.address.attributes.first_name')
+          %td
+            %input{ type: 'text', name: "first_name", class: "#{type} input", value: address.try(:first_name) }
         %tr
-          %th= t('activerecord.models.address.attributes.place_called_or_postal_box')
-          %td= address.place_called_or_postal_box
-      %tr
-        %th= t('activerecord.models.address.attributes.city')
-        %td= address.city
-      %tr
-        %th= t('activerecord.models.address.attributes.zip')
-        %td= address.zip
-      - if address.is_for_dematbox_shipping && (!single || type == 'dematbox_shipping')
+          %th= t('activerecord.models.address.attributes.last_name')
+          %td
+            %input{ type: 'text', name: "last_name", class: "#{type} input", value: address.try(:last_name) }
+        - if type == 'dematbox_shipping'
+          %tr
+            %th= t('activerecord.models.address.attributes.phone')
+            %td
+              %input{ type: 'text', name: "phone", class: "#{type} input", value: address.try(:phone) }
         %tr
-          %th= t('activerecord.models.address.attributes.building')
-          %td= address.building
+          %th= t('activerecord.models.address.attributes.address_1')
+          %td
+            %input{ type: 'text', name: "address_1", class: "#{type} input", value: address.try(:address_1) }
+        %tr
+          %th= t('activerecord.models.address.attributes.address_2')
+          %td
+            %input{ type: 'text', name: "address_2", class: "#{type} input", value: address.try(:address_2) }
+        - if type == 'dematbox_shipping'
+          %tr
+            %th= t('activerecord.models.address.attributes.place_called_or_postal_box')
+            %td
+              %input{ type: 'text', name: "place_called_or_postal_box", class: "#{type} input", value: address.try(:place_called_or_postal_box) }
+        %tr
+          %th= t('activerecord.models.address.attributes.city')
+          %td
+            %input{ type: 'text', name: "city", class: "#{type} input", value: address.try(:city) }
+        %tr
+          %th= t('activerecord.models.address.attributes.zip')
+          %td
+            %input{ type: 'text', name: "zip", class: "#{type} input", value: address.try(:zip) }
+        - if type == 'dematbox_shipping'
+          %tr
+            %th= t('activerecord.models.address.attributes.building')
+            %td
+              %input{ type: 'text', name: "building", class: "#{type} input", value: address.try(:building) }

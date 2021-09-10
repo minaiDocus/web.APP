@@ -27,12 +27,13 @@
 
         - if !@user.is_prescriber && @user.organization.is_active
           .form-group
-            = render file: Rails.root.join('app/templates/front/account_sharings/views/account_sharings/main/_show.html.haml')
+            = render file: Rails.root.join('app/templates/front/account_sharings/views/account_sharings/profile/_show.html.haml')
         
 
         - if @user.is_guest
           .form-group
-            = render file: Rails.root.join('app/templates/front/addresses/views/addresses/_show.html.haml')
+            - addresses = OpenStruct.new({ paper_return_address: @user.paper_return_address, paper_set_shipping_address: @user.paper_set_shipping_address, dematbox_shipping_address: @user.dematbox_shipping_address })
+            = render file: Rails.root.join('app/templates/front/addresses/views/addresses/_show.html.haml'), locals: { addresses: addresses, addr_for: 'user', id: @user.id }
         
         .form-group
           = render file: Rails.root.join('app/templates/front/dematboxes/views/dematboxes/_show.html.haml')

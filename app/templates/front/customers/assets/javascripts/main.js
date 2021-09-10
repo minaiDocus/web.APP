@@ -52,7 +52,6 @@ class Customer{
     this.add_customer();
     this.edit_customer();
     this.get_subscription_edit_view();
-    this.get_addresses();
     this.load_configuraation_otpion_view();
     this.get_accounting_plan_view();
     this.filter_customer();
@@ -240,38 +239,6 @@ class Customer{
     this.check_input_number();
     this.update_price();
   }
-
-
-  // TODO .... NEED TO PERSONALIZE
-  get_addresses(){
-    let that = this;
-    let customer_id = $('input:hidden[name="customer_id"]').val();
-    let paper_return_id = $('input:hidden[name="paper_return_addresses"]').val();
-    let paper_set_shipping_id = $('input:hidden[name="paper_set_shipping_addresses"]').val();
-    let dematbox_shipping_id = $('input:hidden[name="dematbox_shipping_addresses"]').val();
-
-    $('#customer-content #adresses-tab').unbind('click').bind('click',function(e) {
-      e.preventDefault();
-      that.applicationJS.parseAjaxResponse({ 'url': '/organizations/' + that.organization_id + '/customers/' + customer_id + '/addresses/' + paper_return_id + '/edit' }).then((element)=>{
-        $('#customer-content .tab-content .tab-pane#adresses .paper_return_content').html($(element).find('#address.edit').html());
-        $('#customer-content .tab-content .tab-pane#adresses .paper_return_content .address-for-paper-set-shipping').html('');
-        $('#customer-content .tab-content .tab-pane#adresses .paper_return_content .address-for-dematbox-shipping').html('');
-      });
-
-      that.applicationJS.parseAjaxResponse({ 'url': '/organizations/' + that.organization_id + '/customers/' + customer_id + '/addresses/' + paper_set_shipping_id + '/edit' }).then((element)=>{
-        $('#customer-content .tab-content .tab-pane#adresses .paper_set_shipping_content').html($(element).find('#address.edit').html());
-        $('#customer-content .tab-content .tab-pane#adresses .paper_set_shipping_content .address-for-paper-return').html('');
-        $('#customer-content .tab-content .tab-pane#adresses .paper_set_shipping_content .address-for-dematbox-shipping').html('');
-      });
-
-      that.applicationJS.parseAjaxResponse({ 'url': '/organizations/' + that.organization_id + '/customers/' + customer_id + '/addresses/' + dematbox_shipping_id + '/edit' }).then((element)=>{
-        $('#customer-content .tab-content .tab-pane#adresses .dematbox_shipping_content').html($(element).find('#address.edit').html());
-        $('#customer-content .tab-content .tab-pane#adresses .dematbox_shipping_content .address-for-paper-set-shipping').html('');
-        $('#customer-content .tab-content .tab-pane#adresses .dematbox_shipping_content .address-for-paper-return').html('');
-      });
-    });
-  }
-
 
   show_subscription_option(){
     let self = this;

@@ -1,26 +1,8 @@
-= stylesheet_link_tag 'front/customers/assets/stylesheets/main'
-= stylesheet_link_tag 'front/customers/assets/stylesheets/addresses'
+.general.derivationRight
+  .row
+    .col-md-8
+      %h3.bold Paramètres : Gestion des adresses
 
-#addresses
-  .row.derivationRight
-    .col-md-12
-      .box.clearfix
-        .float-left
-          %h3
-            Liste des adresses du client : 
-            = link_to @customer, organization_customer_path(@organization, @customer, tab: 'addresses'), class: 'fs-origin'
-        .float-right
-          = link_to 'Nouvelle adresse', new_organization_customer_address_path(@organization, @customer), class: 'btn btn-primary'
-  .row.derivationLeft
-    .col-md-12
-      .box.addresses-box-content
-        - grouped_addresses = @addresses.in_groups_of(3)
-        - grouped_addresses.each_with_index do |addresses, index|
-          .row{ class: ((index + 1) < grouped_addresses.size ? 'margin1bottom' : '') }
-            - addresses.each do |address|
-              - if address
-                / .col-md-
-                = render partial: 'address', locals: { address: address, single: false }
+    - addresses = OpenStruct.new({ paper_return_address: @customer.addresses.for_paper_return.first, paper_set_shipping_address: @customer.addresses.for_paper_set_shipping.first, dematbox_shipping_address: @customer.addresses.for_dematbox_shipping.first })
 
-= javascript_include_tag 'front/customers/assets/javascripts/main'
-= javascript_include_tag 'front/customers/assets/javascripts/addresses'
+    = render file: Rails.root.join('app/templates/front/addresses/views/addresses/_show.html.haml'), locals: { addresses: addresses, addr_for: 'user', id: @customer.id }

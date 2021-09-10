@@ -38,8 +38,6 @@ Rails.application.routes.draw do
           get 'my_unisoft_societies'
           post 'associate_society'
         end
-
-        resources :addresses, controller: 'addresses'
       end
     end
   end

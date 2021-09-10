@@ -1,70 +1,71 @@
 # frozen_string_literal: true
 class Addresses::MainController < FrontController
-  before_action :load_account_number_rule, only: %w[show edit update destroy]
   before_action :verify_access
-  before_action :load_address, only: %w[edit update destroy]
+  before_action :load_address, only: %w[destroy]
 
   prepend_view_path('app/templates/front/addresses/views')
 
-  # GET /account/addresses
-  def index
-    @addresses = @user.addresses.all
-  end
-
-  # GET /account/addresses/new
-  def new
-    @address = Address.new
-
-    @address.first_name = @user.first_name
-    @address.last_name  = @user.last_name
-  end
-
-  # POST /account/addresses
-  def create
-    @address = @user.addresses.new(address_params)
-    if @address.save
-      flash[:success] = 'Créé avec succès.'
-      redirect_to account_addresses_path
-    else
-      render :new
-    end
-  end
-
-  # POST /account/addresses/:address_id/edit
-  def edit; end
-
-  # PUT /account/addresses/:address_id
-  def update
-    if @address.update(address_params)
-      flash[:success] = 'Modifié avec succès.'
-      redirect_to account_addresses_path
-    else
-      render :edit
-    end
-  end
-
   # DELETE /account/addresses/:address_id
   def destroy
-    if @address.destroy
-      flash[:success] = 'Supprimé avec succès.'
-      redirect_to account_addresses_path
+    @address.destroy
+    render json: { json_flash: { success: 'Supprimé avec succès.' } }, status: 200
+  end
+
+  def update_all
+    if params[:addr_for] == 'user'
+      object = User.find(params[:id])
+    else
+      object = Organization.find(params[:id])
     end
+
+    error = []
+
+    3.times do |i|
+      if i == 0 && params[:paper_return]
+        address = object.addresses.for_paper_return.first || object.addresses.new(is_for_paper_return: true)
+        address.assign_attributes( address_params(:paper_return) )
+        address.is_for_paper_set_shipping = false
+        address.is_for_dematbox_shipping  = false
+      elsif i == 1 && params[:paper_set_shipping]
+        address = object.addresses.for_paper_set_shipping.first || object.addresses.new(is_for_paper_set_shipping: true)
+        address.assign_attributes( address_params(:paper_set_shipping) )
+        address.is_for_paper_return       = false
+        address.is_for_dematbox_shipping  = false
+      elsif params[:dematbox_shipping]
+        address = object.addresses.for_dematbox_shipping.first || object.addresses.new(is_for_dematbox_shipping: true)
+        address.is_for_paper_set_shipping = false
+        address.is_for_paper_return       = false
+        address.assign_attributes( address_params(:dematbox_shipping) )
+      end
+
+      if address
+        error << address.errors.messages unless address.save
+      end
+    end
+
+    if error.any?
+      json_flash[:error] = error.join(', ')
+    else
+      json_flash[:success] = 'Mise à jour avec succès'
+    end
+
+    render json: { json_flash: json_flash }, status: 200
   end
 
   private
 
   def verify_access
-    if @user.is_prescriber
-      redirect_to root_path, flash: { error: t('authorization.unessessary_rights') }
+    unless @user
+      render json: { json_flash: { error: t('authorization.unessessary_rights') } }, status: 200
     end
   end
 
   def load_address
-    @address = @user.addresses.find(params[:id])
+    @address = Address.find(params[:id])
   end
 
-  def address_params
-    params.require(:address).permit(
+  def address_params(type)
+    params.require(type.to_sym).permit(
       :first_name,
       :last_name,
       :company,
