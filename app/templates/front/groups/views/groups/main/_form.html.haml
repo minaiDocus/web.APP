@@ -1,34 +1,34 @@
-= simple_form_for @group, url: (action_name.in?(%w(new create)) ? organization_groups_path(@organization) : organization_group_path(@organization, @group)), html: { class: ' form-horizontal label-small' } do |f|
-  .modal-body
-    - if @user.leader?
-      %h4 Informations
+= simple_form_for @group, url: (action_name.in?(%w(new create)) ? organization_groups_path(@organization) : organization_group_path(@organization, @group)), html: { class: ' form-horizontal create_update_form' } do |f|
+  - if @user.leader?
+    %h5 Informations
+    %hr
+    = f.label :name, label: t('activerecord.models.group.attributes.name'), :class => "semibold"
+    .select-container.no-padding.w-100
+      = f.input :name, label: false, input_html: { placeholder: "Direction" }
+    = f.label :description, label: t('activerecord.models.group.attributes.description'), :class => "semibold"
+    .select-container.no-padding.w-100
+      = f.input :description, as: :text, label: false
+    - if @user.is_admin
+      %h5 Dropbox Extended
       %hr
-      = f.input :name, label: t('activerecord.models.group.attributes.name'), label_html: { class: 'semibold ' }, input_html: { class: 'select-container no-padding w-100 book-code-software ', placeholder: "Direction" }
+      = f.label :dropbox_delivery_folder, label: t('activerecord.models.group.attributes.dropbox_delivery_folder'), :class => "semibold"
       .select-container.no-padding.w-100
-        = f.input :description, as: :text, label: t('activerecord.models.group.attributes.description')
-      - if @user.is_admin
-        %h4 Dropbox Extended
-        %hr
-        = f.input :dropbox_delivery_folder, label: t('activerecord.models.group.attributes.dropbox_delivery_folder'), input_html: { class: 'input-xxlarge' }
-        .form-group.row
-          .col-md-10
-            = f.label :is_dropbox_authorized, t('activerecord.models.group.attributes.is_dropbox_authorized'), class: 'semibold'
-          .col-md-2.form-check.form-switch
-            = f.label :is_dropbox_authorized, 'Oui', class: 'semibold label_check_field'
-            = check_box_tag 'group[is_dropbox_authorized]', '1', @group.is_dropbox_authorized, class: 'form-check-input input_check_field'
-    - content_for :assignation do
-      %h4 Assignation #{ 'des clients' if not @user.leader? }
-      %hr
-      - if @user.leader?
-        = f.association :members, collection: @organization.members.order(:code), label_method: :info, input_html: { class: 'searchable-option-list show-selection-below-list show-select-all', id: 'select-collaborators-list'}, include_blank: false, multiple: true
-      = f.association :customers, collection: @organization.customers.order(:code), label_method: :info, input_html: { class: 'searchable-option-list', id: 'select-customers-collaborators-list' }, include_blank: false, multiple: true
-
+        = f.input :dropbox_delivery_folder, label: false, input_html: { class: 'input-xxlarge' }
+      .form-group.row
+        .col-md-10
+          = f.label :is_dropbox_authorized, t('activerecord.models.group.attributes.is_dropbox_authorized'), class: 'semibold'
+        .col-md-2
+          .form-check.form-switch
+            = f.input :is_dropbox_authorized, as: :boolean, label: false, input_html: { class: 'form-check-input input_switch input_check_field', id: 'is_dropbox_authorized_field' }
+            %label.semibold{class: 'form-check-label label_check_field', for: 'is_dropbox_authorized_field'} Non
+  - content_for :assignation do
+    %h5 Assignation #{ 'des clients' if not @user.leader? }
+    %hr
     - if @user.leader?
-      = content_for :assignation
-    - else
-      = content_for :assignation
-  .modal-footer
-    .form-group.no-margin
-      .w-100.text-end
-        = link_to t('actions.cancel'), organization_groups_path(@organization), class: 'btn btn-light'
-        = f.submit t('actions.submit'), class: 'btn btn-primary semibold'
+      = f.association :members, collection: @organization.members.order(:code), label_method: :info, input_html: { class: 'searchable-option-list show-selection-below-list show-select-all', id: 'select-collaborators-list'}, include_blank: false, multiple: true
+    = f.association :customers, collection: @organization.customers.order(:code), label_method: :info, input_html: { class: 'searchable-option-list', id: 'select-customers-collaborators-list' }, include_blank: false, multiple: true
+
+  - if @user.leader?
+    = content_for :assignation
+  - else
+    = content_for :assignation

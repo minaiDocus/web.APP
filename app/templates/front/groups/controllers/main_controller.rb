@@ -7,10 +7,7 @@ class Groups::MainController < OrganizationController
 
   # GET /organizations/:organization_id/groups
   def index
-    @groups = @user.groups.search(search_terms(params[:group_contains]))
-                   .order(sort_column => sort_direction)
-                   .page(params[:page])
-                   .per(params[:per_page])
+    base_content
   end
 
   # GET /organizations/:organization_id/groups/:id
@@ -56,7 +53,11 @@ class Groups::MainController < OrganizationController
     @group.destroy
     FileImport::Dropbox.changed(@group.collaborators)
     flash[:success] = 'Supprimé avec succès.'
-    redirect_to organization_groups_path(@organization)
+    #redirect_to organization_groups_path(@organization)
+
+    base_content
+
+    render :index
   end
 
   private
@@ -110,6 +111,13 @@ class Groups::MainController < OrganizationController
 
   def load_group
     @group = @organization.groups.find(params[:id])
+  end
+
+  def base_content
+    @groups = @user.groups.search(search_terms(params[:group_contains]))
+                   .order(sort_column => sort_direction)
+                   .page(params[:page])
+                   .per(params[:per_page])
   end
 
   def sort_column

@@ -3,3 +3,20 @@
   cursor: pointer;
   color: #FF4848;
 }
+
+.edit-delete .edit a {
+  text-decoration: none;
+  cursor: pointer;
+  color: rgba(26, 26, 26, 0.7);
+}
+
+/* TO REMOVE */
+
+.padding-group-collaborator .sub_menu {
+  position: relative !important;
+  width: 120px;
+}
+
+.collaborators.page-content {
+  margin-bottom: 7%;
+}

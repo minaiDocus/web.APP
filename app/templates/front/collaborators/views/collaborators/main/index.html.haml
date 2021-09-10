@@ -11,7 +11,7 @@
       .col-md-2.no-padding
         .input-group.mb-3.search-content
           %span.input-group-text#basic-addon1= glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })
-          %input.form-control#search_input{ type: :text, "aria-label" => "Rechercher", "aria-describedby" => "basic-addon1", name:'user_contains[search_text]', placeholder: 'Rechercher' }  
+          %input.form-control#search_input{ type: :text, "aria-label" => "Rechercher", "aria-describedby" => "basic-addon1", name:'user_contains[search_text]', placeholder: 'Rechercher' }
       .col-md-1.text-center.no-padding
         %button.btn.btn-light.more-filter.semibold
           %span.me-2 Filtrer
@@ -57,21 +57,8 @@
 
           = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { name: 'members', total_pages: @members.total_pages }
 
-  .row.mt-5
-    .col-md-8
-      %h3.bold
-        Gérer les groupes
-        %span.badge.badge-secondary.badge-sm.regular= @groups.size
-    .col-md-2.no-padding
-      .input-group.mb-3
-        %span.input-group-text#basic-addon1= glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })          
-        %input.form-control{ type: :text, "aria-label" => "Rechercher", "aria-describedby" => "basic-addon1", placeholder: 'Rechercher'  }    
-    .col-md-2.text-start
-      %button.btn.btn-primary.group.create.new_edit.semibold
-        %span= glyphicon('plus', { size: '14', color: '#FFFF'})
-        %span.ms-1 Créer un groupe
-
-  = render file: Rails.root.join('app/templates/front/groups/views/groups/main/index.html.haml')
+  .box-group-content
+    = render file: Rails.root.join('app/templates/front/groups/views/groups/main/index.html.haml')
   
   .modal#add_edit_collaborator
     .modal-dialog

@@ -74,6 +74,28 @@ function bind_collaborator_events(){
 
     AppEmit('show_collaborator_file_storages_edit', { url: $(this).attr('link') });
   });
+
+  $('.destroy_group').unbind('click').bind('click', function(e) {
+    /*e.preventDefault();*/
+    e.stopPropagation();
+
+    const text = $(this).attr('text');
+    const url  = $(this).attr('link');
+
+    if (confirm(text)) {
+      AppEmit('destroy_group', { url: url });
+    }
+    else { return false; }
+  });
+
+  $('.show_details_group').unbind('click').bind('click', function(e) {
+    e.stopPropagation();
+    e.preventDefault();
+
+    const url = $(this).attr('href');
+
+    AppEmit('show_details_group', { url: url });
+  });
 }
 
 jQuery(function() {

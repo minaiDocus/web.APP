@@ -1,8 +1,2 @@
-.modal#group
-  .modal-dialog
-    .modal-content
-      .modal-header
-        %h5.modal-title.bold Création d'un nouveau groupe
-        %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
-
-      = render partial: 'form'
+#group.new.form_content{text: "Création d'un nouveau groupe"}
+  = render partial: 'form'

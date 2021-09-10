@@ -5,6 +5,7 @@ class Main{
     this.applicationJS   = new ApplicationJS;
     this.member_modal    = $('#add_edit_collaborator.modal');
     this.group_modal     = $('#add_edit_group');
+    this.group_show_details_modal = $('#show_group_details');
     this.member_filter_modal = $('#search_collaborator_filter');
     this.organization_id = $('input:hidden[name="organization_id"]').val();
     this.action_locker   = false;
@@ -23,9 +24,11 @@ class Main{
     else if (target === 'groups') {
       this.applicationJS.parseAjaxResponse(params).then((element)=>{
         this.group_modal.find('.modal-body').html($(element).find('.form_content').html());
-        this.group_modal.find('.modal-title').html($(element).find('.form_content').attr('text').html());
+        this.group_modal.find('.modal-title').html($(element).find('.form_content').attr('text'));
         apply_searchable_option('groups')
         this.group_modal.modal('show');
+
+        ApplicationJS.set_checkbox_radio();
       });
     }
   }
@@ -56,12 +59,22 @@ class Main{
       'type': 'POST',
       'dataType': 'html',
     }).then((response)=>{
-      $('.collaborators.page-content').html($(response).find('.collaborators.page-content').html());
-      this.member_modal.modal('hide');
+      if (url.indexOf("collaborators") >= 0) {
+        $('.page-content').html($(response).find('.page-content').html());
+        this.member_modal.modal('hide');
+      }
+      if (url.indexOf("groups") >= 0) {
+        $('.page-content .box-group-content').html($(response).find('.page-content').html());
+        this.group_modal.modal('hide');
+      }
+
       bind_collaborator_events();
       ApplicationJS.handle_submenu();
       ApplicationJS.hide_submenu();
-    }).catch((response)=>{ this.member_modal.modal('hide'); });
+    }).catch((response)=>{
+      if (url.indexOf("collaborators") >= 0) { this.member_modal.modal('hide'); }
+      if (url.indexOf("groups") >= 0) { this.group_modal.modal('hide'); }
+    });
   }
 
 
@@ -156,6 +169,59 @@ class Main{
     })
     .catch(()=>{ this.action_locker = false; });
   }
+
+  destroy_group(url){
+    let is_deleted = false
+
+    if (!is_deleted) {
+      let ajax_params =   {
+                          'url': url,
+                          'type': 'DELETE',
+                          'dataType': 'html',
+                        };
+
+      this.applicationJS.parseAjaxResponse(ajax_params)
+      .then((element)=>{
+        this.action_locker = false;
+        $('.page-content .box-group-content').html($(element).find('.page-content').html());
+        is_deleted = true
+
+        bind_collaborator_events();
+        ApplicationJS.handle_submenu();
+        ApplicationJS.set_checkbox_radio();
+        ApplicationJS.hide_submenu();
+      })
+      .catch(()=>{ this.action_locker = false; });
+    }
+  }
+
+  show_details_group(url){
+    let is_already_open = false
+
+    if (!is_already_open) {
+      let ajax_params =   {
+                          'url': url,
+                          'type': 'GET',
+                          'dataType': 'html',
+                        };
+
+      this.applicationJS.parseAjaxResponse(ajax_params)
+      .then((element)=>{
+        this.action_locker = false;
+        this.group_show_details_modal.find('.modal-body').html($(element).find('.group-modal-body').html());
+        this.group_show_details_modal.find('.modal-title').html($(element).find('.group-modal-title').html());
+
+        this.group_show_details_modal.modal('show');
+        is_already_open = true
+
+        bind_collaborator_events();
+        ApplicationJS.handle_submenu();
+        ApplicationJS.set_checkbox_radio();
+        ApplicationJS.hide_submenu();
+      })
+      .catch(()=>{ this.action_locker = false; });
+    }
+  }
 }
 
 
@@ -182,6 +248,11 @@ jQuery(function() {
 
   AppListenTo('show_collaborator_rights_edit', (e)=>{ main.show_collaborator_rights_edit(e.detail.url); });
   AppListenTo('show_collaborator_file_storages_edit', (e)=>{ main.show_collaborator_file_storages_edit(e.detail.url); });
+
+  AppListenTo('destroy_group', (e)=>{ main.destroy_group(e.detail.url); });
+
+  AppListenTo('show_details_group', (e)=>{ main.show_details_group(e.detail.url); });
+  
   
   AppListenTo('window.change-per-page.members', (e)=>{ main.load_data(true, e.detail.name, 1, e.detail.per_page); });
   AppListenTo('window.change-page.members', (e)=>{ main.load_data(true, e.detail.name, e.detail.page); });

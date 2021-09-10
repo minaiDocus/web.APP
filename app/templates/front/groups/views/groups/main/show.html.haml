@@ -2,60 +2,47 @@
 
 #group
   %input#organization_id{type: :hidden, value: @organization.id, name: 'organization_id'}
-  .row.derivationRight
-    .col-md-12
-      .box.clearfix
-        .row
-          .col-md-10
-            %h3 #{@group}
-          .col-md-2
-            .form-group
-              .w-100.text-end{id: "group-#{@group.id}"}
-                - if (@user.leader? || @user.manage_groups) && @organization.is_active
-                  %button.btn.btn-primary.edit.group.new_edit.semibold= t('actions.edit')
+  .box.derivationLeft
+    %h4.text-center.group-modal-title #{@group}
+    %hr
 
-  .row.derivationLeft
-    .col-md-12
-      .box
-        .row
-          .col-md-4
-            .box.bg-light.height_groups.groups_1
-              %h4.margin1bottom Informations
-              %hr
-              %table.table.table-condensed.table-bordered-inner.table-striped.margin0bottom
-                %tbody
-                  %tr
-                    %th= t('activerecord.models.common.attributes.created_at')
-                    %td= l @group.created_at
-                  %tr
-                    %th= t('activerecord.models.group.attributes.name')
-                    %td= @group.name
-                  %tr
-                    %th= t('activerecord.models.group.attributes.description')
-                    %td= @group.description
-          .col-md-4
-            .box.bg-light.height_groups.groups_1
-              %h4
-                Liste des collaborateurs 
-                %span.badge.badge-info.fs-origin= @group.collaborators.count
-              %hr
-              %ul
-                - @group.collaborators.order(code: :asc).each do |collaborator|
-                  %li= collaborator.info
-          .col-md-4
-            .box.bg-light.height_groups.groups_1
-              %h4
-                Liste des clients 
-                %span.badge.badge-info.fs-origin= @group.customers.count
-              %hr
-              %ul
-                - @group.customers.order(code: :asc).each do |customer|
-                  %li= customer.info
-
-
-.modal#edit-group
-  .modal-dialog
-    .modal-content
+    .group-modal-body
+      %ul#paper-set-order-tab.nav.nav-tabs{role: "tablist"}
+        %li.nav-item{role: "presentation"}
+          %button#information_basic_tab.nav-link.active{"aria-controls" => "information_basic", "aria-selected" => "true", "data-bs-target" => "#information_basic", "data-bs-toggle" => "tab", role: "tab", type: "button"} Inforamtions
+        %li.nav-item{role: "presentation"}
+          %button#collaborators_list_tab.nav-link{"aria-controls" => "collaborators_list", "aria-selected" => "false", "data-bs-target" => "#collaborators_list", "data-bs-toggle" => "tab", role: "tab", type: "button"}
+            Liste des collaborateurs 
+            %span.badge.bg-secondary= @group.collaborators.count
+        %li.nav-item{role: "presentation"}
+          %button#clients_list_tab.nav-link{"aria-controls" => "clients_list", "aria-selected" => "false", "data-bs-target" => "#clients_list", "data-bs-toggle" => "tab", role: "tab", type: "button"}
+            Liste des clients 
+            %span.badge.bg-secondary= @group.customers.count
+      
+      #paper-set-order-tab-content.tab-content
+        #information_basic.tab-pane.fade.show.active{"aria-labelledby" => "information_basic_tab", role: "tabpanel"}
+          .box
+            %table.table.table-condensed.table-bordered-inner.table-striped.margin0bottom
+              %tbody
+                %tr
+                  %th= t('activerecord.models.common.attributes.created_at')
+                  %td= l @group.created_at
+                %tr
+                  %th= t('activerecord.models.group.attributes.name')
+                  %td= @group.name
+                %tr
+                  %th= t('activerecord.models.group.attributes.description')
+                  %td= @group.description
+        #collaborators_list.tab-pane.fade{"aria-labelledby" => "collaborators_list_tab", role: "tabpanel"}
+          .box
+            %ul
+              - @group.collaborators.order(code: :asc).each do |collaborator|
+                %li= collaborator.info
+        #clients_list.tab-pane.fade{"aria-labelledby" => "clients_list_tab", role: "tabpanel"}
+          .box
+            %ul
+              - @group.customers.order(code: :asc).each do |customer|
+                %li= customer.info
 
 
 
