@@ -1,0 +1,14 @@
+.row
+  .col-md-12
+    %form#shared_accounts_form
+      %input#form_type{ type: 'hidden', name: 'form_type', value: 'share_account' }
+      .form-group.clearfix
+        .label-section
+          Contact ou client
+        .control-section
+          = select_tag 'account_sharing[collaborator_id]', options_for_select(@users_options), include_blank: false, class: 'custom-select.mr-sm-2'
+      .form-group.clearfix
+        .label-section
+          Dossier client
+        .control-section
+          = select_tag 'account_sharing[account_id]', options_for_select(@customers_options), include_blank: false, class: 'custom-select.mr-sm-2'

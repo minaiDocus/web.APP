@@ -16,7 +16,7 @@ class AccountSharing::ShareAccount
     if authorized && @account_sharing.save
       FileImport::Dropbox.changed([@account_sharing.collaborator])
 
-      url = Rails.application.routes.url_helpers.account_profile_url({ panel: 'account_sharing' }.merge(ActionMailer::Base.default_url_options))
+      url = Rails.application.routes.url_helpers.profiles_url({ panel: 'account_sharing' }.merge(ActionMailer::Base.default_url_options))
 
       notifications = [
         {

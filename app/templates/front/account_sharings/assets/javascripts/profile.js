@@ -1,6 +1,6 @@
-//=require './events'
+//=require './profile_events'
 
-class AccountSharingsMain{
+class AccountSharingsProfile{
   constructor(){
     this.applicationJS = new ApplicationJS();
   }
@@ -54,7 +54,7 @@ class AccountSharingsMain{
 }
 
 jQuery(function() {
-  let main = new AccountSharingsMain();
+  let main = new AccountSharingsProfile();
 
   AppListenTo('account_sharings_new', (e)=>{ main.account_sharings_new() });
   AppListenTo('account_sharings_new_request', (e)=>{ main.account_sharings_new_request() });

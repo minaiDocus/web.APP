@@ -74,9 +74,9 @@ Rails.application.routes.draw do
       #   post :update_multiple, on: :collection
       # end
 
-      resources :account_sharings, only: %w(index new create destroy), controller: 'account_sharings' do
-        post :accept, on: :member
-      end
+      # resources :account_sharings, only: %w(index new create destroy), controller: 'account_sharings' do
+      #   post :accept, on: :member
+      # end
     end
   end
 end

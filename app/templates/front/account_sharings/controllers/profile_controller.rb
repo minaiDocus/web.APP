@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class AccountSharings::MainController < FrontController
+class AccountSharings::ProfileController < FrontController
   prepend_view_path('app/templates/front/account_sharings/views')
 
   def create

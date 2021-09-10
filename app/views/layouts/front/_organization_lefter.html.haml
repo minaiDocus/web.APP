@@ -55,8 +55,8 @@
           %a{href: organization_account_number_rules_path(@organization) }
             %span.link_principal{class: (controller_path == 'account_number_rules/main')? 'active' : ''}= t('organizations.bank_assignment')
       %li{ data: { href: "#{@organization.id}/account_sharing" } }
-        %a{href: "#" }
-          %span.link_principal= t('folders.shared_folders')
+        %a{href: account_sharings_organization_path(@organization) }
+          %span.link_principal{class: (controller_path == 'account_sharings/organization')? 'active' : ''}= t('folders.shared_folders')
       %li{ data: { href: "#{@organization.id}/invoices" } }
         %a{href: organization_invoices_path(@organization) }
           %span.link_principal{class: (controller_path == 'invoices/main')? 'active' : ''}= t('organizations.invoices')

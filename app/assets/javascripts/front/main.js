@@ -11,20 +11,23 @@ function bind_globals_events(){
     $('.pagination .per-page').unbind('change').bind('change', function(e){
       let name = $(this).data('name');
       let target = $(this).data('target');
-      AppEmit(`window.change-per-page.${name}`, { name: name, target: target, per_page: $(this).val() });
+      let current_page = $(this).data('current-page');
+
+      AppEmit(`window.change-per-page.${name}`, { name: name, target: target, page: current_page, per_page: $(this).val() });
       if(target != name)
-        AppEmit(`window.change-per-page.${target}`, { name: name, target: target, per_page: $(this).val() });
+        AppEmit(`window.change-per-page.${target}`, { name: name, target: target, page: current_page, per_page: $(this).val() });
     });
     $('.pagination .previous-page').unbind('click').bind('click', function(e){
       let name         = $(this).data('name');
       let target       = $(this).data('target');
+      let per_page     = $(this).data('per-page');
       let current_page = $(this).data('current-page');
       let next_value   = current_page - 1;
 
       if(next_value >= 1){
-        AppEmit(`window.change-page.${name}`, { name: name, target: target, page: next_value, trigger: 'previous' });
+        AppEmit(`window.change-page.${name}`, { name: name, target: target, page: next_value, per_page: per_page, trigger: 'previous' });
         if(target != name)
-          AppEmit(`window.change-page.${target}`, { name: name, target: target, page: next_value, trigger: 'previous' });
+          AppEmit(`window.change-page.${target}`, { name: name, target: target, page: next_value, per_page: per_page, trigger: 'previous' });
       }
     });
     $('.pagination .next-page').unbind('click').bind('click', function(e){

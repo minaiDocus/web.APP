@@ -1,0 +1,7 @@
+.row
+  .col-md-12
+    = simple_form_for @guest_collaborator, url: '#', html: { id: 'shared_contacts_form', class: 'form-group' } do |f| 
+      = f.input :email, placeholder: 'john.doe@example.com', hint: 'Si le contact existe déjà, les champs ci-dessous seront ignorés'
+      = f.input :company
+      = f.input :first_name
+      = f.input :last_name
