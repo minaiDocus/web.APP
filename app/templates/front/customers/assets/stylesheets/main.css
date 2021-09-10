@@ -102,3 +102,22 @@ p{
 #customer-content ul li.nav-item{
   border-bottom: 1px solid rgba(26, 26, 26, 0.04);
 }
+
+.label-software{
+  margin-top: 2px;
+}
+
+.nav{
+  flex-wrap: unset;
+  width: 1390px;
+  overflow: auto;
+}
+
+ul.list.nav {
+  scrollbar-width: thin; /* "auto" or "thin" */
+  scrollbar-color: #C1D837 rgba(26, 26, 26, 0.02); /* scroll thumb and track */  
+}
+
+.list.nav li button{
+  white-space: nowrap;
+} 

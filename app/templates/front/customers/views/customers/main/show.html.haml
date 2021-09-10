@@ -7,10 +7,9 @@
     .col-md-12
       = render 'header'
 
-  %span.auto-scroll-span-left
-    %button.btn= glyphicon('arrow-left', { size: '13' })
+  .mb-4
   
-  %ul.nav.nav-tabs.ms-3.derivationLeft{ "role" => "tablist" }
+  %ul.list.nav.nav-tabs.ms-3.derivationLeft{ "role" => "tablist" }
     %li.nav-item.no-margin{ "role" => "presentation" }
       %button.semibold.nav-link#information-tab{ class: ('active' if params[:tab] == 'information' || params[:tab].blank? ), "data-bs-toggle" => "tab", "data-bs-target" => "#information", type: :button, "role" => "tab", "aria-controls" => "information", "aria-selected" => "#{params[:tab] == 'information' || params[:tab].blank?}" } Informations générales
     - if @customer.active? && !@organization.specific_mission
@@ -133,9 +132,6 @@
     - if @user.is_admin && @customer.active? && !@organization.specific_mission
       %li.nav-item.no-margin{ "role" => "presentation" }
         %button.semibold.nav-link#file-storages-tab{ class: ('active' if params[:tab] == 'file_storage'), "data-bs-toggle" => "tab", "data-bs-target" => "#file-storages", type: :button, "role" => "tab", "aria-controls" => "file-storages", "aria-selected" => "#{params[:tab] == 'file_storage'}" } Stockages externes
-
-  %span.auto-scroll-span-right
-    %button.btn= glyphicon('arrow-right', { size: '13' })
 
   .tab-content
 <<<<<<< HEAD
