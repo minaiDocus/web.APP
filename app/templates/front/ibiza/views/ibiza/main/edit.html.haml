@@ -20,21 +20,21 @@
           %br
           = f.hint 'Cette option peut être ré-écrite au niveau de chaque dossier.'
         .col-md-1.form-check.form-switch
-          = f.input :auto_deliver, as: :boolean, label: "Non", label_html: { class: 'form-check-label' }, input_html: { id: 'flexSwitchCheckDefault', class: 'custom-form-inline form-check-input custom-form-switch' }
+          = f.input :auto_deliver, as: :boolean, label: "Non", label_html: { class: 'form-check-label' }, input_html: { id: 'flexSwitchCheckDefault', class: 'form-check-input custom-form-switch' }
       .form-group.row
         .col-md-11
           = f.label :is_analysis_activated, class: 'semibold'
           %br
           = f.hint 'Cette option peut être ré-écrite au niveau de chaque dossier.'
         .col-md-1.form-check.form-switch.custom-form-switch
-          = f.input :is_analysis_activated, as: :boolean, label: "Non", label_html: { class: 'form-check-label' }, input_html: { id: 'flexSwitchCheckDefault', class: 'custom-form-inline form-check-input' }
+          = f.input :is_analysis_activated, as: :boolean, label: "Non", label_html: { class: 'form-check-label' }, input_html: { id: 'flexSwitchCheckDefault', class: 'form-check-input' }
       .form-group.row
         .col-md-11
           = f.label :is_analysis_to_validate, class: 'semibold'
           %br
           = f.hint "Cette option suspend l'envoi en pré-affectation des pièces, en passant par une validation manuelle des analyses comptables, Les pièces téléversées via le site ou mobile ne sont pas concernées (peut être ré-écrite au niveau de chaque dossier)."
         .col-md-1.form-check.form-switch.custom-form-switch
-          = f.input :is_analysis_to_validate, as: :boolean, label: "Non", label_html: { class: 'form-check-label' }, input_html: { id: 'flexSwitchCheckDefault', class: 'custom-form-inline form-check-input' }
+          = f.input :is_analysis_to_validate, as: :boolean, label: "Non", label_html: { class: 'form-check-label' }, input_html: { id: 'flexSwitchCheckDefault', class: 'form-check-input' }
       .form-group
         %label.semibold Format du nom de la pièce iDocus dans iBiZa (par défaut colonne “pièce” dans iBiza)
         .row

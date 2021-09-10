@@ -62,6 +62,18 @@ function bind_collaborator_events(){
 
     AppEmit('search_contains_filter', { url: form.attr('action'), data: form.serialize()});
   });
+
+  $('.collaborator_rights').unbind('click').bind('click', function(e) {
+    e.stopPropagation();
+
+    AppEmit('show_collaborator_rights_edit', { url: $(this).attr('link') });
+  });
+
+  $('.collaborator_file_storages').unbind('click').bind('click', function(e) {
+    e.stopPropagation();
+
+    AppEmit('show_collaborator_file_storages_edit', { url: $(this).attr('link') });
+  });
 }
 
 jQuery(function() {

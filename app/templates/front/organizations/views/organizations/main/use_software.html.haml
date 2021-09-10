@@ -52,14 +52,14 @@
                 %br
                 = sf.hint 'Cette option permet de selectionner/utiliser Quadratus dans le paramétrage dossier client'
               .col-md-1.form-check.form-switch.custom-form-switch
-                = sf.input :is_used, as: :boolean, label: 'Oui?', label_html: { class: 'form-check-label' }, input_html: { checked: @organization.try(:quadratus).try(:used?), id: 'flexSwitchCheckDefault', class: 'custom-form-inline form-check-input'}
+                = sf.input :is_used, as: :boolean, label: 'Oui?', label_html: { class: 'form-check-label' }, input_html: { checked: @organization.try(:quadratus).try(:used?), id: 'flexSwitchCheckDefault', class: 'form-check-input'}
             .form-group.row
               .col-md-11
                 = sf.label :auto_deliver, t('activerecord.models.software_quadratus.attributes.auto_deliver'), class: 'semibold'
                 %br
                 = sf.hint 'Cette option peut être écrasée dans le paramétrage dossier client'
               .col-md-1.form-check.form-switch.custom-form-switch
-                = sf.input :auto_deliver, as: :boolean, label: 'Oui?', label_html: { class: 'form-check-label' }, input_html: { checked: @organization.try(:quadratus).try(:auto_deliver?), id: 'flexSwitchCheckDefault', class: 'custom-form-inline form-check-input'}
+                = sf.input :auto_deliver, as: :boolean, label: 'Oui?', label_html: { class: 'form-check-label' }, input_html: { checked: @organization.try(:quadratus).try(:auto_deliver?), id: 'flexSwitchCheckDefault', class: 'form-check-input'}
         - if @user.leader?
           .modal-footer
             .w-100.text-end
@@ -84,14 +84,14 @@
                 %br
                 = sf.hint 'Cette option permet de selectionner/utiliser Cegid dans le paramétrage dossier client'
               .col-md-1.form-check.form-switch.custom-form-switch
-                = sf.input :is_used, as: :boolean, label: 'Oui?', label_html: { class: 'form-check-label' }, input_html: { checked: @organization.try(:cegid).try(:used?), id: 'flexSwitchCheckDefault', class: 'custom-form-inline form-check-input'}
+                = sf.input :is_used, as: :boolean, label: 'Oui?', label_html: { class: 'form-check-label' }, input_html: { checked: @organization.try(:cegid).try(:used?), id: 'flexSwitchCheckDefault', class: 'form-check-input'}
             .form-group.row
               .col-md-11
                 = sf.label :auto_deliver, t('activerecord.models.software_cegid.attributes.auto_deliver'), class: 'semibold'
                 %br
                 = sf.hint 'Cette option peut être écrasée dans le paramétrage dossier client'
               .col-md-1.form-check.form-switch.custom-form-switch
-                = sf.input :auto_deliver, as: :boolean, label: 'Oui?', label_html: { class: 'form-check-label' }, input_html: { checked: @organization.try(:cegid).try(:auto_deliver?), id: 'flexSwitchCheckDefault', class: 'custom-form-inline form-check-input'}
+                = sf.input :auto_deliver, as: :boolean, label: 'Oui?', label_html: { class: 'form-check-label' }, input_html: { checked: @organization.try(:cegid).try(:auto_deliver?), id: 'flexSwitchCheckDefault', class: 'form-check-input'}
         - if @user.leader?
           .modal-footer
             .w-100.text-end
@@ -116,14 +116,14 @@
                 %br
                 = sf.hint 'Cette option permet de selectionner/utiliser Sage dans le paramétrage dossier client'
               .col-md-1.form-check.form-switch.custom-form-switch
-                = sf.input :is_used, as: :boolean, label: 'Oui?', label_html: { class: 'form-check-label' }, input_html: { checked: @organization.try(:sage).try(:used?), id: 'flexSwitchCheckDefault', class: 'custom-form-inline form-check-input'}
+                = sf.input :is_used, as: :boolean, label: 'Oui?', label_html: { class: 'form-check-label' }, input_html: { checked: @organization.try(:sage).try(:used?), id: 'flexSwitchCheckDefault', class: 'form-check-input'}
             .form-group.row
               .col-md-11
                 = sf.label :auto_deliver, t('activerecord.models.software_sage.attributes.auto_deliver'), class: 'semibold'
                 %br
                 = sf.hint 'Cette option peut être écrasée dans le paramétrage dossier client'
               .col-md-1.form-check.form-switch.custom-form-switch
-                = sf.input :auto_deliver, as: :boolean, label: 'Oui?', label_html: { class: 'form-check-label' }, input_html: { checked: @organization.try(:sage).try(:auto_deliver?), id: 'flexSwitchCheckDefault', class: 'custom-form-inline form-check-input'}
+                = sf.input :auto_deliver, as: :boolean, label: 'Oui?', label_html: { class: 'form-check-label' }, input_html: { checked: @organization.try(:sage).try(:auto_deliver?), id: 'flexSwitchCheckDefault', class: 'form-check-input'}
         - if @user.leader?
           .modal-footer
             .w-100.text-end
@@ -148,14 +148,14 @@
                 %br
                 = sf.hint 'Cette option permet de selectionner/utiliser Fec Agiris dans le paramétrage dossier client'
               .col-md-1.form-check.form-switch.custom-form-switch
-                = sf.input :is_used, as: :boolean, label: 'Oui?', label_html: { class: 'form-check-label' }, input_html: { checked: @organization.try(:fec_agiris).try(:used?), id: 'flexSwitchCheckDefault', class: 'custom-form-inline form-check-input'}
+                = sf.input :is_used, as: :boolean, label: 'Oui?', label_html: { class: 'form-check-label' }, input_html: { checked: @organization.try(:fec_agiris).try(:used?), id: 'flexSwitchCheckDefault', class: 'form-check-input'}
             .form-group.row
               .col-md-11
                 = sf.label :auto_deliver, t('activerecord.models.software_fec_agiris.attributes.auto_deliver'), class: 'semibold'
                 %br
                 = sf.hint 'Cette option peut être écrasée dans le paramétrage dossier client'
               .col-md-1.form-check.form-switch.custom-form-switch
-                = sf.input :auto_deliver, as: :boolean, label: 'Oui?', label_html: { class: 'form-check-label' }, input_html: { checked: @organization.try(:fec_agiris).try(:auto_deliver?), id: 'flexSwitchCheckDefault', class: 'custom-form-inline form-check-input'}
+                = sf.input :auto_deliver, as: :boolean, label: 'Oui?', label_html: { class: 'form-check-label' }, input_html: { checked: @organization.try(:fec_agiris).try(:auto_deliver?), id: 'flexSwitchCheckDefault', class: 'form-check-input'}
         - if @user.leader?
           .modal-footer
             .w-100.text-end
@@ -180,14 +180,14 @@
                 %br
                 = sf.hint "Cette option permet de selectionner/utiliser Exact Online dans le paramétrage dossier client \n La liaison doit être paramètrée au niveau de chaque dossier (Configuration compte exact online)."
               .col-md-1.form-check.form-switch.custom-form-switch
-                = sf.input :is_used, as: :boolean, label: 'Oui?', label_html: { class: 'form-check-label' }, input_html: { checked: @organization.try(:exact_online).try(:used?), id: 'flexSwitchCheckDefault', class: 'custom-form-inline form-check-input'}
+                = sf.input :is_used, as: :boolean, label: 'Oui?', label_html: { class: 'form-check-label' }, input_html: { checked: @organization.try(:exact_online).try(:used?), id: 'flexSwitchCheckDefault', class: 'form-check-input'}
             .form-group.row
               .col-md-11
                 = sf.label :auto_deliver, t('activerecord.models.software_exact_online.attributes.auto_deliver'), class: 'semibold'
                 %br
                 = sf.hint 'Cette option peut être écrasée dans le paramétrage dossier client'
               .col-md-1.form-check.form-switch.custom-form-switch
-                = sf.input :auto_deliver, as: :boolean, label: 'Oui?', label_html: { class: 'form-check-label' }, input_html: { checked: @organization.try(:exact_online).try(:auto_deliver?), id: 'flexSwitchCheckDefault', class: 'custom-form-inline form-check-input'}
+                = sf.input :auto_deliver, as: :boolean, label: 'Oui?', label_html: { class: 'form-check-label' }, input_html: { checked: @organization.try(:exact_online).try(:auto_deliver?), id: 'flexSwitchCheckDefault', class: 'form-check-input'}
         - if @user.leader?
           .modal-footer
             .w-100.text-end
@@ -212,14 +212,14 @@
                 %br
                 = sf.hint "Cette option permet de selectionner/utiliser un format d'export personnalisé dans le paramétrage dossier client"
               .col-md-1.form-check.form-switch.custom-form-switch
-                = sf.input :is_used, as: :boolean, label: 'Oui?', label_html: { class: 'form-check-label' }, input_html: { checked: @organization.try(:csv_descriptor).try(:used?), id: 'flexSwitchCheckDefault', class: 'custom-form-inline form-check-input'}
+                = sf.input :is_used, as: :boolean, label: 'Oui?', label_html: { class: 'form-check-label' }, input_html: { checked: @organization.try(:csv_descriptor).try(:used?), id: 'flexSwitchCheckDefault', class: 'form-check-input'}
             .form-group.row
               .col-md-11
                 = sf.label :auto_deliver, t('activerecord.models.software_csv_descriptor.attributes.auto_deliver'), class: 'semibold'
                 %br
                 = sf.hint 'Cette option peut être écrasée dans le paramétrage dossier client'
               .col-md-1.form-check.form-switch.custom-form-switch
-                = sf.input :auto_deliver, as: :boolean, label: 'Oui?', label_html: { class: 'form-check-label' }, input_html: { checked: @organization.try(:csv_descriptor).try(:auto_deliver?), id: 'flexSwitchCheckDefault', class: 'custom-form-inline form-check-input'}
+                = sf.input :auto_deliver, as: :boolean, label: 'Oui?', label_html: { class: 'form-check-label' }, input_html: { checked: @organization.try(:csv_descriptor).try(:auto_deliver?), id: 'flexSwitchCheckDefault', class: 'form-check-input'}
         - if @user.leader?
           .modal-footer
             .w-100.text-end
@@ -244,14 +244,14 @@
                 %br
                 = sf.hint "Cette option permet de selectionner/utiliser My Unisoft dans le paramétrage dossier client \n La liaison doit être paramètrée au niveau de chaque dossier (Configuration compte my unisoft)."
               .col-md-1.form-check.form-switch.custom-form-switch
-                = sf.input :is_used, as: :boolean, label: 'Oui?', label_html: { class: 'form-check-label' }, input_html: { checked: @organization.try(:my_unisoft).try(:used?), id: 'flexSwitchCheckDefault', class: 'custom-form-inline form-check-input'}
+                = sf.input :is_used, as: :boolean, label: 'Oui?', label_html: { class: 'form-check-label' }, input_html: { checked: @organization.try(:my_unisoft).try(:used?), id: 'flexSwitchCheckDefault', class: 'form-check-input'}
             .form-group.row
               .col-md-11
                 = sf.label :auto_deliver, 'Souhaitez-vous livrer automatiquement les écritures ?', class: 'semibold'
                 %br
                 = sf.hint 'Cette option peut être écrasée dans le paramétrage dossier client'
               .col-md-1.form-check.form-switch.custom-form-switch
-                = sf.input :auto_deliver, as: :boolean, label: 'Oui?', label_html: { class: 'form-check-label' }, input_html: { checked: @organization.try(:my_unisoft).try(:auto_deliver?), id: 'flexSwitchCheckDefault', class: 'custom-form-inline form-check-input'}
+                = sf.input :auto_deliver, as: :boolean, label: 'Oui?', label_html: { class: 'form-check-label' }, input_html: { checked: @organization.try(:my_unisoft).try(:auto_deliver?), id: 'flexSwitchCheckDefault', class: 'form-check-input'}
         - if @user.leader?
           .modal-footer
             .w-100.text-end

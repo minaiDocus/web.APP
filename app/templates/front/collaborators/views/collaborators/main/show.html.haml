@@ -27,10 +27,10 @@
             %li.nav-item
               %a.nav-link{ class: ('active' if params[:tab] == 'organization_group'), href: '#organization_group', 'data-bs-toggle' => 'tab' } Organisations
           %li.nav-item
-            %a.nav-link{ class: ('active' if params[:tab] == 'authorization'), href: '#authorization', 'data-bs-toggle' => 'tab' } Autorisation
+            %a.nav-link.collaborator_rights{ class: ('active' if params[:tab] == 'authorization'), href: '#authorization', 'data-bs-toggle' => 'tab', link: edit_organization_collaborator_rights_path(@organization, @member) } Autorisation
           - if @user.is_admin && @organization.is_active
             %li.nav-item
-              %a.nav-link{ class: ('active' if params[:tab] == 'file_storages'), href: '#file_storages', 'data-bs-toggle' => 'tab' } Stockages externes
+              %a.nav-link.collaborator_file_storages{ class: ('active' if params[:tab] == 'file_storages'), href: '#file_storages', 'data-bs-toggle' => 'tab', link: edit_organization_collaborator_file_storage_authorizations_path(@organization, @member) } Stockages externes
 
         .tab-content.box.bg-light.border-top-0
           = render partial: 'info'

@@ -35,5 +35,5 @@
 
     - if @organization.is_active
       .form-group
-        .w-100.text-end{id: "member-#{@member.id}"}
-          = f.submit 'Valider les modifications', class: 'btn btn-primary bold valid-collaborator-modification'
+        .w-100.text-end
+          = f.submit t('actions.submit'), class: 'btn btn-primary bold valid-collaborator-modification'

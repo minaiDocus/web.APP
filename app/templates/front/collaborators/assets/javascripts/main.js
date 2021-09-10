@@ -115,17 +115,73 @@ class Main{
       ApplicationJS.hide_submenu();
     }).catch((response)=>{ this.member_filter_modal.modal('hide'); });
   }
+
+
+  show_collaborator_rights_edit(url){
+    let ajax_params =   {
+                          'url': url,
+                          'dataType': 'html',
+                          'target': ''
+                        };
+
+    this.applicationJS.parseAjaxResponse(ajax_params)
+    .then((element)=>{
+      this.action_locker = false;
+      $('#authorization').html($(element).find('#collaborator_rights').html());
+      $('#authorization .cancel_collaborator_rights').remove();
+      bind_collaborator_events();
+      ApplicationJS.handle_submenu();
+      ApplicationJS.set_checkbox_radio();
+      ApplicationJS.hide_submenu();
+    })
+    .catch(()=>{ this.action_locker = false; });
+  }
+
+  show_collaborator_file_storages_edit(url){
+    let ajax_params =   {
+                          'url': url,
+                          'dataType': 'html',
+                          'target': ''
+                        };
+
+    this.applicationJS.parseAjaxResponse(ajax_params)
+    .then((element)=>{
+      this.action_locker = false;
+      $('#file_storages').html($(element).find('#file_storage_authorizations').html());
+      $('#file_storages .cancel_collaborator_file_storages').remove();
+      bind_collaborator_events();
+      ApplicationJS.handle_submenu();
+      ApplicationJS.set_checkbox_radio();
+      ApplicationJS.hide_submenu();
+    })
+    .catch(()=>{ this.action_locker = false; });
+  }
 }
 
 
 jQuery(function() {
-  var main = new Main();
+  let main = new Main();
+
+  let is_rigths_executed = false;
+  if ($('#authorization.active.show').length > 0 && !is_rigths_executed) {
+    main.show_collaborator_rights_edit($('.collaborator_rights.active').attr('link'));
+    is_rigths_executed = true;
+  }
+
+  let is_file_storages_executed = false;
+  if ($('#file_storages.active.show').length > 0 && !is_file_storages_executed) {
+    main.show_collaborator_file_storages_edit($('.collaborator_file_storages.active').attr('link'));
+    is_file_storages_executed = true;
+  }
 
   AppListenTo('new_edit', (e)=>{ main.new_edit(e.detail.target, e.detail.action_name, e.detail.id); });
   AppListenTo('create_update', (e)=>{ main.create_update(e.detail.url, e.detail.data); });
 
   AppListenTo('user_contains_search_text', (e)=>{ main.load_data(true); });
   AppListenTo('search_contains_filter', (e)=>{ main.search_contains_filter(e.detail.url, e.detail.data); });
+
+  AppListenTo('show_collaborator_rights_edit', (e)=>{ main.show_collaborator_rights_edit(e.detail.url); });
+  AppListenTo('show_collaborator_file_storages_edit', (e)=>{ main.show_collaborator_file_storages_edit(e.detail.url); });
   
   AppListenTo('window.change-per-page.members', (e)=>{ main.load_data(true, e.detail.name, 1, e.detail.per_page); });
   AppListenTo('window.change-page.members', (e)=>{ main.load_data(true, e.detail.name, e.detail.page); });
