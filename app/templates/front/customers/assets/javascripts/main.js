@@ -1,56 +1,17 @@
+//= require './events'
+
 class Customer{
 
   constructor(){
     this.applicationJS         = new ApplicationJS;
     this.create_customer_modal = $('#create-customer.modal');
-    this.filter_customer_modal = $('#customers-filter');    
+    this.filter_customer_modal = $('#customers-filter.modal');
+    this.account_close_confirm_modal = $('#account_close_confirm.modal');
     this.organization_id       = $('input:hidden[name="organization_id"]').val();
   }
 
-  set_customer_event(){
-    let self = this;
-    $('.action.sub_edit_delete, .edit_group').unbind('click');
-    $('.action.sub_edit_delete, .edit_group').bind('click',function(e) {
-      e.stopPropagation();
-
-      $('.sub_menu').not(this).each(function(){
-        $(this).addClass('hide');
-      });
-
-      $(this).parent().find('.sub_menu').removeClass('hide');
-    });
-
-    $('.customer-close').unbind('click').bind('click',function(e) {
-      e.preventDefault();
-
-      self.applicationJS.parseAjaxResponse({ 'url': '/organizations/' + self.organization_id + '/customers/' + $(this).attr('data-customer-id') + '/account_close_confirm'}).then((element)=>{       
-        
-        $('#close-customer.modal').modal('show');
-        $('.modal-header .modal-title').html('Clôturer le dossier');
-        $('#close-customer.modal .modal-body').html($(element).find('.close-confirm-content').html());
-        self.set_customer_event();
-      });
-    });
-    
-    $('.customer-reopen').unbind('click').bind('click',function(e) {
-      e.preventDefault();
-
-      self.applicationJS.parseAjaxResponse({ 'url': '/organizations/' + self.organization_id + '/customers/' + $(this).attr('data-customer-id') + '/account_reopen_confirm'}).then((element)=>{       
-        
-        $('#close-customer.modal').modal('show');
-        $('.modal-header .modal-title').html('Réouvrir le dossier');
-        $('#close-customer.modal .modal-body').html($(element).find('.reopen-confirm-content').html());
-        self.set_customer_event();
-      });
-    });
-
-  }
-
   main(){
-    this.set_customer_event();
-
     this.add_customer();
-    this.edit_customer();
     this.get_subscription_edit_view();
     this.load_configuraation_otpion_view();
     this.get_accounting_plan_view();
@@ -327,7 +288,6 @@ class Customer{
         $('#customer-content .tab-content .tab-pane#accounting-plan').html($(element).find('#accounting_plan').html());
         self.get_vat_accounts_view(customer_id);
 
-        self.set_customer_event();
         ApplicationJS.set_checkbox_radio(self);
 
         // self.get_vat_accounts_view(customer_id);
@@ -572,16 +532,6 @@ class Customer{
   }
 
 
-  edit_customer(){
-    $('.sub_menu .edit-customer').unbind('click').bind('click',function(e) {
-      e.stopPropagation();
-
-      $('.list-customers').addClass('hide')
-      $('.customer-parameters').removeClass('hide')
-    });
-  }
-
-
   filter_customer(){
     let self = this;
     $('.customer-filter').unbind('click').bind('click',function(e) {
@@ -613,10 +563,58 @@ class Customer{
       });
     });
   }
+
+
+  close_or_reopen_confirm_view(url, target_action){
+    this.applicationJS.parseAjaxResponse({ 'url': url }).then((elements)=>{
+      if (target_action === 'close') {
+        this.account_close_confirm_modal.find('.modal-title').text('Clôturer le dossier');
+      }
+
+      else if (target_action === 'reopen') {
+        const text = $(elements).find('.close_or_reopen').attr('text');
+        this.account_close_confirm_modal.find('.modal-title').text(text);
+        this.account_close_confirm_modal.find('.close_or_reopen_confirm').attr('link', $(elements).find('.close_or_reopen').attr('link'));
+        this.account_close_confirm_modal.find('.close_or_reopen_confirm').text(text);
+        this.account_close_confirm_modal.find('.close_or_reopen_confirm').removeClass('close');
+      }
+
+      this.account_close_confirm_modal.find('.modal-body').html($(elements).find('.close_or_reopen').html());
+      this.account_close_confirm_modal.modal('show');
+    });
+  }
+
+  close_or_reopen_confirm(url, data={}){
+    let params = {};
+
+    if (url.indexOf("reopen_account") >= 0) {
+      /*params = {'url': url, 'type': 'PATCH', 'dataType': 'html'};*/
+      params = {'url': url, 'type': 'POST', data: { _method: 'PATCH' }, 'dataType': 'html'};
+    }
+    else if (url.indexOf("close_account") >= 0) {
+      params = {'url': url, 'data': data, 'type': 'POST', 'dataType': 'html'};
+    }
+
+    this.applicationJS.parseAjaxResponse(params).then((response)=>{
+      $('#customer-content').html($(response).find('#customer-content').html());
+      this.account_close_confirm_modal.modal('hide');
+
+      this.get_customer_edit_view();
+      bind_customer_events();
+      ApplicationJS.handle_submenu();
+      ApplicationJS.set_checkbox_radio();
+      ApplicationJS.hide_submenu();
+    }).catch((response)=>{
+      
+    });
+  }
 }
 
 
 jQuery(function () {
   var customer = new Customer();
+
+  AppListenTo('close_or_reopen_confirm_view', (e)=>{ customer.close_or_reopen_confirm_view(e.detail.url, e.detail.target); });
+  AppListenTo('close_or_reopen_confirm', (e)=>{ customer.close_or_reopen_confirm(e.detail.url, e.detail.data); });
   customer.main();
 });

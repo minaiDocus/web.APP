@@ -133,7 +133,10 @@
 
   .tab-content
     .tab-pane.box.no-margin#information{ class: ('active' if params[:tab] == 'information' || params[:tab].blank?), "role" => "tabpanel", "aria-labelledby" => "information-tab" }
-      %span loading...
+      - if @customer.inactive?
+        %span.badge.bg-danger.text-start.closed_account Information non disponible car le dossier est clôturé
+      - else
+        %span loading...
 
     - if @customer.active?
       .tab-pane.box.no-margin#subscription{class: ('active' if params[:tab] == 'subscription'),  "role" => "tabpanel", "aria-labelledby" => "subscription-tab" }

@@ -137,7 +137,6 @@
                            
           .carousel-item
             .accounting-plan-base-form
-              / = render partial: 'customers/main/book_type'
               loading Journal comptables ...
 
     .modal-footer
@@ -145,14 +144,12 @@
         .col-md-8.d-inline-block
           %button.btn.btn-default.semibold.previous{ type: :button, "data-bs-target" => "#carouselExampleControls", "data-bs-slide" => "prev" } Précedent                     
         .col-md-4.d-inline-block.ps-1.text-end
-          %button.btn.btn-light.cancel.me-1.semibold{ type: :button } Annuler
+          %button.btn.btn-light.cancel{ 'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button' } Annuler
           %button.btn.btn-primary.semibold.next{ type: :button, "data-bs-target" => "#carouselExampleControls", "data-bs-slide" => "next" } Suivant
       .row.w-100.normal-form-action.hide
         .col-md-8                     
         .col-md-4.d-inline-block.ps-1.text-end
           - if params[:action].in?(%w(new create))
-            / = link_to t('actions.cancel'), organization_customers_path(@organization), class: 'btn btn-light'
             = submit_tag t('actions.submit'), class: 'btn btn-primary semibold'
           - else
-            / = link_to t('actions.cancel'), organization_customer_path(@organization, @customer), class: 'btn btn-light'
             = submit_tag 'Valider les modifications', class: 'btn btn-primary semibold'

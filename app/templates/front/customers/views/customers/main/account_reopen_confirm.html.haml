@@ -1,13 +1,5 @@
-.reopen-confirm-content
+.account_reopen_confirm.close_or_reopen{link: reopen_account_organization_customer_path(@organization, @customer), text: 'Réouvrir le dossier'}
 	%p.p-1
 		Voulez-vous réellement réouvrir le dossier
 		%span.semibold= @customer.info
 		%span ?
-	.modal-footer
-		.row.form-group.w-100.no-margin
-			.col-md-6
-			.col-md-3.text-center
-				= link_to t('actions.cancel'), organization_customer_path(@organization, @customer), class: 'btn btn-light w-100 me-2 btn-sm semibold'
-			.col-md-3.text-center.no-padding        
-				= link_to 'Réouvrir le dossier', reopen_account_organization_customer_path(@organization, @customer), method: 'patch', class: 'btn btn-primary w-100 btn-sm semibold', data: { confirm: t('actions.confirm') }
-

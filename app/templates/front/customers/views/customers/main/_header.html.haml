@@ -8,10 +8,8 @@
       %span.customer-name= @customer.info    
   .col-md-6.text-end.no-padding
     - if @customer.active?
-      %button.btn.btn-danger.semibold.customer-close{ data: { customer_id: @customer.id }}
-        %span.me-2=glyphicon('ban', { size: '15', color: '#FF4848'})
-        %span Clôturer le dossier
+      = link_to glyphicon('ban', { size: '15', color: '#FF4848'}) + ' Clôturer le dossier', account_close_confirm_organization_customer_path(@organization, @customer), class: 'btn btn-danger semibold close_customer'
     - else
-      %button.btn.btn-light.semibold.customer-reopen{ data: { customer_id: @customer.id }}
-        %span.me-2=glyphicon('folder', { size: '15', color: '#72AA42'})
-        %span Réouvrir le dossier    
+      = link_to glyphicon('folder', { size: '15', color: '#72AA42'}) + ' Réouvrir le dossier', account_reopen_confirm_organization_customer_path(@organization, @customer), class: 'btn btn-primary semibold reopen_customer'
+    - if @user.is_admin && (@customer.active? || @customer.inactive_at > Time.now)
+      = link_to glyphicon('ban', { size: '15', color: '#FF4848'}) + ' Clôturer le dossier maintenant !', account_close_confirm_organization_customer_path(@organization, @customer, close_now: 1), class: 'btn btn-danger semibold close_customer_now'   
