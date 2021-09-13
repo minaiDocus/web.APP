@@ -1,13 +1,18 @@
 .groups.page-content
   .row.mt-5
-    .col-md-8
+    .col-md-6
       %h3.bold
         Gérer les groupes
         %span.badge.badge-secondary.badge-sm.regular= @groups.size
     .col-md-2.no-padding
       .input-group.mb-3.search-content
-        %span.input-group-text#basic-addon1= glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })
-        %input.form-control#search_input{ type: :text, "aria-label" => "Rechercher", "aria-describedby" => "basic-addon1", name:'group_contains[search_text]', placeholder: 'Rechercher' }
+        %span.input-group-text.group-search#basic-addon1= glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })
+        %input.form-control#search_input{ type: :text, "aria-label" => "Rechercher", "aria-describedby" => "basic-addon1", name:'group_contains[text]', placeholder: 'Rechercher' } 
+    .col-md-2.text-center.no-padding
+      %button.btn.btn-light.more-filter.group_filter.semibold
+        %span.me-2 Filtrer
+        %span
+          = glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
     .col-md-2.text-start
       %button.btn.btn-primary.group.create.new_edit.semibold
         %span= glyphicon('plus', { size: '14', color: '#FFFF'})
@@ -79,3 +84,30 @@
           Chargement ...
         .modal-footer
           %button.btn.btn-light{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'} Fermer
+
+  .modal#search_group_filter
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %h5.modal-title.bold Filtrer les groupes
+          %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+        .modal-body
+          = form_tag organization_groups_path(@organization), method: :get, class: 'form-filter group_f search_contains_filter' do
+            = hidden_field_tag :direction, sort_direction
+            = hidden_field_tag :sort, sort_column
+            = hidden_field_tag :per_page, per_page
+            .form-group
+              .label-section
+                = label_tag 'group_contains[name]', t('activerecord.models.group.attributes.name')
+              .control-section
+                .select-container.no-padding.w-100
+                  = text_field_tag 'group_contains[name]', (params[:group_contains][:name] rescue '')
+            .form-group
+              .label-section
+                = label_tag 'group_contains[description]', t('activerecord.models.group.attributes.description')
+              .control-section
+                .select-container.no-padding.w-100
+                  = text_field_tag 'group_contains[description]', (params[:group_contains][:description] rescue '')
+        .modal-footer
+          %button.btn.btn-light.cancel{ 'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button' } Annuler
+          %button.btn.btn-primary.bold.search_filter.group_f{ type: :button } Filter

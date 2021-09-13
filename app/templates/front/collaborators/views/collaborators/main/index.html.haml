@@ -10,10 +10,10 @@
           %span.badge.badge-secondary.badge-sm.regular= @members.count
       .col-md-2.no-padding
         .input-group.mb-3.search-content
-          %span.input-group-text#basic-addon1= glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })
-          %input.form-control#search_input{ type: :text, "aria-label" => "Rechercher", "aria-describedby" => "basic-addon1", name:'user_contains[search_text]', placeholder: 'Rechercher' }
+          %span.input-group-text.member-search#basic-addon1= glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })
+          %input.form-control#search_input{ type: :text, "aria-label" => "Rechercher", "aria-describedby" => "basic-addon1", name:'user_contains[text]', placeholder: 'Rechercher' }
       .col-md-1.text-center.no-padding
-        %button.btn.btn-light.more-filter.semibold
+        %button.btn.btn-light.more-filter.member_filter.semibold
           %span.me-2 Filtrer
           %span
             = glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
@@ -81,10 +81,10 @@
           %h5.modal-title.bold Filtrer les collaborateurs
           %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
         .modal-body
-          = render partial: 'sidebar'          
+          = render partial: 'sidebar'
         .modal-footer
           %button.btn.btn-light.cancel{ 'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button' } Annuler
-          %button.btn.btn-primary.bold.search_filter{ type: :button } Filter
+          %button.btn.btn-primary.bold.search_filter.member_f{ type: :button } Filter
 
 
 = javascript_include_tag 'front/collaborators/assets/javascripts/main'

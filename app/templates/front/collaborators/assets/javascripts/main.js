@@ -7,6 +7,7 @@ class Main{
     this.group_modal     = $('#add_edit_group');
     this.group_show_details_modal = $('#show_group_details');
     this.member_filter_modal = $('#search_collaborator_filter');
+    this.group_filter_modal = $('#search_group_filter');
     this.organization_id = $('input:hidden[name="organization_id"]').val();
     this.action_locker   = false;
   }
@@ -60,10 +61,10 @@ class Main{
       'dataType': 'html',
     }).then((response)=>{
       if (url.indexOf("collaborators") >= 0) {
-        $('.page-content').html($(response).find('.page-content').html());
+        $('.page-content .collaborators-content').html($(response).find('.page-content').html());
         this.member_modal.modal('hide');
       }
-      if (url.indexOf("groups") >= 0) {
+      else if (url.indexOf("groups") >= 0) {
         $('.page-content .box-group-content').html($(response).find('.page-content').html());
         this.group_modal.modal('hide');
       }
@@ -85,13 +86,17 @@ class Main{
     let params = [];
 
     let search_text = '';
+    let params_name = 'group_contains[text]';
 
-    if (search_pattern) {
-      search_text = $('.search-content #search_input').val();
-      if(search_text && search_text != ''){ params.push(`user_contains[text]=${encodeURIComponent(search_text)}`); }
+    if (type === 'members') {
+      type = 'collaborators';
+      params_name = 'user_contains[text]';
     }
 
-    if (type === 'members') { type = 'collaborators'; }
+    if (search_pattern) {
+      search_text = $(`.search-content input[name='${params_name}']#search_input`).val();
+      if(search_text && search_text != ''){ params.push(`${params_name}=${encodeURIComponent(search_text)}`); }
+    }
 
     params.push(`page=${page}`);
 
@@ -104,13 +109,22 @@ class Main{
                         };
 
     this.applicationJS.parseAjaxResponse(ajax_params)
-                      .then((html)=>{
-                        this.action_locker = false;
-                        bind_collaborator_events();
-                        ApplicationJS.handle_submenu();
-                        ApplicationJS.hide_submenu();
-                      })
-                      .catch(()=>{ this.action_locker = false; });
+    .then((response)=>{
+      if (type === 'members') {
+        $('.page-content .collaborators-content').html($(response).find('.page-content').html());
+      }
+      else if (type === 'groups') {
+        $('.page-content .box-group-content').html($(response).find('.page-content').html());
+      }
+
+      $(`.search-content input[name='${params_name}']#search_input`).val(search_text);
+
+      this.action_locker = false;
+      bind_collaborator_events();
+      ApplicationJS.handle_submenu();
+      ApplicationJS.hide_submenu();
+    })
+    .catch(()=>{ this.action_locker = false; });
   }
 
 
@@ -121,12 +135,22 @@ class Main{
       'type': 'GET',
       'dataType': 'html',
     }).then((response)=>{
-      $('.collaborators.page-content').html($(response).find('.collaborators.page-content').html());
-      this.member_filter_modal.modal('hide');
+      if (url.indexOf("collaborators") >= 0) {
+        $('.page-content .collaborators-content').html($(response).find('.page-content .collaborators-content').html());
+        this.member_filter_modal.modal('hide');
+      }
+      else if (url.indexOf("groups") >= 0) {
+        $('.page-content .box-group-content').html($(response).find('.page-content').html());
+        this.group_filter_modal.modal('hide');
+      }
+
       bind_collaborator_events();
       ApplicationJS.handle_submenu();
       ApplicationJS.hide_submenu();
-    }).catch((response)=>{ this.member_filter_modal.modal('hide'); });
+    }).catch((response)=>{
+      this.member_filter_modal.modal('hide');
+      this.group_filter_modal.modal('hide');
+    });
   }
 
 
@@ -243,7 +267,7 @@ jQuery(function() {
   AppListenTo('new_edit', (e)=>{ main.new_edit(e.detail.target, e.detail.action_name, e.detail.id); });
   AppListenTo('create_update', (e)=>{ main.create_update(e.detail.url, e.detail.data); });
 
-  AppListenTo('user_contains_search_text', (e)=>{ main.load_data(true); });
+  AppListenTo('search_text', (e)=>{ main.load_data(true, e.detail.type); });
   AppListenTo('search_contains_filter', (e)=>{ main.search_contains_filter(e.detail.url, e.detail.data); });
 
   AppListenTo('show_collaborator_rights_edit', (e)=>{ main.show_collaborator_rights_edit(e.detail.url); });

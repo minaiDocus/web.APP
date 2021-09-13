@@ -46,19 +46,49 @@ function bind_collaborator_events(){
   })
 
 
-  $('.search-content #search_input').unbind('keyup').bind('keyup', function(e){ if(e.key == 'Enter'){ /*e.keyCode == 13*/ AppEmit('user_contains_search_text'); } });
-  $('.collaborators-content #basic-addon1').unbind('click').bind('click', function(e){ AppEmit('user_contains_search_text'); });
+  $('.search-content #search_input').unbind('keyup').bind('keyup', function(e){
+    e.stopPropagation();
+
+    let name = $(this).attr('name');
+    let type = 'members';
+
+    if (name === 'group_contains[text]') {
+      type = 'groups';
+    }
+
+    if(e.key == 'Enter'){ 
+      AppEmit('search_text', { type: type });
+    } 
+  });
+  $('.search-content .input-group-text').unbind('click').bind('click', function(e){
+    e.preventDefault();
+
+    let type = 'members';
+
+    if ($(this).hasClass('group-search')) {
+      type = 'groups';
+    }
+
+    AppEmit('search_text', { type: type }); 
+  });
 
   $('.more-filter').unbind('click').bind('click',function(e) {
     e.stopPropagation();
 
-    $('#search_collaborator_filter').modal('show');
+    if ($(this).hasClass('group_filter')) { $('#search_group_filter').modal('show'); }
+    else if ($(this).hasClass('member_filter')) { $('#search_collaborator_filter').modal('show'); }
   });
 
   $('.search_filter').unbind('click').bind('click', function(e) {
     e.stopPropagation();
 
-    const form = $('form.search_contains_filter');
+    let current_form = 'member_f'
+
+    if ($(this).hasClass('group_f')) {
+      current_form = 'group_f';
+    }
+
+    const form = $(`form.${current_form}.search_contains_filter`);
 
     AppEmit('search_contains_filter', { url: form.attr('action'), data: form.serialize()});
   });

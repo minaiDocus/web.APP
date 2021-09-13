@@ -21,6 +21,13 @@ class Group < ApplicationRecord
 
   def self.search(contains)
     groups = self.all
+
+    text = contains[:text]
+
+    if text.present?
+      groups = groups.where("name LIKE ? OR description LIKE ?" , "%#{text}%", "%#{text}%")
+    end
+
     groups = groups.where("name LIKE ?",        "%#{contains[:name]}%")        unless contains[:name].blank?
     groups = groups.where("description LIKE ?", "%#{contains[:description]}%") unless contains[:description].blank?
     groups
