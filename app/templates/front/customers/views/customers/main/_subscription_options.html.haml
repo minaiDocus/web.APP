@@ -8,23 +8,25 @@
 
   - organization = @subscription.try(:user).try(:organization).presence || FakeObject.new
 
-  .center{ style: "text-align: center" }
+  .text-center
     .notify-warning.fs-origin.mb-3{ class: "#{(@subscription && @subscription.futur_packages.present? && @subscription.futur_packages != '[]') ? '' : 'hide' }" }
       Disparaîtra le mois prochain
   .ido_x_content
-    .row
+    .row.box
       .col-md-3.text-center
-        .form-check.form-check-inline{ class: "#{'notify-warning' if notify_warning(@subscription, 'ido_x')}", title: Subscription::Package.infos_of(:ido_x)[:tooltip], data: { toggle: 'tooltip', placement: 'right' }}
+        .form-check.form-check-inline{ class: "#{'notify-warning' if notify_warning(@subscription, 'ido_x')}"}
           .label-package.label-ido-x.bold iDo'X
       .col-md-6
-        .semibold.description Convertissez les pièces venues de Jefacture.com (factur-X) en écritures comptables !    
-        %p Attention les autres modes d’import ne sont pas disponibles. Seul les fichiers venant de jefacture.com sont autorisés. 
+        .semibold.description= Subscription::Package.infos_of(:ido_x)[:tooltip]
+        %p= Subscription::Package.infos_of(:ido_x)[:mark]
       .col-md-3
         .row
           .col-md-2.text-center
             %span.no-price.price.bold 10€
           .col-md-6.text-end
-            %label.price.bold 5€/mois
+            %label.price.bold
+              = Subscription::Package.price_of(:ido_x)
+              %span €/mois
             %br
             %i.remark offre de lancement
           .col-md-4.text-center
@@ -40,15 +42,17 @@
   .ido_nano_content
     .row.box
       .col-md-3.text-center
-        .form-check.form-check-inline{class: "#{'notify-warning' if notify_warning(@subscription, 'ido_nano')}", title: Subscription::Package.infos_of(:ido_nano)[:tooltip], data: { toggle: 'tooltip', placement: 'right' }}
+        .form-check.form-check-inline{class: "#{'notify-warning' if notify_warning(@subscription, 'ido_nano')}"}
           .label-package.label-ido-micro.bold iDo'Nano
       .col-md-6
-        .semibold.description Transférez jusqu’à 100 pièces par an et benéficiez des automates de récupérations bancaires et documentaires.   
-        %p Au-delà de 100 factures, calcul du dépassement simplifié ; 0,25€ HT/facture
+        .semibold.description= Subscription::Package.infos_of(:ido_nano)[:tooltip]
+        %p= Subscription::Package.infos_of(:ido_nano)[:mark]
       .col-md-3
         .row
           .col-md-8.text-end                  
-            %label.price.bold 10€/mois
+            %label.price.bold
+              = Subscription::Package.price_of(:ido_nano)
+              %span €/mois
           .W-2.col-md-4.text-center
             = radio_button_tag 'subscription[subscription_option]', 'ido_nano', current_package.include?('ido_nano'), class: "form-check-input ido_nano radio-button #{'commitment_pending' if @customer.persisted? && !@customer.try(:subscription).try(:commitment_end?)}", data: { package: "ido_nano" }
     .ido-nano-content.package-options.p-4.hide
@@ -62,15 +66,17 @@
   .ido_micro_content
     .row.box
       .col-md-3.text-center
-        .form-check.form-check-inline{class: "#{'notify-warning' if notify_warning(@subscription, 'ido_micro')}", title: Subscription::Package.infos_of(:ido_micro)[:tooltip], data: { toggle: 'tooltip', placement: 'right' }}
+        .form-check.form-check-inline{class: "#{'notify-warning' if notify_warning(@subscription, 'ido_micro')}"}
           .label-package.label-ido-micro.bold iDo’Micro
       .col-md-6
-        .semibold.description Transférez jusqu’à 100 pièces par an et benéficiez des automates de récupérations bancaires et documentaires.   
-        %p Au-delà de 100 factures, calcul du dépassement simplifié ; 0,25€ HT/facture
+        .semibold.description= Subscription::Package.infos_of(:ido_micro)[:tooltip]
+        %p= Subscription::Package.infos_of(:ido_micro)[:mark]
       .col-md-3
         .row
           .col-md-8.text-end                  
-            %label.price.bold 10€/mois
+            %label.price.bold
+              = Subscription::Package.price_of(:ido_micro)
+              %span €/mois
           .W-2.col-md-4.text-center
             = radio_button_tag 'subscription[subscription_option]', 'ido_micro', current_package.include?('ido_micro'), class: "form-check-input ido_micro radio-button #{'commitment_pending' if @customer.persisted? && !@customer.try(:subscription).try(:commitment_end?)}", data: { package: "ido_micro" }
     .ido-micro-content.package-options.p-4.hide
@@ -84,15 +90,17 @@
   .ido_classique_content
     .row.box
       .col-md-3.text-center
-        .form-check.form-check-inline{ class: "#{'notify-warning' if notify_warning(@subscription, 'ido_classique')}", title: Subscription::Package.infos_of(:ido_classique)[:tooltip], data: { toggle: 'tooltip', placement: 'right' }}
+        .form-check.form-check-inline{ class: "#{'notify-warning' if notify_warning(@subscription, 'ido_classique')}"}
           .label-package.label-ido-basic.bold iDo’Classique
       .col-md-6
-        .semibold.description Transférez jusqu’à 100 pièces par an et mutualisez des quotas au niveau du cabinet.  
-        %p Au-delà du quota cabinet simplifié : 0,25€ HT/facture
+        .semibold.description= Subscription::Package.infos_of(:ido_classique)[:tooltip]
+        %p= Subscription::Package.infos_of(:ido_classique)[:mark]
       .col-md-3
         .row
           .col-md-8.text-end
-            %label.price.bold 11€/mois
+            %label.price.bold
+              = Subscription::Package.price_of(:ido_classique)
+              %span €/mois
           .col-md-4.text-center
             = radio_button_tag 'subscription[subscription_option]', 'ido_classique', ((@subscription && current_package.include?('ido_classique')) || !@subscription), class: 'form-check-input ido_classique radio-button', data: { package: "ido_classique" }
 
@@ -108,11 +116,11 @@
 
           .row.ido-basic-pre-assignment-option
             .col-md-10.form-group
-              .form-check.form-check-inline.pre_assignment{ class: "#{'notify-warning' if notify_warning(@subscription, @subscription.try(:current_package?).to_s, 'pre_assignment_option')} #{'hide' if ((@subscription && !@subscription.is_package?('ido_mini') && !@subscription.is_package?('ido_classique')) || ( @subscription && @subscription.try(:futur_packages).present? && !(@subscription.futur_packages.include?('ido_mini') || @subscription.futur_packages.include?('ido_classique'))))}", style: "#{'padding-top: 1.5%' if notify_warning(@subscription, @subscription.try(:current_package?).to_s, 'pre_assignment_option')}" }
+              .form-check.form-check-inline.pre_assignment{ class: "#{'notify-warning' if notify_warning(@subscription, @subscription.try(:current_package?).to_s, 'pre_assignment_option')}", style: "#{'padding-top: 1.5%' if notify_warning(@subscription, @subscription.try(:current_package?).to_s, 'pre_assignment_option')}" }
                 %label.semibold Pré-saisie comptable
             .col-md-2.form-check.form-switch
               %label.form-check-label.pre-assignment-state{title: 'Pré-saisie comptable activée', data: { toggle: 'tooltip', placement: 'bottom' }} Oui
-              = check_box_tag 'subscription[is_pre_assignment_active]', true, (!@subscription || current_package.include?('pre_assignment_option')), class: "is_pre_assignment_active_true is_pre_assignment_active form-check-input option_checkbox input_switch", data: { package: "mail_option" }, disabled: (!current_package.include?('ido_classique') && @subscription)
+              = check_box_tag 'subscription[is_pre_assignment_active]', true, (!@subscription || current_package.include?('pre_assignment_option')), class: "is_pre_assignment_active_true is_pre_assignment_active form-check-input option_checkbox input_switch", data: { package: "mail_option" }
 
         .col-md-6.journal-numbers
 
@@ -120,53 +128,53 @@
     .row.box
       .col-md-3.text-center
         .form-check.form-check-inline{ class: "#{'notify-warning' if notify_warning(@subscription, 'retriever_option')}", title: Subscription::Package.infos_of(:retriever_option)[:tooltip], data: { toggle: 'tooltip', placement: 'right' }}
-          .label-package.label-ido-retriever.bold.no-padding- Automate
+          .label-package.label-ido-retriever.bold.no-padding Automate
+          %p.grey-label.semibold uniquement
       .col-md-6
-        .semibold.description Bénéficiez des automates de récupération bancaires et documentaires.                    
+        .semibold.description= Subscription::Package.infos_of(:retriever_option)[:tooltip]
       .col-md-3
         .row
           .col-md-8.text-end
-            %label.price.bold 5€/mois
+            %label.price.bold
+              = Subscription::Package.price_of(:retriever_option)
+              %span €/mois
           .col-md-4.text-center
             = radio_button_tag 'subscription[subscription_option]', 'retriever_option', (current_package.include?('retriever_option') && !current_package.include?('ido_classique') && !current_package.include?('ido_nano') && !current_package.include?('ido_micro') && !current_package.include?('ido_x')), class: 'form-check-input ido_retriever_only radio-button', data: { retriever_price_option: @subscription.try(:retriever_price_option).to_s.presence || 'retriever' }
 
     .ido-retriever-only-content.package-options.p-4.hide
       .row
+        .col-md-6
+          - if CustomUtils.is_manual_paper_set_order?(organization)
+            .row.digitization-option.pt-4         
         .col-md-6.journal-numbers
 
   - if CustomUtils.is_manual_paper_set_order?(organization)
     .ido_digitization_only_content
       .row.box
         .col-md-3.text-center
-          .form-check.form-check-inline{ class: "#{'notify-warning' if notify_warning(@subscription, 'digitize_option')}", title: Subscription::Package.infos_of(:digitize_option)[:tooltip], data: { toggle: 'tooltip', placement: 'right' }}
-            .label-package.label-ido-digitization.bold.no-padding- Numérisation
+          .form-check.form-check-inline{ class: "#{'notify-warning' if notify_warning(@subscription, 'digitize_option')}"}
+            .label-package.label-ido-digitization.bold.no-padding Numérisation
+            %p.grey-label.semibold uniquement
         .col-md-6
-          .semibold.description Numérisation uniquement.                    
+          .semibold.description= Subscription::Package.infos_of(:digitize_option)[:tooltip]
         .col-md-3
           .row
             .col-md-8.text-end
-              %label.price.bold 5€/mois
+              %label.price.bold
+                = Subscription::Package.price_of(:digitize_option)
+                %span €/mois
             .col-md-4.text-center
               = radio_button_tag 'subscription[subscription_option]', 'digitize_option', (current_package.include?('digitize_option') && !current_package.include?('ido_classique') && !current_package.include?('ido_nano') && !current_package.include?('ido_micro') && !current_package.include?('ido_x') && !current_package.include?('retriever_option')), class: 'form-check-input ido_digization_only radio-button', data: { retriever_price_option: @subscription.try(:scan_price_option).to_s.presence || 'scan' }
 
       .row.ido-digitization-only-content.package-options.p-4.hide
         .col-md-6.journal-numbers
-
-  .row.box
-    .col-md-10.form-group
-      = label_tag 'subscription[is_to_apply_now]', "Appliquer tout de suite les options à la baisse ?", class: 'semibold'
-    .col-md-2.form-check.form-switch
-      %label.form-check-labelpre-assignment-state{title: 'Pré-saisie comptable activée', data: { toggle: 'tooltip', placement: 'bottom' }} Oui
-      = check_box_tag 'subscription[is_to_apply_now]', true, true, class: 'form-check-input option_checkbox input_switch'
-
   
   %hr
   .row.w-100
-    .text-end
+    .text-center
       %h5
         Prix du forfait avec les options sélectionnées :
-        %b.total_price{ style: 'font-size:20px' } 0,00 €
-
+        %b.total_price.bold 0,00 €
 
 .input-journal-numbers.hide
   .form-group
@@ -176,7 +184,7 @@
       - if @customer.account_book_types.count > 5
         &nbsp;
         %span{id: 'err-msg-input-number'}
-        %div{ style: "clear:both;" }
+        %div.clearfix
           %i Supprimez un journal comptable avant de baisser cette option.
 
 .input-mail-option.hide

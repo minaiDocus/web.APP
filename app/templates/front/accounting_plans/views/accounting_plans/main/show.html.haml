@@ -6,64 +6,48 @@
   %input#customer_id{type: :hidden, value: @customer.id, name: 'customer_id'}
   = stylesheet_link_tag 'front/customers/assets/stylesheets/main'
   .box.no-margin.derivationRight
-    .row.form-group
-      - if @customer.configured?
-        .col-md-6
-        .col-md-6
-          .w-100.text-end
-            = form_tag import_fec_organization_customer_accounting_plan_path(@organization, @customer), method: 'patch', multipart: true, class: 'form-horizontal clearfix label-auto' do
-              .row
-                .col-md-6
-                  .form-group.clearfix.text-start
-                    .control-section
-                      = file_field_tag :fec_file, class: 'filestyle form-control', data: { classButton: 'btn btn-secondary', input: true, buttonText: glyphicon('file') + '' }, accept: "text/plain"
+    .row.form-group      
+      .col-md-6
+        - if @customer.try(:ibiza).try(:ibiza_id?) && @customer.uses?(:ibiza)
+          - to_show        = true
+          - software       = "iBiza"
+          - software_value = @customer.ibiza.try(:auto_update_accounting_plan?)
+          - software_id    = @customer.ibiza.ibiza_id
+        - elsif @customer.uses?(:my_unisoft)
+          - to_show        = true
+          - software       = "My Unisoft"
+          - software_value = @customer.my_unisoft.try(:auto_update_accounting_plan?)
+          - software_id    = @customer.my_unisoft.society_id
 
-                    %i.help-block Encodage du fichier accepté :
-                    %b UTF-8
-                .col-md-6
-                  .form-actions.text-end
-                    .for_submit.col-md-10pr-4.pl-2
-                      .submit
-                        = submit_tag 'Importer FEC', class: 'btn btn-primary'
-                    .for_description.col-md-2.pr-2.pl-2
-                      %span.badge.badge-info.fs-origin .txt
-      - else
-        .w-100.text-start
-          %h3
-            Plan comptable pour le dossier :
-            %span.text-info.fs-origin= @customer
+        - if to_show
+          = form_tag "#", class: 'form-horizontal clearfix label-auto', id: 'auto_update_accounting_plan' do
+            = hidden_field_tag 'user[software_id]', software_id
+            .row.form-group.alert.alert-warning
+              .col-md-10.form-group.no-margin
+                %label.semibold Activer la mise à jour automatique du plan comptable avec celui d’iBiZa ?
+                %br
+                %i.help-block Attention: si cette option est activée, les modifications manuelles du plan comptable seront écrasées automatiquement par la mise à jour auto.
+              .col-md-2.form-check.form-switch
+                %label.form-check-label Non
+                = check_box_tag 'user[software]', true, software_value, info: "#{@organization.id}-#{@customer.id}-#{software}", class: 'form-check-input input_switch auto-update-accounting-plan', id: 'auto-update-accounting-plan'
+      .col-md-6
         .w-100.text-end
-          = link_to t('actions.previous_step'), previous_organization_customer_setup_path(@organization, @customer), class: 'btn btn-secondary'
-          = link_to t('actions.complete_later'), complete_later_organization_customer_setup_path(@organization, @customer), class: 'btn btn-secondary'
-          = link_to t('actions.next_step'), next_organization_customer_setup_path(@organization, @customer), class: 'btn btn-primary'
+          = form_tag import_fec_organization_customer_accounting_plan_path(@organization, @customer), method: 'patch', multipart: true, class: 'form-horizontal clearfix label-auto' do
+            .row
+              .col-md-8
+                .form-group.clearfix.text-start
+                  .control-section
+                    = file_field_tag :fec_file, class: 'filestyle form-control', data: { classButton: 'btn btn-secondary', input: true, buttonText: glyphicon('file') + '' }, accept: "text/plain"
 
-  .mb-4
+                  %i.help-block Encodage du fichier accepté :
+                  %b UTF-8
+              .col-md-4.text-start
+                .form-actions                  
+                  = submit_tag 'Importer FEC', class: 'btn btn-light semibold'                 
+                  %span.badge.bg-info.semibold .txt
 
-  .box.no-margin.derivationLeft
-    - if @customer.try(:ibiza).try(:ibiza_id?) && @customer.uses?(:ibiza)
-      - to_show        = true
-      - software       = "iBiza"
-      - software_value = @customer.ibiza.try(:auto_update_accounting_plan?)
-      - software_id    = @customer.ibiza.ibiza_id
-    - elsif @customer.uses?(:my_unisoft)
-      - to_show        = true
-      - software       = "My Unisoft"
-      - software_value = @customer.my_unisoft.try(:auto_update_accounting_plan?)
-      - software_id    = @customer.my_unisoft.society_id
-
-    - if to_show
-      = form_tag "#", class: 'form-horizontal clearfix label-auto', id: 'auto_update_accounting_plan' do
-        = hidden_field_tag 'user[software_id]', software_id
-        .row.form-group
-          .col-md-10.form-group.no-margin
-            %label.semibold Activer la mise à jour automatique du plan comptable avec celui d’iBiZa ?
-            %br
-            %i.help-block Attention: si cette option est activée, les modifications manuelles du plan comptable seront écrasées automatiquement par la mise à jour auto.
-          .col-md-2.form-check.form-switch
-            %label.form-check-label Non
-            = check_box_tag 'user[software]', true, software_value, info: "#{@organization.id}-#{@customer.id}-#{software}", class: 'form-check-input input_switch auto-update-accounting-plan', id: 'auto-update-accounting-plan'
-  .mb-4
-
+  .mb-4 
+    
   .box.no-margin
     .row
       .col-md-8
@@ -154,16 +138,6 @@
 
   .box.no-margin#vat_accounts
 
-  .mb-4
-
-  .box.no-margin
-    .form-group.no-margin
-      .w-100.text-end
-        %button.btn.btn-light.semibold Annuler
-        %button.btn.btn-primary.bold Valider les modifications
-
-
-
   .modal#edit-provider-customer
     .modal-dialog
       .modal-content
@@ -176,4 +150,12 @@
           
         .modal-footer
 
-  = javascript_include_tag 'front/accounting_plans/assets/javascripts/main'
+  - if @params_fec.present?
+    #import_dialog.modal.fade{data: { backdrop: "static" } }
+      .modal-dialog
+        .modal-content
+          .modal-header
+            %h3 Paramétrage import FEC
+          = render :partial => "/accounting_plans/main/dialog_box", locals: { organization: @organization, customer: @customer, params_fec: @params_fec }
+
+= javascript_include_tag 'front/accounting_plans/assets/javascripts/main'

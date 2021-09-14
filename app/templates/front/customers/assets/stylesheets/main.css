@@ -31,7 +31,7 @@
   font-size: 0.8rem;
 }
 
-p{
+#customer-content p{
   font-size: 0.75rem;
 }
 
@@ -110,7 +110,7 @@ p{
 .nav{
   flex-wrap: unset;
   width: 1390px;
-  overflow: auto;
+  overflow-x: auto;
 }
 
 ul.list.nav {
@@ -120,4 +120,12 @@ ul.list.nav {
 
 .list.nav li button{
   white-space: nowrap;
-} 
+}
+
+.tab-pane#bank-setting .form-group, .tab-pane#compta .form-group{
+  margin-bottom: 2%;
+}
+
+.tab-pane#bank-setting .select-container input, .tab-pane#compta .select-container input{
+  padding: 0.5% !important;
+}

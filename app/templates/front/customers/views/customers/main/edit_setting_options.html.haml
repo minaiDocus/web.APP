@@ -46,14 +46,16 @@
       - elsif @customer.dematbox.try(:beginning_configuration_at).present?
         Configuration en cours...veuillez recharger votre page dans quelques secondes.
       - else
-        Appairez ici un scanner iDocus'Box (Produit Sagemcom). Si vous n'avez pas de scanner,
-        = link_to 'vous pouvez en commander un.', new_organization_customer_order_path(@organization, @customer, order: { type: 'dematbox' })
+        %label
+          Appairez ici un scanner iDocus'Box (Produit Sagemcom). Si vous n'avez pas de scanner,
+          = link_to 'vous pouvez en commander un.', new_organization_customer_order_path(@organization, @customer, order: { type: 'dematbox' }), class: 'no-style green-label semibold'
+          %br
+          Afin d'appairer le scanner, merci de suivre les instructions du
+          = link_to "mode d'emploi Sagemcom", download_document_path(name: 'Livret_utilisation_Dematbox.pdf'), class: 'no-style green-label semibold'
+          fournit lors de la livraison.
         %br
-        Afin d'appairer le scanner, merci de suivre les instructions du
-        = link_to "mode d'emploi Sagemcom", download_document_path(name: 'Livret_utilisation_Dematbox.pdf')
-        fournit lors de la livraison.
         %br
-        Merci d'inscrire le code d'appairage dans le champ ci-dessous :
+        %p Merci d'inscrire le code d'appairage dans le champ ci-dessous :
         .form-group
           %label.semibold Code apparainage iDocus Box
           .select-container.no-padding.w-100

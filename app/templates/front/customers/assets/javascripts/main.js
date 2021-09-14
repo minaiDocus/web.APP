@@ -10,6 +10,70 @@ class Customer{
     this.organization_id       = $('input:hidden[name="organization_id"]').val();
   }
 
+
+  set_customer_event(){
+    let self = this;
+    $('.action.sub_edit_delete, .edit_group').unbind('click');
+    $('.action.sub_edit_delete, .edit_group').bind('click',function(e) {
+      e.stopPropagation();
+
+      $('.sub_menu').not(this).each(function(){
+        $(this).addClass('hide');
+      });
+
+      $(this).parent().find('.sub_menu').removeClass('hide');
+    });
+
+    $('.customer-close').unbind('click').bind('click',function(e) {
+      e.preventDefault();
+
+      self.applicationJS.parseAjaxResponse({ 'url': '/organizations/' + self.organization_id + '/customers/' + $(this).attr('data-customer-id') + '/account_close_confirm'}).then((element)=>{       
+        
+        $('#close-customer.modal').modal('show');
+        $('.modal-header .modal-title').html('Clôturer le dossier');
+        $('#close-customer.modal .modal-body').html($(element).find('.close-confirm-content').html());
+        self.set_customer_event();
+      });
+    });
+    
+    $('.customer-reopen').unbind('click').bind('click',function(e) {
+      e.preventDefault();
+
+      self.applicationJS.parseAjaxResponse({ 'url': '/organizations/' + self.organization_id + '/customers/' + $(this).attr('data-customer-id') + '/account_reopen_confirm'}).then((element)=>{       
+        
+        $('#close-customer.modal').modal('show');
+        $('.modal-header .modal-title').html('Réouvrir le dossier');
+        $('#close-customer.modal .modal-body').html($(element).find('.reopen-confirm-content').html());
+        self.set_customer_event();
+      });
+    });
+
+    console.log('===============================');
+
+    if ($('#import_dialog').length > 0){
+      console.log('OUVERTURE');
+      $('#import_dialog').modal('show');
+    }
+
+    if ($('.import_dialog').length > 0){
+      console.log('OUVERTURE 2');
+      $('.import_dialog').modal('show');
+    }
+
+    console.log('===============================');
+
+    // $('#import_button').click (e) ->
+    //   e.preventDefault()
+    //   $(this).attr('disabled', true)
+    //   if ($('select.piece').val() == '')
+    //     alert('Veuillez sélectionner la colonne pour la référence des pièces svp !')
+    //     $(this).removeAttr('disabled')
+    //     return false
+    //   else
+    //     $('#import_dialog #importFecAfterConfiguration').submit()
+
+  }
+
   main(){
     this.add_customer();
     this.get_subscription_edit_view();

@@ -106,8 +106,6 @@ class AccountingPlan {
   }
 }
 
-
-
 jQuery(function() {
   let accounting_plan = new AccountingPlan();
   accounting_plan.main();
