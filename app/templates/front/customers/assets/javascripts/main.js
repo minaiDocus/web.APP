@@ -545,23 +545,7 @@ class Customer{
 
       $('#customers-filter').modal('show');
 
-
-      ApplicationJS.set_checkbox_radio(self);
-
-
-      $('#customers-filter .form-filter input.filter-field').unbind('keyup keydown change').bind('keyup keydown change', function(e) {
-        // e.stopPropagation();
-        let empty = false;
-
-        $('#customers-filter .form-filter input.filter-field').each(function() {
-          empty = $(this).val().length == 0;
-        });
-
-        if (empty)
-          $('.modal-footer .btn-filter').attr('disabled', 'disabled');
-        else
-          $('.modal-footer .btn-filter').attr('disabled', false);
-      });
+      ApplicationJS.set_checkbox_radio();
     });
   }
 
