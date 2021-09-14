@@ -9,14 +9,28 @@
                 .box
                   %h5 Identification du client
                   %hr
-                  = f.input :company, label_html: { class: 'required semibold' }, input_html: { class: 'select-container no-padding w-100', placeholder: "ex : iDocus", :required => true }
+                  = f.label :company, :class => "required semibold"
+                  .select-container.no-padding.w-100
+                    = f.input :company, label: false, input_html: { class: 'company_field required_field', placeholder: "ex : iDocus", :required => true }
                   - unless @organization.specific_mission
-                    = f.input :jefacture_account_id, label_html: { class: 'semibold ' }, input_html: { class: 'select-container no-padding w-100', placeholder: "ex : T4534638846" }
-                  = f.input :code, hint: "Doit impérativement commencer par : #{@organization.code}%, 15 caractères alphanumériques maximum, code cabinet inclus.", label_html: { class: 'required semibold' }, input_html: { class: 'select-container no-padding w-100', placeholder: "IDOC%CLIENT10", disabled: ('disabled' if action_name.in? %w(edit update)) }, :required => true
-                  = f.input :first_name, label_html: { class: 'semibold' }, input_html: { class: 'select-container no-padding w-100', placeholder: "ex : Clément" }
-                  = f.input :last_name, label_html: { class: 'semibold' }, input_html: { class: 'select-container no-padding w-100', placeholder: "ex : Lefebure" }
-                  = f.input :phone_number, label_html: { class: 'semibold' }, input_html: { class: 'select-container no-padding w-100', placeholder: "0601020304" }
-                  = f.input :email, hint: "Le courriel sert d’identifiant à iDocus et de contact principal en cas de besoin de la part d’iDocus", label_html: { class: 'required semibold' }, input_html: { class: 'select-container no-padding w-100', placeholder: "nanie10@idocus.com" }, :required => true
+                    = f.label :jefacture_account_id, :class => "semibold"
+                    .select-container.no-padding.w-100
+                      = f.input :jefacture_account_id, label: false, input_html: { class: 'jefacture_account_id_field', placeholder: "ex : T4534638846" }
+                  = f.label :code, :class => "required semibold"
+                  .select-container.no-padding.w-100
+                    = f.input :code, hint: "Doit impérativement commencer par : #{@organization.code}%, 15 caractères alphanumériques maximum, code cabinet inclus.", input_html: { class: 'code_field required_field', placeholder: "IDOC%CLIENT10", disabled: ('disabled' if action_name.in? %w(edit update)) }, :required => true
+                  = f.label :first_name, :class => "semibold"
+                  .select-container.no-padding.w-100
+                    = f.input :first_name, label: false, input_html: { class: 'first_name_field', placeholder: "ex : Clément" }
+                  = f.label :last_name, :class => "semibold"
+                  .select-container.no-padding.w-100
+                    = f.input :last_name, label: false, input_html: { class: 'last_name_field', placeholder: "ex : Lefebure" }
+                  = f.label :phone_number, :class => "semibold"
+                  .select-container.no-padding.w-100
+                    = f.input :phone_number, label: false, input_html: { class: 'phone_number_field', placeholder: "0601020304" }
+                  = f.label :email, :class => "required semibold"
+                  .select-container.no-padding.w-100
+                    = f.input :email, label: false, input_html: { class: 'email_field required_field', placeholder: "clement@idocus.com", :required => true }, hint: "Le courriel sert d’identifiant à iDocus et de contact principal en cas de besoin de la part d’iDocus"
               .col-md-6.back-grey
                 .box.bg-light.height_groups.groups_1.clearfix.small-shadow
                   %h5 Paramètre de base
@@ -145,7 +159,7 @@
           %button.btn.btn-default.semibold.previous{ type: :button, "data-bs-target" => "#carouselExampleControls", "data-bs-slide" => "prev" } Précedent                     
         .col-md-4.d-inline-block.ps-1.text-end
           %button.btn.btn-light.cancel{ 'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button' } Annuler
-          %button.btn.btn-primary.semibold.next{ type: :button, "data-bs-target" => "#carouselExampleControls", "data-bs-slide" => "next" } Suivant
+          %button.btn.btn-primary.semibold.next{ type: :button, "data-bs-target" => "#carouselExampleControls", "data-bs-slide" => "next", disabled: true } Suivant
       .row.w-100.normal-form-action.hide
         .col-md-8                     
         .col-md-4.d-inline-block.ps-1.text-end

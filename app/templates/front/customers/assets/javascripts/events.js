@@ -31,6 +31,12 @@ function bind_customer_events() {
 
     AppEmit('close_or_reopen_confirm', { url: url, data: form_data });
   });
+
+
+  $('input.required_field').unbind('keypress input')
+  .bind('keypress input', function(e) {
+    AppEmit('validate_first_slide_form');
+  });
 }
 
 

@@ -29,7 +29,7 @@ class Customer{
       this.check_input_number();
       this.show_subscription_option();
 
-      this.update_price()
+      this.update_price();
     }
 
     if ($('#journals select#copy-journals-into-customer').length > 0) {
@@ -428,6 +428,8 @@ class Customer{
       this.show_next();
       this.show_previous();
       this.do_submit_customer();
+
+      bind_customer_events();
     });
   }
 
@@ -581,6 +583,8 @@ class Customer{
 
       this.account_close_confirm_modal.find('.modal-body').html($(elements).find('.close_or_reopen').html());
       this.account_close_confirm_modal.modal('show');
+
+      bind_customer_events();
     });
   }
 
@@ -608,11 +612,25 @@ class Customer{
       
     });
   }
+
+  validate_first_slide_form(){
+    let required_fields_count = 0;
+
+    $('input.required_field').each(function() {
+      if ($(this).val() !== '') {
+        required_fields_count += 1;
+      }
+    });
+
+    if (required_fields_count === 3) { this.create_customer_modal.find('.carousel-item-action .next').removeAttr('disabled'); }
+  }
 }
 
 
 jQuery(function () {
   var customer = new Customer();
+
+  AppListenTo('validate_first_slide_form', (e)=>{ customer.validate_first_slide_form(); });
 
   AppListenTo('close_or_reopen_confirm_view', (e)=>{ customer.close_or_reopen_confirm_view(e.detail.url, e.detail.target); });
   AppListenTo('close_or_reopen_confirm', (e)=>{ customer.close_or_reopen_confirm(e.detail.url, e.detail.data); });
