@@ -176,6 +176,12 @@ class User < ApplicationRecord
   def self.search(contains)
     users = self.all
 
+    text = contains[:text]
+
+    if text.present?
+      users = users.where("code LIKE ? OR email LIKE ? OR company LIKE ? OR last_name LIKE ? OR first_name LIKE ?" , "%#{text}%", "%#{text}%", "%#{text}%", "%#{text}%", "%#{text}%")
+    end
+
     if contains[:collaborator_id].present?
       collaborator = User.unscoped.find(contains[:collaborator_id].to_i) rescue nil
       if collaborator

@@ -623,6 +623,46 @@ class Customer{
 
     if (required_fields_count === 3) { this.create_customer_modal.find('.carousel-item-action .next').removeAttr('disabled'); }
   }
+
+
+   load_data(search_pattern=false, type='customers', page=1, per_page=0){
+    if(this.action_locker) { return false; }
+
+    this.action_locker = true;
+    let params = [];
+
+    let search_text = '';
+
+    if (search_pattern) {
+      search_text = $(`.search-content input[name='user_contains[text]']#search_input`).val();
+      if(search_text && search_text != ''){ params.push(`user_contains[text]=${encodeURIComponent(search_text)}`); }
+    }
+
+    params.push(`page=${page}`);
+
+    if (per_page > 0) { params.push(`per_page=${ per_page }`); }
+
+    let ajax_params =   {
+                          'url': `/organizations/${this.organization_id}/${type}?${params.join('&')}`,
+                          'dataType': 'html',
+                          'target': ''
+                        };
+
+    this.applicationJS.parseAjaxResponse(ajax_params)
+    .then((response)=>{
+      $('.list-customers').html($(response).find('.list-customers').html());
+
+      $(`.search-content input[name='user_contains[text]']#search_input`).val(search_text);
+
+      this.action_locker = false;
+      bind_customer_events();
+      ApplicationJS.handle_submenu();
+      ApplicationJS.set_checkbox_radio();
+      ApplicationJS.hide_submenu();
+    })
+    .catch(()=>{ this.action_locker = false; });
+  }
+
 }
 
 
@@ -630,6 +670,8 @@ jQuery(function () {
   var customer = new Customer();
 
   AppListenTo('validate_first_slide_form', (e)=>{ customer.validate_first_slide_form(); });
+
+  AppListenTo('search_text', (e)=>{ customer.load_data(true); });
 
   AppListenTo('close_or_reopen_confirm_view', (e)=>{ customer.close_or_reopen_confirm_view(e.detail.url, e.detail.target); });
   AppListenTo('close_or_reopen_confirm', (e)=>{ customer.close_or_reopen_confirm(e.detail.url, e.detail.data); });

@@ -37,6 +37,21 @@ function bind_customer_events() {
   .bind('keypress input', function(e) {
     AppEmit('validate_first_slide_form');
   });
+
+  $('.search-content #search_input')
+  .unbind('keyup').bind('keyup', function(e){
+    e.stopPropagation();
+
+    if(e.key == 'Enter'){
+      AppEmit('search_text');
+    } 
+  });
+
+  $('.search-content .input-group-text')
+  .unbind('click').bind('click', function(e){
+    e.preventDefault();
+    AppEmit('search_text');
+  });
 }
 
 
