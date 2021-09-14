@@ -19,6 +19,7 @@ Class mère AppListener
 "class" cible: as_idocus_ajax
 "Les paramètres doivent passés obligatoirement par un helper de cryptage : param_encode(hash)"
 
+
 Attribut:
   idocus
     url           => Url de base
