@@ -2,7 +2,7 @@
 
 class Customers::MainController < OrganizationController
 
-  before_action :load_customer, except: %w[index info form_with_first_step new create search]
+  before_action :load_customer, except: %w[index info new create search]
   before_action :verify_rights, except: 'index'
   before_action :verify_if_customer_is_active, only: %w[edit update edit_period_options update_period_options edit_knowings_options update_knowings_options edit_compta_options update_compta_options]
   before_action :verify_if_account_can_be_closed, only: %w[account_close_confirm close_account]
@@ -40,9 +40,6 @@ class Customers::MainController < OrganizationController
     build_softwares
   end
 
-  # GET /organizations/:organization_id/customers/info
-  def info; end
-
   # GET /organizations/:organization_id/customers/:id/new_customer_step_two
   def new_customer_step_two;  end
 
@@ -57,15 +54,12 @@ class Customers::MainController < OrganizationController
     render partial: 'book_type'
   end
 
-  # GET /organizations/:organization_id/customers/form_with_first_step
-  def form_with_first_step
+  # GET /organizations/:organization_id/customers/new
+  def new
     @customer = User.new(code: "#{@organization.code}%")
     build_softwares
     @customer.build_options   if @customer.options.nil?
   end
-
-  # GET /organizations/:organization_id/customers/new
-  def new; end
 
   # POST /organizations/:organization_id/customers
   def create
@@ -91,7 +85,7 @@ class Customers::MainController < OrganizationController
       html_ul_content += "</ul>"
 
       flash[:error] = html_ul_content.html_safe
-      render :form_with_first_step
+      render :new
     end
   end
 

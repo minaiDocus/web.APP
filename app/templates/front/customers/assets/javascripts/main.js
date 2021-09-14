@@ -248,8 +248,6 @@ class Customer{
     if ($('#customer-content').length > 0) {
       this.applicationJS.parseAjaxResponse({ 'url': '/organizations/' + this.organization_id + '/customers/' + $('input:hidden[name="customer_id"]').val() + '/edit' }).then((element)=>{
         $('#customer-content .tab-content .tab-pane#information').html($(element).find('.customer-form-content').html());
-        $('#customer-content #customer-form-data .carousel-item-action').remove();
-        $('#customer-content #customer-form-data .normal-form-action').removeClass('hide');
         $('#customer-content #customer-form-data .subscription-base-form').parent().remove();
         $('#customer-content #customer-form-data .accounting-plan-base-form').parent().remove();
 
@@ -413,8 +411,9 @@ class Customer{
   }
 
   get_customer_first_step_form(){
-    this.applicationJS.parseAjaxResponse({ 'url': '/organizations/' + this.organization_id + '/customers/form_with_first_step' }).then((element)=>{
-      this.create_customer_modal.find('.modal-content').html($(element).find('.modal-content').html());
+    this.applicationJS.parseAjaxResponse({ 'url': '/organizations/' + this.organization_id + '/customers/new' }).then((element)=>{
+      this.create_customer_modal.find('.modal-body').html($(element).find('.customer-form-content').html());
+      this.create_customer_modal.find('.normal-form-action').remove();
       
       $('select#select-group-list').removeClass('form-control');
       $('select#select-group-list').searchableOptionList({

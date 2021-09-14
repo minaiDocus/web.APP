@@ -4,8 +4,6 @@ Rails.application.routes.draw do
     resources :organizations, only: [] do
       resources :customers, controller: 'main' do
         collection do
-          get   'info'
-          get   'form_with_first_step'
           get   'search'
         end
         member do
