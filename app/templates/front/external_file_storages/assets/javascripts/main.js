@@ -1,44 +1,26 @@
-//= require './events'
-
 class EFSMain{
   constructor(){
     this.applicationJS = new ApplicationJS();
   }
 
-  update_storage(class_name){
-    let data = SerializeToJson( $(`.storage_form form.edit_${class_name}`) );
-    let ajax_params = {
-                        url: '/external_file_storage',
-                        type: 'POST',
-                        dataType: 'json',
-                        data: data
-                      }
+  use_service(e){
+    let elem    = e.detail.element
+    let service = elem.attr('id').split('_')[1];
+    let is_used = elem.is(":checked");
 
-    this.applicationJS.parseAjaxResponse(ajax_params)
-  }
-
-  use_service(service, is_used){
     if(is_used)
       $(".service_config_"+service).show();
     else
       $(".service_config_"+service).hide();
 
-    let data = { service: service, is_enable: is_used }
-    let ajax_params = {
-                        url: '/external_file_storage/use',
-                        type: 'POST',
-                        dataType: 'json',
-                        data: data
-                      }
-
-    this.applicationJS.parseAjaxResponse(ajax_params);
-
+    let datas = { service: service, is_enable: is_used };
+    
+    e.set_key('datas', datas);
   }
 }
 
 jQuery(function() {
   let main = new EFSMain();
 
-  AppListenTo('efs_update_storage', (e)=>{ main.update_storage(e.detail.class_name) });
-  AppListenTo('efs_use_service', (e)=>{ main.use_service(e.detail.service, e.detail.is_used) });
+  AppListenTo('efs_init_enabling_service', (e)=>{ main.use_service(e); });
 });

@@ -7,6 +7,45 @@ function bind_globals_events(){
   /* Notice flash */
     $('span.close_error').unbind('click').bind('click', function(e){ $('.notice-internal-error').fadeOut('fast'); });
 
+  /* AS AJAX LINK */
+    let events_list = 'click.as_idocus_ajax change.as_idocus_ajax keyup.as_idocus_ajax';
+    $('.as_idocus_ajax').unbind(events_list).bind(events_list, function(e){
+      if( $(this).type != 'checkbox' && $(this).type == 'radio' )
+        e.preventDefault();
+
+      $(this).attr('disabled', 'disabled');
+
+      let current_event = e.type;
+      let authorized_events = [];
+      try { authorized_events = $(this).idocus('events').split(' ') || [] }catch(r){} ;
+
+      if( authorized_events.find((t)=>{ return t == current_event }) || authorized_events.length == 0 ){
+        let idocus_params = JSON.parse( atob($(this).attr('idocus')) );
+
+        const launch_ajax = ( _params={} )=>{
+          let next_param = Object.assign(idocus_params, _params);
+
+          ApplicationJS.launch_async( next_param )
+                       .then((e)=>{
+                          if( next_param['after_send'] ){
+                            AppEmit( next_param['after_send'], { response: e, element: $(this) } );
+                          }
+
+                          $(this).removeAttr('disabled');
+                        });
+        }
+
+        if( idocus_params['before_send'] ){
+          AppEmit( idocus_params['before_send'], { element: $(this), idocus_params: idocus_params } )
+                 .then((i)=>{ console.log(i); launch_ajax(i) });
+        }else{
+          launch_ajax();
+        }
+      }else{
+        console.log(`Unauthorized event : ${current_event}`);
+      }
+    });
+
   /* PAGINATIONS */
     $('.pagination .per-page').unbind('change').bind('change', function(e){
       let name = $(this).data('name');

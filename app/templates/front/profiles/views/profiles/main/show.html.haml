@@ -7,7 +7,7 @@
         Mon compte
     .col-md-2.text-center
       - unless organizations_suspended? && @user.active?
-        %button.btn.btn-light-primary.semibold.change-password.w-100
+        %button.btn.btn-light-primary.semibold.change-password.w-100{'data-bs-target' => '#change-password', 'data-bs-toggle' => 'modal', :type => 'button'}
           %span.me-4= glyphicon('key', { size: '15', color: '#0d6efd'})
           %span Changer mot de passe
           
@@ -15,7 +15,7 @@
       - if @user.active?
         - if @user.organization.is_active
           - unless organizations_suspended?
-            %button.btn.btn-light.semibold.external-file-storage.w-100
+            %button.btn.btn-light.semibold.external-file-storage.w-100{'data-bs-target' => '#external-file-storage', 'data-bs-toggle' => 'modal', :type => 'button'}
               %span.me-4= glyphicon('external-link', { size: '15', color: '#72AA42'})
               %span Stockage externes
 
@@ -42,7 +42,8 @@
           = render partial: 'notifications', locals: { f: f }
           %hr
           .form-group.text-center
-            %button.btn.btn-primary.semibold.w-25#validate_notification_options{ type: 'button'} Valider
+            - idoc_params = param_encode({ url: '/profiles', method: 'put', form: 'subscription_options' })
+            %button.btn.btn-primary.semibold.w-25.as_idocus_ajax{ type: 'button', idocus: idoc_params } Valider
 
         - if @user.options.try(:is_upload_authorized) && !(@user.is_admin || @user.is_prescriber || @user.inactive?)
           - period_service = Billing::Period.new user: @user, current_time: Time.now.beginning_of_month
@@ -102,4 +103,3 @@
 
 
 = render partial: 'dialogs'
-= javascript_include_tag 'front/profiles/assets/javascripts/main'

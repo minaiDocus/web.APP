@@ -191,13 +191,13 @@ class Organizations::MainController < OrganizationController
     if @user.is_admin && params[:revoke_confirm] == 'true'
       result = Billing::DebitMandateResponse.new(@organization.debit_mandate).send(:revoke_payment)
       if result.present?
-        flash[:error]   = result
+        json_flash[:error]   = result
       else
-        flash[:success] = 'Mandat supprimé avec succès.'
+        json_flash[:success] = 'Mandat supprimé avec succès.'
       end
     end
 
-    redirect_to organization_path(@organization, { tab: 'payments' })
+    render json: { json_flash: json_flash }, status: 200
   end
 
   private

@@ -36,6 +36,8 @@
       - else
         .no-favorite-customer= t('dashboard.no_favorite_customer')
 
+- validation_param = param_encode({ url: "/dashboard/add_customer_to_favorite", method: 'post', form:'send_customer_to_favorite', html: { target: '#container-box' }, modal: { id: 'add-to-favorite' } })
+
 #add-to-favorite.modal.fade{'aria-hidden' => 'true', 'aria-labelledby' => 'myFavoriteModalLabel', :role => 'dialog', :tabindex => '-1'}
   .modal-dialog{:role => 'document'}
     .modal-content
@@ -51,7 +53,7 @@
               = select_tag 'favorite_customers', options_for_select(favorite_options, @favorites), class: 'select-customer searchable-option-list', id: 'select-customer-to-favorite', include_blank: false, multiple: true
       .modal-footer
         %button.btn.btn-light.semibold{'data-bs-dismiss' => 'modal', :type => 'button'}= t('dashboard.cancel_action')
-        %button.btn.btn-primary.semibold.btn-add{:type => 'button', id: 'add-customer-to-favorite'}= t('dashboard.edit_action')
+        %button.btn.btn-primary.semibold.as_idocus_ajax{ :type => 'button', id: 'add-customer-to-favorite', idocus: validation_param}= t('dashboard.edit_action')
 
 
 = javascript_include_tag 'front/dashboard/assets/javascripts/main'

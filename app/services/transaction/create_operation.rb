@@ -10,6 +10,8 @@ class Transaction::CreateOperation
     operations.each do |o|
       operation = Operation.new(o)
       operation.api_name = 'capidocus'
+      operation.forced_processing_at         = Time.now  #Launch processing of capidocus's operation immediatly
+      operation.forced_processing_by_user_id = 2374 #'mina@idocus.com'
 
       new_operation = new(operation).perform
 

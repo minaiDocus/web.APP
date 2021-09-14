@@ -5,6 +5,10 @@ module ApplicationHelper
     content_tag :span, Base64.encode64(value.to_s), class: 'js_var_setter', id: "js_var_#{name}", style: 'display: none'
   end
 
+  def param_encode(input)
+    Base64.encode64(input.to_json)
+  end
+
   def javascript_call(class_name, function, args=nil)
     content_tag(:div, javascript_tag("window.setTimeout(function(){
       jQuery(function(){

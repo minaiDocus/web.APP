@@ -6,7 +6,7 @@
         %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
       .modal-body
         .col-md-12
-          = form_for true_user, url: profiles_path do |f|
+          = form_for true_user, url: profiles_path, html: { id: 'edit_user' } do |f|
             %input{ type: 'hidden', name: 'user[h_change_password]', value: 'true' }
             .form-group.clearfix              
               = f.label 'Mot de passe actuel :'
@@ -21,7 +21,8 @@
               .select-container.no-padding.w-100
                 = f.password_field :password_confirmation, label: 'Confirmation du nouveau mot de passe'
       .modal-footer
-        %button.validate.btn.btn-primary.semibold Valider
+        - idoc_params = param_encode({ url: '/profiles', method: 'put', form: 'edit_user', modal: { id: 'change-password' } })
+        %button.as_idocus_ajax.btn.btn-primary.semibold{ idocus: idoc_params } Valider
 
 .modal#external-file-storage
   .modal-dialog{ style: 'max-width: 1280px' }

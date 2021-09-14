@@ -32,6 +32,7 @@
 //= require moment
 //= require daterangepicker
 //= require custom_popover
+//= require app_listener
 
 var GLOBAL = {}
 var VARIABLES = {}
@@ -43,17 +44,6 @@ VARIABLES.set = (var_name, value) => {
 
 VARIABLES.get = (var_name) => {
   return VARS[var_name];
-}
-
-AppListenTo = (event_name, callback={}) => {
-  document.addEventListener(event_name, callback, false);
-}
-
-AppEmit = (event_name, params=null) => {
-  const event = new CustomEvent(event_name, {'detail': params});
-  event.initEvent(event_name, true, true);
-
-  document.dispatchEvent(event);
 }
 
 // Type must be 'show' or 'hide'
@@ -192,8 +182,6 @@ class ApplicationJS {
     var self = this
 
     return new Promise((success, error) => {
-      var target = params.target || null;
-
       $.ajax({
         url: params.url,
         type: params.type || 'GET',
@@ -209,11 +197,22 @@ class ApplicationJS {
         success: function(result) {
           if (beforeUpdateContent) { beforeUpdateContent(); }
 
-          if(target){ $(target).html($(result).find(target).html()); }
+          let target = params.target || null;
+          if(target)
+          {
+            if(params.mode == 'append')
+              $(target).append($(result).find(target).html());
+            else if(params.mode == 'prepend')
+              $(target).prepend($(result).find(target).html());
+            else
+              $(target).html($(result).find(target).html());
+          }
 
           if (afterUpdateContent) { afterUpdateContent(); }
 
-          self.noticeAllMessageFrom(result);         
+          try{
+            self.noticeAllMessageFrom(result);
+          }catch(e){}
 
           try{
             if(result.json_flash.success){
@@ -260,6 +259,108 @@ class ApplicationJS {
 
   displayListPer(params={}, afterUpdateContent=function(e){}){
     if (afterUpdateContent !== null) { this.parseAjaxResponse(params, null, afterUpdateContent); }
+  }
+
+  static launch_async(idocus_params={}){
+    return new Promise((success, error)=>{
+      let url             = idocus_params['url'];
+      let confirm_message = idocus_params['confirm'];
+
+      if( url )
+      {
+        const launcher = ()=>{
+          let type        = idocus_params['method'] || 'GET';
+          let ajax_params = {
+                              url: url,
+                              type: type,
+                            }
+          //parsing content-type
+            if(idocus_params['content-type']){
+              ajax_params['contentType'] = idocus_params['content_type']
+            }
+
+          //parsing HTML parameter
+            ajax_params['dataType'] = 'json';
+            if(idocus_params['html'] && idocus_params['html']['target']){
+              ajax_params['dataType'] = 'html';
+              ajax_params['target']   = idocus_params['html']['target'];
+              ajax_params['mode']     = idocus_params['html']['mode'];
+            }
+
+          //parsing form and datas parmeter
+            let form      = $(`form#${idocus_params['form']}`);
+            let form_data = {}
+
+            if(form){
+              if(ajax_params['dataType'] == 'json')
+                form_data = SerializeToJson(form); //serialize as json
+              else
+                form_data = form.serialize(); //serialize as url params
+            }
+            if(idocus_params['datas'] && ajax_params['dataType'] == 'json'){
+              let new_datas = {}
+
+              try{
+                new_datas = JSON.parse(idocus_params['datas']) || {};
+              }catch(e){
+                new_datas = idocus_params['datas'] || {};
+              }
+
+              form_data = Object.assign( form_data, new_datas );
+            }
+
+            if(form_data){
+              ajax_params['data'] = form_data;
+            }
+
+          let appJS = new ApplicationJS();
+          appJS.parseAjaxResponse(ajax_params)
+                .then(e => {
+                  //Handling modal param
+                  if( idocus_params['modal'] && idocus_params['modal']['id'] )
+                  {
+                    let modal            = $(`.modal#${idocus_params['modal']['id']}`);
+                    let close_on_success = (idocus_params['modal']['close_after_success'] === false)? false : true
+                    let close_on_error   = idocus_params['modal']['close_after_error'] || false
+
+                    if(e.json_flash){
+                      if( close_on_success && e.json_flash.success ){ modal.modal('hide'); }
+                      if( close_on_error && e.json_flash.error ){ modal.modal('hide'); }
+                    }else{
+                      if( close_on_success ){ modal.modal('hide'); }
+                      if( close_on_error ){ modal.modal('hide'); }
+                    }
+                  }
+
+                  //handle redirect_to param
+                  if( idocus_params['redirect-to'] && idocus_params['redirect_to']['url'] )
+                    ApplicationJS.launch_async( idocus_params['redirect_to'] );
+
+                  success(e);
+                })
+                .catch(err => {
+                  //Handling modal param
+                  if( idocus_params['modal'] && idocus_params['modal']['id'] )
+                  {
+                    let modal          = $(`.modal#${idocus_params['modal']['id']}`);
+                    let close_on_error = idocus_params['modal']['close_after_error'] || false
+                    if( close_on_error ){ modal.modal('hide'); }
+                  }
+
+                  success(err)
+                });       
+        }
+
+        if( confirm_message && confirm(confirm_message) )
+          launcher();
+        else
+          launcher();
+      }
+      else
+      {
+        success();
+      }
+    });
   }
 
   static set_checkbox_radio(that = null){

@@ -1,0 +1,48 @@
+[=== APP LISTENER ===]
+Class mère AppListener
+  > AppEmit('trigger_test', { id: 1234 });
+    //Javascript fait une emission d'appel de l'évènement "trigger_test" et envoi comme paramètre "{ id: 1234}"
+
+  > AppListenTo('trigger_test', (param)=>{ /*instruction*/ });
+    //Javascript est en attente d'écoute de l'appel à l'évènement "trigger_test" et execute la fonction passé en paramètre
+    // params => représente un objet retourné par CustomEvent de javascript, les paramètres perso sont stocké dans : param.detail ( ex :  param.detail.id )
+
+
+  > AppEmit('trigger_test', { id: 1234 }).then((c_param)=>{ /*instruction*/ });
+    //Après exécution de l'évènement par AppListenTo un callback est renvoyé à l'émetteur via " .then( (c)=>{ } ) "
+    > le paramètre "param" de AppListenTo peut assigné une valeur au sortie "c_param" de l'AppEmit grace à la fonction: param.set_key(key, value);
+    ( ex: param.set_key("response", "789"); .... c_param.response; )
+  
+
+[=== Idocus Ajax ==]
+
+"class" cible: as_idocus_ajax
+"Les paramètres doivent passés obligatoirement par un helper de cryptage : param_encode(hash)"
+
+Attribut:
+  idocus
+    url           => Url de base
+    content_type  => Content type de la requete (default: application/x-www-form-urlencoded; charset=UTF-8)
+    method        => Methode de la requete (defaut: GET)
+    confirm       => Message de confirmation
+    events        => Event authorisé (triggered event), séparés par espace si plusieurs (ex: 'click change keyup')
+    before_send   => Appel (AppEmit) sur le nom de l'évènement avant lancement ajax ( paramètre: { element: $(this), idocus_params: idocus_params } )
+    after_send    => Appel (AppEmit) sur le nom de l'évènement après success ( paramètre: { element: $(this), response: e } )
+    form          => ID d'une formulaire (form) à serialisé (ex: 'quelquechose')
+    datas         => Datas à envoyé (avec form sérialisé si existe) au format JSON STRING [ datas ecrase form s'il existe une même clé ]
+
+    html => la data-type de la requete devient 'HTML' (si par défaut JSON)
+      target => Découpage de la cible vers la dom 
+                (ex: target: '.container .child1')
+                Le parseur recherche l'element jquery '.container .child1' du résultat et remplace le contenu principale de '.container .child1'
+      mode   => Mode de remplissage ['append', 'prepend', 'replace'] (defaut: 'replace')
+
+    redirect_to => Redirection vers l'url en paramètre après lancement (toujours en mode ajax) [ Ajax recursive ]
+      tous les sous paramètre du paramètre idocus sont acceptable dans cette option
+      exemple
+        redirect_to: { url: 'xxx', method: 'get', datas: '{}', html: { target: 'yyyy' } }
+
+    modal => Gestion de modal
+      id                  => HTML id du modal à gérer (ex: 'quelquechose')
+      close_after_success => valeur (true, false) default(true) 
+      close_after_error   => valeur (true, false) default(false)

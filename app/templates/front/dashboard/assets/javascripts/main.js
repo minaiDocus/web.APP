@@ -15,26 +15,12 @@ function bind_favorite_clicks(){
   });
 }
 
-jQuery(function() {
+jQuery(function(){
   let applicationJS = new ApplicationJS();
 
   $('#select-customer-to-favorite').searchableOptionList({
     maxHeight: '400px'
   });
+
   bind_favorite_clicks();
-
-  $('#add-customer-to-favorite.btn-add').unbind('click').bind('click',function(e) {
-    e.stopPropagation();
-    $(this).attr('disabled', true);
-
-    let params =  {
-                    'url': '/dashboard/add_customer_to_favorite',
-                    'type': 'POST',
-                    'data': $('#send_customer_to_favorite').serialize(),
-                    'target': '#container-box',
-                  }
-    applicationJS.parseAjaxResponse(params, function(){ $('#add-to-favorite').modal('hide'); }, bind_favorite_clicks);
-
-    $(this).attr('disabled', false);
-  });
 });

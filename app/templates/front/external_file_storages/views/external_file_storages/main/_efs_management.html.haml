@@ -1,3 +1,5 @@
+- idocus_params = param_encode({ url: '/external_file_storage/use', method: 'post', before_send: 'efs_init_enabling_service', events: 'click' })
+
 Configurer l’accès à vos services de stockage externe de documents vous permet de recevoir tous les documents numérisés par iDocus sur un autre support que notre plateforme (Export de documents). Nous pouvons également aller chercher les documents directement sur ces supports externes (Import de documents)
 %br
 - if external_file_storage.authorized > 0
@@ -8,7 +10,7 @@ Configurer l’accès à vos services de stockage externe de documents vous perm
     #dropbox.box.bg-light
       .row
         .col-md-1
-          = check_box_tag :enable_dropbox, 1, is_service_used, id: "service_#{service_number}", class: 'checkbox use_service', style: 'float:left; margin-right:5px; margin-top:0;'
+          = check_box_tag :enable_dropbox, 1, is_service_used, id: "service_#{service_number}", class: 'checkbox use_service as_idocus_ajax', style: 'float:left; margin-right:5px; margin-top:0;', idocus: idocus_params
           %div{ style: 'float:left; text-align:center; width:62px' }
             %a.logo= image_tag 'application/dropbox_logo.png', :alt => 'logo'
             %b DROPBOX
@@ -50,7 +52,7 @@ Configurer l’accès à vos services de stockage externe de documents vous perm
     #google_drive.box.bg-light
       .row
         .col-md-1
-          = check_box_tag :enable_google_docs, 1, is_service_used, id: "service_#{service_number}", class: 'checkbox use_service', style: 'float:left; margin-right:5px; margin-top:0;'
+          = check_box_tag :enable_google_docs, 1, is_service_used, id: "service_#{service_number}", class: 'checkbox use_service as_idocus_ajax', style: 'float:left; margin-right:5px; margin-top:0;', idocus: idocus_params
           %div{ style: 'float:left; text-align:center; width:62px' }
             %a.logo= image_tag 'application/googledrive_logo.png', alt: 'logo'
             %b GOOGLE DRIVE (Beta)
@@ -75,7 +77,7 @@ Configurer l’accès à vos services de stockage externe de documents vous perm
     #ftp.box.bg-light
       .row
         .col-md-1
-          = check_box_tag :enable_ftp, 1, is_service_used, id: "service_#{service_number}", class: 'checkbox use_service', style: 'float:left; margin-right:5px; margin-top:0;'
+          = check_box_tag :enable_ftp, 1, is_service_used, id: "service_#{service_number}", class: 'checkbox use_service as_idocus_ajax', style: 'float:left; margin-right:5px; margin-top:0;', idocus: idocus_params
           %div{ style: 'float:left; text-align:center; width:62px' }
             %a.logo= image_tag 'application/ftp_logo.png', alt: 'logo'
             %b FTP
@@ -102,7 +104,7 @@ Configurer l’accès à vos services de stockage externe de documents vous perm
     #box.box.bg-light
       .row
         .col-md-1
-          = check_box_tag :enable_box, 1, is_service_used, id: "service_#{service_number}", class: 'checkbox use_service', style: 'float:left; margin-right:5px; margin-top:0;'
+          = check_box_tag :enable_box, 1, is_service_used, id: "service_#{service_number}", class: 'checkbox use_service as_idocus_ajax', style: 'float:left; margin-right:5px; margin-top:0;', idocus: idocus_params
           %div{ style: 'float:left; text-align:center; width:62px' }
             %a.logo= image_tag 'application/box_logo.png', alt: 'logo'
             %b Box.com
