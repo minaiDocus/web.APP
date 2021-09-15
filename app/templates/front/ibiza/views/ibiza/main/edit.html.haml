@@ -1,162 +1,155 @@
 = stylesheet_link_tag 'front/ibiza/assets/stylesheets/main'
 
-#ibiza.edit.derivationRight
-  .row
-    .w-100.text-start
-      %span.semibold Configuration de iBiza :
-      %i Connexion à iBiza pour le transfert des écritures
-  %hr
-  .row
-    = simple_form_for (@ibiza || Software::Ibiza.new), url: organization_ibiza_path(@organization), html: { class: 'form-horizontal' } do |f|
-      .select-container.no-padding.w-100
-        = f.input :specific_url_options, label_html: { class: 'semibold' }, placeholder: 'https://webservice.irf-cloud.com/IRFService/services/IRFService.svc', hint: "Pour connecter iBiZa à iDocus, Vous pouvez spécifier votre URL de connexion (Par défaut: https://webservice.irf-cloud.com/IRFService/services/IRFService.svc)"
-      .select-container.no-padding.w-100
-        = f.input :access_token, label_html: { class: 'semibold' }, hint: "Pour connecter iBiZa à iDocus, rendez-vous sur l'iBiZStore pour récupérer votre jeton d'accès."
-      .select-container.no-padding.w-100
-        = f.input :access_token_2, label_html: { class: 'semibold' }, hint: "Pour connecter iBiZa à iDocus, rendez-vous sur l'iBiZStore pour récupérer votre jeton d'accès."
-      .form-group.row
-        .col-md-11
-          = f.label :auto_deliver, class: 'semibold'
-          %br
-          = f.hint 'Cette option peut être ré-écrite au niveau de chaque dossier.'
-        .col-md-1.form-check.form-switch
-          = f.input :auto_deliver, as: :boolean, label: "Non", label_html: { class: 'form-check-label' }, input_html: { id: 'flexSwitchCheckDefault', class: 'form-check-input custom-form-switch' }
-      .form-group.row
-        .col-md-11
-          = f.label :is_analysis_activated, class: 'semibold'
-          %br
-          = f.hint 'Cette option peut être ré-écrite au niveau de chaque dossier.'
-        .col-md-1.form-check.form-switch.custom-form-switch
-          = f.input :is_analysis_activated, as: :boolean, label: "Non", label_html: { class: 'form-check-label' }, input_html: { id: 'flexSwitchCheckDefault', class: 'form-check-input' }
-      .form-group.row
-        .col-md-11
-          = f.label :is_analysis_to_validate, class: 'semibold'
-          %br
-          = f.hint "Cette option suspend l'envoi en pré-affectation des pièces, en passant par une validation manuelle des analyses comptables, Les pièces téléversées via le site ou mobile ne sont pas concernées (peut être ré-écrite au niveau de chaque dossier)."
-        .col-md-1.form-check.form-switch.custom-form-switch
-          = f.input :is_analysis_to_validate, as: :boolean, label: "Non", label_html: { class: 'form-check-label' }, input_html: { id: 'flexSwitchCheckDefault', class: 'form-check-input' }
-      .form-group
-        %label.semibold Format du nom de la pièce iDocus dans iBiZa (par défaut colonne “pièce” dans iBiza)
-        .row
-          .col-md-10
+#ibiza_software_box
+  %input#organization_id{ type: 'hidden', value: @organization.id }
+  #ibiza.edit.derivationRight
+    .row
+      .w-100.text-start
+        %span.semibold Configuration de iBiza :
+        %i Connexion à iBiza pour le transfert des écritures
+    %hr
+    .row
+      = simple_form_for (@ibiza || Software::Ibiza.new), url: organization_ibiza_path(@organization), html: { class: 'form-horizontal', id: 'ibiza_form_edition' } do |f|
+        %input{ type: 'hidden', id: 'piece_name_hidden', name: 'software_ibiza[piece_name_format]', value: '{}' }
+        %input{ type: 'hidden', id: 'piece_name_separator_hidden', name: 'software_ibiza[piece_name_format_separator]', value: @ibiza.try(:piece_name_separator) || '_' }
+        %input{ type: 'hidden', id: 'description_hidden', name: 'software_ibiza[description]', value: '{}' }
+        %input{ type: 'hidden', id: 'description_separator_hidden', name: 'software_ibiza[description_separator]', value: @ibiza.try(:description_separator) || '_' }
+        .select-container.no-padding.w-100
+          = f.input :specific_url_options, label_html: { class: 'semibold' }, placeholder: 'https://webservice.irf-cloud.com/IRFService/services/IRFService.svc', hint: "Pour connecter iBiZa à iDocus, Vous pouvez spécifier votre URL de connexion (Par défaut: https://webservice.irf-cloud.com/IRFService/services/IRFService.svc)"
+        .select-container.no-padding.w-100
+          = f.input :access_token, label_html: { class: 'semibold' }, hint: "Pour connecter iBiZa à iDocus, rendez-vous sur l'iBiZStore pour récupérer votre jeton d'accès."
+        .select-container.no-padding.w-100
+          = f.input :access_token_2, label_html: { class: 'semibold' }, hint: "Pour connecter iBiZa à iDocus, rendez-vous sur l'iBiZStore pour récupérer votre jeton d'accès."
+        .form-group.row
+          .col-md-11
+            = f.label :auto_deliver, class: 'semibold'
+            %br
+            = f.hint 'Cette option peut être ré-écrite au niveau de chaque dossier.'
+          .col-md-1.form-check.form-switch
+            = f.input :auto_deliver, as: :boolean, label: "Non", label_html: { class: 'form-check-label' }, input_html: { id: 'flexSwitchCheckDefault', class: 'form-check-input custom-form-switch' }
+        .form-group.row
+          .col-md-11
+            = f.label :is_analysis_activated, class: 'semibold'
+            %br
+            = f.hint 'Cette option peut être ré-écrite au niveau de chaque dossier.'
+          .col-md-1.form-check.form-switch.custom-form-switch
+            = f.input :is_analysis_activated, as: :boolean, label: "Non", label_html: { class: 'form-check-label' }, input_html: { id: 'flexSwitchCheckDefault', class: 'form-check-input' }
+        .form-group.row
+          .col-md-11
+            = f.label :is_analysis_to_validate, class: 'semibold'
+            %br
+            = f.hint "Cette option suspend l'envoi en pré-affectation des pièces, en passant par une validation manuelle des analyses comptables, Les pièces téléversées via le site ou mobile ne sont pas concernées (peut être ré-écrite au niveau de chaque dossier)."
+          .col-md-1.form-check.form-switch.custom-form-switch
+            = f.input :is_analysis_to_validate, as: :boolean, label: "Non", label_html: { class: 'form-check-label' }, input_html: { id: 'flexSwitchCheckDefault', class: 'form-check-input' }
+        .form-group
+          %label.semibold Format du nom de la pièce iDocus dans iBiZa (par défaut colonne “pièce” dans iBiza)
+          .row
+            .col-md-10
+              .select-container.no-padding.w-100
+                %input.piece_name_preview
+            .col-md-2.text-center
+              %input#current_piece_name{ type: 'hidden', value: @ibiza.try(:piece_name_format).to_json }
+              %button.btn.btn-light.w-100.semibold#piece-name-edit Modifier
+        .form-group
+          %label.semibold Format de l’écriture comptable dans iBiZa
+          .row
+            .col-md-10
+              .select-container.no-padding.w-100
+                %input.description_preview
+            .col-md-2.text-center
+              %input#current_description{ type: 'hidden', value: @ibiza.try(:description).to_json }
+              %button.btn.btn-light.w-100.semibold#preseizure-name-edit Modifier
+        .form-group
+          %label.semibold Champ utilisé dans la colonne "Ref. pièce" et "Piece" dans Ibiza
+          - piece_number_selected = @ibiza.try(:voucher_ref_target) == 'piece_number' ? "selected='selected'" : ""
+          - piece_name_selected = @ibiza.try(:voucher_ref_target) == 'piece_name' ? "selected='selected'" : ""
+          = select_tag "software_ibiza[voucher_ref_target]", raw("<option value='piece_number' #{piece_number_selected}>Ref. pièce = Numéro de pièce d'origine et Pièce = Nom de la pièce (iDocus)</option><option value='piece_name' #{piece_name_selected}>Ref. pièce = Nom de la pièce (iDocus) et Pièce = Numéro de pièce d'origine</option>"), multiple: false, class: 'form-control', id: 'software_ibiza_voucher_ref_target'
+
+        .form-group.no-margin
+          .w-100.text-end
+            - idocus_params = param_encode({ url: "/organizations/#{@organization.id}/ibiza", method: 'put', form: 'ibiza_form_edition' })
+            %button.btn.btn-primary.as_idocus_ajax{ type: 'button', idocus: idocus_params } Valider
+
+  .modal#softwares-piece-modal
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %h5.modal-title.bold Modifier le format du nom de la pièce iDocus dans iBiZa
+          %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+        .modal-body
+          .form-group
+            %label.semibold Sélectionnez les éléments à incorporer pour composer le nom de sortie PDF
             .select-container.no-padding.w-100
-              %input{ placeholder: " CAB%DOC AC 201901 001 " }
-          .col-md-2.text-center
-            %button.btn.btn-light.w-100.semibold#piece-name-edit Modifier
-      .form-group
-        %label.semibold Format de l’écriture comptable dans iBiZa
-        .row
-          .col-md-10
+              %input.piece_name_preview
+
+          .form-group.clearfix
+            %ul#piece_name_sortable
+              %li.btn-light.piece_name_sortable_child.clickable.code{ data: { name: 'code', ex: 'IDO%TEST' } }
+                Code complet
+              %li.btn-light.piece_name_sortable_child.clickable.code_wp{ data: { name: 'code_wp', ex: 'TEST' } }
+                Code dossier sans cabinet
+              %li.btn-light.piece_name_sortable_child.clickable.journal{ data: { name: 'journal', ex: 'AC' } }
+                Journal
+              %li.btn-light.piece_name_sortable_child.clickable.period{ data: { name: 'period', ex: Time.now.strftime("%Y%m") } }
+                Période de traitement
+              %li.btn-light.piece_name_sortable_child.clickable.number{ data: { name: 'number', ex: "001" } }
+                Numéro
+
+          .form-group
+            %label.semibold Séparer les éléments par
+            %select.form-control#piece_name_separator{ name: 'piece_name_separator', multiple: false }
+              - selected = @ibiza.try(:piece_name_separator)
+              %option{ value: '_', selected: (selected == '_') } Underscore “_”
+              %option{ value: '-', selected: (selected == '-') } Tirait "-"
+
+        .modal-footer
+          .w-100.text-end
+            %button.btn.btn-primary.valid#piece_name_validation{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'} Valider
+
+  .modal#softwares-preseizure-modal
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %h5.modal-title.bold Modifier le format de l’écriture comptable iBiZa
+          %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+        .modal-body
+          .form-group
+            %label.semibold Sélectionnez les éléments à incorporer pour composer le nom de sortie PDF
             .select-container.no-padding.w-100
-              %input{ placeholder: "CAB%DOC AC 201901 001 - FACT001" }
-          .col-md-2.text-center
-            %button.btn.btn-light.w-100.semibold#preseizure-name-edit Modifier
-      .form-group
-        %label.semibold Champ utilisé dans la colonne "Ref. pièce" et "Piece" dans Ibiza
-        - piece_number_selected = @ibiza.try(:voucher_ref_target) == 'piece_number' ? "selected='selected'" : ""
-        - piece_name_selected = @ibiza.try(:voucher_ref_target) == 'piece_name' ? "selected='selected'" : ""
-        = select_tag "software_ibiza[voucher_ref_target]", raw("<option value='piece_number' #{piece_number_selected}>Ref. pièce = Numéro de pièce d'origine et Pièce = Nom de la pièce (iDocus)</option><option value='piece_name' #{piece_name_selected}>Ref. pièce = Nom de la pièce (iDocus) et Pièce = Numéro de pièce d'origine</option>"), multiple: false, class: 'form-control', id: 'software_ibiza_voucher_ref_target'
+              %input.description_preview
 
-      .form-group.no-margin
-        .w-100.text-end
-          = link_to t('actions.cancel'), organization_path(@organization, tab: 'ibiza'), class: 'btn btn-light'
-          = f.submit 'Valider', class: 'btn btn-primary .valid-software-modification semibold'
+          .form-group.clearfix
+            %ul#description_sortable
+              %li.btn-light.description_sortable_child.clickable.operation_label{ data: { name: 'operation_label', ex: 'test' } }
+                Libellé de l'opération bancaire
+              %li.btn-light.description_sortable_child.clickable.date{ data: { name: 'date', ex: Time.now.strftime('%Y-%m-%d') } }
+                Date réelle
+              %li.btn-light.description_sortable_child.clickable.third_party{ data: { name: 'third_party', ex: 'Google' } }
+                Tiers
+              %li.btn-light.description_sortable_child.clickable.amount{ data: { name: 'amount', ex: '1000' } }
+                Montant d’origine
+              %li.btn-light.description_sortable_child.clickable.currency{ data: { name: 'currency', ex: 'eur' } }
+                Devise
+              %li.btn-light.description_sortable_child.clickable.conversion_rate{ data: { name: 'conversion_rate', ex: '1' } }
+                Taux de conversion
+              %li.btn-light.description_sortable_child.clickable.observation{ data: { name: 'observation', ex: 'test' } }
+                Remarque
+              %li.btn-light.description_sortable_child.clickable.journal{ data: { name: 'journal', ex: 'AC' } }
+                Journal
+              %li.btn-light.description_sortable_child.clickable.piece_name{ data: { name: 'piece_name', ex: 'idoc' } }
+                Nom de la pièce iDocus
+              %li.btn-light.description_sortable_child.clickable.piece_number{ data: { name: 'piece_number', ex: '001' } }
+                N° de pièce
 
-.modal#softwares-piece-modal
-  .modal-dialog
-    .modal-content
-      .modal-header
-        %h5.modal-title.bold Modifier le format du nom de la pièce iDocus dans iBiZa
-        %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
-      .modal-body
-        .form-group
-          %label.semibold Sélectionnez les éléments à incorporer pour composer le nom de sortie PDF
-          .select-container.no-padding.w-100
-            %input{ placeholder: " CAB%DOC AC 201901 001" }
+          .form-group
+            %label.semibold Séparer les éléments par
+            %select.form-control#description_separator{ name: 'description_separator', multiple: false }
+              - selected = @ibiza.try(:description)
+              %option{ value: '_', selected: (selected == '_') } Underscore “_”
+              %option{ value: '-', selected: (selected == '-') } Tirait "-"
 
-        .form-group.clearfix
-          %ul#sortable-software
-            %li.btn-light.click
-              = hidden_field_tag 'software_ibiza[piece_name_format][code][position]', 1
-              Code complet
-            %li.btn-light.click
-              = hidden_field_tag 'software_ibiza[piece_name_format][code_wp][position]', 1
-              Code dossier sans cabinet
-            %li.btn-light.click
-              = hidden_field_tag 'software_ibiza[piece_name_format][journal][position]', 1
-              Journal
-            %li.btn-light.click
-              = hidden_field_tag 'software_ibiza[piece_name_format][period][position]', 1
-              Période de traitement
-            %li.btn-light.click
-              = hidden_field_tag 'software_ibiza[piece_name_format][number][position]', 1
-              Numéro
-
-        .form-group
-          %label.semibold Séparer les éléments par
-          - underscore_selected = @ibiza.try(:piece_name_format_sep).try(:strip) == '_' ? "selected='selected'" : ""
-          - trait_selected = @ibiza.try(:piece_name_format_sep).try(:strip) == '-' ? "selected='selected'" : ""
-          = select_tag "software_ibiza[piece_name_format_sep]", raw("<option value='_' #{underscore_selected}>Underscore \“_\”</option><option value='-' #{trait_selected}>Tirait \"-\"</option>"), multiple: false, class: 'form-control', id: 'software_ibiza_piece_name_format_sep'
-
-      .modal-footer
-        .w-100.text-end
-          %button.btn.btn-light{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'} Annuler
-          %button.btn.btn-primary.valid Valider
-
-.modal#softwares-preseizure-modal
-  .modal-dialog
-    .modal-content
-      .modal-header
-        %h5.modal-title.bold Modifier le format de l’écriture comptable iBiZa
-        %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
-      .modal-body
-        .form-group
-          %label.semibold Sélectionnez les éléments à incorporer pour composer le nom de sortie PDF
-          .select-container.no-padding.w-100
-            %input{ placeholder: "CAB%DOC AC 201901 001 - FACT001" }
-
-        .form-group.clearfix
-          %ul#sortable-software-preseizures
-            %li.btn-light.click
-              = hidden_field_tag 'software_ibiza[description][operation_label][position]', 1
-              Libellé de l'opération bancaire
-            %li.btn-light.click
-              = hidden_field_tag 'software_ibiza[description][date][position]', 1
-              Date réelle
-            %li.btn-light.click
-              = hidden_field_tag 'software_ibiza[description][third_party][position]', 1
-              Tiers
-            %li.btn-light.click
-              = hidden_field_tag 'software_ibiza[description][amount][position]', 1
-              Montant d’origine
-            %li.btn-light.click
-              = hidden_field_tag 'software_ibiza[description][currency][position]', 1
-              Devise
-            %li.btn-light.click
-              = hidden_field_tag 'software_ibiza[description][conversion_rate][position]', 1
-              Taux de conversion
-            %li.btn-light.click
-              = hidden_field_tag 'software_ibiza[description][observation][position]', 1
-              Remarque
-            %li.btn-light.click
-              = hidden_field_tag 'software_ibiza[description][journal][position]', 1
-              Journal
-            %li.btn-light.click
-              = hidden_field_tag 'software_ibiza[description][piece_name][position]', 1
-              Nom de la pièce iDocus
-            %li.btn-light.click
-              = hidden_field_tag 'software_ibiza[description][piece_number][position]', 1
-              N° de pièce
-
-        .form-group
-          %label.semibold Séparer les éléments par
-          - underscore_selected = @ibiza.try(:description_separator).try(:strip) == '_' ? "selected='selected'" : ""
-          - trait_selected = @ibiza.try(:description_separator).try(:strip) == '-' ? "selected='selected'" : ""
-          = select_tag "software_ibiza[description_separator]", raw("<option value='_' #{underscore_selected}>Underscore \“_\”</option><option value='-' #{trait_selected}>Tirait \"-\"</option>"), multiple: false, class: 'form-control', id: 'software_ibiza_description_separator'
-
-      .modal-footer
-        .w-100.text-end
-          %button.btn.btn-light{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'} Annuler
-          %button.btn.btn-primary.valid Valider
+        .modal-footer
+          .w-100.text-end
+            %button.btn.btn-primary.valid#description_validation{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'} Valider
 
 = javascript_include_tag 'front/ibiza/assets/javascripts/main'

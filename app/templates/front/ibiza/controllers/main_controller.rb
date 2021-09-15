@@ -15,12 +15,12 @@ class Ibiza::MainController < OrganizationController
         IbizaLib::VerifyAccessTokens.new(@ibiza.id.to_s).execute
       end
 
-      flash[:success] = 'Créé avec succès.'
-
-      redirect_to organization_path(@organization, tab: 'ibiza')
+      json_flash[:success] = 'Créé avec succès.'
     else
-      render :edit
+      json_flash[:error] = @ibiza.errors.messages.join('; ')
     end
+
+    render json: { json_flash: json_flash }, status: 200
   end
 
   # GET /organizations/:organization_id/ibiza/edit
@@ -33,12 +33,12 @@ class Ibiza::MainController < OrganizationController
         IbizaLib::VerifyAccessTokens.new(@ibiza.id.to_s).execute
       end
 
-      flash[:success] = 'Modifié avec succès.'
-
-      redirect_to organization_path(@organization, tab: 'ibiza')
+      json_flash[:success] = 'Modifié avec succès.'
     else
-      render :edit
+      json_flash[:error] = @ibiza.errors.messages.join('; ')
     end
+
+    render json: { json_flash: json_flash }, status: 200
   end
 
   private
@@ -56,8 +56,8 @@ class Ibiza::MainController < OrganizationController
 
   def ibiza_params
     params.require(:software_ibiza).permit(:specific_url_options, :ibiza_id, :access_token, :access_token_2, :auto_deliver, :is_analysis_activated, :is_analysis_to_validate, :description_separator, :piece_name_format_sep, :voucher_ref_target).tap do |whitelist|
-      whitelist[:description]       = params[:software_ibiza][:description].permit!.to_hash
-      whitelist[:piece_name_format] = params[:software_ibiza][:piece_name_format].permit!.to_hash
+      whitelist[:description]       = JSON.parse(params[:software_ibiza][:description]).with_indifferent_access
+      whitelist[:piece_name_format] = JSON.parse(params[:software_ibiza][:piece_name_format]).with_indifferent_access
     end
   end
 end

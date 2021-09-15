@@ -8,33 +8,51 @@
     .form-group
       %label.semibold Sélectionnez les éléments à incorporer pour composer le nom de sortie PDF
       .select-container.no-padding.w-100
-        %input.book-code-software{ placeholder: "Ajoutez des éléments pour voir le résultat" }
+        %input.book-code-software.preview{ placeholder: "Ajoutez des éléments pour voir le résultat" }
 
     .form-group.clearfix
-      %ul#sortable
-        %li.btn-light.click
+      %ul#sortable_parent
+        %li.sortable_child.btn-light.clickable.code{ data: { name: 'code', ex: 'TS%0001' } }
           Code client iDocus
-          %span.badge.bg-success.position.semibold 1
-        %li.btn-light.click Nom de la société
-        %li.btn-light.click
+        %li.sortable_child.btn-light.clickable.company{ data: { name: 'company', ex: 'iDocus' } }
+          Nom de la société
+        %li.sortable_child.btn-light.clickable.journal{ data: { name: 'journal', ex: 'AC' } }
           Journal iDocus
-          %span.badge.bg-success.position.semibold 2
-        %li.btn-light.click
+        %li.sortable_child.btn-light.clickable.period{ data: { name: 'period', ex: Time.now.strftime("%Y%m") } }
           Période iDocus
-          %span.badge.bg-success.position.semibold 3
-        %li.btn-light.click N° de pièce iDocus
-        %li.btn-light-secondary Nom du tiers
-        %li.btn-light-secondary N° de la facture d’origine
-        %li.btn-light-secondary.clear Date de la facture
+        %li.sortable_child.btn-light.clickable.piece_number{ data: { name: 'piece_number', ex: '001' } }
+          N° de pièce iDocus
+        %li.sortable_child.btn-light-secondary.clickable.third_party{ data: { name: 'third_party', ex: 'Google' } }
+          Nom du tiers
+        %li.sortable_child.btn-light-secondary.clickable.invoice_number{ data: { name: 'invoice_number', ex: '001002' } }
+          N° de la facture d’origine
+        %li.sortable_child.btn-light-secondary.clickable.clear.invoice_date{ data: { name: 'invoice_date', ex: Time.now.strftime("%Y-%m-%d") } }
+          Date de la facture
+
+    .form-group
+      %label 
+        Les options 
+        %strong [Nom du tiers, N° de facture d'origine, Date de la facture]
+        ne sont disponibles que sur les dossiers en pré-affectation comptable.
+        %br
+        En les activant, votre fichier ne vous sera livré qu'après le traitement en pré-affectation comptable, sous réserve que la donnée soit disponible.
+
+    .form-group
+      %label.semibold Portée
+      %select.form-control#scope{ name: 'scope', multiple: false }
+        %option{ value: 'organization', selected: true } Collaborateurs et clients
+        %option{ value: 'collaborators'} Collaborateurs uniquement
 
     .form-group
       %label.semibold Séparer les éléments par
       %select.form-control#element-separator{ name: 'element-separator', multiple: false }
-        %option{ value: 'trait-8', selected: true } Underscore “_”
-        %option{ value: 'trait-6'} Tirait "-"
+        %option{ value: '_', selected: true } Underscore “_”
+        %option{ value: '-'} Tirait "-"
 
     .form-group.no-margin
       .w-100.text-end
-        %button.btn.btn-primary.valid-modification-pdf Valider les modifications
+        - idocus_param = param_encode({ url: "/organizations/#{@organization.id}/file_naming_policy", method: 'put', before_send: 'create_policy_parameter' })
+        %button.btn.btn-primary.as_idocus_ajax{ idocus: idocus_param } Valider les modifications
 
+%input#current_policy_name{ type: 'hidden', value: @file_naming_policy.to_json }
 = javascript_include_tag 'front/file_naming_policies/assets/javascripts/main'

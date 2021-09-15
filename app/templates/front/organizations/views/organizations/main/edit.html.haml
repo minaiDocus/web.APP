@@ -110,6 +110,7 @@
 
       .form-group.no-margin
         .w-100.text-end
-          = f.submit 'Valider les modifications', class: 'btn btn-primary semibold valid-modification'
+          - idocus_params = param_encode({ url: "/organizations/#{@organization.id}", method: 'put', form: 'organization_edit' })
+          %button.btn.btn-primary.semibold.as_idocus_ajax{ type: 'button', idocus: idocus_params} Valider les modifications
 
 = javascript_include_tag 'front/organizations/assets/javascripts/main'

@@ -11,11 +11,12 @@ class FileNamingPolicies::MainController < OrganizationController
   # PUT /organizations/:organization_id/file_naming_policy
   def update
     if @file_naming_policy.update(file_naming_policy_params)
-      flash[:success] = 'Modifié avec succès.'
-      redirect_to organization_path(@organization, tab: 'file_naming_policy')
+      json_flash[:success] = 'Modifié avec succès.'
     else
-      render 'edit'
+      json_flash[:error]   = "Impossible d'effectué les modifications"
     end
+
+    render json: { json_flash: json_flash }, status: 200
   end
 
   # PUT /account/organizations/:organization_id/file_naming_policy/preview

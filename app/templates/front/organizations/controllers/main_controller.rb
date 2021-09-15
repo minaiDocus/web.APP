@@ -112,18 +112,17 @@ class Organizations::MainController < OrganizationController
       end
 
       if result
-        flash[:success] = 'Modifié avec succès.'
+        json_flash[:success] = 'Modifié avec succès.'
       else
-        flash[:error] = 'Erreur de mise à jour.'
+        json_flash[:error] = 'Erreur de mise à jour.'
       end
-
-      to_redirect
     elsif @organization.update(organization_params)
-      flash[:success] = 'Modifié avec succès.'
-      to_redirect
+      json_flash[:success] = 'Modifié avec succès.'
     else
-      render 'edit'
+      json_flash[:error] = 'Erreur de mise à jour.'
     end
+
+    render json: { json_flash: json_flash }, status: 200
   end
 
   # PUT /account/organizations/:id/activate
