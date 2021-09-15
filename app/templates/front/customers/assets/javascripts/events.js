@@ -52,6 +52,14 @@ function bind_customer_events() {
     e.preventDefault();
     AppEmit('search_text');
   });
+
+  /*$('.valid_subscription_edit').unbind('click').bind('click', function(e) {
+    e.preventDefault();
+
+    const form = $('form#subscription_package_form');
+
+    AppEmit('update_subscription', { url: form.attr('action'), data: form.serialize()});
+  });*/
 }
 
 

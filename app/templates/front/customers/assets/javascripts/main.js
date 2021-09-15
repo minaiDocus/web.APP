@@ -8,6 +8,7 @@ class Customer{
     this.filter_customer_modal = $('#customers-filter.modal');
     this.account_close_confirm_modal = $('#account_close_confirm.modal');
     this.organization_id       = $('input:hidden[name="organization_id"]').val();
+    this.action_locker = false;
   }
 
 
@@ -76,8 +77,8 @@ class Customer{
 
   main(){
     this.add_customer();
-    this.get_subscription_edit_view();
-    this.load_configuraation_otpion_view();
+    this.edit_subscription_package();
+    this.load_settings_options_view();
     this.get_accounting_plan_view();
     this.filter_customer();
 
@@ -111,23 +112,26 @@ class Customer{
 
   check_input_number(){
     let self = this;
+    let special_input = $('.subscription_number_of_journals input[type="number"].special_input');
+    let current_value = special_input.val();
 
-    $('#personalize_subscription_package_form .subscription_number_of_journals .special_input').focus();
+    special_input.focus();
 
-    $('#personalize_subscription_package_form .subscription_number_of_journals .special_input').bind('click', function(e) {
+    special_input.unbind('click keyup keydown change').bind('click keyup keydown change', function(e) {
       e.stopPropagation();
-      self.update_price();
-    })
 
-    $('.subscription_number_of_journals input[type="number"].special_input').unbind('keyup keydown change').bind('keyup keydown change', function(e) {
-      e.stopPropagation();
+      current_value += $(this).val();
+
       self.update_price();
     });
 
-    $('#personalize_subscription_package_form .subscription_number_of_journals .special_input').bind('keypress', function(e) { 
+    special_input.unbind('keypress').bind('keypress', function(e) { 
       e.preventDefault();
       e.stopPropagation();
     });
+
+    special_input.val(current_value);
+    special_input.change();
   }
 
 
@@ -328,15 +332,23 @@ class Customer{
     }
   }
 
-  get_subscription_edit_view(){
+  get_subscription_edit_view(customer_id){
+    this.applicationJS.parseAjaxResponse({ 'url': '/organizations/' + this.organization_id + '/customers/' + customer_id + '/subscription/edit' })
+    .then((element)=>{
+      $('#customer-content .tab-content .tab-pane#subscription').html($(element).find('#subscriptions.edit').html());
+      this.main();
+      bind_customer_events();
+    });
+  }
+
+  edit_subscription_package(){
     let self = this;
     let customer_id = $('input:hidden[name="customer_id"]').val();
+
     $('#customer-content #subscription-tab').unbind('click').bind('click',function(e) {
-      e.preventDefault();
+      e.stopPropagation();
       
-      self.applicationJS.parseAjaxResponse({ 'url': '/organizations/' + self.organization_id + '/customers/' + customer_id + '/subscription/edit' }).then((element)=>{
-        $('#customer-content .tab-content .tab-pane#subscription').html($(element).find('#subscriptions.edit').html());
-      });
+      self.get_subscription_edit_view(customer_id);
     });
   }
 
@@ -365,7 +377,7 @@ class Customer{
   }
 
 
-  load_configuraation_otpion_view(){
+  load_settings_options_view(){
     let self = this;
     let customer_id = $('input:hidden[name="customer_id"]').val();
     $('#customer-content #compta-tab').unbind('click').bind('click',function(e) {
@@ -711,17 +723,52 @@ class Customer{
     .catch(()=>{ this.action_locker = false; });
   }
 
+
+  update_subscription(url, data){
+    if(this.action_locker) { return false; }
+
+    this.action_locker = true;
+
+    this.applicationJS.parseAjaxResponse({
+      'url': url,
+      'data': data,
+      'type': 'POST',
+      'dataType': 'html',
+    }).then((response)=>{
+      $('#customer-content .tab-content .tab-pane#subscription').html($(response).find('#subscriptions.edit').html());
+      /*url = url.replace('/subscription', '?tab=subscription');
+      window.location.replace(url);*/
+      
+      this.main();
+      bind_customer_events();
+      ApplicationJS.handle_submenu();
+      ApplicationJS.set_checkbox_radio();
+      ApplicationJS.hide_submenu();
+    }).catch((error)=>{
+      
+    });
+  }
+
 }
 
 
 jQuery(function () {
   var customer = new Customer();
 
+  let load_only_once = false;
+  if ($('#subscription.tab-pane.active').length > 0 && !load_only_once) {
+    load_only_once = true;
+    customer.get_subscription_edit_view($('input:hidden[name="customer_id"]').val());
+  }
+
   AppListenTo('validate_first_slide_form', (e)=>{ customer.validate_first_slide_form(); });
 
   AppListenTo('search_text', (e)=>{ customer.load_data(true); });
 
+  /*AppListenTo('update_subscription', (e)=>{ customer.update_subscription(e.detail.url, e.detail.data); });*/
+
   AppListenTo('close_or_reopen_confirm_view', (e)=>{ customer.close_or_reopen_confirm_view(e.detail.url, e.detail.target); });
   AppListenTo('close_or_reopen_confirm', (e)=>{ customer.close_or_reopen_confirm(e.detail.url, e.detail.data); });
+  
   customer.main();
 });

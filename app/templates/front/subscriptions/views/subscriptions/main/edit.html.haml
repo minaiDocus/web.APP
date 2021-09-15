@@ -1,18 +1,16 @@
 ﻿= stylesheet_link_tag 'front/subscriptions/assets/stylesheets/main'
 
 #subscriptions.edit
-  = form_tag organization_customer_subscription_path(@organization, @customer), method: :patch, class: 'simple_form form form-horizontal margin0', :data => {:"is_recently_created" => @customer.recently_created? } do    
-    = render file: Rails.root.join('app/templates/front/customers/views/customers/main/_subscription_options.html.haml')
+  = form_tag organization_customer_subscription_path(@organization, @customer), method: :patch, class: 'simple_form form form-horizontal margin0', :data => {:"is_recently_created" => @customer.recently_created? }, id: 'subscription_package_form' do
+    .box
+      = render file: Rails.root.join('app/templates/front/customers/views/customers/main/_subscription_options.html.haml')
+      .form-group.no-margin
+        .row
+          .col-md-4
+          .col-md-8.text-end
+            .form-check.form-check-inline.me-5                 
+              %label.form-check-label Appliquer tout de suite les options à la baisse ?            
+              = check_box_tag 'subscription[is_to_apply_now]', true, true, class: 'form-check-input'
+            = submit_tag "Valider les modifications", class: 'btn btn-primary bold valid_subscription_edit'
 
-    .form-group.no-margin
-      .row
-        .col-md-4
-        .col-md-8.text-end
-          .form-check.form-check-inline.me-5                 
-            %label.form-check-label Appliquer tout de suite les options à la baisse ?            
-            = check_box_tag 'subscription[is_to_apply_now]', true, true, class: 'form-check-input'
-          = link_to 'Annuler', organization_customer_path(@organization, @customer, tab: 'subscription-tab'), class: 'btn btn-light semibold'
-          = submit_tag "Valider les modifications", class: 'btn btn-primary bold'
-
-  = javascript_include_tag 'front/customers/assets/javascripts/main'
-/ = javascript_include_tag 'front/subscriptions/assets/javascripts/main'
+= javascript_include_tag 'front/customers/assets/javascripts/main'

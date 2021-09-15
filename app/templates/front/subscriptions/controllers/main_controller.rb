@@ -6,7 +6,6 @@ class Subscriptions::MainController < OrganizationController
   before_action :load_subscription
 
   prepend_view_path('app/templates/front/subscriptions/views')
-  prepend_view_path('app/templates/front/customers/views')
 
   # /organizations/:organization_id/organization_subscription/edit
   def edit; end
