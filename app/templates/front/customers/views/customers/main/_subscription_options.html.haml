@@ -167,6 +167,7 @@
               = radio_button_tag 'subscription[subscription_option]', 'digitize_option', (current_package.include?('digitize_option') && !current_package.include?('ido_classique') && !current_package.include?('ido_nano') && !current_package.include?('ido_micro') && !current_package.include?('ido_x') && !current_package.include?('retriever_option')), class: 'form-check-input ido_digization_only radio-button', data: { retriever_price_option: @subscription.try(:scan_price_option).to_s.presence || 'scan' }
 
       .row.ido-digitization-only-content.package-options.p-4.hide
+        .col-md-6
         .col-md-6.journal-numbers
   
   %hr
