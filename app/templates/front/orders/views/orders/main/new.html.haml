@@ -1,9 +1,6 @@
 = stylesheet_link_tag 'front/orders/assets/stylesheets/main'
 
 #order.new.derivationRight
-  / - unless @customer.configured?
-  /   .box
-  /     TODO ... STEP
   .order-content
     .w-100.text-center
       %h5
@@ -11,16 +8,11 @@
           Commande du scanner iDocus’Box
         - else
           Commande de Kit envoi courrier
+        %span.text-info.fs-origin= " : #{@customer}"
 
-        - if @customer.configured?
-          pour le client : 
-          = link_to @customer, organization_customer_path(@organization, @customer, tab: 'orders'), class: 'fs-origin'
-        - else
-          pour le dossier : 
-          %span.text-info.fs-origin= @customer
 
     .box.order-form-content
-      = simple_form_for @order, url: organization_customer_orders_path(@organization, @customer), html: { class: 'form-horizontal' } do |f|
+      = simple_form_for @order, url: organization_customer_orders_path(@organization, @customer), html: { class: 'form-horizontal', id: 'new_edit_order_customer' } do |f|
         = render partial: 'form', locals: { f: f }
 
 

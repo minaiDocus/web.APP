@@ -1,0 +1,14 @@
+- validation_param = param_encode({ url: "/organizations/#{@organization.id}/customers/#{@customer.id}/orders", method: 'post', form:'new_edit_order_customer', html: { target: '#orders.tab-pane' }, modal: { id: 'new_edit_order' }, before_send: 'change_new_edit_order_url', after_send: 'rebind_customer_event_listener' })
+.modal#new_edit_order
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.modal-title.bold Commande de Kit envoi courrier
+        %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+      .modal-body
+        Chargement ...
+        
+      .modal-footer
+        - if @customer.configured?
+          %button.btn.btn-light.cancel{ 'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button' } Annuler
+          %button.btn.btn-primary.bold.valid_new_edit_order.as_idocus_ajax{ type: :button, idocus: validation_param} } Ajouter

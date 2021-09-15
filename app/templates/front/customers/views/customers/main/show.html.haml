@@ -191,12 +191,12 @@
                 %td= Order.state_machine.states[order.state].human_name
                 %td
                   - if order.pending? && (Time.now < order.created_at + 24.hours)
-                    = link_to 'Modifier', edit_organization_customer_order_path(@organization, @customer, order), class: 'btn btn-light'
+                    = link_to 'Modifier', "#", class: 'btn btn-light new_edit_order_url', link: edit_organization_customer_order_path(@organization, @customer, order)
                     = link_to 'Annuler', organization_customer_order_path(@organization, @customer, order), method: 'delete', data: { confirm: t('actions.confirm') }, class: 'btn btn-light'
         .form-group.no-margin
           .w-100.text-end
             - if @customer.is_dematbox_authorized
-              = link_to "Commander un/des scanner(s) iDocus'box", new_organization_customer_order_path(@organization, @customer, order: { type: 'dematbox' }), class: 'btn btn-primary'
+              = link_to "Commander un/des scanner(s) iDocus'box", "#", class: 'btn btn-primary new_edit_order_url', link: new_organization_customer_order_path(@organization, @customer, order: { type: 'dematbox' })
             - if @customer.subscription.is_package?('mail_option') || @customer.subscription.is_package?('digitize_option')
               - if CustomUtils.is_manual_paper_set_order?(@organization)
                 = link_to 'Générer un kit de numérisation', select_organization_file_sending_kit_path(@organization, order_customer_id: @customer.id), class: 'btn btn-primary'
@@ -1070,4 +1070,5 @@
             = link_to t('actions.edit'), edit_organization_customer_file_storage_authorizations_path(@organization, @customer), class: 'btn btn-primary bold'
 
 = render partial: 'customer_dialog'
+= render partial: 'order_dialog'
 = javascript_include_tag 'front/customers/assets/javascripts/main'

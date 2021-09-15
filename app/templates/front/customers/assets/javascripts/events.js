@@ -60,6 +60,15 @@ function bind_customer_events() {
 
     AppEmit('update_subscription', { url: form.attr('action'), data: form.serialize()});
   });*/
+
+
+  $('.new_edit_order_url').unbind('click.order').bind('click.order', function(e) {
+    e.preventDefault();
+
+    const url = $(this).attr('link');
+
+    AppEmit('new_edit_order_view', { url: url });
+  });
 }
 
 

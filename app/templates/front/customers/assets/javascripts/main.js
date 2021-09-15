@@ -6,6 +6,7 @@ class Customer{
     this.applicationJS         = new ApplicationJS;
     this.create_customer_modal = $('#create-customer.modal');
     this.filter_customer_modal = $('#customers-filter.modal');
+    this.new_edit_order_modal = $('#new_edit_order.modal');
     this.account_close_confirm_modal = $('#account_close_confirm.modal');
     this.organization_id       = $('input:hidden[name="organization_id"]').val();
     this.action_locker = false;
@@ -13,42 +14,6 @@ class Customer{
 
 
   set_customer_event(){
-    let self = this;
-    $('.action.sub_edit_delete, .edit_group').unbind('click');
-    $('.action.sub_edit_delete, .edit_group').bind('click',function(e) {
-      e.stopPropagation();
-
-      $('.sub_menu').not(this).each(function(){
-        $(this).addClass('hide');
-      });
-
-      $(this).parent().find('.sub_menu').removeClass('hide');
-    });
-
-    $('.customer-close').unbind('click').bind('click',function(e) {
-      e.preventDefault();
-
-      self.applicationJS.parseAjaxResponse({ 'url': '/organizations/' + self.organization_id + '/customers/' + $(this).attr('data-customer-id') + '/account_close_confirm'}).then((element)=>{       
-        
-        $('#close-customer.modal').modal('show');
-        $('.modal-header .modal-title').html('Clôturer le dossier');
-        $('#close-customer.modal .modal-body').html($(element).find('.close-confirm-content').html());
-        self.set_customer_event();
-      });
-    });
-    
-    $('.customer-reopen').unbind('click').bind('click',function(e) {
-      e.preventDefault();
-
-      self.applicationJS.parseAjaxResponse({ 'url': '/organizations/' + self.organization_id + '/customers/' + $(this).attr('data-customer-id') + '/account_reopen_confirm'}).then((element)=>{       
-        
-        $('#close-customer.modal').modal('show');
-        $('.modal-header .modal-title').html('Réouvrir le dossier');
-        $('#close-customer.modal .modal-body').html($(element).find('.reopen-confirm-content').html());
-        self.set_customer_event();
-      });
-    });
-
     console.log('===============================');
 
     if ($('#import_dialog').length > 0){
@@ -739,14 +704,43 @@ class Customer{
       /*url = url.replace('/subscription', '?tab=subscription');
       window.location.replace(url);*/
       
-      this.main();
-      bind_customer_events();
-      ApplicationJS.handle_submenu();
-      ApplicationJS.set_checkbox_radio();
-      ApplicationJS.hide_submenu();
+      this.rebind_customer_all_events();
     }).catch((error)=>{
       
     });
+  }
+
+  new_edit_order_view(url){
+    if(this.action_locker) { return false; }
+
+    this.action_locker = true;
+    this.applicationJS.parseAjaxResponse({ 'url': url }).then((element)=>{
+      this.new_edit_order_modal.find('.modal-body').html('');
+      this.new_edit_order_modal.find('.modal-body').html($(element).find('#order .order-form-content').html());
+      this.new_edit_order_modal.find('.modal-title').text($(element).find('#order .order-content .text-center h5').text());
+      this.new_edit_order_modal.find('.footer-form').remove();
+
+      if (url.indexOf("new") >= 0) {
+        $('.valid_new_edit_order.as_idocus_ajax').text('Commander');
+      }
+      else if (url.indexOf("edit") >= 0) {
+        $('.valid_new_edit_order.as_idocus_ajax').text('Valider les modifications');
+      }
+
+      this.new_edit_order_modal.modal('show');
+     
+      this.rebind_customer_all_events();
+    }).catch((error)=> { 
+      console.error(error);
+    });
+  }
+
+  rebind_customer_all_events(){
+    this.main();
+    bind_customer_events();
+    ApplicationJS.handle_submenu();
+    ApplicationJS.set_checkbox_radio();
+    ApplicationJS.hide_submenu();
   }
 
 }
@@ -754,6 +748,10 @@ class Customer{
 
 jQuery(function () {
   var customer = new Customer();
+
+  $(document).on('hidden.bs.modal', function (e) {
+    customer.rebind_customer_all_events();
+  });
 
   let load_only_once = false;
   if ($('#subscription.tab-pane.active').length > 0 && !load_only_once) {
@@ -767,8 +765,13 @@ jQuery(function () {
 
   /*AppListenTo('update_subscription', (e)=>{ customer.update_subscription(e.detail.url, e.detail.data); });*/
 
+  AppListenTo('change_new_edit_order_url', (e)=>{ e.set_key('url', $('form#new_edit_order_customer').attr('action')); });
+  AppListenTo('rebind_customer_event_listener', (e)=>{ customer.rebind_customer_all_events(); });
+
   AppListenTo('close_or_reopen_confirm_view', (e)=>{ customer.close_or_reopen_confirm_view(e.detail.url, e.detail.target); });
   AppListenTo('close_or_reopen_confirm', (e)=>{ customer.close_or_reopen_confirm(e.detail.url, e.detail.data); });
+
+  AppListenTo('new_edit_order_view', (e)=>{ customer.new_edit_order_view(e.detail.url); });
   
   customer.main();
 });
