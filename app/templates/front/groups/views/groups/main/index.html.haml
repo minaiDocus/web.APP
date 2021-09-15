@@ -45,9 +45,7 @@
                         = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' supprimer', '#', text: confirm, link: organization_group_path(@organization, group), class: 'destroy_group'
           %br        
           .body.content-box
-            Le groupe direction se compose des administrateurs
-            %br
-            et d’autres personnes vraiment gentilles.
+            = group.description
 
             .row.mt-3
               .col-md-11
