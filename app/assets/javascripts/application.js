@@ -421,26 +421,11 @@ class ApplicationJS {
   }
 
   static hide_submenu() {
-    $(document).click(function(e) {
-      if ($('.sub_menu').is(':visible')) {
-        $('.sub_menu').addClass('hide');
-      }
-
-      if ($('.sub_rule_menu').is(':visible')) { $('.sub_rule_menu').addClass('hide'); }
-    });
+    // ***** TO DELETE *****
   }
 
   static handle_submenu(){
-    $('table tbody .action, .action.submenu_action')
-    .unbind('click').bind('click',function(e) {
-      e.stopPropagation();
-
-      $('.sub_menu').not(this).each(function(){
-        $(this).addClass('hide');
-      });
-
-      $(this).parent().find('.sub_menu').removeClass('hide');
-    });
+    // ***** TO DELETE *****
   }
 
   getFrom(url, success, error){

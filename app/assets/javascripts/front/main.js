@@ -115,6 +115,24 @@ function bind_globals_events(){
     ApplicationJS.generate_auto_scroll_for_div($(this), direction);
   });
   /* SCROLL */
+
+  $('table tbody .action, .action.submenu_action').unbind('click').bind('click',function(e) {
+    e.stopPropagation();
+
+    $('.sub_menu').not(this).each(function(){
+      $(this).addClass('hide');
+    });
+
+    $(this).parent().find('.sub_menu').removeClass('hide');
+  });
+
+  $(document).unbind('click.organizations').bind('click.organizations',function(e){
+    if ($('.sub_menu').is(':visible')) {
+      $('.sub_menu').addClass('hide');
+    }
+
+    if ($('.sub_rule_menu').is(':visible')) { $('.sub_rule_menu').addClass('hide'); }
+  });
 }
 
 function check_flash_messages(){
