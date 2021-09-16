@@ -31,16 +31,17 @@
   .box
     = form_tag(export_or_destroy_organization_account_number_rules_path(@organization), method: :post) do
       .row
-        .col-md-7
-          %h6.mt-3
+        .col-md-6
+          %label.mt-3
             Les règles ci-dessous s'appliquent aux opérations récupérées dans les automates.
             %br Vous pouvez exporter les règles sélectionnées ou les supprimer.
         .col-md-3.text-end
-          %button.btn.btn-light-secondary.add-document.m-1#export-rule{type: 'submit', name: 'export_or_destroy', value: 'export', disabled: 'disabled'} Exporter sur Excel
-          %button.btn.btn-light-secondary.add-document.m-1#delete-rule{type: 'submit', name: 'export_or_destroy', value: 'destroy', 'data-confirm' => 'Etes-vous sûr de vouloir supprimer les règles sélectionnées ?', disabled: 'disabled'} Supprimer
-        .col-md-2
-          %button.btn.btn-secondary.skip_accounting_plan
-            %span.me-2 Paramètres avancés
+          %button.btn.btn-light-secondary.semibold.add-document.m-1#export-rule{type: 'submit', name: 'export_or_destroy', value: 'export', disabled: 'disabled'} Exporter sur Excel
+          %button.btn.btn-light-secondary.semibold.add-document.m-1#delete-rule{type: 'submit', name: 'export_or_destroy', value: 'destroy', 'data-confirm' => 'Etes-vous sûr de vouloir supprimer les règles sélectionnées ?', disabled: 'disabled'} Supprimer
+        .col-md-3.text-end
+          %button.btn.btn-default.skip_accounting_plan.semibold
+            %span.me-2= glyphicon('cog', { size: '12', color: '#72AA42'})
+            %span Paramètres avancés
           
       .row.mt-5
         .col-md-12
@@ -87,116 +88,8 @@
                         %li.delete.red-label
                           = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', organization_account_number_rule_path(@organization, rule), class: 'delete-account-number', method: :delete, data: { confirm: t('actions.confirm') }, title: 'Supprimer'
 
-        = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { name: 'account_number_rules', total_pages: @account_number_rules.total_pages }
-  
-  .modal#add-new-rule
-    .modal-dialog
-      .modal-content
-        .modal-header
-          %h5.modal-title.bold Ajouter une règle
-          %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
-        .modal-body
-          
-        .modal-footer
-          %button.btn.btn-light.cancel{ type: :button, 'aria-label' => 'Close', 'data-bs-dismiss' => 'modal' } Annuler
-          %button.btn.btn-primary.share.validate-account-number-rule{ type: :button, disabled: true } Ajouter
+        = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { name: 'account_number_rules', total_pages: @account_number_rules.total_pages }  
 
-  .modal#import-rule
-    .modal-dialog
-      .modal-content
-        .modal-header
-          %h5.modal-title.bold Importer une règle
-          %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
-        = form_tag import_organization_account_number_rules_path(@organization), method: 'patch', multipart: true, class: 'form-horizontal' do
-          .modal-body
-            .form-group
-              %h6.p-2 Une règle d'affectation doit avoir un nom unique. Si des règles dans le fichier d'import portent le même nom qu'une règle déjà existante, ces règles seront auto incrémentées.
-              .upload-content.text-center
-                .import-process.p-5
-                  .fileinput-button
-                    .w-100
-                      %span= glyphicon('cloud-download', { size: '22', color: 'rgba(26, 26, 26, 0.7)'})
-                    .w-100 Déposez un fichiers CSV ici
-                    .w-100
-                      %span ou 
-                      %span.pointer.green-label séléctionnez-les depuis votre ordinateur
-                      %input{ id: 'input_import_rule', type: 'file', name: 'file', multiple: false }
-                .import-success.p-5.m-3.hide
-                  .w-100
-                    %span= glyphicon('check', { size: '22', color: '#72AA42'})
-                  .w-100 Importation terminée !
-              .file-import-name.row.p-1.m-1
-                .col-md-2.semibold.no-padding anytime.csv
-                .col-md-2.regular 150KB
-                .col-md-8.text-end.no-padding.pointer= glyphicon('x', { size: '10', color: 'rgba(26, 26, 26, 0.32)'})
-              .file_import_csv_example.row.p-1.text-center
-                = link_to "Télécharger le modèle d'import .csv", import_model_organization_account_number_rules_path(@organization)
-
-            .form-group
-              .label-section
-                = label_tag 'account_number_rule[affect]', t('activerecord.models.account_number_rule.attributes.affect'), class: 'semibold', for: 'affect-rule-to'
-              .control-section
-                = select_tag 'account_number_rule[affect]', options_for_select([['Organisation', 'organization'], ['Client', 'user']]), include_blank: true, id: 'affect-rule-to', class: 'form-control select form-select form-select-sm optional'
-                %i Ne pourra plus être changé par la suite
-
-            = render partial: 'affect_to_form'
-            
-          .modal-footer
-            %button.btn.btn-light.cancel{ type: :button, 'aria-label' => 'Close', 'data-bs-dismiss' => 'modal' } Annuler
-            = submit_tag 'Importer', class: 'btn btn-primary import-csv'
-
-  .modal#filter-rule
-    .modal-dialog
-      .modal-content
-        .modal-header
-          %h5.modal-title.bold Importer une règle
-          %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}        
-        = form_tag organization_account_number_rules_path, method: :get, class: 'form-filter' do
-          .modal-body
-            = hidden_field_tag :direction, sort_direction
-            = hidden_field_tag :sort, sort_column
-            = hidden_field_tag :per_page, per_page
-
-            .form-group
-              .label-section
-                = label_tag 'account_number_rule_contains[name]', t('activerecord.models.account_number_rule.attributes.name'), class: 'semibold'
-              .control-section.select-container.no-padding.w-100  
-                = text_field_tag 'account_number_rule_contains[name]', (params[:account_number_rule_contains][:name] rescue '')
-            .form-group
-              .label-section
-                = label_tag 'account_number_rule_contains[affect]', t('activerecord.models.account_number_rule.attributes.affect'), class: 'semibold', for: 'filter-affect-to'
-              .control-section  
-                = select_tag 'account_number_rule_contains[affect]', options_for_select(affect_options_for_select, (params[:account_number_rule_contains][:affect] rescue nil)), include_blank: true, id: 'filter-affect-to'
-            .form-group
-              .label-section
-                = label_tag 'account_number_rule_contains[rule_type]', t('activerecord.models.account_number_rule.attributes.rule_type'), class: 'semibold', for: 'filter-rule-type'
-              .control-section  
-                = select_tag 'account_number_rule_contains[rule_type]', options_for_select(rule_type_options_for_select, (params[:account_number_rule_contains][:rule_type] rescue nil)), include_blank: true, id: 'filter-rule-type'
-            .form-group
-              .label-section
-                = label_tag 'account_number_rule_contains[categorization]', t('activerecord.models.account_number_rule.attributes.categorization'), class: 'semibold', for: 'rule-categories'
-              .control-section  
-                = select_tag 'account_number_rule_contains[categorization]', options_for_select(@organization.account_number_rules.map(&:categorization).uniq, (params[:account_number_rule_contains][:categorization] rescue '')), include_blank: true, id: 'rule-categories'
-            .form-group
-              .label-section
-                = label_tag 'account_number_rule_contains[customer_code]', t('activerecord.models.account_number_rule.attributes.customer_code'), class: 'semibold'
-              .control-section.select-container.no-padding.w-100
-                = text_field_tag 'account_number_rule_contains[customer_code]', (params[:account_number_rule_contains][:customer_code] rescue '')
-            .form-group
-              .label-section
-                = label_tag 'account_number_rule_contains[content]', t('activerecord.models.account_number_rule.attributes.content'), class: 'semibold'
-              .control-section.select-container.no-padding.w-100
-                = text_field_tag 'account_number_rule_contains[content]', (params[:account_number_rule_contains][:content] rescue ''), class: 'semibold'
-            .form-group
-              .label-section
-                = label_tag 'account_number_rule_contains[third_party_account]', t('activerecord.models.account_number_rule.attributes.third_party_account'), class: 'semibold'
-              .control-section.select-container.no-padding.w-100
-                = text_field_tag 'account_number_rule_contains[third_party_account]', (params[:account_number_rule_contains][:third_party_account] rescue '')
-            
-          .modal-footer
-            %button.btn.btn-light.cancel{ type: :button, 'aria-label' => 'Close', 'data-bs-dismiss' => 'modal' } Annuler
-            = submit_tag t('filters.action'), name: nil, class: 'btn btn-primary filter'
-
-  = render partial: 'modal_form_skip_accounting_plan'
+  = render partial: 'dialog'
 
 = javascript_include_tag 'front/account_number_rules/assets/javascripts/main'

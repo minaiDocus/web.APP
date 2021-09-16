@@ -12,23 +12,6 @@ function bind_all_events_account_number_rules(){
       });
     }
 
-    if (target === 'filter-modal') {
-      $('select#filter-affect-to').searchableOptionList({
-        'noneText': 'Selectionner une affectations',
-        'allText': 'Tous séléctionnés'
-      });
-
-      $('select#filter-rule-type').searchableOptionList({
-        'noneText': 'Selectionner un type de règles',
-        'allText': 'Tous séléctionnés'
-      });
-
-      $('select#rule-categories').searchableOptionList({
-        'noneText': 'Selectionner une catégorisation de règles',
-        'allText': 'Tous séléctionnés'
-      });
-    }
-
     if (target === 'download-modal') {
       $('select#affect-rule-to').searchableOptionList({
         'noneText': 'Selectionner un/des affectations',
@@ -209,17 +192,8 @@ function bind_all_events_account_number_rules(){
 
 
   if ($('#skipAccountingPlan .searchable-option-list').length > 0) {
-    $('#skipAccountingPlan .searchable-option-list').searchableOptionList({
-      showSelectionBelowList: true,
-      showSelectAll: true,
-      maxHeight: '300px',
-      texts: {
-        noItemsAvailable: 'Aucune entrée trouvée',
-        selectAll: 'Sélectionner tout',
-        selectNone: 'Désélectionner tout',
-        quickDelete: '&times;',
-        searchplaceholder: 'Cliquer ici pour rechercher'
-      }
+    $('#skipAccountingPlan .searchable-option-list').searchableOptionList({      
+      maxHeight: '300px'
     });
   }
 
