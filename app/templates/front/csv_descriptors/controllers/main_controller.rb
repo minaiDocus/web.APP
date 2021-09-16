@@ -1,66 +1,52 @@
 # frozen_string_literal: true
 class CsvDescriptors::MainController < OrganizationController
   before_action :verify_rights
-  before_action :load_customer
   before_action :load_csv_descriptor
 
   prepend_view_path('app/templates/front/csv_descriptors/views')
 
   # GET /organizations/:organization_id/csv_descriptor/edit
-  def edit
-    if params[:template].present?
-      template = @organization.try(:csv_descriptor)
-
-      @csv_descriptor.comma_as_number_separator = template.comma_as_number_separator
-
-      @csv_descriptor.directive = template.directive
-    end
+  def format_setting
+    render partial: 'format_setting'
   end
 
   # PUT /organizations/:organization_id/customers/:customer_id/csv_descriptor
   def update
     if @csv_descriptor.update(csv_descriptor_params)
-      if @customer.configured?
-        flash[:success] = 'Modifié avec succès.'
+      @csv_descriptor.update(use_own_csv_descriptor_format: true) if(params[:user_id]) #activate custom format if edited, for user only
 
-        redirect_to organization_customer_path(@organization, @customer, tab: 'csv_descriptor')
-      end
+      json_flash[:success] = 'Modifié avec succès.'
     else
-      render 'edit'
+      json_flash[:error] = 'Modification impossible.'
     end
-  end
 
-  # PUT /organizations/:organization_id/customers/:customer_id/csv_descriptor/activate
-  def activate
-    @customer.try(:csv_descriptor).update_attribute(:use_own_csv_descriptor_format, true)
-
-    redirect_to edit_organization_customer_csv_descriptor_edit_path(@organization, @customer, template: true)
+    render json: { json_flash: json_flash }, status: 200
   end
 
   # PUT  /organizations/:organization_id/customers/:customer_id/csv_descriptor/deactivate
   def deactivate
-    @customer.try(:csv_descriptor).update_attribute(:use_own_csv_descriptor_format, false)
+    @csv_descriptor.update_attribute(:use_own_csv_descriptor_format, false)
 
     flash[:success] = 'Modifié avec succès.'
 
-    redirect_to organization_customer_path(@organization, @customer, tab: 'csv_descriptor')
+    redirect_to organization_customer_path(@organization, params[:user_id], tab: 'csv_descriptor')
   end
 
   private
 
   def verify_rights
     unless @user.is_admin || (@user.is_prescriber && @user.organization == @organization) || @organization.try(:csv_descriptor).try(:used?)
-      flash[:error] = t('authorization.unessessary_rights')
-      redirect_to organization_path(@organization)
+      json_flash[:error] = t('authorization.unessessary_rights')
+      render json:{ json_flash: json_flash }, status: 200
     end
   end
 
-  def load_customer
-    @customer = customers.find params[:customer_id]
-  end
-
   def load_csv_descriptor
-    @csv_descriptor = @customer.csv_descriptor!
+    if(params[:user_id])
+      @csv_descriptor = User.find(params[:user_id]).csv_descriptor
+    else
+      @csv_descriptor = @organization.csv_descriptor
+    end
   end
 
   def csv_descriptor_params

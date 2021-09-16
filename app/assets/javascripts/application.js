@@ -197,15 +197,16 @@ class ApplicationJS {
         success: function(result) {
           if (beforeUpdateContent) { beforeUpdateContent(); }
 
-          let target = params.target || null;
+          let target      = params.target || null;
+          let destination = params.target_dest || target || null;
           if(target)
           {
             if(params.mode == 'append')
-              $(target).append($(result).find(target).html());
+              $(destination).append( $(result).find(target)[0].outerHTML );
             else if(params.mode == 'prepend')
-              $(target).prepend($(result).find(target).html());
+              $(destination).prepend( $(result).find(target)[0].outerHTML );
             else
-              $(target).html($(result).find(target).html());
+              $(destination).html( $(result).find(target)[0].outerHTML );
           }
 
           if (afterUpdateContent) { afterUpdateContent(); }
@@ -266,7 +267,7 @@ class ApplicationJS {
       let url             = idocus_params['url'];
       let confirm_message = idocus_params['confirm'];
 
-      if( url )
+      if( url && url != '#' )
       {
         const launcher = ()=>{
           let type        = idocus_params['method'] || 'GET';
@@ -283,8 +284,9 @@ class ApplicationJS {
             ajax_params['dataType'] = 'json';
             if(idocus_params['html'] && idocus_params['html']['target']){
               ajax_params['dataType'] = 'html';
-              ajax_params['target']   = idocus_params['html']['target'];
-              ajax_params['mode']     = idocus_params['html']['mode'];
+              ajax_params['target']      = idocus_params['html']['target'];
+              ajax_params['target_dest'] = idocus_params['html']['target_dest'] || ajax_params['target'];
+              ajax_params['mode']        = idocus_params['html']['mode'];
             }
 
           //parsing form and datas parmeter

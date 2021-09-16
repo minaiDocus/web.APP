@@ -808,10 +808,23 @@
                     .alignright
                       - if @customer.csv_descriptor.try(:use_own_format?)
                         - if @organization.csv_descriptor.try(:directive).present?
-                          = link_to "Utiliser le format de l'organisation", deactivate_organization_customer_csv_descriptor_path(@organization, @customer), method: :patch, class: 'btn btn-secondary', data: {confirm: "Voulez-vous vraiment utiliser le format défini pour l'organisation?"}
-                        = link_to 'Modifier le format propre au dossier', edit_organization_customer_csv_descriptor_path(@organization, @customer), class: 'btn btn-primary'
+                          - idocus_params = param_encode({ url: deactivate_custom_user_csv_descriptor_path(@organization.id, @customer.id), method: 'post', confirm: "Voulez-vous vraiment utiliser le format defini pour l'organisation?" })
+                          %button.btn.btn-secondary.as_idocus_ajax{ type: 'button', idocus: idocus_params } Utiliser le format de l'organisation
+                        %button.btn.btn-primary#edit_customer_csv_descriptor{ type: 'button', data: { id: @customer.id, organization_id: @organization.id } } Modifier le format propre au dossier
                       - else
-                        = link_to 'Créer un format propre au dossier', activate_organization_customer_csv_descriptor_path(@organization, @customer), method: :patch, class: 'btn btn-primary'
+                        %button.btn.btn-primary#edit_customer_csv_descriptor{ type: 'button', data: { id: @customer.id, organization_id: @organization.id } } Créer un format propre au dossier
+          .modal#csv_descriptor_modal 
+            .modal-dialog{ style: 'min-width: 1340px'}
+              .modal-content
+                .modal-header
+                  %h5.modal-title.bold Fomat CSV personnalisable
+                  %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+                .modal-body
+                  #edit_csv_descriptor_format
+                .modal-footer
+                  .w-100.text-end
+                    - idocus_params = param_encode({ url: "/organizations/#{@organization.id}/csv_descriptor/#{@customer.id}/update", method: 'patch', form: 'edit_format_csv_descriptor', before_send: 'csv_descriptor_update_format', modal: { id: 'csv_descriptor_modal' } })
+                    %button.btn.btn-primary.valid.as_idocus_ajax{ idocus: idocus_params } Valider
 
     .tab-pane#accounting-plan{ class: ('active' if params[:tab] == 'accounting_plan'), "role" => "tabpanel", "aria-labelledby" => "accounting-plan-tab" }
       .box.no-margin

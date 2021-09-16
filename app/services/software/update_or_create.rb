@@ -2,8 +2,7 @@ class Software::UpdateOrCreate
 
   class << self
     def assign_or_new(attributes)
-      software = attributes[:owner].send(attributes[:software].to_sym).presence
-      software = Interfaces::Software::Configuration.softwares[attributes[:software].to_sym].new if software.nil?
+      software = attributes[:owner].send(attributes[:software].to_sym).presence || Interfaces::Software::Configuration.softwares[attributes[:software].to_sym].new
 
       begin
         software.assign_attributes(attributes[:columns])

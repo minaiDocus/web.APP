@@ -1,0 +1,47 @@
+- softwares_list = Interfaces::Software::Configuration::SOFTWARES
+- tab_present = @organization.send(params[:tab].to_s.to_sym).try(:used?) rescue nil
+
+.general
+  .row
+    .col-md-8
+      %h3.bold Paramètres : Logiciels comptables et CSV
+
+    %ul.nav.nav-tabs.ms-4{ "role" => "tablist" }
+      - softwares_list.each_with_index do |software, index|
+        - is_active = (tab_present && params[:tab] == software.to_s) || (!tab_present && index == 0)
+        - if @organization.send(software.to_sym).try(:used?)
+          %li.nav-item.no-margin{ "role" => "presentation", class: (is_active)? 'active' : '' }
+            %button.semibold.nav-link{ id: "#{software}-software-tab", "data-bs-toggle" => "tab", "data-bs-target" => "##{software}-software", type: :button, "role" => "tab", "aria-controls" => "#{software}-software", "aria-selected" => "true" }= Interfaces::Software::Configuration::SOFTWARES_HUMAN_NAME[software.to_sym]
+      %li.nav-item.no-margin{ "role" => "presentation" }
+        %button.semibold.nav-link#other-software-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#other-software", type: :button, "role" => "tab", "aria-controls" => "other-software", "aria-selected" => "false"} Autres logiciels      
+
+    .tab-content
+      - softwares_list.each_with_index do |software, index|
+        - is_active = (tab_present && params[:tab] == software) || (!tab_present && index == 0)
+        - if @organization.send(software.to_sym).try(:used?) && software == 'ibiza'
+          .tab-pane.box.no-margin#ibiza-software{ "role" => "tabpanel", "aria-labelledby" => "ibiza-software-tab", class: (is_active)? 'active' : '' }
+            = render file: Rails.root.join('app/templates/front/ibiza/views/ibiza/main/setting.html.haml'), locals: { ibiza: @organization.ibiza }
+        - elsif @organization.send(software.to_sym).try(:used?)
+          .tab-pane.box.no-margin{ id: "#{software}-software", "role" => "tabpanel", "aria-labelledby" => "#{software}-software-tab", class: (is_active)? 'active' : '' }
+            = render partial: 'basic_configuration', locals: { software: software.to_s }
+
+      .tab-pane.box.no-margin#other-software{ "role" => "tabpanel", "aria-labelledby" => "other-software-tab" }
+        %p Activer l'option d'export des écritures comptables en cliquant sur le logo et pièces pour :
+        - img_list = { quadratus: '/assets/logo/quadratus-logo.png', cegid: '/assets/logo/cegid-logo.png', sage: '/assets/logo/sage-logo.png', fec_agiris: '/assets/logo/agiris-logo.png', exact_online: '/assets/logo/exact-logo.png' }
+        - softwares_list.each_slice(3) do |group|
+          .row
+            - group.each do |software|
+              - if @organization.send(software.to_sym).try(:used?)
+                - url = deactivate_software_path(@organization, software)
+                - confirm = "Voulez vous vraiment désactiver ce logi"
+              - else
+                - url = activate_software_path(@organization, software)
+                - confirm = "Voulez vous vraiment activer ce logiciel?"
+              .col-md-4.box-software.pointer{ id: software, class: (@organization.send(software.to_sym).try(:used?))? 'selected' : '' }
+                %a{ href: url, style: 'width: 100%', data: { confirm: confirm, method: 'post' } }
+                  - if img_list[software.to_sym].present?
+                    %img{ class: "use-software #{software}", alt: 'logo-quadratus', src: img_list[software.to_sym] }
+                  - else
+                    %span.use-software{ class: software }= Interfaces::Software::Configuration::SOFTWARES_HUMAN_NAME[software.to_sym]
+
+= javascript_include_tag 'front/software_setting/assets/javascripts/main'

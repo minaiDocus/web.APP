@@ -5,7 +5,6 @@ Rails.application.routes.draw do
       patch :activate,              on: :member
       patch :deactivate,            on: :member
       get   :edit_options,          on: :collection
-      get   :use_software,          on: :member
       get   :edit_software_users,   on: :member
       get   :close_confirm,         on: :member
       get   :edit_payment,          on: :member

@@ -20,9 +20,6 @@ class Organizations::MainController < OrganizationController
     redirect_to account_organizations_path
   end
 
-
-  def use_software; end
-
   # GET /account/organizations/:id/edit_software_users
   def edit_software_users
     @software = params[:software]

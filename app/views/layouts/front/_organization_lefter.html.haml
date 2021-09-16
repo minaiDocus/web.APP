@@ -1,13 +1,13 @@
 = stylesheet_link_tag 'front/organization_lefter'
 
-- organization_edit         = controller_path == 'organizations/main' && action_name == 'edit'
-- file_naming_policy_edit   = controller_path == 'file_naming_policies/main' && action_name == 'edit'
-- reminder_emails_index     = controller_path == 'reminder_emails/main' && action_name == 'index'
-- addresses_index           = controller_path == 'organizations/addresses' && action_name == 'index'
-- organization_use_software = controller_path == 'organizations/main' && action_name == 'use_software'
-- organization_edit_payment = controller_path == 'organizations/main' && action_name == 'edit_payment'
+- organization_edit             = controller_path == 'organizations/main' && action_name == 'edit'
+- file_naming_policy_edit       = controller_path == 'file_naming_policies/main' && action_name == 'edit'
+- reminder_emails_index         = controller_path == 'reminder_emails/main' && action_name == 'index'
+- addresses_index               = controller_path == 'organizations/addresses' && action_name == 'index'
+- organization_software_setting = controller_path == 'software_setting/main' && action_name == 'index'
+- organization_edit_payment     = controller_path == 'organizations/main' && action_name == 'edit_payment'
 
-- toggle_submenu = organization_edit || file_naming_policy_edit || reminder_emails_index || addresses_index || organization_use_software || organization_edit_payment
+- toggle_submenu = organization_edit || file_naming_policy_edit || reminder_emails_index || addresses_index || organization_software_setting || organization_edit_payment
 
 .organizations.mb-5
   .lefter
@@ -32,9 +32,9 @@
           %li{ data: { href: "#{@organization.id}/addresses/" } }
             %a{href: organization_addresses_path(@organization) }
               %span.link_slave{class: (addresses_index ? 'active' : '')}= t('organizations.address_management')
-          %li{ data: { href: "#{@organization.id}/use_software" } }
-            %a{href: use_software_organization_path(@organization) }
-              %span.link_slave{class: (organization_use_software ? 'active' : '')}= t('organizations.software')
+          %li{ data: { href: "#{@organization.id}/softwares" } }
+            %a{href: softwares_list_path(@organization) }
+              %span.link_slave{class: (organization_software_setting ? 'active' : '')}= t('organizations.software')
           %li{ data: { href: "#{@organization.id}/edit_payment" } }
             %a{href: edit_payment_organization_path(@organization) }
               %span.link_slave{class: (organization_edit_payment ? 'active' : '')}= t('organizations.payment_method')

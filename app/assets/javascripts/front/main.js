@@ -1,6 +1,9 @@
 //= require '../application'
 
 function bind_globals_events(){
+  if( $('.searchable-option-list').css('display') != 'none' )
+    $('.searchable-option-list').searchableOptionList({ maxHeight: '300px' });
+
   /************************************************************************************/ 
   /******* IMPORTANT : USE ONLY UNBIND AND BIND FORMAT EVENTS IN THIS METHODS *********/
   /************************************************************************************/
@@ -20,7 +23,12 @@ function bind_globals_events(){
       try { authorized_events = $(this).idocus('events').split(' ') || [] }catch(r){} ;
 
       if( authorized_events.find((t)=>{ return t == current_event }) || authorized_events.length == 0 ){
-        let idocus_params = JSON.parse( atob($(this).attr('idocus')) );
+        let idocus_params = null;
+        try{
+          idocus_params = JSON.parse( atob($(this).attr('idocus')) );
+        }catch(e){
+          idocus_params = JSON.parse( $(this).attr('idocus') );
+        }
 
         const launch_ajax = ( _params={} )=>{
           let next_param = Object.assign(idocus_params, _params);
@@ -32,7 +40,8 @@ function bind_globals_events(){
                           }
 
                           $(this).removeAttr('disabled');
-                        });
+                        })
+                       .catch(e=>{ $(this).removeAttr('disabled'); })
         }
 
         if( idocus_params['before_send'] ){
@@ -42,6 +51,7 @@ function bind_globals_events(){
           launch_ajax();
         }
       }else{
+        $(this).removeAttr('disabled');
         console.log(`Unauthorized event : ${current_event}`);
       }
     });

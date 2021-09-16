@@ -6,7 +6,11 @@ module ApplicationHelper
   end
 
   def param_encode(input)
-    Base64.encode64(input.to_json)
+    if(Rails.env != 'development')
+      Base64.encode64(input.to_json)
+    else
+      input.to_json
+    end
   end
 
   def javascript_call(class_name, function, args=nil)

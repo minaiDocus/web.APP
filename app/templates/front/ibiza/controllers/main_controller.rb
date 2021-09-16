@@ -5,32 +5,23 @@ class Ibiza::MainController < OrganizationController
 
   prepend_view_path('app/templates/front/ibiza/views')
 
-  # POST /organizations/:organization_id/ibiza
-  def create
-    @ibiza = Software::Ibiza.new(ibiza_params)
-    @ibiza.owner = @organization
-
-    if @ibiza.save
-      if @ibiza.need_to_verify_access_tokens?
-        IbizaLib::VerifyAccessTokens.new(@ibiza.id.to_s).execute
-      end
-
-      json_flash[:success] = 'Créé avec succès.'
-    else
-      json_flash[:error] = @ibiza.errors.messages.join('; ')
-    end
-
-    render json: { json_flash: json_flash }, status: 200
-  end
-
   # GET /organizations/:organization_id/ibiza/edit
-  def edit; end
+  def setting
+    @ibiza = @organization.ibiza
+  end
 
   # PUT /organizations/:organization_id/ibiza
   def update
     if @ibiza.update(ibiza_params)
       if @ibiza.need_to_verify_access_tokens?
         IbizaLib::VerifyAccessTokens.new(@ibiza.id.to_s).execute
+      end
+
+      software_users = params[:software_account_list] || ''
+      @organization.customers.active.each do |customer|
+        softwares_params = { columns: { is_used: (software_users.include?(customer.to_s) && !customer.uses?(:exact_online)) }, software: 'ibiza' }
+
+        customer.create_or_update_software(softwares_params)
       end
 
       json_flash[:success] = 'Modifié avec succès.'

@@ -12,34 +12,6 @@ class Customer{
     this.action_locker = false;
   }
 
-
-  set_customer_event(){
-    console.log('===============================');
-
-    if ($('#import_dialog').length > 0){
-      console.log('OUVERTURE');
-      $('#import_dialog').modal('show');
-    }
-
-    if ($('.import_dialog').length > 0){
-      console.log('OUVERTURE 2');
-      $('.import_dialog').modal('show');
-    }
-
-    console.log('===============================');
-
-    // $('#import_button').click (e) ->
-    //   e.preventDefault()
-    //   $(this).attr('disabled', true)
-    //   if ($('select.piece').val() == '')
-    //     alert('Veuillez sélectionner la colonne pour la référence des pièces svp !')
-    //     $(this).removeAttr('disabled')
-    //     return false
-    //   else
-    //     $('#import_dialog #importFecAfterConfiguration').submit()
-
-  }
-
   main(){
     this.add_customer();
     this.edit_subscription_package();
@@ -743,6 +715,17 @@ class Customer{
     ApplicationJS.hide_submenu();
   }
 
+  load_csv_descriptor(user_id, organization_id){
+    let ajax_params = {
+                        url: `/organizations/${organization_id}/csv_descriptor/${user_id}/format_setting`,
+                        type: 'GET',
+                        dataType: 'HTML',
+                        target: '#csv_descriptors.edit',
+                        target_dest: '#edit_csv_descriptor_format'
+                      };
+
+    this.applicationJS.parseAjaxResponse(ajax_params).then((e)=>{ $('.modal#csv_descriptor_modal').modal('show'); });
+  }
 }
 
 
@@ -773,5 +756,7 @@ jQuery(function () {
 
   AppListenTo('new_edit_order_view', (e)=>{ customer.new_edit_order_view(e.detail.url); });
   
+  AppListenTo('csv_descriptor_edit_customer_format', (e)=>{ customer.load_csv_descriptor(e.detail.id, e.detail.organization_id) });
+ 
   customer.main();
 });

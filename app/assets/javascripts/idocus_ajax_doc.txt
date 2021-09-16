@@ -33,9 +33,10 @@ Attribut:
     datas         => Datas à envoyé (avec form sérialisé si existe) au format JSON STRING [ datas ecrase form s'il existe une même clé ]
 
     html => la data-type de la requete devient 'HTML' (si par défaut JSON)
-      target => Découpage de la cible vers la dom 
+      target => Découpage de la cible (source) vers la dom (destination)
                 (ex: target: '.container .child1')
-                Le parseur recherche l'element jquery '.container .child1' du résultat et remplace le contenu principale de '.container .child1'
+                Le parseur recherche l'element jquery '.container .child1' du résultat (source) et remplace le contenu principale (destination) de '.container .child1'
+      target_dest => Emplacement (destination) du découpage "target" si défini au lieu de "target (destination)", [target est obligatoire si target_dest est défini]
       mode   => Mode de remplissage ['append', 'prepend', 'replace'] (defaut: 'replace')
 
     redirect_to => Redirection vers l'url en paramètre après lancement (toujours en mode ajax) [ Ajax recursive ]

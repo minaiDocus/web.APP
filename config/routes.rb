@@ -82,6 +82,7 @@ Rails.application.routes.draw do
   front_draw('paper_processes')
   front_draw('suspended')
   front_draw('profiles')
+  front_draw('software_setting')
 
   ### --------------------------- admin ---------------------------- ###
 
