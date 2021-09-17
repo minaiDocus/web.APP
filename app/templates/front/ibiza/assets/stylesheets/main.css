@@ -14,10 +14,7 @@
 }
 
 .form-group .ui-sortable li.btn-light:hover {
-  border: 1px solid #72AA42;
-  border-radius: 8px;
-  color: #72AA42;
-  font-weight: bold;
+  border: 1px solid #CBD9C0;
 }
 
 .form-group .ui-sortable li.btn-light.active{
@@ -25,45 +22,7 @@
   border: 1px solid #72AA42;
   border-radius: 8px;
   color: #72AA42;
-}
-
-.form-group .ui-sortable li.btn-light span{
-  padding: 3%;
-  float: right;
-}
-
-.sub_menu{
-  min-width: 10% !important;
-}
-
-img {
-  max-width:100%;
-  height:auto;
-  margin: auto;
-}
-
-.box-software{
-  display: flex;  
-  background: #FFFFFF;
-  border: 1px solid rgba(26, 26, 26, 0.1);
-  box-sizing: border-box;
-  border-radius: 8px;
-  width: 25%;
-  margin: 3%;
-  height: 10em;
-}
-
-.box-software.selected{
-  border: 1px solid #72AA42;
-}
-
-#csv span{
-  font-size: 5rem;
-  margin: auto;
-}
-
-label{  
-  font-size: 13px;
+  font-family: Raleway-semiBold
 }
 
 .form-group{

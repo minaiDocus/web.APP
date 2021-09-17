@@ -10,8 +10,8 @@
       - softwares_list.each_with_index do |software, index|
         - is_active = (tab_present && params[:tab] == software.to_s) || (!tab_present && index == 0)
         - if @organization.send(software.to_sym).try(:used?)
-          %li.nav-item.no-margin{ "role" => "presentation", class: (is_active)? 'active' : '' }
-            %button.semibold.nav-link{ id: "#{software}-software-tab", "data-bs-toggle" => "tab", "data-bs-target" => "##{software}-software", type: :button, "role" => "tab", "aria-controls" => "#{software}-software", "aria-selected" => "true" }= Interfaces::Software::Configuration::SOFTWARES_HUMAN_NAME[software.to_sym]
+          %li.nav-item.no-margin{ "role" => "presentation" }
+            %button.semibold.nav-link{ id: "#{software}-software-tab", "data-bs-toggle" => "tab", "data-bs-target" => "##{software}-software", type: :button, "role" => "tab", "aria-controls" => "#{software}-software", "aria-selected" => "true", class: (is_active)? 'active' : '' }= Interfaces::Software::Configuration::SOFTWARES_HUMAN_NAME[software.to_sym]
       %li.nav-item.no-margin{ "role" => "presentation" }
         %button.semibold.nav-link#other-software-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#other-software", type: :button, "role" => "tab", "aria-controls" => "other-software", "aria-selected" => "false"} Autres logiciels      
 
@@ -19,7 +19,7 @@
       - softwares_list.each_with_index do |software, index|
         - is_active = (tab_present && params[:tab] == software) || (!tab_present && index == 0)
         - if @organization.send(software.to_sym).try(:used?) && software == 'ibiza'
-          .tab-pane.box.no-margin#ibiza-software{ "role" => "tabpanel", "aria-labelledby" => "ibiza-software-tab", class: (is_active)? 'active' : '' }
+          .tab-pane.no-margin#ibiza-software{ "role" => "tabpanel", "aria-labelledby" => "ibiza-software-tab", class: (is_active)? 'active' : '' }
             = render file: Rails.root.join('app/templates/front/ibiza/views/ibiza/main/setting.html.haml'), locals: { ibiza: @organization.ibiza }
         - elsif @organization.send(software.to_sym).try(:used?)
           .tab-pane.box.no-margin{ id: "#{software}-software", "role" => "tabpanel", "aria-labelledby" => "#{software}-software-tab", class: (is_active)? 'active' : '' }
