@@ -71,7 +71,7 @@ Rails.application.routes.draw do
   front_draw('periods')
   front_draw('boxes')
   front_draw('external_file_storages')
-  front_draw('ftps')
+  front_draw('ftps_setting')
   front_draw('payments')
   front_draw('compositions')
   front_draw('dematboxes')

@@ -1,29 +1,29 @@
 # frozen_string_literal: true
-class Ftps::MainController < FrontController
+class FtpsSetting::UserController < FrontController
   before_action :verify_authorization
-  before_action :load_ftp
+  before_action :load_sftp
 
   prepend_view_path('app/templates/front/ftps/views')
 
   def edit; end
 
   def update
-    @ftp.assign_attributes(ftp_params)
-    if @ftp.valid? && Ftp::VerifySettings.new(@ftp, current_user.code).execute
-      @ftp.is_configured = true
-      @ftp.save
+    @sftp.assign_attributes(ftp_params)
+    if @sftp.valid? && Ftp::VerifySettings.new(@sftp, current_user.code).execute
+      @sftp.is_configured = true
+      @sftp.save
       flash[:success] = 'Votre compte FTP a été configuré avec succès.'
-      redirect_to account_profile_path(anchor: 'ftp', panel: 'efs_management')
+      redirect_to account_profile_path(anchor: 'sftp', panel: 'efs_management')
     else
-      flash[:error] = @ftp.reload.error_message
+      flash[:error] = @sftp.reload.error_message
       render :edit
     end
   end
 
   def destroy
-    @ftp.reset_info
+    @sftp.reset_info
     flash[:success] = 'Vos paramètres FTP ont été réinitialisé.'
-    redirect_to account_profile_path(anchor: 'ftp', panel: 'efs_management')
+    redirect_to account_profile_path(anchor: 'sftp', panel: 'efs_management')
   end
 
   private
@@ -35,11 +35,11 @@ class Ftps::MainController < FrontController
     end
   end
 
-  def load_ftp
-    @ftp = @user.find_or_create_external_file_storage.ftp
+  def load_sftp
+    @sftp = @user.find_or_create_external_file_storage.sftp
   end
 
   def ftp_params
-    params.require(:ftp).permit(:host, :port, :is_passive, :login, :password)
+    params.require(:sftp).permit(:host, :port, :is_passive, :login, :password)
   end
 end

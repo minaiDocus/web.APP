@@ -269,104 +269,97 @@ class ApplicationJS {
 
       if( url && url != '#' )
       {
-        const launcher = ()=>{
-          let type        = idocus_params['method'] || 'GET';
-          let ajax_params = {
-                              url: url,
-                              type: type,
-                            }
-          //parsing content-type
-            if(idocus_params['content-type']){
-              ajax_params['contentType'] = idocus_params['content_type']
+        let type        = idocus_params['method'] || 'GET';
+        let ajax_params = {
+                            url: url,
+                            type: type,
+                          }
+        //parsing content-type
+          if(idocus_params['content-type']){
+            ajax_params['contentType'] = idocus_params['content_type']
+          }
+
+        //parsing HTML parameter
+          ajax_params['dataType'] = 'json';
+          if(idocus_params['html'] && idocus_params['html']['target']){
+            ajax_params['dataType'] = 'html';
+            ajax_params['target']      = idocus_params['html']['target'];
+            ajax_params['target_dest'] = idocus_params['html']['target_dest'] || ajax_params['target'];
+            ajax_params['mode']        = idocus_params['html']['mode'];
+          }
+
+        //parsing form and datas parmeter
+          let form      = $(`form#${idocus_params['form']}`);
+          let form_data = {}
+
+          if(form){
+            if(ajax_params['dataType'] == 'json')
+              form_data = SerializeToJson(form); //serialize as json
+            else
+              form_data = form.serialize(); //serialize as url params
+
+            if(idocus_params['force_form_url'] == true){
+              ajax_params['url'] = form.attr('action');
+
+              if(form.attr('method'))
+                ajax_params['type'] = form.attr('method');
+            }
+          }
+          if(idocus_params['datas'] && ajax_params['dataType'] == 'json'){
+            let new_datas = {}
+
+            try{
+              new_datas = JSON.parse(idocus_params['datas']) || {};
+            }catch(e){
+              new_datas = idocus_params['datas'] || {};
             }
 
-          //parsing HTML parameter
-            ajax_params['dataType'] = 'json';
-            if(idocus_params['html'] && idocus_params['html']['target']){
-              ajax_params['dataType'] = 'html';
-              ajax_params['target']      = idocus_params['html']['target'];
-              ajax_params['target_dest'] = idocus_params['html']['target_dest'] || ajax_params['target'];
-              ajax_params['mode']        = idocus_params['html']['mode'];
-            }
+            form_data = Object.assign( form_data, new_datas );
+          }
 
-          //parsing form and datas parmeter
-            let form      = $(`form#${idocus_params['form']}`);
-            let form_data = {}
+          if(form_data){
+            ajax_params['data'] = form_data;
+          }
 
-            if(form){
-              if(ajax_params['dataType'] == 'json')
-                form_data = SerializeToJson(form); //serialize as json
-              else
-                form_data = form.serialize(); //serialize as url params
+        let appJS = new ApplicationJS();
+        appJS.parseAjaxResponse(ajax_params)
+              .then(e => {
+                //Handling modal param
+                if( idocus_params['modal'] && idocus_params['modal']['id'] )
+                {
+                  let modal            = $(`.modal#${idocus_params['modal']['id']}`);
+                  let close_on_success = (idocus_params['modal']['close_after_success'] === false)? false : true
+                  let close_on_error   = idocus_params['modal']['close_after_error'] || false
 
-              if(idocus_params['force_form_url'] == true){
-                ajax_params['url'] = form.attr('action');
-
-                if(form.attr('method'))
-                  ajax_params['type'] = form.attr('method');
-              }
-            }
-            if(idocus_params['datas'] && ajax_params['dataType'] == 'json'){
-              let new_datas = {}
-
-              try{
-                new_datas = JSON.parse(idocus_params['datas']) || {};
-              }catch(e){
-                new_datas = idocus_params['datas'] || {};
-              }
-
-              form_data = Object.assign( form_data, new_datas );
-            }
-
-            if(form_data){
-              ajax_params['data'] = form_data;
-            }
-
-          let appJS = new ApplicationJS();
-          appJS.parseAjaxResponse(ajax_params)
-                .then(e => {
-                  //Handling modal param
-                  if( idocus_params['modal'] && idocus_params['modal']['id'] )
-                  {
-                    let modal            = $(`.modal#${idocus_params['modal']['id']}`);
-                    let close_on_success = (idocus_params['modal']['close_after_success'] === false)? false : true
-                    let close_on_error   = idocus_params['modal']['close_after_error'] || false
-
-                    if(e.json_flash){
-                      if( close_on_success && e.json_flash.success ){ modal.modal('hide'); }
-                      if( close_on_error && e.json_flash.error ){ modal.modal('hide'); }
-                    }else{
-                      if( close_on_success ){ modal.modal('hide'); }
-                      if( close_on_error ){ modal.modal('hide'); }
-                    }
-                  }
-
-                  //handle redirect_to param
-                  if( idocus_params['redirect_to'] && idocus_params['redirect_to']['url'] ){
-                    ApplicationJS.launch_async( idocus_params['redirect_to'] ).then((e)=>{ success(e); }).catch(err=>{ error(err); });
-                  }
-                  else
-                  {
-                    success(e);
-                  }
-                })
-                .catch(err => {
-                  //Handling modal param
-                  if( idocus_params['modal'] && idocus_params['modal']['id'] )
-                  {
-                    let modal          = $(`.modal#${idocus_params['modal']['id']}`);
-                    let close_on_error = idocus_params['modal']['close_after_error'] || false
+                  if(e.json_flash){
+                    if( close_on_success && e.json_flash.success ){ modal.modal('hide'); }
+                    if( close_on_error && e.json_flash.error ){ modal.modal('hide'); }
+                  }else{
+                    if( close_on_success ){ modal.modal('hide'); }
                     if( close_on_error ){ modal.modal('hide'); }
                   }
+                }
 
-                  success(err)
-                });       
-        }
+                //handle redirect_to param
+                if( idocus_params['redirect_to'] && idocus_params['redirect_to']['url'] ){
+                  ApplicationJS.launch_async( idocus_params['redirect_to'] ).then((e)=>{ success(e); }).catch(err=>{ error(err); });
+                }
+                else
+                {
+                  success(e);
+                }
+              })
+              .catch(err => {
+                //Handling modal param
+                if( idocus_params['modal'] && idocus_params['modal']['id'] )
+                {
+                  let modal          = $(`.modal#${idocus_params['modal']['id']}`);
+                  let close_on_error = idocus_params['modal']['close_after_error'] || false
+                  if( close_on_error ){ modal.modal('hide'); }
+                }
 
-        if( confirm_message && confirm(confirm_message) )
-          launcher();
-        else
-          launcher();
+                success(err)
+              });
       }
       else
       {

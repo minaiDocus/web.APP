@@ -8,24 +8,22 @@ class MyCompanyFiles::SettingsController < OrganizationController
 
   prepend_view_path('app/templates/front/my_company_files/views')
 
-
-  def edit; end
-
   def update
     if @mcf_settings.update(mcf_settings_params)
-      flash[:success] = 'Modifié avec succès.'
-      redirect_to organization_path(@organization, tab: 'mcf')
+      json_flash[:success] = 'Modifié avec succès.'
     else
-      flash[:error] = 'Impossible de modifier vos paramètres.'
-      render :edit
+      json_flash[:error] = 'Impossible de modifier vos paramètres.'
     end
+
+    render json: { json_flash: json_flash }, status: 200
   end
 
   def destroy
     @mcf_settings.reset
 
     flash[:success] = 'Vos paramètres pour My Company Files ont été supprimé.'
-    redirect_to organization_path(@organization, tab: 'mcf')
+    
+    render json: { json_flash: json_flash }, status: 200
   end
 
   def authorize
@@ -41,23 +39,20 @@ class MyCompanyFiles::SettingsController < OrganizationController
   end
 
   def callback
-    if params[:state].present? && params[:state] == state
-      if params[:access_token].present? && params[:refresh_token].present? && params[:expiration_date].present?
-        @mcf_settings.update(
-          access_token: params[:access_token],
-          refresh_token: params[:refresh_token],
-          access_token_expires_at: params[:expiration_date].to_i / 1000
-        )
-        flash[:success] = 'Votre compte My Company Files a bien été lié à iDocus.'
-      else
-        flash[:error] = 'La requête est invalide.'
-      end
+    if params[:access_token].present? && params[:refresh_token].present? && params[:expiration_date].present?
+      @mcf_settings.update(
+        access_token: params[:access_token],
+        refresh_token: params[:refresh_token],
+        access_token_expires_at: params[:expiration_date].to_i / 1000
+      )
+      flash[:success] = 'Votre compte My Company Files a bien été lié à iDocus.'
     elsif params[:error]&.match(/access_denied/)
       flash[:error] = 'Vous avez refusé de lier votre compte My Company Files à iDocus.'
     else
       flash[:error] = 'La requête est invalide ou la session a expiré.'
     end
-    redirect_to organization_path(@organization, tab: 'mcf')
+
+    redirect_to organization_efs_path(@organization, tab: 'mcf')
   end
 
   private

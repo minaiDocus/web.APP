@@ -18,7 +18,7 @@ class Organizations::SubscriptionsController < OrganizationController
 
   # PUT /account/organizations/:organization_id/organization_subscription
   def update
-    if params[:subscription] && @subscription.update(subscription_params)
+    if @subscription.update( params[:subscription] ? subscription_params : { option_ids: [] } )
       Billing::UpdatePeriod.new(@subscription.current_period).execute
       json_flash[:success] = 'Modifié avec succès.'
     else

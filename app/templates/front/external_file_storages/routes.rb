@@ -22,5 +22,7 @@ Rails.application.routes.draw do
       post :use,                  on: :member
       post :update_path_settings, on: :member
     end
+
+    get 'oganizations/:organization_id/external_storages', to: "efs_organization#index", as: 'organization_efs'
   end
 end

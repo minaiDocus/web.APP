@@ -30,25 +30,37 @@ function bind_globals_events(){
           idocus_params = JSON.parse( $(this).attr('idocus') );
         }
 
-        const launch_ajax = ( _params={} )=>{
-          let next_param = Object.assign(idocus_params, _params);
+        let confirm_message = idocus_params['confirm'];
+        let can_continue    = true;
+        if( confirm_message && !confirm(confirm_message) )
+          can_continue = false;
 
-          ApplicationJS.launch_async( next_param )
-                       .then((e)=>{
-                          if( next_param['after_send'] ){
-                            AppEmit( next_param['after_send'], { response: e, element: $(this) } );
-                          }
+        if( can_continue )
+        {
+          const launch_ajax = ( _params={} )=>{
+            let next_param = Object.assign(idocus_params, _params);
 
-                          $(this).removeAttr('disabled');
-                        })
-                       .catch(e=>{ $(this).removeAttr('disabled'); })
+            ApplicationJS.launch_async( next_param )
+                         .then((e)=>{
+                            if( next_param['after_send'] ){
+                              AppEmit( next_param['after_send'], { response: e, element: $(this) } );
+                            }
+
+                            $(this).removeAttr('disabled');
+                          })
+                         .catch(e=>{ $(this).removeAttr('disabled'); })
+          }
+
+          if( idocus_params['before_send'] ){
+            AppEmit( idocus_params['before_send'], { element: $(this), idocus_params: idocus_params } )
+                   .then((i)=>{ launch_ajax(i) });
+          }else{
+            launch_ajax();
+          }
         }
-
-        if( idocus_params['before_send'] ){
-          AppEmit( idocus_params['before_send'], { element: $(this), idocus_params: idocus_params } )
-                 .then((i)=>{ launch_ajax(i) });
-        }else{
-          launch_ajax();
+        else
+        {
+          $(this).removeAttr('disabled');
         }
       }else{
         $(this).removeAttr('disabled');

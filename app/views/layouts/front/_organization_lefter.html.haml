@@ -5,10 +5,11 @@
 - reminder_emails_index         = controller_path == 'reminder_emails/main' && action_name == 'index'
 - addresses_index               = controller_path == 'organizations/addresses' && action_name == 'index'
 - organization_software_setting = controller_path == 'software_setting/main' && action_name == 'index'
+- organization_efs              = controller_path == 'external_file_storages/efs_organization' && action_name == 'index'
 - organization_edit_payment     = controller_path == 'organizations/main' && action_name == 'edit_payment'
 - organization_subscription     = controller_path == 'organizations/subscriptions' && action_name == 'show'
 
-- toggle_submenu = organization_edit || file_naming_policy_edit || reminder_emails_index || addresses_index || organization_software_setting || organization_edit_payment || organization_subscription
+- toggle_submenu = organization_edit || file_naming_policy_edit || reminder_emails_index || addresses_index || organization_software_setting || organization_efs || organization_edit_payment || organization_subscription
 
 .organizations.mb-5
   .lefter
@@ -35,6 +36,9 @@
           %li{ data: { href: "#{@organization.id}/addresses/" } }
             %a{href: organization_addresses_path(@organization) }
               %span.link_slave{class: (addresses_index ? 'active' : '')}= t('organizations.address_management')
+          %li{ data: { href: "#{@organization.id}/efs" } }
+            %a{href: organization_efs_path(@organization) }
+              %span.link_slave{class: (organization_efs ? 'active' : '')}= t('organizations.efs')
           %li{ data: { href: "#{@organization.id}/softwares" } }
             %a{href: softwares_list_path(@organization) }
               %span.link_slave{class: (organization_software_setting ? 'active' : '')}= t('organizations.software')

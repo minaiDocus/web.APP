@@ -25,14 +25,6 @@ Rails.application.routes.draw do
         
       end
 
-      resource :ftps, only: %w(edit update destroy), controller: 'ftps' do
-        post :fetch_now, on: :collection
-      end
-
-      resource :sftps, only: %w(edit update destroy), controller: 'sftps' do
-        post :fetch_now, on: :collection
-      end
-
       resource :csv_descriptor, only: %w(edit update), controller: 'csv_descriptors'
 
       resources :customers, only: [] do

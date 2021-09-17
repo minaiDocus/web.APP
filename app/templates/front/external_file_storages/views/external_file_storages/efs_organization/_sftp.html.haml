@@ -1,9 +1,11 @@
-= stylesheet_link_tag 'front/organizations/assets/stylesheets/main'
-
-.card
-  .card-header
-    %h3 Édition de la configuration SFTP
-  = simple_form_for @sftp, url: organization_sftps_path(@organization), html: { class: 'form form-horizontal margin0' } do |f|
+#sftp.derivationLeft
+  - if @sftp.try(:error_message).present?
+    %h4 Dérnière message d'erreur rencontré
+    %span.badge.badge-danger.fs-origin.text-white
+      le #{@sftp.error_fetched_at.strftime("%d-%m-%Y %H:%M:%S")} :
+    %span
+      = @sftp.error_message
+  = simple_form_for @sftp, url: organization_update_ftps_path(@organization, 'sftp'), html: { id: 'edition_sftp_organization', class: 'form form-horizontal margin0' } do |f|
     .card-body
       .row
         .col-md-5
@@ -25,9 +27,13 @@
               = label_tag :prev_output_path, 'Prévisualisation du chemin de livraison : ', class: 'control-label'
             .control-section
               = text_field_tag :prev_output_path, '', disabled: true, class: 'input-xlarge'
-    .card-footer
-      .form-actions.margin0bottom
-        = f.submit t('actions.submit'), class: 'btn btn-primary'
-        = link_to t('actions.cancel').capitalize, organization_path(@organization, tab: 'sftp'), class: 'btn btn-light'
 
-= javascript_include_tag 'front/organizations/assets/javascripts/main'
+  - if @user.leader?
+    - idocus_params = param_encode({ url: '#url', method: 'POST', form: 'edition_sftp_organization', force_form_url: true })
+    %btn.btn.btn-primary.as_idocus_ajax{ type: 'button', idocus: idocus_params } Valider les modifications
+    - if @sftp.try(:configured?)
+      - idocus_params = param_encode({ url: organization_ftps_fetch_now_path(@organization, 'sftp'), method: 'POST', confirm: 'Êtes-vous sûr de vouloir récupérer maintenant ?' })
+      %button.btn.btn-primary.as_idocus_ajax{ type: 'button', idocus: idocus_params } Récupérer maintenant
+
+      - idocus_params = param_encode({ url: organization_destroy_ftps_path(@organization, 'sftp'), method: 'DELETE', confirm: 'Êtes-vous sûr de vouloir supprimer vos paramètres SFTP ?', redirect_to: { url: organization_efs_path(@organization, tab: 'sftp'), method: 'GET', html: { target: '.general' } } })
+      %button.btn.btn-primary.as_idocus_ajax{ type: 'button', idocus: idocus_params } Réinitialiser mes paramètres
