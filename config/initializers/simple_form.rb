@@ -53,7 +53,7 @@ SimpleForm.setup do |config|
       ba.use :error, wrap_with: { tag: 'i', class: 'help-inline' }
     end
     b.wrapper tag: 'div', class: 'control-section' do |ba|
-      ba.use :input, class: ''
+      ba.use :input, class: 'form-control'
       ba.use :hint,  wrap_with: { tag: 'i', class: 'help-block' }
     end
   end
@@ -83,7 +83,7 @@ SimpleForm.setup do |config|
   config.wrappers :inline_checkbox, tag: 'div', class: 'form-group clearfix', error_class: 'error' do |b|
     b.use :html5
     b.use :placeholder
-    b.use :label_input, wrap_with: { class: 'form-check form-check-inline ' }
+    b.use :label_input, wrap_with: { class: 'checkbox inline' }
     b.use :error, wrap_with: { tag: 'span', class: 'help-inline' }
     b.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
   end

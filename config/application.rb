@@ -12,14 +12,6 @@ module Idocus
   class Application < Rails::Application
     # load all files in lib directory
 
-    Dir[Rails.root.join("app/templates/front/*/config.rb")].each do |f|
-     require f
-    end
-
-    Dir[Rails.root.join("app/templates/back/*/config.rb")].each do |f|
-     require f
-    end
-
     config.load_defaults 5.2
 
     # development files
@@ -29,7 +21,7 @@ module Idocus
     Dir.glob("#{Rails.root}/lib/*.{rb}").each { |file| require file }
     Dir.glob("#{Rails.root}/lib/patches/*.{rb}").each { |file| require file }
     Dir.glob("#{Rails.root}/lib/knowings_api/*.{rb}").each { |file| require file }
-    Dir.glob("#{Rails.root}/lib/google_drive/*.{rb}").each { |file| require file }
+    Dir.glob("#{Rails.root}/lib/gdr/*.{rb}").each { |file| require file }
     Dir.glob("#{Rails.root}/lib/supplier_recognition/*.{rb}").each { |file| require file }
     Dir.glob("#{Rails.root}/lib/jefacture/*.{rb}").each { |file| require file }
     Dir.glob("#{Rails.root}/lib/ibiza_lib/api/*.{rb}").each { |file| require file }
@@ -40,6 +32,14 @@ module Idocus
     Dir.glob("#{Rails.root}/lib/exact_online_lib/*.{rb}").each { |file| require file }
     Dir.glob("#{Rails.root}/lib/mcf_lib/api/*.{rb}").each { |file| require file }
     Dir.glob("#{Rails.root}/lib/mcf_lib/*.{rb}").each { |file| require file }
+
+    Dir[Rails.root.join("app/templates/front/*/config.rb")].each do |f|
+     require f
+    end
+
+    Dir[Rails.root.join("app/templates/back/*/config.rb")].each do |f|
+     require f
+    end
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers

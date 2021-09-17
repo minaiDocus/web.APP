@@ -1,25 +1,6 @@
 class CustomUtils
 
   class << self
-    def parse_date_range_of(date='')
-      parsed_date = date.gsub(' ', '').split('-')
-
-      begin
-        date1 = parsed_date[0].split('/')[2].to_s + '-' + parsed_date[0].split('/')[1].to_s + '-' + parsed_date[0].split('/')[0].to_s
-        date2 = parsed_date[1].split('/')[2].to_s + '-' + parsed_date[1].split('/')[1].to_s + '-' + parsed_date[1].split('/')[0].to_s
-      rescue
-        date1 = ''
-        date2 = ''
-      end
-
-      if !date1.match(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/) && !date2.match(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/)
-        date1 = 10.years.ago.strftime('%Y-%m-%d')
-        date2 = 10.years.ago.strftime('%Y-%m-%d')
-      end
-
-      ["#{date1.to_s} 00:00:00", "#{date2.to_s} 23:59:59"]
-    end
-
     def replace_code_of(code) #replace old code 'AC0162' with 'MVN%GRHCONSULT'
       if code.match(/^AC0162/)
         code.gsub('AC0162', 'MVN%GRHCONSULT')
@@ -115,36 +96,6 @@ class CustomUtils
       ### EXAMPLE: ["IDOC", 'ORGCODE1', "ORGCODE2"].include?(organization.code)
 
       ["IDOC", "MCN", "CEN"].include?(organization.code)
-    end
-
-    def arrStr_to_array(data)
-      return [] if data.blank?
-
-      is_array = true
-      begin
-        data.size
-      rescue
-        is_array = false
-      end
-
-      if is_array
-        data
-      else
-        exist   = true
-        i       = 0
-        result  = []
-        while exist
-          dt = data[i.to_s]
-          i += 1
-          if dt.present?
-            result << dt
-          else
-            exist = false
-          end
-        end
-
-        result
-      end
     end
   end
 end
