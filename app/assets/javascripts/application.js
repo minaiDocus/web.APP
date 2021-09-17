@@ -298,6 +298,13 @@ class ApplicationJS {
                 form_data = SerializeToJson(form); //serialize as json
               else
                 form_data = form.serialize(); //serialize as url params
+
+              if(idocus_params['force_form_url'] == true){
+                ajax_params['url'] = form.attr('action');
+
+                if(form.attr('method'))
+                  ajax_params['type'] = form.attr('method');
+              }
             }
             if(idocus_params['datas'] && ajax_params['dataType'] == 'json'){
               let new_datas = {}
@@ -335,10 +342,13 @@ class ApplicationJS {
                   }
 
                   //handle redirect_to param
-                  if( idocus_params['redirect-to'] && idocus_params['redirect_to']['url'] )
-                    ApplicationJS.launch_async( idocus_params['redirect_to'] );
-
-                  success(e);
+                  if( idocus_params['redirect_to'] && idocus_params['redirect_to']['url'] ){
+                    ApplicationJS.launch_async( idocus_params['redirect_to'] ).then((e)=>{ success(e); }).catch(err=>{ error(err); });
+                  }
+                  else
+                  {
+                    success(e);
+                  }
                 })
                 .catch(err => {
                   //Handling modal param

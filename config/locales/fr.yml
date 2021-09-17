@@ -249,6 +249,7 @@ fr:
     address_management: Gestion des Adresses
     software: Logiciels Comptables et .CSV
     payment_method: Mode de Paiement
+    subscription: Abonnement
     collaborators: Collaborateurs
     customers: Clients
     journals: Journaux comptables

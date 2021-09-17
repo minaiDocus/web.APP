@@ -20,55 +20,6 @@ class Organizations::MainController < OrganizationController
     redirect_to account_organizations_path
   end
 
-  # GET /account/organizations/:id/edit_software_users
-  def edit_software_users
-    @software = params[:software]
-    @software_name = case @software
-                     when 'coala'
-                       'Coala'
-                     when 'quadratus'
-                       'Quadratus'
-                     when 'cegid'
-                       'Cegid'
-                     when 'csv_descriptor'
-                       'Export csv personnalisé'
-                     when 'ibiza'
-                       'Ibiza'
-                     when 'exact_online'
-                       'Exact Online'
-                     when 'my_unisoft'
-                       'My Unisoft'
-                     when 'fec_agiris'
-                       'Fec Agiris'
-                     else
-                       ''
-                      end
-  end
-
-  # PUT /account/organizations/:id/update_software_users
-  def update_software_users
-    software = params[:software]
-    software_users = params[:software_account_list] || ''
-    @organization.customers.active.each do |customer|
-      softwares_params = nil
-
-      if software == 'ibiza'
-        softwares_params = {columns: { is_used: (software_users.include?(customer.to_s) && !customer.uses?(:exact_online)) }, software: 'ibiza'}
-      elsif software == 'exact_online'
-        softwares_params = {columns: { is_used: (software_users.include?(customer.to_s) && !customer.uses?(:ibiza)) }, software: 'exact_online'}
-      else
-        softwares_params = {columns: { is_used: software_users.include?(customer.to_s) }, software: software}
-      end
-
-      unless softwares_params.nil?
-        customer.create_or_update_software(softwares_params)
-      end
-    end
-
-    flash[:success] = 'Modifié avec succès.'
-    redirect_to edit_software_users_organization_path(@organization, software: software)
-  end
-
   # GET /account/organizations/:id/
   def show
     @organization_statistic = SubscriptionStatistic.where(organization_id: @organization.id).first
@@ -84,10 +35,6 @@ class Organizations::MainController < OrganizationController
     end
     # @members = @organization.customers.page(params[:page]).per(params[:per])
     # @periods = Period.where(user_id: @organization.customers.pluck(:id)).where('start_date < ? AND end_date > ?', Date.today, Date.today).includes(:billings)
-
-    # @subscription         = @organization.find_or_create_subscription
-    # @subscription_options = @subscription.options.sort_by(&:position)
-    # @total                = Billing::OrganizationBillingAmount.new(@organization).execute
   end
 
   # GET /account/organizations/:id/edit

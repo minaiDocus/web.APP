@@ -58,7 +58,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resource :organization_subscription, only: %w(edit update), controller: 'subscriptions' do
+      resource :organization_subscription, only: %w(show edit update), controller: 'subscriptions' do
         get   'select_options',    on: :collection
         patch 'propagate_options', on: :collection
       end

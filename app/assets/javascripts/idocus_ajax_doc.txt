@@ -30,6 +30,7 @@ Attribut:
     before_send   => Appel (AppEmit) sur le nom de l'évènement avant lancement ajax ( paramètre: { element: $(this), idocus_params: idocus_params } )
     after_send    => Appel (AppEmit) sur le nom de l'évènement après success ( paramètre: { element: $(this), response: e } )
     form          => ID d'une formulaire (form) à serialisé (ex: 'quelquechose')
+    force_form_url  => true, false (default false), récupère l'url (action) et methode du formulaire (form) et ecrase l'url et methode en paramètre
     datas         => Datas à envoyé (avec form sérialisé si existe) au format JSON STRING [ datas ecrase form s'il existe une même clé ]
 
     html => la data-type de la requete devient 'HTML' (si par défaut JSON)
@@ -40,7 +41,7 @@ Attribut:
       mode   => Mode de remplissage ['append', 'prepend', 'replace'] (defaut: 'replace')
 
     redirect_to => Redirection vers l'url en paramètre après lancement (toujours en mode ajax) [ Ajax recursive ]
-      tous les sous paramètre du paramètre idocus sont acceptable dans cette option
+      tous les sous paramètre du paramètre idocus sont acceptable dans cette option: #SAUF BEFORE_SEND ET CONFIRM POUR LE MOMENT
       exemple
         redirect_to: { url: 'xxx', method: 'get', datas: '{}', html: { target: 'yyyy' } }
 

@@ -46,7 +46,7 @@ function bind_globals_events(){
 
         if( idocus_params['before_send'] ){
           AppEmit( idocus_params['before_send'], { element: $(this), idocus_params: idocus_params } )
-                 .then((i)=>{ console.log(i); launch_ajax(i) });
+                 .then((i)=>{ launch_ajax(i) });
         }else{
           launch_ajax();
         }

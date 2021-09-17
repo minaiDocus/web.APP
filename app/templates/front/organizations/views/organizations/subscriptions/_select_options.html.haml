@@ -1,10 +1,6 @@
-= stylesheet_link_tag 'front/organizations/assets/stylesheets/main'
-
-#organization_subscriptions.select_options.derivationRight
-  .card
-    .card-header
-      %h3 Propager les quotas
-    = simple_form_for @subscription, url: propagate_options_organization_organization_subscription_path(@organization), html: { class: 'form-horizontal' } do |f|
+.ajax_response
+  #organization_subscriptions.select_options
+    = simple_form_for @subscription, url: propagate_options_organization_organization_subscription_path(@organization), html: { id: 'subscription_propagation_form', class: 'form-horizontal' } do |f|
       .card-body
         .row
           .col-md-6
@@ -68,9 +64,3 @@
                         %td
                           %label{ for: "subscription_customer_id_#{customer.id}" }= customer.info
                 = hidden_field_tag 'subscription[customer_ids][]', ''
-      .card-footer
-        .form-actions.margin0bottom
-          = f.submit t('actions.propagate'), class: 'btn btn-primary'
-          = link_to t('actions.cancel'), organization_path(@organization, tab: 'subscription'), class: 'btn btn-light'
-
-= javascript_include_tag 'front/organizations/assets/javascripts/main'

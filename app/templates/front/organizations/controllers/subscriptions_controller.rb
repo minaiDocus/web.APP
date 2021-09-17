@@ -6,28 +6,38 @@ class Organizations::SubscriptionsController < OrganizationController
 
   prepend_view_path('app/templates/front/organizations/views')
 
+  def show
+    @subscription_options = @subscription.options.sort_by(&:position)
+    @total                = Billing::OrganizationBillingAmount.new(@organization).execute
+  end
+
   # GET /account/organizations/:organization_id/organization_subscription/edit
-  def edit; end
+  def edit
+    render partial: 'edit'
+  end
 
   # PUT /account/organizations/:organization_id/organization_subscription
   def update
-    if @subscription.update(subscription_params)
+    if params[:subscription] && @subscription.update(subscription_params)
       Billing::UpdatePeriod.new(@subscription.current_period).execute
-      flash[:success] = 'Modifié avec succès.'
-      redirect_to organization_path(@organization, tab: 'subscription')
+      json_flash[:success] = 'Modifié avec succès.'
     else
-      render :edit
+      json_flash[:error] = "Impossible d'appliquer les modifications"
     end
+
+    render json: { json_flash: json_flash }, status: 200
   end
 
   # GET /account/organizations/:organization_id/organization_subscription/select_options
-  def select_options; end
+  def select_options
+    render partial: 'select_options'
+  end
 
   # PUT /account/organizations/:organization_id/organization_subscription/propagate_options
   def propagate_options
-    _params = subscription_quotas_params
+    if params[:subscription] && @subscription.update(subscription_quotas_params)
+      _params = subscription_quotas_params
 
-    if @subscription.update(_params)
       ids = begin
               params[:subscription][:customer_ids] - ['']
             rescue StandardError
@@ -39,7 +49,7 @@ class Organizations::SubscriptionsController < OrganizationController
       if ids.size == registered_ids.size
         subscriptions = Subscription.where(user_id: ids)
 
-        subscriptions.update_all(_params.to_s)
+        subscriptions.each{|s| s.update(_params) }
 
         periods = Period.where(subscription_id: subscriptions.map(&:id)).where('start_date <= ? AND end_date >= ?', Date.today, Date.today)
 
@@ -48,15 +58,15 @@ class Organizations::SubscriptionsController < OrganizationController
           Billing::UpdatePeriodPrice.new(period).execute
         end
 
-        flash[:success] = 'Propagé avec succès.'
-
-        redirect_to organization_path(@organization, tab: 'subscription')
+        json_flash[:success] = 'Propagé avec succès.'
       else
-        render :select_options
+        json_flash[:error] = "Impossible de traiter les informations"
       end
     else
-      render :select_options
+      json_flash[:error] = "Impossible de traiter les informations"
     end
+
+    render json: { json_flash: json_flash }, status: 200
   end
 
   private
