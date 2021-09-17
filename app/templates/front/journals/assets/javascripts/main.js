@@ -30,8 +30,8 @@ class Journal{
           self.journal_form_modal.find('.next').text('Suivant');
           self.show_vat_account_field();
 
-          $('.add_vat_account_field').unbind('click').bind('click', function(e) {
-            e.stopPropagation();
+          $('.add_vat_account_field').unbind('click').bind('click', function(e) {            
+            e.preventDefault();
 
             self.add_vat_account_field(10, 445660);
 

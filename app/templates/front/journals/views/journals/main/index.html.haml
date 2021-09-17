@@ -66,16 +66,4 @@
               %button.btn.btn-primary.semibold.next{ type: :button, "data-bs-target" => "#carousel-journal-form", "data-bs-slide" => "next" } Suivant
               %button.btn.btn-primary.semibold.validate.hide{ type: :submit } Valider
 
-
-
-  .sub_integration_append.hide
-    .sub_menu.text-start
-      %ul.no-margin.no-padding.regular
-        %li
-          %span.edit= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-          &nbsp;Éditer
-        %li.red-label
-          %span= glyphicon('trash', { size: '15', color: "#FF4848" })
-          &nbsp;Supprimer
-
 = javascript_include_tag 'front/journals/assets/javascripts/main'
