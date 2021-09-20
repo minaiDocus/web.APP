@@ -146,3 +146,21 @@
     border-radius: 20px; }
   #csv_descriptors.edit .input-prepend .slider.round:before {
     border-radius: 50%; }
+
+#csv_descriptors .form-select{
+  width: 30% !important;
+}
+
+#csv_descriptors .select-container input {
+  padding: 6%;
+  font-size: 17px;
+}
+
+#csv_descriptors .field{
+  border: 1px solid #E7E7E7;
+  border-radius: 8px;
+}
+
+#csv_descriptors .field:hover{
+  background-color: #F7F7F7;
+}

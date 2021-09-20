@@ -74,7 +74,8 @@ activate_csv_field_action = function() {
 };
 
 activate_csv_global_action = function() {
-  $('#csv_descriptors.edit .add_field').click(function() {
+  $('#csv_descriptors.edit .add_field').click(function(e) {
+    e.preventDefault();
     var fields;
     $('#csv_descriptors.edit .template li.field').clone().appendTo('#csv_descriptors.edit .list');
     fields = $('#csv_descriptors.edit .list li.field').last().find('#select_directive option').first();
@@ -82,7 +83,8 @@ activate_csv_global_action = function() {
     activate_csv_field_action();
     return false;
   });
-  $('#csv_descriptors.edit .remove_all_fields').click(function() {
+  $('#csv_descriptors.edit .remove_all_fields').click(function(e) {
+    e.preventDefault();
     var is_confirmed;
     is_confirmed = confirm('Etes-vous sûr ?');
     if (is_confirmed) {
@@ -90,7 +92,8 @@ activate_csv_global_action = function() {
     }
     return false;
   });
-  return $('#csv_descriptors.edit .add_all_fields').click(function() {
+  return $('#csv_descriptors.edit .add_all_fields').click(function(e) {
+    e.preventDefault();
     var escape_option, is_confirmed, options;
     is_confirmed = confirm('Etes-vous sûr ?');
     if (is_confirmed) {

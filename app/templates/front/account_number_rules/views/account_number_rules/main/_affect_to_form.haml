@@ -2,19 +2,17 @@
   %h6.head_affect_to.hide Choisir le(s) groupe(s) et/ou client(s) affectés par la règle.
   %hr
   .controls.users.row
-    .col-md-6
-      .form-group.customers-list.hide
-        .label-section
-          = label_tag 'account_number_rule[user_ids][]', t('activerecord.models.account_number_rule.attributes.users'), class: 'control-label semibold', for: 'customers-list'
-        .control-section
-          - users = @account_number_rule.present? ? @account_number_rule.users : []
-          - customers = @organization.customers.active.order(code: :asc)
-          = select_tag 'account_number_rule[user_ids][]', options_from_collection_for_select(customers, 'id', 'info', (customers.map{ |user| "#{ user.id}" if users.include?(user) })), class: 'select form-select-sm optional', id: 'customers-list', include_blank: true, multiple: true
+    .form-group.customers-list.hide
+      .label-section
+        = label_tag 'account_number_rule[user_ids][]', t('activerecord.models.account_number_rule.attributes.users'), class: 'control-label semibold', for: 'customers-list'
+      .control-section
+        - users = @account_number_rule.present? ? @account_number_rule.users : []
+        - customers = @organization.customers.active.order(code: :asc)
+        = select_tag 'account_number_rule[user_ids][]', options_from_collection_for_select(customers, 'id', 'info', (customers.map{ |user| "#{ user.id}" if users.include?(user) })), class: 'select form-select-sm optional', id: 'customers-list', include_blank: true, multiple: true
 
-    .col-md-6
-      .form-group.groups-list.hide
-        .label-section
-          = label_tag 'account_number_rule[group][]', "Groupes", class: 'control-label semibold', for: 'groups-list'
-        .control-section
-          - groups = @organization.groups.includes(:members).order(name: :asc)
-          = select_tag 'account_number_rule[group][]', options_for_select(groups.collect{ |group| [group.name, group.members.map{ |m| m.id.to_s }.join(' ')] }), class: 'select form-select-sm optional', id: 'groups-list', include_blank: true, multiple: true
+    .form-group.groups-list.hide
+      .label-section
+        = label_tag 'account_number_rule[group][]', "Groupes", class: 'control-label semibold', for: 'groups-list'
+      .control-section
+        - groups = @organization.groups.includes(:members).order(name: :asc)
+        = select_tag 'account_number_rule[group][]', options_for_select(groups.collect{ |group| [group.name, group.members.map{ |m| m.id.to_s }.join(' ')] }), class: 'select form-select-sm optional', id: 'groups-list', include_blank: true, multiple: true

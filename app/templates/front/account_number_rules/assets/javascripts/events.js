@@ -190,13 +190,6 @@ function bind_all_events_account_number_rules(){
     AppEmit('skip_accounting_plan', { url: url, account_list: accounts, account_validation: account_validation });
   })
 
-
-  if ($('#skipAccountingPlan .searchable-option-list').length > 0) {
-    $('#skipAccountingPlan .searchable-option-list').searchableOptionList({      
-      maxHeight: '300px'
-    });
-  }
-
   $('.search-content #search_input').unbind('keyup').bind('keyup', function(e){ if(e.key == 'Enter'){ /*e.keyCode == 13*/ AppEmit('account_number_rule_contains_search_text'); } });
   $('.bank-affectation #basic-addon1').unbind('click').bind('click', function(e){ AppEmit('account_number_rule_contains_search_text'); });
 
