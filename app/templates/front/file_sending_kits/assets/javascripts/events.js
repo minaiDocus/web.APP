@@ -2,6 +2,7 @@
 function applied_manual_paper_set_order(){
   let elements = $('tbody#fsk_paper_set_orders tr');
   if (elements.length > 0) {
+    console.log('FF');
     let total_price = 0
     elements.each(function(index, element){
       let period = 1;

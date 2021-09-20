@@ -308,10 +308,12 @@ class ApplicationJS {
           let form_data = {}
 
           if(form){
-            if(ajax_params['dataType'] == 'json')
+            /*if(ajax_params['dataType'] == 'json')
               form_data = SerializeToJson(form); //serialize as json
             else
-              form_data = form.serialize(); //serialize as url params
+              form_data = form.serialize(); //serialize as url params*/
+
+            form_data = form.serialize();
 
             if(idocus_params['force_form_url'] == true){
               ajax_params['url'] = form.attr('action');

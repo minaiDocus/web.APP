@@ -13,7 +13,7 @@
           %span.alert.alert-success.show-content.success-generation.hide Votre fichier de commande a bien été généré =>
           = link_to image_tag('application/icon-pdf.png', alt: "#{@organization.code.downcase}_folders.pdf", class: 'generate-manual-order', style: 'position:relative;top:-2px;') + " Télécharger le dernièr kit de numérisation généré pdf", folders_organization_file_sending_kit_path(@organization, {v: Time.now.strftime('%H%M%S')}), class: "btn btn-light download-manual-paper-set-order-folder-pdf"
   .box.mt-4
-    = form_tag generate_organization_file_sending_kit_path(@organization), class: (manual_paper_set_order ? 'form-horizontal label-auto fsk_paper_set_orders' : 'form-horizontal label-auto') do
+    = form_tag generate_organization_file_sending_kit_path(@organization), class: (manual_paper_set_order ? 'form-horizontal label-auto fsk_paper_set_orders' : 'form-horizontal label-auto'), id: 'fsk_paper_set_orders' do
       %table.table.table-striped.table-condensed.table-bordered-inner.table-detachable-head
         %thead
           %tr

@@ -71,6 +71,17 @@ function bind_customer_events() {
 
     AppEmit('new_edit_order_view', { url: url });
   });
+
+
+  $('.select_for_orders').unbind('click').bind('click', function(e) {
+    e.stopPropagation();
+
+    const url = $(this).attr('link');
+
+    AppEmit('select_for_orders', { url: url });
+
+    $('#select_for_orders').modal('show');
+  });
 }
 
 

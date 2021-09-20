@@ -12,3 +12,16 @@
         - if @customer.configured?
           %button.btn.btn-light.cancel{ 'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button' } Annuler
           %button.btn.btn-primary.bold.valid_new_edit_order.as_idocus_ajax{ type: :button, idocus: validation_param} } Ajouter
+
+- validation_param = param_encode({ url: generate_organization_file_sending_kit_path(@organization), method: 'post', form:'fsk_paper_set_orders', modal: { id: 'select_for_orders', close_after_success: false, close_after_error: false }, redirect_to: { url: organization_customer_path(@organization, @customer, tab: 'orders'), method: 'get', html: { target: '#orders.tab-pane' }, redirect_to: { url: select_organization_file_sending_kit_path(@organization, order_customer_id: @customer.id), method: 'get', html: { target: '.file_sending_kits_select', target_dest: '#select_for_orders.modal .modal-body' }, after_send: 'handle_select_for_orders_result' } } })
+.modal.fade#select_for_orders
+  .modal-dialog{:role => 'document'}
+    .modal-content
+      .modal-header
+        %h5.modal-title.bold Sélection des options du kit d'envoi de numérisation
+        %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+      .modal-body
+        Chargement ...
+      .modal-footer
+        %button.btn.btn-light.cancel{ 'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button' } Annuler 
+        %input.btn.btn-primary.bold.as_idocus_ajax{:type => 'submit', name: 'commit', value: 'Générer', 'data-disable-with' => 'Générer', idocus: validation_param}

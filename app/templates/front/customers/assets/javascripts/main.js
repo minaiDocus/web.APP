@@ -1,5 +1,8 @@
 //= require './events'
 
+//**** File Sending kits JS *******/
+//=require '../../../file_sending_kits/assets/javascripts/events'
+
 class Customer{
 
   constructor(){
@@ -7,6 +10,7 @@ class Customer{
     this.create_customer_modal = $('#create-customer.modal');
     this.filter_customer_modal = $('#customers-filter.modal');
     this.new_edit_order_modal = $('#new_edit_order.modal');
+    this.select_multiple       = $('#select_for_orders.modal');
     this.account_close_confirm_modal = $('#account_close_confirm.modal');
     this.organization_id       = $('input:hidden[name="organization_id"]').val();
     this.action_locker = false;
@@ -723,6 +727,24 @@ class Customer{
 
     this.applicationJS.parseAjaxResponse(ajax_params).then((e)=>{ $('.modal#csv_descriptor_modal').modal('show'); });
   }
+
+  select_for_orders(url){
+    this.applicationJS.parseAjaxResponse({ 'url': url }).catch((error)=> {
+      console.log(error)
+    }).then((element)=>{
+      this.select_multiple.find('.modal-body').html($(element).find('.file_sending_kits_select').html());
+      this.select_multiple.find('.form-footer-content').remove();
+
+      file_sending_kits_main_events();
+      this.rebind_customer_all_events();
+    });
+  }
+
+  handle_select_for_orders_result(response){
+    this.select_multiple.find('.form-footer-content').remove();
+    file_sending_kits_main_events();
+    this.rebind_customer_all_events();
+  }
 }
 
 
@@ -747,6 +769,9 @@ jQuery(function () {
   AppListenTo('new_edit_order_view', (e)=>{ customer.new_edit_order_view(e.detail.url); });
   AppListenTo('change_new_edit_order_url', (e)=>{ e.set_key('url', $('form#new_edit_order_customer').attr('action')); });
   AppListenTo('rebind_customer_event_listener', (e)=>{ customer.rebind_customer_all_events(); });
+
+  AppListenTo('select_for_orders', (e)=>{ customer.select_for_orders(e.detail.url); });
+  AppListenTo('handle_select_for_orders_result', (e)=>{ customer.handle_select_for_orders_result(e.detail.response); });
   
   AppListenTo('csv_descriptor_edit_customer_format', (e)=>{ customer.load_csv_descriptor(e.detail.id, e.detail.organization_id) });
  

@@ -137,7 +137,7 @@ class FileSendingKits::MainController < OrganizationController
 
         if without_shipping_address.count == 0 && error_logo.empty?
           Order::FileSendingKitGenerator.generate clients_data, @file_sending_kit, @organization, (params[:one_workshop_labels_page_per_customer] == '1')
-          flash[:notice] = 'Généré avec succès.'
+          json_flash[:success] = 'Généré avec succès.'
         else
           errors = []
           if without_shipping_address.count != 0
@@ -151,18 +151,14 @@ class FileSendingKits::MainController < OrganizationController
             errors << error_logo.join(' ')
           end
 
-          flash[:error] = errors.join(' ') if errors.any?
+          json_flash[:error] = errors.join(' ') if errors.any?
         end
 
-        if manual_paper_set_order
-          render json: {messahe: 'OK'}, status: 200
-          # redirect_to folders_account_organization_file_sending_kit_path(@organization)
-        else
-          redirect_to organization_path(@organization, tab: 'file_sending_kit')
-        end
+        render json: { json_flash: json_flash, option: (manual_paper_set_order ? 'digitize' : '') }, status: 200
       end
     rescue Timeout::Error
-      render body: 'Requete trop volumineux, Veuillez réduire votre sélection svp ...', status: 603
+      json_flash[:error] = 'Requete trop volumineux, Veuillez réduire votre sélection svp ...'
+      render json: { json_flash: json_flash }, status: 603
     end
   end
 

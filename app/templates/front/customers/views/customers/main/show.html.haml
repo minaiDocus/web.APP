@@ -199,9 +199,9 @@
               = link_to "Commander un/des scanner(s) iDocus'box", "#", class: 'btn btn-primary new_edit_order_url', link: new_organization_customer_order_path(@organization, @customer, order: { type: 'dematbox' })
             - if @customer.subscription.is_package?('mail_option') || @customer.subscription.is_package?('digitize_option')
               - if CustomUtils.is_manual_paper_set_order?(@organization)
-                = link_to 'Générer un kit de numérisation', select_organization_file_sending_kit_path(@organization, order_customer_id: @customer.id), class: 'btn btn-primary'
+                = link_to 'Générer un kit de numérisation', "#", link: select_organization_file_sending_kit_path(@organization, order_customer_id: @customer.id), class: 'btn btn-primary select_for_orders'
               - else
-                = link_to 'Commander un Kit envoi courrier', new_organization_customer_order_path(@organization, @customer, order: { type: 'paper_set' }), class: 'btn btn-primary'
+                = link_to 'Commander un Kit envoi courrier', "#", link: new_organization_customer_order_path(@organization, @customer, order: { type: 'paper_set' }), class: 'btn btn-primary new_edit_order_url'
 
 
     .tab-pane#adresses{ class: ('active' if params[:tab] == 'addresses'), "role" => "tabpanel", "aria-labelledby" => "adresses-tab" }
