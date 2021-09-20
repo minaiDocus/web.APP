@@ -49,3 +49,27 @@ Attribut:
       id                  => HTML id du modal à gérer (ex: 'quelquechose')
       close_after_success => valeur (true, false) default(true) 
       close_after_error   => valeur (true, false) default(false)
+
+
+
+[=== Idocus pagination ===]
+
+ex: = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { name: 'xxxx', mark: 'yyy', total_pages: objet.total_pages }
+  url         => url de base de la pagination
+  target      => Dom html cible de la requete ajax
+  filter      => attr 'id' d'une formulaire de filtre
+  total_pages => Nombre total de page (généralement: quelquechose.total_pages)
+  name        => Nom cible de la pagination (equivalent à name dans une formulaire), non obligatoire
+  mark        => Par défaut égale à [nom], evènement cible dans un appel JS, non obligatoire
+  no_per_page => (default: false), pas d'affichage par page si true
+
+  Fonction JS
+    Des listener JS sont disponible pour la pagination
+      AppListenTo('window.change-per-page.[name]')
+      AppListenTo('window.change-per-page.[mark]') si mark != name
+        Les paramètres suivantes sont disponible: { name: 'name', mark: 'mark', page: 'page courante', per_page: 'per_page courante' }
+
+
+      AppListenTo('window.change-page.[name]')
+      AppListenTo('window.change-page.[mark]') si mark != name
+        Les paramètres suivantes sont disponible: { name: 'name', mark: 'mark', page: 'page courante', per_page: 'per_page courante', trigger: 'previous OU next' }

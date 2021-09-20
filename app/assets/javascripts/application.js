@@ -201,12 +201,27 @@ class ApplicationJS {
           let destination = params.target_dest || target || null;
           if(target)
           {
+            let source_html = '';
+            try{
+              source_html = $(result).find(target)[0].outerHTML;
+            }catch(e){
+              let found = false;
+              if(/^[.]/.test(target)){
+                if( $(result).hasClass(target.replace('.', '')) ){ found = true; source_html = $(result)[0].outerHTML; }
+              }else if( /^[#]/.test(target) ){
+                if( $(result).attr(id) == target.replace('#', '') ){ found = true; source_html = $(result)[0].outerHTML; }
+              }
+
+              if(!found)
+                console.error(e);
+            }
+
             if(params.mode == 'append')
-              $(destination).append( $(result).find(target)[0].outerHTML );
+              $(destination).append( source_html );
             else if(params.mode == 'prepend')
-              $(destination).prepend( $(result).find(target)[0].outerHTML );
+              $(destination).prepend( source_html );
             else
-              $(destination).html( $(result).find(target)[0].outerHTML );
+              $(destination).html( source_html );
           }
 
           if (afterUpdateContent) { afterUpdateContent(); }
@@ -305,6 +320,7 @@ class ApplicationJS {
                 ajax_params['type'] = form.attr('method');
             }
           }
+
           if(idocus_params['datas'] && ajax_params['dataType'] == 'json'){
             let new_datas = {}
 

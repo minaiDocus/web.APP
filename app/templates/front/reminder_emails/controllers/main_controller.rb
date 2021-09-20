@@ -6,13 +6,10 @@ class ReminderEmails::MainController < OrganizationController
   prepend_view_path('app/templates/front/reminder_emails/views')
 
   def index
-    base_content
+    @reminder_emails = @organization.reminder_emails.order(created_at: :desc).page(params[:page]).per(params[:per_page])
   end
 
-  # GET /organizations/:organization_id/reminder_emails/:id
-  def show
-    render layout: nil
-  end
+  def show; end
 
   # GET /organizations/:organization_id/reminder_emails/new
   def new
@@ -27,6 +24,8 @@ class ReminderEmails::MainController < OrganizationController
       @reminder_email.content = template.content
       @reminder_email.delivery_day = template.delivery_day
     end
+
+    render partial: 'form'
   end
 
   # POST # GET /organizations/:organization_id/reminder_emails
@@ -36,37 +35,37 @@ class ReminderEmails::MainController < OrganizationController
     @reminder_email.organization = @organization
 
     if @reminder_email.save
-      flash[:success] = 'Créé avec succès.'
-
-      redirect_to organization_reminder_emails_path(@organization)
+      json_flash[:success] = 'Créé avec succès.'
     else
-      render :new
+      json_flash[:error] = @reminder_email.errors.messages.to_s
     end
+
+    render json: { json_flash: json_flash }, status: 200
   end
 
   # GET /organizations/:organization_id/reminder_emails/:id/edit
-  def edit; end
+  def edit
+    render partial: 'form'
+  end
 
   # PUT /organizations/:organization_id/reminder_emails/:id
   def update
     if @reminder_email.update(reminder_email_params)
-      flash[:success] = 'Modifié avec succès.'
-
-      redirect_to organization_reminder_emails_path(@organization)
+      json_flash[:success] = 'Modifié avec succès.'
     else
-      render 'edit'
+      json_flash[:error] = @reminder_email.errors.messages
     end
+
+    render json: { json_flash: json_flash }, status: 200
   end
 
   # DELETE /organizations/:organization_id/reminder_emails/:id
   def destroy
     @reminder_email.destroy
 
-    flash[:success] = 'Supprimé avec succès.'
+    json_flash[:success] = 'Supprimé avec succès.'
 
-    base_content
-
-    render :index
+    render json: { json_flash: json_flash }, status: 200
   end
 
   # POST /organizations/:organization_id/reminder_emails/:id/deliver
@@ -74,23 +73,17 @@ class ReminderEmails::MainController < OrganizationController
     result = @reminder_email.deliver
 
     if result.is_a?(TrueClass) || result.is_a?(FalseClass) && result == true
-      flash[:success] = 'Envoyé avec succès.'
+      json_flash[:success] = 'Envoyé avec succès.'
     elsif result.is_a?(Array) && result.empty?
-      flash[:notice] = 'Les mails ont déjà été envoyés.'
+      json_flash[:notice] = 'Les mails ont déjà été envoyés.'
     else
-      flash[:error] = 'Une erreur est survenu lors de la livraison.'
+      json_flash[:error] = 'Une erreur est survenu lors de la livraison.'
     end
 
-    base_content
-
-    render :index
+    render json: { json_flash: json_flash }, status: 200
   end
 
   private
-
-  def base_content
-    @reminder_emails = @organization.reminder_emails.order(created_at: :desc).page(params[:page]).per(params[:per_page])
-  end
 
   def verify_rights
     unless @user.is_admin || (@user.is_prescriber && @user.organization == @organization)

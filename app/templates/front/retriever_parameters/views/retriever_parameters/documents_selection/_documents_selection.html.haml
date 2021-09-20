@@ -41,5 +41,5 @@
             %tr
               %td{colspan: 7}= t('global.no-data-found')
 
-    = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { name: 'documents-selection', target: 'retriever_parameters', total_pages: documents.total_pages }
+    = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { name: 'documents-selection', mark: 'retriever_parameters', total_pages: documents.total_pages }
           

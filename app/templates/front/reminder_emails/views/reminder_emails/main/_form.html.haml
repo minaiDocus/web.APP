@@ -1,5 +1,5 @@
-= simple_form_for [@organization, @reminder_email || ReminderEmail.new], html: { class: 'form form-horizontal margin0' } do |f|
-  .modal-body
+.reminder_form
+  = simple_form_for [@organization, @reminder_email || ReminderEmail.new], html: { id: 'email_configuration', class: 'form form-horizontal margin0' } do |f|
     .form-group
       .select-container.no-padding.w-100
         = f.input :name, input_html: { class: '', placeholder: 'Exemple: Envoi 1' }
@@ -13,10 +13,10 @@
       .select-container.no-padding.w-100
         = f.input :content, :as => :ckeditor, :input_html => {class: 'ckeditor', :ckeditor => {:toolbar => 'mini'}}
 
-    .form-group
-      %label.semibold Envoyez à
-      .select-container.no-padding.w-100
-        %input.book-code-software{ placeholder: "Ex : N’oubliez pas d’envoyer vos documents !" }
+    / .form-group
+    /   %label.semibold Envoyez à
+    /   .select-container.no-padding.w-100
+    /     %input.book-code-software{ placeholder: "Ex : N’oubliez pas d’envoyer vos documents !" }
 
     .form-group
       .row
@@ -29,8 +29,3 @@
           .form-check.form-check-inline
             = f.radio_button :period, 3, id: '', class: 'form-check-input'
             = f.label :period, t('activerecord.models.reminder_email.attributes.period_options.quarterly'), class: 'form-check-label'
-
-  .modal-footer
-    .w-100.text-end
-      %button.btn.btn-light.semibold{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'} Annuler
-      = f.submit t('actions.submit'), class: 'btn btn-primary semibold'

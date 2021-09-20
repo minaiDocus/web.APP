@@ -9,6 +9,8 @@
     .card-body
       .row
         .col-md-5
+          = text_field_tag 'test[x][12]', ''
+          = text_field_tag 'test[x][13]', ''
           = f.input :host
           = f.input :port, as: :integer
           = f.input :is_passive, as: :boolean

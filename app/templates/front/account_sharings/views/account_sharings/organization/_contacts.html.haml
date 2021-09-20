@@ -23,13 +23,13 @@
           %td.text-end.pointer
             .action.sub_edit_delete
               %span= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
-              .sub_menu.text-start.hide
-                %ul.no-margin.no-padding.regular                  
-                  %li
-                    %span.me-1= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                    %span= link_to 'Modifier', data: { id: guest_collaborator.id }
-                  %li
-                    %span.red-label.me-1= glyphicon('trash', { size: '15', color: "#445E2B" })
-                    %span= link_to 'Supprimer', account_sharings_organization_destroy_contact_path(@organization, guest_collaborator), method: :delete, data: { confirm: "Êtes-vous sûr de vouloir supprimer le contact \"#{guest_collaborator.info}\" ?" }
+            .sub_menu.text-start.hide
+              %ul.no-margin.no-padding.regular                  
+                %li
+                  %span.me-1= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
+                  %span= link_to 'Modifier', data: { id: guest_collaborator.id }
+                %li
+                  %span.red-label.me-1= glyphicon('trash', { size: '15', color: "#445E2B" })
+                  %span= link_to 'Supprimer', account_sharings_organization_destroy_contact_path(@organization, guest_collaborator), method: :delete, data: { confirm: "Êtes-vous sûr de vouloir supprimer le contact \"#{guest_collaborator.info}\" ?" }
 
   = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { name: 'sharing_contacts', total_pages: @guest_collaborators.total_pages }

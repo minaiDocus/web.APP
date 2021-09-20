@@ -41,7 +41,7 @@
             %td= Order.state_machine.states[order.state].human_name
             %td= link_to_paper_tracking(order.kit) if order.kit.try(:tracking_number)
 
-    = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { name: 'ppp-list-documents', target: 'paper_set_orders', total_pages: @orders_count  }
+    = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { name: 'ppp-list-documents', mark: 'paper_set_orders', total_pages: @orders_count  }
 
 .modal#ppp-filter
   .modal-dialog
