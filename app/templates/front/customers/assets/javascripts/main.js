@@ -683,9 +683,6 @@ class Customer{
   }
 
   new_edit_order_view(url){
-    if(this.action_locker) { return false; }
-
-    this.action_locker = true;
     this.applicationJS.parseAjaxResponse({ 'url': url }).then((element)=>{
       this.new_edit_order_modal.find('.modal-body').html('');
       this.new_edit_order_modal.find('.modal-body').html($(element).find('#order .order-form-content').html());
@@ -732,10 +729,6 @@ class Customer{
 jQuery(function () {
   var customer = new Customer();
 
-  $(document).on('hidden.bs.modal', function (e) {
-    customer.rebind_customer_all_events();
-  });
-
   let load_only_once = false;
   if ($('#subscription.tab-pane.active').length > 0 && !load_only_once) {
     load_only_once = true;
@@ -748,13 +741,12 @@ jQuery(function () {
 
   /*AppListenTo('update_subscription', (e)=>{ customer.update_subscription(e.detail.url, e.detail.data); });*/
 
-  AppListenTo('change_new_edit_order_url', (e)=>{ e.set_key('url', $('form#new_edit_order_customer').attr('action')); });
-  AppListenTo('rebind_customer_event_listener', (e)=>{ customer.rebind_customer_all_events(); });
-
   AppListenTo('close_or_reopen_confirm_view', (e)=>{ customer.close_or_reopen_confirm_view(e.detail.url, e.detail.target); });
   AppListenTo('close_or_reopen_confirm', (e)=>{ customer.close_or_reopen_confirm(e.detail.url, e.detail.data); });
 
   AppListenTo('new_edit_order_view', (e)=>{ customer.new_edit_order_view(e.detail.url); });
+  AppListenTo('change_new_edit_order_url', (e)=>{ e.set_key('url', $('form#new_edit_order_customer').attr('action')); });
+  AppListenTo('rebind_customer_event_listener', (e)=>{ customer.rebind_customer_all_events(); });
   
   AppListenTo('csv_descriptor_edit_customer_format', (e)=>{ customer.load_csv_descriptor(e.detail.id, e.detail.organization_id) });
  

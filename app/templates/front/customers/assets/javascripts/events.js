@@ -64,8 +64,8 @@ function bind_customer_events() {
   });*/
 
 
-  $('.new_edit_order_url').unbind('click.order').bind('click.order', function(e) {
-    e.preventDefault();
+  $('.new_edit_order_url').unbind('click').bind('click', function(e) {
+    e.stopPropagation();
 
     const url = $(this).attr('link');
 
