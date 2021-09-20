@@ -1,6 +1,7 @@
 var activate_csv_field_action, activate_csv_global_action, field_separator_state, initialize_csv_editor, update_directive_input;
 
 update_directive_input = function(type, element) {
+  console.log(element);
   if (type === 'date' || type === 'deadline_date' || type === 'period_date') {
     element.parents('li').find('#text_format').hide();
     element.parents('li').find('#text_format').attr('disabled', 'disabled');

@@ -1279,6 +1279,10 @@ fr:
           auto_deliver: Livrer automatiquement les écritures ?
           is_used: Utilise Exact Online?
           state: Etat
+      software_my_unisoft:
+        attributes: 
+          is_used: Utilise My Unisoft ?
+          auto_deliver: Livrer automatiquement les écritures ?
       software_coala:
         attributes:
           is_used: Activer l'option d'export des écritures comptables et pièces pour Coala (.zip)?

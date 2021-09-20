@@ -33,3 +33,30 @@
   padding: 0.5%;
   font-size: 17px;
 }
+
+
+.box-software{
+  display: flex;  
+  background: #FFFFFF;
+  border: 1px solid rgba(26, 26, 26, 0.1);
+  box-sizing: border-box;
+  border-radius: 8px;
+  width: 25%;
+  margin: 3%;
+  height: 10em;
+}
+
+.box-software.selected{
+  border: 1px solid #72AA42;
+  background: #f8ffdf;
+}
+
+.box-software a{
+  padding: 15%;
+  text-align: center;
+}
+
+.use-software{
+  font-size: 40px;
+  color: rgba(26,26,26,0.7);
+}

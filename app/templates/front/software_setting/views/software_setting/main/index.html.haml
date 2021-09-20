@@ -22,26 +22,26 @@
           .tab-pane.no-margin#ibiza-software{ "role" => "tabpanel", "aria-labelledby" => "ibiza-software-tab", class: (is_active)? 'active' : '' }
             = render file: Rails.root.join('app/templates/front/ibiza/views/ibiza/main/setting.html.haml'), locals: { ibiza: @organization.ibiza }
         - elsif @organization.send(software.to_sym).try(:used?)
-          .tab-pane.box.no-margin{ id: "#{software}-software", "role" => "tabpanel", "aria-labelledby" => "#{software}-software-tab", class: (is_active)? 'active' : '' }
+          .tab-pane{ id: "#{software}-software", "role" => "tabpanel", "aria-labelledby" => "#{software}-software-tab", class: (is_active)? 'active' : '' }
             = render partial: 'basic_configuration', locals: { software: software.to_s }
 
       .tab-pane.box.no-margin#other-software{ "role" => "tabpanel", "aria-labelledby" => "other-software-tab" }
-        %p Activer l'option d'export des écritures comptables en cliquant sur le logo et pièces pour :
+        %label.semibold Activer l'option d'export des écritures comptables en cliquant sur le logo et pièces pour :
         - img_list = { quadratus: '/assets/logo/quadratus-logo.png', cegid: '/assets/logo/cegid-logo.png', sage: '/assets/logo/sage-logo.png', fec_agiris: '/assets/logo/agiris-logo.png', exact_online: '/assets/logo/exact-logo.png' }
         - softwares_list.each_slice(3) do |group|
           .row
             - group.each do |software|
               - if @organization.send(software.to_sym).try(:used?)
                 - url = deactivate_software_path(@organization, software)
-                - confirm = "Voulez vous vraiment désactiver ce logi"
+                - confirm = "Voulez vous vraiment désactiver ce logiciel?"
               - else
                 - url = activate_software_path(@organization, software)
                 - confirm = "Voulez vous vraiment activer ce logiciel?"
-              .col-md-4.box-software.pointer{ id: software, class: (@organization.send(software.to_sym).try(:used?))? 'selected' : '' }
-                %a{ href: url, style: 'width: 100%', data: { confirm: confirm, method: 'post' } }
+              .col-md-4.box-software.pointer{ id: software, class: (@organization.send(software.to_sym).try(:used?))? 'selected' : '' }                
+                %a.no-style.w-100{ href: url, data: { confirm: confirm, method: 'post' } }
                   - if img_list[software.to_sym].present?
-                    %img{ class: "use-software #{software}", alt: 'logo-quadratus', src: img_list[software.to_sym] }
+                    %img{ class: "image-software #{software}", alt: 'logo-quadratus', src: img_list[software.to_sym] }
                   - else
-                    %span.use-software{ class: software }= Interfaces::Software::Configuration::SOFTWARES_HUMAN_NAME[software.to_sym]
+                    %span.use-software.bold{ class: software }= Interfaces::Software::Configuration::SOFTWARES_HUMAN_NAME[software.to_sym]
 
 = javascript_include_tag 'front/software_setting/assets/javascripts/main'
