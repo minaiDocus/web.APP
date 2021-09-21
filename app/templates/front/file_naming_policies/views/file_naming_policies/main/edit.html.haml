@@ -39,13 +39,13 @@
 
     .form-group
       %label.semibold Portée
-      %select.form-control#scope{ name: 'scope', multiple: false }
+      %select.form-select#scope{ name: 'scope', multiple: false }
         %option{ value: 'organization', selected: true } Collaborateurs et clients
         %option{ value: 'collaborators'} Collaborateurs uniquement
 
     .form-group
       %label.semibold Séparer les éléments par
-      %select.form-control#element-separator{ name: 'element-separator', multiple: false }
+      %select.form-select#element-separator{ name: 'element-separator', multiple: false }
         %option{ value: '_', selected: true } Underscore “_”
         %option{ value: '-'} Tirait "-"
 

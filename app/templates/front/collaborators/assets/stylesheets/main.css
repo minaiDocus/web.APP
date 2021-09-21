@@ -25,3 +25,11 @@
   margin: 0 1% !important;
   width: 30%;
 }
+
+.form-group{
+  margin-bottom: 1% !important;
+}
+
+.select-container input{
+  padding: 0.5%;
+}

@@ -17,7 +17,7 @@
       'modalHTML': undefined,
       'menuItemTitleClass': 'multi-select-menuitem--titled',
       'activeClass': 'multi-select-container--open',
-      'noneText': 'Filtre par dossier',
+      'noneText': 'Selectionner',
       'allText': undefined,
       'presets': undefined,
       'positionedMenuClass': 'multi-select-container--positioned',

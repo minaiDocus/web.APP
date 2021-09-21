@@ -1,5 +1,5 @@
 - if @user.is_admin && @organization.is_active
-  #file_storages.tab-pane.fade{ class: ('active show' if params[:tab] == 'file_storages') }
+  #file_storages.tab-pane.box.no-margin.fade{ class: ('active show' if params[:tab] == 'file_storages') }
     = render file: Rails.root.join('app/templates/front/customers/views/customers/main/_file_storages.html.haml'), locals: { user: @member.user }
     .form-group.no-margin
       .w-100.text-end

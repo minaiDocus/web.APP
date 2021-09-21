@@ -1,6 +1,6 @@
 .groups.page-content
   .row.mt-5
-    .col-md-6
+    .col-md-7
       %h3.bold
         Gérer les groupes
         %span.badge.badge-secondary.badge-sm.regular= @groups.size
@@ -8,15 +8,15 @@
       .input-group.mb-3.search-content
         %span.input-group-text.group-search#basic-addon1= glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })
         %input.form-control#search_input{ type: :text, "aria-label" => "Rechercher", "aria-describedby" => "basic-addon1", name:'group_contains[text]', placeholder: 'Rechercher' } 
-    .col-md-2.text-center.no-padding
+    .col-md-1.text-center.no-padding
       %button.btn.btn-light.more-filter.group_filter.semibold
         %span.me-2 Filtrer
         %span
           = glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
-    .col-md-2.text-start
-      %button.btn.btn-primary.group.create.new_edit.semibold
+    .col-md-2.no-padding
+      %button.btn.btn-primary.group.create.new_edit.semibold.w-100
         %span= glyphicon('plus', { size: '14', color: '#FFFF'})
-        %span.ms-1 Créer un groupe
+        %span.ms-2 Créer un groupe
 
   - @groups.each_slice(3) do |groups|
     .row.mt-3
@@ -29,7 +29,7 @@
               .content-box= group.created_at.strftime('%d%m%Y')
             .col-md-1
               .action.submenu_action.edit_group.pointer.list-groupe
-                %span.glyph= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
+                %span.glyph= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
               .sub_menu.text-start.hide
                 %ul.no-margin.no-padding.regular.edit-delete{id: "group-#{group.id}"}
                   - if @organization.is_active
