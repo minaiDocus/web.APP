@@ -48,8 +48,12 @@
                 %td.left= t('subscription_options.ido_classic')
                 %td.right= @organization_statistic.try(:options).try(:[], :basic_package).to_i
               %tr
-                %td.glyph= glyphicon('media-record', { color: '#1A1A1A' })
+                %td.glyph= glyphicon('media-record', { color: '#555B35' })
                 %td.left= t('subscription_options.retriever')
                 %td.right= @organization_statistic.try(:options).try(:[], :retriever_package).to_i
+              %tr
+                %td.glyph= glyphicon('media-record', { color: '#1A1A1A' })
+                %td.left= t('subscription_options.digitize')
+                %td.right= @organization_statistic.try(:options).try(:[], :digitize_package).to_i
 
 = javascript_include_tag 'front/organizations/assets/javascripts/show'

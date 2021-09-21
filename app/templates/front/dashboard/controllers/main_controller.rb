@@ -2,12 +2,6 @@
 class Dashboard::MainController < FrontController
   prepend_view_path('app/templates/front/dashboard/views')
 
-  def test
-    debugger
-    # render json: { abc: '123' }, status: 200
-    render partial: 'test'
-  end
-
   def index
     @favorites = @user.favorite_customers.try(:customer_ids) || []
   end

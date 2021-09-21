@@ -47,8 +47,10 @@
 }
 
 .box-software.selected{
-  border: 1px solid #72AA42;
-  background: #f8ffdf;
+  border: 2px solid #C1D837;
+  box-shadow: 0px 1px 0px 5px rgba(193,216,55,0.23);
+  -webkit-box-shadow: 0px 1px 0px 5px rgba(193,216,55,0.23);
+  -moz-box-shadow: 0px 1px 0px 5px rgba(193,216,55,0.23);
 }
 
 .box-software a{

@@ -12,7 +12,8 @@ jQuery(function () {
       "iDo'Nano",
       "iDo'X",
       "iDo'Classique",
-      "Automate"
+      "Automate",
+      "Numérisation"
     ],
     datasets: [{
       label: 'My First Dataset',
@@ -22,6 +23,7 @@ jQuery(function () {
         '#C1E637',
         '#C1D837',
         '#445E2B',
+        '#555B35',
         '#1A1A1A'
       ]
     }]
@@ -33,8 +35,7 @@ jQuery(function () {
         align: 'start'
     },
     legend: {
-      display: false 
-
+      display: false
     }
   }
 
