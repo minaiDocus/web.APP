@@ -15,7 +15,7 @@ function load_reporting_invoices(){
                     }
 
   VARIABLES['reporting_loading']++;
-  applicationJS.parseAjaxResponse(ajax_params).then(e=>{ 
+  applicationJS.sendRequest(ajax_params).then(e=>{ 
     $('.reporting #invoices').html(e);
 
     VARIABLES['reporting_loading']--;

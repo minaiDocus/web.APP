@@ -17,11 +17,11 @@ class RetrievedDatasMain{
   force_preseizures(){
     if(confirm('Voulez vous vraiment lancer la pré-afféctation des opérations'))
     {
-      this.applicationJS.parseAjaxResponse({
+      this.applicationJS.sendRequest({
         'url': '/retrieved/force_operations',
         'type': 'POST',
         'dataType': 'json',
-      }).then((e)=>{ this.applicationJS.noticeFlashMessageFrom(null, e.message); });
+      }).then((e)=>{ this.applicationJS.noticeSuccessMessageFrom(null, e.message); });
 
       this.load_datas('operations');
     }
@@ -50,7 +50,7 @@ class RetrievedDatasMain{
                           'target': ''
                         };
 
-    this.applicationJS.parseAjaxResponse(ajax_params)
+    this.applicationJS.sendRequest(ajax_params)
                       .then((html)=>{
                         $(`.tab-pane#${type}`).html(html);
                         $(`span#total-${type}`).text( $(`input#${type}-size`).val() );

@@ -31,6 +31,7 @@ Attribut:
     after_send    => Appel (AppEmit) sur le nom de l'évènement après success ( paramètre: { element: $(this), response: e } )
     form          => ID d'une formulaire (form) à serialisé (ex: 'quelquechose')
     force_form_url  => true, false (default false), récupère l'url (action) et methode du formulaire (form) et ecrase l'url et methode en paramètre
+    force_linear_form => (defaut: false) force la sérialisation d'une formulaire en url encoded data (et non en objet)
     datas         => Datas à envoyé (avec form sérialisé si existe) au format JSON STRING [ datas ecrase form s'il existe une même clé ]
 
     html => la data-type de la requete devient 'HTML' (si par défaut JSON)

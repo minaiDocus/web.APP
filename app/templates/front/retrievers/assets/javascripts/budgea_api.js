@@ -21,12 +21,12 @@ class BudgeaApi{
                         dataType: 'json'
                       };
 
-    this.applicationJS.parseAjaxResponse(ajax_params)
+    this.applicationJS.sendRequest(ajax_params)
                       .then((e)=>{
                         let config = JSON.parse(atob(e.id));
 
                         if (config === void 0 || config === '' || config === null) {
-                          this.applicationJS.noticeInternalErrorFrom(null, 'Erreur lors du chargement de la congiguration de base');
+                          this.applicationJS.noticeErrorMessageFrom(null, 'Erreur lors du chargement de la congiguration de base');
                         } else {
                           this.api_base_url = config.url;
                           this.api_client_id = config.c_id;
@@ -51,7 +51,7 @@ class BudgeaApi{
                         dataType: 'json'
                       };
 
-      await this.applicationJS.parseAjaxResponse(ajax_params).then((e)=>{ this.set_tokens(e); resolve(); }).catch(e=>{ reject(e); });
+      await this.applicationJS.sendRequest(ajax_params).then((e)=>{ this.set_tokens(e); resolve(); }).catch(e=>{ reject(e); });
     });
   };
 

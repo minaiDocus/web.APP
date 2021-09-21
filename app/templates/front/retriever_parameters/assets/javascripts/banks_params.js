@@ -32,7 +32,7 @@ class RPBanksParams{
                               SetCache('connectors_list', this.connectors);
                               this.fill_connectors();
                             })
-                            .catch((e)=>{ this.main.applicationJS.noticeInternalErrorFrom(null, e.toString()); })
+                            .catch((e)=>{ this.main.applicationJS.noticeErrorMessageFrom(null, e.toString()); })
       }
     }
   }
@@ -75,7 +75,7 @@ class RPBanksParams{
                           'dataType': 'json'
                         };
 
-      this.main.applicationJS.parseAjaxResponse(ajax_params).then((e)=>{ this.main.load_datas('banks-params'); this.main.applicationJS.noticeFlashMessageFrom(null, e.message); });
+      this.main.applicationJS.sendRequest(ajax_params).then((e)=>{ this.main.load_datas('banks-params'); this.main.applicationJS.noticeSuccessMessageFrom(null, e.message); });
     }
   }
 
@@ -96,7 +96,7 @@ class RPBanksParams{
                         'dataType': 'html'
                       };
 
-    this.main.applicationJS.parseAjaxResponse(ajax_params)
+    this.main.applicationJS.sendRequest(ajax_params)
                             .then((e)=>{ 
                               this.modal.modal('show');
                               this.modal.find('.modal-title').text(title);
@@ -124,14 +124,14 @@ class RPBanksParams{
                         'dataType': 'json'
                       };
 
-    this.main.applicationJS.parseAjaxResponse(ajax_params)
+    this.main.applicationJS.sendRequest(ajax_params)
                       .then((e)=>{ 
                         if(e.success){
                           this.main.load_datas('banks-params');
                           this.modal.modal('hide');
-                          this.main.applicationJS.noticeFlashMessageFrom(null, e.message);
+                          this.main.applicationJS.noticeSuccessMessageFrom(null, e.message);
                         }else{
-                          this.main.applicationJS.noticeInternalErrorFrom(null, e.message);
+                          this.main.applicationJS.noticeErrorMessageFrom(null, e.message);
                         }
                       });
   }

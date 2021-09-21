@@ -24,7 +24,7 @@ class RPDocumentsSelection{
                           'dataType': 'json'
                         };
 
-      this.applicationJS.parseAjaxResponse(ajax_params).then((e)=>{ this.main.load_datas('documents-selection'); this.applicationJS.noticeFlashMessageFrom(null, e.message); });
+      this.applicationJS.sendRequest(ajax_params).then((e)=>{ this.main.load_datas('documents-selection'); this.applicationJS.noticeSuccessMessageFrom(null, e.message); });
     }
   }
 }

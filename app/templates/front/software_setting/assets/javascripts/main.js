@@ -13,7 +13,7 @@ class SoftwareSetting {
                           target: '#csv_descriptors.edit',
                           target_dest: '#edit_csv_descriptor_format'
                         }
-    this.applicationJS.parseAjaxResponse(ajax_params).then((e)=>{ $('.modal#csv_descriptor_modal').modal('show'); });
+    this.applicationJS.sendRequest(ajax_params).then((e)=>{ $('.modal#csv_descriptor_modal').modal('show'); });
   }
 }
 

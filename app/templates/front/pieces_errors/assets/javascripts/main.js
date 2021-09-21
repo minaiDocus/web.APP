@@ -49,7 +49,7 @@ class PiecesErrorsMain{
                           'target': ''
                         };
 
-    this.applicationJS.parseAjaxResponse(ajax_params)
+    this.applicationJS.sendRequest(ajax_params)
                       .then((html)=>{
                         $(`.tab-pane#${type}`).html(html);
                         $(`span#total-${type}`).text( $(`input#${type}-size`).val() );

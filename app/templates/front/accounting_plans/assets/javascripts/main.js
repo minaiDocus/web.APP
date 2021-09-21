@@ -31,7 +31,7 @@ class AccountingPlan {
                     'contentType': 'application/json'
                   };
 
-        self.applicationJS.parseAjaxResponse(params).then((result)=>{ self.applicationJS.noticeFlashMessageFrom(null, result.message); });
+        self.applicationJS.sendRequest(params).then((result)=>{ self.applicationJS.noticeSuccessMessageFrom(null, result.message); });
      });
     });
   }
@@ -84,7 +84,7 @@ class AccountingPlan {
   get_edit_view(target){
     let self = this;
 
-    self.applicationJS.parseAjaxResponse({ 'url': '/organizations/' + self.organization_id + '/customers/' + self.customer_id + '/accounting_plan/edit' }).then((element)=>{
+    self.applicationJS.sendRequest({ 'url': '/organizations/' + self.organization_id + '/customers/' + self.customer_id + '/accounting_plan/edit' }).then((element)=>{
       self.edit_provider_modal.find('.modal-body').html($(element).find('#accounting_plan').html());
       self.edit_provider_modal.find(target).remove();
       if (target === '.provider-form') { self.edit_provider_modal.find('.modal-title').text('Éditer un client'); }

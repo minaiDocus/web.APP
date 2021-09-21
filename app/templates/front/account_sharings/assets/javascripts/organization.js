@@ -29,7 +29,7 @@ class AccountSharingsOrganization{
                         dataType: 'html',
                       }
 
-    this.applicationJS.parseAjaxResponse(ajax_params).then((e)=>{ $('.tab-pane#shared_accounts').html(e); bind_account_sharings_organization_events(); });
+    this.applicationJS.sendRequest(ajax_params).then((e)=>{ $('.tab-pane#shared_accounts').html(e); bind_account_sharings_organization_events(); });
   }
 
   load_contacts(page=1, per_page=20){
@@ -39,7 +39,7 @@ class AccountSharingsOrganization{
                         dataType: 'html',
                       }
 
-    this.applicationJS.parseAjaxResponse(ajax_params).then((e)=>{ $('.tab-pane#contacts').html(e); bind_account_sharings_organization_events(); });
+    this.applicationJS.sendRequest(ajax_params).then((e)=>{ $('.tab-pane#contacts').html(e); bind_account_sharings_organization_events(); });
   }
 
   add_account(){
@@ -49,7 +49,7 @@ class AccountSharingsOrganization{
                         dataType: 'html',
                       }
 
-    this.applicationJS.parseAjaxResponse(ajax_params)
+    this.applicationJS.sendRequest(ajax_params)
                       .then((e)=>{
                         this.current_form = 'account';
                         $('.modal#account-sharing .modal-title').html('Partager un dossier');
@@ -59,7 +59,7 @@ class AccountSharingsOrganization{
   }
 
   validate_account(){
-    let data = SerializeToJson( $(`.modal#account-sharing form#shared_accounts_form`) );
+    let data = $(`.modal#account-sharing form#shared_accounts_form`).serializeObject();
     let ajax_params = {
                         url: `${this.base_url}/create_account`,
                         type: 'POST',
@@ -67,7 +67,7 @@ class AccountSharingsOrganization{
                         data: data
                       }
 
-    this.applicationJS.parseAjaxResponse(ajax_params).then((e)=>{ $('.modal#account-sharing').modal('hide'); this.load_accounts( 1, $('.per_page.sharing_accounts').val() ); });
+    this.applicationJS.sendRequest(ajax_params).then((e)=>{ $('.modal#account-sharing').modal('hide'); this.load_accounts( 1, $('.per_page.sharing_accounts').val() ); });
   }
 
   edit_contact(id=0){
@@ -83,7 +83,7 @@ class AccountSharingsOrganization{
                         dataType: 'html',
                       }
 
-    this.applicationJS.parseAjaxResponse(ajax_params)
+    this.applicationJS.sendRequest(ajax_params)
                       .then((e)=>{
                         this.current_form = 'contact';
                         $('.modal#account-sharing .modal-title').html('Edition de contact');
@@ -97,7 +97,7 @@ class AccountSharingsOrganization{
     if(this.contact_id > 0)
       url = `/update_contact/${this.contact_id}`
 
-    let data = SerializeToJson( $(`.modal#account-sharing form#shared_contacts_form`) );
+    let data = $(`.modal#account-sharing form#shared_contacts_form`).serializeObject();
     let ajax_params = {
                         url: `${this.base_url}${url}`,
                         type: 'POST',
@@ -105,7 +105,7 @@ class AccountSharingsOrganization{
                         data: data
                       }
 
-    this.applicationJS.parseAjaxResponse(ajax_params).then((e)=>{ $('.modal#account-sharing').modal('hide'); this.load_contacts( 1, $('.per_page.sharing_contacts').val() ); });
+    this.applicationJS.sendRequest(ajax_params).then((e)=>{ $('.modal#account-sharing').modal('hide'); this.load_contacts( 1, $('.per_page.sharing_contacts').val() ); });
   }
 
 }

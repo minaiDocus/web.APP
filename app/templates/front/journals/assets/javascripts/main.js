@@ -261,7 +261,7 @@ class Journal{
                     dataType: 'json'
                   }
 
-    this.applicationJS.parseAjaxResponse(params).then((e)=>{ $('#comptaAnalysisEdition.modal').modal('hide'); });
+    this.applicationJS.sendRequest(params).then((e)=>{ $('#comptaAnalysisEdition.modal').modal('hide'); });
   }
 
   load_journals(type='journals', page=1, per_page=0){
@@ -280,7 +280,7 @@ class Journal{
                           'target': ''
                         };
 
-    this.applicationJS.parseAjaxResponse(ajax_params)
+    this.applicationJS.sendRequest(ajax_params)
                       .then((html)=>{
                         this.action_locker = false;
                         this.main();
@@ -306,7 +306,7 @@ class Journal{
 
     if (journal_id !== null) { url  = '/organizations/' + self.organization_id + '/journals/' + journal_id + '/edit'; }
 
-    self.applicationJS.parseAjaxResponse({ 'url': url }).then((element)=>{
+    self.applicationJS.sendRequest({ 'url': url }).then((element)=>{
       let from        = '#journal.new';
       let modal_title = 'Nouveau journal comptable';
 

@@ -79,16 +79,16 @@ class ConfigurationSteps{
   delete_connection(id){
     if(confirm('Voulez vous vraiment supprimer cette automate? La suppression peut prendre un moment.')){
       this.budgeaApi.delete_connection(id)
-                    .then((e)=>{ this.applicationJS.noticeFlashMessageFrom(null, 'Suppression terminée'); AppEmit('retriever_reload_all'); })
-                    .catch((e)=>{ this.applicationJS.noticeInternalErrorFrom(null, e.toString()); AppEmit('retriever_reload_all'); });
+                    .then((e)=>{ this.applicationJS.noticeSuccessMessageFrom(null, 'Suppression terminée'); AppEmit('retriever_reload_all'); })
+                    .catch((e)=>{ this.applicationJS.noticeErrorMessageFrom(null, e.toString()); AppEmit('retriever_reload_all'); });
     }
   }
 
   trigger_connection(id){
     if(confirm('Voulez vous vraiment synchroniser cette automate? La synchronisation peut prendre un moment.')){
       this.budgeaApi.trigger_connection(id)
-                    .then((e)=>{ this.applicationJS.noticeFlashMessageFrom(null, 'Synchronisation terminée'); AppEmit('retriever_reload_all'); })
-                    .catch((e)=>{ this.applicationJS.noticeInternalErrorFrom(null, e.toString()); AppEmit('retriever_reload_all'); });
+                    .then((e)=>{ this.applicationJS.noticeSuccessMessageFrom(null, 'Synchronisation terminée'); AppEmit('retriever_reload_all'); })
+                    .catch((e)=>{ this.applicationJS.noticeErrorMessageFrom(null, e.toString()); AppEmit('retriever_reload_all'); });
     }
   }
 }

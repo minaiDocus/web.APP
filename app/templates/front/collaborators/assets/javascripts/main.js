@@ -15,7 +15,7 @@ class Main{
 
   show_modal(target, params){
     if (target === 'collaborators') {
-      this.applicationJS.parseAjaxResponse(params).then((element)=>{
+      this.applicationJS.sendRequest(params).then((element)=>{
         this.member_modal.find('.modal-body').html($(element).find('.form_content').html());
         this.member_modal.find('.modal-title').html($(element).find('.form_content').attr('text'));
         apply_searchable_option('collaborators');
@@ -23,7 +23,7 @@ class Main{
       });
     }
     else if (target === 'groups') {
-      this.applicationJS.parseAjaxResponse(params).then((element)=>{
+      this.applicationJS.sendRequest(params).then((element)=>{
         this.group_modal.find('.modal-body').html($(element).find('.form_content').html());
         this.group_modal.find('.modal-title').html($(element).find('.form_content').attr('text'));
         apply_searchable_option('groups')
@@ -54,7 +54,7 @@ class Main{
   }
 
   create_update(url, data){
-    this.applicationJS.parseAjaxResponse({
+    this.applicationJS.sendRequest({
       'url': url,
       'data': data,
       'type': 'POST',
@@ -108,7 +108,7 @@ class Main{
                           'target': ''
                         };
 
-    this.applicationJS.parseAjaxResponse(ajax_params)
+    this.applicationJS.sendRequest(ajax_params)
     .then((response)=>{
       if (type === 'members') {
         $('.page-content .collaborators-content').html($(response).find('.page-content').html());
@@ -129,7 +129,7 @@ class Main{
 
 
   search_contains_filter(url, data){
-    this.applicationJS.parseAjaxResponse({
+    this.applicationJS.sendRequest({
       'url': url,
       'data': data,
       'type': 'GET',
@@ -161,7 +161,7 @@ class Main{
                           'target': ''
                         };
 
-    this.applicationJS.parseAjaxResponse(ajax_params)
+    this.applicationJS.sendRequest(ajax_params)
     .then((element)=>{
       this.action_locker = false;
       $('#authorization').html($(element).find('#collaborator_rights').html());
@@ -181,7 +181,7 @@ class Main{
                           'target': ''
                         };
 
-    this.applicationJS.parseAjaxResponse(ajax_params)
+    this.applicationJS.sendRequest(ajax_params)
     .then((element)=>{
       this.action_locker = false;
       $('#file_storages').html($(element).find('#file_storage_authorizations').html());
@@ -204,7 +204,7 @@ class Main{
                           'dataType': 'html',
                         };
 
-      this.applicationJS.parseAjaxResponse(ajax_params)
+      this.applicationJS.sendRequest(ajax_params)
       .then((element)=>{
         this.action_locker = false;
         $('.page-content .box-group-content').html($(element).find('.page-content').html());
@@ -229,7 +229,7 @@ class Main{
                           'dataType': 'html',
                         };
 
-      this.applicationJS.parseAjaxResponse(ajax_params)
+      this.applicationJS.sendRequest(ajax_params)
       .then((element)=>{
         this.action_locker = false;
         this.group_show_details_modal.find('.modal-body').html($(element).find('.group-modal-body').html());

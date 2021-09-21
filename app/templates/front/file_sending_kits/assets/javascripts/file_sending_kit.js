@@ -8,7 +8,7 @@ class FileSendingKit{
   }
 
   generate_manual_paper_set_order(url, data){
-    this.applicationJS.parseAjaxResponse({
+    this.applicationJS.sendRequest({
       'url': url,
       'data': data,
       'type': 'POST',

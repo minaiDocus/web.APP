@@ -10,7 +10,7 @@ class NotifierMain{
                         dataType: 'html',
                       }
 
-    this.applicationJS.parseAjaxResponse(ajax_params)
+    this.applicationJS.sendRequest(ajax_params)
                        .then((e)=>{
                           $('#notifications_notifier').html(e);
                           let unread_count = $(e).find('input#unread_count').val();
@@ -27,7 +27,7 @@ class NotifierMain{
                         dataType: 'html',
                       }
 
-    this.applicationJS.parseAjaxResponse(ajax_params)
+    this.applicationJS.sendRequest(ajax_params)
                        .then((e)=>{
                           $('.modal#all_notifications .modal-body').html(e);
                           $('.modal#all_notifications').modal('show');

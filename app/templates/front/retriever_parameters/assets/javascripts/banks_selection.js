@@ -23,7 +23,7 @@ class RPBanksSelection{
                           'dataType': 'html',
                         };
 
-    this.main.applicationJS.parseAjaxResponse(ajax_params)
+    this.main.applicationJS.sendRequest(ajax_params)
                             .then((e)=>{
                               this.mainConfig.main_modal.find('#bank_selection').html(e);
                             });
@@ -37,21 +37,21 @@ class RPBanksSelection{
                       this.local_accounts  = data.my_accounts; // the result is a collection of api_ids
                       resolve();
                     })
-                    .catch((error)=>{ this.mainConfig.applicationJS.noticeInternalErrorFrom(null, error.toString()) });
+                    .catch((error)=>{ this.mainConfig.applicationJS.noticeErrorMessageFrom(null, error.toString()) });
     });
   }
 
   submit_selected_accounts(){
     if(confirm('Etes vous sûr?')){
       let self = this
-      let data = SerializeToJson( this.mainConfig.main_modal.find('.step4 form#account-selection') );
+      let data = this.mainConfig.main_modal.find('.step4 form#account-selection').serializeObject();
 
       let selected_accounts  = this.remote_accounts.filter((account)=>{ return data['bank_accounts'].find(d=>{ return d == account['id'] }); });
 
       if(selected_accounts.length > 0){
         this.mainConfig.budgeaApi.update_my_accounts(selected_accounts)
                                   .then(()=>{ this.configuration_finished(); })
-                                  .catch(error=>{ this.mainConfig.applicationJS.noticeInternalErrorFrom(null, error.toString()); });
+                                  .catch(error=>{ this.mainConfig.applicationJS.noticeErrorMessageFrom(null, error.toString()); });
       }else{
         this.configuration_finished();
       }

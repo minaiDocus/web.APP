@@ -265,12 +265,12 @@ jQuery(function() {
   $('document').livequery(function(){ main.bind_events(); });
 
   $('#comptaAnalysisEdition .btn#validate_analysis').unbind('click').bind('click', function(){ 
-    let data = SerializeToJson($('#comptaAnalysisEdition form#compta_analytic_form_modal'));
+    let data = $('#comptaAnalysisEdition form#compta_analytic_form_modal').serializeObject();
     AppEmit('compta_analytics.validate_analysis', { data: data });
   });
 
   $('.modal#comptaAnalysisEdition').on('hide.bs.modal', function(e){
-    let data = SerializeToJson($('#comptaAnalysisEdition form#compta_analytic_form_modal'));
+    let data = $('#comptaAnalysisEdition form#compta_analytic_form_modal').serializeObject();
     AppEmit('compta_analytics.hide_modal', { data: data, resume: main.get_analytics_resume() });
   });
 

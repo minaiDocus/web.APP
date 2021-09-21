@@ -7,9 +7,9 @@ class AddressesMain{
     let addr_for = $('#addresses_management input#addr_for').val();
     let id       = $('#addresses_management input#addr_id').val();
 
-    let paper_return       = SerializeToJson( $('#addresses_management form.paper_return_form') );
-    let paper_set_shipping = SerializeToJson( $('#addresses_management form.paper_set_shipping_form') );
-    let dematbox_shipping  = SerializeToJson( $('#addresses_management form.dematbox_shipping_form') );
+    let paper_return       = $('#addresses_management form.paper_return_form').serializeObject();
+    let paper_set_shipping = $('#addresses_management form.paper_set_shipping_form').serializeObject();
+    let dematbox_shipping  = $('#addresses_management form.dematbox_shipping_form').serializeObject();
 
     let ajax_params = {
                         url: '/addresses/update_all',
@@ -17,7 +17,7 @@ class AddressesMain{
                         dataType: 'json',
                         data: { id: id, addr_for: addr_for, paper_return: paper_return, paper_set_shipping: paper_set_shipping, dematbox_shipping: dematbox_shipping },
                       };
-    this.applicationJS.parseAjaxResponse(ajax_params);
+    this.applicationJS.sendRequest(ajax_params);
   }
 
   destroy_address(elem){  
@@ -31,7 +31,7 @@ class AddressesMain{
                           type: 'DELETE',
                           dataType: 'json',
                         };
-      this.applicationJS.parseAjaxResponse(ajax_params)
+      this.applicationJS.sendRequest(ajax_params)
                         .then((e)=>{ 
                           $(`#addresses_management form.${type}_form input`).each(function(a){
                             $(this).val('');

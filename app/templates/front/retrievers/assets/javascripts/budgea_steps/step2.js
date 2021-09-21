@@ -19,7 +19,7 @@ class ConfigurationStep2{
                           'dataType': 'html',
                         };
 
-    this.mainConfig.applicationJS.parseAjaxResponse(ajax_params)
+    this.mainConfig.applicationJS.sendRequest(ajax_params)
                                   .then((e)=>{
                                     this.mainConfig.main_modal.find('#step2').html(e);
 
@@ -81,7 +81,7 @@ class ConfigurationStep2{
         else
           this.mainConfig.budgeaApi.webauth(account_id, this.mainConfig.current_connector['id'], true);
       }else{
-        let all_datas   = SerializeToJson( this.form );
+        let all_datas   = this.form.serializeObject();
         let data_remote = JSON.parse(JSON.stringify(all_datas)); //Cloning all_datas
 
         delete data_remote.ido_connector_id;
@@ -112,20 +112,20 @@ class ConfigurationStep2{
               console.log(data.remote_response);
             },
             (error)=>{
-              self.mainConfig.applicationJS.noticeInternalErrorFrom(null, error.toString());
+              self.mainConfig.applicationJS.noticeErrorMessageFrom(null, error.toString());
             }
           );
         }
 
         if(this.with_contact){
-          let data_contact = SerializeToJson( this.contact_form );
+          let data_contact = this.contact_form.serializeObject();
           delete data_contact.local_company;
           delete data_contact.local_name;
           delete data_contact.local_first_name;
 
           this.mainConfig.budgeaApi.update_contact(data_contact).then(
             (data)=>{ fetch_connection() },
-            (error)=> { self.mainConfig.applicationJS.noticeInternalErrorFrom(null, error.toString()) }
+            (error)=> { self.mainConfig.applicationJS.noticeErrorMessageFrom(null, error.toString()) }
           )
         }else{
           fetch_connection();
@@ -133,7 +133,7 @@ class ConfigurationStep2{
 
       }
     }else{
-      self.mainConfig.applicationJS.noticeInternalErrorFrom(null, 'Veuillez remplir correctement les champs obligatoires!')
+      self.mainConfig.applicationJS.noticeErrorMessageFrom(null, 'Veuillez remplir correctement les champs obligatoires!')
     }
   }
 }

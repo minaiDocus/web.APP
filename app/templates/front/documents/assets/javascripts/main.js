@@ -39,7 +39,7 @@ class DocumentsMain{
     this.ajax_params['target'] = (append)? null : '.main-content';
     this.ajax_params['data']   = data.join('&');
 
-    this.applicationJS.parseAjaxResponse(this.ajax_params, function(){ $('#more-filter.modal').modal('hide'); })
+    this.applicationJS.sendRequest(this.ajax_params, function(){ $('#more-filter.modal').modal('hide'); })
                        .then((e)=>{
                           if(append){
                             if($(e).find('.no-data-found').length > 0){
@@ -101,7 +101,7 @@ class DocumentsMain{
 
     this.export_params = params;
 
-    this.applicationJS.parseAjaxResponse({ 'url': '/documents/export_options', 'type': 'POST', 'data': this.export_params, target: null, dataType: 'json' })
+    this.applicationJS.sendRequest({ 'url': '/documents/export_options', 'type': 'POST', 'data': this.export_params, target: null, dataType: 'json' })
                       .then((e)=>{
                         let options = e.options;
                         let html = '';
@@ -175,7 +175,7 @@ class DocumentsMain{
                         }
 
     if(confirm(information))
-      this.applicationJS.parseAjaxResponse(ajax_params).then((e)=>{ this.applicationJS.noticeFlashMessageFrom(null, 'Livraison en cours ...'); });
+      this.applicationJS.sendRequest(ajax_params).then((e)=>{ this.applicationJS.noticeSuccessMessageFrom(null, 'Livraison en cours ...'); });
   }
 }
 

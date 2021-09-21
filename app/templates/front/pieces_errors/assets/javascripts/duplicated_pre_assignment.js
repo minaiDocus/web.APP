@@ -27,7 +27,7 @@ class DuplicatedPreAssignment{
                           'dataType': 'json'
                         };
 
-      this.main.applicationJS.parseAjaxResponse(ajax_params).then((e)=>{ this.main.load_datas('duplicated-pre-assignment'); });
+      this.main.applicationJS.sendRequest(ajax_params).then((e)=>{ this.main.load_datas('duplicated-pre-assignment'); });
     }
   }
 }

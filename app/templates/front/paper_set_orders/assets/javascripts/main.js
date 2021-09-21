@@ -43,7 +43,7 @@ class PaperSetOrder{
                           'target': ''
                         };
 
-    this.applicationJS.parseAjaxResponse(ajax_params)
+    this.applicationJS.sendRequest(ajax_params)
                       .then((html)=>{
                         if (search_pattern && search_text != '') {
                           $('.paper-set-order-view').html($(html).find('.paper-set-order-view').html());
@@ -57,7 +57,7 @@ class PaperSetOrder{
   }
 
   select_for_orders(){
-    this.applicationJS.parseAjaxResponse({ 'url': this.paper_set_link }).catch((error)=> { 
+    this.applicationJS.sendRequest({ 'url': this.paper_set_link }).catch((error)=> { 
       console.log(error)
     }).then((element)=>{
       if (this.is_manual === 'true') {
@@ -77,7 +77,7 @@ class PaperSetOrder{
 
   order_multiple_paper_set(url, data){
     if (data.length > 0) {
-      this.applicationJS.parseAjaxResponse({
+      this.applicationJS.sendRequest({
         'url': url,
         'data': data,
         'type': 'POST',
@@ -98,7 +98,7 @@ class PaperSetOrder{
 
 
   add_or_edit_paper_set_order(url){
-    this.applicationJS.parseAjaxResponse({ 'url': url }).catch((error)=> { 
+    this.applicationJS.sendRequest({ 'url': url }).catch((error)=> { 
       console.log(error)
     }).then((element)=>{
       this.add_new.find('.modal-body').html($(element).find('#paper_set_order .form-content').html());

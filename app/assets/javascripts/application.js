@@ -46,6 +46,57 @@ VARIABLES.get = (var_name) => {
   return VARS[var_name];
 }
 
+$.fn.serializeObject = function() {
+  var o = {};
+  var a = this.serializeArray();
+
+  try{
+    $.each(a, function(){
+      const inject = (obj, name)=>{
+        if(name.match(/\[\](.+)/))
+        {
+          obj[name] = this.value;
+        }
+        else if(name.match(/\[\]$/)){
+          let obj_index = name.replace(/\[\]/g, '');
+
+          if(this.value != undefined && this.value != '' && this.value != null){
+            try{
+              obj[obj_index].push(this.value);
+            }catch(e){
+              obj[obj_index] = [this.value];
+            }
+          }
+        }
+        else
+        {
+          let splited = name.split('[');
+          let c_name  = splited[0].replace(']', '');
+
+          if(splited.length > 1)
+          {
+            if(obj[c_name] == undefined || obj[c_name] == null)
+              obj[c_name] = {};
+
+            splited.shift();
+            inject(obj[c_name], splited.join('['));
+          }
+          else
+          {
+            obj[c_name] = this.value;
+          }
+        }
+      }
+
+      inject(o, this.name);
+    });
+  }catch(err){
+    console.error(err);
+  }
+
+  return o;
+};
+
 // Type must be 'show' or 'hide'
 AppToggleLoading = (type='show') => {
   if(type == 'show'){
@@ -56,31 +107,6 @@ AppToggleLoading = (type='show') => {
     $('div.loading_box').removeClass('force');
     $('div.loading_box').addClass('hide');
   }
-}
-
-SerializeToJson = (form) => {
-  let data = form.serializeArray();
-  let result = {};
-
-  data.forEach((obj)=>{
-    if(obj.name.match(/\[\]/)){
-      let obj_index = obj.name.replace(/\[\]/g, '');
-      let obj_val = result[obj_index];
-
-      if(obj_val != '' && obj_val != undefined && obj_val != null){
-        if(obj.value != undefined && obj.value != '' && obj.value != null)
-          result[obj_index].push(obj.value)
-      }else{
-        if(obj.value != undefined && obj.value != '' && obj.value != null)
-          result[obj_index] = [obj.value];
-      }
-    }else{
-      if(obj.value != undefined && obj.value != '' && obj.value != null)
-        result[obj.name] = obj.value
-    }
-  });
-
-  return result
 }
 
 SetCache = (name, value, lifeTime) => {
@@ -132,11 +158,11 @@ class ApplicationJS {
   }
 
   noticeAllMessageFrom(page=null){
-    this.noticeFlashMessageFrom(page);
-    this.noticeInternalErrorFrom(page);
+    this.noticeSuccessMessageFrom(page);
+    this.noticeErrorMessageFrom(page);
   }
 
-  noticeFlashMessageFrom(page=null, message = null){
+  noticeSuccessMessageFrom(page=null, message = null){
     var html = message;
     var is_present = null;
     if(message)
@@ -157,7 +183,7 @@ class ApplicationJS {
     }
   }
 
-  noticeInternalErrorFrom(page=null, message = null){
+  noticeErrorMessageFrom(page=null, message = null){
     var html = message;
     var is_present = null;
     if(message)
@@ -178,7 +204,7 @@ class ApplicationJS {
     }
   }
 
-  parseAjaxResponse(params={}, beforeUpdateContent=function(e){}, afterUpdateContent=function(e){}){
+  sendRequest(params={}, beforeUpdateContent=function(e){}, afterUpdateContent=function(e){}){
     var self = this
 
     return new Promise((success, error) => {
@@ -232,14 +258,14 @@ class ApplicationJS {
 
           try{
             if(result.json_flash.success){
-              self.noticeFlashMessageFrom(null, result.json_flash.success)
+              self.noticeSuccessMessageFrom(null, result.json_flash.success)
             }
           }catch(e){}
 
           try{
             if(result.json_flash.error){
               $('#idocus_notifications_messages .notice-internal-error .error_title').text('Attention');
-              self.noticeInternalErrorFrom(null, result.json_flash.error)
+              self.noticeErrorMessageFrom(null, result.json_flash.error)
             }
           }catch(e){}
 
@@ -256,7 +282,7 @@ class ApplicationJS {
           }, 1000);
         },
         error: function(result){          
-          self.noticeInternalErrorFrom(null, result.responseText);
+          self.noticeErrorMessageFrom(null, result.responseText);
 
           if(success)
             success(result);
@@ -274,7 +300,7 @@ class ApplicationJS {
   }
 
   displayListPer(params={}, afterUpdateContent=function(e){}){
-    if (afterUpdateContent !== null) { this.parseAjaxResponse(params, null, afterUpdateContent); }
+    if (afterUpdateContent !== null) { this.sendRequest(params, null, afterUpdateContent); }
   }
 
   static launch_async(idocus_params={}){
@@ -308,12 +334,17 @@ class ApplicationJS {
           let form_data = {}
 
           if(form){
-            /*if(ajax_params['dataType'] == 'json')
-              form_data = SerializeToJson(form); //serialize as json
+            if(ajax_params['force_linear_form'] == true)
+            {
+              form_data = form.serialize();
+            }
             else
-              form_data = form.serialize(); //serialize as url params*/
-
-            form_data = form.serialize();
+            {
+              if(ajax_params['dataType'] == 'json')
+                form_data = form.serializeObject(); //serialize as json
+              else
+                form_data = form.serialize(); //serialize as url params
+            }
 
             if(idocus_params['force_form_url'] == true){
               ajax_params['url'] = form.attr('action');
@@ -332,7 +363,8 @@ class ApplicationJS {
               new_datas = idocus_params['datas'] || {};
             }
 
-            form_data = Object.assign( form_data, new_datas );
+            if(typeof(form_data) === 'object')
+              form_data = Object.assign( form_data, new_datas );
           }
 
           if(form_data){
@@ -340,7 +372,7 @@ class ApplicationJS {
           }
 
         let appJS = new ApplicationJS();
-        appJS.parseAjaxResponse(ajax_params)
+        appJS.sendRequest(ajax_params)
               .then(e => {
                 //Handling modal param
                 if( idocus_params['modal'] && idocus_params['modal']['id'] )

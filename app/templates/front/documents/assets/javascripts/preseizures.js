@@ -19,7 +19,7 @@ class DocumentsPreseizures{
                     'dataType': 'html'
                   }
 
-    this.applicationJS.parseAjaxResponse(params)
+    this.applicationJS.sendRequest(params)
                       .then((e)=>{
                         let dynamic_box = $(e).find('.dynamic_box');
 
@@ -46,7 +46,7 @@ class DocumentsPreseizures{
                     'dataType': 'html'
                   }
 
-    this.applicationJS.parseAjaxResponse(params).then((e)=>{
+    this.applicationJS.sendRequest(params).then((e)=>{
       this.edit_modal.find('.modal-body').html(e);
       this.edit_modal.modal('show');
     });
@@ -63,16 +63,16 @@ class DocumentsPreseizures{
                     'dataType': 'json'
                   }
 
-    this.applicationJS.parseAjaxResponse(params).then((e)=>{
+    this.applicationJS.sendRequest(params).then((e)=>{
       if(e.error.toString() == '')
       {
         this.refresh_view(this.id);
-        this.applicationJS.noticeFlashMessageFrom(null, 'Modifié avec succès');
+        this.applicationJS.noticeSuccessMessageFrom(null, 'Modifié avec succès');
         this.edit_modal.modal('hide');
       }
       else
       {
-        this.applicationJS.noticeInternalErrorFrom(null, e.error);
+        this.applicationJS.noticeErrorMessageFrom(null, e.error);
       }
     });
   }
@@ -160,11 +160,11 @@ class DocumentsPreseizures{
                     'dataType': 'json'
                   };
 
-    this.applicationJS.parseAjaxResponse(params).then((e)=>{ 
+    this.applicationJS.sendRequest(params).then((e)=>{ 
       if(e.error != '')
-        this.applicationJS.noticeInternalErrorFrom(null, e.error);
+        this.applicationJS.noticeErrorMessageFrom(null, e.error);
       else
-        this.applicationJS.noticeFlashMessageFrom(null, 'Modifié avec succès');
+        this.applicationJS.noticeSuccessMessageFrom(null, 'Modifié avec succès');
 
       this.refresh_view(preseizure_id); 
     });
@@ -214,7 +214,7 @@ class DocumentsPreseizures{
                       'type': "GET",
                     };
 
-        this.applicationJS.parseAjaxResponse(_prm).then((data)=>{ finalize(data); });
+        this.applicationJS.sendRequest(_prm).then((data)=>{ finalize(data); });
       }
       else
       {

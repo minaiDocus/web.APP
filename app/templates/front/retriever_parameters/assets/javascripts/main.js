@@ -61,7 +61,7 @@ class RetrievedParametersMain{
                           'target': ''
                         };
 
-    this.applicationJS.parseAjaxResponse(ajax_params)
+    this.applicationJS.sendRequest(ajax_params)
                       .then((html)=>{
                         $(`.tab-pane#${type}`).html(html);
                         $(`span#total-${type}`).text( $(`input#${type}-size`).val() );
@@ -99,7 +99,7 @@ jQuery(function() {
   AppListenTo('retriever_validate_retriever_selection', (e)=>{ 
     main.bank_select_object.submit_selected_accounts((e)=>{
       main.bank_select_object.init_form({ id: $('#retriever_selector').val() });
-      main.applicationJS.noticeFlashMessageFrom(null, 'Configuration temrminée!');
+      main.applicationJS.noticeSuccessMessageFrom(null, 'Configuration temrminée!');
     });
   });
 

@@ -10,7 +10,7 @@ class ConfigurationStep1{
       if(this.mainConfig.current_connector){
         this.mainConfig.goto(2, this.retriever);
       }else{
-        this.mainConfig.applicationJS.noticeInternalErrorFrom(null, 'Veuillez selectionnez un connecteur avant de poursuivre svp ...');
+        this.mainConfig.applicationJS.noticeErrorMessageFrom(null, 'Veuillez selectionnez un connecteur avant de poursuivre svp ...');
       }
     }
 
@@ -43,7 +43,7 @@ class ConfigurationStep1{
                                   this.mainConfig.budgeaApi.check_cgu();
                                 });
     }else{
-      this.mainConfig.applicationJS.noticeInternalErrorFrom(null, 'Veuillez selectionnez un compte avant de poursuivre svp ...');
+      this.mainConfig.applicationJS.noticeErrorMessageFrom(null, 'Veuillez selectionnez un compte avant de poursuivre svp ...');
     }
   }
 
@@ -72,7 +72,7 @@ class ConfigurationStep1{
                                     SetCache('connectors_list', this.connectors);
                                     this.fill_connectors();
                                   })
-                                  .catch((e)=>{ this.mainConfig.applicationJS.noticeInternalErrorFrom(null, e.toString()); })
+                                  .catch((e)=>{ this.mainConfig.applicationJS.noticeErrorMessageFrom(null, e.toString()); })
       }
     }
   }

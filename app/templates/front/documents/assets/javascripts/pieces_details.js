@@ -37,7 +37,7 @@ class DocumentsDetails extends DocumentsMain{
                         'dataType': 'json'
                       }
 
-        this.applicationJS.parseAjaxResponse(params).then((e)=>{ this.load_pieces(true); });
+        this.applicationJS.sendRequest(params).then((e)=>{ this.load_pieces(true); });
       }
     }
   }
@@ -51,7 +51,7 @@ class DocumentsDetails extends DocumentsMain{
                         'dataType': 'json'
                       }
 
-        this.applicationJS.parseAjaxResponse(params).then((e)=>{ this.load_pieces(true); });
+        this.applicationJS.sendRequest(params).then((e)=>{ this.load_pieces(true); });
     }
   }
 
@@ -75,7 +75,7 @@ class DocumentsDetails extends DocumentsMain{
                     dataType: 'json'
                   }
 
-    this.applicationJS.parseAjaxResponse(params).then((e)=>{ this.load_pieces(true); });
+    this.applicationJS.sendRequest(params).then((e)=>{ this.load_pieces(true); });
   }
 
   show_preseizures_modal(elem){
@@ -87,7 +87,7 @@ class DocumentsDetails extends DocumentsMain{
                       'dataType': 'html'
                     }
 
-      this.applicationJS.parseAjaxResponse(params).then((e)=>{
+      this.applicationJS.sendRequest(params).then((e)=>{
         $('#view-document-content .modal-body').html($(e).find('.preseizures_box').html());
         $('#view-document-content .modal-body .for-dismiss-modal').html($('.dismiss-modal').clone().removeClass('hide').html());
         $('#view-document-content').modal('show');

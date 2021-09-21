@@ -76,7 +76,7 @@ class Organization {
   prepare_payment_slimpay(url, data){
     const self = this;
     if (self.valid_slimpay_form()) {
-      this.applicationJS.parseAjaxResponse({
+      this.applicationJS.sendRequest({
           'url': url,
           'data': data,
           'type': 'POST',
@@ -114,7 +114,7 @@ class Organization {
 
   confirm_payment_slimpay(url){
     const self = this;
-    this.applicationJS.parseAjaxResponse({
+    this.applicationJS.sendRequest({
       'url': url,
       'type': 'POST',
       'dataType': 'json',

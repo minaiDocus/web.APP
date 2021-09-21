@@ -6,7 +6,7 @@ class AccountSharingsProfile{
   }
 
   account_sharings_new(){
-    let data = SerializeToJson( $(`.modal#account-sharing-new form#new_user`) );
+    let data = $(`.modal#account-sharing-new form#new_user`).serializeObject();
     let ajax_params = {
                         url: '/account_sharings',
                         type: 'POST',
@@ -14,7 +14,7 @@ class AccountSharingsProfile{
                         data: data
                       }
 
-    this.applicationJS.parseAjaxResponse(ajax_params)
+    this.applicationJS.sendRequest(ajax_params)
                       .then((e)=>{
                         try{
                           if(!e.json_flash.error){
@@ -27,7 +27,7 @@ class AccountSharingsProfile{
   }
 
   account_sharings_new_request(){
-    let data = SerializeToJson( $(`.modal#account-sharing-new-request form#new_account_sharing_request`) );
+    let data = $(`.modal#account-sharing-new-request form#new_account_sharing_request`).serializeObject();
     let ajax_params = {
                         url: '/account_sharings/create_request',
                         type: 'POST',
@@ -35,7 +35,7 @@ class AccountSharingsProfile{
                         data: data
                       }
 
-    this.applicationJS.parseAjaxResponse(ajax_params)
+    this.applicationJS.sendRequest(ajax_params)
                       .then((e)=>{
                         try{
                           if(!e.json_flash.error){

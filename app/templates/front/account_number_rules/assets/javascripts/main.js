@@ -32,7 +32,7 @@ class AccountNumberRule{
                           'target': ''
                         };
 
-    this.applicationJS.parseAjaxResponse(ajax_params)
+    this.applicationJS.sendRequest(ajax_params)
                       .then((html)=>{
                         if (search_pattern && search_text != '') {
                           $('.bank-affectation').html($(html).find('.bank-affectation').html());
@@ -50,7 +50,7 @@ class AccountNumberRule{
 
     if (id > 0) { url  = `/organizations/${this.organization_id}/account_number_rules/${id}/edit`; }
 
-    this.applicationJS.parseAjaxResponse({ 'url': url }).catch((error)=> { 
+    this.applicationJS.sendRequest({ 'url': url }).catch((error)=> { 
       console.log(error)
     }).then((element)=>{
       let from        = '#account_number_rule.new';
@@ -92,12 +92,12 @@ class AccountNumberRule{
   }
 
   skip_accounting_plan(url, account_list, account_validation){
-    this.applicationJS.parseAjaxResponse({
+    this.applicationJS.sendRequest({
         'url': url,
         'data': { account_list: account_list, account_validation: account_validation },
         'type': 'POST',
         'dataType': 'json',
-      }).then((e)=>{ /*this.applicationJS.noticeFlashMessageFrom(null, e.message);*/ });
+      }).then((e)=>{ /*this.applicationJS.noticeSuccessMessageFrom(null, e.message);*/ });
   }
 }
 

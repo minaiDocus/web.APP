@@ -19,7 +19,7 @@ class ConfigurationStep3{
                           'dataType': 'html',
                         };
 
-    this.mainConfig.applicationJS.parseAjaxResponse(ajax_params)
+    this.mainConfig.applicationJS.sendRequest(ajax_params)
                                   .then((e)=>{
                                     this.mainConfig.main_modal.find('#step3').html(e);
 
@@ -42,13 +42,13 @@ class ConfigurationStep3{
     let self = this;
     if(this.valid_fields()){
       let data_local  = { budgea_id: this.connector['id'] };
-      let data_remote = SerializeToJson( this.form );
+      let data_remote = this.form.serializeObject();
 
       this.mainConfig.budgeaApi.update_additionnal_infos(this.connector['id'], data_remote, data_local)
                                 .then((e)=>{ self.mainConfig.goto(4, this.connector); })
-                                .catch((error)=>{ self.mainConfig.applicationJS.noticeInternalErrorFrom(null, error.toString()); })
+                                .catch((error)=>{ self.mainConfig.applicationJS.noticeErrorMessageFrom(null, error.toString()); })
     }else{
-      self.mainConfig.applicationJS.noticeInternalErrorFrom(null, 'Veuillez remplir correctement les champs obligatoires!');
+      self.mainConfig.applicationJS.noticeErrorMessageFrom(null, 'Veuillez remplir correctement les champs obligatoires!');
     }
   }
 }

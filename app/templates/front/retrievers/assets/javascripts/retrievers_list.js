@@ -24,7 +24,7 @@ class RetrieversList{
                       this.connectors = connectors;
                       this.fill_ul_list();
                     })
-                    .catch((e)=>{ this.applicationJS.noticeInternalErrorFrom(null, e.toString()); })
+                    .catch((e)=>{ this.applicationJS.noticeErrorMessageFrom(null, e.toString()); })
     }
   }
 
@@ -70,7 +70,7 @@ class RetrieversList{
                           'dataType': 'json'
                         }
 
-      this.applicationJS.parseAjaxResponse(ajax_params)
+      this.applicationJS.sendRequest(ajax_params)
                         .then((e)=>{
                           window.location.href = '/retrievers/get_connector_xls/' + e.key
                         })

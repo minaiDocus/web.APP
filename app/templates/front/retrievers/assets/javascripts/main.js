@@ -43,7 +43,7 @@ class RetrieverMain{
                           'target': (this.page == 1)? '.retrievers-list' : ''
                         };
 
-    this.applicationJS.parseAjaxResponse(ajax_params)
+    this.applicationJS.sendRequest(ajax_params)
                       .then((e)=>{
                         if(this.page > 1)
                         {
@@ -73,14 +73,14 @@ class RetrieverMain{
         let url = '/retrievers/new_internal';
         if(retriever_id > 0)
           url = `/retrievers/edit_internal?id=${retriever_id}`;
-        this.applicationJS.parseAjaxResponse({ url: url, type: 'GET', dataType: 'html' })
+        this.applicationJS.sendRequest({ url: url, type: 'GET', dataType: 'html' })
                           .then((e)=>{
                             $('.modal#add-internal-retriever .modal-body').html(e);
                             $('.modal#add-internal-retriever').modal('show');
                           });
       }
     }else{
-      this.applicationJS.noticeInternalErrorFrom(null, 'Veuillez selectionnez un dossier!');
+      this.applicationJS.noticeErrorMessageFrom(null, 'Veuillez selectionnez un dossier!');
     }
   }
 
@@ -96,7 +96,7 @@ class RetrieverMain{
       type = 'PUT';
     }
 
-    let data         = SerializeToJson( $(`#internal-retrievers form#internal-retriever-form`) );
+    let data         = $(`#internal-retrievers form#internal-retriever-form`).serializeObject();
     let ajax_params  =   {
                             'url': url,
                             'type': type,
@@ -104,7 +104,7 @@ class RetrieverMain{
                             'dataType': 'json'
                           };
 
-    this.applicationJS.parseAjaxResponse(ajax_params)
+    this.applicationJS.sendRequest(ajax_params)
                       .then((e)=>{
                         if(e.json_flash.success)
                           $('.modal#add-internal-retriever').modal('hide');

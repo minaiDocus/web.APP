@@ -37,7 +37,7 @@ class ReportingStatistics {
                         data: this.data_params.json_type
                       }
     VARIABLES['reporting_loading']++;
-    this.applicationJS.parseAjaxResponse(ajax_params).then((res)=>{ this.chart.flow_chart(res); this.finalize_loading(); });
+    this.applicationJS.sendRequest(ajax_params).then((res)=>{ this.chart.flow_chart(res); this.finalize_loading(); });
 
     //html table fetching
     let ajax_params2 =  {
@@ -46,7 +46,7 @@ class ReportingStatistics {
                           data: this.data_params.html_type
                         }
     VARIABLES['reporting_loading']++;
-    this.applicationJS.parseAjaxResponse(ajax_params2).then((e)=>{ $('#lastest_sending_docs').html(e); this.finalize_loading(); });
+    this.applicationJS.sendRequest(ajax_params2).then((e)=>{ $('#lastest_sending_docs').html(e); this.finalize_loading(); });
   }
 
   pre_assignment_accounts(){
@@ -58,7 +58,7 @@ class ReportingStatistics {
                         data: this.data_params.json_type
                       }
     VARIABLES['reporting_loading']++;
-    this.applicationJS.parseAjaxResponse(ajax_params).then((res)=>{ this.chart.delivery_account_chart(res); this.finalize_loading(); });
+    this.applicationJS.sendRequest(ajax_params).then((res)=>{ this.chart.delivery_account_chart(res); this.finalize_loading(); });
 
     //html table fetching
     let ajax_params2 =  {
@@ -67,7 +67,7 @@ class ReportingStatistics {
                           data: this.data_params.html_type
                         }
     VARIABLES['reporting_loading']++;
-    this.applicationJS.parseAjaxResponse(ajax_params2).then((e)=>{ $('#pre_assignment_accounts').html(e); this.finalize_loading(); });
+    this.applicationJS.sendRequest(ajax_params2).then((e)=>{ $('#pre_assignment_accounts').html(e); this.finalize_loading(); });
   }
 
   retrievers_report(){
@@ -79,7 +79,7 @@ class ReportingStatistics {
                         data: this.data_params.json_type
                       }
     VARIABLES['reporting_loading']++;
-    this.applicationJS.parseAjaxResponse(ajax_params).then((res)=>{ this.chart.retrievers_chart(res); this.finalize_loading();});
+    this.applicationJS.sendRequest(ajax_params).then((res)=>{ this.chart.retrievers_chart(res); this.finalize_loading();});
 
     //html table fetching
     let ajax_params2 =  {
@@ -88,6 +88,6 @@ class ReportingStatistics {
                           data: this.data_params.html_type
                         }
     VARIABLES['reporting_loading']++;
-    this.applicationJS.parseAjaxResponse(ajax_params2).then((e)=>{ $('#failed_retrievers').html(e); this.finalize_loading(); });
+    this.applicationJS.sendRequest(ajax_params2).then((e)=>{ $('#failed_retrievers').html(e); this.finalize_loading(); });
   }
 }

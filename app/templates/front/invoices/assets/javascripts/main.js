@@ -80,7 +80,7 @@ class Invoice {
               JSON.stringify({id: id, organization_id: organizationId})
             );
 
-            applicationJS.parseAjaxResponse(params, beforeUpdateContent, afterUpdateContent);
+            applicationJS.sendRequest(params, beforeUpdateContent, afterUpdateContent);
           }
         }
       });
@@ -124,7 +124,7 @@ class Invoice {
         self.bindSubMenu();
       };
 
-      applicationJS.parseAjaxResponse(params, beforeUpdateContent, afterUpdateContent);
+      applicationJS.sendRequest(params, beforeUpdateContent, afterUpdateContent);
     })
   }
 
@@ -163,7 +163,7 @@ class Invoice {
         JSON.stringify(dataParams)
       );
 
-      applicationJS.parseAjaxResponse(params, beforeUpdateContent, afterUpdateContent);
+      applicationJS.sendRequest(params, beforeUpdateContent, afterUpdateContent);
     });
 
     $('#reset-invoice-setting-form').on('click', function() {

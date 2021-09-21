@@ -26,7 +26,7 @@ class DocumentsTags{
                     'dataType': 'html'
                   }
 
-    this.applicationJS.parseAjaxResponse(params).then((e)=>{
+    this.applicationJS.sendRequest(params).then((e)=>{
       this.tags_modal.find('.modal-body').html(e);
       this.tags_modal.modal('show');
     });
@@ -42,7 +42,7 @@ class DocumentsTags{
                     'dataType': 'json'
                   }
 
-    this.applicationJS.parseAjaxResponse(params).then((e)=>{ this.applicationJS.noticeFlashMessageFrom(null, e.message); });
+    this.applicationJS.sendRequest(params).then((e)=>{ this.applicationJS.noticeSuccessMessageFrom(null, e.message); });
 
     this.tags_modal.modal('hide');
   }

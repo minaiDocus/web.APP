@@ -260,7 +260,7 @@ class Customer{
 
   get_customer_edit_view(){
     if ($('#customer-content').length > 0) {
-      this.applicationJS.parseAjaxResponse({ 'url': '/organizations/' + this.organization_id + '/customers/' + $('input:hidden[name="customer_id"]').val() + '/edit' }).then((element)=>{
+      this.applicationJS.sendRequest({ 'url': '/organizations/' + this.organization_id + '/customers/' + $('input:hidden[name="customer_id"]').val() + '/edit' }).then((element)=>{
         $('#customer-content .tab-content .tab-pane#information').html($(element).find('.customer-form-content').html());
         $('#customer-content #customer-form-data .subscription-base-form').parent().remove();
         $('#customer-content #customer-form-data .accounting-plan-base-form').parent().remove();
@@ -279,7 +279,7 @@ class Customer{
   }
 
   get_subscription_edit_view(customer_id){
-    this.applicationJS.parseAjaxResponse({ 'url': '/organizations/' + this.organization_id + '/customers/' + customer_id + '/subscription/edit' })
+    this.applicationJS.sendRequest({ 'url': '/organizations/' + this.organization_id + '/customers/' + customer_id + '/subscription/edit' })
     .then((element)=>{
       $('#customer-content .tab-content .tab-pane#subscription').html($(element).find('#subscriptions.edit').html());
       this.main();
@@ -304,7 +304,7 @@ class Customer{
     $('#accounting-plan-tab').unbind('click').bind('click',function(e) {
       e.preventDefault();
       
-      self.applicationJS.parseAjaxResponse({ 'url': '/organizations/' + self.organization_id + '/customers/' + customer_id + '/accounting_plan' }).then((element)=>{
+      self.applicationJS.sendRequest({ 'url': '/organizations/' + self.organization_id + '/customers/' + customer_id + '/accounting_plan' }).then((element)=>{
         $('#customer-content .tab-content .tab-pane#accounting-plan').html($(element).find('#accounting_plan').html());
         self.get_vat_accounts_view(customer_id);
 
@@ -317,7 +317,7 @@ class Customer{
 
 
   get_vat_accounts_view(customer_id){
-    this.applicationJS.parseAjaxResponse({ 'url': '/organizations/' + this.organization_id + '/customers/' + customer_id + '/accounting_plan/vat_accounts' }).then((result)=>{
+    this.applicationJS.sendRequest({ 'url': '/organizations/' + this.organization_id + '/customers/' + customer_id + '/accounting_plan/vat_accounts' }).then((result)=>{
       $('#vat_accounts').html($(result).find('#vat_accounts').html());
     });
   }
@@ -329,7 +329,7 @@ class Customer{
     $('#customer-content #compta-tab').unbind('click').bind('click',function(e) {
       e.preventDefault();
       
-      self.applicationJS.parseAjaxResponse({ 'url': '/organizations/' + self.organization_id + '/customers/' + customer_id + '/edit_setting_options' }).then((element)=>{
+      self.applicationJS.sendRequest({ 'url': '/organizations/' + self.organization_id + '/customers/' + customer_id + '/edit_setting_options' }).then((element)=>{
         $('#customer-content .tab-content .tab-pane#compta').html($(element).find('#customer.edit').html());
 
         ApplicationJS.set_checkbox_radio(self);
@@ -355,7 +355,7 @@ class Customer{
                     'dataType': 'json'
                   }
 
-    this.applicationJS.parseAjaxResponse(params).then((result)=>{
+    this.applicationJS.sendRequest(params).then((result)=>{
       if(result['message'] === undefined || result['message'] === null)
       {
         let original_value = element.data('original-value') || '';
@@ -384,7 +384,7 @@ class Customer{
         // TO PERSONALIZE THIS NOTIFICATION
 
         // let message = result['message'] + " ==> iBiza n'est pas configuré correctement"
-        // this.applicationJS.noticeInternalErrorFrom(null, message);
+        // this.applicationJS.noticeErrorMessageFrom(null, message);
       }
 
 
@@ -433,7 +433,7 @@ class Customer{
   }
 
   get_customer_first_step_form(){
-    this.applicationJS.parseAjaxResponse({ 'url': '/organizations/' + this.organization_id + '/customers/new' }).then((element)=>{
+    this.applicationJS.sendRequest({ 'url': '/organizations/' + this.organization_id + '/customers/new' }).then((element)=>{
       this.create_customer_modal.find('.modal-body').html($(element).find('.customer-form-content').html());
       this.create_customer_modal.find('.normal-form-action').remove();
       
@@ -456,7 +456,7 @@ class Customer{
 
 
   select_journals(){
-    this.applicationJS.parseAjaxResponse({ 'url': '/organizations/' + this.organization_id + '/customers/' + $('input:hidden[name="customer_id"]').val() + '/journals/select' }).then((result)=>{
+    this.applicationJS.sendRequest({ 'url': '/organizations/' + this.organization_id + '/customers/' + $('input:hidden[name="customer_id"]').val() + '/journals/select' }).then((result)=>{
       this.create_customer_modal.find('.accounting-plan-base-form .copy-select-journals').html($(result).find('#journals.select').html());
       this.set_custom_remove_class('.next', 'do-submit');
       this.set_custom_add_class('.next', 'load-journal-form');
@@ -486,8 +486,8 @@ class Customer{
                     'dataType': 'html'
                   }
 
-    this.applicationJS.parseAjaxResponse(params).then((result)=>{
-      this.applicationJS.noticeFlashMessageFrom(null, 'Ajout avec succès');
+    this.applicationJS.sendRequest(params).then((result)=>{
+      this.applicationJS.noticeSuccessMessageFrom(null, 'Ajout avec succès');
 
       this.create_customer_modal.find('.modal-content').html($(result).find('#book_type .modal-content').html());
       $('select#copy-journals-into-customer').searchableOptionList({
@@ -573,7 +573,7 @@ class Customer{
 
 
   close_or_reopen_confirm_view(url, target_action){
-    this.applicationJS.parseAjaxResponse({ 'url': url }).then((elements)=>{
+    this.applicationJS.sendRequest({ 'url': url }).then((elements)=>{
       if (target_action === 'close') {
         this.account_close_confirm_modal.find('.modal-title').text('Clôturer le dossier');
       }
@@ -604,7 +604,7 @@ class Customer{
       params = {'url': url, 'data': data, 'type': 'POST', 'dataType': 'html'};
     }
 
-    this.applicationJS.parseAjaxResponse(params).then((response)=>{
+    this.applicationJS.sendRequest(params).then((response)=>{
       $('#customer-content').html($(response).find('#customer-content').html());
       this.account_close_confirm_modal.modal('hide');
 
@@ -654,7 +654,7 @@ class Customer{
                           'target': ''
                         };
 
-    this.applicationJS.parseAjaxResponse(ajax_params)
+    this.applicationJS.sendRequest(ajax_params)
     .then((response)=>{
       $('.list-customers').html($(response).find('.list-customers').html());
 
@@ -675,7 +675,7 @@ class Customer{
 
     this.action_locker = true;
 
-    this.applicationJS.parseAjaxResponse({
+    this.applicationJS.sendRequest({
       'url': url,
       'data': data,
       'type': 'POST',
@@ -692,7 +692,7 @@ class Customer{
   }
 
   new_edit_order_view(url){
-    this.applicationJS.parseAjaxResponse({ 'url': url }).then((element)=>{
+    this.applicationJS.sendRequest({ 'url': url }).then((element)=>{
       this.new_edit_order_modal.find('.modal-body').html('');
       this.new_edit_order_modal.find('.modal-body').html($(element).find('#order .order-form-content').html());
       this.new_edit_order_modal.find('.modal-title').text($(element).find('#order .modal-title-text').text());
@@ -731,11 +731,11 @@ class Customer{
                         target_dest: '#edit_csv_descriptor_format'
                       };
 
-    this.applicationJS.parseAjaxResponse(ajax_params).then((e)=>{ $('.modal#csv_descriptor_modal').modal('show'); });
+    this.applicationJS.sendRequest(ajax_params).then((e)=>{ $('.modal#csv_descriptor_modal').modal('show'); });
   }
 
   select_for_orders(url){
-    this.applicationJS.parseAjaxResponse({ 'url': url }).catch((error)=> {
+    this.applicationJS.sendRequest({ 'url': url }).catch((error)=> {
       console.log(error)
     }).then((element)=>{
       this.select_multiple.find('.modal-body').html($(element).find('.file_sending_kits_select').html());

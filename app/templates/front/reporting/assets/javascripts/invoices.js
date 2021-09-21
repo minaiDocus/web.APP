@@ -242,7 +242,7 @@ function load_all(year){
                       dataType: 'html',
                     }
 
-  applicationJS.parseAjaxResponse(ajax_params).then(e=>{ 
+  applicationJS.sendRequest(ajax_params).then(e=>{ 
     $('.reporting #invoices').html(e);
   });
 }
