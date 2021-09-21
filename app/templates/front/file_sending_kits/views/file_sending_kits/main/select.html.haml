@@ -58,7 +58,7 @@
                   %td.hide.price{ style: 'font-size:15px;text-align: left !important;' , id: 'fsk_order_paper_set_price'}
               - else
                 %tr
-                  %td{style: 'width: 66px'}= check_box_tag "users[#{client.id}][is_checked]", "true", false
+                  %td{style: 'width: 66px'}= check_box_tag "users[#{client.id}][is_checked]", "true", false, class: "fsk_user_checked form-check-input pointer float-none"
                   %td= client.info
                   - last_order = client.orders.last
                   - if last_order.normal_paper_set_order?
@@ -80,18 +80,17 @@
             %b.fsk_total_price{ style: 'font-size:20px' }
       - else
         .form-group.boolean
-          .label-section
-            = label_tag 'one_workshop_labels_page_per_customer', "Une page d'étiquette par client ?", class: 'control-label boolean'
-          .control-section
-            %label.checkbox
-              = check_box_tag 'one_workshop_labels_page_per_customer', 1, false, type: 'checkbox', class: 'boolean orm-check-input pointer float-none'
+          .form-check.idocus-custom-form-check
+            = check_box_tag 'one_workshop_labels_page_per_customer', 1, false, type: 'checkbox', class: 'boolean form-check-input pointer float-none', id: 'one_workshop_labels_page_per_customer'
+            = label_tag 'one_workshop_labels_page_per_customer', "Une page d'étiquette par client ?", class: 'control-label boolean form-check-label', for: 'one_workshop_labels_page_per_customer'
       .form-group.form-footer-content.text-end.hide
         - if manual_paper_set_order
           = submit_tag 'Générer', class: 'btn btn-primary', id:'generate-manual-paper-set-order'
         - else
           = submit_tag t('actions.submit'), class: 'btn btn-primary'
-        = link_to t('actions.cancel'), (manual_paper_set_order ? select_organization_file_sending_kit_path(@organization) : organization_path(@organization, tab: 'file_sending_kit')), class: "btn btn-light#{(manual_paper_set_order ? ' canceling-manual-order' : '')}"
-        = link_to t('actions.edit'), edit_organization_file_sending_kit_path(@organization), class: 'btn btn-primary' if current_user.is_developer
+        = link_to t('actions.edit'), '#', link: edit_organization_file_sending_kit_path(@organization), class: 'btn btn-primary bold edit-file-sending-kits' if current_user.is_developer
 
+
+= render partial: 'file_sending_kit_modal'
 
 = javascript_include_tag 'front/file_sending_kits/assets/javascripts/main'

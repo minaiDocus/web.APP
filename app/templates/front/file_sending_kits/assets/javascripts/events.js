@@ -103,6 +103,31 @@ function file_sending_kits_main_events() {
     'allText': 'Tous séléctionnés'
   });*/
 
+
+  $('.select_for_orders').unbind('click').bind('click', function(e) {
+    e.stopPropagation();
+
+    const url = $(this).attr('link');
+
+    AppEmit('select_for_orders', { url: url });
+
+    $('#select_for_orders').modal('show');
+  });
+
+
+  $('.edit-file-sending-kits').unbind('click').bind('click', function(e) {
+    e.preventDefault();
+
+    const url = $(this).attr('link');
+
+    AppEmit('edit_file_sending_kits_view', { url: url});
+  });
+
+  $('.validate_file_sending_kits_edit').unbind('click').bind('click', function(e) {
+    e.stopPropagation();
+    $('form#edit_file_sending_kit_form').submit();
+  });
+
   applied_manual_paper_set_order();
 
   generate_manual_paper_set_order();

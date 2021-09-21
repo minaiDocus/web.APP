@@ -8,8 +8,9 @@
 - organization_efs              = controller_path == 'external_file_storages/efs_organization' && action_name == 'index'
 - organization_edit_payment     = controller_path == 'organizations/main' && action_name == 'edit_payment'
 - organization_subscription     = controller_path == 'organizations/subscriptions' && action_name == 'show'
+- organization_file_sending_kit = controller_path == 'file_sending_kits/main' && ( action_name == 'select' || action_name == 'edit' || action_name == 'show' )
 
-- toggle_submenu = organization_edit || file_naming_policy_edit || reminder_emails_index || addresses_index || organization_software_setting || organization_efs || organization_edit_payment || organization_subscription
+- toggle_submenu = organization_edit || file_naming_policy_edit || reminder_emails_index || addresses_index || organization_software_setting || organization_efs || organization_edit_payment || organization_subscription || organization_file_sending_kit
 
 .organizations.mb-5
   .lefter
@@ -50,6 +51,14 @@
             %li{ data: { href: "#{@organization.id}/subscription" } }
               %a{href: organization_organization_subscription_path(@organization) }
                 %span.link_slave{class: (organization_subscription ? 'active' : '')}= t('organizations.subscription')
+          - if CustomUtils.is_manual_paper_set_order?(@organization) && @user.is_prescriber
+            %li{ data: { href: "#{@organization.id}/file_sending_kit" } }
+              %a{href: select_organization_file_sending_kit_path(@organization) }
+                %span.link_slave{class: (organization_file_sending_kit ? 'active' : '')} Kit d'envoi de numérisation
+          - elsif @user.is_admin && !@organization.specific_mission
+            %li{ data: { href: "#{@organization.id}/file_sending_kit" } }
+              %a{href: organization_file_sending_kit_path(@organization) }
+                %span.link_slave{class: (organization_file_sending_kit ? 'active' : '')} Kit d'envoi de documents
       // =================== PARAMETERS ===============================
 
       - if @user.leader? || @user.manage_collaborators

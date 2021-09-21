@@ -4,6 +4,8 @@ class FileSendingKit{
     this.applicationJS      = new ApplicationJS();
     this.organization_id    = $('input:hidden[name="organization_id"]').val();
     this.add_new_rule_modal = $('#add-new-rule.modal');
+    this.file_sending_kits_edit = $('#file_sending_kits_edit.modal');
+    this.select_multiple       = $('#select_for_orders.modal');
     this.action_locker      = false;
   }
 
@@ -41,5 +43,27 @@ class FileSendingKit{
     });
 
      /*file_sending_kits_main_events();*/
+  }
+
+  edit_file_sending_kits_view(url){
+    this.applicationJS.parseAjaxResponse({ 'url': url }).then((element)=>{
+      this.file_sending_kits_edit.find('.modal-body').html($(element).find('.file_sending_kits_edit').html());
+      this.file_sending_kits_edit.modal('show');
+    }).catch((error)=> { 
+      console.error(error);
+    });
+  }
+
+  select_for_orders(url){
+    this.applicationJS.parseAjaxResponse({ 'url': url }).catch((error)=> {
+      console.log(error)
+    }).then((element)=>{
+      this.select_multiple.find('.modal-body').html($(element).find('.file_sending_kits_select').html());
+      this.select_multiple.find('.form-footer-content').remove();
+    });
+  }
+
+  select_for_multiple_result(response){
+    this.select_multiple.find('.form-footer-content').remove();
   }
 }

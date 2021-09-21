@@ -5,6 +5,9 @@ class FileSendingKits::MainController < OrganizationController
 
   prepend_view_path('app/templates/front/file_sending_kits/views')
 
+  
+  def show; end
+
   # GET /organizations/:organization_id/file_sending_kit/edit
   def edit; end
 

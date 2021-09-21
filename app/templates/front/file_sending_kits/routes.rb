@@ -2,7 +2,7 @@
 Rails.application.routes.draw do
   scope module: 'file_sending_kits' do
   	resources :organizations, only: [] do
-	    resource :file_sending_kit, only: %w(edit update), controller: 'main' do
+	    resource :file_sending_kit, only: %w(show edit update), controller: 'main' do
 		    get  'mails',           on: :member
 		    get  'select',          on: :member
 		    get  'folders',         on: :member
