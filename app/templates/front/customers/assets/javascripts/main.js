@@ -3,6 +3,10 @@
 //**** File Sending kits JS *******/
 //=require '../../../file_sending_kits/assets/javascripts/events'
 
+//**** orders JS *******/
+//=require '../../../orders/assets/javascripts/events'
+//=require '../../../orders/assets/javascripts/order'
+
 class Customer{
 
   constructor(){
@@ -12,6 +16,7 @@ class Customer{
     this.new_edit_order_modal = $('#new_edit_order.modal');
     this.select_multiple       = $('#select_for_orders.modal');
     this.account_close_confirm_modal = $('#account_close_confirm.modal');
+    this.file_sending_kits_edit = $('#file_sending_kits_edit.modal');
     this.organization_id       = $('input:hidden[name="organization_id"]').val();
     this.action_locker = false;
   }
@@ -690,7 +695,7 @@ class Customer{
     this.applicationJS.parseAjaxResponse({ 'url': url }).then((element)=>{
       this.new_edit_order_modal.find('.modal-body').html('');
       this.new_edit_order_modal.find('.modal-body').html($(element).find('#order .order-form-content').html());
-      this.new_edit_order_modal.find('.modal-title').text($(element).find('#order .order-content .text-center h5').text());
+      this.new_edit_order_modal.find('.modal-title').text($(element).find('#order .modal-title-text').text());
       this.new_edit_order_modal.find('.footer-form').remove();
 
       if (url.indexOf("new") >= 0) {
@@ -702,6 +707,7 @@ class Customer{
 
       this.new_edit_order_modal.modal('show');
      
+      bind_all_events_order();
       this.rebind_customer_all_events();
     }).catch((error)=> { 
       console.error(error);
@@ -745,6 +751,18 @@ class Customer{
     file_sending_kits_main_events();
     this.rebind_customer_all_events();
   }
+
+  edit_file_sending_kits_view(url){
+    this.applicationJS.parseAjaxResponse({ 'url': url }).then((element)=>{
+      this.file_sending_kits_edit.find('.modal-body').html($(element).find('.file_sending_kits_edit').html());
+      this.select_multiple.modal('hide');
+      this.file_sending_kits_edit.modal('show');
+
+      this.rebind_customer_all_events();
+    }).catch((error)=> { 
+      console.error(error);
+    });
+  }
 }
 
 
@@ -772,6 +790,19 @@ jQuery(function () {
 
   AppListenTo('select_for_orders', (e)=>{ customer.select_for_orders(e.detail.url); });
   AppListenTo('handle_select_for_orders_result', (e)=>{ customer.handle_select_for_orders_result(e.detail.response); });
+
+  let order = new Order();
+
+  if ($('#order form, form#new_edit_order_customer').length > 0){
+    order.update_casing_counts();
+    order.update_price();
+  }
+
+  AppListenTo('update_casing_counts', (e)=>{ order.update_casing_counts(); });
+  AppListenTo('update_price', (e)=>{ order.update_price(); });
+  AppListenTo('check_casing_size_and_count', (e)=>{ order.check_casing_size_and_count(); });
+
+  AppListenTo('edit_file_sending_kits_view', (e)=>{ customer.edit_file_sending_kits_view(e.detail.url); });
   
   AppListenTo('csv_descriptor_edit_customer_format', (e)=>{ customer.load_csv_descriptor(e.detail.id, e.detail.organization_id) });
  

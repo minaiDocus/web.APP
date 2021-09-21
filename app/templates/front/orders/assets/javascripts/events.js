@@ -13,7 +13,7 @@ function apply_searchable_option_list(target) {
 function bind_all_events_order(){
   $('.select.order_paper_set_casing_count i.help-block').addClass('hide');
 
-  if ($('#order form').length > 0){
+  if ($('#order form, form#new_edit_order_customer').length > 0){
     AppEmit('update_casing_counts');
     AppEmit('update_price');
 

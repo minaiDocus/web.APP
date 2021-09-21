@@ -290,7 +290,7 @@ class ApplicationJS {
                             type: type,
                           }
         //parsing content-type
-          if(idocus_params['content-type']){
+          if(idocus_params['content_type']){
             ajax_params['contentType'] = idocus_params['content_type']
           }
 

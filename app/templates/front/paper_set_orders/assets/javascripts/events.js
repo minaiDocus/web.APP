@@ -139,7 +139,7 @@ function bind_all_events_paper_set_orders(){
 
     $('select').unbind('change').bind('change', function(e) { AppEmit('update_table_price'); });
     $('.date_order').unbind('change').bind('change', function(e) {
-      index = $(this).attr("data-index");
+      const index = $(this).attr("data-index");
       AppEmit('update_table_casing_counts', { index: index});
     });
 
@@ -149,6 +149,19 @@ function bind_all_events_paper_set_orders(){
   $('.add-paper-set-order, .create-paper-set-order-multiple').unbind('click').bind('click', function(e) {
     e.stopPropagation();
     $('#valid-manual-paper-set-order.paper_set_order_form, #default.paper_set_order_form').submit();
+  });
+
+  $('.edit-file-sending-kits').unbind('click').bind('click', function(e) {
+    e.preventDefault();
+
+    const url = $(this).attr('link');
+
+    AppEmit('edit_file_sending_kits_view', { url: url});
+  });
+
+  $('.validate_file_sending_kits_edit').unbind('click').bind('click', function(e) {
+    e.stopPropagation();
+    $('form#edit_file_sending_kit_form').submit();
   });
 
   ApplicationJS.set_checkbox_radio();

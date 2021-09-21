@@ -82,6 +82,19 @@ function bind_customer_events() {
 
     $('#select_for_orders').modal('show');
   });
+
+  $('.edit-file-sending-kits').unbind('click').bind('click', function(e) {
+    e.preventDefault();
+
+    const url = $(this).attr('link');
+
+    AppEmit('edit_file_sending_kits_view', { url: url});
+  });
+
+  $('.validate_file_sending_kits_edit').unbind('click').bind('click', function(e) {
+    e.stopPropagation();
+    $('form#edit_file_sending_kit_form').submit();
+  });
 }
 
 

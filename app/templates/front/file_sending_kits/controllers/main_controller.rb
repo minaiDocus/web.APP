@@ -56,10 +56,11 @@ class FileSendingKits::MainController < OrganizationController
 
     if @file_sending_kit.save
       flash[:success] = 'Modifié avec succès.'
-      redirect_to organization_path(@organization, tab: 'file_sending_kit')
     else
-      render 'edit'
+      flash[:error] = "Erreur de modification: #{@file_sending_kit.errors.messages.join(', ')}"
     end
+
+    redirect_to edit_organization_file_sending_kit_path(@organization)
   end
 
   # GET /organizations/:organization_id/file_sending_kit/select
@@ -218,7 +219,7 @@ class FileSendingKits::MainController < OrganizationController
     right_logo = params[:file_sending_kit][:right_logo]
 
     @file_sending_kit.cloud_center_logo.attach(io: File.open(center_logo.tempfile), filename: "center_logo_#{@file_sending_kit.id}.png", content_type: "image/png") if center_logo.present?
-    @file_sending_kit.cloud_left_logo.attach(io: File.open(left_logo.tempfile), filename: "center_logo_#{@file_sending_kit.id}.png", content_type: "image/png") if left_logo.present?
-    @file_sending_kit.cloud_right_logo.attach(io: File.open(right_logo.tempfile), filename: "center_logo_#{@file_sending_kit.id}.png", content_type: "image/png") if right_logo.present?
+    @file_sending_kit.cloud_left_logo.attach(io: File.open(left_logo.tempfile), filename: "left_logo_#{@file_sending_kit.id}.png", content_type: "image/png") if left_logo.present?
+    @file_sending_kit.cloud_right_logo.attach(io: File.open(right_logo.tempfile), filename: "right_logo_#{@file_sending_kit.id}.png", content_type: "image/png") if right_logo.present?
   end
 end

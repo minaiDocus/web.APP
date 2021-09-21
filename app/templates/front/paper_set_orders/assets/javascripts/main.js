@@ -13,6 +13,7 @@ class PaperSetOrder{
     this.is_manual             = $('input:hidden[name="manual_paper_set_order"]').val();
     this.paper_set_link        = $('input:hidden[name="manual_paper_set_order"]').attr('view');
     this.add_new               = $('#add-new-paper-set-order.modal');
+    this.file_sending_kits_edit = $('#file_sending_kits_edit.modal');
     this.select_multiple       = $('#select_for_orders.modal');
     this.create_order_multiple = $('#create_order_multiple.modal');
     this.action_locker         = false;
@@ -306,6 +307,19 @@ class PaperSetOrder{
     }
   }
 
+
+  edit_file_sending_kits_view(url){
+    this.applicationJS.parseAjaxResponse({ 'url': url }).then((element)=>{
+      this.file_sending_kits_edit.find('.modal-body').html($(element).find('.file_sending_kits_edit').html());
+      this.select_multiple.modal('hide');
+      this.file_sending_kits_edit.modal('show');
+     
+      bind_all_events_paper_set_orders();
+    }).catch((error)=> { 
+      console.error(error);
+    });
+  }
+
 }
 
 
@@ -333,6 +347,8 @@ jQuery(function () {
   AppListenTo('update_table_casing_counts', (e)=>{ paper_set_order.update_table_casing_counts(e.detail.index); });
 
   AppListenTo('order_multiple_paper_set', (e)=>{ paper_set_order.order_multiple_paper_set(e.detail.url, e.detail.data); });
+
+  AppListenTo('edit_file_sending_kits_view', (e)=>{ paper_set_order.edit_file_sending_kits_view(e.detail.url); });
 
   AppListenTo('generate_manual_paper_set_order', (e)=>{ file_sending_kit.generate_manual_paper_set_order(e.detail.url, e.detail.data); file_sending_kits_main_events(); });
 
