@@ -133,7 +133,6 @@ function file_sending_kits_main_events() {
   generate_manual_paper_set_order();
 
   ApplicationJS.set_checkbox_radio();
-  ApplicationJS.hide_submenu();
 }
 
 

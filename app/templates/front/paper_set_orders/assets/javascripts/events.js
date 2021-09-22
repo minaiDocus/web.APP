@@ -165,7 +165,6 @@ function bind_all_events_paper_set_orders(){
   });
 
   ApplicationJS.set_checkbox_radio();
-  ApplicationJS.hide_submenu();
 }
 
 jQuery(function() {

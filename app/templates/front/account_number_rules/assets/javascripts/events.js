@@ -194,7 +194,6 @@ function bind_all_events_account_number_rules(){
   $('.bank-affectation #basic-addon1').unbind('click').bind('click', function(e){ AppEmit('account_number_rule_contains_search_text'); });
 
   ApplicationJS.set_checkbox_radio();
-  ApplicationJS.hide_submenu();
 }
 
 jQuery(function() {

@@ -27,7 +27,6 @@ class VatAccount {
 
     this.handle_edit_delete_submenu();
     ApplicationJS.set_checkbox_radio();
-    ApplicationJS.hide_submenu();
   }
 
 

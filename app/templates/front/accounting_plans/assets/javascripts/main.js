@@ -77,7 +77,6 @@ class AccountingPlan {
     this.edit_provider_customer();
     this.handle_edit_delete_sub_menu();
     ApplicationJS.set_checkbox_radio();
-    ApplicationJS.hide_submenu();
   }
 
 

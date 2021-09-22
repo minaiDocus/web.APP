@@ -49,8 +49,6 @@ class Main{
     }
 
     bind_collaborator_events();
-    ApplicationJS.handle_submenu();
-    ApplicationJS.hide_submenu();
   }
 
   create_update(url, data){
@@ -70,8 +68,6 @@ class Main{
       }
 
       bind_collaborator_events();
-      ApplicationJS.handle_submenu();
-      ApplicationJS.hide_submenu();
     }).catch((response)=>{
       if (url.indexOf("collaborators") >= 0) { this.member_modal.modal('hide'); }
       if (url.indexOf("groups") >= 0) { this.group_modal.modal('hide'); }
@@ -121,8 +117,6 @@ class Main{
 
       this.action_locker = false;
       bind_collaborator_events();
-      ApplicationJS.handle_submenu();
-      ApplicationJS.hide_submenu();
     })
     .catch(()=>{ this.action_locker = false; });
   }
@@ -145,8 +139,6 @@ class Main{
       }
 
       bind_collaborator_events();
-      ApplicationJS.handle_submenu();
-      ApplicationJS.hide_submenu();
     }).catch((response)=>{
       this.member_filter_modal.modal('hide');
       this.group_filter_modal.modal('hide');
@@ -167,9 +159,7 @@ class Main{
       $('#authorization').html($(element).find('#collaborator_rights').html());
       $('#authorization .cancel_collaborator_rights').remove();
       bind_collaborator_events();
-      ApplicationJS.handle_submenu();
       ApplicationJS.set_checkbox_radio();
-      ApplicationJS.hide_submenu();
     })
     .catch(()=>{ this.action_locker = false; });
   }
@@ -187,9 +177,7 @@ class Main{
       $('#file_storages').html($(element).find('#file_storage_authorizations').html());
       $('#file_storages .cancel_collaborator_file_storages').remove();
       bind_collaborator_events();
-      ApplicationJS.handle_submenu();
       ApplicationJS.set_checkbox_radio();
-      ApplicationJS.hide_submenu();
     })
     .catch(()=>{ this.action_locker = false; });
   }
@@ -211,9 +199,7 @@ class Main{
         is_deleted = true
 
         bind_collaborator_events();
-        ApplicationJS.handle_submenu();
         ApplicationJS.set_checkbox_radio();
-        ApplicationJS.hide_submenu();
       })
       .catch(()=>{ this.action_locker = false; });
     }
@@ -239,9 +225,7 @@ class Main{
         is_already_open = true
 
         bind_collaborator_events();
-        ApplicationJS.handle_submenu();
         ApplicationJS.set_checkbox_radio();
-        ApplicationJS.hide_submenu();
       })
       .catch(()=>{ this.action_locker = false; });
     }

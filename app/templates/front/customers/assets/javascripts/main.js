@@ -55,7 +55,6 @@ class Customer{
       });
     }
 
-    ApplicationJS.hide_submenu();
     ApplicationJS.set_checkbox_radio(this);
   }
 
@@ -614,9 +613,7 @@ class Customer{
 
       this.get_customer_edit_view();
       bind_customer_events();
-      ApplicationJS.handle_submenu();
       ApplicationJS.set_checkbox_radio();
-      ApplicationJS.hide_submenu();
     }).catch((response)=>{
       
     });
@@ -666,9 +663,7 @@ class Customer{
 
       this.action_locker = false;
       bind_customer_events();
-      ApplicationJS.handle_submenu();
       ApplicationJS.set_checkbox_radio();
-      ApplicationJS.hide_submenu();
     })
     .catch(()=>{ this.action_locker = false; });
   }
@@ -721,9 +716,7 @@ class Customer{
   rebind_customer_all_events(){
     this.main();
     bind_customer_events();
-    ApplicationJS.handle_submenu();
     ApplicationJS.set_checkbox_radio();
-    ApplicationJS.hide_submenu();
   }
 
   load_csv_descriptor(user_id, organization_id){

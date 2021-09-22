@@ -43,7 +43,6 @@ function bind_all_events_order(){
   }
 
   ApplicationJS.set_checkbox_radio();
-  ApplicationJS.hide_submenu();
 }
 
 jQuery(function() {

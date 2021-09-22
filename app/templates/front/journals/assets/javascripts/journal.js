@@ -260,8 +260,6 @@ class Journal{
 
   main() {
     this.new_edit_account_book_type_view()
-
-    this.handle_edit_delete_submenu();
     ApplicationJS.set_checkbox_radio();
     this.select_entry_type();
     this.set_carousel_content_on_slide();
@@ -305,17 +303,5 @@ class Journal{
     else{
       $('#new_account_book_type .can_be_required').removeAttr('required');
     }
-  }
-
-  handle_edit_delete_submenu(){
-    $('.action.sub-menu-book').unbind('click').bind('click',function(e) {
-      e.stopPropagation();
-
-      $('.sub_menu').not(this).each(function(){
-        $(this).addClass('hide');
-      });
-
-      $(this).parent().find('.sub_menu').removeClass('hide');
-    });
   }
 }
