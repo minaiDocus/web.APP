@@ -1,6 +1,6 @@
 = javascript_declare_var 'controller_path', controller_path
 
-%nav.navbar.navbar-expand-lg.fixed-top.sticky-top
+%nav.navbar.navbar-expand-lg.fixed-top.showMenu
   .row.w-100.no-margin
     .col-md-1.text-center
       = link_to image_tag('logo/tiny_logo_2.png', alt: 'logo iDocus'), '/', class: 'navbar-brand no-margin', data:{ href: '/' }
@@ -83,4 +83,4 @@
             = link_to glyphicon('person', {size: '13', color: '#212529'}) + ' Mon compte', '/profiles', class: 'dropdown-item', target: '_blank'
             = link_to glyphicon('document', {size: '13', color: '#212529'}) + " CGU #{Time.now.strftime("%Y")}", download_document_path(name: 'CGU_iDocus_201805.pdf'), class: 'dropdown-item', target: '_blank'
             = link_to glyphicon('comment-square', {size: '13', color: '#212529'}) + ' Nous contacter', 'https://idocus.zendesk.com/hc/fr', class: 'dropdown-item', target: '_blank'
-            = link_to glyphicon('account-logout', {size: '13', color: '#FF4848'}) + ' Se déconnecter', destroy_user_session_path, class: 'dropdown-item red-label  account-log-out', target: '_blank'
+            = link_to glyphicon('account-logout', {size: '13', color: '#FF4848'}) + ' Se déconnecter', destroy_user_session_path, method: 'delete', class: 'dropdown-item red-label  account-log-out'

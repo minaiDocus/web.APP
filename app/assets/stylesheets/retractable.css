@@ -12,37 +12,40 @@
 }
 
 @mozkeyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  0% { opacity: 0; }
+  80% { opacity: 0.6; }
+  100% { opacity: 1; }
 }
 @webkitkeyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  0% { opacity: 0; }
+  80% { opacity: 0.6; }
+  100% { opacity: 1; }
 }
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  0% { opacity: 0; }
+  80% { opacity: 0.6; }
+  100% { opacity: 1; }
 }
 
 @mozkeyframes showLogin {
-  from { max-height: 0px; max-width: 950px; }
-  to { max-height: 900px; max-width:1140px; }
+  from { max-height: 0px; }
+  to { max-height: 900px; }
   0% { opacity: 0; }
-  50% { opacity: 0.5; }
+  10% { opacity: 0.5; }
   100% { opacity: 1; }
 }
 @webkitkeyframes showLogin {
-  from { max-height: 0px; max-width: 950px; }
-  to { max-height: 900px; max-width:1140px; }
+  from { max-height: 0px; }
+  to { max-height: 900px; }
   0% { opacity: 0; }
-  50% { opacity: 0.5; }
+  10% { opacity: 0.5; }
   100% { opacity: 1; }
 }
 @keyframes showLogin {
-  from { max-height: 0px; max-width: 950px; }
-  to { max-height: 900px; max-width:1140px; }
+  from { max-height: 0px; }
+  to { max-height: 900px; }
   0% { opacity: 0; }
-  50% { opacity: 0.5; }
+  10% { opacity: 0.5; }
   100% { opacity: 1; }
 }
 
@@ -87,29 +90,29 @@
 }
 
 @mozkeyframes showMenu {
-  from { top: -15px; }
+  from { top: -100px; }
   to { top: 0; }
 }
 @webkitkeyframes showMenu {
-  from { top: -15px; }
+  from { top: -100px; }
   to { top: 0; }
 }
 @keyframes showMenu {
-  from { top: -15px; }
+  from { top: -100px; }
   to { top: 0; }
 }
 
 @mozkeyframes showFooter {
-  from { top: 15px; }
-  to { top: 0; }
+  from { bottom: -100px; }
+  to { bottom: 0; }
 }
 @webkitkeyframes showFooter {
-  from { top: 15px; }
-  to { top: 0; }
+  from { bottom: -100px; }
+  to { bottom: 0; }
 }
 @keyframes showFooter {
-  from { top: 15px; }
-  to { top: 0; }
+  from { bottom: -100px; }
+  to { bottom: 0; }
 }
 
 @mozkeyframes showSideMenu {
@@ -159,7 +162,7 @@ tbody.retractable.slidedown tr {
   transition: opacity 0.2s ease-out;
 }
 
-.retractable.fadein {
+.fadein {
   opacity: 1;
   animation-name: fadeIn;
   animation-duration: 0.8s;
@@ -179,14 +182,12 @@ tbody.retractable.slidedown tr {
 
 .showMenu{
   animation-name: showMenu;
-  animation-duration: 0.3s;
-  position: relative;
+  animation-duration: 0.6s;
 }
 
 .showFooter{
   animation-name: showFooter;
-  animation-duration: 0.3s;
-  position: relative;
+  animation-duration: 0.6s;
 }
 
 .side-menu{
