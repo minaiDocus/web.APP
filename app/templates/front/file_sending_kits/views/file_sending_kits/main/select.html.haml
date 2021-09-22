@@ -5,23 +5,29 @@
 .file_sending_kits_select
   - manual_paper_set_order = CustomUtils.is_manual_paper_set_order?(@organization)
   .row
-    .text-center
-      - if manual_paper_set_order
+    .col-md-8.text-start
+      %h3.semibold Kit d'envoi de numérisation
+    .col-md-4.text-end
+      - if manual_paper_set_order        
+        = link_to image_tag('application/icon-pdf.png', alt: "#{@organization.code.downcase}_folders.pdf", class: 'generate-manual-order', style: 'position:relative;top:-2px;') + " Télécharger le dernièr kit de numérisation généré pdf", folders_organization_file_sending_kit_path(@organization, {v: Time.now.strftime('%H%M%S')}), class: "btn btn-light download-manual-paper-set-order-folder-pdf"
+  - if manual_paper_set_order
+    .mb-4
+    .row
+      .text-center
         #download-manual-paper-set-order.d-inline
-          %span.alert.alert-danger.show-notify-content.error-generation.hide Une erreur a été rencontré lors de la régénération de votre commande ... veuillez réessayer svp
-          %span.alert.alert-info.show-notify-content.blink.pending-generation.hide Génération de fichier de commande en cours ... veuillez patienter svp
-          %span.alert.alert-success.show-content.success-generation.hide Votre fichier de commande a bien été généré =>
-          = link_to image_tag('application/icon-pdf.png', alt: "#{@organization.code.downcase}_folders.pdf", class: 'generate-manual-order', style: 'position:relative;top:-2px;') + " Télécharger le dernièr kit de numérisation généré pdf", folders_organization_file_sending_kit_path(@organization, {v: Time.now.strftime('%H%M%S')}), class: "btn btn-light download-manual-paper-set-order-folder-pdf"
+          %span.alert.alert-danger.show-notify-content.error-generation.semibold.hide Une erreur a été rencontré lors de la régénération de votre commande ... veuillez réessayer svp
+          %span.alert.alert-info.show-notify-content.blink.pending-generation.semibold.hide Génération de fichier de commande en cours ... veuillez patienter svp
+          %span.alert.alert-success.show-content.success-generation.hide Votre fichier de commande a bien été généré
+
   .box.mt-4
     = form_tag generate_organization_file_sending_kit_path(@organization), class: (manual_paper_set_order ? 'form-horizontal label-auto fsk_paper_set_orders' : 'form-horizontal label-auto'), id: 'fsk_paper_set_orders' do
-      %table.table.table-striped.table-condensed.table-bordered-inner.table-detachable-head
+      %table.table.table-striped
         %thead
           %tr
-            %th{style: 'width: 66px'}
+            %th.text-center
               - if manual_paper_set_order
                 = label_tag do
-                  = check_box_tag "users[fsk_all_users_checked][are_checked]", "true", (params[:order_customer_id].present? ? true : false), id: 'fsk_all_users_checked', class: 'form-check-input pointer float-none'
-                  Tous
+                  = check_box_tag "users[fsk_all_users_checked][are_checked]", "true", (params[:order_customer_id].present? ? true : false), id: 'fsk_all_users_checked', class: 'form-check-input'
               - else
                 = 'Sélection'
             %th Nom
@@ -42,8 +48,8 @@
                 - next_month_order = (Time.now + 1.month).beginning_of_month.strftime("%Y-%m-%d")
                 - order = current_order || Order.new(user: client, type: 'paper_set', period_duration: (client.subscription.present? ? client.subscription.period_duration : 1))
                 %tr
-                  %td{style: 'width: 66px'}
-                    = check_box_tag "users[#{client.id}][is_checked]", "true", (params[:order_customer_id].present? ? true : false), class: "fsk_user_checked form-check-input pointer float-none"
+                  %td.text-center
+                    = check_box_tag "users[#{client.id}][is_checked]", "true", (params[:order_customer_id].present? ? true : false), class: "fsk_user_checked form-check-input"
                   %td
                     = client.info
                     %span.error_info
@@ -53,8 +59,8 @@
                     = hidden_field_tag("orders[][manual_paper_set_order]", manual_paper_set_order, {id: 'fsk_manual_paper_set_order', data: {id: @organization.id}})
                     = hidden_field_tag("orders[][order_period_duration]", (client.subscription.present? ? client.subscription.period_duration : 1), {id: 'fsk_order_period_duration'})
                     = hidden_field_tag("orders[][paper_set_folder_count]", client.account_book_types.size, {id: 'fsk_order_paper_set_folder_count'})
-                  %td= select_tag "orders[][paper_set_start_date]", options_for_select(paper_set_start_date_options(order), current_order ? current_order.paper_set_start_date : next_month_order), include_blank: false, class: "form-control select form-select-sm optional date_order start_date", id: 'fsk_orders_paper_set_start_date'
-                  %td= select_tag "orders[][paper_set_end_date]", options_for_select(paper_set_end_date_options(order), current_order ? current_order.paper_set_end_date : next_month_order), include_blank: false, class: "form-control select form-select-sm optional date_order end_date", id: 'fsk_orders_paper_set_end_date'
+                  %td= select_tag "orders[][paper_set_start_date]", options_for_select(paper_set_start_date_options(order), current_order ? current_order.paper_set_start_date : next_month_order), include_blank: false, class: "form-select select form-select-sm optional date_order start_date", id: 'fsk_orders_paper_set_start_date'
+                  %td= select_tag "orders[][paper_set_end_date]", options_for_select(paper_set_end_date_options(order), current_order ? current_order.paper_set_end_date : next_month_order), include_blank: false, class: "form-select select form-select-sm optional date_order end_date", id: 'fsk_orders_paper_set_end_date'
                   %td.hide.price{ style: 'font-size:15px;text-align: left !important;' , id: 'fsk_order_paper_set_price'}
               - else
                 %tr
@@ -83,9 +89,10 @@
           .form-check.idocus-custom-form-check
             = check_box_tag 'one_workshop_labels_page_per_customer', 1, false, type: 'checkbox', class: 'boolean form-check-input pointer float-none', id: 'one_workshop_labels_page_per_customer'
             = label_tag 'one_workshop_labels_page_per_customer', "Une page d'étiquette par client ?", class: 'control-label boolean form-check-label', for: 'one_workshop_labels_page_per_customer'
+      %hr
       .form-group.form-footer-content.text-end.hide
         - if manual_paper_set_order
-          = submit_tag 'Générer', class: 'btn btn-primary', id:'generate-manual-paper-set-order'
+          = submit_tag 'Générer', class: 'btn btn-default no-margin', id:'generate-manual-paper-set-order'
         - else
           = submit_tag t('actions.submit'), class: 'btn btn-primary'
         = link_to t('actions.edit'), '#', link: edit_organization_file_sending_kit_path(@organization), class: 'btn btn-primary bold edit-file-sending-kits' if current_user.is_developer

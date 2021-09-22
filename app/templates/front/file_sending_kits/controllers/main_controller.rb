@@ -70,8 +70,7 @@ class FileSendingKits::MainController < OrganizationController
   def select; end
 
   # POST /organizations/:organization_id/file_sending_kit/generate
-  def generate
-    debugger
+  def generate    
     begin
       #Timeout : 10 minutes
       Timeout::timeout (60*10) do

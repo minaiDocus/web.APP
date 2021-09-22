@@ -1,38 +1,43 @@
 #subscripiton_organization
   %h3 Abonnement
-  %table.table.table-striped.table-condensed
-    %tr
-      %th Option
-      %th Choix
-      %th.price Prix HT
-      %th.price Prix TTC
-    %tr
-      %td Clients
-      %td= @organization.customers.active_at(Time.now).count
-      %td.price= format_price_00(@total - @subscription.current_period.products_price_in_cents_wo_vat) + ' €'
-      %td.price= format_price_00((@total * @subscription.tva_ratio) - @subscription.current_period.products_price_in_cents_w_vat) + ' €'
-    - @subscription_options.each do |option|
-      %tr
-        %td Autres
-        %td= option.name
-        %td.price= format_price_00(option.price_in_cents_wo_vat) + ' €'
-        %td.price= format_price_00(option.price_in_cents_w_vat) + ' €'
-    %tr
-      %td
-      %th Total
-      %td.price= format_price_00(@total) + ' €'
-      %td.price= format_price_00(@total * @subscription.tva_ratio) + ' €'
-    %tr
-      %td
-      %th TVA (20 %)
-      %td
-      %td.price= format_price_00((@total * @subscription.tva_ratio) - @total) + ' €'
+  .mb-4
+  .box
+    %table.table.table-striped
+      %thead
+        %th Option
+        %th Choix
+        %th.price Prix HT
+        %th.price Prix TTC
+      %tbody
+        %tr
+          %td Clients
+          %td= @organization.customers.active_at(Time.now).count
+          %td.price= format_price_00(@total - @subscription.current_period.products_price_in_cents_wo_vat) + ' €'
+          %td.price= format_price_00((@total * @subscription.tva_ratio) - @subscription.current_period.products_price_in_cents_w_vat) + ' €'
+        - @subscription_options.each do |option|
+          %tr
+            %td Autres
+            %td= option.name
+            %td.price= format_price_00(option.price_in_cents_wo_vat) + ' €'
+            %td.price= format_price_00(option.price_in_cents_w_vat) + ' €'
+        %tr
+          %td
+          %th Total
+          %td.price= format_price_00(@total) + ' €'
+          %td.price= format_price_00(@total * @subscription.tva_ratio) + ' €'
+        %tr
+          %td
+          %th TVA (20 %)
+          %td
+          %td.price= format_price_00((@total * @subscription.tva_ratio) - @total) + ' €'
 
-  - idocus_params = param_encode({ url: edit_organization_organization_subscription_path(@organization), method: 'GET', html: { target: '#organization_subscriptions', target_dest: '#modal-body-edition' } })
-  %button.btn.btn-primary.as_idocus_ajax{ idocus: idocus_params, 'data-bs-target' => '#subscriptions_edition', 'data-bs-toggle' => 'modal', :type => 'button' }= t('actions.edit')
+    %hr
+    .text-end
+      - idocus_params = param_encode({ url: edit_organization_organization_subscription_path(@organization), method: 'GET', html: { target: '#organization_subscriptions', target_dest: '#modal-body-edition' } })
+      %button.btn.btn-light.as_idocus_ajax{ idocus: idocus_params, 'data-bs-target' => '#subscriptions_edition', 'data-bs-toggle' => 'modal', :type => 'button' }= t('actions.edit')
 
-  - idocus_params = param_encode({ url: select_options_organization_organization_subscription_path(@organization), method: 'GET', html: { target: '#organization_subscriptions', target_dest: '#modal-body-propagation' } })
-  %button.btn.btn-primary.as_idocus_ajax{ idocus: idocus_params, 'data-bs-target' => '#subscriptions_propagation', 'data-bs-toggle' => 'modal', :type => 'button' } Propager les quotas
+      - idocus_params = param_encode({ url: select_options_organization_organization_subscription_path(@organization), method: 'GET', html: { target: '#organization_subscriptions', target_dest: '#modal-body-propagation' } })
+      %button.btn.btn-primary.as_idocus_ajax{ idocus: idocus_params, 'data-bs-target' => '#subscriptions_propagation', 'data-bs-toggle' => 'modal', :type => 'button' } Propager les quotas
 
 .modal#subscriptions_edition 
   .modal-dialog{ style: 'min-width: 800px'}
@@ -53,7 +58,7 @@
       .modal-header
         %h5.modal-title.bold Propager les quotas
         %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
-      .modal-body
+      .modal-body.back-grey
         #modal-body-propagation
       .modal-footer
         .w-100.text-end
