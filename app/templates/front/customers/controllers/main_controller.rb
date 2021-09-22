@@ -40,16 +40,6 @@ class Customers::MainController < OrganizationController
     build_softwares
   end
 
-  # GET /organizations/:organization_id/customers/:id/new_customer_step_two
-  def new_customer_step_two;  end
-
-  # GET /organizations/:organization_id/customers/:id/book_type_creator/:journal_id
-  def book_type_creator
-    @journal = AccountBookType.where(id: params[:journal_id]).first.presence || AccountBookType.new
-
-    render partial: 'book_type_creator'
-  end
-
   def refresh_book_type
     render partial: 'book_type'
   end

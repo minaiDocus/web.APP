@@ -7,9 +7,6 @@ Rails.application.routes.draw do
           get   'search'
         end
         member do
-          get   'new_customer_step_two'
-          get   'book_type_creator(/:journal_id)', action: 'book_type_creator'
-          get   'refresh_book_type'
           get   'edit_ibiza'
           patch 'update_ibiza'
           get   'edit_exact_online'

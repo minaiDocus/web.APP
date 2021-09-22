@@ -46,7 +46,7 @@ class FileSendingKit{
   }
 
   edit_file_sending_kits_view(url){
-    this.applicationJS.parseAjaxResponse({ 'url': url }).then((element)=>{
+    this.applicationJS.sendRequest({ 'url': url }).then((element)=>{
       this.file_sending_kits_edit.find('.modal-body').html($(element).find('.file_sending_kits_edit').html());
       this.file_sending_kits_edit.modal('show');
     }).catch((error)=> { 
@@ -55,7 +55,7 @@ class FileSendingKit{
   }
 
   select_for_orders(url){
-    this.applicationJS.parseAjaxResponse({ 'url': url }).catch((error)=> {
+    this.applicationJS.sendRequest({ 'url': url }).catch((error)=> {
       console.log(error)
     }).then((element)=>{
       this.select_multiple.find('.modal-body').html($(element).find('.file_sending_kits_select').html());

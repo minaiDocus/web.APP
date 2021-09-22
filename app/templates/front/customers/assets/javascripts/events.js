@@ -95,6 +95,23 @@ function bind_customer_events() {
     e.stopPropagation();
     $('form#edit_file_sending_kit_form').submit();
   });
+
+
+  /*$('.add_account_book_type').unbind('click').bind('click', function(e) {
+    e.preventDefault();
+
+    const url = $(this).attr('link');
+
+    AppEmit('new_account_book_type_view', { url: url});
+  });*/
+
+  /*$('.edit_journal_customer').unbind('click').bind('click', function(e) {
+    e.preventDefault();
+
+    const url = $(this).attr('href');
+
+    AppEmit('new_edit_journal_view', { url: url});
+  });*/
 }
 
 

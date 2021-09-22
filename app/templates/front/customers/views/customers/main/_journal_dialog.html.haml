@@ -1,0 +1,28 @@
+.modal#journal-form
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.modal-title.bold Nouveau journal comptable
+        %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+      .modal-body
+
+      .modal-footer
+        .row.w-100.previous-next-controls
+          .col-md-8.d-inline-block
+            %button.btn.btn-default.semibold.previous.hide{ type: :button, "data-bs-target" => "#carousel-journal-form", "data-bs-slide" => "prev" } Précedent       
+          .col-md-4.d-inline-block.ps-1.text-end
+            %button.btn.btn-light.cancel.me-1.semibold{ type: :button, 'aria-label' => 'Close', 'data-bs-dismiss' => 'modal' } Annuler
+            %button.btn.btn-primary.semibold.next{ type: :button, "data-bs-target" => "#carousel-journal-form", "data-bs-slide" => "next" } Suivant
+            %button.btn.btn-primary.semibold.validate.hide{ type: :submit } Valider
+
+.modal.fade#new_edit_journal_customer
+  .modal-dialog{:role => 'document'}
+    .modal-content
+      .modal-header
+        %h5.modal-title.bold Edition du journal
+        %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+      .modal-body#file_sending_kits_edit_body
+        Chargement ...
+      .modal-footer
+        %button.btn.btn-light.semibold.cancel{ 'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', type: :button } Annuler
+        %button.btn.btn-primary.bold.validate_file_sending_kits_edit{ type: :button } Valider les modifications

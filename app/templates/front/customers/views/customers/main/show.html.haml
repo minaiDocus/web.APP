@@ -25,11 +25,6 @@
     - else
       %li.nav-item.no-margin{ "role" => "presentation" }
         %button.semibold.nav-link#journals-tab{ class: ('active' if params[:tab] == 'journals'), "data-bs-toggle" => "tab", "data-bs-target" => "#journals", type: :button, "role" => "tab", "aria-controls" => "journals", "aria-selected" => "#{params[:tab] == 'journals'}" } Journaux comptables
-    - if @customer.active? && @customer.options.is_retriever_authorized && !@organization.specific_mission
-      %li.nav-item.no-margin{ "role" => "presentation" }
-        %button.semibold.nav-link#ido-fac-bank-tab{ class: ('active' if params[:tab] == 'ido_fac_bank'), "data-bs-toggle" => "tab", "data-bs-target" => "#ido-fac-bank", type: :button, "role" => "tab", "aria-controls" => "ido-fac-bank", "aria-selected" => "#{params[:tab] == 'ido_fac_bank'}", account_id: @customer.id } iDo'FacBanque
-      %li.nav-item.no-margin{ "role" => "presentation" }
-        %button.semibold.nav-link#bank-setting-tab{ class: ('active' if params[:tab] == 'bank_setting'), "data-bs-toggle" => "tab", "data-bs-target" => "#bank-setting", type: :button, "role" => "tab", "aria-controls" => "bank-setting", "aria-selected" => "#{params[:tab] == 'bank_setting'}", account_id: @customer.id} Paramètres bancaires
     - unless @organization.specific_mission
       %li.nav-item.no-margin{ "role" => "presentation" }
         %button.semibold.nav-link#compta-tab{ class: ('active' if params[:tab] == 'compta'), "data-bs-toggle" => "tab", "data-bs-target" => "#compta", type: :button, "role" => "tab", "aria-controls" => "compta", "aria-selected" => "#{params[:tab] == 'compta'}" } Paramètres
@@ -219,6 +214,11 @@
           En cas de nécessité (suppression du journal), merci de contacter le
           = link_to 'support.', 'javascript:ZDiscussions.showDiscussionsFBW();'
       .form-group
+        .text-end
+          %button.btn.btn-primary.bold.new-journal.new_edit_account_book_type{link: new_organization_customer_journal_path(@organization, @customer)}
+            %span.me-2= glyphicon('plus', { color: "#FFF", size: '15'})       
+            %span Nouveau journal
+        %hr
         - if @organization.specific_mission
           %table.table.table-striped
             %thead
@@ -240,7 +240,7 @@
                       .sub_menu.text-start.hide
                         %ul.no-margin.no-padding.regular
                           %li.edit
-                            = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' ' + t('actions.edit'), edit_organization_customer_journal_path(@organization, @customer, journal)
+                            = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' ' + t('actions.edit'), '#', link: edit_organization_customer_journal_path(@organization, @customer, journal), class: 'new_edit_account_book_type'
                       - if @user.is_admin || false || journal.is_open_for_modification?
                         %li.delete.red-label
                           = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', organization_customer_journal_path(@organization, @customer, journal), method: 'delete', data: { confirm: t('actions.confirm') }
@@ -279,7 +279,7 @@
                       .sub_menu.text-start.hide
                         %ul.no-margin.no-padding.regular
                           %li.edit
-                            = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' ' + t('actions.edit'), edit_organization_customer_journal_path(@organization, @customer, journal)
+                            = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' ' + t('actions.edit'), '#', link: edit_organization_customer_journal_path(@organization, @customer, journal), class: 'new_edit_account_book_type'
                           - if @user.is_admin || false || journal.is_open_for_modification?
                             %li.delete.red-label
                               = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', organization_customer_journal_path(@organization, @customer, journal), method: 'delete', data: { confirm: t('actions.confirm') }
@@ -403,8 +403,6 @@
           %button.btn.btn-light.semibold Annuler
           %button.btn.btn-primary.bold Valider les modifications
 
-    .tab-pane.box.no-margin#ido-fac-bank{ class: ('active' if params[:tab] == 'ido_fac_bank'), "role" => "tabpanel", "aria-labelledby" => "ido-fac-bank-tab" }
-      iDo fac bank TODO ...
 
     .tab-pane.box.no-margin#compta{ class: ('active' if params[:tab] == 'compta'), "role" => "tabpanel", "aria-labelledby" => "compta-tab" }
       %table.table.table-striped.table-condensed
@@ -1084,4 +1082,5 @@
 
 = render partial: 'customer_dialog'
 = render partial: 'order_dialog'
+= render partial: 'journal_dialog'
 = javascript_include_tag 'front/customers/assets/javascripts/main'

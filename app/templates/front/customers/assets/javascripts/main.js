@@ -7,6 +7,9 @@
 //=require '../../../orders/assets/javascripts/events'
 //=require '../../../orders/assets/javascripts/order'
 
+//**** journals JS *******/
+//=require '../../../journals/assets/javascripts/journal'
+
 class Customer{
 
   constructor(){
@@ -17,6 +20,7 @@ class Customer{
     this.select_multiple       = $('#select_for_orders.modal');
     this.account_close_confirm_modal = $('#account_close_confirm.modal');
     this.file_sending_kits_edit = $('#file_sending_kits_edit.modal');
+    this.account_book_type_view = $('#account_book_type_modal.modal');
     this.organization_id       = $('input:hidden[name="organization_id"]').val();
     this.action_locker = false;
   }
@@ -753,10 +757,21 @@ class Customer{
   }
 
   edit_file_sending_kits_view(url){
-    this.applicationJS.parseAjaxResponse({ 'url': url }).then((element)=>{
+    this.applicationJS.sendRequest({ 'url': url }).then((element)=>{
       this.file_sending_kits_edit.find('.modal-body').html($(element).find('.file_sending_kits_edit').html());
       this.select_multiple.modal('hide');
       this.file_sending_kits_edit.modal('show');
+
+      this.rebind_customer_all_events();
+    }).catch((error)=> { 
+      console.error(error);
+    });
+  }
+
+  new_account_book_type_view(url){
+    this.applicationJS.sendRequest({ 'url': url }).then((element)=>{
+      this.account_book_type_view.find('.modal-body').html($(element).html());
+      this.account_book_type_view.modal('show');
 
       this.rebind_customer_all_events();
     }).catch((error)=> { 
@@ -803,6 +818,20 @@ jQuery(function () {
   AppListenTo('check_casing_size_and_count', (e)=>{ order.check_casing_size_and_count(); });
 
   AppListenTo('edit_file_sending_kits_view', (e)=>{ customer.edit_file_sending_kits_view(e.detail.url); });
+
+  /*AppListenTo('new_account_book_type_view', (e)=>{ customer.new_account_book_type_view(e.detail.url); });*/
+
+  let journal = new Journal();
+  journal.main();
+
+  $('#journal .edit_journal_analytics').unbind('click').bind('click', function(e){ 
+    let journal_id = $(this).data('journal-id');
+    let customer_id = $(this).data('customer-id');
+    let code = $(this).data('code');
+    journal.edit_analytics(journal_id, customer_id, code);
+  });
+
+  AppListenTo('compta_analytics.validate_analysis', (e)=>{ journal.update_analytics(e.detail.data) });
   
   AppListenTo('csv_descriptor_edit_customer_format', (e)=>{ customer.load_csv_descriptor(e.detail.id, e.detail.organization_id) });
  

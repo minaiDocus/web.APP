@@ -309,7 +309,7 @@ class PaperSetOrder{
 
 
   edit_file_sending_kits_view(url){
-    this.applicationJS.parseAjaxResponse({ 'url': url }).then((element)=>{
+    this.applicationJS.sendRequest({ 'url': url }).then((element)=>{
       this.file_sending_kits_edit.find('.modal-body').html($(element).find('.file_sending_kits_edit').html());
       this.select_multiple.modal('hide');
       this.file_sending_kits_edit.modal('show');

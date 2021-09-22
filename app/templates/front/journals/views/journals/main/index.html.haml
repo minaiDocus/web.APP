@@ -9,7 +9,7 @@
         Journaux comptables
         %span.badge.badge-secondary.badge-sm.regular= @journals.total_count
     .col-md-2.text-center
-      %button.btn.btn-primary.bold.new-journal
+      %button.btn.btn-primary.bold.new-journal.new_edit_account_book_type{link: new_organization_journal_path(@organization)}
         %span.me-2= glyphicon('plus', { color: "#FFF", size: '15'})       
         %span Nouveau journal
 
@@ -43,7 +43,7 @@
               .sub_menu.edit-journal.text-start.hide
                 %ul.no-margin.no-padding.regular                 
                   %li.edit{journal_id: journal.id}
-                    = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Éditer', edit_organization_journal_path(@organization, journal)
+                    = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Éditer', '#', link: edit_organization_journal_path(@organization, journal), class: 'new_edit_account_book_type'
                   %li.delete.red-label
                     = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', organization_journal_path(@organization, journal), method: 'delete', data: { confirm: t('actions.confirm') }
 
