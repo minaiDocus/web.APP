@@ -1,19 +1,19 @@
 function bind_all_events_account_number_rules(){
   function multi_select_for(target= 'add-modal') {
     if (target === 'add-modal') {
-      $('select#customers-list').searchableOptionList({
+      $('select#customers-list').asMultiSelect({
         'noneText': 'Selectionner un/des clients affectés par la règle',
         'allText': 'Tous séléctionnés'
       });
 
-      $('select#groups-list').searchableOptionList({
+      $('select#groups-list').asMultiSelect({
         'noneText': 'Selectionner un/des groupe(s) affectés par la règle',
         'allText': 'Tous séléctionnés'
       });
     }
 
     if (target === 'download-modal') {
-      $('select#affect-rule-to').searchableOptionList({
+      $('select#affect-rule-to').asMultiSelect({
         'noneText': 'Selectionner un/des affectations',
         'allText': 'Tous séléctionnés'
       });

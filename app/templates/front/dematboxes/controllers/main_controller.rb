@@ -6,14 +6,16 @@ class Dematboxes::MainController < FrontController
   # POST /account/dematboxes
   def create
     @dematbox.subscribe(params[:pairing_code])
-    flash[:success] = "Configuration de iDocus'Box en cours..."
-    redirect_to profiles_path
+    json_flash[:success] = "Configuration de iDocus'Box en cours..."
+    
+    render json: { json_flash: json_flash }, status: 200
   end
 
   # DELETE /account/dematboxes
   def destroy
     @dematbox.unsubscribe
     flash[:success] = 'Supprimé avec succèss.'
+
     redirect_to profiles_path
   end
 

@@ -22,6 +22,7 @@
       = render partial: 'layouts/front/organization_lefter'
     - else
       != content_for?(:content) ? yield(:content) : yield
+    .footer_marginer{ style: 'height: 120px' }
   - render partial: 'layouts/front/support_chat'
   = render partial: 'layouts/front/notice_flush_messages'
   = render partial: 'shared/as_user'

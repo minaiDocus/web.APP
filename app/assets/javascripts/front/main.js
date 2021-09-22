@@ -1,9 +1,11 @@
 //= require '../application'
 
-function bind_globals_events(){
-  if( $('.searchable-option-list').css('display') != 'none' )
-    $('.searchable-option-list').searchableOptionList({ maxHeight: '300px' });
+function elements_initializer(){
+  $('.searchable-option-list').asMultiSelect({ maxHeight: '300px' });
+}
 
+function bind_globals_events(){
+  elements_initializer();
   /************************************************************************************/ 
   /******* IMPORTANT : USE ONLY UNBIND AND BIND FORMAT EVENTS IN THIS METHODS *********/
   /************************************************************************************/
@@ -182,7 +184,7 @@ function bind_globals_events(){
   /* SCROLL ON TOP */
 
   /* SCROLL */
-  $('span[class^="auto-scroll-span"]').click(function(e){    
+  $('span[class^="auto-scroll-span"]').unbind('click').bind('click', function(e){    
     var class_name = $(this).attr('class').split(' ')[0];
     var direction  = class_name.split('-')[3];
     ApplicationJS.generate_auto_scroll_for_div($(this), direction);

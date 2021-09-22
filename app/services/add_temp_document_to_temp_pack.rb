@@ -8,12 +8,16 @@ class AddTempDocumentToTempPack
       opts = { dematbox_doc_id: options[:dematbox_doc_id] }
 
       temp_document = TempDocument.find_or_initialize_with(opts)
-    elsif options[:fingerprint].present?
-      opts = { original_fingerprint: options[:fingerprint], user_id: options[:user_id] }
+    end
 
-      temp_document = TempDocument.find_or_initialize_with(opts)
-    else
-      temp_document ||= TempDocument.new
+    if not temp_document
+      if options[:fingerprint].present?
+        opts = { original_fingerprint: options[:fingerprint], user_id: options[:user_id] }
+
+        temp_document = TempDocument.find_or_initialize_with(opts)
+      else
+        temp_document ||= TempDocument.new
+      end
     end
 
     if options[:delivery_type] != 'retriever' || !temp_document.persisted?

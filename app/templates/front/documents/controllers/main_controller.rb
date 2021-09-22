@@ -74,7 +74,7 @@ class Documents::MainController < FrontController
     supported_format = %w[csv xml_ibiza txt_quadratus zip_quadratus zip_coala xls_coala txt_fec_agiris txt_fec_acd csv_cegid tra_cegid]
 
     if preseizures.any? && export_format.in?(supported_format)
-      preseizures = preseizures.by_position
+      preseizures = preseizures.sort_by{|e| e.position }
 
       export = PreseizureExport::GeneratePreAssignment.new(preseizures, export_format).generate_on_demand
       if export && export.file_name.present? && export.file_path.present?

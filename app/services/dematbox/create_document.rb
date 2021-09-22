@@ -53,6 +53,8 @@ class Dematbox::CreateDocument
             dematbox_box_id:       @params['boxId'],
             dematbox_service_id:   @params['serviceId'],
             dematbox_text:         @params['text'],
+            fingerprint:           fingerprint,
+            user_id:               user.id,
             is_content_file_valid: true
           }
 
@@ -166,5 +168,9 @@ class Dematbox::CreateDocument
 
   def upload?
     @virtual_box_id == DematboxServiceApi.config.virtual_box_id.to_s
+  end
+
+  def fingerprint
+    DocumentTools.checksum(file.path)
   end
 end

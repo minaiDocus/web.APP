@@ -32,3 +32,4 @@
         %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
       .modal-body.back-grey
         = render file: Rails.root.join('app/templates/front/external_file_storages/views/external_file_storages/main/_efs_management.html.haml'), locals: { external_file_storage: @external_file_storage }
+      .modal-footer.p-4

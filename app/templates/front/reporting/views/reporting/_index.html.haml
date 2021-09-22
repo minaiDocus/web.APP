@@ -4,18 +4,18 @@
 
 .container-fluid.reporting
   .row
-    .col-md-8
+    .col-md-9
       %h1.bold
         = t('reporting.reporting_text') + ' : '
         %span.green-label= @report_organization.name
     .col-md-2
       = select_tag 'customer_filter', options_for_select(accounts_options), id: 'customer_filter', multiple: true
-    .col-md-2
-      .form-group                    
-        .input-group.mb-3
-          %span.show-calendar.input-group-text{ data: { ref: 'date_filter' } }= glyphicon('calendar', { size: '14', color: 'background: rgba(26, 26, 26, 0.7)' })          
-          %input.form-control.value-content.date.daterange#date_filter{ type: :text, name: 'date_filter'}
-          %span.show-calendar.input-group-text-right{ data: { ref: 'date_filter' } }= glyphicon('chevron-bottom', { size: '12', color: 'background: rgba(26, 26, 26, 0.7)' })
+    .col-md-1
+      / .form-group
+      /   .input-group.mb-3
+      /     %span.show-calendar.input-group-text{ data: { ref: 'date_filter' } }= glyphicon('calendar', { size: '14', color: 'background: rgba(26, 26, 26, 0.7)' })          
+      /     %input.form-control.value-content.date.daterange#date_filter{ type: :text, name: 'date_filter'}
+      /     %span.show-calendar.input-group-text-right{ data: { ref: 'date_filter' } }= glyphicon('chevron-bottom', { size: '12', color: 'background: rgba(26, 26, 26, 0.7)' })
 
   .mb-5
 

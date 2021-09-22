@@ -1,29 +1,29 @@
 # frozen_string_literal: true
 class FtpsSetting::UserController < FrontController
   before_action :verify_authorization
-  before_action :load_sftp
+  before_action :load_by_type
 
-  prepend_view_path('app/templates/front/ftps/views')
+  prepend_view_path('app/templates/front/ftps_setting/views')
 
   def edit; end
 
   def update
-    @sftp.assign_attributes(ftp_params)
-    if @sftp.valid? && Ftp::VerifySettings.new(@sftp, current_user.code).execute
-      @sftp.is_configured = true
-      @sftp.save
+    @ftps.assign_attributes(_params)
+    if @ftps.valid? && Ftp::VerifySettings.new(@ftps, current_user.code).execute
+      @ftps.is_configured = true
+      @ftps.save
       flash[:success] = 'Votre compte FTP a été configuré avec succès.'
-      redirect_to account_profile_path(anchor: 'sftp', panel: 'efs_management')
+      redirect_to profiles_path
     else
-      flash[:error] = @sftp.reload.error_message
+      flash[:error] = @ftps.reload.error_message
       render :edit
     end
   end
 
   def destroy
-    @sftp.reset_info
+    @ftps.reset_info
     flash[:success] = 'Vos paramètres FTP ont été réinitialisé.'
-    redirect_to account_profile_path(anchor: 'sftp', panel: 'efs_management')
+    redirect_to profiles_path
   end
 
   private
@@ -31,15 +31,19 @@ class FtpsSetting::UserController < FrontController
   def verify_authorization
     unless @user.find_or_create_external_file_storage.is_ftp_authorized?
       flash[:error] = "Vous n'êtes pas autorisé à utiliser FTP."
-      redirect_to account_profile_path(panel: 'efs_management')
+      redirect_to profiles_path
     end
   end
 
-  def load_sftp
-    @sftp = @user.find_or_create_external_file_storage.sftp
+  def load_by_type
+    if params[:type] == 'ftp'
+      @ftps = @user.find_or_create_external_file_storage.ftp
+    else
+      @ftps = @user.find_or_create_external_file_storage.sftp
+    end
   end
 
-  def ftp_params
-    params.require(:sftp).permit(:host, :port, :is_passive, :login, :password)
+  def _params
+    params.require(params[:type]).permit(:host, :port, :is_passive, :login, :password)
   end
 end

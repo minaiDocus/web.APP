@@ -2,10 +2,11 @@
   %input#duplicated-pre-assignment-size{ type: 'hidden', value: @duplicates.total_count }
 
   .form-group
-    .w-100.text-end            
-      %button.btn.btn-danger.semibold#unlock-preseizures
-        %span.me-2= glyphicon('aperture', { size: '15', color: '#FF4848'})
-        %span Débloquer ceux séléctionnées
+    .w-100.text-end
+      - if @user.has_collaborator_action?        
+        %button.btn.btn-danger.semibold#unlock-preseizures
+          %span.me-2= glyphicon('aperture', { size: '15', color: '#FF4848'})
+          %span Débloquer ceux séléctionnées
       %button.btn.btn-light-primary.semibold#confirm-duplication
         %span.me-2= glyphicon('circle-check', { size: '15', color: '#0d6efd'})
         %span Marquer comme duplication ceux séléctionnées

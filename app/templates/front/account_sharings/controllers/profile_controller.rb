@@ -10,12 +10,12 @@ class AccountSharings::ProfileController < FrontController
     elsif Array(@account_sharing.errors[:account] || @account_sharing.errors[:collaborator]).include?('est déjà pris.')
       flash[:success] = 'Ce contact a déjà accès à votre compte.'
     elsif @contact.errors[:email].include?('est déjà pris.') || @account_sharing.errors[:collaborator_id].include?("n'est pas valide")
-      json_flash[:error] = "Vous ne pouvez pas partager votre compte avec le contact : #{@contact.email}."
+      flash[:error] = "Vous ne pouvez pas partager votre compte avec le contact : #{@contact.email}."
     else
-      json_flash[:error] = "Veuillez remplir correctement les champs obligatoires svp!"
+      flash[:error] = "Veuillez remplir correctement les champs obligatoires svp!"
     end
 
-    render json: { json_flash: json_flash }, status: 200
+    render json: { json_flash: flash }, status: 200
   end
 
   def destroy
@@ -25,6 +25,7 @@ class AccountSharings::ProfileController < FrontController
     else
       flash[:error] = 'Impossible de supprimer le partage.'
     end
+
     redirect_to profiles_path
   end
 
@@ -35,10 +36,10 @@ class AccountSharings::ProfileController < FrontController
     if @account_sharing_request.save
       flash[:success] = 'Demande envoyé avec succès.'
     else
-      json_flash[:error] = @account_sharing_request.errors.messages
+      flash[:error] = 'Impossible de faire la demande, code ou email invalide'
     end
 
-    render json: { json_flash: json_flash }, stattus: 200
+    render json: { json_flash: flash }, status: 200
   end
 
   private

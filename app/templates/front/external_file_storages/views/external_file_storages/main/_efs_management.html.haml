@@ -85,13 +85,13 @@ Configurer l’accès à vos services de stockage externe de documents vous perm
           - if external_file_storage.ftp.is_configured?
             %h6
               Votre compte iDocus est connecté à votre compte FTP.
-              = link_to 'Configurer', edit_ftp_path
+              = link_to 'Configurer', edit_ftps_path('ftp')
               ou
               = link_to 'supprimer mes paramètres.', ftp_path, method: :delete, data: { confirm: 'Êtes-vous sûr de vouloir supprimer vos paramètres FTP ?' }
           - else
             %h6
               Pour connecter iDocus à votre compte FTP,
-              = link_to ' cliquez ici.', edit_ftp_path
+              = link_to ' cliquez ici.', edit_ftps_path('ftp')
           \.
       .row{ :class => "service_config_#{service_number} #{!is_service_used ? 'hide' : ''}" }
         .col-md-12

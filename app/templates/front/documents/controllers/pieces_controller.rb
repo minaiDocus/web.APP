@@ -29,7 +29,6 @@ class Documents::PiecesController < FrontController
 
   def delete
     pieces_ids  = Array(params[:ids] || [])
-    # pieces_ids  = [] #FOR test
     pack        = nil
 
     pieces_ids.each do |piece_id|

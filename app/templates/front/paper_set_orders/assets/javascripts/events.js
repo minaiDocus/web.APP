@@ -19,7 +19,7 @@ function confirm_manual_paper_set_order(){
 function apply_searchable_option_list(target) {
   if (target=== 'select_customers') {
     $('select#select-customers-paper-set-order').removeClass('form-control');
-    $('select#select-customers-paper-set-order').searchableOptionList({
+    $('select#select-customers-paper-set-order').asMultiSelect({
       'searchplaceholder': 'Selectionner / Rechercher un dossier client à qui envoyer un kit courrier',
       'noneText': 'Selectionner un/des journaux',
       'allText': 'Tous séléctionnés'

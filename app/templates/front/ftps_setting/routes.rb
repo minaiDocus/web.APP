@@ -2,8 +2,8 @@ Rails.application.routes.draw do
   scope module: 'ftps_setting' do
     scope :ftps do
       get '/edit/:type', to: 'user#edit', as: 'edit_ftps'
-      patch '/:type', to: 'user#update', as: 'update_ftps'
-      put '/:type', to: 'user#create', as: 'create_ftps'
+      patch '/', to: 'user#update', as: 'update_ftps'
+      put '/', to: 'user#create', as: 'create_ftps'
       delete '/:type', to: 'user#delete', as: 'destroy_ftps'
     end
 

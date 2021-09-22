@@ -2,15 +2,15 @@ function apply_searchable_option(target) {
   if (target === 'collaborators') {
     $('#select-collaborator-role').removeClass('form-control');
     $('#select-organization-group-list').removeClass('form-control');
-    $('#select-collaborator-role').searchableOptionList();
-    $('#select-organization-group-list').searchableOptionList();
+    $('#select-collaborator-role').asMultiSelect();
+    $('#select-organization-group-list').asMultiSelect();
   }
 
   else if (target === 'groups') {
     $('#select-collaborators-list').removeClass('form-control');
     $('#select-customers-collaborators-list').removeClass('form-control');
-    $('#select-collaborators-list').searchableOptionList();
-    $('#select-customers-collaborators-list').searchableOptionList();
+    $('#select-collaborators-list').asMultiSelect();
+    $('#select-customers-collaborators-list').asMultiSelect();
   }
 }
 

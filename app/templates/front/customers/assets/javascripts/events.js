@@ -2,7 +2,7 @@ function searchable_option_copy_journals_list() {
   let checked_count = 0;
 
   $('select#copy-journals-into-customer').removeClass('form-control');
-  $('select#copy-journals-into-customer').searchableOptionList({
+  $('select#copy-journals-into-customer').asMultiSelect({
     'noneText': 'Selectionner un/des journaux',
     'allText': 'Tous séléctionnés',
     events: {

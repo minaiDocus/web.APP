@@ -34,112 +34,126 @@
 //= require custom_popover
 //= require app_listener
 
-var GLOBAL = {}
-var VARIABLES = {}
-var VARS = {}
+/********** GLOBAL VARIABLES ********/
+  var GLOBAL = {}
+  var VARIABLES = {}
+  var VARS = {}
 
-VARIABLES.set = (var_name, value) => {
-  VARS[var_name] = value;
-}
+  VARIABLES.set = (var_name, value) => {
+    VARS[var_name] = value;
+  }
 
-VARIABLES.get = (var_name) => {
-  return VARS[var_name];
-}
+  VARIABLES.get = (var_name) => {
+    return VARS[var_name];
+  }
 
-$.fn.serializeObject = function() {
-  var o = {};
-  var a = this.serializeArray();
 
-  try{
-    $.each(a, function(){
-      const inject = (obj, name)=>{
-        if(name.match(/\[\](.+)/))
-        {
-          obj[name] = this.value;
-        }
-        else if(name.match(/\[\]$/)){
-          let obj_index = name.replace(/\[\]/g, '');
+/*********** JQuery mixing *********************/
+  $.fn.asMultiSelect = function(options={}){
+    if( !this.hasClass('mixed-to-multi') ){
+      this.searchableOptionList(options);
+      this.addClass('mixed-to-multi');
+    }
+  }
 
-          if(this.value != undefined && this.value != '' && this.value != null){
-            try{
-              obj[obj_index].push(this.value);
-            }catch(e){
-              obj[obj_index] = [this.value];
-            }
-          }
-        }
-        else
-        {
-          let splited = name.split('[');
-          let c_name  = splited[0].replace(']', '');
+  $.fn.serializeObject = function(){
+    var o = {};
+    var a = this.serializeArray();
 
-          if(splited.length > 1)
+    try{
+      $.each(a, function(){
+        const inject = (obj, name)=>{
+          if(name.match(/\[\](.+)/))
           {
-            if(obj[c_name] == undefined || obj[c_name] == null)
-              obj[c_name] = {};
+            obj[name] = this.value;
+          }
+          else if(name.match(/\[\]$/)){
+            let obj_index = name.replace(/\[\]/g, '');
 
-            splited.shift();
-            inject(obj[c_name], splited.join('['));
+            if(this.value != undefined && this.value != '' && this.value != null){
+              try{
+                obj[obj_index].push(this.value);
+              }catch(e){
+                obj[obj_index] = [this.value];
+              }
+            }
           }
           else
           {
-            obj[c_name] = this.value;
+            let splited = name.split('[');
+            let c_name  = splited[0].replace(']', '');
+
+            if(splited.length > 1)
+            {
+              if(obj[c_name] == undefined || obj[c_name] == null)
+                obj[c_name] = {};
+
+              splited.shift();
+              inject(obj[c_name], splited.join('['));
+            }
+            else
+            {
+              obj[c_name] = this.value;
+            }
           }
         }
-      }
 
-      inject(o, this.name);
-    });
-  }catch(err){
-    console.error(err);
+        inject(o, this.name);
+      });
+    }catch(err){
+      console.error(err);
+    }
+
+    return o;
+  };
+
+
+/******************* GLOBAL FUNCTIONS *********************/
+  // Type must be 'show' or 'hide'
+  AppToggleLoading = (type='show') => {
+    if(type == 'show'){
+      $('div.loading_box').addClass('force');
+      $('div.loading_box').removeClass('hide');
+    }
+    else{
+      $('div.loading_box').removeClass('force');
+      $('div.loading_box').addClass('hide');
+    }
   }
 
-  return o;
-};
-
-// Type must be 'show' or 'hide'
-AppToggleLoading = (type='show') => {
-  if(type == 'show'){
-    $('div.loading_box').addClass('force');
-    $('div.loading_box').removeClass('hide');
+  SetCache = (name, value, lifeTime) => {
+    localStorage[name] = JSON.stringify({ dataSet: value, timeSet: new Date().getTime(), lifeTime: (lifeTime || 30) }) //lifeTime in minutes
   }
-  else{
-    $('div.loading_box').removeClass('force');
-    $('div.loading_box').addClass('hide');
-  }
-}
 
-SetCache = (name, value, lifeTime) => {
-  localStorage[name] = JSON.stringify({ dataSet: value, timeSet: new Date().getTime(), lifeTime: (lifeTime || 30) }) //lifeTime in minutes
-}
-
-GetCache = (name) => {
-  if(localStorage[name] == undefined || localStorage[name] == '' || localStorage[name] == null){
-    console.log('init')
-    return ''
-  }else{
-    let dataCache = JSON.parse(localStorage[name])
-    let dataSet = dataCache.dataSet
-    let lifeTime = dataCache.lifeTime
-    let timeSet = dataCache.timeSet
-
-    if( (dataSet == undefined || dataSet == '' || dataSet == null) || (lifeTime == undefined || lifeTime == '' || lifeTime == null) ){
+  GetCache = (name) => {
+    if(localStorage[name] == undefined || localStorage[name] == '' || localStorage[name] == null){
+      console.log('init')
       return ''
     }else{
-      let endTime = new Date().getTime()
-      let timeDiff = ((endTime - timeSet) / 1000) / 60 //timeDiff in minutes
+      let dataCache = JSON.parse(localStorage[name])
+      let dataSet = dataCache.dataSet
+      let lifeTime = dataCache.lifeTime
+      let timeSet = dataCache.timeSet
 
-      if(timeDiff >= lifeTime){
-        console.log('reset')
+      if( (dataSet == undefined || dataSet == '' || dataSet == null) || (lifeTime == undefined || lifeTime == '' || lifeTime == null) ){
         return ''
       }else{
-        console.log('cache')
-        return dataSet
+        let endTime = new Date().getTime()
+        let timeDiff = ((endTime - timeSet) / 1000) / 60 //timeDiff in minutes
+
+        if(timeDiff >= lifeTime){
+          console.log('reset')
+          return ''
+        }else{
+          console.log('cache')
+          return dataSet
+        }
       }
     }
   }
-}
 
+
+/************************ MAIN CLASS ********************************/
 class ApplicationJS {
   constructor(){
     this.parseJsVar();
@@ -200,7 +214,7 @@ class ApplicationJS {
       $('#idocus_notifications_messages .notice-internal-error .message-alert').html(html);
 
       $('#idocus_notifications_messages .notice-internal-error').slideDown('fast');
-      setTimeout(function(){$('.notice-internal-error').fadeOut('');}, 10000);
+      setTimeout(function(){$('.notice-internal-error').fadeOut('');}, 15000);
     }
   }
 
@@ -473,46 +487,5 @@ class ApplicationJS {
         }
       });
     }
-  }
-
-  static hide_submenu() {
-    // ***** TO DELETE *****
-  }
-
-  static handle_submenu(){
-    // ***** TO DELETE *****
-  }
-
-  getFrom(url, success, error){
-    return new Promise((success, error) => {
-      let self = this
-
-      $.ajax({
-        url: url,
-        header: { Accept: 'application/html' },
-        data: { xhr_token: VARIABLES.get('XHR_TKN') },
-        type: 'GET',
-        success: function(result){
-          self.parseJsVar();
-
-          if(success)
-            success(result);
-        },
-        error: function(data){
-          //TODO : personalize errors
-          if(data.status == '404')
-          {
-            self.noticeInternalError('<span>Page introuvable ....</span>');
-          }
-          else
-          {
-            self.noticeInternalError(data.responseText);
-          }
-
-          if(error)
-            error(data);
-        },
-      });
-    });
   }
 }

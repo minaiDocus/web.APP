@@ -2,10 +2,11 @@
   %input#ignored-pre-assignment-size{ type: 'hidden', value: @ignored_list.total_count }
 
   .form-group
-    .w-100.text-end            
-      %button.btn.btn-danger.semibold#resend-to-pre-assignment
-        %span.me-2= glyphicon('aperture', { size: '15', color: '#FF4848'})
-        %span Renvoyer et forcer la pré-affectation
+    .w-100.text-end
+      - if @user.has_collaborator_action?          
+        %button.btn.btn-danger.semibold#resend-to-pre-assignment
+          %span.me-2= glyphicon('aperture', { size: '15', color: '#FF4848'})
+          %span Renvoyer et forcer la pré-affectation
       %button.btn.btn-light-primary.semibold#confirm-ignorance
         %span.me-2= glyphicon('circle-check', { size: '15', color: '#0d6efd'})
         %span Marquer la séléction comme vu

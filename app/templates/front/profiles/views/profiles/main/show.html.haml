@@ -43,7 +43,7 @@
           %hr
           .form-group.text-center
             - idoc_params = param_encode({ url: '/profiles', method: 'put', form: 'subscription_options' })
-            %button.btn.btn-primary.semibold.w-25.as_idocus_ajax{ type: 'button', idocus: idoc_params } Valider
+            %button.btn.btn-primary.semibold.w-25.as_idocus_ajax{ type: 'button', idocus: idoc_params } Mettre à jours
 
         - if @user.options.try(:is_upload_authorized) && !(@user.is_admin || @user.is_prescriber || @user.inactive?)
           - period_service = Billing::Period.new user: @user, current_time: Time.now.beginning_of_month
@@ -89,7 +89,8 @@
                   %label Voici votre adresse personnalisée à laquelle vous devez envoyer vos pièces :
                   %b{ style: 'font-size: 16px;' }
                     = "#{@user.email_code}@fw.idocus.com"
-                  = link_to 'Générer une nouvelle adresse', email_code_profiles_path, class: 'btn btn-light semibold ms-2', data: { method: :post }
+                  - idocus_params = param_encode({ url: email_code_profiles_path, method: 'post', confirm: 'Voulez vous vraiment générer une nouvelle adresse?', redirect_to: { url: profiles_path, method: 'get', html: { target: '#emailed_documents' } } })
+                  %button.btn.btn-light.semibold.ms-2.as_idocus_ajax{ type: 'button', idocus: idocus_params } Générer une nouvelle adresse
 
     - if !@user.organization.is_active && @user.leader?
       #active_organization.row

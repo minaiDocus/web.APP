@@ -1,52 +1,57 @@
 - @pieces.each_slice(4) do |pieces|
   // -- grid type
-  .box.grid.hide
+  .box.grid{ class: @user.pre_assignement_displayed? ? 'hide' : '' } 
     .row.grid-content
       - pieces.each do |piece|
         .col-md-3
           .stamp-content{ id: "document_grid_#{piece.id}", data: { preseizure_id: piece.preseizures.first.try(:id) } }
             .image_piece.text-center
+              %span.zoom.pdf-viewer.pointer{title: 'Visualiser la pièce', "data-content-url" => piece.get_access_url}
+                = glyphicon('magnifying-glass', { size: '20', color: 'background: rgba(26, 26, 26, 0.7)'})
               = image_tag document_thumb_url(piece)
             .label-content.text-center.p-2= piece.name
         
   //---------------------------------------------------------------------------------------------------------------------------------------------
   // list type
-  - pieces.each do |piece|
-    .preseizures_box
-      - preseizures = piece.preseizures      
-      .box.list
-        .row.list-content
-          .w-25
-            .stamp-content.pagethumb.text-center
-              .image_piece.w-100
-                %span.zoom.pdf-viewer.pointer{title: 'Visualiser la pièce', "data-content-url" => piece.get_access_url}
-                  = glyphicon('magnifying-glass', { size: '20', color: 'background: rgba(26, 26, 26, 0.7)'})
-                = image_tag document_thumb_url(piece), class: 'w-50'
-          - if preseizures.size == 1
-            .w-75.dynamic_box{ id: "document_#{piece.id}", data: { preseizure_id: preseizures.first.id, type: 'piece' } }
-              %span.form-check.float-end           
-                %input.form-check-input.pointer.float-none.select-document{ data: { id: piece.id }, type: :checkbox, value: "" }
-              = render file: Rails.root.join('app/templates/front/documents/views/documents/preseizures/_preseizure_box.html.haml'), locals: { preseizure: preseizures.first, piece: piece, operation: nil }
-          - elsif preseizures.size >= 1
-            .w-75
-              %span.form-check.float-end            
-                %input.form-check-input.pointer.float-none.select-document{ data: { id: piece.id }, type: :checkbox, value: "" }
-              %ul.nav.nav-tabs.ms-3{ "role" => "tablist" }
-                - preseizures.each_with_index do |preseizure, index|
-                  %li.nav-item.no-margin{ "role" => "presentation" }
-                    %button.semibold.nav-link{ class: "#{(index == 0) ? 'active' : ''}", "id" => "preseizure-tab-#{preseizure.id}", "data-bs-toggle" => "tab", "data-bs-target" => "#preseizure-#{preseizure.id}", type: :button, "role" => "tab", "aria-controls" => "preseizure-tab-#{preseizure.id}", "aria-selected" => "true" }= preseizure.try(:third_party)
+  - if @user.pre_assignement_displayed?
+    - pieces.each do |piece|
+      .preseizures_box
+        - preseizures = piece.preseizures      
+        .box.list
+          .row.list-content
+            .w-25
+              .stamp-content.pagethumb.text-center
+                .image_piece.w-100
+                  %span.zoom.pdf-viewer.pointer{title: 'Visualiser la pièce', "data-content-url" => piece.get_access_url}
+                    = glyphicon('magnifying-glass', { size: '20', color: 'background: rgba(26, 26, 26, 0.7)'})
+                  = image_tag document_thumb_url(piece), class: 'w-50'
+            - if preseizures.size == 1
+              .w-75.dynamic_box{ id: "document_#{piece.id}", data: { preseizure_id: preseizures.first.id, type: 'piece' } }
+                %span.form-check.float-end           
+                  %input.form-check-input.pointer.float-none.select-document{ data: { id: piece.id }, type: :checkbox, value: "" }
+                = render file: Rails.root.join('app/templates/front/documents/views/documents/preseizures/_preseizure_box.html.haml'), locals: { preseizure: preseizures.first, piece: piece, operation: nil }
+            - elsif preseizures.size >= 1
+              .w-75{ id: "document_#{piece.id}" }
+                %span.form-check.float-end            
+                  %input.form-check-input.pointer.float-none.select-document{ data: { id: piece.id }, type: :checkbox, value: "" }
+                %ul.nav.nav-tabs.ms-3{ "role" => "tablist" }
+                  - preseizures.each_with_index do |preseizure, index|
+                    %li.nav-item.no-margin{ "role" => "presentation" }
+                      %button.semibold.nav-link{ class: "#{(index == 0) ? 'active' : ''}", "id" => "preseizure-tab-#{preseizure.id}", "data-bs-toggle" => "tab", "data-bs-target" => "#preseizure-#{preseizure.id}", type: :button, "role" => "tab", "aria-controls" => "preseizure-tab-#{preseizure.id}", "aria-selected" => "true" }= preseizure.try(:third_party)
 
-              .tab-content
-                - preseizures.each_with_index do |preseizure, index|
-                  .tab-pane.box.no-margin{ class: "#{(index == 0) ? 'active' : ''}", "id" => "preseizure-#{preseizure.id}", "role" => "tabpanel", "aria-labelledby" => "preseizure-#{preseizure.id}-tab" }
-                    .dynamic_box{ id: "document_#{index}_#{piece.id}", data: { preseizure_id: preseizure.id, type: 'piece' } }
-                      = render file: Rails.root.join('app/templates/front/documents/views/documents/preseizures/_preseizure_box.html.haml'), locals: { preseizure: preseizure, piece: piece, operation: nil }
-          - else
-            .w-75.text-center.no-preseizure{ id: "document_#{piece.id}" }
-              %span.form-check.float-end            
-                %input.form-check-input.pointer.float-none.select-document{ data: { id: piece.id }, type: :checkbox, value: "" }
-              %h1 Aucune écriture comptable
-
+                .tab-content
+                  - preseizures.each_with_index do |preseizure, index|
+                    .tab-pane.box.no-margin{ class: "#{(index == 0) ? 'active' : ''}", "id" => "preseizure-#{preseizure.id}", "role" => "tabpanel", "aria-labelledby" => "preseizure-#{preseizure.id}-tab" }
+                      .dynamic_box{ id: "document_#{index}_#{piece.id}", data: { preseizure_id: preseizure.id, type: 'piece' } }
+                        = render file: Rails.root.join('app/templates/front/documents/views/documents/preseizures/_preseizure_box.html.haml'), locals: { preseizure: preseizure, piece: piece, operation: nil }
+            - else
+              .w-75.text-center.no-preseizure{ id: "document_#{piece.id}" }
+                %span.form-check.float-end            
+                  %input.form-check-input.pointer.float-none.select-document{ data: { id: piece.id }, type: :checkbox, value: "" }
+                %h1 Aucune écriture comptable
+  - else
+    .preseizures_box.hide
+      .p-5 Ecriture comptable non disponible
 
 
 

@@ -11,14 +11,15 @@
       %h3.bold.mt-2
         %span.me-2= @pack.name.gsub('all', '')
         %span.badge.badge-secondary.regular.datas_size= @pieces.total_count
-        %span.badge.badge-danger.semibold.deleted-piece-count
-          = @pieces_deleted.count.to_s + " pièce(s) supprimée(s)"
-          .content-list-pieces-deleted.text-start.regular.hide
-            %ul
-              - @pieces_deleted.each do |piece_deleted|
-                %li.pointer{"data-content" => html_piece_view(piece_deleted), id: piece_deleted.id}
-                  %span #{piece_deleted.name} supprimée le #{piece_deleted.delete_at.try(:to_date)} par #{piece_deleted.delete_by}
-                  %span.float-end.restore{ data: {"piece-id": piece_deleted.id}} Restaurer
+        - if @pieces_deleted.count > 0
+          %span.badge.badge-danger.semibold.deleted-piece-count
+            = @pieces_deleted.count.to_s + " pièce(s) supprimée(s)"
+            .content-list-pieces-deleted.text-start.regular.hide
+              %ul
+                - @pieces_deleted.each do |piece_deleted|
+                  %li.pointer{"data-content" => html_piece_view(piece_deleted), id: piece_deleted.id}
+                    %span #{piece_deleted.name} supprimée le #{piece_deleted.delete_at.try(:to_date)} par #{piece_deleted.delete_by}
+                    %span.float-end.restore{ data: {"piece-id": piece_deleted.id}} Restaurer
     .col-md-3   
       .search-content
         .row.no-margin
@@ -32,19 +33,24 @@
         %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
 
   .row.box.derivationRight.p-4
-    .col-md-1.no-padding.text-left.change-view.to-list= glyphicon('grid-two-up', { size: '18', color:'rgba(26, 26, 26, 0.32);'}) 
-    .col-md-1.no-padding.text-left.change-view.to-grid.hide= glyphicon('media-pause', { size: '18', color:'rgba(26, 26, 26, 0.32);', style: 'transform: rotate(90deg)'}) 
+    - if @user.pre_assignement_displayed?
+      .col-md-1.no-padding.text-left.change-view.to-list= glyphicon('grid-two-up', { size: '18', color:'rgba(26, 26, 26, 0.32);' })
+      .col-md-1.no-padding.text-left.change-view.to-grid.hide= glyphicon('media-pause', { size: '18', color:'rgba(26, 26, 26, 0.32);', style: 'transform: rotate(90deg)' })
+    - else
+      .col-md-1.no-padding.text-left
     .col-md-9
     .col-md-2.text-end  
       %span.pointer.ms-2.action-selected.delete_piece.hide{title: 'Supprimer', multi: 'true'}= glyphicon('trash', { size: '18',  color:'#FF4848'})
       %span.pointer.ms-2.action-selected.update_tags.hide{title: 'Tagger', multi: 'true'}= glyphicon('tag', { size: '18', color:'rgba(26, 26, 26, 0.32);'})
-      %span.pointer.ms-2.action-selected.edit_compta_analysis.hide{ title: 'Édition compta. analytiques', data: { code: @pack.owner.code, is_used: @pack.owner.uses_ibiza_analytics?.to_s } }= glyphicon('pencil', { size: '18', color:'rgba(26, 26, 26, 0.32);'})
+      - if @pack.owner.uses_ibiza_analytics?
+        %span.pointer.ms-2.action-selected.edit_compta_analysis.hide{ title: 'Édition compta. analytiques', data: { code: @pack.owner.code, is_used: @pack.owner.uses_ibiza_analytics?.to_s } }= glyphicon('pencil', { size: '18', color:'rgba(26, 26, 26, 0.32);'})
       %span.pointer.ms-2.download_pack_bundle{title: 'Télécharger', data: {id: @pack.id}}= glyphicon('data-transfer-download', { size: '18', color:'rgba(26, 26, 26, 0.32);'})
       %span.pointer.ms-2.download_pack_archive{title: 'Télécharger une archive zip', data: {id: @pack.id}}= glyphicon('account-logout', { size: '18', color:'rgba(26, 26, 26, 0.32);', style: 'transform: rotate(90deg)'})
-      %span.pointer.ms-2.preseizures_export{title: 'Export écriture', data:{ id: @pack.id, type: 'special_piece', multi: 'true' }}= glyphicon('cloud-download', { size: '18', color:'rgba(26, 26, 26, 0.32);'})
-      %span.pointer.ms-2.deliver_preseizures{title: 'Livraison écriture comptable', data: { id: @pack.id, type: 'special_piece', multi: 'true'}}= glyphicon('loop-circular', { size: '18', color:'rgba(26, 26, 26, 0.32);'})
+      - if @user.has_collaborator_action?
+        %span.pointer.ms-2.preseizures_export{title: 'Export écriture', data:{ id: @pack.id, type: 'special_piece', multi: 'true' }}= glyphicon('cloud-download', { size: '18', color:'rgba(26, 26, 26, 0.32);'})
+        %span.pointer.ms-2.deliver_preseizures{title: 'Livraison écriture comptable', data: { id: @pack.id, type: 'special_piece', multi: 'true'}}= glyphicon('loop-circular', { size: '18', color:'rgba(26, 26, 26, 0.32);'})
       %span.pointer.form-check.d-inline.ms-2      
-        %input.form-check-input.pointer.float-none.select-all{ type: :checkbox, value: "" }          
+        %input.form-check-input.pointer.float-none.select-all{ type: :checkbox, value: "" }
 
   .main-content.derivationLeft
     - if @pieces.size > 0

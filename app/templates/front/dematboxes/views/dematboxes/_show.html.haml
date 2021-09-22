@@ -30,10 +30,11 @@
         %label fournit lors de la livraison.
         %br
         %label Merci d'inscrire le code d'appairage dans le champ ci-dessous :
-        = form_tag create_dematbox_path, method: :post, class: 'form-inline margin2top' do
+        = form_tag create_dematbox_path, method: :post, id: 'idocus_box_configuration', class: 'form-inline margin2top' do
           .form-group.no-margin
             = label_tag :pairing_code, 'Code appairage : ', class: 'semibold'           
             .select-container.no-padding.w-25
               = text_field_tag :pairing_code, ''
             .mb-2
-            = submit_tag t('actions.submit'), class: 'btn btn-primary semibold w-25'
+            - idocus_params = param_encode({ url: '#url', form: 'idocus_box_configuration', force_form_url: true, method: 'post'  })
+            = button_tag t('actions.submit'), type: 'button', class: 'btn btn-primary semibold w-25 as_idocus_ajax', idocus: idocus_params

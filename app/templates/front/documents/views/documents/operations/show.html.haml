@@ -26,9 +26,9 @@
   .row.box.p-4.derivationRight
     .col-md-9
     .col-md-3.text-end
-      %span.pointer.ms-2.download_report_archive{title: 'Télécharger une archive zip', data: {id: @report.id}}= glyphicon('account-logout', { size: '18', color:'rgba(26, 26, 26, 0.32);', style: 'transform: rotate(90deg)'})
-      %span.pointer.ms-2.preseizures_export{title: 'Export écriture', data:{ id: @report.id, type: 'special_operation', multi: 'true' }}= glyphicon('cloud-download', { size: '18', color:'rgba(26, 26, 26, 0.32);'})
-      %span.pointer.ms-2.deliver_preseizures{title: 'Livraison écriture comptable', data: { id: @report.id, type: 'special_operation', multi: 'true'}}= glyphicon('loop-circular', { size: '18', color:'rgba(26, 26, 26, 0.32);'})
+      - if @user.has_collaborator_action?
+        %span.pointer.ms-2.preseizures_export{title: 'Export écriture', data:{ id: @report.id, type: 'special_operation', multi: 'true' }}= glyphicon('cloud-download', { size: '18', color:'rgba(26, 26, 26, 0.32);'})
+        %span.pointer.ms-2.deliver_preseizures{title: 'Livraison écriture comptable', data: { id: @report.id, type: 'special_operation', multi: 'true'}}= glyphicon('loop-circular', { size: '18', color:'rgba(26, 26, 26, 0.32);'})
       %span.pointer.form-check.d-inline.ms-2      
         %input.form-check-input.pointer.float-none.select-all{ type: :checkbox, value: "" }
 

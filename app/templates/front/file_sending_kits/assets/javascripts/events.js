@@ -93,12 +93,12 @@ function file_sending_kits_main_events() {
     applied_manual_paper_set_order();
   });
 
-  /*$('select#fsk_orders_paper_set_start_date').searchableOptionList({
+  /*$('select#fsk_orders_paper_set_start_date').asMultiSelect({
     'noneText': 'Selectionner une affectations',
     'allText': 'Tous séléctionnés'
   });
 
-  $('select#fsk_orders_paper_set_end_date').searchableOptionList({
+  $('select#fsk_orders_paper_set_end_date').asMultiSelect({
     'noneText': 'Selectionner un type de règles',
     'allText': 'Tous séléctionnés'
   });*/

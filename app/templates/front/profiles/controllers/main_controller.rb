@@ -61,12 +61,12 @@ class Profiles::MainController < FrontController
       redirect_to upload_email_infos_organization_customer_path(customer.organization, customer)
     else
       if !(@user.is_admin || @user.is_prescriber || @user.inactive?) && @user.update_email_code
-        flash[:success] = 'Code régénéré avec succès.'
+        json_flash[:success] = 'Code régénéré avec succès.'
       else
-        flash[:error] = "Impossible d'effectuer l'opération demandée"
+        json_flash[:error] = "Impossible d'effectuer l'opération demandée"
       end
 
-      redirect_to profiles_path
+      render json: { json_flash: json_flash }, status: 200
     end
   end
 

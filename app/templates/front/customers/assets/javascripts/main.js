@@ -49,7 +49,6 @@ class Customer{
 
     if ($('#journals select#copy-journals-into-customer').length > 0) { searchable_option_copy_journals_list(); }
 
-
     ApplicationJS.set_checkbox_radio(this);
   }
 
@@ -264,7 +263,7 @@ class Customer{
         $('#customer-content #customer-form-data .accounting-plan-base-form').parent().remove();
 
         $('select#select-group-list').removeClass('form-control');
-        $('select#select-group-list').searchableOptionList({
+        $('select#select-group-list').asMultiSelect({
           'noneText': 'Selectionner un/des groupe(s)',
           'allText': 'Tous séléctionnés'
         });
@@ -437,7 +436,7 @@ class Customer{
       this.create_customer_modal.find('.normal-form-action').remove();
       
       $('select#select-group-list').removeClass('form-control');
-      $('select#select-group-list').searchableOptionList({
+      $('select#select-group-list').asMultiSelect({
         'noneText': 'Selectionner un/des groupe(s)',
         'allText': 'Tous séléctionnés'
       });

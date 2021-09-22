@@ -3,7 +3,7 @@
     .row
       .col-md-5
         %h5.pack.semibold= pack.name.to_s.gsub('all', '').strip
-        %h6.under_pack.regular= pack.user.organization.name 
+        %h6.under_pack.regular= pack.owner.organization.name 
       .col-md-4
         .created-date
           %span.semibold Premier ajout le :
@@ -29,11 +29,17 @@
           %span.badge.bg-dark.semibold Notes de frais
         - if not pack.is_fully_processed
           %span.badge.bg-dark.semibold En cours ...
+
+        - pack.get_tags.split(' - ').each_slice(3).first.try(:each) do |tag|
+          - if tag != '-'
+            %span.badge.bg-dark.semibold= tag
+
       .col-md-4.text-end
         / %span.ms-2= glyphicon('flag', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
         %span.ms-2.update_tags{title: 'Taguer le lot', data: {id: pack.id, type: 'pack'}}= glyphicon('tag', { size: '16', color:'rgba(26, 26, 26, 0.32);'})
         %span.ms-2.download_pack_bundle{title: 'Télécharger', data: {id: pack.id}}= glyphicon('data-transfer-download', { size: '16', color:'rgba(26, 26, 26, 0.32);'})
         %span.ms-2.download_pack_archive{title: 'Télécharger une archive zip', data: {id: pack.id}}= glyphicon('account-logout', { size: '16', color:'rgba(26, 26, 26, 0.32);', style: 'transform: rotate(90deg)'})
-        %span.ms-2.preseizures_export{title: 'Export écriture comptable', data:{ id: pack.id, type: 'special_piece', multi: 'true' }}= glyphicon('cloud-download', { size: '16', color:'rgba(26, 26, 26, 0.32);'})
-        - if pack.user.uses_api_softwares?
-          %span.ms-2.deliver_preseizures{title: 'Livraison écriture comptable', data: {id: pack.id, type: 'special_piece', multi: 'true'}}= glyphicon('loop-circular', { size: '16', color:'rgba(26, 26, 26, 0.32);'})
+        - if @user.has_collaborator_action?
+          %span.ms-2.preseizures_export{title: 'Export écriture comptable', data:{ id: pack.id, type: 'special_piece', multi: 'true' }}= glyphicon('cloud-download', { size: '16', color:'rgba(26, 26, 26, 0.32);'})
+          - if pack.user.uses_api_softwares?
+            %span.ms-2.deliver_preseizures{title: 'Livraison écriture comptable', data: {id: pack.id, type: 'special_piece', multi: 'true'}}= glyphicon('loop-circular', { size: '16', color:'rgba(26, 26, 26, 0.32);'})
