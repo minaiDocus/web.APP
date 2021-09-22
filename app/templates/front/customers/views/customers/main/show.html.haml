@@ -213,11 +213,12 @@
         %p
           En cas de nécessité (suppression du journal), merci de contacter le
           = link_to 'support.', 'javascript:ZDiscussions.showDiscussionsFBW();'
-      .form-group
-        .text-end
-          %button.btn.btn-primary.bold.new-journal.new_edit_account_book_type{link: new_organization_customer_journal_path(@organization, @customer)}
-            %span.me-2= glyphicon('plus', { color: "#FFF", size: '15'})       
-            %span Nouveau journal
+      - if @customer.active?
+        .form-group
+          .text-end
+            %button.btn.btn-primary.bold.new-journal.new_edit_account_book_type{link: new_organization_customer_journal_path(@organization, @customer)}
+              %span.me-2= glyphicon('plus', { color: "#FFF", size: '15'})       
+              %span Nouveau journal
         %hr
         - if @organization.specific_mission
           %table.table.table-striped
@@ -302,34 +303,29 @@
                 %i.text-muted
                   = link_to '(Augmenter le total autorisé de journaux comptables)', edit_organization_customer_subscription_path(@organization, @customer)
 
-      .row
-        .col-md-7
-        .col-md-5.alignright
-          - if @customer.active? && (@user.leader? || @user.organization_rights_is_customer_journals_management_authorized)
-            - if is_max_number_of_journals_reached?
-              = link_to 'Ajouter nouveau', '#', class: 'btn btn-primary', disabled: 'disabled'
-              - unless @organization.specific_mission
-                = link_to 'Copier depuis base existante', '#', class: 'btn btn-primary', disabled: 'disabled'
-            / TODO HERE
-            / - elsif @customer.active?
-            /   = link_to 'Ajouter nouveau', new_organization_customer_journal_path(@organization, @customer), class: 'btn btn-primary'
-            /   - unless @organization.specific_mission
-            /     = link_to 'Copier depuis base existante', select_organization_customer_journals_path(@organization, @customer), class: 'btn btn-primary'
-      
-      - if @customer.account_book_types.count < @customer.options.max_number_of_journals
-        - journals = @organization.account_book_types.order(is_default: :desc, name: :asc)
-        = form_tag copy_organization_customer_journals_path(@organization, @customer), method: 'POST', class: 'form-horizontal' do
+      - if @customer.active? && (@user.leader? || @user.organization_rights_is_customer_journals_management_authorized)
+        - if is_max_number_of_journals_reached? # NEED TO VERIFY
           .mb-5
           .form-group
-            %label.semibold Ajouter un journal
-            = select_tag "journal_ids[]", options_from_collection_for_select(journals, "id", "name"), multiple: true, class: 'form-control', id: 'copy-journals-into-customer'
+            = link_to 'Ajouter nouveau', '#', class: 'btn btn-primary', disabled: 'disabled'
+            - unless @organization.specific_mission
+              = link_to 'Copier depuis base existante', '#', class: 'btn btn-primary', disabled: 'disabled'
+        
+        - elsif @customer.active?
+          - journal_names = @journals.map{|journal| journal.name}
+          - journals = @organization.account_book_types.where.not(name: journal_names).order(is_default: :desc, name: :asc)
+          - if @customer.account_book_types.count < @customer.options.max_number_of_journals && journals.any?
+            = form_tag copy_organization_customer_journals_path(@organization, @customer), method: 'POST', class: 'form-horizontal', id: 'copy_account_book_type_form' do
+              .mb-5
+              .form-group
+                %label.semibold Copier les journaux comptables depuis la base existante
+                = select_tag "journal_ids[]", options_from_collection_for_select(journals, "id", "name"), multiple: true, class: 'form-control', id: 'copy-journals-into-customer'
 
 
-          .form-group.no-margin
-            .w-100.text-end
-              - unless @organization.specific_mission
-                = link_to t('actions.cancel'), organization_customer_path(@organization, @customer, tab: 'journals'), class: 'btn btn-light semibold'
-                = submit_tag 'Valider les modifications', class: 'btn btn-primary bold'
+              .form-group.no-margin.footer_copy_journals
+                .w-100.text-end
+                  - unless @organization.specific_mission
+                    = submit_tag 'Copier', class: 'btn btn-primary bold copy_account_book_type_btn', disabled: true
 
     .tab-pane.box.no-margin#bank-setting{ "role" => "tabpanel", "aria-labelledby" => "bank-setting-tab" }
       .form-group

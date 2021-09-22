@@ -47,13 +47,8 @@ class Customer{
       this.update_price();
     }
 
-    if ($('#journals select#copy-journals-into-customer').length > 0) {
-      $('#journals select#copy-journals-into-customer').removeClass('form-control');
-      $('#journals select#copy-journals-into-customer').searchableOptionList({
-        'noneText': 'Selectionner un/des journaux',
-        'allText': 'Tous séléctionnés'
-      });
-    }
+    if ($('#journals select#copy-journals-into-customer').length > 0) { searchable_option_copy_journals_list(); }
+
 
     ApplicationJS.set_checkbox_radio(this);
   }
@@ -347,6 +342,7 @@ class Customer{
       self.get_customer_first_step_form();
 
       self.set_pre_assignment_view();
+
     });
   }
 
@@ -457,18 +453,6 @@ class Customer{
     });
   }
 
-
-  select_journals(){
-    this.applicationJS.sendRequest({ 'url': '/organizations/' + this.organization_id + '/customers/' + $('input:hidden[name="customer_id"]').val() + '/journals/select' }).then((result)=>{
-      this.create_customer_modal.find('.accounting-plan-base-form .copy-select-journals').html($(result).find('#journals.select').html());
-      this.set_custom_remove_class('.next', 'do-submit');
-      this.set_custom_add_class('.next', 'load-journal-form');
-      this.create_customer_modal.find('.modal-footer .previous').attr('disabled','disabled');
-      $('#create-customer.modal.show .modal-title').text('Paramètrage: journaux comptables');
-    });
-  }
-
-
   set_custom_add_class(target, new_class){
     this.create_customer_modal.find(target).addClass(new_class);
   }
@@ -490,13 +474,36 @@ class Customer{
                   }
 
     this.applicationJS.sendRequest(params).then((result)=>{
-      this.applicationJS.noticeSuccessMessageFrom(null, 'Ajout avec succès');
+      his.applicationJS.noticeSuccessMessageFrom(null, 'Ajout avec succès');
 
-      this.create_customer_modal.find('.modal-content').html($(result).find('#book_type .modal-content').html());
-      $('select#copy-journals-into-customer').searchableOptionList({
-        'noneText': 'Selectionner un/des journaux',
-        'allText': 'Tous séléctionnés'
+      this.create_customer_modal.find('.modal-body').html($(result).find('#journals').html());
+      this.create_customer_modal.find('.modal-title').text('Paramètrage: journaux comptables');
+      this.create_customer_modal.find('.footer_copy_journals').remove();
+      this.create_customer_modal.find('.modal-footer .next').addClass('copy_account_book_type_btn').attr('disabled', 'disabled');
+      this.create_customer_modal.modal('show');
+
+      searchable_option_copy_journals_list();
+
+
+      /* ******* NEED TO VERIFY CAROUSEL SLIDE FORM WHEN CHOOSE TO USE IT ***** */
+
+      let journal = new Journal();
+      journal.main();
+
+      $('#journal .edit_journal_analytics').unbind('click').bind('click', function(e){
+        let journal_id = $(this).data('journal-id');
+        let customer_id = $(this).data('customer-id');
+        let code = $(this).data('code');
+        journal.edit_analytics(journal_id, customer_id, code);
       });
+
+      AppListenTo('compta_analytics.validate_analysis', (e)=>{ journal.update_analytics(e.detail.data) });
+
+      /* ******* NEED TO VERIFY CAROUSEL SLIDE FORM WHEN CHOOSE TO USE IT ***** */
+
+      this.create_customer_modal.modal('hide');
+
+      bind_customer_events();
     });
   }
 
@@ -521,6 +528,13 @@ class Customer{
       self.set_custom_add_class('.next', 'do-submit');
       self.create_customer_modal.find('.modal-title').text('Sélectionner un abonnement');
       self.create_customer_modal.find('.next').text('Valider');
+
+      /* ******* REMOVE IT WHEN CHOOSE create METHOD ***** */
+
+      self.create_customer_modal.find('.next').removeAttr('data-bs-slide');
+
+     /* ******* REMOVE IT WHEN CHOOSE create METHOD ***** */
+
       self.set_custom_add_class('.previous', 'active');
       self.active_deactive_previous();
 
@@ -550,10 +564,16 @@ class Customer{
     $('.do-submit').unbind('click').bind('click',function(e) {
       e.stopPropagation();
 
-      self.set_custom_remove_class('.previous', 'active');
+      /* ******* REMOVE IT WHEN CHOOSE create METHOD ***** */
+
+      /*self.set_custom_remove_class('.previous', 'active');
       self.set_custom_remove_class('.next', 'do-submit');
       self.active_deactive_previous();
-      self.create();
+      self.create();*/
+
+      /* ******* REMOVE IT WHEN CHOOSE create METHOD ***** */
+
+      $('form#customer-form-data').submit();
     });
   }
 
@@ -577,6 +597,8 @@ class Customer{
 
   close_or_reopen_confirm_view(url, target_action){
     this.applicationJS.sendRequest({ 'url': url }).then((elements)=>{
+      this.account_close_confirm_modal.find('.close_reopen_confirm_content').html($(elements).find('.close_or_reopen').html());
+
       if (target_action === 'close') {
         this.account_close_confirm_modal.find('.modal-title').text('Clôturer le dossier');
       }
@@ -589,7 +611,6 @@ class Customer{
         this.account_close_confirm_modal.find('.close_or_reopen_confirm').removeClass('close');
       }
 
-      this.account_close_confirm_modal.find('.modal-body').html($(elements).find('.close_or_reopen').html());
       this.account_close_confirm_modal.modal('show');
 
       bind_customer_events();

@@ -1,3 +1,19 @@
+function searchable_option_copy_journals_list() {
+  let checked_count = 0;
+
+  $('select#copy-journals-into-customer').removeClass('form-control');
+  $('select#copy-journals-into-customer').searchableOptionList({
+    'noneText': 'Selectionner un/des journaux',
+    'allText': 'Tous séléctionnés',
+    events: {
+      onChange: function(sol, changedElements) {
+        changedElements['0'].checked ? checked_count ++ : checked_count --;
+        (checked_count > 0) ? $('.copy_account_book_type_btn').removeAttr('disabled') : $('.copy_account_book_type_btn').attr('disabled', 'disabled');
+      },
+    }
+  });
+}
+
 function bind_customer_events() {
   $('.close_customer, .reopen_customer').unbind('click').bind('click',function(e) {
     e.preventDefault();
@@ -96,22 +112,14 @@ function bind_customer_events() {
     $('form#edit_file_sending_kit_form').submit();
   });
 
+  /* ******* NEED TO VERIFY CAROUSEL SLIDE FORM WHEN CHOOSE TO USE IT ***** */
 
-  /*$('.add_account_book_type').unbind('click').bind('click', function(e) {
-    e.preventDefault();
-
-    const url = $(this).attr('link');
-
-    AppEmit('new_account_book_type_view', { url: url});
+  /*$('.next.copy_account_book_type_btn').unbind('click.copy_journals').bind('click.copy_journals', function(e) {
+    e.stopPropagation();
+    $('#create-customer.modal form#copy_account_book_type_form').submit();
   });*/
 
-  /*$('.edit_journal_customer').unbind('click').bind('click', function(e) {
-    e.preventDefault();
-
-    const url = $(this).attr('href');
-
-    AppEmit('new_edit_journal_view', { url: url});
-  });*/
+  /* ******* NEED TO VERIFY CAROUSEL SLIDE FORM WHEN CHOOSE TO USE IT ***** */
 }
 
 

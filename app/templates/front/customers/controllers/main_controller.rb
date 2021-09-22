@@ -66,7 +66,7 @@ class Customers::MainController < OrganizationController
       else
         Subscription::Form.new(@customer.subscription, @user, request).submit(params[:subscription])
 
-        redirect_to new_customer_step_two_organization_customer_path(@organization, @customer)
+        redirect_to organization_customer_path(@organization, @customer, tab: 'journals')
       end
     else
       _error_messages = @customer.errors.messages
@@ -75,7 +75,8 @@ class Customers::MainController < OrganizationController
       html_ul_content += "</ul>"
 
       flash[:error] = html_ul_content.html_safe
-      render :new
+
+      redirect_to organization_customer_path(@organization, @customer)
     end
   end
 
@@ -107,7 +108,7 @@ class Customers::MainController < OrganizationController
 
         redirect_to organization_customer_path(@organization, @customer)
       else
-        render :edit
+        redirect_to organization_customer_path(@organization, @customer, tab: 'information')
       end
     end
   end

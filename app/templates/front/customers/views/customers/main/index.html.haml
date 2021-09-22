@@ -63,8 +63,12 @@
                       %ul.no-margin.no-padding.regular
                         %li.edit.edit-customer
                           = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Éditer', organization_customer_path(@organization, customer)
-                        %li.delete.red-label
-                          = link_to glyphicon('ban', { size: '15', color: "#FF4848" }) + ' Clôturer le dossier', account_close_confirm_organization_customer_path(@organization, customer)
+                        - if customer.active?
+                          %li.delete.red-label
+                            = link_to glyphicon('ban', { size: '15', color: "#FF4848" }) + ' Clôturer le dossier', account_close_confirm_organization_customer_path(@organization, customer), class: 'close_customer'
+                        - else
+                          %li.reopen.text-success
+                            = link_to glyphicon('folder', { size: '15', color: '#72AA42'}) + ' Réouvrir le dossier', account_reopen_confirm_organization_customer_path(@organization, customer), class: 'reopen_customer'
 
 
 .modal#customers-filter
@@ -134,5 +138,8 @@
             %button.btn.btn-light.cancel{ 'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button' } Annuler
             %button.btn.btn-primary.semibold.next{ type: :button, "data-bs-target" => "#carousel_customer_form", "data-bs-slide" => "next", disabled: true } Suivant
 
+
+= render partial: 'customer_dialog'
+= render partial: 'journal_dialog'
 
 = javascript_include_tag 'front/customers/assets/javascripts/main'
