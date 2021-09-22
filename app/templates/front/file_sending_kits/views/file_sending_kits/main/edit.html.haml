@@ -6,19 +6,19 @@
 .file_sending_kits_edit
   - manual_paper_set_order = CustomUtils.is_manual_paper_set_order?(@organization)
   = simple_form_for [@organization, @file_sending_kit], html: { class: 'form form-horizontal margin0', :enctype => manual_paper_set_order ? "multipart/form-data" : "", id: 'edit_file_sending_kit_form'  } do |f|
-    %ul#file_sending_kits_tab.nav.nav-tabs{role: "tablist"}
-      %li.nav-item{role: "presentation"}
-        %button#basic_info_details_tab.nav-link.active{"aria-controls" => "basic_info_details", "aria-selected" => "true", "data-bs-target" => "#basic_info_details", "data-bs-toggle" => "tab", role: "tab", type: "button"}= t('common.details')
-      %li.nav-item{role: "presentation"}
-        %button#file_sending_kits_center_logo_tab.nav-link{"aria-controls" => "file_sending_kits_center_logo", "aria-selected" => "false", "data-bs-target" => "#file_sending_kits_center_logo", "data-bs-toggle" => "tab", role: "tab", type: "button"}= t('activerecord.models.file_sending_kit.attributes.logo.center')
-      %li.nav-item{role: "presentation"}
-        %button#file_sending_kits_left_logo_tab.nav-link{"aria-controls" => "file_sending_kits_left_logo", "aria-selected" => "false", "data-bs-target" => "#file_sending_kits_left_logo", "data-bs-toggle" => "tab", role: "tab", type: "button"}= t('activerecord.models.file_sending_kit.attributes.logo.left')
-      %li.nav-item{role: "presentation"}
-        %button#file_sending_kits_right_logo_tab.nav-link{"aria-controls" => "file_sending_kits_right_logo", "aria-selected" => "false", "data-bs-target" => "#file_sending_kits_right_logo", "data-bs-toggle" => "tab", role: "tab", type: "button"}= t('activerecord.models.file_sending_kit.attributes.logo.right')
+    %ul#file_sending_kits_tab.nav.nav-tabs.ms-3{role: "tablist"}
+      %li.nav-item.no-margin{role: "presentation"}
+        %button#basic_info_details_tab.semibold.nav-link.active{"aria-controls" => "basic_info_details", "aria-selected" => "true", "data-bs-target" => "#basic_info_details", "data-bs-toggle" => "tab", role: "tab", type: "button"}= t('common.details')
+      %li.nav-item.no-margin{role: "presentation"}
+        %button#file_sending_kits_center_logo_tab.semibold.nav-link{"aria-controls" => "file_sending_kits_center_logo", "aria-selected" => "false", "data-bs-target" => "#file_sending_kits_center_logo", "data-bs-toggle" => "tab", role: "tab", type: "button"}= t('activerecord.models.file_sending_kit.attributes.logo.center')
+      %li.nav-item.no-margin{role: "presentation"}
+        %button#file_sending_kits_left_logo_tab.semibold.nav-link{"aria-controls" => "file_sending_kits_left_logo", "aria-selected" => "false", "data-bs-target" => "#file_sending_kits_left_logo", "data-bs-toggle" => "tab", role: "tab", type: "button"}= t('activerecord.models.file_sending_kit.attributes.logo.left')
+      %li.nav-item.no-margin{role: "presentation"}
+        %button#file_sending_kits_right_logo_tab.semibold.nav-link{"aria-controls" => "file_sending_kits_right_logo", "aria-selected" => "false", "data-bs-target" => "#file_sending_kits_right_logo", "data-bs-toggle" => "tab", role: "tab", type: "button"}= t('activerecord.models.file_sending_kit.attributes.logo.right')
     
     #file_sending_kits_content.tab-content
       #basic_info_details.tab-pane.fade.show.active{"aria-labelledby" => "basic_info_details_tab", role: "tabpanel"}
-        .box
+        .box.no-margin
           = f.label :title, :class => "semibold"
           .select-container.no-padding.w-100
             = f.input :title, label: false
@@ -29,7 +29,7 @@
           .select-container.no-padding.w-100
             = f.input :instruction,  as: :text, label: false
       #file_sending_kits_center_logo.tab-pane.fade{"aria-labelledby" => "file_sending_kits_center_logo_tab", role: "tabpanel"}
-        .box
+        .box.no-margin
           - if manual_paper_set_order
             .row
               .col-md-8
@@ -56,7 +56,7 @@
             .select-container.no-padding.w-100
               = f.input :logo_width, label: false
       #file_sending_kits_left_logo.tab-pane.fade{"aria-labelledby" => "file_sending_kits_left_logo_tab", role: "tabpanel"}
-        .box
+        .box.no-margin
           - if manual_paper_set_order
             .row
               .col-md-8
@@ -83,7 +83,7 @@
             .select-container.no-padding.w-100
               = f.input :left_logo_width, label: false
       #file_sending_kits_right_logo.tab-pane.fade{"aria-labelledby" => "file_sending_kits_right_logo_tab", role: "tabpanel"}
-        .box
+        .box.no-margin
           - if manual_paper_set_order
             .row
               .col-md-8
