@@ -53,7 +53,7 @@ SimpleForm.setup do |config|
       ba.use :error, wrap_with: { tag: 'i', class: 'help-inline' }
     end
     b.wrapper tag: 'div', class: 'control-section' do |ba|
-      ba.use :input, class: 'form-control'
+      ba.use :input, class: ''
       ba.use :hint,  wrap_with: { tag: 'i', class: 'help-block' }
     end
   end

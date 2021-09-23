@@ -129,7 +129,7 @@
         %button.semibold.nav-link#file-storages-tab{ class: ('active' if params[:tab] == 'file_storage'), "data-bs-toggle" => "tab", "data-bs-target" => "#file-storages", type: :button, "role" => "tab", "aria-controls" => "file-storages", "aria-selected" => "#{params[:tab] == 'file_storage'}" } Stockages externes
 
   .tab-content
-    .tab-pane.box.no-margin#information{ class: ('active' if params[:tab] == 'information' || params[:tab].blank?), "role" => "tabpanel", "aria-labelledby" => "information-tab" }      
+    .tab-pane.no-margin#information{ class: ('active' if params[:tab] == 'information' || params[:tab].blank?), "role" => "tabpanel", "aria-labelledby" => "information-tab" }      
 
 
     - if @customer.active?
@@ -150,53 +150,63 @@
             .w-100.text-end
               = link_to t('actions.edit'), edit_organization_customer_subscription_path(@organization, @customer), class: 'btn btn-primary bold subscription-edit'
 
-      .tab-pane.box.no-margin#orders{ class: ('active' if params[:tab] == 'orders'), "role" => "tabpanel", "aria-labelledby" => "orders-tab" }
-        %table.table.table-condensed.table-striped.table-bordered-inner.margin2bottom.table-detachable-head
-          %thead
-            %tr.bg-brown.text-white
-              %th Date de la commande
-              %th Produit
-              %th Quantité
-              %th Prix (HT)
-              %th Adresse de livraison
-              %th Statut
-              %th Actions
-          %tbody
-            - @customer.orders.order(created_at: :desc).each do |order|
+      .tab-pane.no-margin#orders{ class: ('active' if params[:tab] == 'orders'), "role" => "tabpanel", "aria-labelledby" => "orders-tab" }
+        .box
+          %table.table.table-striped
+            %thead
               %tr
-                %td= l order.created_at
-                - if order.dematbox?
-                  %td iDocus'Box
-                  %td= order.dematbox_count
-                  %td.alignright= format_price_00(order.price_in_cents_wo_vat) + ' €'
+                %th Date de la commande
+                %th Produit
+                %th Quantité
+                %th Prix (HT)
+                %th Adresse de livraison
+                %th Statut
+                %th Actions
+            %tbody
+              - @customer.orders.order(created_at: :desc).each do |order|
+                %tr
+                  %td= l order.created_at
+                  - if order.dematbox?
+                    %td iDocus'Box
+                    %td= order.dematbox_count
+                    %td.alignright= format_price_00(order.price_in_cents_wo_vat) + ' €'
+                  - else
+                    %td Kit envoi courrier
+                    %td
+                      = order.paper_set_casing_size.to_s + 'g'
+                      %br
+                      = order.paper_set_casing_count.to_s + ' enveloppe(s)'
+                      %br
+                      = order.paper_set_folder_count.to_s + ' chemises'
+                      %br
+                      = paper_set_date_to_name(order.period_duration, order.paper_set_start_date)
+                      à
+                      = paper_set_date_to_name(order.period_duration, order.paper_set_end_date)
+                    %td.alignright= format_price_00(order.price_in_cents_wo_vat) + ' €'
+                  %td= order.address.try(:long_info)
+                  %td= Order.state_machine.states[order.state].human_name
+                  %td.text-end.pointer
+                    .action
+                      %span= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
+                    .sub_menu.text-start.hide
+                      %ul.no-margin.no-padding.regular
+                        - if order.pending? && (Time.now < order.created_at + 24.hours)                                             
+                          %li
+                            %span.me-1= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
+                            %span= link_to 'Modifier', "#", class: 'new_edit_order_url', link: edit_organization_customer_order_path(@organization, @customer, order)
+                          %li
+                            %span.me-1= glyphicon('action-undo', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
+                            %span= link_to 'Annuler', organization_customer_order_path(@organization, @customer, order), method: 'delete', data: { confirm: t('actions.confirm') }                   
+  
+          .form-group.no-margin
+            .w-100.text-end
+              - if @customer.is_dematbox_authorized
+                = link_to "Commander un/des scanner(s) iDocus'box", "#", class: 'btn btn-dark bold new_edit_order_url', link: new_organization_customer_order_path(@organization, @customer, order: { type: 'dematbox' })
+              - if @customer.subscription.is_package?('mail_option') || @customer.subscription.is_package?('digitize_option')
+                - if CustomUtils.is_manual_paper_set_order?(@organization)
+                  = link_to 'Générer un kit de numérisation', "#", link: select_organization_file_sending_kit_path(@organization, order_customer_id: @customer.id), class: 'btn btn-light bold select_for_orders'
                 - else
-                  %td Kit envoi courrier
-                  %td
-                    = order.paper_set_casing_size.to_s + 'g'
-                    %br
-                    = order.paper_set_casing_count.to_s + ' enveloppe(s)'
-                    %br
-                    = order.paper_set_folder_count.to_s + ' chemises'
-                    %br
-                    = paper_set_date_to_name(order.period_duration, order.paper_set_start_date)
-                    à
-                    = paper_set_date_to_name(order.period_duration, order.paper_set_end_date)
-                  %td.alignright= format_price_00(order.price_in_cents_wo_vat) + ' €'
-                %td= order.address.try(:long_info)
-                %td= Order.state_machine.states[order.state].human_name
-                %td
-                  - if order.pending? && (Time.now < order.created_at + 24.hours)
-                    = link_to 'Modifier', "#", class: 'btn btn-light new_edit_order_url', link: edit_organization_customer_order_path(@organization, @customer, order)
-                    = link_to 'Annuler', organization_customer_order_path(@organization, @customer, order), method: 'delete', data: { confirm: t('actions.confirm') }, class: 'btn btn-light'
-        .form-group.no-margin
-          .w-100.text-end
-            - if @customer.is_dematbox_authorized
-              = link_to "Commander un/des scanner(s) iDocus'box", "#", class: 'btn btn-primary bold new_edit_order_url', link: new_organization_customer_order_path(@organization, @customer, order: { type: 'dematbox' })
-            - if @customer.subscription.is_package?('mail_option') || @customer.subscription.is_package?('digitize_option')
-              - if CustomUtils.is_manual_paper_set_order?(@organization)
-                = link_to 'Générer un kit de numérisation', "#", link: select_organization_file_sending_kit_path(@organization, order_customer_id: @customer.id), class: 'btn btn-primary bold select_for_orders'
-              - else
-                = link_to 'Commander un Kit envoi courrier', "#", link: new_organization_customer_order_path(@organization, @customer, order: { type: 'paper_set' }), class: 'btn btn-primary bold new_edit_order_url'
+                  = link_to 'Commander un Kit envoi courrier', "#", link: new_organization_customer_order_path(@organization, @customer, order: { type: 'paper_set' }), class: 'btn btn-primary bold new_edit_order_url'
 
 
     .tab-pane#adresses{ class: ('active' if params[:tab] == 'addresses'), "role" => "tabpanel", "aria-labelledby" => "adresses-tab" }
@@ -1070,11 +1080,12 @@
                 = link_to t('actions.edit'), edit_knowings_options_organization_customer_path(@organization, @customer), class: 'btn btn-primary'
 
     - if @user.is_admin && @customer.active?
-      .tab-pane.box.no-margin#file-storages{ class: ('active' if params[:tab] == 'file_storage'), "role" => "tabpanel", "aria-labelledby" => "file-storages-tab" }
-        = render partial: 'customers/main/file_storages', locals: { user: @customer }
-        .form-group.no-margin
-          .w-100.text-end
-            = link_to t('actions.edit'), edit_organization_customer_file_storage_authorizations_path(@organization, @customer), class: 'btn btn-primary bold'
+      .tab-pane.no-margin#file-storages{ class: ('active' if params[:tab] == 'file_storage'), "role" => "tabpanel", "aria-labelledby" => "file-storages-tab" }
+        .box
+          = render partial: 'customers/main/file_storages', locals: { user: @customer }
+        / .form-group.no-margin
+        /   .w-100.text-end
+        /     = link_to t('actions.edit'), edit_organization_customer_file_storage_authorizations_path(@organization, @customer), class: 'btn btn-primary bold'
 
 = render partial: 'customer_dialog'
 = render partial: 'order_dialog'

@@ -51,7 +51,11 @@
 }
 
 .sub_menu{
-  min-width: 13% !important;
+  min-width: 7% !important;
+}
+
+.sub_menu li{
+  padding: 6% 9%;
 }
 
 .border-right{
@@ -85,10 +89,6 @@
   text-decoration: none;
   cursor: pointer;
   color: rgba(26, 26, 26, 0.7) !important;
-}
-
-.modal .back-grey{
-  background: rgba(26, 26, 26, 0.04);
 }
 
 .idocus-custom-form-check {

@@ -6,7 +6,7 @@
           .row.customer-base-form
             .col-md-6
               .box
-                %h5 Identification du client
+                %h5.semibold Identification du client
                 %hr
                 = f.label :company, :class => "required semibold"
                 .select-container.no-padding.w-100
@@ -30,9 +30,9 @@
                 = f.label :email, :class => "required semibold"
                 .select-container.no-padding.w-100
                   = f.input :email, label: false, input_html: { class: 'email_field required_field', placeholder: "clement@idocus.com", :required => true }, hint: "Le courriel sert d’identifiant à iDocus et de contact principal en cas de besoin de la part d’iDocus"
-            .col-md-6.back-grey
-              .box.bg-light.height_groups.groups_1.clearfix.small-shadow
-                %h5 Paramètre de base
+            .col-md-6
+              .bg-light.height_groups.groups_1.clearfix.small-shadow.p-3
+                %h5.semibold Paramètre de base
                 %hr
                 - unless @organization.specific_mission
                   .form-group.row
@@ -65,7 +65,8 @@
                           %label.semibold{class: 'form-check-label label_check_field', for: 'check-taxable-options'} Non
                 
                 - unless @organization.specific_mission
-                  %h5 Logiciels comptables utilisés:
+                  .mb-5
+                  %h6.semibold Logiciels comptables utilisés:
                   %hr
                   .form-group
                     .row
@@ -74,14 +75,14 @@
                           = f.simple_fields_for :ibiza do |software|
                             = software.hidden_field :id
                             .form-check.idocus-custom-form-check
-                              = software.input :is_used, as: :boolean, label: false, input_html: { class: 'form-check-input pointer float-none softwares_setting check-ibiza', id: 'check-ibiza' }
+                              = software.input :is_used, as: :boolean, label: false, input_html: { class: 'form-check-input pointer float-none softwares_setting check-ibiza m-1', id: 'check-ibiza' }
                               %label.ms-2.semibold{class: 'form-check-label', for: 'check-ibiza'} Ibiza
                       .col-md-6
                         - if @organization.try(:cegid).try(:used?)
                           = f.simple_fields_for :cegid do |software|
                             = software.hidden_field :id
                             .form-check.idocus-custom-form-check
-                              = software.input :is_used, as: :boolean, label: false, input_html: { class: 'form-check-input pointer float-none softwares_setting check-cegid', id: 'check-cegid' }
+                              = software.input :is_used, as: :boolean, label: false, input_html: { class: 'form-check-input pointer float-none softwares_setting check-cegid m-1', id: 'check-cegid' }
                               %label.ms-2.semibold{class: 'form-check-label', for: 'check-cegid'} Cegid
                     .row
                       .col-md-6
@@ -89,14 +90,14 @@
                           = f.simple_fields_for :exact_online do |software|
                             = software.hidden_field :id
                             .form-check.idocus-custom-form-check
-                              = software.input :is_used, as: :boolean, label: false, input_html: { class: 'form-check-input pointer float-none softwares_setting check-exact-online', id: 'check-exact-online' }
+                              = software.input :is_used, as: :boolean, label: false, input_html: { class: 'form-check-input pointer float-none softwares_setting check-exact-online m-1', id: 'check-exact-online' }
                               %label.ms-2.semibold{class: 'form-check-label', for: 'check-exact-online'} Exact Online
                       .col-md-6
                         - if @organization.try(:fec_agiris).try(:used?)
                           = f.simple_fields_for :fec_agiris do |software|
                             = software.hidden_field :id
                             .form-check.idocus-custom-form-check
-                              = software.input :is_used, as: :boolean, label: false, input_html: { class: 'form-check-input pointer float-none softwares_setting check-fec-agiris', id: 'check-fec-agiris' }
+                              = software.input :is_used, as: :boolean, label: false, input_html: { class: 'form-check-input pointer float-none softwares_setting check-fec-agiris m-1', id: 'check-fec-agiris' }
                               %label.ms-2.semibold{class: 'form-check-label', for: 'check-fec-agiris'} Fec Agiris
 
                     .row
@@ -105,14 +106,14 @@
                           = f.simple_fields_for :coala do |software|
                             = software.hidden_field :id
                             .form-check.idocus-custom-form-check
-                              = software.input :is_used, as: :boolean, label: false, input_html: { class: 'form-check-input pointer float-none softwares_setting check-coala', id: 'check-coala' }
+                              = software.input :is_used, as: :boolean, label: false, input_html: { class: 'form-check-input pointer float-none softwares_setting check-coala m-1', id: 'check-coala' }
                               %label.ms-2.semibold{class: 'form-check-label', for: 'check-coala'} Coala
                       .col-md-6
                         - if @organization.try(:csv_descriptor).try(:used?)
                           = f.simple_fields_for :csv_descriptor do |software|
                             = software.hidden_field :id
                             .form-check.idocus-custom-form-check
-                              = software.input :is_used, as: :boolean, label: false, input_html: { class: 'form-check-input pointer float-none softwares_setting check-csv-descriptor', id: 'check-csv-descriptor' }
+                              = software.input :is_used, as: :boolean, label: false, input_html: { class: 'form-check-input pointer float-none softwares_setting check-csv-descriptor m-1', id: 'check-csv-descriptor' }
                               %label.ms-2.semibold{class: 'form-check-label', for: 'check-csv-descriptor'} Format d’export .csv
                     .row
                       .col-md-6
@@ -120,14 +121,14 @@
                           = f.simple_fields_for :quadratus do |software|
                             = software.hidden_field :id
                             .form-check.idocus-custom-form-check
-                              = software.input :is_used, as: :boolean, label: false, input_html: { class: 'form-check-input pointer float-none softwares_setting check-quadratus', id: 'check-quadratus' }
+                              = software.input :is_used, as: :boolean, label: false, input_html: { class: 'form-check-input pointer float-none softwares_setting check-quadratus m-1', id: 'check-quadratus' }
                               %label.ms-2.semibold{class: 'form-check-label', for: 'check-quadratus'} Quadratus
                       .col-md-6
                         - if @organization.try(:my_unisoft).try(:used?)
                           = f.simple_fields_for :my_unisoft do |software|
                             = software.hidden_field :id
                             .form-check.idocus-custom-form-check
-                              = software.input :is_used, as: :boolean, label: false, input_html: { class: 'form-check-input pointer float-none softwares_setting check-my-unisoft', id: 'check-my-unisoft' }
+                              = software.input :is_used, as: :boolean, label: false, input_html: { class: 'form-check-input pointer float-none softwares_setting check-my-unisoft m-1', id: 'check-my-unisoft' }
                               %label.ms-2.semibold{class: 'form-check-label', for: 'check-my-unisoft'} My Unisoft
                     .row
                       .col-md-6
@@ -135,7 +136,7 @@
                           = f.simple_fields_for :sage do |software|
                             = software.hidden_field :id
                             .form-check.idocus-custom-form-check
-                              = software.input :is_used, as: :boolean, label: false, input_html: { class: 'form-check-input pointer float-none softwares_setting check-sage', id: 'check-sage' }
+                              = software.input :is_used, as: :boolean, label: false, input_html: { class: 'form-check-input pointer float-none softwares_setting check-sage m-1', id: 'check-sage' }
                               %label.ms-2.semibold{class: 'form-check-label', for: 'check-sage'} Sage
                   .form-group
                     .softwares-section
@@ -154,7 +155,7 @@
         /     loading Journal comptables ...
 
         //* ******* NEED TO VERIFY JS WHEN CHOOSE TO USE IT ***** */
-
+    %hr
     .form-group.row.w-100.normal-form-action
       .col-md-8                     
       .col-md-4.d-inline-block.ps-1.text-end
