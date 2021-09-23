@@ -24,14 +24,6 @@ function bind_all_events(){
     e.stopPropagation()
 
     $('#filter-'+ $(".tab-pane.active").attr('id')).modal('show');
-
-    $('#select-document.daterange').daterangepicker({     
-      "autoApply": true,
-      linkedCalendars: false,
-      locale: {
-        format: 'DD/MM/YYYY'
-      }
-    });
   });
 
   $('span.chevron-show').unbind('click');

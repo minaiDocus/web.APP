@@ -1,12 +1,4 @@
 function bind_all_events(){
-  $('#delivery-date.daterange, #invoice-date.daterange').daterangepicker({     
-    "autoApply": true,
-    linkedCalendars: false,
-    locale: {
-      format: 'DD/MM/YYYY'
-    }
-  });
-
   $('#delivery-date.daterange, #invoice-date.daterange').val('');
 
   $('.more-filter').unbind('click').bind('click',function(e) {

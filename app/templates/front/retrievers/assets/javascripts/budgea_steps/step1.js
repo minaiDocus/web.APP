@@ -81,7 +81,13 @@ class ConfigurationStep1{
     let filter     = $('.step1 #connector-search-name').val();
     if(filter.length < 3){ filter = null };
 
-    let type       = $('.step1 #choose-selector').val();
+    let type       = 'bank' //$('.step1 #choose-selector').val();
+
+    //add document capabilities if edition
+    if(this.retriever['budgea_connector_id'] && this.retriever['budgea_connector_id'] > 0){
+      type = 'all';
+    }
+
     let regEx      = new RegExp((`${filter}` || '.*'), 'i');
     let total_size = 0;
     let options    = '';

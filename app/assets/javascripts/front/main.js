@@ -2,6 +2,25 @@
 
 function elements_initializer(){
   $('.searchable-option-list').asMultiSelect({ maxHeight: '300px' });
+
+  $('.singledate').asDateRange({
+    defaultBlank: true,
+    "autoApply": true,
+    singleDatePicker: true,
+    linkedCalendars: false,
+    locale: {
+      format: 'YYYY-MM-DD'
+    }
+  })
+
+  $('.daterange').asDateRange({
+    defaultBlank: true,
+    "autoApply": true,
+    linkedCalendars: false,
+    locale: {
+      format: 'DD/MM/YYYY'
+    }
+  });
 }
 
 function bind_globals_events(){
@@ -80,22 +99,27 @@ function bind_globals_events(){
       let current_page = $(this).data('current-page');
 
 
-      let url2 = url
-      let page_params = `per_page=${ $(this).val() }&page=${ current_page }`;
-      if(/[?]/.test(url2))
-        url2 = `${url2}&${page_params}`;
-      else
-        url2 = `${url2}?${page_params}`;
+      const emit_pagination_events = ()=>{
+        AppEmit(`window.change-per-page.${name}`, { url: url, filter: filter, name: name, mark: mark, page: current_page, per_page: $(this).val() });
+        if(mark != name)
+          AppEmit(`window.change-per-page.${mark}`, { url: url, filter: filter, name: name, mark: mark, page: current_page, per_page: $(this).val() });
+      }
 
-      if(filter)
-        url2 = `${url2}&${ $(`form#${filter}`).serialize() }`;
+      if( url != undefined && url != null && url != '' && url != '#'){
+        let url2 = url
+        let page_params = `per_page=${ $(this).val() }&page=${ current_page }`;
+        if(/[?]/.test(url2))
+          url2 = `${url2}&${page_params}`;
+        else
+          url2 = `${url2}?${page_params}`;
 
-      ApplicationJS.launch_async({ url: url2, method: 'GET', html: { target: target } })
-                  .then((e)=>{
-                    AppEmit(`window.change-per-page.${name}`, { url: url, filter: filter, name: name, mark: mark, page: current_page, per_page: $(this).val() });
-                    if(mark != name)
-                      AppEmit(`window.change-per-page.${mark}`, { url: url, filter: filter, name: name, mark: mark, page: current_page, per_page: $(this).val() });
-                  });
+        if(filter)
+          url2 = `${url2}&${ $(`form#${filter}`).serialize() }`;
+
+        ApplicationJS.launch_async({ url: url2, method: 'GET', html: { target: target } }).then((e)=>{ emit_pagination_events() });
+      }else{
+        emit_pagination_events();
+      }
     });
     $('.pagination .previous-page').unbind('click').bind('click', function(e){
       let url          = $(this).data('url');
@@ -107,23 +131,28 @@ function bind_globals_events(){
       let current_page = $(this).data('current-page');
       let next_value   = current_page - 1;
 
-      if(next_value >= 1){
-        let url2 = url
-        let page_params = `per_page=${ per_page }&page=${ next_value }`;
-        if(/[?]/.test(url2))
-          url2 = `${url2}&${page_params}`;
-        else
-          url2 = `${url2}?${page_params}`;
+      const emit_pagination_events = ()=>{
+        AppEmit(`window.change-page.${name}`, { url: url, filter: filter, name: name, mark: mark, page: next_value, per_page: per_page, trigger: 'previous' });
+        if(mark != name)
+          AppEmit(`window.change-page.${mark}`, { url: url, filter: filter, name: name, mark: mark, page: next_value, per_page: per_page, trigger: 'previous' });
+      }
 
-        if(filter)
-          url2 = `${url2}&${ $(`form#${filter}`).serialize() }`;
+      if( url != undefined && url != null && url != '' && url != '#'){
+        if(next_value >= 1){
+          let url2 = url
+          let page_params = `per_page=${ per_page }&page=${ next_value }`;
+          if(/[?]/.test(url2))
+            url2 = `${url2}&${page_params}`;
+          else
+            url2 = `${url2}?${page_params}`;
 
-        ApplicationJS.launch_async({ url: url2, method: 'GET', html: { target: target } })
-                    .then(e=>{
-                      AppEmit(`window.change-page.${name}`, { url: url, filter: filter, name: name, mark: mark, page: next_value, per_page: per_page, trigger: 'previous' });
-                      if(mark != name)
-                        AppEmit(`window.change-page.${mark}`, { url: url, filter: filter, name: name, mark: mark, page: next_value, per_page: per_page, trigger: 'previous' });
-                    });
+          if(filter)
+            url2 = `${url2}&${ $(`form#${filter}`).serialize() }`;
+
+          ApplicationJS.launch_async({ url: url2, method: 'GET', html: { target: target } }).then(e=>{ emit_pagination_events(); });
+        }
+      }else{
+        emit_pagination_events();
       }
     });
 
@@ -138,23 +167,28 @@ function bind_globals_events(){
       let total_pages   = $(this).data('total-pages');
       let next_value = current_page + 1;
 
-      if(next_value <= total_pages){
-        let url2 = url
-        let page_params = `per_page=${ per_page }&page=${ next_value }`;
-        if(/[?]/.test(url2))
-          url2 = `${url2}&${page_params}`;
-        else
-          url2 = `${url2}?${page_params}`;
+      const emit_pagination_events = ()=>{
+        AppEmit(`window.change-page.${name}`, { url: url, filter: filter, name: name, mark: mark, page: next_value, per_page: per_page, trigger: 'next' });
+                        if(mark != name)
+                          AppEmit(`window.change-page.${mark}`, { url: url, filter: filter, name: name, mark: mark, page: next_value, per_page: per_page, trigger: 'next' });
+      }
 
-        if(filter)
-          url2 = `${url2}&${ $(`form#${filter}`).serialize() }`;
+      if( url != undefined && url != null && url != '' && url != '#'){
+        if(next_value <= total_pages){
+          let url2 = url
+          let page_params = `per_page=${ per_page }&page=${ next_value }`;
+          if(/[?]/.test(url2))
+            url2 = `${url2}&${page_params}`;
+          else
+            url2 = `${url2}?${page_params}`;
 
-        ApplicationJS.launch_async({ url: url2, method: 'GET', html: { target: target } })
-                    .then(e=>{
-                      AppEmit(`window.change-page.${name}`, { url: url, filter: filter, name: name, mark: mark, page: next_value, per_page: per_page, trigger: 'next' });
-                      if(mark != name)
-                        AppEmit(`window.change-page.${mark}`, { url: url, filter: filter, name: name, mark: mark, page: next_value, per_page: per_page, trigger: 'next' });
-                    });
+          if(filter)
+            url2 = `${url2}&${ $(`form#${filter}`).serialize() }`;
+
+          ApplicationJS.launch_async({ url: url2, method: 'GET', html: { target: target } }).then(e=>{ emit_pagination_events(); });
+        }
+      }else{
+        emit_pagination_events();
       }
     });
 

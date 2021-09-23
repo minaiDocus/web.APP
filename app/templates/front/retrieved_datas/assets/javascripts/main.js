@@ -14,19 +14,6 @@ class RetrievedDatasMain{
     this.load_datas('documents');
   }
 
-  force_preseizures(){
-    if(confirm('Voulez vous vraiment lancer la pré-afféctation des opérations'))
-    {
-      this.applicationJS.sendRequest({
-        'url': '/retrieved/force_operations',
-        'type': 'POST',
-        'dataType': 'json',
-      }).then((e)=>{ this.applicationJS.noticeSuccessMessageFrom(null, e.message); });
-
-      this.load_datas('operations');
-    }
-  }
-
   load_datas(type='operations', page=1, per_page=0){
     if(this.action_locker)
       return false;
@@ -67,7 +54,8 @@ jQuery(function() {
   main.load_all();
 
   AppListenTo('retrieved_datas_reload_all', (e)=>{ main.load_all(); });
-  AppListenTo('retrieved_datas_force_preseizures', (e)=>{ main.force_preseizures(); });
+  AppListenTo('retrieved_datas_reload_operations', (e)=>{ this.load_datas('operations'); });
+
   AppListenTo('retrieved_datas_filter', (e)=>{ $(`.modal#filter-${e.detail.type}`).modal('hide'); main.load_datas(e.detail.type); });
   AppListenTo('retrieved_datas_reset_filter', (e)=>{ $(`.modal#filter-${e.detail.type}`).modal('hide'); $(`.modal #filter-${e.detail.type}-form`)[0].reset(); main.load_datas(e.detail.type); });
 

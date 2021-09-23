@@ -36,7 +36,7 @@
       .input-prepend.date.datepicker
         %span.add-on
           %i.icon-th
-        = text_field_tag @bank_account.start_date.present? ? 'bank_account[start_date_disabled]' : 'bank_account[start_date]', @bank_account.start_date, { disabled: @bank_account.start_date.present? }
+        = text_field_tag @bank_account.start_date.present? ? 'bank_account[start_date_disabled]' : 'bank_account[start_date]', @bank_account.start_date, { class: 'singledate', disabled: @bank_account.start_date.present? }
         - if @bank_account.start_date.present?
           = hidden_field_tag 'bank_account[start_date]', @bank_account.start_date
       - if @bank_account.operations.count >= 1

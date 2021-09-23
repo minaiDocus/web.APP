@@ -49,6 +49,36 @@
 
 
 /*********** JQuery mixing *********************/
+  $.fn.asDateRange = function(option={}){
+    $.each(this, function(e){
+        let el = $(this);
+
+        if( !el.hasClass('mixed-to-date-range') ){
+        let initial_value = el.val();
+        let final_value   = '';
+
+        el.daterangepicker(option);
+        el.addClass('mixed-to-date-range');
+
+        if( el.hasClass('notblank') ){
+          //daterangepicker set an automatic date
+        }
+        else{
+          if(option.defaultBlank && option.defaultBlank == true){
+            if(initial_value == undefined || initial_value == '' || initial_value == null)
+              el.val('');
+
+            el.unbind('keyup.custom_keyup_date').bind('keyup.custom_keyup_date', function(e){ final_value = el.val(); });
+
+            el.unbind('blur.custom_blur_date').bind('blur.custom_blur_date', function(e){
+              if(!final_value){ el.val(''); }
+            });
+          }
+        }
+      }
+    });
+  }
+
   $.fn.asMultiSelect = function(options={}){
     if( !this.hasClass('mixed-to-multi') ){
       this.searchableOptionList(options);

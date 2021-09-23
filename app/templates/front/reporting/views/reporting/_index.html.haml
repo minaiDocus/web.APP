@@ -24,8 +24,9 @@
       %button.semibold.nav-link.active#documents-selection-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#invoices", type: :button, "role" => "tab", "aria-controls" => "invoices", "aria-selected" => "false"} 
         Facturations
     %li.nav-item.no-margin{ "role" => "presentation" }
-      %button.semibold.nav-link#statistics-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#statistics", type: :button, "role" => "tab", "aria-controls" => "statistics", "aria-selected" => "true" } 
+      %button.semibold.nav-link#statistics-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#statistics", type: :button, "role" => "tab", "aria-controls" => "statistics", "aria-selected" => "true" }
         Statistiques
+        %span.badge.bg-dark= "#{1.month.ago.strftime('%d/%m/%y')} - #{Time.now.strftime('%d/%m/%y')}"
   
   .tab-content.mb-4
     .tab-pane.box.no-margin.active#invoices{ "role" => "tabpanel", "aria-labelledby" => "invoices-tab" }

@@ -1,13 +1,23 @@
 .derivationLeft
-  - if waiting_operations_count > 0
+  - if waiting_operations_count > 0 || current_user.is_admin
     .row
-      .col-md-8
-      .col-md-4.text-end
-        %button.btn.btn-danger.semibold.force-preseizures
-          %span.me-2= glyphicon('aperture', { size: '15', color: '#FF4848'})
-          %span Forcer la pré-affectation de
-          %span.count-operation= waiting_operations_count
-          %span opération(s)
+      .col-md-6
+      .col-md-3.text-end
+        - if current_user.is_admin
+          - idocus_param = param_encode({ url: '/retrieved/unlock_operations', method: 'post', confirm: 'Etes vous sûr?', form: 'filter-operations-form', after_send: 'retrieved_datas_reload_operations' })
+          %button.btn.btn-danger.semibold.force-preseizures.as_idocus_ajax{ idocus: idocus_param, type: 'button' }
+            %span.me-2= glyphicon('aperture', { size: '15', color: '#FF4848'})
+            %span Débloquer les opérations
+            %span.count-operation= waiting_operations_count
+            %span opération(s)
+      .col-md-3.text-end
+        - if waiting_operations_count > 0
+          - idocus_param = param_encode({ url: '/retrieved/force_operations', method: 'post', confirm: 'Etes vous sûr?', form: 'filter-operations-form', after_send: 'retrieved_datas_reload_operations' })
+          %button.btn.btn-danger.semibold.force-preseizures.as_idocus_ajax{ idocus: idocus_param, type: 'button' }
+            %span.me-2= glyphicon('aperture', { size: '15', color: '#FF4848'})
+            %span Forcer la pré-affectation de
+            %span.count-operation= waiting_operations_count
+            %span opération(s)
 
   .mb-4
 
@@ -23,7 +33,8 @@
           %th Catégorie
           %th Libellé
           %th Montant
-          %th Pré-affecté
+          - if @user.pre_assignement_displayed?
+            %th Pré-affecté
         %tbody
           - if operations.any?
             - operations.each do |operation|
@@ -35,7 +46,8 @@
                 %td -
                 %td= operation.label
                 %td= operation.amount.to_s + " €"
-                %td Oui
+                - if @user.pre_assignement_displayed?
+                  %td Oui
           - else
             %tr
               %td{colspan: 8}= t('global.no-data-found')

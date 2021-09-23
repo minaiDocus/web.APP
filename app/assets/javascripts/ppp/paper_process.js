@@ -117,15 +117,6 @@
 
     $('.ppp-filter').unbind('click').bind('click', function(e){
       e.preventDefault();
-
-      $('.date.daterange').daterangepicker({
-        "autoApply": true,
-        linkedCalendars: false,
-        locale: {
-          format: 'DD/MM/YYYY'
-        }
-      });
-
       $('#ppp-filter.modal').modal('show');
     });
 

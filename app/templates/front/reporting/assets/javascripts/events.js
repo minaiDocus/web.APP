@@ -1,12 +1,4 @@
 function bind_all_events(){
-  $('.daterange').daterangepicker({
-    "autoApply": true,
-    linkedCalendars: false,
-    locale: {
-      format: 'DD/MM/YYYY'
-    }
-  });
-
   $('#customer_filter').multiSelect({
     "noneText": "Filtre par dossier"
   });
