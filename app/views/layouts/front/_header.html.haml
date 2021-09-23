@@ -76,7 +76,7 @@
           %span#notification_count.badge.badge-alert.fs-origin.float-end.notif-badge.semibold
           = link_to glyphicon('bell', color: "rgba(26, 26, 26, 0.7);", size: '22'), '#notification', class: 'nav-link dropdown-toggle', id: 'notification-content', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-bs-toggle' => 'dropdown'
           .dropdown-menu.dropdown-menu-end.notification-content-list.no-padding.box{"aria-labelledby" => "notification-content"}
-            = render file: Rails.root.join('app/templates/front/notifications/views/notifications/_notifier.html.haml')  
+            = render file: Rails.root.join('app/templates/front/notifications/views/notifications/_notifier.html.haml')
 
         %li.nav-item.dropdown
           = link_to glyphicon('cog', color: "rgba(26, 26, 26, 0.7);", size: '22'), '#configure-profile', class: 'nav-link dropdown-toggle bold', id: 'navbardropdownmenusetting', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-bs-toggle' => 'dropdown'

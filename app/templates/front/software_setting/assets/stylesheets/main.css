@@ -1,0 +1,64 @@
+.form-group .ui-sortable li {
+  width: auto;
+  float: left;
+  margin-right: 2%;
+  margin-bottom: 1%;
+  text-align: center;
+  padding: 1%;
+  cursor: pointer;
+}
+
+#sortable-software li, #sortable-software-preseizures li{
+  width: auto;
+  font-size: 0.8rem;
+}
+
+.form-group .ui-sortable li.btn-light:hover {
+  border: 1px solid #CBD9C0;
+}
+
+.form-group .ui-sortable li.btn-light.active{
+  background: #EEF8B8;
+  border: 1px solid #72AA42;
+  border-radius: 8px;
+  color: #72AA42;
+  font-family: Raleway-semiBold
+}
+
+.form-group{
+  margin-bottom: 1%;
+}
+
+.select-container input{
+  padding: 0.5%;
+  font-size: 17px;
+}
+
+
+.box-software{
+  display: flex;  
+  background: #FFFFFF;
+  border: 1px solid rgba(26, 26, 26, 0.1);
+  box-sizing: border-box;
+  border-radius: 8px;
+  width: 25%;
+  margin: 3%;
+  height: 10em;
+}
+
+.box-software.selected{
+  border: 2px solid #C1D837;
+  box-shadow: 0px 1px 0px 5px rgba(193,216,55,0.23);
+  -webkit-box-shadow: 0px 1px 0px 5px rgba(193,216,55,0.23);
+  -moz-box-shadow: 0px 1px 0px 5px rgba(193,216,55,0.23);
+}
+
+.box-software a{
+  padding: 15%;
+  text-align: center;
+}
+
+.use-software{
+  font-size: 40px;
+  color: rgba(26,26,26,0.7);
+}

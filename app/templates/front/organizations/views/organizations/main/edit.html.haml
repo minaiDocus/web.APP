@@ -91,12 +91,12 @@
         .form-group
           %label.semibold Nombre de périodes antérieures accessibles au téléversement des pièces
           .select-container.no-padding.w-100
-            %input{ placeholder: "1" }
+            = f.input :authd_prev_period, as: :integer, label: false, input_html: { min: 0 }
 
         .form-group
           %label.semibold Jour de clôture de la période précédente dans la période en cours
           .select-container.no-padding.w-100
-            %input.book-code-software{ placeholder: "11" }
+            = f.input :auth_prev_period_until_day, as: :integer, label: false, input_html: { min: 0, max: 28 }, hint: '0 à 28'
           %i Par exemple le 11 février pour cloturer janvier. Choisir un chiffre de 0 à 28.
 
         .form-group

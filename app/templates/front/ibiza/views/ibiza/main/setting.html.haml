@@ -1,17 +1,17 @@
 = stylesheet_link_tag 'front/ibiza/assets/stylesheets/main'
 - ibiza = ibiza rescue @ibiza
 
-#ibiza_software_box.box.no-margin
-  %input#organization_id{ type: 'hidden', value: @organization.id }
-  #ibiza.edit.derivationRight
-    .row
-      .w-100.text-start
-        %h5.semibold 
-          Configuration de iBiza :
-          %span.regular Connexion à iBiza pour le transfert des écritures
-    %hr
-    .row
-      = simple_form_for (ibiza || Software::Ibiza.new), url: organization_ibiza_path(@organization), html: { class: 'form-horizontal', id: 'ibiza_form_edition' } do |f|
+%input#organization_id{ type: 'hidden', value: @organization.id }
+= simple_form_for (ibiza || Software::Ibiza.new), url: organization_ibiza_path(@organization), html: { class: 'form-horizontal', id: 'ibiza_form_edition' } do |f|
+  #ibiza_software_box.box.no-margin
+    #ibiza.edit.derivationRight
+      .row
+        .w-100.text-start
+          %h5.semibold 
+            Configuration de iBiza :
+            %span.regular Connexion à iBiza pour le transfert des écritures
+      %hr
+      .row
         %input{ type: 'hidden', id: 'piece_name_hidden', name: 'software_ibiza[piece_name_format]', value: '{}' }
         %input{ type: 'hidden', id: 'piece_name_separator_hidden', name: 'software_ibiza[piece_name_format_separator]', value: ibiza.try(:piece_name_separator) || '_' }
         %input{ type: 'hidden', id: 'description_hidden', name: 'software_ibiza[description]', value: '{}' }
@@ -76,19 +76,20 @@
           - piece_name_selected = ibiza.try(:voucher_ref_target) == 'piece_name' ? "selected='selected'" : ""
           = select_tag "software_ibiza[voucher_ref_target]", raw("<option value='piece_number' #{piece_number_selected}>Ref. pièce = Numéro de pièce d'origine et Pièce = Nom de la pièce (iDocus)</option><option value='piece_name' #{piece_name_selected}>Ref. pièce = Nom de la pièce (iDocus) et Pièce = Numéro de pièce d'origine</option>"), multiple: false, class: 'form-select', id: 'software_ibiza_voucher_ref_target'
 
-%hr
-.box.no-margin
-  .row
-    .col-md-12      
-      %h5.semibold Utilisateurs
-      %hr
-      .form-group
-        .label-section
-          = label_tag 'software_account_list', "Liste des clients assignés à l'option:", class: 'select control-label'
-        .control-section
-          -list_options = @organization.customers.active.order(:code).filter_by_software('ibiza').compact
-          -list_selected = list_options.select{ |c| c.uses?(:ibiza) }
-          = select_tag 'software_account_list', options_for_select(list_options, list_selected), include_blank: false, multiple: true, class: 'searchable-option-list'
+  %hr
+  .box.no-margin
+    .row
+      .col-md-12      
+        %h5.semibold Utilisateurs
+        %hr
+        .form-group
+          .label-section
+            = label_tag 'software_account_list', "Liste des clients assignés à l'option:", class: 'select control-label'
+          .control-section
+            -list_options = @organization.customers.active.order(:code).filter_by_software('ibiza').compact
+            -list_selected = list_options.select{ |c| c.uses?(:ibiza) }
+            = select_tag 'software_account_list', options_for_select(list_options, list_selected), include_blank: false, multiple: true, class: 'searchable-option-list'
+
 %hr
 
 .form-group.no-margin

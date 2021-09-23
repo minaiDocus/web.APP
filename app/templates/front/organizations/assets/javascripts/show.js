@@ -45,7 +45,7 @@ jQuery(function () {
 
   var mychart_2 = new Chart(chart_dossiers, {type: 'line', data: {
     labels: stat_customers_labels,
-    datasets: [{      
+    datasets: [{
       data: stat_customers_values,
       fill: false,
       borderColor: '#72AA42',      

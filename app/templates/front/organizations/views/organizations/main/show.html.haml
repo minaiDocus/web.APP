@@ -51,9 +51,10 @@
                 %td.glyph= glyphicon('media-record', { color: '#555B35' })
                 %td.left= t('subscription_options.retriever')
                 %td.right= @organization_statistic.try(:options).try(:[], :retriever_package).to_i
-              %tr
-                %td.glyph= glyphicon('media-record', { color: '#1A1A1A' })
-                %td.left= t('subscription_options.digitize')
-                %td.right= @organization_statistic.try(:options).try(:[], :digitize_package).to_i
+              - if CustomUtils.is_manual_paper_set_order?(@organization)
+                %tr
+                  %td.glyph= glyphicon('media-record', { color: '#1A1A1A' })
+                  %td.left= t('subscription_options.digitize')
+                  %td.right= @organization_statistic.try(:options).try(:[], :digitize_package).to_i
 
 = javascript_include_tag 'front/organizations/assets/javascripts/show'

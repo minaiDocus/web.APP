@@ -500,7 +500,6 @@ class ApplicationJS {
       }
     });
 
-
     if ($('.input_switch:checked').length > 0) {
       const selected = $('.input_switch:checked');
 

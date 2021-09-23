@@ -15,8 +15,12 @@ class NotifierMain{
                           $('#notifications_notifier').html(e);
                           let unread_count = $(e).find('input#unread_count').val();
 
-                          $('span#notification_count').text(unread_count);
-                          $('span#notification_count').css('display', 'inline-block');
+                          if(unread_count > 0){
+                            $('span#notification_count').text(unread_count);
+                            $('span#notification_count').css('display', 'inline-block');
+                          }else{
+                            $('span#notification_count').css('display', 'none');
+                          }
                        });
   }
 
