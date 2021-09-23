@@ -18,19 +18,24 @@ class Journal{
         case 0:
           // do something for .journal-first-step-form
           self.journal_form_modal.find('.previous').addClass('hide');
+          self.journal_form_modal.find('.validate').addClass('hide');
+          self.journal_form_modal.find('.next').removeClass('hide');
           self.journal_form_modal.find('.next').text('Suivant');
           self.required_fields();
           self.validate_first_slide_form();
           self.select_entry_type();
+
           break;
         case 1:
           // do something for .knowings-configuration .pre-assignment-attributes ...
           self.journal_form_modal.find('.previous-next-controls .next').removeAttr('disabled');
           self.journal_form_modal.find('.previous').removeClass('hide');
+          self.journal_form_modal.find('.validate').addClass('hide');
+          self.journal_form_modal.find('.next').removeClass('hide');
           self.journal_form_modal.find('.next').text('Suivant');
           self.show_vat_account_field();
 
-          $('.add_vat_account_field').unbind('click').bind('click', function(e) {
+          $('.add_vat_account_field').unbind('click.more_vats').bind('click.more_vats', function(e) {
             e.stopPropagation();
 
             self.add_vat_account_field(10, 445660);
@@ -39,13 +44,22 @@ class Journal{
           });
 
           self.remove_vat_account_field();
-          $('input[name="account_book_type[account_type]"]').unbind('click').bind('click', function(e) {
+          $('input[name="account_book_type[account_type]"]').unbind('click.show_type').bind('click.show_type', function(e) {
             if ($(this).is(":checked")){
               $(this).attr('checked', 'checked');
             }
 
             self.update_form();
           });
+
+          if (parseInt($("#account_book_type_entry_type").val()) === 0){
+            $('.no_entry_selected').html($('.carousel_item_last_slide').html());
+            self.journal_form_modal.find('.next').addClass('hide');
+            self.journal_form_modal.find('.validate').removeClass('hide');
+
+            self.submit_journal_form(true);
+          }
+
           break;
         case 2:
           // do something for .ido-instruction, .default-options
@@ -53,16 +67,27 @@ class Journal{
           self.serialize_vat_accounts('#journal-form.modal form .account_book_type_vat_accounts');
           self.journal_form_modal.find('.next').addClass('hide');
           self.journal_form_modal.find('.validate').removeClass('hide');
-          $('.previous-next-controls .validate').unbind('click').bind('click', function(e) {
-            e.stopPropagation();
+          self.submit_journal_form();
 
-            $('form#new-journal-form, form#edit-journal-form').submit();
-            self.journal_form_modal.modal('hide');
-          });
           break;
         default:
           //Default
       }
+    });
+  }
+
+
+  submit_journal_form(no_entry_selected=false){
+    let self = this;
+    $('.previous-next-controls .validate').unbind('click.submit_journal').bind('click.submit_journal', function(e) {
+      e.stopPropagation();
+
+      if (no_entry_selected) {
+        $('.carousel_item_last_slide').remove();
+      }
+
+      $('form#new-journal-form, form#edit-journal-form').submit();
+      self.journal_form_modal.modal('hide');
     });
   }
 
@@ -138,7 +163,7 @@ class Journal{
       let label = vat_account.find('input[type="text"].vat_accounts_label, input[type="number"].vat_accounts_label').val();
       let field = vat_account.find('input[type="text"].vat_accounts').val();
 
-      if (label === self.default_vat_accounts_label){
+      if ((label === self.default_vat_accounts_label) || label === 'Compte de TVA par défaut' ){
         label = '0';
       }
 
@@ -152,6 +177,12 @@ class Journal{
   }
 
   show_vat_account_field(){
+    let vat_accounts_values      = [];
+    let rate_vat_accounts_values = [];
+
+    $.map($('.more_vat_accounts input[name="account_book_type[vat_accounts_rate]"]'), (element, index) => { vat_accounts_values.push($(element).val()) });
+    $.map($('.more_vat_accounts input[name="account_book_type[vat_accounts_label]"]'), (element, index) => { rate_vat_accounts_values.push($(element).val()) });
+
     let self = this;
     let vat_accounts = $('input[type=hidden]#account-book-type-vat-accounts-hidden').val();
 
@@ -160,16 +191,21 @@ class Journal{
         vat_accounts = JSON.parse(vat_accounts);
         for(let rate in vat_accounts){
           let vat_account = vat_accounts[rate];
-          if ((rate.indexOf(self.default_vat_accounts_label) >= 0) || (rate === '0')){
+
+          if ((rate.indexOf(self.default_vat_accounts_label) >= 0) || (rate === 'Compte de TVA par défaut') || (rate === '0')){
+            vat_account = vat_account || 445660; /* SET DEFAULT VALUE TO 445660 WHEN IT IS EMPTY*/
             $('input[type="text"]#account_book_type_default_vat_accounts').attr('value', vat_account);
 
             if ($('.account_book_type_vat_accounts.error').length > 0){
+
               $('input[type="text"]#account_book_type_default_vat_accounts').css('border', '1px solid #b94a48');
               $('input[type="text"]#account_book_type_default_vat_accounts').attr('value', '');
             }
           }
-          if (!(rate === '' || rate === 'undefined' || rate === null || rate === undefined || vat_account === '' || vat_account === 'undefined' || vat_account === null || vat_account === undefined || (rate.indexOf(self.default_vat_accounts_label) >= 0) || rate === '0')){
-            self.add_vat_account_field(rate, vat_account);
+          else if (!($.inArray(rate, rate_vat_accounts_values) > -1 || $.inArray(vat_account, vat_accounts_values) > -1)){
+            if (!(rate === '' || rate === 'undefined' || rate === null || rate === undefined || vat_account === '' || vat_account === 'undefined' || vat_account === null || vat_account === undefined || (rate.indexOf(self.default_vat_accounts_label) >= 0) || rate === '0')){
+              self.add_vat_account_field(rate, vat_account);
+            }
           }
         }
       } catch (error) {
@@ -268,7 +304,7 @@ class Journal{
   new_edit_account_book_type_view(){
     let self = this;
    
-    $('.new_edit_account_book_type').unbind('click').bind('click', function(e) {
+    $('.new_edit_account_book_type').unbind('click.new_edit_jo').bind('click.new_edit_jo', function(e) {
       e.stopPropagation();
 
       const url = $(this).attr('link');
