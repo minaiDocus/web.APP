@@ -1,7 +1,6 @@
 = stylesheet_link_tag 'front/organizations/assets/stylesheets/show'
 
 #paper_set_orders.order_multiple.derivationRight
-  %input#paper_set_prices{ value: "#{@paper_set_prices}", type: :hidden }
   - manual_paper_set_order = CustomUtils.is_manual_paper_set_order?(@organization)
   .row.hide
     .text-center
@@ -10,6 +9,7 @@
         %span.badge.badge-info= @orders.count
   .box.mt-4.form-content
     = form_tag create_multiple_organization_paper_set_orders_path(@organization), :id => manual_paper_set_order ? 'valid-manual-paper-set-order' : 'default', class: 'paper_set_order_form order_multiple_form' do |f|
+      %input#paper_set_prices{ value: "#{@paper_set_prices}", type: :hidden }
       .form-group.form-body-content
         %input#paper_set_specific_prices{ value: 1, type: :hidden, data: {manual: manual_paper_set_order.to_s} }
         %p Veuillez choisir les options pour chaque commande.

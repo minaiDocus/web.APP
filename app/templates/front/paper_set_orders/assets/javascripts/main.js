@@ -243,9 +243,11 @@ class PaperSetOrder{
     let price = 0;
     let self = this;
 
-    $.each(orders, function(i) {
+    orders.each(function(i){
       let order = this;
       let paper_set_casing_size  = parseInt($(order).find("select[name*='paper_set_casing_size']").val());
+      console.log(paper_set_casing_size);
+
       let paper_set_folder_count_index = parseInt($(order).find("select[name*='paper_set_folder_count']").val()) - 5;
       let start_date = new Date($(order).find("select[name*='paper_set_start_date']").val());
       let end_date = new Date($(order).find("select[name*='paper_set_end_date']").val());
@@ -270,6 +272,8 @@ class PaperSetOrder{
       $(order).find('.price').html(price + ",00€");
       $('.total_price').html(total_price + ",00€ HT");
     });
+
+    console.log('vita le price');
   }
 
   update_table_casing_counts(index){
@@ -297,7 +301,7 @@ class PaperSetOrder{
     };
 
     if(index < 0){
-      $('#paper_set_orders.order_multiple tbody#list_orders > tr, form.order_multiple_form tbody#list_orders tr').each((e) => {
+      $('#paper_set_orders.order_multiple tbody#list_orders > tr, form.order_multiple_form tbody#list_orders tr').each(function(e){
         let key = $(this).attr("data-index");
         fill_options_of(key);
       });
@@ -333,8 +337,8 @@ jQuery(function () {
   }
 
   if ($('.order_multiple form, form.order_multiple_form').length > 0){
-    paper_set_order.update_table_price();
     paper_set_order.update_table_casing_counts(-1);
+    paper_set_order.update_table_price();
   }
 
   AppListenTo('select_for_orders', (e)=>{ paper_set_order.select_for_orders(); });

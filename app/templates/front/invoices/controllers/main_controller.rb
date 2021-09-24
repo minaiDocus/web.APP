@@ -28,14 +28,12 @@ class Invoices::MainController < OrganizationController
     @invoice_setting.user         = User.find_by_code params[:invoice_setting][:user_code]
 
     if @invoice_setting.save
-      flash[:success] = (params[:invoice_setting][:id].present?) ? 'Modifié avec succès' : 'Ajout avec succès.'
+      json_flash[:success] = (params[:invoice_setting][:id].present?) ? 'Modifié avec succès' : 'Ajout avec succès.'
     else
-      flash[:error] = 'Enregistrement non valide, veuillez verifier les informations.'
+      json_flash[:error] = 'Enregistrement non valide, veuillez verifier les informations.'
     end
 
-    base_content
-
-    render :show
+    render json: { json_flash: json_flash }, status: 200
   end
 
   def synchronize
@@ -45,28 +43,24 @@ class Invoices::MainController < OrganizationController
       if params[:invoice_setting_synchronize_contains][:period].present?
         period = (params[:invoice_setting_synchronize_contains][:period]).to_date
 
-        flash[:success] = 'Synchronisation des factures en cours ...'
+        json_flash[:success] = 'Synchronisation des factures en cours ...'
 
         InvoiceSetting.delay(queue: :high).invoice_synchronize(period, invoice_setting.id)
       end
     else
-      flash[:error] = 'Synchronisation échouée, veuillez verifier les informations.'
+      json_flash[:error] = 'Synchronisation échouée, veuillez verifier les informations.'
     end
 
-    base_content
-
-    render :show
+    render json: { json_flash: json_flash }, status: 200
   end
 
 
   def remove
     InvoiceSetting.find(params[:id]).destroy
 
-    flash[:success] = 'Suppression avec succès.'
+    json_flash[:success] = 'Suppression avec succès.'
 
-    base_content
-
-    render :show
+    render json: { json_flash: json_flash }, status: 200
   end
 
   private

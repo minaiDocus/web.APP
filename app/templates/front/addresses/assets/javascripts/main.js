@@ -7,9 +7,9 @@ class AddressesMain{
     let addr_for = $('#addresses_management input#addr_for').val();
     let id       = $('#addresses_management input#addr_id').val();
 
-    let paper_return       = $('#addresses_management form.paper_return_form').serializeObject();
-    let paper_set_shipping = $('#addresses_management form.paper_set_shipping_form').serializeObject();
-    let dematbox_shipping  = $('#addresses_management form.dematbox_shipping_form').serializeObject();
+    let paper_return       = $('#addresses_management form.paper_return_form').serializeObject(true);
+    let paper_set_shipping = $('#addresses_management form.paper_set_shipping_form').serializeObject(true);
+    let dematbox_shipping  = $('#addresses_management form.dematbox_shipping_form').serializeObject(true);
 
     let ajax_params = {
                         url: '/addresses/update_all',
@@ -46,6 +46,6 @@ class AddressesMain{
 jQuery(function() {
   let main = new AddressesMain();
 
-  $('#addresses_management .update_addresses').unbind('click').bind('click', (e)=>{ main.update_addresses() });
-  $('#addresses_management .destroy_address').unbind('click').bind('click', function(e){ main.destroy_address($(this)) });
+  $('#addresses_management .update_addresses').unbind('click').bind('click', (e)=>{e.preventDefault(); main.update_addresses() });
+  $('#addresses_management .destroy_address').unbind('click').bind('click', function(e){e.preventDefault(); main.destroy_address($(this)) });
 });

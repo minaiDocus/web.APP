@@ -43,11 +43,11 @@ class AccountNumberRules::MainController < OrganizationController
 
     if @account_number_rule.save
       flash[:success] = 'Créé avec succès.'
-
-      redirect_to organization_account_number_rule_path(@organization, @account_number_rule)
     else
-      render 'new'
+      flash[:error] = @account_number_rule.errors.messages.to_s
     end
+
+    redirect_to organization_account_number_rules_path(@organization)
   end
 
   # GET /account/organizations/:organization_id/account_number_rules/:id/edit
@@ -62,11 +62,11 @@ class AccountNumberRules::MainController < OrganizationController
 
     if @account_number_rule.update(account_number_rule_params)
       flash[:success] = 'Modifié avec succès.'
-
-      redirect_to organization_account_number_rules_path(@organization)
-    else
-      render 'edit'
+   else
+      flash[:error] = @account_number_rule.errors.messages.to_s
     end
+
+    redirect_to organization_account_number_rules_path(@organization)
   end
 
   # DELETE /account/organizations/:organization_id/account_number_rules/:id
@@ -138,7 +138,7 @@ class AccountNumberRules::MainController < OrganizationController
 
     update_option('keep_account_validation', 'account_validation') if params[:account_validation]
 
-    render json: { success: true }, status: 200
+    render json: { json_flash: { success: 'Modification effectué' } }, status: 200
   end
 
   private

@@ -5,8 +5,8 @@
     .col-md-8
       %h3.bold Paramètres : Emails de rappel
     .col-md-4.text-end
-      - idocus_params = param_encode({ url: new_organization_reminder_email_path(@organization), html: { target: '.reminder_form', target_dest: '#reminder_edition_box' } })
-      %button.btn.btn-primary.new-reminder-email.semibold.as_idocus_ajax{ idocus: idocus_params, 'data-bs-target' => '#reminder-email-modal', 'data-bs-toggle' => 'modal' }
+      - modal_params = param_encode({ url: new_organization_reminder_email_path(@organization), title: 'Configuration email' })
+      %button.btn.btn-primary.new-reminder-email.semibold.as_idocus_modal{ idocus: modal_params }
         %span.me-2= glyphicon('plus', { color: "#FFF", size: '16'})   
         %span Nouvel email
 
@@ -36,11 +36,11 @@
                   .sub_menu.text-start.hide
                     %ul.no-margin.no-padding.regular
                       %li.reminder-email-action.view
-                        - idocus_params = param_encode({ url: organization_reminder_email_path(@organization, reminder_email), method: 'GET', html: { target: '.reminder-content', target_dest: '#reminder_show_box' } })
-                        = link_to glyphicon('eye', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Voir', organization_reminder_email_path(@organization, reminder_email), class: 'as_idocus_ajax', idocus: idocus_params, 'data-bs-target' => '#show-reminder-email-modal', 'data-bs-toggle' => 'modal'
+                        - modal_params = param_encode({ url: organization_reminder_email_path(@organization, reminder_email), title: 'Email', target: '.reminder-content', with_cancel: false })
+                        = link_to glyphicon('eye', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Voir', '#', class: 'as_idocus_modal', idocus: modal_params
                       %li.reminder-email-action.edit
-                        - idocus_params = param_encode({ url: edit_organization_reminder_email_path(@organization, reminder_email), html: { target: '.reminder_form', target_dest: '#reminder_edition_box' } })
-                        = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Éditer', '#', class: 'as_idocus_ajax', idocus: idocus_params, 'data-bs-target' => '#reminder-email-modal', 'data-bs-toggle' => 'modal'
+                        - modal_params = param_encode({ url: edit_organization_reminder_email_path(@organization, reminder_email), title: 'Configuration email' })
+                        = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Éditer', '#', class: 'as_idocus_modal', idocus: modal_params
                       / %li.reminder-email-action.de-activate
                       /   - idocus_params = param_encode({ url: deactivate_organization_reminder_email_path(@organization, reminder_email), method: 'delete', confirm: t('actions.confirm'), redirect_to: redirection })
                       /   = link_to glyphicon('ban', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Désactiver', organization_reminder_email_path(@organization, reminder_email)
@@ -52,29 +52,3 @@
                         = link_to glyphicon('envelope-open', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Envoyer', '#', class: 'as_idocus_ajax', idocus: idocus_params
 
       = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: organization_reminder_emails_path(@organization.id), target: '#reminder-email-table', total_pages: @reminder_emails.total_pages }
-
-  .modal#reminder-email-modal
-    .modal-dialog
-      .modal-content
-        .modal-header
-          %h5.modal-title.bold Configuration email
-          %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
-        .modal-body
-          #reminder_edition_box
-            = render partial: 'form'
-        .modal-footer
-          .w-100.text-end
-            %button.btn.btn-light.semibold{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'} Annuler
-            - idocus_params= param_encode({ url: '#url', form: 'email_configuration', force_form_url: true, redirect_to: redirection, modal: { id: 'reminder-email-modal' } })
-            %button.btn.btn-primary.as_idocus_ajax{ type: 'button', idocus: idocus_params }= t('actions.submit')
-
-
-  .modal#show-reminder-email-modal
-    .modal-dialog
-      .modal-content
-        .modal-header
-          %h5.modal-title.bold Email
-          %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
-        .modal-body
-          #reminder_show_box
-        .modal-footer

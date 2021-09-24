@@ -63,7 +63,7 @@ class FileSendingKits::MainController < OrganizationController
       flash[:error] = "Erreur de modification: #{@file_sending_kit.errors.messages.join(', ')}"
     end
 
-    redirect_to edit_organization_file_sending_kit_path(@organization)
+    redirect_to select_organization_file_sending_kit_path(@organization)
   end
 
   # GET /organizations/:organization_id/file_sending_kit/select

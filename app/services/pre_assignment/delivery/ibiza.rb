@@ -1,5 +1,5 @@
 class PreAssignment::Delivery::Ibiza < PreAssignment::Delivery::DataService
-  RETRYABLE_ERRORS = ['The fog is not checked', 'La connexion sous-jacente a été', 'An error occured', "can t open connection", "can not establish connection"]
+  RETRYABLE_ERRORS = ['The fog cant be created', 'The fog is not checked', 'La connexion sous-jacente a été', 'An error occured', "can t open connection", "can not establish connection", "undefined method `each", "authentification (ibiza) a échoué"]
 
   def self.retry_delivery(delivery_id)
     delivery = PreAssignmentDelivery.find delivery_id
@@ -7,7 +7,7 @@ class PreAssignment::Delivery::Ibiza < PreAssignment::Delivery::DataService
     delivery.update(state: 'pending', error_message: 'retry sending') if delivery.state == 'error'
   end
 
-	def self.execute(delivery)
+  def self.execute(delivery)
     new(delivery).run
   end
 

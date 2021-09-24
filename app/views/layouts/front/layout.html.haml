@@ -23,7 +23,9 @@
     - else
       != content_for?(:content) ? yield(:content) : yield
     .footer_marginer{ style: 'height: 120px' }
-  - render partial: 'layouts/front/support_chat'
+
+  = render partial: 'layouts/front/main_modal'
+  // = render partial: 'layouts/front/support_chat'
   = render partial: 'layouts/front/notice_flush_messages'
   = render partial: 'shared/as_user'
 

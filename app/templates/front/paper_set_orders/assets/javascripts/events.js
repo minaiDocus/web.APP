@@ -92,8 +92,9 @@ function bind_all_events_paper_set_orders(){
   });
 
   if ($('form.paper_set_order_form').length > 0){
-    AppEmit('update_casing_counts');
-    AppEmit('update_price');
+    AppEmit('update_casing_counts').then(e=>{
+      AppEmit('update_price');
+    });
 
     $('select').unbind('change').bind('change', function(e) {
       if ($(this).attr('id') === 'order_paper_set_start_date' || $(this).attr('id') === 'order_paper_set_end_date' ) {
@@ -134,13 +135,16 @@ function bind_all_events_paper_set_orders(){
   }
 
   if ($('.order_multiple form, form.order_multiple_form').length > 0){
-    AppEmit('update_table_casing_counts', { index: -1});
-    AppEmit('update_table_price');
+    AppEmit('update_table_casing_counts', { index: -1}).then(e=>{
+      AppEmit('update_table_price');
+    });
 
     $('select').unbind('change').bind('change', function(e) { AppEmit('update_table_price'); });
     $('.date_order').unbind('change').bind('change', function(e) {
       const index = $(this).attr("data-index");
-      AppEmit('update_table_casing_counts', { index: index});
+      AppEmit('update_table_casing_counts', { index: index}).then((e)=>{
+        AppEmit('update_table_price');
+      });
     });
 
     confirm_manual_paper_set_order();
@@ -148,6 +152,7 @@ function bind_all_events_paper_set_orders(){
 
   $('.add-paper-set-order, .create-paper-set-order-multiple').unbind('click').bind('click', function(e) {
     e.stopPropagation();
+    AppToggleLoading('show');
     $('#valid-manual-paper-set-order.paper_set_order_form, #default.paper_set_order_form').submit();
   });
 

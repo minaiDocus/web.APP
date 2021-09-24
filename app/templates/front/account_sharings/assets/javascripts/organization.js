@@ -73,6 +73,8 @@ class AccountSharingsOrganization{
   edit_contact(id=0){
     this.contact_id = id;
 
+    console.log(id);
+
     let url = '/new_contact'
     if(id > 0)
       url = `/edit_contact/${id}`

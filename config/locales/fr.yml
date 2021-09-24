@@ -257,7 +257,7 @@ fr:
     bank_assignment: Affectation bancaires
     bank_assignment_rule: Règle d'affectation bancaires
     invoices: Factures
-    idocus_box_and_order: Kits Courriers et iDocus'Box
+    paper_set_order: Kits Courriers
     active_customers: Dossiers actifs
     customers_evolution: Evolution du nombre de dossiers
     distribution_of_subscriptions: Répartition des abonnements

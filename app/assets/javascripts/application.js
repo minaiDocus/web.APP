@@ -86,7 +86,7 @@
     }
   }
 
-  $.fn.serializeObject = function(){
+  $.fn.serializeObject = function(strict=false){
     var o = {};
     var a = this.serializeArray();
 
@@ -95,7 +95,10 @@
         const inject = (obj, name)=>{
           if(name.match(/\[\](.+)/))
           {
-            obj[name] = this.value;
+            if(strict && this.value)
+              obj[c_name] = this.value;
+            else if(!strict)
+              obj[c_name] = this.value;
           }
           else if(name.match(/\[\]$/)){
             let obj_index = name.replace(/\[\]/g, '');
@@ -123,7 +126,10 @@
             }
             else
             {
-              obj[c_name] = this.value;
+              if(strict && this.value)
+                obj[c_name] = this.value;
+              else if(!strict)
+                obj[c_name] = this.value;
             }
           }
         }
@@ -286,12 +292,18 @@ class ApplicationJS {
                 console.error(e);
             }
 
-            if(params.mode == 'append')
+            if(params.mode == 'append'){
               $(destination).append( source_html );
-            else if(params.mode == 'prepend')
+            }
+            else if(params.mode == 'prepend'){
               $(destination).prepend( source_html );
-            else
-              $(destination).html( source_html );
+            }
+            else{
+              if(target == destination)
+                $(destination).replaceWith( source_html );
+              else
+                $(destination).html( source_html );
+            }
           }
 
           if (afterUpdateContent) { afterUpdateContent(); }
@@ -341,10 +353,6 @@ class ApplicationJS {
         }
       });
     });
-  }
-
-  displayListPer(params={}, afterUpdateContent=function(e){}){
-    if (afterUpdateContent !== null) { this.sendRequest(params, null, afterUpdateContent); }
   }
 
   static launch_async(idocus_params={}){
@@ -421,7 +429,11 @@ class ApplicationJS {
                 //Handling modal param
                 if( idocus_params['modal'] && idocus_params['modal']['id'] )
                 {
-                  let modal            = $(`.modal#${idocus_params['modal']['id']}`);
+                  let modal_name = idocus_params['modal']['id']
+                  if(modal_name == '#')
+                    modal_name = 'general_idocus_main_modal';
+
+                  let modal            = $(`.modal#${modal_name}`);
                   let close_on_success = (idocus_params['modal']['close_after_success'] === false)? false : true
                   let close_on_error   = idocus_params['modal']['close_after_error'] || false
 
@@ -447,7 +459,11 @@ class ApplicationJS {
                 //Handling modal param
                 if( idocus_params['modal'] && idocus_params['modal']['id'] )
                 {
-                  let modal          = $(`.modal#${idocus_params['modal']['id']}`);
+                  let modal_name = idocus_params['modal']['id']
+                  if(modal_name == '#')
+                    modal_name = 'general_idocus_main_modal';
+
+                  let modal            = $(`.modal#${modal_name}`);
                   let close_on_error = idocus_params['modal']['close_after_error'] || false
                   if( close_on_error ){ modal.modal('hide'); }
                 }

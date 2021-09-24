@@ -125,6 +125,7 @@ function file_sending_kits_main_events() {
 
   $('.validate_file_sending_kits_edit').unbind('click').bind('click', function(e) {
     e.stopPropagation();
+    AppToggleLoading('show');
     $('form#edit_file_sending_kit_form').submit();
   });
 

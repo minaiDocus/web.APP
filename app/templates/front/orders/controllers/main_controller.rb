@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Orders::MainController < OrganizationController
   before_action :load_customer
+  before_action :load_order_prices
   before_action :verify_rights
   before_action :load_order, only: %w[edit update destroy]
   before_action :verify_editability, only: %w[edit update destroy]
@@ -12,7 +13,6 @@ class Orders::MainController < OrganizationController
     @order = Order.new
     @order.user = @customer
     @order.period_duration = @customer.subscription.period_duration
-    @paper_set_prices = Order::PaperSet.paper_set_prices
 
     if params[:order][:type] == 'paper_set'
       @order.type = 'paper_set'
@@ -45,7 +45,6 @@ class Orders::MainController < OrganizationController
   # POST /organizations/:organization_id/customers/:customer_id/orders
   def create
     @order = Order.new(order_params)
-    @paper_set_prices = Order::PaperSet.paper_set_prices
 
     if @order.dematbox? && Order::Dematbox.new(@customer, @order).execute
       copy_back_address
@@ -75,9 +74,7 @@ class Orders::MainController < OrganizationController
   end
 
   # GET /organizations/:organization_id/customers/:customer_id/orders/:id/edit
-  def edit
-    @paper_set_prices = Order::PaperSet.paper_set_prices
-  end
+  def edit;  end
 
   # PUT /organizations/:organization_id/customers/:customer_id/orders/:id
   def update
@@ -117,6 +114,10 @@ class Orders::MainController < OrganizationController
   end
 
   private
+
+  def load_order_prices
+    @paper_set_prices = Order::PaperSet.paper_set_prices
+  end
 
   def load_customer
     @customer = customers.find params[:customer_id]

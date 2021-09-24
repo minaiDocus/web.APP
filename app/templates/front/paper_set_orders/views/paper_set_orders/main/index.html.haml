@@ -75,7 +75,7 @@
           %input.btn.btn-primary.valid-paper-set-order{:type => 'submit', name: 'commit', value: 'Commander', id: 'valid-paper-set-order', 'data-disable-with' => 'Commander'}
 
 .modal.fade#create_order_multiple
-  .modal-dialog{:role => 'document'}
+  .modal-dialog{:role => 'document', style: 'min-width: 1024px'}
     .modal-content
       .modal-header
         Commande multiple de Kit Courriers
@@ -83,7 +83,7 @@
       .modal-body
         Chargement ...
       .modal-footer
-        = link_to t('actions.cancel'), '#', class: 'btn btn-light close_and_select_for_orders'
+        %button.btn.btn-light.semibold.cancel{ 'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', type: :button } Annuler
         %input.btn.btn-primary.create-paper-set-order-multiple{:type => 'submit', name: 'commit', value: 'Commander', id: 'create-paper-set-order-multiple', 'data-disable-with' => 'Commander', class: "btn btn-primary#{' valid-manual-paper-set-order' if manual_paper_set_order}"}
 
 

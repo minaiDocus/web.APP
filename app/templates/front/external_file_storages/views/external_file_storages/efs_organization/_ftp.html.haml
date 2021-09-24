@@ -50,11 +50,12 @@
   - if @user.leader?
     %hr
     .text-end
-      - idocus_params = param_encode({ url: '#url', method: 'POST', form: 'edition_ftp_organization', force_form_url: true })
-      %btn.btn.btn-default.as_idocus_ajax{ type: 'button', idocus: idocus_params } Valider les modifications
       - if @ftp.try(:configured?)
         - idocus_params = param_encode({ url: organization_ftps_fetch_now_path(@organization, 'ftp'), method: 'POST', confirm: 'Êtes-vous sûr de vouloir récupérer maintenant ?' })
         %button.btn.btn-light.as_idocus_ajax{ type: 'button', idocus: idocus_params } Récupérer maintenant
 
         - idocus_params = param_encode({ url: organization_destroy_ftps_path(@organization, 'ftp'), method: 'DELETE', confirm: 'Êtes-vous sûr de vouloir supprimer vos paramètres FTP ?', redirect_to: { url: organization_efs_path(@organization, tab: 'ftp'), method: 'GET', html: { target: '.general' } } })
-        %button.btn.btn-primary.as_idocus_ajax{ type: 'button', idocus: idocus_params } Réinitialiser mes paramètres
+        %button.btn.btn-default.as_idocus_ajax{ type: 'button', idocus: idocus_params } Réinitialiser mes paramètres
+
+      - idocus_params = param_encode({ url: '#url', method: 'POST', form: 'edition_ftp_organization', force_form_url: true })
+      %btn.btn.btn-primary.as_idocus_ajax{ type: 'button', idocus: idocus_params } Valider les modifications

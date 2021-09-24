@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class PaperSetOrders::MainController < OrganizationController
   before_action :verify_rights
+  before_action :load_order_prices
   before_action :load_order_and_customer, only: %w[edit update destroy]
   before_action :verify_if_customer_can_order_paper_sets, only: %w[edit update]
   before_action :verify_editability, only: %w[edit update destroy]
@@ -79,7 +80,6 @@ class PaperSetOrders::MainController < OrganizationController
 
   def order_multiple
     if params[:customer_ids].present?
-      @paper_set_prices = Order::PaperSet.paper_set_prices
       customers = @organization.customers.where(id: params[:customer_ids])
       @orders = customers.map do |customer|
         Order.new(user: customer, type: 'paper_set', period_duration: customer.subscription.period_duration)
@@ -113,6 +113,10 @@ class PaperSetOrders::MainController < OrganizationController
   end
 
   private
+
+  def load_order_prices
+    @paper_set_prices = Order::PaperSet.paper_set_prices
+  end
 
   def sort_column
     if params[:sort].in? %w[created_at user_code company state]
