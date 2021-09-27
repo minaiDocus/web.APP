@@ -1,7 +1,0 @@
-#address.new.derivationRight
-  .card
-    .card-header
-      %h3 
-        Nouvelle adresse pour le client : 
-        = link_to @customer, account_organization_customer_path(@organization, @customer, tab: 'addresses'), class: 'fs-origin'
-    = render partial: 'form'
