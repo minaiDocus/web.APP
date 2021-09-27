@@ -140,6 +140,18 @@ function bind_globals_events(){
     });
   /* SCROLL ON TOP */
 
+  document.addEventListener("DOMContentLoaded", function(event) {
+    let popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+    let popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+      return new bootstrap.Popover(popoverTriggerEl)
+    });
+
+    let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+  });
+
   $('table tbody .action, .action.submenu_action').unbind('click').bind('click',function(e) {
     e.stopPropagation();
 

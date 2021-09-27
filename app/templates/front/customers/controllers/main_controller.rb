@@ -267,6 +267,7 @@ class Customers::MainController < OrganizationController
   def reopen_account
     Subscription::Reopen.new(@customer, @user, request).execute
     flash[:success] = 'Dossier réouvert avec succès.'
+
     redirect_to organization_customer_path(@organization, @customer)
   end
 

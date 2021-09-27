@@ -46,13 +46,7 @@
                       = link_to customer, organization_customer_path(@organization, customer)
                   %td.align-middle= customer.created_at.strftime('%d/%m/%Y')
                   %td.align-middle
-                    - period = @periods.select { |e| e.user == customer }.first
-                    - if period
-                      - period.product_option_orders.each do |option|
-                        %span.semibold= option.group_title
-                        - if option.title.present?
-                          %br
-                          %i= option.title
+                    %span{ data: { bs: { toggle: 'popover on right', trigger: 'hover focus', content: "period"} }}
                   %td.text-center.align-middle= customer.subscription.try(:is_package?, 'pre_assignment_option') ? 'Activé' : '-'
                   %td.text-center.align-middle= customer.subscription.try(:is_package?, 'retriever_option') ? "Récupération banque +\nFactures sur Internet" : "-"
                   %td.align-middle= customer.subscription.try(:number_of_journals)
