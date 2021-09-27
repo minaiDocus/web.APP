@@ -15,6 +15,8 @@ Class mère AppListener
   
 
   class cible .as_idocus_emit
+  "Les paramètres doivent passés obligatoirement par un helper de cryptage : param_encode(hash)"
+
   idocus
     name   => Nom de l'event listener
     events => Event authorisé (triggered event), séparés par espace si plusieurs (ex: 'click change keyup')
@@ -38,9 +40,11 @@ Attribut:
     events        => Event authorisé (triggered event), séparés par espace si plusieurs (ex: 'click change keyup')
     before_send   => Appel (AppEmit) sur le nom de l'évènement avant lancement ajax ( paramètre: { element: $(this), idocus_params: idocus_params } )
     after_send    => Appel (AppEmit) sur le nom de l'évènement après success ( paramètre: { element: $(this), response: e } )
-    form          => ID d'une formulaire (form) à serialisé (ex: 'quelquechose')
-    force_form_url  => true, false (default false), récupère l'url (action) et methode du formulaire (form) et ecrase l'url et methode en paramètre
-    force_linear_form => (defaut: false) force la sérialisation d'une formulaire en url encoded data (et non en objet)
+    form => form associé à la requete   
+      id          => ID (html) d'une formulaire (form) à serialisé (ex: 'quelquechose')
+      dump_action => (default false), récupère l'url (action) et methode du formulaire (form) et ecrase l'url et methode en paramètre
+      linear      => (defaut: false) force la sérialisation d'une formulaire en url encoded data (et non en objet)
+      validate    => (default: true) Validation du formulaire sur les champs "required"
     datas         => Datas à envoyé (avec form sérialisé si existe) au format JSON STRING [ datas ecrase form s'il existe une même clé ]
 
     html => le data-type de la requete devient 'HTML' (si par défaut JSON)
@@ -65,8 +69,9 @@ Attribut:
 ex: = 
   "class" cible: as_idocus_modal
   "Les paramètres doivent passés obligatoirement par un helper de cryptage : param_encode(hash)"
+  "IMPORTANT : NE PAS UTILISER SUR UN MULTI-MODAL (MODAL SUR MODAL)"
 
-  m_idocus
+  idocus
     id          => ID du modal (optionnel, id du modal cible à utilisé) par défaut: 'general_idocus_main_modal'
     title       => Titre du modal sur modal-title h5
     style       => CSS style ex: (style: 'min-width: 1024px')

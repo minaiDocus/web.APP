@@ -4,7 +4,7 @@
       .col-md-6
       .col-md-3.text-end
         - if current_user.is_admin
-          - idocus_param = param_encode({ url: '/retrieved/unlock_operations', method: 'post', confirm: 'Etes vous sûr?', form: 'filter-operations-form', after_send: 'retrieved_datas_reload_operations' })
+          - idocus_param = param_encode({ url: '/retrieved/unlock_operations', method: 'post', confirm: 'Etes vous sûr?', form: { id: 'filter-operations-form' }, after_send: 'retrieved_datas_reload_operations' })
           %button.btn.btn-danger.semibold.force-preseizures.as_idocus_ajax{ idocus: idocus_param, type: 'button' }
             %span.me-2= glyphicon('aperture', { size: '15', color: '#FF4848'})
             %span Débloquer les opérations
@@ -12,7 +12,7 @@
             %span opération(s)
       .col-md-3.text-end
         - if waiting_operations_count > 0
-          - idocus_param = param_encode({ url: '/retrieved/force_operations', method: 'post', confirm: 'Etes vous sûr?', form: 'filter-operations-form', after_send: 'retrieved_datas_reload_operations' })
+          - idocus_param = param_encode({ url: '/retrieved/force_operations', method: 'post', confirm: 'Etes vous sûr?', form:{ id: 'filter-operations-form' }, after_send: 'retrieved_datas_reload_operations' })
           %button.btn.btn-danger.semibold.force-preseizures.as_idocus_ajax{ idocus: idocus_param, type: 'button' }
             %span.me-2= glyphicon('aperture', { size: '15', color: '#FF4848'})
             %span Forcer la pré-affectation de

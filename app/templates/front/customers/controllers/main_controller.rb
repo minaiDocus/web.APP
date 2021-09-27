@@ -69,12 +69,7 @@ class Customers::MainController < OrganizationController
         redirect_to organization_customer_path(@organization, @customer, tab: 'journals')
       end
     else
-      _error_messages = @customer.errors.messages
-      html_ul_content = "<ul>"
-      _error_messages.each {|key, value| html_ul_content += "<li>#{key} : #{value.join(', ')}</li>"}
-      html_ul_content += "</ul>"
-
-      flash[:error] = html_ul_content.html_safe
+      flash[:error] = errors_to_list @customer.errors.messages
 
       redirect_to organization_customer_path(@organization, @customer)
     end

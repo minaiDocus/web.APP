@@ -358,6 +358,7 @@ class ApplicationJS {
 
   static launch_async(idocus_params={}){
     return new Promise((success, error)=>{
+      let appJS           = new ApplicationJS();
       let url             = idocus_params['url'];
       let confirm_message = idocus_params['confirm'];
 
@@ -383,27 +384,53 @@ class ApplicationJS {
           }
 
         //parsing form and datas parmeter
-          let form      = $(`form#${idocus_params['form']}`);
-          let form_data = {}
+          let form_data = {};
+          if(idocus_params['form'] && idocus_params['form']['id'])
+          {
+            let form      = $(`form#${idocus_params['form']['id']}`);
 
-          if(form){
-            if(ajax_params['force_linear_form'] == true)
+            if(form)
             {
-              form_data = form.serialize();
-            }
-            else
-            {
-              if(ajax_params['dataType'] == 'json')
-                form_data = form.serializeObject(); //serialize as json
+              if(idocus_params['form']['linear'] === true)
+              {
+                form_data = form.serialize();
+              }
               else
-                form_data = form.serialize(); //serialize as url params
-            }
+              {
+                if(ajax_params['dataType'] == 'json')
+                  form_data = form.serializeObject(); //serialize as json
+                else
+                  form_data = form.serialize(); //serialize as url params
+              }
 
-            if(idocus_params['force_form_url'] == true){
-              ajax_params['url'] = form.attr('action');
+              if(idocus_params['form']['dump_action'] === true){
+                ajax_params['url'] = form.attr('action');
 
-              if(form.attr('method'))
-                ajax_params['type'] = form.attr('method');
+                if(form.attr('method'))
+                  ajax_params['type'] = form.attr('method');
+              }
+
+              // Validate the from
+              if(idocus_params['form']['validate'] !== false){
+                let errors = [];
+                form.find("input,textarea,select").filter('[required]:visible').each(function(e){
+                  if($(this).val() == undefined || $(this).val() == null || $(this).val().trim() == ''){
+                    $(this).parents().each((a, parent)=>{
+                      if( $(parent).hasClass('form-group') ){
+                        let label = $(parent).find('label').text();
+                        errors.push( `<strong>${ label || $(this).attr('name') }</strong>: est obligatoire` );
+                        return false; //break
+                      }
+                    });
+                  }
+                });
+
+                if(errors.length > 0){
+                  appJS.noticeErrorMessageFrom(null, '<ul class="errors_list"><li class="error_element">' + errors.join('</li><li class="error_element">') + '</li></ul>');
+                  error();
+                  return false;
+                }
+              }
             }
           }
 
@@ -420,11 +447,8 @@ class ApplicationJS {
               form_data = Object.assign( form_data, new_datas );
           }
 
-          if(form_data){
-            ajax_params['data'] = form_data;
-          }
+          if(form_data){ ajax_params['data'] = form_data; }
 
-        let appJS = new ApplicationJS();
         appJS.sendRequest(ajax_params)
               .then(e => {
                 //Handling modal param

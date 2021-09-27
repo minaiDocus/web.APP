@@ -24,7 +24,7 @@
       = f.link_to_add 'Ajouter un compte de TVA', :vat_accounts, class: 'btn btn-light mt-3 mb-3'
       
   .modal-footer
-    - idocus_params = param_encode({ url: update_multiple_organization_customer_accounting_plan_vat_accounts_path(@organization, @customer), method: 'post', form: 'form_vat_account', modal: { id: 'add-vat-account' } , redirect_to: { url: organization_customer_accounting_plan_path(@organization, @customer), method: 'get', html: { target: '#accounting_plan', target_dest: '.tab-pane#accounting-plan' } } })
+    - idocus_params = param_encode({ url: update_multiple_organization_customer_accounting_plan_vat_accounts_path(@organization, @customer), method: 'post', form: { id: 'form_vat_account' }, modal: { id: 'add-vat-account' } , redirect_to: { url: organization_customer_accounting_plan_path(@organization, @customer), method: 'get', html: { target: '#accounting_plan', target_dest: '.tab-pane#accounting-plan' } } })
     %button.btn.btn-primary.w-25.as_idocus_ajax{ type: :button, idocus: idocus_params } Valider
 
 #accounting_plan.edit.derivationRight 

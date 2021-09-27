@@ -125,6 +125,16 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def errors_to_list(errors=[])
+    contents = ''
+
+    errors.each do |key, val|
+      contents += "<li class='errors_element'><strong>#{key.to_s}: </strong>#{ val.join('; ') rescue val.to_s }</li>"
+    end
+
+    "<ul class='errors_list'>#{contents}</ul>".html_safe
+  end
+
   def json_flash=(index, data)
     @json_flash[index] = data
   end

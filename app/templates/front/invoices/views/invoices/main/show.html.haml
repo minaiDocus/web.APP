@@ -105,7 +105,7 @@
       .form-group.clearfix
         = f.input :journal_code, label: t('invoices.document_type') + ' :', collection: [], required: true, input_html: { class: 'form-control select form-select form-select-sm', "aria-label" => ".form-select-sm"}
     .idocus_modal_buttons
-      - idocus_params = param_encode({ url: '#url', method: 'post', form: 'data-invoice-integration', force_form_url: true, modal: { id: '#' }, redirect_to: { url: organization_invoices_path(@organization), method: 'get', html: { target: '.main_content' } } })
+      - idocus_params = param_encode({ url: '#url', method: 'post', form:{ id: 'data-invoice-integration', dump_action: true }, modal: { id: '#' }, redirect_to: { url: organization_invoices_path(@organization), method: 'get', html: { target: '.main_content' } } })
       %button.btn.btn-primary.add.as_idocus_ajax{ type: :button, idocus: idocus_params }= t('actions.add')
 
   //Synchronize modal
@@ -119,7 +119,7 @@
         .control-section
           = select_tag 'invoice_setting_synchronize_contains[period]', options_for_select( @synchronize_months, (params[:invoice_setting_synchronize_contains][:period] rescue '') ), class: 'form-control select form-select form-select-sm', "aria-label" => ".form-select-sm"
     .idocus_modal_buttons
-      - idocus_params = param_encode({ url: '#url', metod: 'post', form: 'synchronization-invoice-form', force_form_url: true, modal: { id: '#' }, redirect_to: { url: organization_invoices_path(@organization), method: 'get', html: { target: '.main_content' } } })
+      - idocus_params = param_encode({ url: '#url', metod: 'post', form:{ id: 'synchronization-invoice-form', dump_action: true }, modal: { id: '#' }, redirect_to: { url: organization_invoices_path(@organization), method: 'get', html: { target: '.main_content' } } })
       %button.btn.btn-primary.as_idocus_ajax{ type: :button, idocus: idocus_params } Synchroniser
 
 //invoice view

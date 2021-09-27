@@ -32,13 +32,8 @@ class RetrieverParameters::BanksParamsController < RetrieverController
       success = true
       message = 'Créé avec succès.'
     else
-      _error_messages = @bank_account.errors.messages
-      html_ul_content = "Erreur lors de la création du compte bancaire : <ul>"
-      _error_messages.each {|key, value| html_ul_content += "<li>#{key} : #{value.join(', ')}</li>"}
-      html_ul_content += "</ul>"
-
       success = false
-      message = html_ul_content.html_safe
+      message = errors_to_list @bank_account.errors.messages
     end
 
     render json: { success: success, message: message }, status: 200
@@ -64,13 +59,8 @@ class RetrieverParameters::BanksParamsController < RetrieverController
       success = true
       message = "Modifié avec succès."
     else
-      _error_messages = @bank_account.errors.messages
-      html_ul_content = "Erreur lors de l'édition du compte bancaire : <ul>"
-      _error_messages.each {|key, value| html_ul_content += "<li>#{key} : #{value.join(', ')}</li>"}
-      html_ul_content += "</ul>"
-
       success = false
-      message = html_ul_content.html_safe
+      message = errors_to_list @bank_account.errors.messages
     end
 
     render json: { success: success, message: message.to_s }, status: 200

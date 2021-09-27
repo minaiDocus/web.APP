@@ -36,5 +36,5 @@
             .select-container.no-padding.w-25
               = text_field_tag :pairing_code, ''
             .mb-2
-            - idocus_params = param_encode({ url: '#url', form: 'idocus_box_configuration', force_form_url: true, method: 'post'  })
+            - idocus_params = param_encode({ url: '#url', form: { id: 'idocus_box_configuration', dump_action: true }, method: 'post'  })
             = button_tag t('actions.submit'), type: 'button', class: 'btn btn-primary semibold w-25 as_idocus_ajax', idocus: idocus_params

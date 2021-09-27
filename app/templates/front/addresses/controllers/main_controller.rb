@@ -39,12 +39,12 @@ class Addresses::MainController < FrontController
       end
 
       if address
-        error << address.errors.messages unless address.save
+        error << errors_to_list(address.errors.messages) unless address.save
       end
     end
 
     if error.any?
-      json_flash[:error] = error.join(', ')
+      json_flash[:error] = error.join('<hr />')
     else
       json_flash[:success] = 'Mise à jour avec succès'
     end

@@ -44,7 +44,7 @@ class AccountNumberRules::MainController < OrganizationController
     if @account_number_rule.save
       flash[:success] = 'Créé avec succès.'
     else
-      flash[:error] = @account_number_rule.errors.messages.to_s
+      flash[:error] = errors_to_list @account_number_rule.errors.messages
     end
 
     redirect_to organization_account_number_rules_path(@organization)
@@ -63,7 +63,7 @@ class AccountNumberRules::MainController < OrganizationController
     if @account_number_rule.update(account_number_rule_params)
       flash[:success] = 'Modifié avec succès.'
    else
-      flash[:error] = @account_number_rule.errors.messages.to_s
+      flash[:error] = errors_to_list @account_number_rule.errors.messages
     end
 
     redirect_to organization_account_number_rules_path(@organization)

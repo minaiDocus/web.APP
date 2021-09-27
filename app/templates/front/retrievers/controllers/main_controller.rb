@@ -50,7 +50,7 @@ class Retrievers::MainController < RetrieverController
     if @retriever.save
       json_flash[:success] = 'Automate créer avec succès'
     else
-      json_flash[:error] = @retriever.errors.messages
+      json_flash[:error] = errors_to_list @retriever.errors.messages
     end
 
     render json: { json_flash: json_flash }, status: 200
@@ -71,7 +71,7 @@ class Retrievers::MainController < RetrieverController
     if @retriever.update(retriever_params)
       json_flash[:success] = 'Automate mis à jours avec succès'
     else
-      json_flash[:error] = @retriever.errors.messages
+      json_flash[:error] = errors_to_list @retriever.errors.messages
     end
 
     render json: { json_flash: json_flash }, status: 200

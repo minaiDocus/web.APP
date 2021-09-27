@@ -58,5 +58,5 @@
           #edit_csv_descriptor_format
         .modal-footer
           .w-100.text-end
-            - idocus_params = param_encode({ url: "/organizations/#{@organization.id}/csv_descriptor/update", method: 'patch', form: 'edit_format_csv_descriptor', before_send: 'csv_descriptor_update_format', modal: { id: 'csv_descriptor_modal' } })
+            - idocus_params = param_encode({ url: "/organizations/#{@organization.id}/csv_descriptor/update", method: 'patch', form: { id: 'edit_format_csv_descriptor' }, before_send: 'csv_descriptor_update_format', modal: { id: 'csv_descriptor_modal' } })
             %button.btn.btn-primary.valid.as_idocus_ajax{ idocus: idocus_params } Valider

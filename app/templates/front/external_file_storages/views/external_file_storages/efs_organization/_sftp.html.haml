@@ -48,5 +48,5 @@
         - idocus_params = param_encode({ url: organization_destroy_ftps_path(@organization, 'sftp'), method: 'DELETE', confirm: 'Êtes-vous sûr de vouloir supprimer vos paramètres SFTP ?', redirect_to: { url: organization_efs_path(@organization, tab: 'sftp'), method: 'GET', html: { target: '.general' } } })
         %button.btn.btn-default.as_idocus_ajax{ type: 'button', idocus: idocus_params } Réinitialiser mes paramètres
 
-      - idocus_params = param_encode({ url: '#url', method: 'POST', form: 'edition_sftp_organization', force_form_url: true })
+      - idocus_params = param_encode({ url: '#url', method: 'POST', form: { id: 'edition_sftp_organization', dump_action: true } })
       %btn.btn.btn-primary.as_idocus_ajax{ type: 'button', idocus: idocus_params } Valider les modifications

@@ -8,5 +8,5 @@
       .control-section
         = text_field :storage, :final_path, disabled: true, class: 'form-control'
     .form-actions.text-center
-      - idoc_params = param_encode({ url: '/external_file_storage', method: 'post', form: "edit_#{storage.class.name}" })
+      - idoc_params = param_encode({ url: '/external_file_storage', method: 'post', form:{ id: "edit_#{storage.class.name}"} })
       %button.btn.btn-primary.w-25.as_idocus_ajax.semibold{ type: 'button', idocus: idoc_params } Valider

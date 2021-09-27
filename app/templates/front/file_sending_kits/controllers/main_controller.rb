@@ -60,7 +60,7 @@ class FileSendingKits::MainController < OrganizationController
     if @file_sending_kit.save
       flash[:success] = 'Modifié avec succès.'
     else
-      flash[:error] = "Erreur de modification: #{@file_sending_kit.errors.messages.join(', ')}"
+      flash[:error] = errors_to_list @file_sending_kit.errors.messages
     end
 
     redirect_to select_organization_file_sending_kit_path(@organization)

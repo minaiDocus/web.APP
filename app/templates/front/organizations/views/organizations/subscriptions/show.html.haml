@@ -49,7 +49,7 @@
         #modal-body-edition
       .modal-footer
         .w-100.text-end
-          - idocus_params = param_encode({ url: "#url", method: 'patch', form: 'edit_subscription_form', force_form_url: true, modal: { id: 'subscriptions_edition' }, redirect_to: { url: organization_organization_subscription_path(@organization), method: 'GET', html: { target: '#subscripiton_organization' } } })
+          - idocus_params = param_encode({ url: "#url", method: 'patch', form:{ id: 'edit_subscription_form', dump_action: true }, modal: { id: 'subscriptions_edition' }, redirect_to: { url: organization_organization_subscription_path(@organization), method: 'GET', html: { target: '#subscripiton_organization' } } })
           %button.btn.btn-primary.valid.as_idocus_ajax{ idocus: idocus_params } Valider
 
 .modal#subscriptions_propagation 
@@ -62,5 +62,5 @@
         #modal-body-propagation
       .modal-footer
         .w-100.text-end
-          - idocus_params = param_encode({ url: "#url", method: 'post', form: 'subscription_propagation_form', force_form_url: true, modal: { id: 'subscriptions_propagation' } })
+          - idocus_params = param_encode({ url: "#url", method: 'post', form:{ id: 'subscription_propagation_form', dump_action: true}, modal: { id: 'subscriptions_propagation' } })
           %button.btn.btn-primary.valid.as_idocus_ajax{ idocus: idocus_params } Valider

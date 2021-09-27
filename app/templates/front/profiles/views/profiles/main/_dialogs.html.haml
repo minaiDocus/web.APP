@@ -21,7 +21,7 @@
               .select-container.no-padding.w-100
                 = f.password_field :password_confirmation, label: 'Confirmation du nouveau mot de passe'
       .modal-footer
-        - idoc_params = param_encode({ url: '/profiles', method: 'put', form: 'edit_user', modal: { id: 'change-password' } })
+        - idoc_params = param_encode({ url: '/profiles', method: 'put', form: { id: 'edit_user' }, modal: { id: 'change-password' } })
         %button.as_idocus_ajax.btn.btn-primary.semibold{ idocus: idoc_params } Valider
 
 .modal#external-file-storage

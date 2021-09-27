@@ -94,7 +94,7 @@
 
 .form-group.no-margin
   .w-100.text-center
-    - idocus_params = param_encode({ url: "/organizations/#{@organization.id}/ibiza", method: 'put', form: 'ibiza_form_edition' })
+    - idocus_params = param_encode({ url: "/organizations/#{@organization.id}/ibiza", method: 'put', form:{ id: 'ibiza_form_edition' } })
     %button.btn.btn-primary.as_idocus_ajax.w-25{ type: 'button', idocus: idocus_params } Valider
 
   = render file: Rails.root.join('app/templates/front/ibiza/views/ibiza/main/_dialogs.html.haml'), locals: { ibiza: ibiza }

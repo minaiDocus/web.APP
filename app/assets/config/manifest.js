@@ -1,6 +1,7 @@
 //= link favicon.ico
 //= link application.css
 //= link application.js
+//= link dynamic_events.js
 
 //= link logo/tiny_logo.png
 //= link logo/tiny_logo_2.png
