@@ -34,12 +34,11 @@
           - else
             %li.nav-item.no-margin{ "role" => "presentation" }
               %button.semibold.nav-link#journals-tab{ class: ('active' if params[:tab] == 'journals'), "data-bs-toggle" => "tab", "data-bs-target" => "#journals", type: :button, "role" => "tab", "aria-controls" => "journals", "aria-selected" => "#{params[:tab] == 'journals'}" } Journaux comptables
-          - unless @organization.specific_mission
             %li.nav-item.no-margin{ "role" => "presentation" }
               %button.semibold.nav-link#compta-tab{ class: ('active' if params[:tab] == 'compta'), "data-bs-toggle" => "tab", "data-bs-target" => "#compta", type: :button, "role" => "tab", "aria-controls" => "compta", "aria-selected" => "#{params[:tab] == 'compta'}" } Paramètres
-          - if @customer.uses?(:ibiza)
-            %li.nav-item.no-margin{ "role" => "presentation" }
-              %button.semibold.nav-link#ibizabox_tab{ class: ('active' if params[:tab] == 'ibiza_box'), "data-bs-toggle" => "tab", "data-bs-target" => "#ibizabox", type: :button, "role" => "tab", "aria-controls" => "ibizabox", "aria-selected" => "#{params[:tab] == 'ibiza_box'}" } iBiza Box
+            - if @customer.uses?(:ibiza)
+              %li.nav-item.no-margin{ "role" => "presentation" }
+                %button.semibold.nav-link#ibizabox_tab{ class: ('active' if params[:tab] == 'ibiza_box'), "data-bs-toggle" => "tab", "data-bs-target" => "#ibizabox", type: :button, "role" => "tab", "aria-controls" => "ibizabox", "aria-selected" => "#{params[:tab] == 'ibiza_box'}" } iBiza Box
             %li.nav-item.dropdown.no-margin
               %button.semibold.nav-link.dropdown-toggle#softwares-list{ "data-bs-toggle" => "dropdown", "aria-expanded" => "false", type: :button } Logiciels comptables / export csv
               %ul.dropdown-menu{ "aria-labelledby" => "softwares-list" }
@@ -123,19 +122,18 @@
                         %span Format d’export (.csv)
                       .col-md-6.text-center
                         - if @customer.uses?(:csv_descriptor)
-                          = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
-          - unless @organization.specific_mission    
+                          = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })   
             %li.nav-item.no-margin{ "role" => "presentation" }
               %button.semibold.nav-link#accounting-plan-tab{ class: ('active' if params[:tab] == 'accounting_plan'), "data-bs-toggle" => "tab", "data-bs-target" => "#accounting-plan", type: :button, "role" => "tab", "aria-controls" => "accounting-plan", "aria-selected" => "#{params[:tab] == 'accounting_plan'}" } Plan comptable
-          - if @organization.mcf_settings.try(:access_token).present? || @customer.try(:mcf_documents).try(:not_processable).try(:any?)
-            %li.nav-item.no-margin{ "role" => "presentation" }
-              %button.semibold.nav-link#mcf-tab{ class: ('active' if params[:tab] == 'mcf'), "data-bs-toggle" => "tab", "data-bs-target" => "#mcf", type: :button, "role" => "tab", "aria-controls" => "mcf", "aria-selected" => "#{params[:tab] == 'mcf'}" } My Company Files
-          - if @organization.knowings.try(:ready?)
-            %li.nav-item.no-margin{ "role" => "presentation" }
-              %button.semibold.nav-link#ged-tab{ class: ('active' if params[:tab] == 'ged'), "data-bs-toggle" => "tab", "data-bs-target" => "#ged", type: :button, "role" => "tab", "aria-controls" => "ged", "aria-selected" => "#{params[:tab] == 'ged'}" } Outil GED
-          - if @user.is_admin && @customer.active? && !@organization.specific_mission
-            %li.nav-item.no-margin{ "role" => "presentation" }
-              %button.semibold.nav-link#file-storages-tab{ class: ('active' if params[:tab] == 'file_storage'), "data-bs-toggle" => "tab", "data-bs-target" => "#file-storages", type: :button, "role" => "tab", "aria-controls" => "file-storages", "aria-selected" => "#{params[:tab] == 'file_storage'}" } Stockages externes
+            - if @organization.mcf_settings.try(:access_token).present? || @customer.try(:mcf_documents).try(:not_processable).try(:any?)
+              %li.nav-item.no-margin{ "role" => "presentation" }
+                %button.semibold.nav-link#mcf-tab{ class: ('active' if params[:tab] == 'mcf'), "data-bs-toggle" => "tab", "data-bs-target" => "#mcf", type: :button, "role" => "tab", "aria-controls" => "mcf", "aria-selected" => "#{params[:tab] == 'mcf'}" } My Company Files
+            - if @organization.knowings.try(:ready?)
+              %li.nav-item.no-margin{ "role" => "presentation" }
+                %button.semibold.nav-link#ged-tab{ class: ('active' if params[:tab] == 'ged'), "data-bs-toggle" => "tab", "data-bs-target" => "#ged", type: :button, "role" => "tab", "aria-controls" => "ged", "aria-selected" => "#{params[:tab] == 'ged'}" } Outil GED
+            - if @user.is_admin && @customer.active? && !@organization.specific_mission
+              %li.nav-item.no-margin{ "role" => "presentation" }
+                %button.semibold.nav-link#file-storages-tab{ class: ('active' if params[:tab] == 'file_storage'), "data-bs-toggle" => "tab", "data-bs-target" => "#file-storages", type: :button, "role" => "tab", "aria-controls" => "file-storages", "aria-selected" => "#{params[:tab] == 'file_storage'}" } Stockages externes
 
     .tab-content
       .tab-pane.no-margin#information{ class: ('active' if params[:tab] == 'information' || params[:tab].blank?), "role" => "tabpanel", "aria-labelledby" => "information-tab" }      

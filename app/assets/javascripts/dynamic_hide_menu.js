@@ -14,7 +14,7 @@ function generate_auto_scroll_for_div(link, direction){
   var target_div = link.parent('div').find('.auto-scroll-div').first();
 
   var leftPos   = target_div.scrollLeft();
-  var stepPos   = Math.abs(window.target_width - window.parent_width) + 40
+  var stepPos   = Math.abs(window.target_width - window.parent_width) + (target_div.outerWidth() / 2)
 
   var stepPixel = direction == "right" ? leftPos + stepPos : leftPos - stepPos
 
