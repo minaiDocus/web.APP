@@ -42,12 +42,6 @@ Rails.application.routes.draw do
         end
 
         resource :dematbox, only: %w(create destroy), controller: 'dematbox'
-
-        resources :ibizabox_documents, only: %w(index show), controller: 'ibizabox_documents' do
-          get   'piece',    on: :member
-          get   'select',   on: :collection
-          patch 'validate', on: :collection
-        end
       end
 
       resource :organization_subscription, only: %w(show edit update), controller: 'subscriptions' do

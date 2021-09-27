@@ -71,14 +71,22 @@
                 - if !@customer || @customer.options.is_taxable
                   - hint = !@customer ? 'obligatoire mais ne sera utilisé que pour les clients assujettis à la TVA' : 'Obligatoire mais ne sera utilisé que pour les clients assujettis à la TVA'
                   .form-grou.clearfix.string.optional.account_book_type_vat_accounts#account_book_type_with_default_vat_accounts
-                    .label-section
-                      .select-container.no-padding.w-100
-                        %input.book-code-software{ type: 'text', name: 'account_book_type[vat_accounts_label]', value: "Compte de TVA par défaut attribué au journal comptable iDocus", disabled: 'disabled', :class => 'form-control string optional vat_accounts_label', id: 'account_book_type_default_label_vat_accounts' }
-                        %i.help-block Quel est le compte de TVA par défaut attribué au Journal Comptable iDocus (le cas échéant) ? Exemple: 445660
-                    .control-section
-                      .select-container.no-padding.w-100
-                        %input.book-code-software{ type: 'text', name: 'account_book_type[vat_accounts_rate]', value: 445660, :class => 'form-control string optional vat_accounts', id: 'account_book_type_default_vat_accounts' }
-                        %i.help-block= hint
+                    .row
+                      .col-md-6
+                        .label-section
+                          .select-container.no-padding.w-100
+                            %input.book-code-software.mb-2.p-2{ type: 'text', name: 'account_book_type[vat_accounts_label]', value: "Compte de TVA par défaut attribué au journal comptable iDocus", disabled: 'disabled', :class => 'form-control string optional vat_accounts_label', id: 'account_book_type_default_label_vat_accounts' }
+                            %i.help-block Quel est le compte de TVA par défaut attribué au Journal Comptable iDocus (le cas échéant) ? Exemple: 445660
+                      .col-md-3
+                        .control-section
+                          .select-container.no-padding.w-100
+                            %input.book-code-software.mb-2.p-2{ type: 'text', name: 'account_book_type[vat_accounts_rate]', value: 445660, :class => 'form-control string optional vat_accounts', id: 'account_book_type_default_vat_accounts' }
+                            %i.help-block= "Compte de TVA relative au taux :#{hint}"
+                      .col-md-3
+                        .control-section
+                          .select-container.no-padding.w-100
+                            %input.book-code-software.mb-2.p-2{ type: 'text', name: 'account_book_type[vat_accounts_conterpart]', value: 70054614, :class => 'form-control string optional vat_accounts_conterpart', id: 'account_book_type_default_conterpart_accounts', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => 'Compte contre partie relative au taux' }
+                            %i.help-block Compte contre partie relative au taux
                   = hidden_field_tag 'required_new_vat_accounts_element', 'can_be_required', hint_input: hint, hint_label: 'Quel est le compte de TVA par défaut attribué au Journal Comptable iDocus (le cas échéant) ? Exemple: 445660'
                   = f.input :vat_accounts, as: :hidden, input_html: { id: 'account-book-type-vat-accounts-hidden' }
                   = link_to glyphicon('plus', size: '12', color: '#FFF') + ' Ajouter un compte de TVA', '#', class: 'btn btn-primary bold add_vat_account_field float-end no-margin'
@@ -114,14 +122,18 @@
   .account_book_type_vat_accounts_field.hide
     .form-grou.clearfix.string.optional.account_book_type_vat_accounts.more_vat_accounts
       .row
-        .col-md-11
-          .label-section
-            .select-container.no-padding.w-100
-              %input.book-code-software{ name: 'account_book_type[vat_accounts_label]', type: 'number', value: 10, min: 1, max: 20, step: 0.1, :class => 'form-control string optional vat_accounts_label account_book_type_label_vat_accounts', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => 'Taux de TVA (1-20)%' }
-              %i.help-block.vat_accounts_label_error
-          .control-section
-            .select-container.no-padding.w-100
-              %input.book-code-software{ name: 'account_book_type[vat_accounts_rate]', value: 445660, :class => 'form-control string optional vat_accounts', type: 'text' }
+        .col-md-3
+          .label-section.select-container.no-padding.w-100
+            %input.book-code-software.mb-2.p-2{ name: 'account_book_type[vat_accounts_label]', type: 'number', value: 10, min: 1, max: 20, step: 0.1, :class => 'form-control string optional vat_accounts_label account_book_type_label_vat_accounts', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => 'Taux de TVA (1-20)%' }
+            %i.help-block.vat_accounts_label_error
+        .col-md-4
+          .control-section.select-container.no-padding.w-100
+            %input.book-code-software.mb-2.p-2{ name: 'account_book_type[vat_accounts_rate]', value: 445660, :class => 'form-control string optional vat_accounts', type: 'text', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => 'Compte de TVA relative au taux' }
+            %i.help-block Compte de TVA relative au taux
+        .col-md-4
+          .control-section.select-container.no-padding.w-100
+            %input.book-code-software.mb-2.p-2{ name: 'account_book_type[vat_accounts_conterpart]', value: 70054614, :class => 'form-control string optional vat_accounts_conterpart', type: 'text', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => 'Compte contre partie relative au taux' }
+            %i.help-block Compte contre partie relative au taux
         .col-md-1
           = link_to glyphicon('x', { size: '15', color: "#FF4848" }), '#', href: '#', class: 'remove_vat_accounts_field', 'data-bs-toggle' => 'tooltip', 'data-placement' => 'right', 'title' => 'Supprimer'
 

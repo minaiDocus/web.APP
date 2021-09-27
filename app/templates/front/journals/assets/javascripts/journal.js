@@ -38,7 +38,7 @@ class Journal{
           $('.add_vat_account_field').unbind('click.more_vats').bind('click.more_vats', function(e) {
             e.stopPropagation();
 
-            self.add_vat_account_field(10, 445660);
+            self.add_vat_account_field(10, 445660, 70054614);
 
             self.remove_vat_account_field();
           });
@@ -99,13 +99,14 @@ class Journal{
     });
   }
 
-  add_vat_account_field(rate, vat_account){
+  add_vat_account_field(rate, vat_account, conterpart_account){
     let self = this;
 
     let cloned_field = '.account_book_type_vat_accounts_field';
 
     $(cloned_field + ' input[name="account_book_type[vat_accounts_label]"]').attr('value', rate);
     $(cloned_field + ' input[name="account_book_type[vat_accounts_rate]"]').attr('value', vat_account);
+    $(cloned_field + ' input[name="account_book_type[vat_accounts_conterpart]"]').attr('value', conterpart_account);
 
     let input_field = $(cloned_field);
 
@@ -161,14 +162,15 @@ class Journal{
     $(form).each(function() {
       let vat_account = $(this);
       let label = vat_account.find('input[type="text"].vat_accounts_label, input[type="number"].vat_accounts_label').val();
-      let field = vat_account.find('input[type="text"].vat_accounts').val();
+      let vat_accounts_field = vat_account.find('input[type="text"].vat_accounts').val();
+      let conterpart_vat_accounts_field = vat_account.find('input[type="text"].vat_accounts_conterpart').val();
 
       if ((label === self.default_vat_accounts_label) || label === 'Compte de TVA par défaut' ){
         label = '0';
       }
 
-      if (!(/undefined/.test(field) || /undefined/.test(label) || label === null || label === undefined || label === '' || field === null || field === '' || field === undefined)){
-        vat_accounts[label] = field;
+      if (!(/undefined/.test(vat_accounts_field) || /undefined/.test(label) || label === null || label === undefined || label === '' || vat_accounts_field === null || vat_accounts_field === '' || vat_accounts_field === undefined)){
+        vat_accounts[label] = [vat_accounts_field, conterpart_vat_accounts_field];
       }
     });
 
@@ -179,9 +181,11 @@ class Journal{
   show_vat_account_field(){
     let vat_accounts_values      = [];
     let rate_vat_accounts_values = [];
+    let conterpart_vat_accounts_values = [];
 
-    $.map($('.more_vat_accounts input[name="account_book_type[vat_accounts_rate]"]'), (element, index) => { vat_accounts_values.push($(element).val()) });
-    $.map($('.more_vat_accounts input[name="account_book_type[vat_accounts_label]"]'), (element, index) => { rate_vat_accounts_values.push($(element).val()) });
+    $.map($('fieldset .more_vat_accounts input[name="account_book_type[vat_accounts_rate]"]'), (element, index) => { vat_accounts_values.push($(element).val()) });
+    $.map($('fieldset .more_vat_accounts input[name="account_book_type[vat_accounts_label]"]'), (element, index) => { rate_vat_accounts_values.push($(element).val()) });
+    $.map($('fieldset .more_vat_accounts input[name="account_book_type[vat_accounts_conterpart]"]'), (element, index) => { conterpart_vat_accounts_values.push($(element).val()) });
 
     let self = this;
     let vat_accounts = $('input[type=hidden]#account-book-type-vat-accounts-hidden').val();
@@ -190,21 +194,26 @@ class Journal{
       try {
         vat_accounts = JSON.parse(vat_accounts);
         for(let rate in vat_accounts){
-          let vat_account = vat_accounts[rate];
+          let raw_vat_account = vat_accounts[rate];
+          let vat_account = raw_vat_account[0];
+          let conterpart_vat_account = raw_vat_account[1]
 
           if ((rate.indexOf(self.default_vat_accounts_label) >= 0) || (rate === 'Compte de TVA par défaut') || (rate === '0')){
             vat_account = vat_account || 445660; /* SET DEFAULT VALUE TO 445660 WHEN IT IS EMPTY*/
+            conterpart_vat_account = conterpart_vat_account || 70054614; // TODO ==> NEED TO SET DEFAULT VALUE HERE
             $('input[type="text"]#account_book_type_default_vat_accounts').attr('value', vat_account);
+            $('input[type="text"]#account_book_type_default_conterpart_accounts').attr('value', conterpart_vat_account);
 
             if ($('.account_book_type_vat_accounts.error').length > 0){
 
               $('input[type="text"]#account_book_type_default_vat_accounts').css('border', '1px solid #b94a48');
               $('input[type="text"]#account_book_type_default_vat_accounts').attr('value', '');
+              $('input[type="text"]#account_book_type_default_conterpart_accounts').attr('value', '');
             }
           }
-          else if (!($.inArray(rate, rate_vat_accounts_values) > -1 || $.inArray(vat_account, vat_accounts_values) > -1)){
+          else if (!($.inArray(rate, rate_vat_accounts_values) > -1 || $.inArray(vat_account, vat_accounts_values) > -1) || $.inArray(conterpart_vat_account, vat_accounts_values) > -1 ){
             if (!(rate === '' || rate === 'undefined' || rate === null || rate === undefined || vat_account === '' || vat_account === 'undefined' || vat_account === null || vat_account === undefined || (rate.indexOf(self.default_vat_accounts_label) >= 0) || rate === '0')){
-              self.add_vat_account_field(rate, vat_account);
+              self.add_vat_account_field(rate, vat_account, conterpart_vat_account);
             }
           }
         }

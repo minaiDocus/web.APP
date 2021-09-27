@@ -120,6 +120,13 @@ function bind_customer_events() {
   });*/
 
   /* ******* NEED TO VERIFY CAROUSEL SLIDE FORM WHEN CHOOSE TO USE IT ***** */
+
+
+  $('#ibizabox_tab').unbind('click.show_ibizabox').bind('click.show_ibizabox', function(e) {
+    e.stopPropagation();
+    $('#ibizabox_folders_list_tab').addClass('show active');
+    $('#ibizabox_folders_list').addClass('show active');
+  });
 }
 
 

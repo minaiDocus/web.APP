@@ -1,10 +1,10 @@
 # frozen_string_literal: true
-class IbizaboxFolders::MainController < OrganizationController
+class Ibiza::BoxFoldersController < OrganizationController
   before_action :load_customer
   before_action :verify_rights
   before_action :verify_if_customer_is_active
 
-  prepend_view_path('app/templates/front/ibizabox_folders/views')
+  prepend_view_path('app/templates/front/ibiza/views')
 
   def update
     @folder = @customer.ibizabox_folders.find params[:id]

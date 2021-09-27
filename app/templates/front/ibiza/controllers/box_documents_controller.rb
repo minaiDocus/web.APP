@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-class Organizations::IbizaboxDocumentsController < OrganizationController
+class Ibiza::BoxDocumentsController < OrganizationController
   before_action :load_customer
   before_action :load_document, except: %w[index select validate]
 
-  prepend_view_path('app/templates/front/organizations/views')
+  prepend_view_path('app/templates/front/ibiza/views')
 
   def index
     collection = @customer.temp_documents.from_ibizabox.joins([ibizabox_folder: :journal]).select('temp_documents.*, account_book_types.name as journal')

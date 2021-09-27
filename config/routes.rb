@@ -53,7 +53,6 @@ Rails.application.routes.draw do
   front_draw('paper_set_orders')
   front_draw('journals')
   front_draw('ibiza')
-  front_draw('ibizabox_folders')
   front_draw('my_company_files')
   front_draw('pack_reports')
   front_draw('accounting_plans')

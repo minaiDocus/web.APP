@@ -1,0 +1,33 @@
+= stylesheet_link_tag 'front/organizations/assets/stylesheets/show'
+
+#ibizabox_documents
+  .row.retractable.with-filter.derivationLeft
+    .col-md-10
+      %h5
+        Historique des documents récupérés depuis la box iBiza du client
+        %span.badge.bg-secondary= @documents_count
+    .col-md-2.text-end.no-padding
+      %button.btn.btn-light.open_ibizabox_documents_filter.semibold
+        %span.me-2 Filtrer
+        %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
+  %hr
+  %table.table.table-bordered-inner.table-condensed.table-striped.margin1top.margin1bottom.table-detachable-head
+    %thead
+      %tr.bg-brown.text-white
+        %th Date de la récupération
+        %th Journal
+        %th Nom original
+        %th Nom iDocus
+        %th.pages Nb. pages
+    %tbody.retractable.slidedown
+      - @documents.each do |document|
+        %tr
+          %td= l(document.created_at)
+          %td= document.journal
+          %td= link_to document.original_file_name, organization_customer_ibizabox_document_path(@organization, @customer, document), target: '_blank'
+          %td= link_to document.piece.cloud_content_object.filename, piece_organization_customer_ibizabox_document_path(@organization, @customer, document), target: '_blank' if document.piece
+          %td.pages= document.pages_number
+  = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: organization_customer_ibizabox_documents_path(@organization, @customer), target: '.historic_content', total_pages: @documents.total_pages }
+  = render 'sidebar'
+
+= javascript_include_tag 'front/organizations/assets/javascripts/main'

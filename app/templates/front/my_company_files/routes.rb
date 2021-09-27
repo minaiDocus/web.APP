@@ -9,6 +9,15 @@ Rails.application.routes.draw do
         post :authorize
         get  :callback
       end
+
+      resources :customers, only: [], controller: 'customer' do
+        member do
+          get   'edit_mcf'
+          get   'show_mcf_errors'
+          post  'retake_mcf_errors'
+          patch 'update_mcf'
+        end
+      end
     end
   end
 end
