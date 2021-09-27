@@ -12,11 +12,8 @@ class AccountingPlans::MainController < OrganizationController
   def show
     if params[:dir].present?
       FileUtils.rm_rf params[:dir] if params[:dir]
-      if params[:new_create_book_type].present?
-        redirect_to new_customer_step_two_organization_customer_path(@organization, @customer)
-      else
-        redirect_to organization_customer_accounting_plan_path(@organization, @customer)
-      end
+
+      redirect_to organization_customer_path(@organization, @customer, tab: 'accounting_plan')
     end
   end
 
@@ -31,7 +28,8 @@ class AccountingPlans::MainController < OrganizationController
       format.html {
         if modified
           flash[:success] = 'Modifié avec succès.'
-          redirect_to organization_customer_accounting_plan_path(@organization, @customer)
+
+          redirect_to organization_customer_path(@organization, @customer, tab: 'accounting_plan')          
         else
           render :edit
         end
@@ -96,18 +94,15 @@ class AccountingPlans::MainController < OrganizationController
 
     if file
       if @accounting_plan.import(file, type)
-        flash[:success] = 'Importé avec succès.'
+        # flash[:success] = 'Importé avec succès.'
       else
-        flash[:error] = 'Fichier non valide.'
+        # flash[:error] = 'Fichier non valide.'
       end
     else
-      flash[:error] = 'Aucun fichier choisi.'
+      # flash[:error] = 'Aucun fichier choisi.'
     end
-    if params[:new_create_book_type].present?
-      render partial: '/customers/main/table', locals: { providers: @customer.accounting_plan.providers, customers: @customer.accounting_plan.customers }
-    else
-      redirect_to organization_customer_accounting_plan_path(@organization, @customer)
-    end
+    
+    redirect_to organization_customer_path(@organization, @customer, tab: 'accounting_plan')    
   end
 
   def import_fec
@@ -171,8 +166,8 @@ class AccountingPlans::MainController < OrganizationController
 
     if params[:new_create_book_type].present?
       render partial: '/account/customers/table', locals: { providers: @customer.accounting_plan.providers, customers: @customer.accounting_plan.customers }
-    else
-      redirect_to organization_customer_accounting_plan_path(@organization, @customer)
+    else      
+      redirect_to organization_customer_path(@organization, @customer, tab: 'accounting_plan')
     end
   end
 
@@ -183,8 +178,8 @@ class AccountingPlans::MainController < OrganizationController
     @accounting_plan.save
 
     flash[:success] = 'Fournisseurs supprimés avec succès.'
-
-    redirect_to organization_customer_accounting_plan_path(@organization, @customer)
+    
+    redirect_to organization_customer_path(@organization, @customer, tab: 'accounting_plan')
   end
 
   # DELETE /organizations/:organization_id/customers/:customer_id/accounting_plan/destroy_customers
@@ -194,8 +189,8 @@ class AccountingPlans::MainController < OrganizationController
     @accounting_plan.save
 
     flash[:success] = 'Clients supprimés avec succès.'
-
-    redirect_to organization_customer_accounting_plan_path(@organization, @customer)
+    
+    redirect_to organization_customer_path(@organization, @customer, tab: 'accounting_plan')
   end
 
   private

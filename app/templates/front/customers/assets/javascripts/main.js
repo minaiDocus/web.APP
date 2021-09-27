@@ -28,8 +28,7 @@ class Customer{
   main(){
     this.add_customer();
     this.edit_subscription_package();
-    this.load_settings_options_view();
-    this.get_accounting_plan_view();
+    this.load_settings_options_view();    
     this.filter_customer();
 
     this.get_customer_edit_view();
@@ -294,31 +293,6 @@ class Customer{
       self.get_subscription_edit_view(customer_id);
     });
   }
-
-  get_accounting_plan_view(){
-    let self = this;
-    let customer_id = $('input:hidden[name="customer_id"]').val();
-    $('#accounting-plan-tab').unbind('click').bind('click',function(e) {
-      e.preventDefault();
-      
-      self.applicationJS.sendRequest({ 'url': '/organizations/' + self.organization_id + '/customers/' + customer_id + '/accounting_plan' }).then((element)=>{
-        $('#customer-content .tab-content .tab-pane#accounting-plan').html($(element).find('#accounting_plan').html());
-        self.get_vat_accounts_view(customer_id);
-
-        ApplicationJS.set_checkbox_radio(self);
-
-        // self.get_vat_accounts_view(customer_id);
-      });
-    });
-  }
-
-
-  get_vat_accounts_view(customer_id){
-    this.applicationJS.sendRequest({ 'url': '/organizations/' + this.organization_id + '/customers/' + customer_id + '/accounting_plan/vat_accounts' }).then((result)=>{
-      $('#vat_accounts').html($(result).find('#vat_accounts').html());
-    });
-  }
-
 
   load_settings_options_view(){
     let self = this;

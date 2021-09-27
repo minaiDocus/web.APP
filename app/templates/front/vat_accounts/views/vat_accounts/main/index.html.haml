@@ -5,15 +5,14 @@
   %input#customer_id{type: :hidden, value: @customer.id, name: 'customer_id'}
   = stylesheet_link_tag 'front/vat_accounts/assets/stylesheets/main'
   .row
-    .col-md-7
-      %h3.bold Compte de TVA
+    .col-md-7      
     .col-md-5.text-end.no-padding
-      %button.btn.btn-light.semibold
-        %span.me-2= glyphicon('cloud-download', { size: '16', color: '#72AA42'})
-        %span Importer un CSV            
+      / %button.btn.btn-light.semibold
+      /   %span.me-2= glyphicon('cloud-download', { size: '16', color: '#72AA42'})
+      /   %span Importer un CSV            
       %button.btn.btn-primary.semibold#add-new-vat-account
         %span.me-2= glyphicon('plus', { size: '15', color: '#FFFF'})
-        %span Ajouter un compte de TVA
+        %span Ajouter un compte TVA
   .mb-3
   .row
     .col-md-12
@@ -21,26 +20,13 @@
         %thead
           %th= t('activerecord.models.vat_account.attributes.code')
           %th= t('activerecord.models.vat_account.attributes.nature')
-          %th= t('activerecord.models.vat_account.attributes.account_number')
-          %th.text-end Action
+          %th= t('activerecord.models.vat_account.attributes.account_number')          
         %tbody
           - @vat_accounts.each do |vat_account|
             %tr
               %td.semibold= vat_account.code
               %td= vat_account.nature
-              %td= vat_account.account_number
-              %td.text-end.pointer
-                .action.edit-delete-menu
-                  %span.glyph= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
-                .sub_menu.text-start.hide
-                  %ul.no-margin.no-padding.regular
-                    - unless @customer.configured?
-                      %li.edit
-                        = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' ' + t('actions.edit'), edit_multiple_organization_customer_accounting_plan_vat_accounts_path(@organization, @customer)
-                    %li.delete.red-label
-                      %span= glyphicon('trash', { size: '15', color: "#FF4848" })
-                      &nbsp;Supprimer
-
+              %td= vat_account.account_number              
 
   .modal#add-vat-account
     .modal-dialog
@@ -48,11 +34,9 @@
         .modal-header
           %h5.modal-title.bold Ajouter un compte TVA
           %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
-        .modal-body
+        .modal-body.back-grey
           .form-group
             %p Loading ...
-
-        .modal-footer
 
   = javascript_include_tag 'front/vat_accounts/assets/javascripts/main'
 

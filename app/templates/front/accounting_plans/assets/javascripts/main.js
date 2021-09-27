@@ -57,40 +57,89 @@ class AccountingPlan {
 
   edit_provider_customer(){
     let self = this;
-    $('.sub_menu .edit').unbind('click').bind('click', function(e) {
+    $('a.edit').unbind('click').bind('click', function(e) {
       e.stopPropagation();
       e.preventDefault();
 
-      if ($(this).hasClass('provider')) { self.get_edit_view('.customer-form'); }
-      else if ($(this).hasClass('customer')) { self.get_edit_view('.provider-form'); }
+      if ($(this).hasClass('provider')) { self.get_edit_view('customer-form', 'provider'); }
+      else if ($(this).hasClass('customer')) { self.get_edit_view('provider-form', 'customer'); }
 
       self.edit_provider_modal.modal('show');
       ApplicationJS.set_checkbox_radio();
     })
   }
 
+  get_vat_accounts_view(){
+    let customer_id = $('input:hidden[name="customer_id"]').val();
+    this.applicationJS.sendRequest({ 'url': '/organizations/' + this.organization_id + '/customers/' + customer_id + '/accounting_plan/vat_accounts' }).then((result)=>{
+      $('#vat_accounts').html($(result).find('#vat_accounts').html());
+    });
+  }
+
+  get_accounting_plan_view(){    
+    let self = this;
+    let customer_id = $('input:hidden[name="customer_id"]').val();
+      
+    self.applicationJS.sendRequest({ 'url': '/organizations/' + self.organization_id + '/customers/' + customer_id + '/accounting_plan' }).then((element)=>{
+      $('#customer-content .tab-content .tab-pane#accounting-plan').html($(element).find('#accounting_plan').html());
+      self.get_vat_accounts_view(customer_id); 
+
+      ApplicationJS.set_checkbox_radio(self);        
+    });
+  }
+
   main() {
+    let self = this;
     if ($('#accounting-plan #auto-update-accounting-plan').length > 0) {
       this.set_auto_update();
     }
+  
+    if ($('#import_dialog').length > 0){
+      setTimeout(function(){ $('#import_dialog').modal('show');
+
+      $('.close_modal_fec').unbind('click').bind('click',function(e) {
+        $(this).attr('disabled', true);
+        $(this).html('<img src="/assets/application/bar_loading.gif" alt="chargement..." >');
+      });
+
+      $('.mask_verif_account, .part_account').unbind('keyup').bind('keyup',function(e) {
+        value = $(this).val();
+
+        regex = /^\d+$/
+
+        if (!regex.exec(value)){
+          $(this).val('');
+        }
+      });
+
+      $('#add_part_account').unbind('click').bind('click',function(e) {
+        e.preventDefault()
+        $('.counter_part_account').append($('.add_part_account').html());
+        self.handle_edit_delete_sub_menu();
+      });
+
+    }, 3000);
+    }
 
     this.edit_provider_customer();
-    this.handle_edit_delete_sub_menu();
+    this.handle_edit_delete_sub_menu();    
     ApplicationJS.set_checkbox_radio();
   }
 
 
-  get_edit_view(target){
+  get_edit_view(target, type){
     let self = this;
 
-    self.applicationJS.sendRequest({ 'url': '/organizations/' + self.organization_id + '/customers/' + self.customer_id + '/accounting_plan/edit' }).then((element)=>{
+    console.log(target);
+    console.log(type);
+
+    self.applicationJS.sendRequest({ 'url': '/organizations/' + self.organization_id + '/customers/' + self.customer_id + '/accounting_plan/edit?type='+type }).then((element)=>{
       self.edit_provider_modal.find('.modal-body').html($(element).find('#accounting_plan').html());
-      self.edit_provider_modal.find(target).remove();
-      if (target === '.provider-form') { self.edit_provider_modal.find('.modal-title').text('Éditer un client'); }
+      self.edit_provider_modal.find('.'+target).remove();
+      if (type === 'customer') { self.edit_provider_modal.find('.modal-title').text('Éditer un client'); }
       ApplicationJS.set_checkbox_radio();
     });
   }
-
 
   handle_edit_delete_sub_menu(){
     $('.action.edit-delete-menu').unbind('click').bind('click',function(e) {
@@ -102,10 +151,24 @@ class AccountingPlan {
 
       $(this).parent().find('.sub_menu').removeClass('hide');
     });
+
+    $('.delete_part_account').unbind('click').bind('click',function(e) {
+      e.preventDefault();
+      $(this).closest('.part-account').remove();
+    });
   }
 }
 
 jQuery(function() {
-  let accounting_plan = new AccountingPlan();
-  accounting_plan.main();
+  if ($('.load-accounting-plan').length > 0){
+    let accounting_plan = new AccountingPlan();
+    accounting_plan.get_accounting_plan_view();
+    accounting_plan.get_vat_accounts_view();
+  }
+  else
+  {
+    let accounting_plan = new AccountingPlan();
+    accounting_plan.main();
+    accounting_plan.get_vat_accounts_view();
+  }
 });
