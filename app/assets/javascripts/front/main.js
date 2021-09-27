@@ -408,14 +408,6 @@ function bind_globals_events(){
     });
   /* SCROLL ON TOP */
 
-  /* SCROLL */
-  $('span[class^="auto-scroll-span"]').unbind('click').bind('click', function(e){    
-    var class_name = $(this).attr('class').split(' ')[0];
-    var direction  = class_name.split('-')[3];
-    ApplicationJS.generate_auto_scroll_for_div($(this), direction);
-  });
-  /* SCROLL */
-
   $('table tbody .action, .action.submenu_action').unbind('click').bind('click',function(e) {
     e.stopPropagation();
 

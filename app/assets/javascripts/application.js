@@ -33,6 +33,7 @@
 //= require daterangepicker
 //= require custom_popover
 //= require app_listener
+//= require dynamic_hide_menu
 
 /********** GLOBAL VARIABLES ********/
   var GLOBAL = {}

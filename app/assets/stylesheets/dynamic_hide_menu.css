@@ -7,7 +7,8 @@
 }
 
 .auto-scroll-div ul.nav{
-  width: 1078px;
+  width: 878px;
+  flex-wrap: unset;
 }
 
 .auto-scroll-div .dropdown-menu.show{    
@@ -16,3 +17,4 @@
   top: auto;
   left: auto;
 }
+

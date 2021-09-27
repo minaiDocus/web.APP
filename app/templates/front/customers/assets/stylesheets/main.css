@@ -107,12 +107,6 @@
   margin-top: 2px;
 }
 
-.nav{
-  flex-wrap: unset;
-  width: 1390px;
-  overflow-x: auto;
-}
-
 ul.list.nav {
   scrollbar-width: thin; /* "auto" or "thin" */
   scrollbar-color: #C1D837 rgba(26, 26, 26, 0.02); /* scroll thumb and track */  
