@@ -394,7 +394,6 @@ class Customer{
             no_results_text: 'Aucun résultat correspondant à'
           });
         }
-        else { this.applicationJS.noticeErrorMessageFrom(null, result['message'] + " ==> iBiza n'est pas configuré correctement"); }
       });
     }
 

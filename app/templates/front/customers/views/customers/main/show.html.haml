@@ -213,15 +213,16 @@
             %strong Attention!
             Les journaux suivants sont assignés aux automates de récupération mais ne sont pas configurés :
             != @pending_journals.map { |j| content_tag(:strong, j) }.join(', ')
-        - unless @user.is_admin || false || !@user.organization_rights_is_customer_journals_management_authorized
-          %p
-            En cas de nécessité (suppression du journal), merci de contacter le
-            = link_to 'support.', 'javascript:ZDiscussions.showDiscussionsFBW();'
-        - if @customer.active?
+        - if @customer.active? && !is_max_number_of_journals_reached?
           .form-group
             .text-end
+              - if !@organization.specific_mission && @customer.active? && (@user.leader? || @user.organization_rights_is_customer_journals_management_authorized)
+                %button.btn.btn-light{ 'data-bs-target' => '#copy-existing-journal', 'data-bs-toggle' => 'modal' }
+                  %span.me-2= glyphicon('plus', { color: "#72AA42", size: '15'})
+                  %span Copier depuis la base existant
+
               %button.btn.btn-primary.bold.new-journal.new_edit_account_book_type{link: new_organization_customer_journal_path(@organization, @customer)}
-                %span.me-2= glyphicon('plus', { color: "#FFF", size: '15'})       
+                %span.me-2= glyphicon('plus', { color: "#FFF", size: '15'})
                 %span Nouveau journal
           %hr
           - if @organization.specific_mission
@@ -252,7 +253,7 @@
                             - unless @user.is_admin || false
                               %i (pour #{distance_of_time_in_words_to_now(journal.created_at + 24.hours)})
           - else
-            %table.table.table-striped
+            %table.table.table-striped.journals_list
               %thead
                 %th Nom journal comptable
                 %th Code
@@ -287,7 +288,8 @@
                               = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' ' + t('actions.edit'), '#', link: edit_organization_customer_journal_path(@organization, @customer, journal), class: 'new_edit_account_book_type'
                             - if @user.is_admin || false || journal.is_open_for_modification?
                               %li.delete.red-label
-                                = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', organization_customer_journal_path(@organization, @customer, journal), method: 'delete', data: { confirm: t('actions.confirm') }
+                                - idocus_params = param_encode({ url: organization_customer_journal_path(@organization, @customer, journal), method: 'delete', confirm: t('actions.confirm'), redirect_to: { url: organization_customer_path(@organization, @customer, tab: 'journals'), method: 'get', html: { target: 'table.journals_list' } } })
+                                = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', '#', idocus: idocus_params, class: 'as_idocus_ajax'
                                 - unless @user.is_admin || false
                                   %i (pour #{distance_of_time_in_words_to_now(journal.created_at + 24.hours)})
 
@@ -305,104 +307,29 @@
                 = "#{@customer.account_book_types.count}/#{@customer.options.max_number_of_journals} journaux comptables utilisés"
                 - if @customer.options.max_number_of_journals < 10
                   %i.text-muted
-                    = link_to '(Augmenter le total autorisé de journaux comptables)', edit_organization_customer_subscription_path(@organization, @customer)
+                    = link_to '(Augmenter le total autorisé de journaux comptables)', organization_customer_path(@organization, @customer, tab: 'subscription')
 
-        - if @customer.active? && (@user.leader? || @user.organization_rights_is_customer_journals_management_authorized)
-          - if is_max_number_of_journals_reached? # NEED TO VERIFY
-            .mb-5
-            .form-group
-              = link_to 'Ajouter nouveau', '#', class: 'btn btn-primary', disabled: 'disabled'
-              - unless @organization.specific_mission
-                = link_to 'Copier depuis base existante', '#', class: 'btn btn-primary', disabled: 'disabled'
-          
-          - elsif @customer.active?
-            - journal_names = @journals.map{|journal| journal.name}
-            - journals = @organization.account_book_types.where.not(name: journal_names).order(is_default: :desc, name: :asc)
-            - if @customer.account_book_types.count < @customer.options.max_number_of_journals && journals.any?
-              = form_tag copy_organization_customer_journals_path(@organization, @customer), method: 'POST', class: 'form-horizontal', id: 'copy_account_book_type_form' do
-                .mb-5
-                .form-group
-                  %label.semibold Copier les journaux comptables depuis la base existante
-                  = select_tag "journal_ids[]", options_from_collection_for_select(journals, "id", "name"), multiple: true, class: 'form-control', id: 'copy-journals-into-customer'
-
-
-                .form-group.no-margin.footer_copy_journals
-                  .w-100.text-end
-                    - unless @organization.specific_mission
-                      = submit_tag 'Copier', class: 'btn btn-primary bold copy_account_book_type_btn', disabled: true
+        - if !@organization.specific_mission && @customer.active? && (@user.leader? || @user.organization_rights_is_customer_journals_management_authorized)
+          .modal#copy-existing-journal
+            .modal-dialog
+              .modal-content
+                .modal-header
+                  %h5.modal-title.bold Copie depuis la base existant
+                  %button.btn-close{ 'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button' }
+                .modal-body
+                  - journal_names = @journals.map{|journal| journal.name}
+                  - journals = @organization.account_book_types.where.not(name: journal_names).order(is_default: :desc, name: :asc)
+                  - if @customer.account_book_types.count < @customer.options.max_number_of_journals && journals.any?
+                    = form_tag copy_organization_customer_journals_path(@organization, @customer), method: 'POST', class: 'form-horizontal', id: 'copy_account_book_type_form' do
+                      .form-group
+                        %label.semibold Copier les journaux comptables depuis la base existante
+                        = select_tag "journal_ids[]", options_from_collection_for_select(journals, "id", "name"), multiple: true, class: 'form-control', id: 'copy-journals-into-customer'
+                .modal-footer
+                  %button.btn.btn-light.cancel{ 'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button' } Annuler
+                  - idocus_params = param_encode({ url: '#url', form: { id: 'copy_account_book_type_form', dump_action: true }, modal: { id: 'copy-existing-journal' }, redirect_to: { url: organization_customer_path(@organization, @customer, tab: 'journals'), method: 'get', html: { target: 'table.journals_list' } } })
+                  %button.btn.btn-primary.bold.copy_account_book_type_btn.as_idocus_ajax{ type: 'button', disabled: 'disabled', idocus: idocus_params } Copier
 
       .tab-pane.box.no-margin#bank-setting{ "role" => "tabpanel", "aria-labelledby" => "bank-setting-tab" }
-        .form-group
-          %label.semibold Nombre de périodes antérieures accessibles au téléversement des pièces
-          .select-container.no-padding.w-100
-            %input.no-padding{ value: "1" }
-
-        .form-group
-          %label.semibold Jour de clôture de la période précédente dans la période en cours
-          .select-container.no-padding.w-100
-            %input.no-padding{ value: "11" }
-          %i De O à 28
-
-        .form-group
-          %label.semibold Code apparainage iDocus Box
-          .select-container.no-padding.w-100
-            %input.no-padding{ placeholder: "ex : 125HKEH344" }
-        
-        .form-group
-          .row
-            .col-md-6
-              %label.semibold Date de l’écriture des opérations bancaires         
-            .col-md-3
-              .form-check.form-check-inline                 
-                %label.form-check-label Date de réalisation
-                %input.form-check-input{ type: :radio, name: "ope-bancaire" }
-            .col-md-3
-              .form-check.form-check-inline               
-                %label.form-check-label Date de prélèvement
-                %input.form-check-input{ type: :radio, name: "ope-bancaire" }
-
-        .form-group
-          .row
-            .col-md-6
-              %label.semibold Date de saisie des factures       
-            .col-md-3
-              .form-check.form-check-inline                 
-                %label.form-check-label Date d’origine
-                %input.form-check-input{ type: :radio, name: "ope-piece" }
-            .col-md-3
-              .form-check.form-check-inline               
-                %label.form-check-label Date de la période iDocus
-                %input.form-check-input{ type: :radio, name: "ope-piece" }
-
-        .form-group
-          .row
-            .col-md-10.form-group.no-margin
-              %label.semibold Le dossier est-il assujeti à la TVA ? 
-            .col-md-2.form-check.form-switch
-              %label.form-check-label Oui
-              %input.form-check-input{ type: :checkbox, checked: true }
-
-        .form-group
-          .row
-            .col-md-10.form-group.no-margin
-              %label.semibold Forcer la pré-affectation des écritures récupérées par les automates ?
-            .col-md-2.form-check.form-switch
-              %label.form-check-label Non
-              %input.form-check-input{ type: :checkbox }
-
-        .form-group
-          .row
-            .col-md-10.form-group.no-margin
-              %label.semibold Afficher la date de réalisation de l'opération si différente de la date de prélèvement ?
-            .col-md-2.form-check.form-switch
-              %label.form-check-label Non
-              %input.form-check-input{ type: :checkbox }
-        %hr
-        .form-group
-          .w-100.text-end
-            %button.btn.btn-light.semibold Annuler
-            %button.btn.btn-primary.bold Valider les modifications
-
 
       .tab-pane.box.no-margin#compta{ class: ('active' if params[:tab] == 'compta'), "role" => "tabpanel", "aria-labelledby" => "compta-tab" }
 

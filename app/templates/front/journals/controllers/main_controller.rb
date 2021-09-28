@@ -108,11 +108,12 @@ class Journals::MainController < OrganizationController
   def destroy
     if @user.is_admin || Settings.first.is_journals_modification_authorized || !@customer || @journal.is_open_for_modification?
       Journal::Handling.new({journal: @journal, current_user: current_user, request: request}).destroy
-
-      flash[:success] = 'Supprimé avec succès.'
+      
       if @customer
-        redirect_to organization_customer_path(@organization, @customer, tab: 'journals')
+        json_flash[:success] = 'Supprimé avec succès.'
+        render json:{ json_flash: json_flash }, status: 200
       else
+        flash[:success] = 'Supprimé avec succès.'
         redirect_to organization_journals_path(@organization)
       end
     else
@@ -158,18 +159,18 @@ class Journals::MainController < OrganizationController
     end
 
     if ids.count == 0
-      flash[:error] = 'Aucun journal sélectionné.'
+      json_flash[:error] = 'Aucun journal sélectionné.'
     elsif copied_ids.count == 0
-      flash[:error] = 'Aucun journal copié.'
+      json_flash[:error] = 'Aucun journal copié.'
     elsif ids.count == copied_ids.count
-      flash[:success] = "#{copied_ids.count} journal(s) copié(s)."
+      json_flash[:success] = "#{copied_ids.count} journal(s) copié(s)."
     else
-      flash[:notice] = "#{copied_ids.count}/#{ids.count} journal(s) copié(s)."
+      json_flash[:notice] = "#{copied_ids.count}/#{ids.count} journal(s) copié(s)."
     end
 
     FileImport::Dropbox.changed(@customer) if copied_ids.count > 0
 
-    redirect_to organization_customer_path(@organization, @customer, tab: 'journals')
+    render json: { json_flash: json_flash }, status: 200
   end
 
   private
