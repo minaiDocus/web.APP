@@ -9,14 +9,6 @@ class MyCompanyFiles::CustomerController < OrganizationController
 
   def edit_mcf; end
 
-  def show_mcf_errors
-    order_by = params[:sort] || 'created_at'
-    direction = params[:direction] || 'desc'
-
-    @mcf_documents_error = @customer.mcf_documents.not_processable.order(order_by => direction).page(params[:page]).per(20)
-    render :show_mcf_errors
-  end
-
   def retake_mcf_errors
     if params[:confirm_unprocessable_mcf].present?
       confirm_unprocessable_mcf
@@ -24,7 +16,7 @@ class MyCompanyFiles::CustomerController < OrganizationController
       retake_mcf_documents
     end
 
-    redirect_to show_mcf_errors_organization_customer_path(@organization, @customer)
+    redirect_to organization_customer_path(@organization, @customer, tab: 'mcf')
   end
 
   def update_mcf

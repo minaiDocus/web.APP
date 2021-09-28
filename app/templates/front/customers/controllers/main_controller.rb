@@ -265,41 +265,12 @@ class Customers::MainController < OrganizationController
     end
   end
 
-  def edit_mcf; end
-
   def upload_email_infos
     if @customer.authorized_upload? && @customer.active?
       render :upload_by_email
     else
       flash[:error] = t('authorization.unessessary_rights')
       redirect_to organization_customer_path(@organization, @customer)
-    end
-  end
-
-  def show_mcf_errors
-    order_by = params[:sort] || 'created_at'
-    direction = params[:direction] || 'desc'
-
-    @mcf_documents_error = @customer.mcf_documents.not_processable.order(order_by => direction).page(params[:page]).per(20)
-    render :show_mcf_errors
-  end
-
-  def retake_mcf_errors
-    if params[:confirm_unprocessable_mcf].present?
-      confirm_unprocessable_mcf
-    elsif params[:retake_mcf_documents].present?
-      retake_mcf_documents
-    end
-
-    redirect_to show_mcf_errors_organization_customer_path(@organization, @customer)
-  end
-
-  def update_mcf
-    if @customer.update(mcf_params)
-      flash[:success] = 'Modifié avec succès.'
-      redirect_to organization_customer_path(@organization, @customer, tab: 'mcf')
-    else
-      render :edit_mcf
     end
   end
 
@@ -475,29 +446,6 @@ class Customers::MainController < OrganizationController
                                    is_operation_value_date_needed
                                    preseizure_date_option
                                  ])
-  end
-
-  def mcf_params
-    params.require(:user).permit(:mcf_storage)
-  end
-
-  def retake_mcf_documents
-    mcf_documents_errors = @customer.mcf_documents.where(id: params[:mcf_documents_ids])
-    if mcf_documents_errors.any?
-      mcf_documents_errors.each(&:reset)
-      flash[:success] = 'Récupération en cours...'
-    end
-  end
-
-
-  def confirm_unprocessable_mcf
-    unprocessable_mcf = @customer.mcf_documents.where(id: params[:mcf_documents_ids]).not_processable
-    if unprocessable_mcf.any?
-      unprocessable_mcf.each(&:confirm_unprocessable)
-      flash[:success] = 'Modifié avec succès.'
-    else
-      flash[:error] = 'Impossible de traiter la demande.'
-    end
   end
 
 

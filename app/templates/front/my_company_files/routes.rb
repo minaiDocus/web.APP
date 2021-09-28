@@ -13,7 +13,6 @@ Rails.application.routes.draw do
       resources :customers, only: [], controller: 'customer' do
         member do
           get   'edit_mcf'
-          get   'show_mcf_errors'
           post  'retake_mcf_errors'
           patch 'update_mcf'
         end

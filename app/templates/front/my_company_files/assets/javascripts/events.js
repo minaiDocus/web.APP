@@ -8,7 +8,7 @@ function bind_mcf_customer_events() {
   });
 
   
-  if ($('#customer.errors.mcf').length > 0) {
+  if ($('#mcf_errors .table_mcf_errors').length > 0) {
     $('#master_checkbox').unbind('change.mcf_checkbox').bind('change.mcf_checkbox', function(e){
       if ($(this).is(':checked')) {
         return $('.checkbox').prop('checked', true);

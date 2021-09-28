@@ -1,4 +1,4 @@
-- validation_param = param_encode({ url: update_mcf_organization_customer_path(@organization, @customer), method: 'post', form:'edit_mcf_customer', html: { target: '#mcf.tab-pane' }, modal: { id: 'edit_mcf_customer_modal' } })
+- validation_param = param_encode({ url: update_mcf_organization_customer_path(@organization, @customer), method: 'post', form: {id: 'edit_mcf_customer'}, html: { target: '#mcf.tab-pane' }, modal: { id: 'edit_mcf_customer_modal' } })
 .modal#edit_mcf_customer_modal
   .modal-dialog
     .modal-content
