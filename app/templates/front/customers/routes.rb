@@ -7,8 +7,6 @@ Rails.application.routes.draw do
           get   'search'
         end
         member do
-          get   'edit_ibiza'
-          patch 'update_ibiza'
           get   'edit_exact_online'
           patch 'update_exact_online'
           get   'edit_my_unisoft'

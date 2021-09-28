@@ -17,6 +17,8 @@ Rails.application.routes.draw do
         resources :ibizabox_folders, only: %w(update), controller: 'box_folders' do
           patch 'refresh', on: :collection
         end
+
+        resource :ibiza, controller: 'customer', only: %w(edit update)
       end
     end
   end

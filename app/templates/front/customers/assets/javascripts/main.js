@@ -403,8 +403,13 @@ class Customer{
       show_ibiza_list(this);
     });
 
-    if ($('#customer.edit.ibiza').length > 0 ) {
-      get_ibiza_customers_list($('#ibiza-customers-list'));
+    if ($('#edit_ibiza_form').length > 0 ) {
+      get_ibiza_customers_list($('#user_ibiza_attributes_ibiza_id'));
+
+      let update_ibiza_btn = $('button[type=button].update_ibiza_organization_users');
+      if (update_ibiza_btn.length > 0){
+        update_ibiza_btn.removeAttr('disabled');
+      }
     }
 
     if ($('#customer-form-data .softwares-section .ibiza-customers-list').length > 0) {
@@ -650,6 +655,10 @@ class Customer{
       console.error(error);
     });
   }
+
+  bind_ibiza_user_events(){
+    this.rebind_customer_all_events();
+  }
 }
 
 
@@ -729,6 +738,9 @@ jQuery(function () {
 
   let mcf = new McfCustomer();
   AppListenTo('show_mcf_edition', (e)=>{ mcf.show_mcf_edition(e.detail.url); });
+
+
+  AppListenTo('bind_ibiza_user_events', (e)=>{ customer.bind_ibiza_user_events(); });
 
  
   customer.main();

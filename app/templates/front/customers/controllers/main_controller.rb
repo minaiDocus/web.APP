@@ -197,33 +197,6 @@ class Customers::MainController < OrganizationController
     end
   end
 
-  # GET /account/organizations/:organization_id/customers/:id/edit_ibiza
-  def edit_ibiza; end
-
-  # PUT /account/organizations/:organization_id/customers/:id/update_ibiza
-  def update_ibiza
-    @customer.assign_attributes(ibiza_params)
-
-    is_ibiza_id_changed = @customer.try(:ibiza).try(:ibiza_id_changed?)
-
-    if @customer.save
-      if @customer.configured?
-        if is_ibiza_id_changed && @user.try(:ibiza).try(:ibiza_id?)
-          AccountingPlan::IbizaUpdate.new(@user).run
-        end
-
-        flash[:success] = 'Modifié avec succès'
-
-        redirect_to organization_customer_path(@organization, @customer, tab: 'ibiza')
-      else
-        # TODO ... REMOVE STEP
-      end
-    else
-      flash[:error] = 'Impossible de modifier'
-      render 'edit'
-    end
-  end
-
 
   # GET /organizations/:organization_id/customers/:id/edit_setting_options
   def edit_setting_options; end
@@ -335,9 +308,6 @@ class Customers::MainController < OrganizationController
       authorized = false
     end
     if action_name.in?(%w[edit_period_options update_period_options]) && !@customer.authorized_upload?
-      authorized = false
-    end
-    if action_name.in?(%w[edit_ibiza update_ibiza]) && !@organization.ibiza.try(:configured?)
       authorized = false
     end
     if action_name.in?(%w[edit_exact_online update_exact_online]) && !@organization.try(:exact_online).try(:used?)
