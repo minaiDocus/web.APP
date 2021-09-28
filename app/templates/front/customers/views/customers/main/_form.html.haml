@@ -1,5 +1,5 @@
 ﻿.customer-form-content  
-  = simple_form_for @customer, url: customer_form_url(@organization, @customer), html: { class: 'form form-horizontal margin0', id: 'customer-form-data' } do |f|
+  = simple_form_for @customer, url: customer_form_url(@organization, @customer), html: { class: 'form form-horizontal margin0 subscription_option_form', id: 'customer-form-data' } do |f|
     .carousel.slide#carousel_customer_form{  "data-bs-touch" => "false", "data-bs-interval" => "false" }
       .carousel-inner
         .carousel-item.active
@@ -133,19 +133,12 @@
                     .softwares-section
                       - if @organization.try(:ibiza).try(:used?)
                         = f.simple_fields_for :ibiza do |software|
-                          = software.input :ibiza_id, collection: [], label: 'Dossier correspondant dans iBiZa', label_html: { class: 'control-label required semibold' }, input_html: { class: 'form-control select form-select form-select-sm optional ibiza-customers-list', id: 'ibiza-customers-list', placeholder: 'Choisir un dossier', data: { original_value: nil, users_list_url: organization_ibiza_users_path(@organization, format: 'json') }, multiple: false } 
+                          = software.input :ibiza_id, collection: [], label: 'Dossier correspondant dans iBiZa', label_html: { class: 'control-label required semibold' }, input_html: { class: 'form-control select optional ibiza-customers-list', id: 'ibiza-customers-list', placeholder: 'Choisir un dossier', data: { original_value: nil, users_list_url: organization_ibiza_users_path(@organization, format: 'json') }, multiple: false } 
 
         .carousel-item.back-grey
           .subscription-base-form
             - unless @organization.specific_mission
               = render 'subscription_options'
-                         
-        //* ******* NEED TO VERIFY JS WHEN CHOOSE TO USE IT ***** */
-        / .carousel-item
-        /   .accounting-plan-base-form
-        /     loading Journal comptables ...
-
-        //* ******* NEED TO VERIFY JS WHEN CHOOSE TO USE IT ***** */
     %hr
     .form-group.row.w-100.normal-form-action
       .col-md-8                     

@@ -41,10 +41,6 @@ class Customer{
 
     this.get_customer_edit_view();
 
-    if ($('#customer.edit.ibiza').length > 0 ) {
-      this.get_ibiza_customers_list($('#ibiza-customers-list'));
-    }
-
     this.show_ibiza_customer();
 
     if ($('#personalize_subscription_package_form').length > 0 ) {
@@ -316,98 +312,121 @@ class Customer{
 
   add_customer(){
     var self = this;
-    $('.new-customer').unbind('click').bind('click',function(e) {
+    $('.new-customer').unbind('click.open_new_customer').bind('click.open_new_customer',function(e) {
       e.stopPropagation();
       self.get_customer_first_step_form();
-
-      self.set_pre_assignment_view();
-
     });
   }
 
 
-  get_ibiza_customers_list(element) {
-    let params =  {
-                    'url': element.data('users-list-url'),
-                    'type': 'GET',
-                    'dataType': 'json'
-                  }
+  set_customer_carousel_on_slide(){
+    let self = this;
+    self.show_ibiza_customer();
 
-    this.applicationJS.sendRequest(params).then((result)=>{
-      if(result['message'] === undefined || result['message'] === null)
-      {
-        let original_value = element.data('original-value') || '';
-        for (let iterator = 0; iterator < result.length; iterator++) {
-          let _element = result[iterator];
-          let option_html = '';
-          if (original_value.length > 0 && original_value === _element['id']) {
-            option_html = '<option value="' + _element['id'] + '" selected="selected">' + _element['name'] + '</option>';
-          } else {
-            option_html = '<option value="' + _element['id'] + '">' + _element['name'] + '</option>';
+    ApplicationJS.set_checkbox_radio(self);
+
+    $('#carousel_customer_form').on('slide.bs.carousel', function (event) {
+      switch (event.to) {
+        case 0:
+          // customer basic form
+
+          self.create_customer_modal.find('.modal-title').text('Créer un nouveau client');
+          self.create_customer_modal.find('.next').removeClass('hide');
+          self.create_customer_modal.find('.previous').addClass('hide');
+          self.create_customer_modal.find('.submit_customer').addClass('hide');
+
+          self.show_ibiza_customer();
+
+          ApplicationJS.set_checkbox_radio(self);
+
+          break;
+        case 1:
+          // package subscription form
+
+          self.create_customer_modal.find('.modal-title').text('Sélectionner un abonnement');
+          self.create_customer_modal.find('.previous').removeClass('hide');
+          self.create_customer_modal.find('.next').addClass('hide');
+          self.create_customer_modal.find('.submit_customer').removeClass('hide');
+
+          if ($('#personalize_subscription_package_form').length > 0 ) {
+            self.update_price();
+            self.check_input_number();
+            self.show_subscription_option();
+            ApplicationJS.set_checkbox_radio(self);
           }
-          element.append(option_html);
-        }
-        element.show();
-        element.chosen({
-          search_contains: true,
-          no_results_text: 'Aucun résultat correspondant à'
-        });
-        $('.removable-feedback').remove();
-        if ($('input[type=submit]').length > 0) {
-          $('input[type=submit]').removeAttr('disabled');
-        }
-      }
-      else
-      {
-        // TO PERSONALIZE THIS NOTIFICATION
 
-        // let message = result['message'] + " ==> iBiza n'est pas configuré correctement"
-        // this.applicationJS.noticeErrorMessageFrom(null, message);
-      }
+          // TO REMOVE
+          $('.submit_customer').unbind('click.submit_customer_form')
+          .bind('click.submit_customer_form', function(e) {
+            e.stopPropagation();
 
+            $('form#customer-form-data').submit();
+          });
 
-      if ($('#customer-form-data input[type="checkbox"].check-ibiza').is(':checked')) {
-        $('#customer-form-data .softwares-section').css('display', 'block');
-      } else {
-        $('#customer-form-data .softwares-section').css('display', 'none');
+          ApplicationJS.set_checkbox_radio(self);
+          break;
+        default:
+          //Default
       }
     });
   }
 
 
   show_ibiza_customer(){
-    $('#customer-form-data input[type="checkbox"].check-ibiza').change(function() {
-      if ($(this).is(':checked')) {
+    const show_ibiza_list = (selector) => {
+      if ($(selector).is(':checked')) {
         $('#customer-form-data .softwares-section').css('display', 'block');
       } else {
         $('#customer-form-data .softwares-section').css('display', 'none');
       }
+    };
+
+    const get_ibiza_customers_list = (selector) => {
+      this.applicationJS.sendRequest({
+        'url': selector.data('users-list-url'),
+        'type': 'GET',
+        'dataType': 'json'
+      }).then((result)=>{
+        if(result['message'] === undefined || result['message'] === null)
+        {
+          let original_value = selector.data('original-value') || '';
+          for (let iterator = 0; iterator < result.length; iterator++) {
+            let _element = result[iterator];
+            let option_html = '';
+            if (original_value.length > 0 && original_value === _element['id']) {
+              option_html = '<option value="' + _element['id'] + '" selected="selected">' + _element['name'] + '</option>';
+            } else {
+              option_html = '<option value="' + _element['id'] + '">' + _element['name'] + '</option>';
+            }
+            selector.append(option_html);
+          }
+          selector.show();
+          selector.chosen({
+            search_contains: true,
+            no_results_text: 'Aucun résultat correspondant à'
+          });
+        }
+        else { this.applicationJS.noticeErrorMessageFrom(null, result['message'] + " ==> iBiza n'est pas configuré correctement"); }
+      });
+    }
+
+    const ibiza_checkbox_selector = $('#customer-form-data input[type="checkbox"].check-ibiza');
+
+    ibiza_checkbox_selector.change(function() {
+      show_ibiza_list(this);
     });
+
+    if ($('#customer.edit.ibiza').length > 0 ) {
+      get_ibiza_customers_list($('#ibiza-customers-list'));
+    }
 
     if ($('#customer-form-data .softwares-section .ibiza-customers-list').length > 0) {
-      this.get_ibiza_customers_list($('#customer-form-data .softwares-section .ibiza-customers-list'));
+      get_ibiza_customers_list($('#customer-form-data .softwares-section .ibiza-customers-list'));
     }
+
+    show_ibiza_list(ibiza_checkbox_selector);
   }
 
-
-  set_pre_assignment_view(){
-    var self = this;
-    $(document).on('show.bs.modal', '#create-customer.modal', function () {
-      self.show_ibiza_customer();
-      self.show_next();
-      self.show_previous();
-      self.do_submit_customer();
-
-      ApplicationJS.set_checkbox_radio(self);
-
-      if ($('#personalize_subscription_package_form').length > 0 ) {
-        self.update_price();
-        self.check_input_number();
-        self.show_subscription_option();
-        ApplicationJS.set_checkbox_radio(self);
-      }
-    });
-  }
 
   get_customer_first_step_form(){
     this.applicationJS.sendRequest({ 'url': '/organizations/' + this.organization_id + '/customers/new' }).then((element)=>{
@@ -421,137 +440,10 @@ class Customer{
       });
       
       this.create_customer_modal.modal('show');
-      this.set_custom_add_class('.next', 'do-next');
-      this.create_customer_modal.find('.previous').attr('disabled','disabled');
-      this.show_next();
-      this.show_previous();
-      this.do_submit_customer();
+
+      this.set_customer_carousel_on_slide();
 
       bind_customer_events();
-    });
-  }
-
-  set_custom_add_class(target, new_class){
-    this.create_customer_modal.find(target).addClass(new_class);
-  }
-
-  set_custom_remove_class(target, new_class){
-    this.create_customer_modal.find(target).removeClass(new_class);
-  }
-
-
-  create(){
-    let datas = this.create_customer_modal.find('#customer-form-data').serialize();
-    let url = this.create_customer_modal.find('#customer-form-data').attr('action');
-
-    let params =  {
-                    'url': url,
-                    'type': 'POST',
-                    'data': datas,
-                    'dataType': 'html'
-                  }
-
-    this.applicationJS.sendRequest(params).then((result)=>{
-      his.applicationJS.noticeSuccessMessageFrom(null, 'Ajout avec succès');
-
-      this.create_customer_modal.find('.modal-body').html($(result).find('#journals').html());
-      this.create_customer_modal.find('.modal-title').text('Paramètrage: journaux comptables');
-      this.create_customer_modal.find('.footer_copy_journals').remove();
-      this.create_customer_modal.find('.modal-footer .next').addClass('copy_account_book_type_btn').attr('disabled', 'disabled');
-      this.create_customer_modal.modal('show');
-
-      searchable_option_copy_journals_list();
-
-
-      /* ******* NEED TO VERIFY CAROUSEL SLIDE FORM WHEN CHOOSE TO USE IT ***** */
-
-      let journal = new Journal();
-      journal.main();
-
-      $('#journal .edit_journal_analytics').unbind('click').bind('click', function(e){
-        let journal_id = $(this).data('journal-id');
-        let customer_id = $(this).data('customer-id');
-        let code = $(this).data('code');
-        journal.edit_analytics(journal_id, customer_id, code);
-      });
-
-      AppListenTo('compta_analytics.validate_analysis', (e)=>{ journal.update_analytics(e.detail.data) });
-
-      /* ******* NEED TO VERIFY CAROUSEL SLIDE FORM WHEN CHOOSE TO USE IT ***** */
-
-      this.create_customer_modal.modal('hide');
-
-      bind_customer_events();
-    });
-  }
-
-
-  active_deactive_previous() {
-    if (this.create_customer_modal.find('.next.do-submit').length > 0) {
-      this.create_customer_modal.find('.previous').removeAttr('disabled');
-    }
-    else {
-      this.create_customer_modal.find('.previous').attr('disabled','disabled');
-    }
-  }
-
-
-
-  show_next(){
-    let self = this;
-    $('.do-next').unbind('click').bind('click',function(e) {
-      e.stopPropagation();
-
-      self.set_custom_remove_class('.next', 'do-next');
-      self.set_custom_add_class('.next', 'do-submit');
-      self.create_customer_modal.find('.modal-title').text('Sélectionner un abonnement');
-      self.create_customer_modal.find('.next').text('Valider');
-
-      /* ******* REMOVE IT WHEN CHOOSE create METHOD ***** */
-
-      self.create_customer_modal.find('.next').removeAttr('data-bs-slide');
-
-     /* ******* REMOVE IT WHEN CHOOSE create METHOD ***** */
-
-      self.set_custom_add_class('.previous', 'active');
-      self.active_deactive_previous();
-
-      self.show_previous();
-
-      self.do_submit_customer();
-    });
-  }
-
-
-  show_previous(){
-    let self = this;
-    $('.previous.active').unbind('click').bind('click', function(e){ 
-      e.stopPropagation();
-
-      self.set_custom_remove_class('.next', 'do-submit');
-      self.set_custom_add_class('.next', 'do-next');
-      self.create_customer_modal.find('.modal-title').text('Créer un nouveau client');
-      self.set_custom_remove_class('.previous', 'active');
-      self.show_next();
-      self.active_deactive_previous();
-    });
-  }
-
-  do_submit_customer(){
-    let self = this;
-    $('.do-submit').unbind('click').bind('click',function(e) {
-      e.stopPropagation();
-
-      /* ******* REMOVE IT WHEN CHOOSE create METHOD ***** */
-
-      /*self.set_custom_remove_class('.previous', 'active');
-      self.set_custom_remove_class('.next', 'do-submit');
-      self.active_deactive_previous();
-      self.create();*/
-
-      /* ******* REMOVE IT WHEN CHOOSE create METHOD ***** */
-
-      $('form#customer-form-data').submit();
     });
   }
 
@@ -569,6 +461,7 @@ class Customer{
       $('#customers-filter').modal('show');
 
       ApplicationJS.set_checkbox_radio();
+      bind_customer_events();
     });
   }
 
@@ -627,7 +520,7 @@ class Customer{
       }
     });
 
-    if (required_fields_count === 3) { this.create_customer_modal.find('.carousel-item-action .next').removeAttr('disabled'); }
+    if (required_fields_count >= 3) { this.create_customer_modal.find('.carousel-item-action .next').removeAttr('disabled'); }
   }
 
 
