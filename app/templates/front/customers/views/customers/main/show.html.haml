@@ -886,8 +886,8 @@
                             .form-group.no-margin
                               .w-100.text-end
                                 - validation_param = param_encode({ url: retake_mcf_errors_organization_customer_path(@organization, @customer), method: 'post', form: {id: 'retake_mcf_errors'}, html: { target: '#mcf.tab-pane' } })
-                                = submit_tag 'Relancer la récupération', name: 'retake_mcf_documents', class: 'btn btn-primary margin1right', data: {confirm: 'Etes-vous sûr?'}
-                                = submit_tag 'Marquer la séléction comme vu', name: 'confirm_unprocessable_mcf', class: 'btn btn-primary margin1right', data: {confirm: 'Etes-vous sûr?'}
+                                = button_tag 'Relancer la récupération', name: 'retake_mcf_documents', class: 'btn btn-primary margin1right as_idocus_ajax', data: {confirm: 'Etes-vous sûr?'}, idocus: validation_param
+                                = button_tag 'Marquer la séléction comme vu', name: 'confirm_unprocessable_mcf', class: 'btn btn-primary margin1right as_idocus_ajax', data: {confirm: 'Etes-vous sûr?'}, idocus: validation_param
                       = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: organization_customer_path(@organization, @customer, tab: 'mcf'), name: 'mcf_errors', target: '.table_mcf_errors', total_pages: mcf_documents_error.total_pages }
 
       - if @organization.knowings.try(:ready?)
