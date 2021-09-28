@@ -355,13 +355,7 @@ class Customer{
             ApplicationJS.set_checkbox_radio(self);
           }
 
-          // TO REMOVE
-          $('.submit_customer').unbind('click.submit_customer_form')
-          .bind('click.submit_customer_form', function(e) {
-            e.stopPropagation();
-
-            $('form#customer-form-data').submit();
-          });
+          bind_customer_events();
 
           ApplicationJS.set_checkbox_radio(self);
           break;
