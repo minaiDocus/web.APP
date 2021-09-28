@@ -1,11 +1,11 @@
 ﻿= stylesheet_link_tag 'front/subscriptions/assets/stylesheets/main'
 
 #subscriptions.edit
-  = form_tag organization_customer_subscription_path(@organization, @customer), method: :patch, class: 'simple_form form form-horizontal margin0', :data => {:"is_recently_created" => @customer.recently_created? }, id: 'subscription_package_form' do
+  = form_tag organization_customer_subscription_path(@organization, @customer), method: :patch, class: 'subscription_option_form simple_form form form-horizontal margin0', :data => {:"is_recently_created" => @customer.recently_created? }, id: 'subscription_package_form' do
     = render file: Rails.root.join('app/templates/front/customers/views/customers/main/_subscription_options.html.haml')
     %hr
     .form-group.no-margin
       .w-100.text-end
-        = submit_tag "Valider les modifications", class: 'btn btn-primary bold valid_subscription_edit'
+        = button_tag "Valider les modifications", class: 'btn btn-primary bold valid_subscription_edit', type: 'button'
 
 = javascript_include_tag 'front/customers/assets/javascripts/main'

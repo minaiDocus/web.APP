@@ -26,7 +26,7 @@
         
     .box
       .row
-        .col-md-12
+        .col-md-12#table_customers
           %table.table.table-striped.table_integration
             %thead
               %th Nom
@@ -39,7 +39,7 @@
               %th.text-end Action
             %tbody
               - @customers.each do |customer|
-                %tr
+                %tr{ class: (!customer.still_active?)? 'inactive' : '' }
                   %td.align-middle= customer.name
                   %td.align-middle
                     %span.info
@@ -69,6 +69,7 @@
                         - else
                           %li.reopen.text-success
                             = link_to glyphicon('folder', { size: '15', color: '#72AA42'}) + ' Réouvrir le dossier', account_reopen_confirm_organization_customer_path(@organization, customer), class: 'reopen_customer'
+          = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: organization_customers_path(@organization.id), target: '#table_customers', total_pages: @customers.total_pages }
 
 
 .modal#customers-filter

@@ -141,21 +141,7 @@
 
       - if @customer.active?
         .tab-pane.no-margin#subscription{class: ('active' if params[:tab] == 'subscription'),  "role" => "tabpanel", "aria-labelledby" => "subscription-tab" }
-          .box
-            %h4.text-start
-              Périodicité
-              - if @subscription.period_duration == 1
-                mensuelle
-              - elsif @subscription.period_duration == 3
-                trimestrielle
-              - elsif @subscription.period_duration == 12
-                annuel
-            .mb-4
-            = render partial: 'options'
-
-            .form-group.no-margin
-              .w-100.text-end
-                = link_to t('actions.edit'), edit_organization_customer_subscription_path(@organization, @customer), class: 'btn btn-primary bold subscription-edit'
+          .no_more_content
 
         .tab-pane.no-margin#orders{ class: ('active' if params[:tab] == 'orders'), "role" => "tabpanel", "aria-labelledby" => "orders-tab" }
           .box

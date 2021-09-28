@@ -389,7 +389,7 @@ class Customers::MainController < OrganizationController
       { coala_attributes: %i[id is_used auto_deliver] },
       { fec_agiris_attributes: %i[id is_used auto_deliver] },
       { cegid_attributes: %i[id is_used auto_deliver] },
-      { quatratus_attributes: %i[id is_used auto_deliver] },
+      { quadratus_attributes: %i[id is_used auto_deliver] },
       { csv_descriptor_attributes: %i[id is_used auto_deliver use_own_csv_descriptor_format] }
     ]
 

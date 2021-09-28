@@ -123,3 +123,17 @@ ul.list.nav {
 .tab-pane#bank-setting .select-container input, .tab-pane#compta .select-container input{
   padding: 0.5% !important;
 }
+
+#table_customers tr.inactive{
+  background-color: #F00;
+  color: #FFF; 
+}
+
+table.future_packages{
+  width: 35%;
+  margin: auto;
+}
+
+table.future_packages .total{
+  border-top: 1px solid #664d03
+}

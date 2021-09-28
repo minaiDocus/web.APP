@@ -2,15 +2,14 @@
   %input{ id: 'subscription_packages_price', type: 'hidden', value: Subscription::Package::PRICES_LIST.to_json }
 #personalize_subscription_package_form
   - if @subscription
-    - current_package = @subscription.futur_packages.present? ? @subscription.futur_packages : @subscription.current_packages
+    - current_package = @subscription.current_packages
   - else
     - current_package = []
 
   - organization = @subscription.try(:user).try(:organization).presence || FakeObject.new
 
-  .text-center
-    .notify-warning.fs-origin.mb-3{ class: "#{(@subscription && @subscription.futur_packages.present? && @subscription.futur_packages != '[]') ? '' : 'hide' }" }
-      Disparaîtra le mois prochain
+  - reduced_retriever_option = (@subscription.try(:retriever_price_option) == :retriever)? false : true
+
   .ido_x_content
     .row.box
       .col-md-3.text-center
@@ -136,7 +135,7 @@
         .row
           .col-md-8.text-end
             %label.price.bold
-              = Subscription::Package.price_of(:retriever_option)
+              = Subscription::Package.price_of(:retriever_option, reduced_retriever_option)
               %span €/mois
           .col-md-4.text-center
             = radio_button_tag 'subscription[subscription_option]', 'retriever_option', (current_package.include?('retriever_option') && !current_package.include?('ido_classique') && !current_package.include?('ido_nano') && !current_package.include?('ido_micro') && !current_package.include?('ido_x')), class: 'form-check-input ido_retriever_only radio-button', data: { retriever_price_option: @subscription.try(:retriever_price_option).to_s.presence || 'retriever' }
@@ -173,15 +172,32 @@
   %hr
   .form-group.row.w-100
     .col-md-4.text-center
-      .form-check.form-check-inline.me-5
-        %label.form-check-label Appliquer tout de suite les options à la baisse ?
-        = check_box_tag 'subscription[is_to_apply_now]', true, true, class: 'form-check-input'
+      - if current_user.is_admin
+        .form-check.form-check-inline.me-5
+          %label.form-check-label Appliquer tout de suite les options à la baisse ?
+          = check_box_tag 'subscription[is_to_apply_now]', true, false, class: 'form-check-input'
     .col-md-8.text-start
       %h5
         Prix du forfait avec les options sélectionnées :
         %b.total_price.bold 0,00 €
 
-.input-journal-numbers.hide
+- if @subscription.try(:futur_packages) && @subscription.try(:futur_packages) != @subscription.try(:current_package)
+  .text-center
+    .alert.alert-warning.mb-3{ class: "#{(@subscription && @subscription.try(:futur_packages).present? && @subscription.try(:futur_packages) != '[]') ? '' : 'hide' }" }
+      %h4.bold Votre abonnement du mois prochain:
+      %table.future_packages
+        %tbody
+          - total_price = 0
+          - JSON.parse(@subscription.futur_packages).each do |package|
+            - total_price += Subscription::Package.price_of(package.to_sym, reduced_retriever_option)
+            %tr.package
+              %td.text-start.semibold.p-2= Subscription::Package.infos_of(package.to_sym)[:group]
+              %td.text-end.p-2= Subscription::Package.price_of(package.to_sym, reduced_retriever_option).to_s + " €"
+          %tr.total
+            %td
+            %td.text-end.p-2= total_price.to_s + " €"
+
+.input-journal-numbers.clonable_fields.hide
   .form-group
     = label_tag 'subscription[number_of_journals]', "Nombre de journaux", class: 'col-form-label required semibold'
     .select-container.no-padding.w-100.subscription_number_of_journals
@@ -192,7 +208,7 @@
         %div.clearfix
           %i Supprimez un journal comptable avant de baisser cette option.
 
-.input-mail-option.hide
+.input-mail-option.clonable_fields.hide
   .col-md-10.form-group
     .form-check.form-check-inline{title: Subscription::Package.infos_of(:mail_option)[:tooltip], data: { toggle: 'tooltip', placement: 'right' }}
       %label.semibold Avec option courrier
@@ -200,7 +216,7 @@
     %label.form-check-label Non
     = check_box_tag 'subscription[mail_option]', true, false, class: "form-check-input option_checkbox input_switch", data: { package: "mail_option" }, disabled: false
 
-.input-retriever-option.hide
+.input-retriever-option.clonable_fields.hide
   .col-md-10.form-group
     .form-check.form-check-inline{title: Subscription::Package.infos_of(:retriever_option)[:tooltip], data: { toggle: 'tooltip', placement: 'right' }}
       %label.semibold Avec option  automate
@@ -208,7 +224,7 @@
     %label.form-check-label Non
     = check_box_tag 'subscription[retriever_option]', true, false, class: "form-check-input input_switch option_checkbox", data: { retriever_price_option: @subscription.try(:retriever_price_option).to_s.presence || 'retriever' }, disabled: false
 
-.input-digitization-option.hide
+.input-digitization-option.clonable_fields.hide
   .col-md-10.form-group
     .form-check.form-check-inline{title: Subscription::Package.infos_of(:digitize_option)[:tooltip], data: { toggle: 'tooltip', placement: 'right' }}
       %label.semibold Avec option numérisation

@@ -67,17 +67,15 @@ class Customer{
 
     special_input.focus();
 
-    special_input.unbind('click keyup keydown change').bind('click keyup keydown change', function(e) {
-      e.stopPropagation();
-
+    special_input.unbind('change.account_book_type').bind('change.account_book_type', function(e) {
       current_value += $(this).val();
 
       self.update_price();
     });
 
-    special_input.unbind('keypress').bind('keypress', function(e) { 
+    special_input.unbind('keypress').bind('keypress', function(e) {
       e.preventDefault();
-      e.stopPropagation();
+      return false;
     });
 
     special_input.val(current_value);
@@ -390,7 +388,6 @@ class Customer{
       this.get_ibiza_customers_list($('#customer-form-data .softwares-section .ibiza-customers-list'));
     }
   }
-
 
 
   set_pre_assignment_view(){
