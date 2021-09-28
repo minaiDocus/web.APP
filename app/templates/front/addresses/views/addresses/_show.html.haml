@@ -7,12 +7,15 @@
   .mb-5
 
   .row
-    .col-md-4.box.no-margin
-      = render file: Rails.root.join('app/templates/front/addresses/views/addresses/main/_address.html.haml'), locals: { address: addresses.try(:paper_return_address), type: 'paper_return' }
-    .col-md-4.box.no-margin
-      = render file: Rails.root.join('app/templates/front/addresses/views/addresses/main/_address.html.haml'), locals: { address: addresses.try(:paper_set_shipping_address), type: 'paper_set_shipping' }
-    .col-md-4.box.no-margin
-      = render file: Rails.root.join('app/templates/front/addresses/views/addresses/main/_address.html.haml'), locals: { address: addresses.try(:dematbox_shipping_address), type: 'dematbox_shipping' }
+    .col-md-4
+      .box.p-4
+        = render file: Rails.root.join('app/templates/front/addresses/views/addresses/main/_address.html.haml'), locals: { address: addresses.try(:paper_return_address), type: 'paper_return' }
+    .col-md-4
+      .box.p-4
+        = render file: Rails.root.join('app/templates/front/addresses/views/addresses/main/_address.html.haml'), locals: { address: addresses.try(:paper_set_shipping_address), type: 'paper_set_shipping' }
+    .col-md-4
+      .box.p-4
+        = render file: Rails.root.join('app/templates/front/addresses/views/addresses/main/_address.html.haml'), locals: { address: addresses.try(:dematbox_shipping_address), type: 'dematbox_shipping' }
   .mb-4
   %hr
   .row

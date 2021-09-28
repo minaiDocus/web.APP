@@ -188,8 +188,9 @@
                               %span.me-1= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
                               %span= link_to 'Modifier', "#", class: 'new_edit_order_url', link: edit_organization_customer_order_path(@organization, @customer, order)
                             %li
+                              - idocus_params = param_encode({ url: organization_customer_order_path(@organization, @customer, order), confirm: t('actions.confirm'), method: 'delete', redirect_to: { url: organization_customer_path(@organization, @customer, tab: 'orders'), method: 'get', html: { target: '#orders.tab-pane table' } } })
                               %span.me-1= glyphicon('action-undo', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                              %span= link_to 'Annuler', organization_customer_order_path(@organization, @customer, order), method: 'delete', data: { confirm: t('actions.confirm') }                   
+                              %span= link_to 'Annuler', '#', class: 'as_idocus_ajax', idocus: idocus_params                   
     
             .form-group.no-margin
               .w-100.text-end
@@ -404,28 +405,6 @@
 
 
       .tab-pane.box.no-margin#compta{ class: ('active' if params[:tab] == 'compta'), "role" => "tabpanel", "aria-labelledby" => "compta-tab" }
-        %table.table.table-striped.table-condensed
-          %tbody
-            %tr
-              %th= t('activerecord.models.user_options.attributes.is_taxable')
-              %td= @customer.options.is_taxable ? t('yes_value') : t('no_value')
-            %tr
-              %th= t('activerecord.models.user_options.attributes.is_pre_assignment_date_computed')
-              %td= @customer.options.pre_assignment_date_computed? ? 'Date de la période iDocus' : 'Date d’origine'
-            %tr
-              %th= t('activerecord.models.user_options.attributes.is_operation_processing_forced')
-              %td= @customer.options.operation_processing_forced? ? t('yes_value') : t('no_value')
-            %tr
-              %th= t('activerecord.models.user_options.attributes.is_operation_value_date_needed')
-              %td= @customer.options.operation_value_date_needed? ? t('yes_value') : t('no_value')
-            %tr
-              %th= t('activerecord.models.user_options.attributes.preseizure_date_option')
-              %td= t("activerecord.models.user_options.attributes.#{@customer.options.get_preseizure_date_option}")
-        .row
-          .col-md-12
-            .form-group.no-margin
-              .w-100.text-end
-                = link_to t('actions.edit'), edit_setting_options_organization_customer_path(@organization, @customer), class: 'btn btn-primary'
 
       - if @customer.uses?(:ibiza)
         .tab-pane.box.no-margin#ibizabox{ class: ('active' if params[:tab] == 'ibiza_box'), "role" => "tabpanel", "aria-labelledby" => "ibizabox_tab" }

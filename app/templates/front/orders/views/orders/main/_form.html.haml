@@ -12,43 +12,31 @@
     = f.simple_fields_for :address do |builder|
       .row
         .col-md-6
-          = builder.label :last_name, label: 'Nom du contact', :class => "semibold"
           .select-container.no-padding.w-100
-            = builder.input :last_name, label: false, input_html: { class: 'last_name_field required_field' }, required: true
-          = builder.label :first_name, label: 'Prénom du contact', :class => "semibold"
+            = builder.input :last_name, input_html: { class: 'last_name_field required_field' }, required: true
           .select-container.no-padding.w-100
-            = builder.input :first_name, label: false, input_html: { class: 'first_name_field required_field' }, required: true
-          = builder.label :phone, label: 'Numéro de téléphone direct (fixe ou mobile)', :class => "semibold"
+            = builder.input :first_name, input_html: { class: 'first_name_field required_field' }, required: true
           .select-container.no-padding.w-100
-            = builder.input :phone, label: false, input_html: { class: 'phone_field required_field' }, required: true
-          = builder.label :company, label: 'Nom de la société', :class => "semibold"
+            = builder.input :phone, input_html: { class: 'phone_field required_field' }, required: true
           .select-container.no-padding.w-100
-            = builder.input :company, label: false, input_html: { class: 'company_field required_field' }, required: true
-          = builder.label :company_number, label: 'N° de Siret', :class => "semibold"
+            = builder.input :company, input_html: { class: 'company_field required_field' }, required: true
           .select-container.no-padding.w-100
-            = builder.input :company_number, label: false, input_html: { class: 'company_number_field required_field' }, required: true
+            = builder.input :company_number, input_html: { class: 'company_number_field required_field' }, required: true
         .col-md-6
-          = builder.label :address_1, label: 'N° et libellé de la voie', :class => "semibold"
           .select-container.no-padding.w-100
-            = builder.input :address_1, label: false, input_html: { class: 'address_1_field required_field' }, required: true
-          = builder.label :place_called_or_postal_box, label: 'Lieu-dit ou BP', :class => "semibold"
+            = builder.input :address_1, input_html: { class: 'address_1_field required_field' }, required: true
           .select-container.no-padding.w-100
-            = builder.input :place_called_or_postal_box, label: false, input_html: { class: 'place_called_or_postal_box_field' }
-          = builder.label :zip, label: 'Code postal', :class => "semibold"
+            = builder.input :place_called_or_postal_box, input_html: { class: 'place_called_or_postal_box_field' }
           .select-container.no-padding.w-100
-            = builder.input :zip, label: false, input_html: { class: 'zip_field required_field' }, required: true
-          = builder.label :city, label: 'Ville', :class => "semibold"
+            = builder.input :zip, input_html: { class: 'zip_field required_field' }, required: true
           .select-container.no-padding.w-100
-            = builder.input :city, label: false, input_html: { class: 'city_field required_field' }, required: true
-          = builder.label :building, label: 'Bâtiment et appartement', :class => "semibold"
+            = builder.input :city, input_html: { class: 'city_field required_field' }, required: true
           .select-container.no-padding.w-100
-            = builder.input :building, label: false, input_html: { class: 'building_field' }
-          = builder.label :door_code, label: 'Digicode', :class => "semibold"
+            = builder.input :building, input_html: { class: 'building_field' }
           .select-container.no-padding.w-100
-            = builder.input :door_code, label: false, input_html: { class: 'door_code_field' }
-          = builder.label :other, label: 'Autre (sonnerie, concierge...)', :class => "semibold"
+            = builder.input :door_code, input_html: { class: 'door_code_field' }
           .select-container.no-padding.w-100
-            = builder.input :other, label: false, input_html: { class: 'other_field' }
+            = builder.input :other, input_html: { class: 'other_field' }
   - else
     %h5.text-center Commande d’un kit complet pour envoi du courrier à iDocus
     %hr
@@ -75,53 +63,39 @@
       #order-addresses.tab-pane.fade{"aria-labelledby" => "order-addresses-tab", role: "tabpanel"}
         .box.paper-set-address
           = f.simple_fields_for :address do |builder|
-            = builder.label :company, label: 'Nom de la société', :class => "semibold"
             .select-container.no-padding.w-100
-              = builder.input :company, label: false, input_html: { class: 'company_field' }
-            = builder.label :last_name, label: 'Nom', :class => "semibold"
+              = builder.input :company, input_html: { class: 'company_field' }
             .select-container.no-padding.w-100
-              = builder.input :last_name, label: false, input_html: { class: 'last_name_field required_field' }, required: true
-            = builder.label :first_name, label: 'Prénom', :class => "semibold"
+              = builder.input :last_name, input_html: { class: 'last_name_field required_field' }, required: true
             .select-container.no-padding.w-100
-              = builder.input :first_name, label: false, input_html: { class: 'first_name_field required_field' }, required: true
-            = builder.label :address_1, label: 'Adresse', :class => "semibold"
+              = builder.input :first_name, input_html: { class: 'first_name_field required_field' }, required: true
             .select-container.no-padding.w-100
-              = builder.input :address_1, label: false, input_html: { class: 'address_1_field required_field' }, required: true
-            = builder.label :address_2, label: 'Adresse (suite)', :class => "semibold"
+              = builder.input :address_1, input_html: { class: 'address_1_field required_field' }, required: true
             .select-container.no-padding.w-100
-              = builder.input :address_2, label: false, input_html: { class: 'address_2_field' }
-            = builder.label :city, label: 'Ville', :class => "semibold"
+              = builder.input :address_2, input_html: { class: 'address_2_field' }
             .select-container.no-padding.w-100
-              = builder.input :city, label: false, input_html: { class: 'city_field required_field' }, required: true
-            = builder.label :zip, label: 'Code postal', :class => "semibold"
+              = builder.input :city, input_html: { class: 'city_field required_field' }, required: true
             .select-container.no-padding.w-100
-              = builder.input :zip, label: false, input_html: { class: 'zip_field required_field' }, required: true
+              = builder.input :zip, input_html: { class: 'zip_field required_field' }, required: true
       #paper-return-address.tab-pane.fade{"aria-labelledby" => "paper-return-address-tab", role: "tabpanel"}
         .box.paper-return-address
           = f.simple_fields_for :paper_return_address do |builder|
-            = builder.label :company, label: 'Nom de la société', :class => "semibold"
             .select-container.no-padding.w-100
-              = builder.input :company, label: false, input_html: { class: 'company_field' }
-            = builder.label :last_name, label: 'Nom', :class => "semibold"
+              = builder.input :company, input_html: { class: 'company_field' }
             .select-container.no-padding.w-100
-              = builder.input :last_name, label: false, input_html: { class: 'last_name_field required_field' }, required: true
-            = builder.label :first_name, label: 'Prénom', :class => "semibold"
+              = builder.input :last_name, input_html: { class: 'last_name_field required_field' }, required: true
             .select-container.no-padding.w-100
-              = builder.input :first_name, label: false, input_html: { class: 'first_name_field required_field' }, required: true
-            = builder.label :address_1, label: 'Adresse', :class => "semibold"
+              = builder.input :first_name, input_html: { class: 'first_name_field required_field' }, required: true
             .select-container.no-padding.w-100
-              = builder.input :address_1, label: false, input_html: { class: 'address_1_field required_field' }, required: true
-            = builder.label :address_2, label: 'Adresse (suite)', :class => "semibold"
+              = builder.input :address_1, input_html: { class: 'address_1_field required_field' }, required: true
             .select-container.no-padding.w-100
-              = builder.input :address_2, label: false, input_html: { class: 'address_2_field' }
-            = builder.label :city, label: 'Ville', :class => "semibold"
+              = builder.input :address_2, input_html: { class: 'address_2_field' }
             .select-container.no-padding.w-100
-              = builder.input :city, label: false, input_html: { class: 'city_field required_field' }, required: true
-            = builder.label :zip, label: 'Code postal', :class => "semibold"
+              = builder.input :city, input_html: { class: 'city_field required_field' }, required: true
             .select-container.no-padding.w-100
-              = builder.input :zip, label: false, input_html: { class: 'zip_field required_field' }, required: true
+              = builder.input :zip, input_html: { class: 'zip_field required_field' }, required: true
           .text-end
-            = link_to "Copier l'adresse livraison de kit", '#', class: 'copy_address btn btn-secondary bold'    
+            = link_to "Copier l'adresse livraison de kit", '#', class: 'copy_address btn btn-light bold'    
 
     %hr
     .w-100.text-center

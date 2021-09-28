@@ -49,28 +49,19 @@ class Orders::MainController < OrganizationController
     if @order.dematbox? && Order::Dematbox.new(@customer, @order).execute
       copy_back_address
 
-      if @customer.configured?
-        flash[:success] = "La commande de #{@order.dematbox_count} scanner#{if @order.dematbox_count > 1
+      json_flash[:success] = "La commande de #{@order.dematbox_count} scanner#{if @order.dematbox_count > 1
                                                                               's'
                                                                             end} iDocus'Box est enregistrée. Vous pouvez la modifier/annuler pendant encore 24 heures."
 
-        redirect_to organization_customer_path(@organization, @customer, tab: 'orders')
-      end
     elsif @order.paper_set? && Order::PaperSet.new(@customer, @order).execute
       copy_back_address
 
-      if @customer.configured?
-        flash[:success] = 'Votre commande de Kit envoi courrier a été prise en compte.'
-
-        redirect_to organization_customer_path(@organization, @customer, tab: 'orders')
-      end
+      json_flash[:success] = 'Votre commande de Kit envoi courrier a été prise en compte.'
     else
-      if @order.period_duration == 3 && !@customer.configured?
-        redirect_to organization_customer_path(@organization, @customer)
-      else
-        render :new
-      end
+      json_flash[:error] = errors_to_list(@order.errors.messages) rescue "Une erreur s'est produite lors de la commande, Veuillez réessayer plus tard svp..."
     end
+
+    render json: { json_flash: json_flash }, status: 200
   end
 
   # GET /organizations/:organization_id/customers/:customer_id/orders/:id/edit
@@ -87,15 +78,12 @@ class Orders::MainController < OrganizationController
 
       copy_back_address
 
-      if @customer.configured?
-        flash[:success] = 'Votre commande a été modifiée avec succès.'
-        redirect_to organization_customer_path(@organization, @customer, tab: 'orders')
-      else
-        redirect_to organization_customer_path(@organization, @customer)
-      end
+      json_flash[:success] = 'Votre commande a été modifiée avec succès.'
     else
-      render :edit
+      json_flash[:error] = errors_to_list(@order.errors.messages) rescue "Une erreur s'est produite lors de la mise à jour, Veuillez réessayer plus tard svp..."
     end
+
+    render json: { json_flash: json_flash }, status: 200
   end
 
   # DELETE /organizations/:organization_id/customers/:customer_id/orders/:id
@@ -103,14 +91,14 @@ class Orders::MainController < OrganizationController
     Order::Destroy.new(@order).execute
 
     if @order.dematbox?
-      flash[:success] = "Votre commande de #{@order.dematbox_count} scanner#{if @order.dematbox_count > 1
+      json_flash[:success] = "Votre commande de #{@order.dematbox_count} scanner#{if @order.dematbox_count > 1
                                                                                's'
                                                                              end} iDocus'Box d'un montant de #{format_price_00(@order.price_in_cents_wo_vat)}€ HT, a été annulée."
     else
-      flash[:success] = "Votre commande de Kit envoi courrier d'un montant de #{format_price_00(@order.price_in_cents_wo_vat)}€ HT, a été annulée."
+      json_flash[:success] = "Votre commande de Kit envoi courrier d'un montant de #{format_price_00(@order.price_in_cents_wo_vat)}€ HT, a été annulée."
     end
 
-    redirect_to organization_customer_path(@organization, @customer, tab: 'orders')
+    render json: { json_flash: json_flash }, status: 200
   end
 
   private

@@ -258,6 +258,25 @@ fr:
         is_for_paper_return: Pour le retour des factures papier ?
         is_for_paper_set_shipping: Pour la livraison du kit envoi courrier ?
         is_for_dematbox_shipping: Pour la livraison de l’iDocus Box ?
+      paper_return_address:
+        first_name: Prénom
+        last_name: Nom
+        company: Société
+        company_number: N° de Siret
+        address_1: Adresse
+        address_2: Adresse (suite)
+        city: Ville
+        zip: Code postal
+        state: Etat
+        phone: Tél fixe ou mobile
+        building: Bâtiment et appartement
+        place_called_or_postal_box: Lieu-dit ou BP
+        door_code: Digicode
+        other: Autre (sonnerie, concierge...)
+        is_for_billing: Pour la facturation ?
+        is_for_paper_return: Pour le retour des factures papier ?
+        is_for_paper_set_shipping: Pour la livraison du kit envoi courrier ?
+        is_for_dematbox_shipping: Pour la livraison de l’iDocus Box ?
       software_ibiza:
         is_used: Utilise Ibiza?
         auto_deliver: Souhaitez-vous livrer automatiquement les écritures ?

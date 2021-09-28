@@ -34,25 +34,28 @@ class Customer{
   }
 
   main(){
-    this.add_customer();
-    this.edit_subscription_package();
-    this.load_settings_options_view();    
-    this.filter_customer();
+    this.get_subscription_edit_view().then((e)=>{
+      this.add_customer();
+      this.load_settings_options_view();    
+      this.filter_customer();
+      this.get_customer_edit_view();
 
-    this.get_customer_edit_view();
+      if ($('#customer.edit.ibiza').length > 0 ) {
+        this.get_ibiza_customers_list($('#ibiza-customers-list'));
+      }
+      this.show_ibiza_customer();
 
-    this.show_ibiza_customer();
+      if ($('#personalize_subscription_package_form').length > 0 ) {
+        this.check_input_number();
+        this.show_subscription_option();
 
-    if ($('#personalize_subscription_package_form').length > 0 ) {
-      this.check_input_number();
-      this.show_subscription_option();
+        this.update_price();
+      }
 
-      this.update_price();
-    }
+      if ($('#journals select#copy-journals-into-customer').length > 0) { searchable_option_copy_journals_list(); }
 
-    if ($('#journals select#copy-journals-into-customer').length > 0) { searchable_option_copy_journals_list(); }
-
-    ApplicationJS.set_checkbox_radio(this);
+      ApplicationJS.set_checkbox_radio(this);
+    });
   }
 
 
@@ -276,37 +279,28 @@ class Customer{
     }
   }
 
-  get_subscription_edit_view(customer_id){
-    this.applicationJS.sendRequest({ 'url': '/organizations/' + this.organization_id + '/customers/' + customer_id + '/subscription/edit' })
-    .then((element)=>{
-      $('#customer-content .tab-content .tab-pane#subscription').html($(element).find('#subscriptions.edit').html());
-      this.main();
-      bind_customer_events();
-    });
-  }
-
-  edit_subscription_package(){
-    let self = this;
-    let customer_id = $('input:hidden[name="customer_id"]').val();
-
-    $('#customer-content #subscription-tab').unbind('click').bind('click',function(e) {
-      e.stopPropagation();
-      
-      self.get_subscription_edit_view(customer_id);
+  get_subscription_edit_view(){
+    return new Promise((success, error) => {
+      let self = this;
+      let customer_id = $('input:hidden[name="customer_id"]').val();
+      this.applicationJS.sendRequest({ 'url': '/organizations/' + this.organization_id + '/customers/' + customer_id + '/subscription/edit' })
+      .then((element)=>{
+        $('#customer-content .tab-content .tab-pane#subscription').html($(element).find('#subscriptions.edit').html());
+        setTimeout(()=>{
+          success();
+          bind_customer_events();
+        }, 1000);
+      });
     });
   }
 
   load_settings_options_view(){
     let self = this;
     let customer_id = $('input:hidden[name="customer_id"]').val();
-    $('#customer-content #compta-tab').unbind('click').bind('click',function(e) {
-      e.preventDefault();
-      
-      self.applicationJS.sendRequest({ 'url': '/organizations/' + self.organization_id + '/customers/' + customer_id + '/edit_setting_options' }).then((element)=>{
-        $('#customer-content .tab-content .tab-pane#compta').html($(element).find('#customer.edit').html());
+    self.applicationJS.sendRequest({ 'url': '/organizations/' + self.organization_id + '/customers/' + customer_id + '/edit_setting_options' }).then((element)=>{
+      $('#customer-content .tab-content .tab-pane#compta').html($(element).find('#customer.edit').html());
 
-        ApplicationJS.set_checkbox_radio(self);
-      });
+      ApplicationJS.set_checkbox_radio(self);
     });
   }
 
@@ -679,7 +673,6 @@ jQuery(function () {
   AppListenTo('close_or_reopen_confirm', (e)=>{ customer.close_or_reopen_confirm(e.detail.url, e.detail.data); });
 
   AppListenTo('new_edit_order_view', (e)=>{ customer.new_edit_order_view(e.detail.url); });
-  AppListenTo('change_new_edit_order_url', (e)=>{ e.set_key('url', $('form#new_edit_order_customer').attr('action')); });
   AppListenTo('rebind_customer_event_listener', (e)=>{ customer.rebind_customer_all_events(); });
 
   AppListenTo('select_for_orders', (e)=>{ customer.select_for_orders(e.detail.url); });

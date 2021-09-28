@@ -16,16 +16,13 @@
   .p-3
     = simple_form_for @customer, url: update_setting_options_organization_customer_path(@organization, @customer), html: { class: 'form-horizontal label-medium' } do |f|
       - if @customer.active? && (@customer.options.is_upload_authorized || @customer.subscription.is_retriever_only? ) && !@organization.specific_mission
-        = f.label :authd_prev_period, class: 'semibold'
         .select-container.no-padding.w-100
-          = f.input :authd_prev_period, as: :integer, label: false, input_html: { min: 0, placeholder: "1" }
-        = f.label :auth_prev_period_until_day, class: 'semibold'
+          = f.input :authd_prev_period, as: :integer, input_html: { min: 0, placeholder: "1" }
         .select-container.no-padding.w-100
-          = f.input :auth_prev_period_until_day, as: :integer, label: false, input_html: { min: 0, max: 28, placeholder: "11" }, hint: 'De 0 à 28'
+          = f.input :auth_prev_period_until_day, as: :integer, input_html: { min: 0, max: 28, placeholder: "11" }, hint: 'De 0 à 28'
         - if @user.is_admin
-          = f.label :auth_prev_period_until_month, class: 'semibold'
-          .select-container.no-padding.w-100
-            = f.input :auth_prev_period_until_month, as: :integer, label: false, input_html: { min: 0, max: 2 }, hint: '0 = actuel, 1 = le mois suivant, 2 = dans 2 mois'
+          .select-container.no-padding.w-100.hide
+            = f.input :auth_prev_period_until_month, as: :integer, input_html: { min: 0, max: 2 }, hint: '0 = actuel, 1 = le mois suivant, 2 = dans 2 mois'
       - if @customer.is_dematbox_authorized
         - if @customer.dematbox.try(:is_configured)
           %h4.margin1bottom Liste des services
@@ -48,7 +45,7 @@
         - else
           %label
             Appairez ici un scanner iDocus'Box (Produit Sagemcom). Si vous n'avez pas de scanner,
-            = link_to 'vous pouvez en commander un.', new_organization_customer_order_path(@organization, @customer, order: { type: 'dematbox' }), class: 'no-style green-label semibold'
+            = link_to 'vous pouvez en commander un.', organization_customer_path(@organization, @customer, tab: 'orders'), class: 'no-style green-label semibold', target: '_blank'
             %br
             Afin d'appairer le scanner, merci de suivre les instructions du
             = link_to "mode d'emploi Sagemcom", download_document_path(name: 'Livret_utilisation_Dematbox.pdf'), class: 'no-style green-label semibold'
@@ -104,13 +101,13 @@
                 %i.help-block (la facture sera saisie au 1er jour du mois/trimestre en cours dans lequel la facture est déposée dans iDocus, exemple: une facture de janvier déposée le 15 novembre sera saisie au 1er novembre)
         .form-group
           .row
-            .col-md-11.form-group.no-margin
+            .col-md-6.form-group.no-margin
               = o.label :is_taxable, class: 'control-label semibold form-check-label'
               %br
                 %i.help-block Non (aucune TVA ne sera reportée en pré-saisie)
-            .col-md-1
+            .col-md-6
               .form-check.form-switch.idocus-custom-form-check
-                = o.input :is_taxable, as: :boolean, label: false, input_html: { class: 'form-check-input input_switch input_check_field check-taxable-user-options', id: 'check-taxable-user-options' }, required: true
+                = o.input :is_taxable, as: :boolean, label: false, input_html: { class: 'form-check-input input_switch input_check_field check-taxable-user-options', id: 'check-taxable-user-options' }
                 %label.semibold{class: 'form-check-label label_check_field', for: 'check-displayed-pre-assignment'} Non
         .form-group
           .row
