@@ -1,12 +1,12 @@
 = stylesheet_link_tag 'front/organizations/assets/stylesheets/edit'
 
-.general.derivationRight
-  .row
+.general
+  .row.derivationRight
     %h3.bold Paramètres : Général (Édition de l'organisation)
 
 
   = simple_form_for @organization, html: { id: 'organization_edit', class: 'form-horizontal label-medium' } do |f|
-    .box.mt-4
+    .box.mt-4.derivationLeft
       = hidden_field_tag :part, params[:part]
       - if params[:part] != 'other_software'
         .form-group

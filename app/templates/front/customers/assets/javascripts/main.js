@@ -10,10 +10,6 @@
 //**** journals JS *******/
 //=require '../../../journals/assets/javascripts/journal'
 
-//**** ibiza(box_documents, box_folders) JS *******/
-//=require '../../../ibiza/assets/javascripts/events'
-//=require '../../../ibiza/assets/javascripts/box_document'
-
 //**** my company files JS *******/
 //=require '../../../my_company_files/assets/javascripts/events'
 //=require '../../../my_company_files/assets/javascripts/mcf_customer'
@@ -283,25 +279,37 @@ class Customer{
     return new Promise((success, error) => {
       let self = this;
       let customer_id = $('input:hidden[name="customer_id"]').val();
-      this.applicationJS.sendRequest({ 'url': '/organizations/' + this.organization_id + '/customers/' + customer_id + '/subscription/edit' })
-      .then((element)=>{
-        $('#customer-content .tab-content .tab-pane#subscription').html($(element).find('#subscriptions.edit').html());
+
+      if(customer_id > 0){
+        this.applicationJS.sendRequest({ 'url': '/organizations/' + this.organization_id + '/customers/' + customer_id + '/subscription/edit' })
+        .then((element)=>{
+          $('#customer-content .tab-content .tab-pane#subscription').html($(element).find('#subscriptions.edit').html());
+          setTimeout(()=>{
+            success();
+            bind_customer_events();
+          }, 1000);
+        });
+      }else{
         setTimeout(()=>{
           success();
           bind_customer_events();
         }, 1000);
-      });
+      }
     });
   }
 
   load_settings_options_view(){
     let self = this;
     let customer_id = $('input:hidden[name="customer_id"]').val();
-    self.applicationJS.sendRequest({ 'url': '/organizations/' + self.organization_id + '/customers/' + customer_id + '/edit_setting_options' }).then((element)=>{
-      $('#customer-content .tab-content .tab-pane#compta').html($(element).find('#customer.edit').html());
+    if(customer_id > 0){
+      self.applicationJS.sendRequest({ 'url': '/organizations/' + self.organization_id + '/customers/' + customer_id + '/edit_setting_options' }).then((element)=>{
+        $('#customer-content .tab-content .tab-pane#compta').html($(element).find('#customer.edit').html());
 
+        ApplicationJS.set_checkbox_radio(self);
+      });
+    }else{
       ApplicationJS.set_checkbox_radio(self);
-    });
+    }
   }
 
   add_customer(){
@@ -714,27 +722,6 @@ jQuery(function () {
   AppListenTo('compta_analytics.validate_analysis', (e)=>{ journal.update_analytics(e.detail.data) });
   
   AppListenTo('csv_descriptor_edit_customer_format', (e)=>{ customer.load_csv_descriptor(e.detail.id, e.detail.organization_id) });
-
-  let box_document = new BoxDocument();
-
-  let load_historic = false
-  let load_select = false
-  if ($('#ibizabox.tab-pane.active').length > 0){
-    if ($('#ibizabox_documents_historic.active.show').length > 0 && !load_historic){
-      const url = $('#ibizabox_documents_historic_tab').attr('link');
-      box_document.show_ibizabox_documents_page(url, '.historic_content');
-      load_historic = true
-    }
-
-    if ($('#select_ibizabox_documents.active.show').length > 0 && !load_select){
-      const url = $('#select_ibizabox_documents_tab').attr('link');
-      box_document.show_ibizabox_documents_page(url, '.select_content');
-      load_select = true
-    }
-  }
-
-  AppListenTo('show_ibizabox_documents_page', (e)=>{ box_document.show_ibizabox_documents_page(e.detail.url, e.detail.target); });
-
 
   let mcf = new McfCustomer();
   AppListenTo('show_mcf_edition', (e)=>{ mcf.show_mcf_edition(e.detail.url); });

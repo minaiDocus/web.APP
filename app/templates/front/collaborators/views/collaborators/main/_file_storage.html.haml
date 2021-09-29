@@ -1,6 +1,3 @@
 - if @user.is_admin && @organization.is_active
   #file_storages.tab-pane.box.no-margin.fade{ class: ('active show' if params[:tab] == 'file_storages') }
-    = render file: Rails.root.join('app/templates/front/customers/views/customers/main/_file_storages.html.haml'), locals: { user: @member.user }
-    .form-group.no-margin
-      .w-100.text-end
-        = link_to t('actions.edit'), edit_organization_collaborator_file_storage_authorizations_path(@organization, @member), class: 'btn btn-primary'
+    = render file: Rails.root.join('app/templates/front/external_file_storages/views/external_file_storages/efs_user/_efs_user.html.haml'), locals: { user: @member.user }

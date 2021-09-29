@@ -64,7 +64,7 @@ module IbizaLib
         end
 
         def get_real_base_domain
-          if Rails.env == 'production'
+          if Rails.env == 'production' || IbizaAPI::Config::ROOT_DOMAIN.match(/saas[.]irf[-]cloud[.]com/)
             url = 'https://production-api.fulll.io/irfservice/services/irfservice.svc/endpoint'
 
             headers = {'content-type' => 'application/xml',

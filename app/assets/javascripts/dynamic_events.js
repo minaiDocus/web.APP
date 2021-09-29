@@ -21,6 +21,22 @@ function elements_initializer(){
   });
 }
 
+function custom_dynamic_height(){
+  window.setTimeout(()=>{
+    $('.height_groups').livequery(function(){
+      for(var i=1; i <= 5; i++) {
+        var min_height = 0;
+        if($('.height_groups.groups_'+i).length > 0){
+          $('.height_groups.groups_'+i).each(function(e){
+            if( min_height < $(this).innerHeight() ) min_height = $(this).innerHeight();
+          });
+          $('.height_groups.groups_'+i).css('min-height', min_height+'px');
+        }
+      }
+    });
+  }, 5000);
+}
+
 function iDocus_event_emiter(){
   let events_list = 'click.as_idocus_emit change.as_idocus_emit keyup.as_idocus_emit';
   $('.as_idocus_emit').unbind(events_list).bind(events_list, function(e){

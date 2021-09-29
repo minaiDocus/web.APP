@@ -43,86 +43,59 @@
               %button.semibold.nav-link.dropdown-toggle#softwares-list{ "data-bs-toggle" => "dropdown", "aria-expanded" => "false", type: :button, class: ('active' if (params[:tab] == 'ibiza' || params[:tab] == 'exact_online' || params[:tab] == 'my_unisoft' || params[:tab] == 'coala' || params[:tab] == 'quadratus' || params[:tab] == 'cegid' || params[:tab] == 'fec_agiris' || params[:tab] == 'fec_acd' || params[:tab] == 'csv_descriptor' )) } Logiciels comptables / export csv
               %ul.dropdown-menu{ "aria-labelledby" => "softwares-list" }
                 - if software_uses('ibiza')   
-                  %li
-                    %button.semibold.nav-link.dropdown-item#ibiza-tab{ class: ('active' if params[:tab] == 'ibiza'), "data-bs-toggle" => "tab", "data-bs-target" => "#ibiza", type: :button, "role" => "tab", "aria-controls" => "ibiza", "aria-selected" => "#{params[:tab] == 'ibiza'}" } 
-                    .row
-                      .col-md-6.text-center
-                        %span iBiza
-                      .col-md-6.text-center
-                        - if @customer.uses?(:ibiza)
-                          = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
+                  %li.clearfix
+                    %button.semibold.nav-link.dropdown-item#ibiza-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#ibiza", type: :button, "role" => "tab", "aria-controls" => "ibiza", "aria-selected" => "#{params[:tab] == 'ibiza'}" } 
+                      %span.float-start iBiza
+                      - if @customer.uses?(:ibiza)
+                        = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'float-end' })
                 - if software_uses('exact_online')
-                  %li
-                    %button.semibold.nav-link.dropdown-item#exact-online-tab{ class: ('active' if params[:tab] == 'exact_online'), "data-bs-toggle" => "tab", "data-bs-target" => "#exact-online", type: :button, "role" => "tab", "aria-controls" => "exact-online", "aria-selected" => "#{params[:tab] == 'exact_online'}" } 
-                    .row
-                      .col-md-6.text-center
-                        %span Exact Online
-                      .col-md-6.text-center
-                        - if @customer.uses?(:exact_online)
-                          = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
+                  %li.clearfix
+                    %button.semibold.nav-link.dropdown-item#exact-online-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#exact-online", type: :button, "role" => "tab", "aria-controls" => "exact-online", "aria-selected" => "#{params[:tab] == 'exact_online'}" } 
+                      %span.float-start Exact Online
+                      - if @customer.uses?(:exact_online)
+                        = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'float-end' })
                 - if software_uses('my_unisoft')
-                  %li
-                    %button.semibold.nav-link.dropdown-item#my-unisoft-tab{ class: ('active' if params[:tab] == 'my_unisoft'), "data-bs-toggle" => "tab", "data-bs-target" => "#my-unisoft", type: :button, "role" => "tab", "aria-controls" => "my-unisoft", "aria-selected" => "#{params[:tab] == 'my_unisoft'}" } 
-                    .row
-                      .col-md-6.text-center
-                        %span My Unisoft
-                      .col-md-6.text-center
-                        - if @customer.uses?(:my_unisoft)
-                          = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
+                  %li.clearfix
+                    %button.semibold.nav-link.dropdown-item#my-unisoft-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#my-unisoft", type: :button, "role" => "tab", "aria-controls" => "my-unisoft", "aria-selected" => "#{params[:tab] == 'my_unisoft'}" } 
+                      %span.float-start My Unisoft
+                      - if @customer.uses?(:my_unisoft)
+                        = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'float-end' })
                 - if @organization.try(:coala).try(:used?)  
-                  %li
-                    %button.semibold.nav-link.dropdown-item#coala-tab{ class: ('active' if params[:tab] == 'coala'), "data-bs-toggle" => "tab", "data-bs-target" => "#coala", type: :button, "role" => "tab", "aria-controls" => "coala", "aria-selected" => "#{params[:tab] == 'coala'}" } 
-                    .row
-                      .col-md-6.text-center
-                        %span Coala
-                      .col-md-6.text-center
-                        - if @customer.uses?(:coala)
-                          = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
+                  %li.clearfix
+                    %button.semibold.nav-link.dropdown-item#coala-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#coala", type: :button, "role" => "tab", "aria-controls" => "coala", "aria-selected" => "#{params[:tab] == 'coala'}" } 
+                      %span.float-start Coala
+                      - if @customer.uses?(:coala)
+                        = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'float-end' })
                 - if @organization.try(:quadratus).try(:used)
-                  %li
-                    %button.semibold.nav-link.dropdown-item#quadratus-tab{ class: ('active' if params[:tab] == 'quadratus'), "data-bs-toggle" => "tab", "data-bs-target" => "#quadratus", type: :button, "role" => "tab", "aria-controls" => "quadratus", "aria-selected" => "#{params[:tab] == 'quadratus'}" } 
-                    .row
-                      .col-md-6.text-center
-                        %span Quadratus
-                      .col-md-6.text-center
-                        - if @customer.uses?(:quadratus)
-                          = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
+                  %li.clearfix
+                    %button.semibold.nav-link.dropdown-item#quadratus-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#quadratus", type: :button, "role" => "tab", "aria-controls" => "quadratus", "aria-selected" => "#{params[:tab] == 'quadratus'}" } 
+                      %span.float-start Quadratus
+                      - if @customer.uses?(:quadratus)
+                        = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'float-end' })
                 - if @organization.try(:cegid).try(:used?)
-                  %li
-                    %button.semibold.nav-link.dropdown-item#cegid-tab{ class: ('active' if params[:tab] == 'cegid'), "data-bs-toggle" => "tab", "data-bs-target" => "#cegid", type: :button, "role" => "tab", "aria-controls" => "cegid", "aria-selected" => "#{params[:tab] == 'cegid'}" } 
-                    .row
-                      .col-md-6.text-center
-                        %span Cegid
-                      .col-md-6.text-center
-                        - if @customer.uses?(:cegid)
-                          = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
+                  %li.clearfix
+                    %button.semibold.nav-link.dropdown-item#cegid-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#cegid", type: :button, "role" => "tab", "aria-controls" => "cegid", "aria-selected" => "#{params[:tab] == 'cegid'}" } 
+                      %span.float-start Cegid
+                      - if @customer.uses?(:cegid)
+                        = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'float-end' })
                 - if @organization.try(:fec_agiris).try(:used?)
-                  %li
-                    %button.semibold.nav-link.dropdown-item#fec-agiris-tab{ class: ('active' if params[:tab] == 'fec_agiris'), "data-bs-toggle" => "tab", "data-bs-target" => "#fec-agiris", type: :button, "role" => "tab", "aria-controls" => "fec-agiris", "aria-selected" => "#{params[:tab] == 'fec_agiris'}" } 
-                    .row
-                      .col-md-6.text-center
-                        %span Fec Agiris
-                      .col-md-6.text-center
-                        - if @customer.uses?(:fec_agiris)
-                          = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
+                  %li.clearfix
+                    %button.semibold.nav-link.dropdown-item#fec-agiris-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#fec-agiris", type: :button, "role" => "tab", "aria-controls" => "fec-agiris", "aria-selected" => "#{params[:tab] == 'fec_agiris'}" } 
+                      %span.float-start Fec Agiris
+                      - if @customer.uses?(:fec_agiris)
+                        = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'float-end' })
                 - if @organization.try(:fec_acd).try(:used?)
-                  %li
-                    %button.semibold.nav-link.dropdown-item#fec-acd-tab{ class: ('active' if params[:tab] == 'fec_acd'), "data-bs-toggle" => "tab", "data-bs-target" => "#fec-acd", type: :button, "role" => "tab", "aria-controls" => "fec-acd", "aria-selected" => "#{params[:tab] == 'fec_acd'}" } 
-                    .row
-                      .col-md-6.text-center
-                        %span Fec ACD
-                      .col-md-6.text-center
-                        - if @customer.uses?(:fec_acd)
-                          = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })
+                  %li.clearfix
+                    %button.semibold.nav-link.dropdown-item#fec-acd-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#fec-acd", type: :button, "role" => "tab", "aria-controls" => "fec-acd", "aria-selected" => "#{params[:tab] == 'fec_acd'}" } 
+                      %span.float-start Fec ACD
+                      - if @customer.uses?(:fec_acd)
+                        = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'float-end' })
                 - if @organization.try(:csv_descriptor).try(:used?)
-                  %li
-                    %button.semibold.nav-link.dropdown-item#csv-descriptor-tab{ class: ('active' if params[:tab] == 'csv_descriptor'), "data-bs-toggle" => "tab", "data-bs-target" => "#csv-descriptor", type: :button, "role" => "tab", "aria-controls" => "csv-descriptor", "aria-selected" => "#{params[:tab] == 'csv_descriptor'}" } 
-                    .row
-                      .col-md-6.text-center
-                        %span Format d’export (.csv)
-                      .col-md-6.text-center
-                        - if @customer.uses?(:csv_descriptor)
-                          = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'text-end' })   
+                  %li.clearfix
+                    %button.semibold.nav-link.dropdown-item#csv-descriptor-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#csv-descriptor", type: :button, "role" => "tab", "aria-controls" => "csv-descriptor", "aria-selected" => "#{params[:tab] == 'csv_descriptor'}" } 
+                      %span.float-start Format d’export (.csv)
+                      - if @customer.uses?(:csv_descriptor)
+                        = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'float-end' })   
             %li.nav-item.no-margin{ "role" => "presentation" }
               %button.semibold.nav-link#accounting-plan-tab{ class: ('active' if params[:tab] == 'accounting_plan'), "data-bs-toggle" => "tab", "data-bs-target" => "#accounting-plan", type: :button, "role" => "tab", "aria-controls" => "accounting-plan", "aria-selected" => "#{params[:tab] == 'accounting_plan'}" } Plan comptable
             - if @organization.mcf_settings.try(:access_token).present? || @customer.try(:mcf_documents).try(:not_processable).try(:any?)
@@ -144,7 +117,7 @@
           .no_more_content
 
         .tab-pane.no-margin#orders{ class: ('active' if params[:tab] == 'orders'), "role" => "tabpanel", "aria-labelledby" => "orders-tab" }
-          .box
+          .box.derivationRight
             %table.table.table-striped
               %thead
                 %tr
@@ -214,7 +187,7 @@
             Les journaux suivants sont assignés aux automates de récupération mais ne sont pas configurés :
             != @pending_journals.map { |j| content_tag(:strong, j) }.join(', ')
         - if @customer.active? && !is_max_number_of_journals_reached?
-          .form-group
+          .form-group.derivationRight
             .text-end
               - if !@organization.specific_mission && @customer.active? && (@user.leader? || @user.organization_rights_is_customer_journals_management_authorized)
                 %button.btn.btn-light{ 'data-bs-target' => '#copy-existing-journal', 'data-bs-toggle' => 'modal' }
@@ -225,6 +198,8 @@
                 %span.me-2= glyphicon('plus', { color: "#FFF", size: '15'})
                 %span Nouveau journal
           %hr
+
+        .derivationLeft
           - if @organization.specific_mission
             %table.table.table-striped
               %thead
@@ -294,7 +269,7 @@
                                   %i (pour #{distance_of_time_in_words_to_now(journal.created_at + 24.hours)})
 
         - unless @organization.specific_mission
-          .form-group
+          .form-group.derivationRight
             .row
               .col-md-6.text-start.notif-booktype
                 %span Pré-saisie comptable activée pour le dossier :
@@ -334,214 +309,222 @@
       .tab-pane.box.no-margin#compta{ class: ('active' if params[:tab] == 'compta'), "role" => "tabpanel", "aria-labelledby" => "compta-tab" }
 
       - if @customer.uses?(:ibiza)
-        .tab-pane.box.no-margin#ibizabox{ class: ('active' if params[:tab] == 'ibiza_box'), "role" => "tabpanel", "aria-labelledby" => "ibizabox_tab" }
+        .tab-pane.no-margin#ibizabox{ class: ('active' if params[:tab] == 'ibiza_box'), "role" => "tabpanel", "aria-labelledby" => "ibizabox_tab" }
           - if @organization.ibiza.first_configured?
-            = render 'ibiza_box'
+            = render file: Rails.root.join('app/templates/front/ibiza/views/ibiza/box_documents/_main.html.haml')
           - else
             = render 'shared/ibiza_not_configured_warning'
 
       - if @organization.try(:ibiza).try(:used?)
         .tab-pane.box.no-margin#ibiza{ class: ('active' if params[:tab] == 'ibiza'), "role" => "tabpanel", "aria-labelledby" => "ibiza-tab" }
-          %h4.margin1bottom Activation Ibiza
-          = simple_form_for @customer, url: customer_form_url(@organization, @customer), html: { id: 'form_ibiza', class: 'form form-horizontal label-auto' } do |c|
-            = hidden_field_tag :part, 'ibiza'
-            = c.simple_fields_for :ibiza do |f|
-              .form-group.row
-                .col-md-8
-                  = label_tag 'user[ibiza_attributes][is_used]', "Ce dossier utilise Ibiza ?", class: 'control-label semibold'
-                .col-md-2.form-check.form-switch
-                  = label_tag 'user[ibiza_attributes][is_used]', 'Oui', class: 'semibold'
-                  = check_box_tag 'user[ibiza_attributes][is_used]', 1, @customer.try(:ibiza).try(:used?), class: 'form-check-input input_switch check-software'
-                .col-md-2
-                  - if @user.leader? || @user.manage_customers
-                    .form-group.no-margin
-                      .w-100.text-end
-                        = f.submit t('actions.submit'), class: 'btn btn-primary'
+          .derivationLeft
+            %h4.margin1bottom Activation Ibiza
+            = simple_form_for @customer, url: customer_form_url(@organization, @customer), html: { id: 'form_ibiza', class: 'form form-horizontal label-auto' } do |c|
+              = hidden_field_tag :part, 'ibiza'
+              = c.simple_fields_for :ibiza do |f|
+                .form-group.row
+                  .col-md-8
+                    = label_tag 'user[ibiza_attributes][is_used]', "Ce dossier utilise Ibiza ?", class: 'control-label semibold'
+                  .col-md-2.form-check.form-switch
+                    = label_tag 'user[ibiza_attributes][is_used]', 'Oui', class: 'semibold'
+                    = check_box_tag 'user[ibiza_attributes][is_used]', 1, @customer.try(:ibiza).try(:used?), class: 'form-check-input input_switch check-software'
+                  .col-md-2
+                    - if @user.leader? || @user.manage_customers
+                      .form-group.no-margin
+                        .w-100.text-end
+                          = f.submit t('actions.submit'), class: 'btn btn-primary'
           - if @customer.uses?(:ibiza)
-            %hr
-            %h4.margin2top.margin1bottom Configuration Ibiza
-            - unless @organization.ibiza.configured?
-              %p
-                = render 'shared/ibiza_not_configured_warning'
-            %table.table.table-striped.table-condensed
-              %tbody
-                %tr
-                  %th= t('activerecord.models.software_ibiza.attributes.ibiza_id')
-                  - if @organization.ibiza.try(:configured?)
-                    - users = @organization.try(:ibiza).users
-                    - if @customer.ibiza.try(:ibiza_id).nil?
-                      %td
-                        %i{ style: 'color:gray' } Aucun
-                    - elsif users.is_a?(Array)
-                      %td= users.select { |e| e.id == @customer.ibiza.try(:ibiza_id) }.first.try(:name)
-                    - elsif users.nil?
-                      %td
-                        %span.label Rafraîchissement en cours
+            .ibiza_configuration_customer
+              .derivationRight
+                %hr
+                %h4.margin2top.margin1bottom Configuration Ibiza
+                - unless @organization.ibiza.configured?
+                  %p
+                    = render 'shared/ibiza_not_configured_warning'
+                %table.table.table-striped.table-condensed
+                  %tbody
+                    %tr
+                      %th= t('activerecord.models.software_ibiza.attributes.ibiza_id')
+                      - if @organization.ibiza.try(:configured?)
+                        - users = @organization.try(:ibiza).users
+                        - if @customer.ibiza.try(:ibiza_id).nil?
+                          %td
+                            %i{ style: 'color:gray' } Aucun
+                        - elsif users.is_a?(Array)
+                          %td= users.select { |e| e.id == @customer.ibiza.try(:ibiza_id) }.first.try(:name)
+                        - elsif users.nil?
+                          %td
+                            %span.label Rafraîchissement en cours
+                        - else
+                          %td
+                            %span.label.label-important Erreur
+                      - else
+                        %td
+                    %tr
+                      %th= t('activerecord.models.software_ibiza.attributes.auto_deliver')
+                      %td= @customer.ibiza.try(:auto_deliver?) ? t('yes_value') : t('no_value')
+                    %tr
+                      %th= t('activerecord.models.software_ibiza.attributes.is_analysis_activated')
+                      %td= @customer.ibiza.try(:compta_analysis_activated?) ? t('yes_value') : t('no_value')
+                    %tr
+                      %th= t('activerecord.models.software_ibiza.attributes.is_analysis_to_validate')
+                      %td= @customer.ibiza.try(:analysis_to_validate?) ? t('yes_value') : t('no_value')
+              .row.derivationLeft
+                .col-md-12.clearfix.mb-3
+                  .float-end
+                    - if @organization.ibiza.try(:configured?)
+                      - modal_title = @customer.configured? ? "Édition des options iBiza du client : #{@customer}" : "Configuration d'iBiza pour le dossier : #{@customer}"
+                      - modal_params = param_encode({ url: edit_organization_customer_ibiza_path(@organization, @customer), title: modal_title, after_show: 'bind_ibiza_user_events', target: '#customer.edit.ibiza' , style: 'min-width: 1005px;'})
+                      %button.btn.btn-primary.edit_customer_ibiza.semibold.as_idocus_modal{ idocus: modal_params  }
+                        %span.me-2
+                          = glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
+                        %span.bold Éditer
                     - else
-                      %td
-                        %span.label.label-important Erreur
-                  - else
-                    %td
-                %tr
-                  %th= t('activerecord.models.software_ibiza.attributes.auto_deliver')
-                  %td= @customer.ibiza.try(:auto_deliver?) ? t('yes_value') : t('no_value')
-                %tr
-                  %th= t('activerecord.models.software_ibiza.attributes.is_analysis_activated')
-                  %td= @customer.ibiza.try(:compta_analysis_activated?) ? t('yes_value') : t('no_value')
-                - if @customer.ibiza.try(:compta_analysis_activated?)
-                  %tr
-                    %th= t('activerecord.models.software_ibiza.attributes.is_analysis_to_validate')
-                    %td= @customer.ibiza.try(:analysis_to_validate?) ? t('yes_value') : t('no_value')
-            .row
-              .col-md-12
-                - if @organization.ibiza.try(:configured?)
-                  - modal_title = @customer.configured? ? "Édition des options iBiza du client : #{@customer}" : "Configuration d'iBiza pour le dossier : #{@customer}"
-                  - modal_params = param_encode({ url: edit_organization_customer_ibiza_path(@organization, @customer), title: modal_title, after_show: 'bind_ibiza_user_events', target: '#customer.edit.ibiza' , style: 'min-width: 1005px;'})
-                  %button.btn.btn-primary.edit_customer_ibiza.semibold.as_idocus_modal{ idocus: modal_params  }
-                    %span.me-2
-                      = glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                    %span.bold Éditer
-                - else
-                  = link_to t('actions.edit'), '#', class: 'btn btn-primary float-right', disabled: true
+                      = link_to t('actions.edit'), '#', class: 'btn btn-primary float-right', disabled: true
 
       - if @organization.try(:exact_online).try(:used?)
         .tab-pane.box.no-margin#exact-online{ class: ('active' if params[:tab] == 'exact_online'), "role" => "tabpanel", "aria-labelledby" => "exact-online-tab" }
-          %h4.margin1bottom Activation Exact Online
-          = simple_form_for @customer, url: customer_form_url(@organization, @customer), html: { id: 'form_exact_online', class: 'form form-horizontal label-auto' } do |c|
-            = hidden_field_tag :part, 'exact_online'
-            = c.simple_fields_for :exact_online do |f|
-              .form-group.row
-                .col-md-8
-                  = label_tag 'user[exact_online_attributes][is_used]', "Ce dossier utilise Exact Online ?", class: 'control-label semibold'
-                .col-md-2.form-check.form-switch
-                  = label_tag 'user[exact_online_attributes][is_used]', 'Oui', class: 'semibold'
-                  = check_box_tag 'user[exact_online_attributes][is_used]', 1, @customer.try(:exact_online).try(:used?), class: 'form-check-input input_switch check-software'
-                .col-md-2
-                  - if @user.leader?
-                    .form-group.no-margin
-                      .w-100.text-end
-                        = f.submit t('actions.submit'), class: 'btn btn-primary'
+          .derivationLeft
+            %h4.margin1bottom Activation Exact Online
+            = simple_form_for @customer, url: customer_form_url(@organization, @customer), html: { id: 'form_exact_online', class: 'form form-horizontal label-auto' } do |c|
+              = hidden_field_tag :part, 'exact_online'
+              = c.simple_fields_for :exact_online do |f|
+                .form-group.row
+                  .col-md-8
+                    = label_tag 'user[exact_online_attributes][is_used]', "Ce dossier utilise Exact Online ?", class: 'control-label semibold'
+                  .col-md-2.form-check.form-switch
+                    = label_tag 'user[exact_online_attributes][is_used]', 'Oui', class: 'semibold'
+                    = check_box_tag 'user[exact_online_attributes][is_used]', 1, @customer.try(:exact_online).try(:used?), class: 'form-check-input input_switch check-software'
+                  .col-md-2
+                    - if @user.leader?
+                      .form-group.no-margin
+                        .w-100.text-end
+                          = f.submit t('actions.submit'), class: 'btn btn-primary'
           - if @customer.uses?(:exact_online)
-            %hr
-            %h4.margin2top.margin1bottom Configuration Exact Online
-            %table.table.table-striped.table-condensed
-              %tbody
-                %tr
-                  %th Etat
-                  %td{colspan: 2, width: '17%'}
-                    - if @customer.exact_online.try(:fully_configured?)
-                      %span.badge.badge-success OK
-                      = link_to 'Supprimer la liaison', unsubscribe_exact_online_path(u: Base64.encode64(@customer.id.to_s)), method: 'POST', data: { confirm: t('actions.confirm') }, class: 'btn btn-danger margin1left'
-                    - elsif !@customer.exact_online.try(:api_keys_present?)
-                      %span.badge.badge-danger Clé api non renseigné
-                    - elsif !@customer.exact_online.try(:linked?)
-                      %span.badge.badge-danger Liaison non établie
-                      = link_to 'Configurer la liaison', authenticate_exact_online_path(customer_id: @customer.id), class: 'btn btn-primary margin1left'
-                %tr
-                  %th= t('activerecord.models.software_exact_online.attributes.user_name')
-                  %td{colspan: 2}= @customer.exact_online.try(:user_name)
-                %tr
-                  %th= t('activerecord.models.software_exact_online.attributes.email')
-                  %td{colspan: 2}= @customer.exact_online.try(:email)
-                %tr
-                  %th= t('activerecord.models.software_exact_online.attributes.full_name')
-                  %td{colspan: 2}= @customer.exact_online.try(:full_name)
-                %tr
-                  %th= t('activerecord.models.software_exact_online.attributes.auto_deliver')
-                  %td= @customer.exact_online.try(:auto_deliver?) ? t('yes_value') : t('no_value')
-            .row
-              .col-md-12
-                = link_to t('actions.edit'), edit_exact_online_organization_customer_path(@organization, @customer), class: 'btn btn-primary float-right'
+            .derivationRight
+              %hr
+              %h4.margin2top.margin1bottom Configuration Exact Online
+              %table.table.table-striped.table-condensed
+                %tbody
+                  %tr
+                    %th Etat
+                    %td{colspan: 2, width: '17%'}
+                      - if @customer.exact_online.try(:fully_configured?)
+                        %span.badge.badge-success OK
+                        = link_to 'Supprimer la liaison', unsubscribe_exact_online_path(u: Base64.encode64(@customer.id.to_s)), method: 'POST', data: { confirm: t('actions.confirm') }, class: 'btn btn-danger margin1left'
+                      - elsif !@customer.exact_online.try(:api_keys_present?)
+                        %span.badge.badge-danger Clé api non renseigné
+                      - elsif !@customer.exact_online.try(:linked?)
+                        %span.badge.badge-danger Liaison non établie
+                        = link_to 'Configurer la liaison', authenticate_exact_online_path(customer_id: @customer.id), class: 'btn btn-primary margin1left'
+                  %tr
+                    %th= t('activerecord.models.software_exact_online.attributes.user_name')
+                    %td{colspan: 2}= @customer.exact_online.try(:user_name)
+                  %tr
+                    %th= t('activerecord.models.software_exact_online.attributes.email')
+                    %td{colspan: 2}= @customer.exact_online.try(:email)
+                  %tr
+                    %th= t('activerecord.models.software_exact_online.attributes.full_name')
+                    %td{colspan: 2}= @customer.exact_online.try(:full_name)
+                  %tr
+                    %th= t('activerecord.models.software_exact_online.attributes.auto_deliver')
+                    %td= @customer.exact_online.try(:auto_deliver?) ? t('yes_value') : t('no_value')
+              .row
+                .col-md-12
+                  = link_to t('actions.edit'), edit_exact_online_organization_customer_path(@organization, @customer), class: 'btn btn-primary float-right'
 
       - if @customer.organization.try(:my_unisoft).try(:used?)
         .tab-pane.box.no-margin#my-unisoft{ class: ('active' if params[:tab] == 'my_unisoft'), "role" => "tabpanel", "aria-labelledby" => "my-unisoft-tab" }
-          %h4.margin1bottom Activation My Unisoft
-          = simple_form_for @customer, url: customer_form_url(@organization, @customer), html: { id: 'form_my_unisoft', class: 'form form-horizontal label-auto' } do |c|
-            = hidden_field_tag :part, 'my_unisoft'
-            = c.simple_fields_for :my_unisoft do |f|
-              .form-group.row
-                .col-md-8
-                  = label_tag 'user[my_unisoft_attributes][is_used]', "Ce dossier utilise My Unisoft ?", class: 'control-label semibold'
-                .col-md-2.form-check.form-switch
-                  = label_tag 'user[my_unisoft_attributes][is_used]', 'Oui', class: 'semibold'
-                  = check_box_tag 'user[my_unisoft_attributes][is_used]', 1, @customer.uses?(:my_unisoft), class: 'form-check-input input_switch check-software'
-                .col-md-2
-                  - if @user.leader?
-                    .form-group.no-margin
-                      .w-100.text-end
-                        = f.submit t('actions.submit'), class: 'btn btn-primary'
+          .derivationLeft
+            %h4.margin1bottom Activation My Unisoft
+            = simple_form_for @customer, url: customer_form_url(@organization, @customer), html: { id: 'form_my_unisoft', class: 'form form-horizontal label-auto' } do |c|
+              = hidden_field_tag :part, 'my_unisoft'
+              = c.simple_fields_for :my_unisoft do |f|
+                .form-group.row
+                  .col-md-8
+                    = label_tag 'user[my_unisoft_attributes][is_used]', "Ce dossier utilise My Unisoft ?", class: 'control-label semibold'
+                  .col-md-2.form-check.form-switch
+                    = label_tag 'user[my_unisoft_attributes][is_used]', 'Oui', class: 'semibold'
+                    = check_box_tag 'user[my_unisoft_attributes][is_used]', 1, @customer.uses?(:my_unisoft), class: 'form-check-input input_switch check-software'
+                  .col-md-2
+                    - if @user.leader?
+                      .form-group.no-margin
+                        .w-100.text-end
+                          = f.submit t('actions.submit'), class: 'btn btn-primary'
           - if @customer.uses?(:my_unisoft)
-            %hr
-            .card
-              .card-header
-                %h4.margin2top.margin1bottom Configuration My Unisoft
-              .card-body
-                - if @customer.my_unisoft.society_id.present?
-                  %table.table.table-striped.table-condensed
-                    %tbody
-                      %tr
-                        %th Etat
-                        %td{colspan: 2, width: '17%'}
-                          .badge.badge-success.fs-origin Connecté                
-                      %tr
-                        %th ID société
-                        %td{colspan: 2}= @customer.my_unisoft.society_id
-                      %tr
-                        %th Nom de la société
-                        %td{colspan: 2}= @customer.my_unisoft.name
-                - else
-                  %h5 Ce dossier n'est pas lié à celui de My Unisoft
+            .derivationRight
+              %hr
+              .card
+                .card-header
+                  %h4.margin2top.margin1bottom Configuration My Unisoft
+                .card-body
+                  - if @customer.my_unisoft.society_id.present?
+                    %table.table.table-striped.table-condensed
+                      %tbody
+                        %tr
+                          %th Etat
+                          %td{colspan: 2, width: '17%'}
+                            .badge.badge-success.fs-origin Connecté                
+                        %tr
+                          %th ID société
+                          %td{colspan: 2}= @customer.my_unisoft.society_id
+                        %tr
+                          %th Nom de la société
+                          %td{colspan: 2}= @customer.my_unisoft.name
+                  - else
+                    %h5 Ce dossier n'est pas lié à celui de My Unisoft
 
-                - if @customer.my_unisoft.society_id.present? && @customer.uses?(:my_unisoft)
-                  %br
-                  %hr
-                  .card.accept_my_unisoft
-                    .card-header
-                      %h4 Vos accès API
-                    .card-body
-                      %table.table.table-condensed.with_custom_controls
-                        %tbody
-                          %tr
-                            %th Plan Comptable
-                            %td
-                              = (@customer.my_unisoft.access_routes.present? && @customer.my_unisoft.access_routes.match(/account/)) ? "Oui" : "Non"
-                          %tr
-                            %th Ecriture Comptable
-                            %td
-                              = (@customer.my_unisoft.access_routes.present? && @customer.my_unisoft.access_routes.match(/entry/)) ? "Oui" : "Non"
-            %br      
-            .row
-              .col-md-12
-                = link_to t('actions.edit'), edit_my_unisoft_organization_customer_path(@organization, @customer), class: 'btn btn-secondary float-right'
+                  - if @customer.my_unisoft.society_id.present? && @customer.uses?(:my_unisoft)
+                    %br
+                    %hr
+                    .card.accept_my_unisoft
+                      .card-header
+                        %h4 Vos accès API
+                      .card-body
+                        %table.table.table-condensed.with_custom_controls
+                          %tbody
+                            %tr
+                              %th Plan Comptable
+                              %td
+                                = (@customer.my_unisoft.access_routes.present? && @customer.my_unisoft.access_routes.match(/account/)) ? "Oui" : "Non"
+                            %tr
+                              %th Ecriture Comptable
+                              %td
+                                = (@customer.my_unisoft.access_routes.present? && @customer.my_unisoft.access_routes.match(/entry/)) ? "Oui" : "Non"
+              %br      
+              .row
+                .col-md-12
+                  = link_to t('actions.edit'), edit_my_unisoft_organization_customer_path(@organization, @customer), class: 'btn btn-secondary float-right'
 
       - if @organization.try(:coala).try(:used?)
         .tab-pane.box.no-margin#coala{ class: ('active' if params[:tab] == 'coala'), "role" => "tabpanel", "aria-labelledby" => "coala-tab" }
-          %h4.margin1bottom Activation Coala
-          = simple_form_for @customer, url: customer_form_url(@organization, @customer), html: { id: 'form_coala', class: 'form form-horizontal label-auto' } do |c|
-            = hidden_field_tag :part, 'coala'
-            = c.simple_fields_for :coala do |f|
-              .form-group.row
-                .col-md-10
-                  = label_tag 'user[coala_attributes][is_used]', "Ce dossier utilise Coala ?", class: 'control-label semibold'
-                .col-md-2.form-check.form-switch
-                  = label_tag 'user[coala_attributes][is_used]', 'Oui', class: 'semibold'
-                  = check_box_tag 'user[coala_attributes][is_used]', 1, @customer.try(:coala).try(:used?), class: 'form-check-input input_switch check-software'
-              .form-group.row
-                .col-md-10
-                  .label-section
-                    = label_tag 'user[coala_attributes][internal_id]', "Identifiant unique du dossier", class: 'semibold'
-                .col-md-2
-                  .control-section
-                    .select-container.no-padding.w-100
-                      = text_field_tag 'user[coala_attributes][internal_id]', nil, class: 'form-control'
-              .form-group.row
-                .col-md-12
-                  - if @user.leader? || @user.manage_customers
-                    .form-group.no-margin
-                      .w-100.text-end
-                        = f.submit t('actions.submit'), class: 'btn btn-primary' 
+          .derivationLeft
+            %h4.margin1bottom Activation Coala
+            = simple_form_for @customer, url: customer_form_url(@organization, @customer), html: { id: 'form_coala', class: 'form form-horizontal label-auto' } do |c|
+              = hidden_field_tag :part, 'coala'
+              = c.simple_fields_for :coala do |f|
+                .form-group.row
+                  .col-md-10
+                    = label_tag 'user[coala_attributes][is_used]', "Ce dossier utilise Coala ?", class: 'control-label semibold'
+                  .col-md-2.form-check.form-switch
+                    = label_tag 'user[coala_attributes][is_used]', 'Oui', class: 'semibold'
+                    = check_box_tag 'user[coala_attributes][is_used]', 1, @customer.try(:coala).try(:used?), class: 'form-check-input input_switch check-software'
+                .form-group.row
+                  .col-md-10
+                    .label-section
+                      = label_tag 'user[coala_attributes][internal_id]', "Identifiant unique du dossier", class: 'semibold'
+                  .col-md-2
+                    .control-section
+                      .select-container.no-padding.w-100
+                        = text_field_tag 'user[coala_attributes][internal_id]', nil, class: 'form-control'
+                .form-group.row
+                  .col-md-12
+                    - if @user.leader? || @user.manage_customers
+                      .form-group.no-margin
+                        .w-100.text-end
+                          = f.submit t('actions.submit'), class: 'btn btn-primary' 
           - if @customer.try(:coala).try(:used?)
-            .hide
+            .hide.derivationRight
               %hr
               %h4.margin2top.margin1bottom Configuration Coala
               %table.table.table-striped.table-condensed
@@ -555,23 +538,24 @@
 
       - if @organization.try(:quadratus).try(:used?)
         .tab-pane.box.no-margin#quadratus{ class: ('active' if params[:tab] == 'quadratus'), "role" => "tabpanel", "aria-labelledby" => "quadratus-tab" }
-          %h4.margin1bottom Activation Quadratus
-          = simple_form_for @customer, url: customer_form_url(@organization, @customer), html: { id: 'form_quadratus', class: 'form form-horizontal label-auto' } do |c|
-            = hidden_field_tag :part, 'quadratus'
-            = c.simple_fields_for :quadratuis do |f|
-              .form-group.row
-                .col-md-8
-                  = label_tag 'user[quadratus_attributes][is_used]', "Ce dossier utilise Quadratus ?", class: 'control-label semibold'
-                .col-md-2.form-check.form-switch
-                  = label_tag 'user[quadratus_attributes][is_used]', 'Oui', class: 'semibold'
-                  = check_box_tag 'user[quadratus_attributes][is_used]', 1, @customer.try(:quadratuis).try(:used?), class: 'form-check-input input_switch check-software'
-                .col-md-2
-                  - if @user.leader? || @user.manage_customers
-                    .form-group.no-margin
-                      .w-100.text-end
-                        = f.submit t('actions.submit'), class: 'btn btn-primary'
+          .derivationLeft
+            %h4.margin1bottom Activation Quadratus
+            = simple_form_for @customer, url: customer_form_url(@organization, @customer), html: { id: 'form_quadratus', class: 'form form-horizontal label-auto' } do |c|
+              = hidden_field_tag :part, 'quadratus'
+              = c.simple_fields_for :quadratuis do |f|
+                .form-group.row
+                  .col-md-8
+                    = label_tag 'user[quadratus_attributes][is_used]', "Ce dossier utilise Quadratus ?", class: 'control-label semibold'
+                  .col-md-2.form-check.form-switch
+                    = label_tag 'user[quadratus_attributes][is_used]', 'Oui', class: 'semibold'
+                    = check_box_tag 'user[quadratus_attributes][is_used]', 1, @customer.try(:quadratuis).try(:used?), class: 'form-check-input input_switch check-software'
+                  .col-md-2
+                    - if @user.leader? || @user.manage_customers
+                      .form-group.no-margin
+                        .w-100.text-end
+                          = f.submit t('actions.submit'), class: 'btn btn-primary'
           - if @customer.try(:quadratus).try(:used?)
-            .hide
+            .hide.derivationRight
               %hr
               %h4.margin2top.margin1bottom Configuration Quadratus
               %table.table.table-striped.table-condensed
@@ -585,23 +569,24 @@
 
       - if @organization.try(:cegid).try(:used?)
         .tab-pane.box.no-margin#cegid{ class: ('active' if params[:tab] == 'cegid'), "role" => "tabpanel", "aria-labelledby" => "cegid-tab" }
-          %h4.margin1bottom Activation Cegid
-          = simple_form_for @customer, url: customer_form_url(@organization, @customer), html: { id: 'form_cegid', class: 'form form-horizontal margin0' } do |c|
-            = hidden_field_tag :part, 'cegid'
-            = c.simple_fields_for :cegid do |f|
-              .form-group.row
-                .col-md-8
-                  = label_tag 'user[cegid_attributes][is_used]', "Ce dossier utilise Cegid ?", class: 'control-label semibold'
-                .col-md-2.form-check.form-switch
-                  = label_tag 'user[cegid_attributes][is_used]', 'Oui', class: 'semibold'
-                  = check_box_tag 'user[cegid_attributes][is_used]', 1, @customer.try(:cegid).try(:used?), class: 'form-check-input input_switch check-software'
-                .col-md-2
-                  - if @user.leader? || @user.manage_customers
-                    .form-group.no-margin
-                      .w-100.text-end
-                        = f.submit t('actions.submit'), class: 'btn btn-primary'
+          .derivationLeft
+            %h4.margin1bottom Activation Cegid
+            = simple_form_for @customer, url: customer_form_url(@organization, @customer), html: { id: 'form_cegid', class: 'form form-horizontal margin0' } do |c|
+              = hidden_field_tag :part, 'cegid'
+              = c.simple_fields_for :cegid do |f|
+                .form-group.row
+                  .col-md-8
+                    = label_tag 'user[cegid_attributes][is_used]', "Ce dossier utilise Cegid ?", class: 'control-label semibold'
+                  .col-md-2.form-check.form-switch
+                    = label_tag 'user[cegid_attributes][is_used]', 'Oui', class: 'semibold'
+                    = check_box_tag 'user[cegid_attributes][is_used]', 1, @customer.try(:cegid).try(:used?), class: 'form-check-input input_switch check-software'
+                  .col-md-2
+                    - if @user.leader? || @user.manage_customers
+                      .form-group.no-margin
+                        .w-100.text-end
+                          = f.submit t('actions.submit'), class: 'btn btn-primary'
           - if @customer.try(:cegid).try(:used?)
-            .hide
+            .hide.derivationRight
               %hr
               %h4.margin2top.margin1bottom Configuration Cegid
               %table.table.table-striped.table-condensed
@@ -615,23 +600,24 @@
 
       - if @organization.try(:fec_agiris).try(:used?)
         .tab-pane.box.no-margin#fec-agiris{ class: ('active' if params[:tab] == 'fec_agiris'), "role" => "tabpanel", "aria-labelledby" => "fec-agiris-tab" }
-          %h4.margin1bottom Activation Fec Agiris
-          = simple_form_for @customer, url: customer_form_url(@organization, @customer), html: { id: 'form_fec_agiris', class: 'form form-horizontal margin0' } do |c|
-            = hidden_field_tag :part, 'fec_agiris'
-            = c.simple_fields_for :fec_agiris do |f|
-              .form-group.row
-                .col-md-8
-                  = label_tag 'user[fec_agiris_attributes][is_used]', "Ce dossier utilise Fec Agiris ?", class: 'control-label semibold'
-                .col-md-2.form-check.form-switch
-                  = label_tag 'user[fec_agiris_attributes][is_used]', 'Oui', class: 'semibold'
-                  = check_box_tag 'user[fec_agiris_attributes][is_used]', 1, @customer.try(:fec_agiris).try(:used?), class: 'form-check-input input_switch check-software'
-                .col-md-2
-                  - if @user.leader? || @user.manage_customers
-                    .form-group.no-margin
-                      .w-100.text-end
-                        = f.submit t('actions.submit'), class: 'btn btn-primary'
+          .derivationLeft
+            %h4.margin1bottom Activation Fec Agiris
+            = simple_form_for @customer, url: customer_form_url(@organization, @customer), html: { id: 'form_fec_agiris', class: 'form form-horizontal margin0' } do |c|
+              = hidden_field_tag :part, 'fec_agiris'
+              = c.simple_fields_for :fec_agiris do |f|
+                .form-group.row
+                  .col-md-8
+                    = label_tag 'user[fec_agiris_attributes][is_used]', "Ce dossier utilise Fec Agiris ?", class: 'control-label semibold'
+                  .col-md-2.form-check.form-switch
+                    = label_tag 'user[fec_agiris_attributes][is_used]', 'Oui', class: 'semibold'
+                    = check_box_tag 'user[fec_agiris_attributes][is_used]', 1, @customer.try(:fec_agiris).try(:used?), class: 'form-check-input input_switch check-software'
+                  .col-md-2
+                    - if @user.leader? || @user.manage_customers
+                      .form-group.no-margin
+                        .w-100.text-end
+                          = f.submit t('actions.submit'), class: 'btn btn-primary'
           - if @customer.try(:fec_agiris).try(:used?)
-            .hide
+            .hide.derivationRight
               %hr
               %h4.margin2top.margin1bottom Configuration Fec Agiris
               %table.table.table-striped.table-condensed
@@ -645,23 +631,24 @@
 
       - if @organization.try(:fec_acd).try(:used?)
         .tab-pane.box.no-margin#fec-acd{ class: ('active' if params[:tab] == 'fec_acd'), "role" => "tabpanel", "aria-labelledby" => "fec-acd-tab" }
-          %h4.margin1bottom Activation Fec ACD
-          = simple_form_for @customer, url: customer_form_url(@organization, @customer), html: { id: 'form_fec_acd', class: 'form form-horizontal margin0' } do |c|
-            = hidden_field_tag :part, 'fec_acd'
-            = c.simple_fields_for :fec_acd do |f|
-              .form-group.row
-                .col-md-8
-                  = label_tag 'user[fec_acd_attributes][is_used]', "Ce dossier utilise Fec ACD ?", class: 'control-label semibold'
-                .col-md-2.form-check.form-switch
-                  = label_tag 'user[fec_acd_attributes][is_used]', 'Oui', class: 'semibold'
-                  = check_box_tag 'user[fec_acd_attributes][is_used]', 1, @customer.try(:fec_acd).try(:used?), class: 'form-check-input input_switch check-software'
-                .col-md-2
-                  - if @user.leader? || @user.manage_customers
-                    .form-group.no-margin
-                      .w-100.text-end
-                        = f.submit t('actions.submit'), class: 'btn btn-primary'
+          .derivationLeft
+            %h4.margin1bottom Activation Fec ACD
+            = simple_form_for @customer, url: customer_form_url(@organization, @customer), html: { id: 'form_fec_acd', class: 'form form-horizontal margin0' } do |c|
+              = hidden_field_tag :part, 'fec_acd'
+              = c.simple_fields_for :fec_acd do |f|
+                .form-group.row
+                  .col-md-8
+                    = label_tag 'user[fec_acd_attributes][is_used]', "Ce dossier utilise Fec ACD ?", class: 'control-label semibold'
+                  .col-md-2.form-check.form-switch
+                    = label_tag 'user[fec_acd_attributes][is_used]', 'Oui', class: 'semibold'
+                    = check_box_tag 'user[fec_acd_attributes][is_used]', 1, @customer.try(:fec_acd).try(:used?), class: 'form-check-input input_switch check-software'
+                  .col-md-2
+                    - if @user.leader? || @user.manage_customers
+                      .form-group.no-margin
+                        .w-100.text-end
+                          = f.submit t('actions.submit'), class: 'btn btn-primary'
           - if @customer.try(:fec_acd).try(:used?)
-            .hide
+            .hide.derivationRight
               %hr
               %h4.margin2top.margin1bottom Configuration Fec ACD
               %table.table.table-striped.table-condensed
@@ -675,52 +662,54 @@
 
       - if @organization.try(:csv_descriptor).try(:used?)
         .tab-pane.box.no-margin#csv-descriptor{ class: ('active' if params[:tab] == 'csv_descriptor'), "role" => "tabpanel", "aria-labelledby" => "csv-descriptor-tab" }
-          %h4.margin1bottom Activation Fichier d'export personnalisé (.csv)
-          = simple_form_for @customer, url: customer_form_url(@organization, @customer), html: { id: 'form_csv_descriptor', class: 'form form-horizontal label-auto' } do |c|
-            = hidden_field_tag :part, 'csv_descriptor'
-            = c.simple_fields_for :csv_descriptor do |f|
-              .form-group.row
-                .col-md-8
-                  = label_tag 'user[csv_descriptor_attributes][is_used]', "Ce dossier utilise un format d'export personnalisé ?", class: 'control-label semibold'
-                .col-md-2.form-check.form-switch
-                  = label_tag 'user[csv_descriptor_attributes][is_used]', 'Oui', class: 'semibold'
-                  = check_box_tag 'user[csv_descriptor_attributes][is_used]', 1, @customer.try(:csv_descriptor).try(:used?), class: 'form-check-input input_switch check-software'
-                .col-md-2
-                  - if @user.leader? || @user.manage_customers
-                    .form-group.no-margin
-                      .w-100.text-end
-                        = f.submit t('actions.submit'), class: 'btn btn-primary'
-          - if @customer.uses?(:csv_descriptor)
-            %hr
-            %h4.margin2top.margin1bottom Configuration Fichier d'export personnalisé (.csv)
-            %table.table.table-striped.table-condensed
-              %tbody
-                %tr.hide
-                  %th Générer automatiquement l'export des écritures et pièces ?
-                  %td
-                    .alignright
-                      %span{style: "padding:10px 50px"}= @customer.try(:csv_descriptor).try(:auto_deliver?) ? t('yes_value') : t('no_value')
-                      - if @user.leader? || @user.manage_customers
-                        = link_to t('actions.edit'), edit_software_organization_customer_path(@organization, @customer, software: 'csv_descriptor'), class: 'btn btn-primary float-right'
-                %tr
-                  %th
-                    - if @customer.csv_descriptor.try(:use_own_format?)
-                      Ce dossier utilise son propre format de fichier d'export .csv.
-                    - else
-                      Ce dossier utilise le format de fichier d'export .csv de l'organisation.
-                    - unless @organization.csv_descriptor.try(:directive).present?
-                      %br
-                      %i (L'organisation n'a pas de format csv configuré)
-                  %td
+          .derivationLeft
+            %h4.margin1bottom Activation Fichier d'export personnalisé (.csv)
+            = simple_form_for @customer, url: customer_form_url(@organization, @customer), html: { id: 'form_csv_descriptor', class: 'form form-horizontal label-auto' } do |c|
+              = hidden_field_tag :part, 'csv_descriptor'
+              = c.simple_fields_for :csv_descriptor do |f|
+                .form-group.row
+                  .col-md-8
+                    = label_tag 'user[csv_descriptor_attributes][is_used]', "Ce dossier utilise un format d'export personnalisé ?", class: 'control-label semibold'
+                  .col-md-2.form-check.form-switch
+                    = label_tag 'user[csv_descriptor_attributes][is_used]', 'Oui', class: 'semibold'
+                    = check_box_tag 'user[csv_descriptor_attributes][is_used]', 1, @customer.try(:csv_descriptor).try(:used?), class: 'form-check-input input_switch check-software'
+                  .col-md-2
                     - if @user.leader? || @user.manage_customers
+                      .form-group.no-margin
+                        .w-100.text-end
+                          = f.submit t('actions.submit'), class: 'btn btn-primary'
+          - if @customer.uses?(:csv_descriptor)
+            .derivationRight
+              %hr
+              %h4.margin2top.margin1bottom Configuration Fichier d'export personnalisé (.csv)
+              %table.table.table-striped.table-condensed
+                %tbody
+                  %tr.hide
+                    %th Générer automatiquement l'export des écritures et pièces ?
+                    %td
                       .alignright
-                        - if @customer.csv_descriptor.try(:use_own_format?)
-                          - if @organization.csv_descriptor.try(:directive).present?
-                            - idocus_params = param_encode({ url: deactivate_custom_user_csv_descriptor_path(@organization.id, @customer.id), method: 'post', confirm: "Voulez-vous vraiment utiliser le format défini pour l'organisation?" })
-                            %button.btn.btn-secondary.as_idocus_ajax{ type: 'button', idocus: idocus_params } Utiliser le format de l'organisation
-                          %button.btn.btn-primary#edit_customer_csv_descriptor{ type: 'button', data: { id: @customer.id, organization_id: @organization.id } } Modifier le format propre au dossier
-                        - else
-                          %button.btn.btn-primary#edit_customer_csv_descriptor{ type: 'button', data: { id: @customer.id, organization_id: @organization.id } } Créer un format propre au dossier
+                        %span{style: "padding:10px 50px"}= @customer.try(:csv_descriptor).try(:auto_deliver?) ? t('yes_value') : t('no_value')
+                        - if @user.leader? || @user.manage_customers
+                          = link_to t('actions.edit'), edit_software_organization_customer_path(@organization, @customer, software: 'csv_descriptor'), class: 'btn btn-primary float-right'
+                  %tr
+                    %th
+                      - if @customer.csv_descriptor.try(:use_own_format?)
+                        Ce dossier utilise son propre format de fichier d'export .csv.
+                      - else
+                        Ce dossier utilise le format de fichier d'export .csv de l'organisation.
+                      - unless @organization.csv_descriptor.try(:directive).present?
+                        %br
+                        %i (L'organisation n'a pas de format csv configuré)
+                    %td
+                      - if @user.leader? || @user.manage_customers
+                        .alignright
+                          - if @customer.csv_descriptor.try(:use_own_format?)
+                            - if @organization.csv_descriptor.try(:directive).present?
+                              - idocus_params = param_encode({ url: deactivate_custom_user_csv_descriptor_path(@organization.id, @customer.id), method: 'post', confirm: "Voulez-vous vraiment utiliser le format défini pour l'organisation?" })
+                              %button.btn.btn-secondary.as_idocus_ajax{ type: 'button', idocus: idocus_params } Utiliser le format de l'organisation
+                            %button.btn.btn-primary#edit_customer_csv_descriptor{ type: 'button', data: { id: @customer.id, organization_id: @organization.id } } Modifier le format propre au dossier
+                          - else
+                            %button.btn.btn-primary#edit_customer_csv_descriptor{ type: 'button', data: { id: @customer.id, organization_id: @organization.id } } Créer un format propre au dossier
             .modal#csv_descriptor_modal 
               .modal-dialog
                 .modal-content
@@ -741,67 +730,9 @@
 
       - if @organization.mcf_settings.try(:access_token).present? || @customer.try(:mcf_documents).try(:not_processable).try(:any?)
         .tab-pane.box.no-margin#mcf{ class: ('active' if params[:tab] == 'mcf'), "role" => "tabpanel", "aria-labelledby" => "mcf-tab" }
-          - if @organization.mcf_settings.try(:access_token).present?
-            %h4 Paramètre de compte
-            %table.table.table-striped.table-condensed
-              %tbody
-                %tr
-                  %th Compte associé
-                  %td
-                    - if @customer.mcf_storage.present?
-                      = @customer.mcf_storage
-                    - else
-                      %i{ style: 'color:gray' } Aucun
-            .row
-              .col-md-12
-                .form-group.no-margin
-                  .w-100.text-end
-                    - if @organization.mcf_settings.configured?
-                      = link_to t('actions.edit'), '#', link: edit_mcf_organization_customer_path(@organization, @customer), class: 'btn btn-primary bold edit_mcf_customer'
-                    - else @organization.mcf_settings.configured?
-                      = link_to t('actions.edit'), '#', class: 'btn btn-primary', disabled: true
-            %br
-            %br
-          - if @customer.try(:mcf_documents).try(:not_processable).try(:any?)
-            %h4 Erreur de récupération de documents
-            %table.table.table-striped.table-condensed
-              %tbody
-                %tr
-                  %th
-                    %i{ style: 'color:red' }= @customer.mcf_documents.not_processable.count
-                    erreur(s) de récupération de documents venant de MCF detectée(s)
-            .row
-              .col-md-12
-                - mcf_documents_error = @customer.mcf_documents.not_processable.order('created_at' => 'desc').page(params[:page]).per(params[:per_page])
-                #mcf_errors
-                  - if mcf_documents_error.empty?
-                    %p Aucune erreur de récupération de document détéctée.
-                  - else
-                    = form_tag retake_mcf_errors_organization_customer_path(@organization, @customer), method: :post, class: 'form form-vertical margin0bottom', id: 'retake_mcf_errors' do
-                      %table.table.table-striped.table-condensed.margin0bottom.table_mcf_errors
-                        %tr
-                          %th= check_box_tag 'master_checkbox', 0, false
-                          %th Date
-                          %th Nom du fichier
-                          %th Journal
-                          %th Message erreur
-                        - mcf_documents_error.each_with_index do |mcf_document, index|
-                          %tr
-                            %td= check_box_tag 'mcf_documents_ids[]', mcf_document.id, false, class: ('checkbox checker_mcf_document_' + index.to_s)
-                            %td= mcf_document.created_at.strftime('%d/%m/%Y %H:%M')
-                            %td= mcf_document.original_file_name
-                            %td= mcf_document.journal
-                            %td= mcf_document.error_message
-                        %tr
-                          %td{colspan: 6}
-                            .form-group.no-margin
-                              .w-100.text-end
-                                - validation_param = param_encode({ url: retake_mcf_errors_organization_customer_path(@organization, @customer), method: 'post', form: {id: 'retake_mcf_errors'}, html: { target: '#mcf.tab-pane' } })
-                                = button_tag 'Relancer la récupération', name: 'retake_mcf_documents', class: 'btn btn-primary margin1right as_idocus_ajax', data: {confirm: 'Etes-vous sûr?'}, idocus: validation_param
-                                = button_tag 'Marquer la séléction comme vu', name: 'confirm_unprocessable_mcf', class: 'btn btn-primary margin1right as_idocus_ajax', data: {confirm: 'Etes-vous sûr?'}, idocus: validation_param
-                      = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: organization_customer_path(@organization, @customer, tab: 'mcf'), name: 'mcf_errors', target: '.table_mcf_errors', total_pages: mcf_documents_error.total_pages }
+          = render file: Rails.root.join('app/templates/front/my_company_files/views/my_company_files/_configuration.html.haml')
 
-      - if @organization.knowings.try(:ready?)
+      - if @organization.knowings.try(:ready?) && 1 == 0
         .tab-pane.box.no-margin#ged{ class: ('active' if params[:tab] == 'ged'), "role" => "tabpanel", "aria-labelledby" => "ged-tab" }
           %table.table.table-striped.table-condensed
             %thead
@@ -821,7 +752,7 @@
       - if @user.is_admin && @customer.active?
         .tab-pane.no-margin#file-storages{ class: ('active' if params[:tab] == 'file_storage'), "role" => "tabpanel", "aria-labelledby" => "file-storages-tab" }
           .box
-            = render partial: 'customers/main/file_storages', locals: { user: @customer }
+            = render file: Rails.root.join('app/templates/front/external_file_storages/views/external_file_storages/efs_user/_efs_user.html.haml'), locals: { user: @customer }
           / .form-group.no-margin
           /   .w-100.text-end
           /     = link_to t('actions.edit'), edit_organization_customer_file_storage_authorizations_path(@organization, @customer), class: 'btn btn-primary bold'

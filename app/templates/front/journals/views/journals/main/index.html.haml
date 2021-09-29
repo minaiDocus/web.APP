@@ -3,7 +3,7 @@
 %input#organization_id{type: :hidden, value: @organization.id, name: 'organization_id'}
 
 .book
-  .row
+  .row.derivationRight
     .col-md-10
       %h3.bold
         Journaux comptables
@@ -14,7 +14,7 @@
         %span Nouveau journal
 
   
-  .box.mt-4
+  .box.mt-4.derivationLeft
     %table.table.table-striped.table_integration
       %thead
         %th Nom du journal comptable

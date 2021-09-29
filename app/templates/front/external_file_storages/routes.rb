@@ -3,6 +3,12 @@ Rails.application.routes.draw do
     post 'dropbox/webhook', to: 'dropbox#webhook', action: 'webhook'
     get  'dropbox/webhook', to: 'dropbox#verify', action: 'verify'
 
+    resources :organizations, only: [] do
+      resources :user, only: [] do
+        resource :file_storage_authorizations, only: %w(edit update), controller: 'authorization'
+      end
+    end
+
     resource :dropbox, controller: 'dropbox' do
       get 'authorize_url', on: :member
       get 'callback',      on: :member

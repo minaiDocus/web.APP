@@ -10,7 +10,7 @@
 
   - reduced_retriever_option = (@subscription.try(:retriever_price_option) == :retriever)? false : true
 
-  .ido_x_content
+  .ido_x_content.derivationLeft
     .row.box
       .col-md-3.text-center
         .form-check.form-check-inline{ class: "#{'notify-warning' if notify_warning(@subscription, 'ido_x')}"}
@@ -38,7 +38,7 @@
             = text_field_tag 'user[jefacture_account_id]', @customer.jefacture_account_id, class: 'form-control ido_x_option option_checkbox', disabled: !current_package.include?('ido_x'), placeholder: "ex : 278 254 652"
       .col-md-6.journal-numbers
 
-  .ido_nano_content
+  .ido_nano_content.derivationRight
     .row.box
       .col-md-3.text-center
         .form-check.form-check-inline{class: "#{'notify-warning' if notify_warning(@subscription, 'ido_nano')}"}
@@ -62,7 +62,7 @@
             .row.digitization-option{data: {active: "#{(current_package.include?('ido_nano') && current_package.include?('digitize_option'))}", disabled: "#{!current_package.include?('ido_nano')}", notify: "#{notify_warning(@subscription, 'ido_nano', 'digitize_option')}"}}
         .col-md-6.journal-numbers
 
-  .ido_micro_content
+  .ido_micro_content.derivationLeft
     .row.box
       .col-md-3.text-center
         .form-check.form-check-inline{class: "#{'notify-warning' if notify_warning(@subscription, 'ido_micro')}"}
@@ -86,7 +86,7 @@
             .row.digitization-option{data: {active: "#{(current_package.include?('ido_micro') && current_package.include?('digitize_option'))}", disabled: "#{!current_package.include?('ido_micro')}", notify: "#{notify_warning(@subscription, 'ido_micro', 'digitize_option')}"}}
         .col-md-6.journal-numbers
   
-  .ido_classique_content
+  .ido_classique_content.derivationRight
     .row.box
       .col-md-3.text-center
         .form-check.form-check-inline{ class: "#{'notify-warning' if notify_warning(@subscription, 'ido_classique')}"}
@@ -123,7 +123,7 @@
 
         .col-md-6.journal-numbers
 
-  .ido_retriever_only_content
+  .ido_retriever_only_content.derivationLeft
     .row.box
       .col-md-3.text-center
         .form-check.form-check-inline{ class: "#{'notify-warning' if notify_warning(@subscription, 'retriever_option')}", title: Subscription::Package.infos_of(:retriever_option)[:tooltip], data: { toggle: 'tooltip', placement: 'right' }}
@@ -148,7 +148,7 @@
         .col-md-6.journal-numbers
 
   - if CustomUtils.is_manual_paper_set_order?(organization)
-    .ido_digitization_only_content
+    .ido_digitization_only_content.derivationRight
       .row.box
         .col-md-3.text-center
           .form-check.form-check-inline{ class: "#{'notify-warning' if notify_warning(@subscription, 'digitize_option')}"}

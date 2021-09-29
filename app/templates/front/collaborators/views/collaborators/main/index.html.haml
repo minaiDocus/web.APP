@@ -3,7 +3,7 @@
 .collaborators.page-content
   %input#organization_id{type: :hidden, value: @organization.id, name: 'organization_id'}
   .collaborators-content
-    .row
+    .row.derivationLeft
       .col-md-6
         %h3.bold
           Liste des collaborateurs
@@ -21,7 +21,7 @@
           %span.me-3= glyphicon('plus', { size: '14', color: '#FFFF'})
           %span Ajouter un collaborateur
 
-    .box
+    .box.derivationRight
       .row
         .col-md-12
           %table.table.table-striped.table_integration
@@ -56,7 +56,7 @@
 
           = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { name: 'members', total_pages: @members.total_pages }
 
-  .box-group-content
+  .box-group-content.derivationLeft
     = render file: Rails.root.join('app/templates/front/groups/views/groups/main/index.html.haml')
   
   .modal#add_edit_collaborator

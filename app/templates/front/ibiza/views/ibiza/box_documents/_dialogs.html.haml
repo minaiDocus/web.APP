@@ -1,18 +1,18 @@
 - if action_name == 'index'
   - path = organization_customer_ibizabox_documents_path(@organization, @customer)
-  - target_dest = '.historic_content'
+  - title = 'Historique des documents'
 - elsif action_name == 'select'
   - path = select_organization_customer_ibizabox_documents_path(@organization, @customer)
-  - target_dest = '.select_content'
+  - title = 'Sélection des documents'
 
-.modal#ibizabox_documents_filter_modal
+.modal{ id: "filter_#{action_name}"}
   .modal-dialog
     .modal-content
       .modal-header
-        %h5.modal-title.bold Configuration email
+        %h5.modal-title.bold= title
         %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
       .modal-body
-        = form_tag path, method: :get, class: 'form-filter', id: 'ibizabox_documents_filter' do
+        = form_tag path, method: :get, class: 'form-filter', id: "form_filter_#{action_name}" do
           .form-group.clearfix
             .label-section
               = label_tag 'document_contains[name]', 'Nom original', class: 'semibold'
@@ -27,5 +27,5 @@
       .modal-footer
         .w-100.text-end
           %button.btn.btn-light.semibold{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'} Annuler
-          - idocus_params = param_encode({ url: path, form: 'ibizabox_documents_filter', html: { target: '#ibizabox_documents', target_dest: target_dest }, modal: { id: 'ibizabox_documents_filter_modal' } })
+          - idocus_params = param_encode({ url: path, form: "form_filter_#{action_name}", html: { target: "#ibizabox_#{action_name}" }, modal: { id: "filter_#{action_name}", close_after_error: true } })
           %button.btn.btn-primary.as_idocus_ajax{ type: 'button', idocus: idocus_params }= t('filters.action')

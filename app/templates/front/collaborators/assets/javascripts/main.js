@@ -147,39 +147,39 @@ class Main{
 
 
   show_collaborator_rights_edit(url){
-    let ajax_params =   {
-                          'url': url,
-                          'dataType': 'html',
-                          'target': ''
-                        };
+    // let ajax_params =   {
+    //                       'url': url,
+    //                       'dataType': 'html',
+    //                       'target': ''
+    //                     };
 
-    this.applicationJS.sendRequest(ajax_params)
-    .then((element)=>{
-      this.action_locker = false;
-      $('#authorization').html($(element).find('#collaborator_rights').html());
-      $('#authorization .cancel_collaborator_rights').remove();
-      bind_collaborator_events();
-      ApplicationJS.set_checkbox_radio();
-    })
-    .catch(()=>{ this.action_locker = false; });
+    // this.applicationJS.sendRequest(ajax_params)
+    // .then((element)=>{
+    //   this.action_locker = false;
+    //   $('#authorization').html($(element).find('#collaborator_rights').html());
+    //   $('#authorization .cancel_collaborator_rights').remove();
+    //   bind_collaborator_events();
+    //   ApplicationJS.set_checkbox_radio();
+    // })
+    // .catch(()=>{ this.action_locker = false; });
   }
 
   show_collaborator_file_storages_edit(url){
-    let ajax_params =   {
-                          'url': url,
-                          'dataType': 'html',
-                          'target': ''
-                        };
+    // let ajax_params =   {
+    //                       'url': url,
+    //                       'dataType': 'html',
+    //                       'target': ''
+    //                     };
 
-    this.applicationJS.sendRequest(ajax_params)
-    .then((element)=>{
-      this.action_locker = false;
-      $('#file_storages').html($(element).find('#file_storage_authorizations').html());
-      $('#file_storages .cancel_collaborator_file_storages').remove();
-      bind_collaborator_events();
-      ApplicationJS.set_checkbox_radio();
-    })
-    .catch(()=>{ this.action_locker = false; });
+    // this.applicationJS.sendRequest(ajax_params)
+    // .then((element)=>{
+    //   this.action_locker = false;
+    //   $('#file_storages').html($(element).find('#file_storage_authorizations').html());
+    //   $('#file_storages .cancel_collaborator_file_storages').remove();
+    //   bind_collaborator_events();
+    //   ApplicationJS.set_checkbox_radio();
+    // })
+    // .catch(()=>{ this.action_locker = false; });
   }
 
   destroy_group(url){
@@ -260,7 +260,6 @@ jQuery(function() {
   AppListenTo('destroy_group', (e)=>{ main.destroy_group(e.detail.url); });
 
   AppListenTo('show_details_group', (e)=>{ main.show_details_group(e.detail.url); });
-  
   
   AppListenTo('window.change-per-page.members', (e)=>{ main.load_data(true, e.detail.name, 1, e.detail.per_page); });
   AppListenTo('window.change-page.members', (e)=>{ main.load_data(true, e.detail.name, e.detail.page); });

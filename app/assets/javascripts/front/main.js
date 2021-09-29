@@ -2,6 +2,7 @@
 //= require '../dynamic_events'
 
 function bind_globals_events(){
+  custom_dynamic_height();
   elements_initializer();
   iDocus_event_emiter();
   iDocus_ajax_links();

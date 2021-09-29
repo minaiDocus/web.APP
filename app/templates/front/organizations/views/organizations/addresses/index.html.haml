@@ -1,8 +1,10 @@
-.general.derivationRight
+.general
   .row
-    .col-md-8
-      %h3.bold Paramètres : Gestion des adresses (Liste des adresses de l'organisation)
+    .derivationRight
+      .col-md-8
+        %h3.bold Paramètres : Gestion des adresses (Liste des adresses de l'organisation)
 
-    - addresses = OpenStruct.new({ paper_return_address: @organization.addresses.for_paper_return.first, paper_set_shipping_address: @organization.addresses.for_paper_set_shipping.first, dematbox_shipping_address: @organization.addresses.for_dematbox_shipping.first })
+    .derivationLeft
+      - addresses = OpenStruct.new({ paper_return_address: @organization.addresses.for_paper_return.first, paper_set_shipping_address: @organization.addresses.for_paper_set_shipping.first, dematbox_shipping_address: @organization.addresses.for_dematbox_shipping.first })
 
-    = render file: Rails.root.join('app/templates/front/addresses/views/addresses/_show.html.haml'), locals: { addresses: addresses, addr_for: 'organization', id: @organization.id }
+      = render file: Rails.root.join('app/templates/front/addresses/views/addresses/_show.html.haml'), locals: { addresses: addresses, addr_for: 'organization', id: @organization.id }

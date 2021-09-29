@@ -1,11 +1,11 @@
 = stylesheet_link_tag 'front/organizations/assets/stylesheets/edit'
 
 .general
-  .row
+  .row.derivationRight
     .col-md-8
       %h3.bold Mode de paiement
 
-  .box.mt-4
+  .box.mt-4.derivationLeft
     - if @user.leader?
       = render :partial => 'slimpay_checkout'
       %table.table.table-condensed.table-striped

@@ -18,10 +18,19 @@
         %input{ type: 'hidden', id: 'description_separator_hidden', name: 'software_ibiza[description_separator]', value: ibiza.try(:description_separator) || '_' }
         .select-container.no-padding.w-100
           = f.input :specific_url_options, label_html: { class: 'semibold' }, placeholder: 'https://webservice.irf-cloud.com/IRFService/services/IRFService.svc', hint: "Pour connecter iBiZa à iDocus, Vous pouvez spécifier votre URL de connexion (Par défaut: https://webservice.irf-cloud.com/IRFService/services/IRFService.svc)"
-        .select-container.no-padding.w-100
-          = f.input :access_token, label_html: { class: 'semibold' }, hint: "Pour connecter iBiZa à iDocus, rendez-vous sur l'iBiZStore pour récupérer votre jeton d'accès."
-        .select-container.no-padding.w-100
-          = f.input :access_token_2, label_html: { class: 'semibold' }, hint: "Pour connecter iBiZa à iDocus, rendez-vous sur l'iBiZStore pour récupérer votre jeton d'accès."
+        .to_change_box
+          .select-container.no-padding.w-100
+            - if ibiza.access_token.present? && ibiza.first_configured?
+              %span.badge.bg-success.me-2.float-end.semibold Valid
+            - elsif ibiza.access_token.present?
+              %span.badge.bg-danger.me-2.float-end.semibold Invalid
+            = f.input :access_token, label_html: { class: 'semibold' }, hint: "Pour connecter iBiZa à iDocus, rendez-vous sur l'iBiZStore pour récupérer votre jeton d'accès."
+          .select-container.no-padding.w-100
+            - if ibiza.access_token_2.present? && ibiza.second_configured?
+              %span.badge.bg-success.me-2.float-end.semibold Valid
+            - elsif ibiza.access_token_2.present?
+              %span.badge.bg-danger.me-2.float-end.semibold Invalid
+            = f.input :access_token_2, label_html: { class: 'semibold' }, hint: "Pour connecter iBiZa à iDocus, rendez-vous sur l'iBiZStore pour récupérer votre jeton d'accès."
         .form-group
           .row
             .col-md-11
@@ -94,7 +103,7 @@
 
 .form-group.no-margin
   .w-100.text-center
-    - idocus_params = param_encode({ url: "/organizations/#{@organization.id}/ibiza", method: 'put', form:{ id: 'ibiza_form_edition' } })
+    - idocus_params = param_encode({ url: "/organizations/#{@organization.id}/ibiza", method: 'put', form:{ id: 'ibiza_form_edition' }, redirect_to: { url: softwares_list_path(@organization, tab: 'ibiza'), method: 'get', html: { target: '.to_change_box' } } })
     %button.btn.btn-primary.as_idocus_ajax.w-25{ type: 'button', idocus: idocus_params } Valider
 
   = render file: Rails.root.join('app/templates/front/ibiza/views/ibiza/main/_dialogs.html.haml'), locals: { ibiza: ibiza }

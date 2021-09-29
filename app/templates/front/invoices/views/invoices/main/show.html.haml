@@ -1,9 +1,9 @@
 = stylesheet_link_tag 'front/invoices/assets/stylesheets/main'
 
 .main_content
-  .invoice.derivationRight
+  .invoice
     .auto_integration_box
-      .row
+      .row.derivationRight
         .col-md-10
           %h3.bold
             Intégration automatique des factures
@@ -16,7 +16,7 @@
             %span Paramètres
 
       
-      .box.mt-4.table_integration
+      .box.mt-4.table_integration.derivationLeft
         %table.table.table-striped
           %thead
             %th Code de dossiers
@@ -51,13 +51,13 @@
         = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: organization_invoices_path(@organization), name: 'integration', target: '.table_integration', total_pages: @invoice_settings.total_pages }
 
     .invoices_box
-      .row
+      .row.derivationRight
         .col-md-8
           %h3.bold 
             Factures
             %span.badge.badge-secondary.badge-sm.regular.total-invoices= @invoices.total_count
 
-      #data_invoices.box.mt-4.table_facture
+      #data_invoices.box.mt-4.table_facture.derivationLeft
         %table.table.table-striped
           %thead
             %th Numero de facture

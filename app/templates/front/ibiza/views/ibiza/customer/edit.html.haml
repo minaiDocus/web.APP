@@ -59,5 +59,5 @@
               %label.form-check-label Auto
   .idocus_modal_buttons
     - if @customer.configured?
-      - idocus_params = param_encode({ url: organization_customer_ibiza_path(@organization, @customer), metod: 'post', form:{ id: 'edit_ibiza_form', dump_action: true }, modal: { id: '#' } })
+      - idocus_params = param_encode({ url: organization_customer_ibiza_path(@organization, @customer), method: 'post', form:{ id: 'edit_ibiza_form', dump_action: true }, modal: { id: '#' }, redirect_to: { url: organization_customer_path(@organization, @customer, tab: 'ibiza'), html: { target: '.ibiza_configuration_customer' } } })
       %button.btn.btn-primary.update_ibiza_organization_users.as_idocus_ajax{ type: :button, idocus: idocus_params, disabled: true } Valider

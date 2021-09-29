@@ -20,7 +20,7 @@ class Collaborators::MainController < OrganizationController
   end
 
   # GET /organizations/:organization_id/collaborators/:id
-  def show; end
+  def show;  end
 
   # GET /organizations/:organization_id/collaborators/new
   def new

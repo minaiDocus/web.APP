@@ -1,17 +1,22 @@
 # frozen_string_literal: true
-class Rights::MainController < OrganizationController
+class Collaborators::RightsController < OrganizationController
   before_action :verify_rights
   before_action :load_member
 
-  prepend_view_path('app/templates/front/rights/views')
+  prepend_view_path('app/templates/front/collaborators/views')
 
   # GET /account/organizations/:organization_id/collaborators/:collaborator_id/rights/edit
   def edit; end
 
   # PUT /account/organizations/:organization_id/collaborators/:collaborator_id/rights
   def update
-    @member.update(membership_params)
-    flash[:success] = 'Modifié avec succès.'
+    if @member.update(membership_params)
+      flash[:success] = 'Modifié avec succès.'
+    else
+      flash[:error] = errors_to_list @member.errors.messages
+    end
+
+    # render json: { json_flash: json_flash }, status: 200
     redirect_to organization_collaborator_path(@organization, @member, tab: 'authorization')
   end
 

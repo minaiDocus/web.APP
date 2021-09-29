@@ -197,7 +197,7 @@ class ApplicationJS {
   constructor(){
     this.parseJsVar();
 
-    console.log( VARIABLES.get('controller_path') );
+    // console.log( VARIABLES.get('controller_path') );
     this.parseJsVar = this.parseJsVar.bind(this);
   }
 
@@ -260,6 +260,7 @@ class ApplicationJS {
   sendRequest(params={}, beforeUpdateContent=function(e){}, afterUpdateContent=function(e){}){
     var self = this
 
+    console.log(params.url);
     return new Promise((success, error) => {
       $.ajax({
         url: params.url,
@@ -288,7 +289,7 @@ class ApplicationJS {
               if(/^[.]/.test(target)){
                 if( $(result).hasClass(target.replace('.', '')) ){ found = true; source_html = $(result)[0].outerHTML; }
               }else if( /^[#]/.test(target) ){
-                if( $(result).attr(id) == target.replace('#', '') ){ found = true; source_html = $(result)[0].outerHTML; }
+                if( $(result).attr('id') == target.replace('#', '') ){ found = true; source_html = $(result)[0].outerHTML; }
               }
 
               if(!found)
@@ -466,10 +467,10 @@ class ApplicationJS {
 
                   if(e.json_flash){
                     if( close_on_success && e.json_flash.success ){ modal.modal('hide'); }
-                    if( close_on_error && e.json_flash.error ){ modal.modal('hide'); }
+                    else if( close_on_error && e.json_flash.error ){ modal.modal('hide'); }
                   }else{
                     if( close_on_success ){ modal.modal('hide'); }
-                    if( close_on_error ){ modal.modal('hide'); }
+                    else if( close_on_error ){ modal.modal('hide'); }
                   }
                 }
 
@@ -490,7 +491,7 @@ class ApplicationJS {
                   if(modal_name == '#')
                     modal_name = 'general_idocus_main_modal';
 
-                  let modal            = $(`.modal#${modal_name}`);
+                  let modal          = $(`.modal#${modal_name}`);
                   let close_on_error = idocus_params['modal']['close_after_error'] || false
                   if( close_on_error ){ modal.modal('hide'); }
                 }

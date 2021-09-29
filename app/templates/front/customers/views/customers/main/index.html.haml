@@ -2,9 +2,9 @@
 
 .customers
   %input#organization_id{type: :hidden, value: @organization.id, name: 'organization_id'}
-  %input#customer_id{type: :hidden, value: @customers.last&.id, name: 'customer_id'}
-  .list-customers.derivationRight
-    .row
+  %input#customer_id{type: :hidden, value: 0, name: 'customer_id'}
+  .list-customers
+    .row.derivationRight
       .col-md-6
         %h3.bold
           Liste des clients
@@ -24,7 +24,7 @@
             %span Nouveau Client
           
         
-    .box
+    .box.derivationLeft
       .row
         .col-md-12#table_customers
           %table.table.table-striped.table_integration

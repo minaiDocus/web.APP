@@ -8,6 +8,7 @@ class NotifierMain{
                         url: '/notifications/latest',
                         type: 'GET',
                         dataType: 'html',
+                        no_loading: true
                       }
 
     this.applicationJS.sendRequest(ajax_params)

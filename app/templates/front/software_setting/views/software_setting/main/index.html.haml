@@ -4,7 +4,7 @@
 
 .general
   .row
-    .col-md-8
+    .col-md-8.derivationRight
       %h3.bold Paramètres : Logiciels comptables et CSV
 
     %ul.nav.nav-tabs.ms-4{ "role" => "tablist" }
@@ -33,10 +33,10 @@
             = render partial: 'basic_configuration', locals: { software: software.to_s }
 
       .tab-pane.box.no-margin#other-software{ "role" => "tabpanel", "aria-labelledby" => "other-software-tab", class: (!first_active)? 'active' : '' }
-        %label.semibold Activer l'option d'export des écritures comptables en cliquant sur le logo et pièces pour :
+        %label.semibold.derivationLeft Activer l'option d'export des écritures comptables en cliquant sur le logo et pièces pour :
         - img_list = { quadratus: '/assets/logo/quadratus-logo.png', cegid: '/assets/logo/cegid-logo.png', sage: '/assets/logo/sage-logo.png', fec_agiris: '/assets/logo/agiris-logo.png', exact_online: '/assets/logo/exact-logo.png' }
         - softwares_list.each_slice(3) do |group|
-          .row
+          .row.derivationRight
             - group.each do |software|
               - if @organization.send(software.to_sym).try(:used?)
                 - url = deactivate_software_path(@organization, software)

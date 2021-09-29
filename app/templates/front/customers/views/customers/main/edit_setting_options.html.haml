@@ -1,6 +1,6 @@
 = stylesheet_link_tag 'front/customers/assets/stylesheets/main'
 
-#customer.edit.derivationRight
+#customer.edit
   / - unless @customer.configured?
   /   .box
   /     = render 'steps'
@@ -13,7 +13,7 @@
   /   %h3
   /     Options pour le dossier : 
   /     %span.text-info.fs-origin= @customer
-  .p-3
+  .p-3.derivationRight
     = simple_form_for @customer, url: update_setting_options_organization_customer_path(@organization, @customer), html: { class: 'form-horizontal label-medium' } do |f|
       - if @customer.active? && (@customer.options.is_upload_authorized || @customer.subscription.is_retriever_only? ) && !@organization.specific_mission
         .select-container.no-padding.w-100

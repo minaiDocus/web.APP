@@ -1,14 +1,14 @@
 = stylesheet_link_tag 'front/organizations/assets/stylesheets/show'
 
 .acceuil_organizations.container-fluid
-  .row
+  .row.derivationRight
     .col-md-12.title
       %h1
         = t('organizations.my_organization') + ' :'
         %span= @organization.name
   .row
     .col-md-12.statistic_board                 
-      .col-md-8.left_section
+      .col-md-8.left_section.derivationLeft
         .row.no-padding.no-margin
           .col-md-12.collab_customer.no-margin
             .col-md-6.collaborator.box.no-margin
@@ -22,7 +22,7 @@
             %h4= t('organizations.customers_evolution')
             
             %canvas#chart_dossiers          
-      .col-md-4.right_section
+      .col-md-4.right_section.derivationRight
         .repartition
           %h4= t('organizations.distribution_of_subscriptions')
           %canvas#chart_abonnement

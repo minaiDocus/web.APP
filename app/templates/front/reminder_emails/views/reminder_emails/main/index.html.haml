@@ -1,7 +1,7 @@
 = stylesheet_link_tag 'front/reminder_emails/assets/stylesheets/main'
 
-.general.derivationRight
-  .row
+.general
+  .row.derivationRight
     .col-md-8
       %h3.bold Paramètres : Emails de rappel
     .col-md-4.text-end
@@ -11,7 +11,7 @@
         %span Nouvel email
 
   - redirection = { url: organization_reminder_emails_path(@organization.id), method: 'GET', html: { target: '.reminder-email-content' } }
-  .reminder-email-content
+  .reminder-email-content.derivationLeft
     .box.mt-4
       %table.table.table-striped.table_integration#reminder-email-table
         %thead

@@ -6,7 +6,7 @@
 %input#manual_paper_set_order{type: :hidden, value: "#{manual_paper_set_order}", view: (manual_paper_set_order ? select_organization_file_sending_kit_path(@organization) : select_for_orders_organization_paper_set_orders_path), name: 'manual_paper_set_order'}
 
 .kits.paper-set-order-view
-  .row
+  .row.derivationRight
     .col-md-8
       %h3.bold
         Kit courrier
@@ -15,7 +15,7 @@
       %button.btn.btn-primary.select_for_orders.semibold
         Nouvelle commande
 
-  .box.mt-4
+  .box.mt-4.derivationLeft
     %table.table.table-striped
       %thead
         %th Dossier
