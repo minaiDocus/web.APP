@@ -33,6 +33,9 @@ nav.navbar .dropdown-menu
 nav.navbar .nav-link, nav.navbar .dropdown-item, footer a
   :color #FFF !important
 
+a
+  text-decoration: none
+
 .bg-brown
   background-color: #696969
 .bg-brown-light
@@ -105,20 +108,8 @@ h3 a
   +border-radius(4px)
   +box-shadow(rgba(0, 0, 0, .065) 0 3px 5px)
 
-#dashboard
-  .panel
-    padding-bottom: 0
-    .badge-tags
-      padding: 5px
-      font-size: 12px
-  table
-    .date
-      width: 100px
-    .name
-      width: 200px
-    .count
-      width: 20px
-      text-align: right
+.badge
+  font-size: inherit
 
 .center
   vertical-align: middle !important
@@ -140,5 +131,27 @@ h3 a
     left: 3px
 i.gray
   color: #AAAAAA
+
+.auto-scroll-div ul.nav
+  width: 1024px !important
+  
+.form-check-input  
+  background-color: rgba(26, 26, 26, 0.1)
+  border-color: rgba(26, 26, 26, 0.1)
+
+.form-check-input:checked
+  background-color: #C1D837
+  border-color: #C1D837
+
+.form-filter
+  input[type=text], input[type=number], select
+    width: 100%
+  .input-group
+    input[type=text]
+      width: 70%
+
+
+
+
 
 @import "admin/*"

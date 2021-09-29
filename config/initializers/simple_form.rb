@@ -58,6 +58,19 @@ SimpleForm.setup do |config|
     end
   end
 
+  config.wrappers :bootstrap_admin, tag: 'div', class: 'form-group clearfix', error_class: 'error' do |b|
+    b.use :html5
+    b.use :placeholder
+    b.wrapper tag: 'div', class: 'label-section' do |ba|
+      ba.use :label
+      ba.use :error, wrap_with: { tag: 'i', class: 'help-inline' }
+    end
+    b.wrapper tag: 'div', class: 'control-section' do |ba|
+      ba.use :input, class: 'w-100'
+      ba.use :hint,  wrap_with: { tag: 'i', class: 'help-block' }
+    end
+  end
+
   config.wrappers :prepend, tag: 'div', class: 'form-group', error_class: 'error' do |b|
     b.use :html5
     b.use :placeholder

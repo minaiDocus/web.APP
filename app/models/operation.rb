@@ -5,8 +5,8 @@ class Operation < ApplicationRecord
   attr_accessor :temp_currency
 
   belongs_to :organization
-  belongs_to :user
-  belongs_to :bank_account
+  belongs_to :user, optional: true
+  belongs_to :bank_account, optional: true
   belongs_to :pack, optional: true
   belongs_to :piece,   class_name: 'Pack::Piece',              inverse_of: :operations, optional: true
   belongs_to :forced_processing_by_user, class_name: 'User',   inverse_of: :forced_processing_operations, optional: true
@@ -39,8 +39,10 @@ class Operation < ApplicationRecord
   scope :not_recently_added_or_forced, -> { where('operations.created_at < ? OR operations.forced_processing_at IS NOT ?', 7.days.ago, nil) }
   scope :with,                         -> (period) { where(updated_at: period) }
 
+  scope :cedricom_orphans, -> { where(bank_account_id: nil).where.not(cedricom_reception_id: nil) }
+
   after_save do |operation|
-    Rails.cache.write(['user', operation.user.id, 'operations', 'last_updated_at'], Time.now.to_i)
+    Rails.cache.write(['user', operation.user.id, 'operations', 'last_updated_at'], Time.now.to_i) if operation.user&.id
   end
 
   def self.search_for_collection(collection, contains)
@@ -53,8 +55,17 @@ class Operation < ApplicationRecord
     collection = collection.where("label LIKE ?",    "%#{contains[:label]}%")    unless contains[:label].blank?
     collection = collection.where("category LIKE ?", "%#{contains[:category]}%") unless contains[:category].blank?
 
-    collection = collection.where("date BETWEEN '#{CustomUtils.parse_date_range_of(contains[:date]).join("' AND '")}'")  if contains[:date].present?
-    collection = collection.where("value_date BETWEEN '#{CustomUtils.parse_date_range_of(contains[:value_date]).join("' AND '")}'")  if contains[:value_date].present?
+    if contains[:date]
+      contains[:date].each do |operator, value|
+        collection = collection.where("date #{operator} ?", value) if operator.in?(['>=', '<='])
+      end
+    end
+
+    if contains[:value_date]
+      contains[:value_date].each do |operator, value|
+        collection = collection.where("value_date #{operator} ?", value) if operator.in?(['>=', '<='])
+      end
+    end
 
     if contains[:bank_account].present? && (contains[:bank_account][:number].present? || contains[:bank_account][:bank_name].present?)
       collection = collection.joins(:bank_account)

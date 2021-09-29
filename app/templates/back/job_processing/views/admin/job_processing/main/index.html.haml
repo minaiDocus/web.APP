@@ -2,14 +2,14 @@
   .row
     .col-md-12
       .box.small-shadow.clearfix
-        .float-left
+        .float-start
           %h3
             Job processing
-        .float-right
+        .float-end
           %input#flag_temp_start_stop{ value: '0', type: 'hidden' }
           %button.btn.btn-success#real_temp.font-weight-bold
             Temps réel
-        .float-right
+        .float-end
           = link_to 'Lancer data verificator', launch_data_verif_admin_job_processing_index_path, class: 'mr-1 btn btn-light font-weight-bold'
 
   .row.retractable.with-filter

@@ -1,8 +1,8 @@
-= simple_form_for @organization_group, url: (@organization_group.persisted? ? admin_organizations_group_path : admin_organizations_groups_path), html: { class: 'form-horizontal label-medium' } do |f|
+= simple_form_for @organization_group, url: (@organization_group.persisted? ? admin_organizations_group_path : admin_organizations_groups_path), html: { class: 'simple_form form-horizontal label-medium' }, wrapper: :bootstrap_admin do |f|
   .card-body
-    = f.input :name
-    = f.association :organizations, collection: Organization.all.order(:name), input_html: { class: 'searchable-option-list' }, required: true
-    = f.input :is_auto_membership_activated
+    = f.input :name, input_html: { class: 'w-100' }
+    = f.association :organizations, collection: Organization.all.order(:name), input_html: { class: 'searchable-option-list clearfix' }, required: true, multiple: true
+    = f.input :is_auto_membership_activated, class: 'clearfix'
   .card-footer
     .form-actions.margin0bottom
       = f.submit t('actions.submit'), class: 'btn btn-primary'

@@ -1,9 +1,9 @@
 .card.retractable-filter
   = form_tag admin_pre_assignment_deliveries_path, method: :get, class: 'form-filter' do
     .card-header.clearfix
-      .float-left
+      .float-start
         %h3 Filtres
-      .float-right.margin1left
+      .float-end.margin1left
         %a.locker{ href: "#", title: "Cacher le Filtre" }= glyphicon('layers')
     .retractable-filter-content
       .card-body

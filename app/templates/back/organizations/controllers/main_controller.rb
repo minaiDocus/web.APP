@@ -10,7 +10,7 @@ class Admin::Organizations::MainController < OrganizationController
   skip_before_action :load_recent_notifications
 
   before_action :apply_membership
-  before_action :load_action_organization, only: ['suspend', 'unsuspend']
+  before_action :load_action_organization, only: ['suspend', 'unsuspend', 'deactivate']
   before_action :verify_admin_rights
 
   # GET /admin/organizations
@@ -47,6 +47,15 @@ class Admin::Organizations::MainController < OrganizationController
   def unsuspend
     @organization.update_attribute(:is_suspended, false)
     flash[:success] = 'Activé avec succès.'
+    redirect_to admin_organizations_path
+  end
+
+  # PUT /account/organizations/:id/deactivate
+  def deactivate
+    Organization::Deactivate.new(@organization.id.to_s).execute
+    @organization.update_attribute(:is_active, false)
+    flash[:success] = 'Désactivé avec succès.'
+
     redirect_to admin_organizations_path
   end
 

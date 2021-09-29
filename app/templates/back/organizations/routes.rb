@@ -9,6 +9,7 @@ Rails.application.routes.draw do
 
       put '/suspend/:id', to: "main#suspend", as: "suspend"
       put '/unsuspend/:id', to: "main#unsuspend", as: "unsuspend"
+      put '/deactivate/:id', to: "main#deactivate", as: "deactivate"
 
       resources :groups, controller: 'groups'
     end

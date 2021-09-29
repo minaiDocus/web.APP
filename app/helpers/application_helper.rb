@@ -225,9 +225,9 @@ module ApplicationHelper
 
   def per_page_link(number, options = {})
     temp_class = (options['class'] || options[:class] || '').split
-    temp_class << 'page-link-badge'
+    temp_class << 'text-dark'
     temp_class << 'badge'
-    temp_class << 'badge-info' if per_page == number
+    temp_class << 'bg-info' if per_page == number
     temp_class.uniq!
 
     temp_options = options.merge(class: temp_class)

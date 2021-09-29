@@ -4,11 +4,11 @@
   .row.derivationLeft
     .col-md-12
       .box.small-shadow.clearfix
-        .float-left
+        .float-start
           %h3
             Liste des groupes d'organisation &nbsp;
             %span.badge.badge-info= @organization_groups.total_count
-        .float-right
+        .float-end
           = link_to t('actions.new'), new_admin_organizations_group_path, class: 'btn btn-primary'
 
   .row.derivationRight

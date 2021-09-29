@@ -209,6 +209,8 @@ tbody.retractable.slidedown tr {
   animation-duration: 1.8s;
   animation-fill-mode: forwards;
   animation-delay: 0.7s;
+  width: 90%;
+  padding-top: 5%;
 }
 
 .showLogin{

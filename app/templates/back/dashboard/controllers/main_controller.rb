@@ -3,7 +3,6 @@ class Admin::Dashboard::MainController < BackController
   prepend_view_path('app/templates/back/dashboard/views')
 
   def index
-    @new_provider_requests = NewProviderRequest.not_processed.order(created_at: :desc).includes(:user).limit(5)
     @unbillable_organizations = Organization.billed.select { |e| e.billing_address.nil? }
   end
 
@@ -148,4 +147,10 @@ class Admin::Dashboard::MainController < BackController
     render partial: 'failed_reports_delivery', locals: { collection: @failed_reports_delivery }
   end
 
+  # GET /admin/cedricom_orphans
+  def cedricom_orphans
+    @orphans = Operation.cedricom_orphans.group(:organization_id, :unrecognized_iban).group("DATE(created_at)").count
+    
+    render partial: 'cedricom_orphans', locals: { collection: @orphans }
+  end
 end

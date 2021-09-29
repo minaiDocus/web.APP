@@ -32,8 +32,8 @@ module AdminHelper
 
   def email_state(email)
     klass = 'badge fs-origin'
-    klass += ' badge-success'   if email.state == 'processed'
-    klass += ' badge-danger' if email.state.in? %w(error unprocessable)
+    klass += ' bg-success'   if email.state == 'processed'
+    klass += ' bg-danger' if email.state.in? %w(error unprocessable)
 
     content_tag 'span', Email.state_machine.states[email.state].human_name, class: klass
   end
@@ -41,8 +41,8 @@ module AdminHelper
 
   def pre_assignment_delivery_state(delivery)
     klass = 'badge fs-origin'
-    klass += ' badge-success'   if delivery.state == 'sent'
-    klass += ' badge-danger' if delivery.state == 'error'
+    klass += ' bg-success'   if delivery.state == 'sent'
+    klass += ' bg-danger' if delivery.state == 'error'
 
     content_tag 'span', PreAssignmentDelivery.state_machine.states[delivery.state].try(:human_name), class: klass
   end

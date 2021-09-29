@@ -65,8 +65,8 @@ nav.navbar
   .navbar-nav
     .nav-link, .dropdown-item
       text-decoration: none
-    .nav-item
-      :margin 0 5px
+    .nav-item      
+      padding: 0 3px
   :text-decoration none !important
 nav.navbar a:hover, footer a:hover
   :text-decoration underline
@@ -168,17 +168,11 @@ form
       display: inline-block
       line-height: 20px
   .control-section
-    margin-left : 10px
-    input, select, .sol-inner-container
-      width: 100%
-      height: 31px
-      /*max-width: 400px*/
+    margin-left : 10px    
     textarea
       width: 100%
       height: 100px
-      /*max-width: 400px*/
-    input[type="checkbox"], input[type="radio"]
-      width: auto !important
+      /*max-width: 400px*/    
     input[type="number"]
       max-width: 80px
     .checkbox
@@ -193,11 +187,7 @@ form
       border-color: #bbb !important
     div.datepicker
       padding-left: 0px !important
-      padding-right: 0px !important
-    .sol-selection
-      .sol-option
-        input, select, textarea
-          width: auto
+      padding-right: 0px !important    
     .bootstrap-filestyle
       input[type="text"]
         width: 210px !important
@@ -333,7 +323,7 @@ form.form-filter
   :background-color gray !important
 
 .hide
-  :display none
+  :display none !important
 
 .red, a.red
   :color #ad3737
