@@ -709,42 +709,19 @@ jQuery(function () {
 
   /*AppListenTo('new_account_book_type_view', (e)=>{ customer.new_account_book_type_view(e.detail.url); });*/
 
-  if ($('#journals.tab-pane.active').length > 0) {
-    let journal = new Journal();
-    journal.main();
+  let journal = new Journal();
+  journal.main();
 
-    $('#journal .edit_journal_analytics').unbind('click').bind('click', function(e){ 
-      let journal_id = $(this).data('journal-id');
-      let customer_id = $(this).data('customer-id');
-      let code = $(this).data('code');
-      journal.edit_analytics(journal_id, customer_id, code);
-    });
+  $('#journal .edit_journal_analytics').unbind('click').bind('click', function(e){ 
+    let journal_id = $(this).data('journal-id');
+    let customer_id = $(this).data('customer-id');
+    let code = $(this).data('code');
+    journal.edit_analytics(journal_id, customer_id, code);
+  });
 
-    AppListenTo('compta_analytics.validate_analysis', (e)=>{ journal.update_analytics(e.detail.data) });
-  }
-  
+  AppListenTo('compta_analytics.validate_analysis', (e)=>{ journal.update_analytics(e.detail.data) });
+
   AppListenTo('csv_descriptor_edit_customer_format', (e)=>{ customer.load_csv_descriptor(e.detail.id, e.detail.organization_id) });
-
-  let box_document = new BoxDocument();
-
-  let load_historic = false;
-  let load_select = false;
-  if ($('#ibizabox.tab-pane.active').length > 0){
-    if ($('#ibizabox_documents_historic.active.show').length > 0 && !load_historic){
-      const url = $('#ibizabox_documents_historic_tab').attr('link');
-      box_document.show_ibizabox_documents_page(url, '.historic_content');
-      load_historic = true;
-    }
-
-    if ($('#select_ibizabox_documents.active.show').length > 0 && !load_select){
-      const url = $('#select_ibizabox_documents_tab').attr('link');
-      box_document.show_ibizabox_documents_page(url, '.select_content');
-      load_select = true;
-    }
-  }
-
-  AppListenTo('show_ibizabox_documents_page', (e)=>{ box_document.show_ibizabox_documents_page(e.detail.url, e.detail.target); });
-
 
   let mcf = new McfCustomer();
   AppListenTo('show_mcf_edition', (e)=>{ mcf.show_mcf_edition(e.detail.url); });
