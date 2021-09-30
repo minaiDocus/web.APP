@@ -23,13 +23,11 @@ class Subscriptions::MainController < CustomerController
       end
 
       flash[:success] = 'Modifié avec succès.'
-
-      redirect_to organization_customer_path(@organization, @customer, tab: 'subscription')
     else
       flash[:error] = 'Vous devez sélectionner un forfait.'
-
-      render :edit
     end
+
+    redirect_to edit_organization_customer_subscription_path(@organization, @customer)
   end
 
   private
