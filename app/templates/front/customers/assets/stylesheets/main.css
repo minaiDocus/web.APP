@@ -50,14 +50,6 @@
   margin: 25%;
 }
 
-.sub_menu{
-  min-width: 7% !important;
-}
-
-.sub_menu li{
-  padding: 6% 9%;
-}
-
 .border-right{
   border-right: 1px solid rgba(26, 26, 26, 0.1);  
 }
@@ -124,11 +116,6 @@ ul.list.nav {
   padding: 0.5% !important;
 }
 
-#table_customers tr.inactive{
-  background-color: #F00;
-  color: #FFF; 
-}
-
 table.future_packages{
   width: 35%;
   margin: auto;
@@ -149,3 +136,14 @@ table.future_packages .total{
   -moz-box-shadow: 2px 5px 13px -1px rgba(0,0,0,0.75);
 }
 
+table.table.list_customers tr.inactive{
+  background-color: #4a4a4a;
+}
+
+table.table.list_customers tr.inactive td, table.table.list_customers tr.inactive span a{
+  color: white;
+}
+
+table.table.list_customers tr.inactive .sub_menu{
+  color: white;
+}

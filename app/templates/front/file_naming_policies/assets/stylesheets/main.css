@@ -31,10 +31,6 @@
   float: right;
 }
 
-.sub_menu{
-  min-width: 10% !important;
-}
-
 img {
   max-width:100%;
   height:auto;

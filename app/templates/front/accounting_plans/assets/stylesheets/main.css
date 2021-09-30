@@ -1,6 +1,5 @@
 #accounting_plan .sub_menu {
   position: relative;
-  min-width: 10em !important;
 }
 
 .sub_menu .delete a {

@@ -10,5 +10,4 @@
     - if @customer.active?
       = link_to glyphicon('ban', { size: '15', color: '#FF4848'}) + ' Clôturer le dossier', account_close_confirm_organization_customer_path(@organization, @customer), class: 'btn btn-danger semibold close_customer'
     - else
-
-      = link_to 'Réouvrir le dossier', reopen_account_organization_customer_path(@organization, @customer), class: 'btn btn-primary semibold', data: { toggle: "confirmation", title: "Voulez-vous réellement réouvrir le dossier #{@customer.info} ?" }, method: :put
+      = link_to glyphicon('folder', { size: '15', color: '#72AA42'}) + ' Réouvrir le dossier', account_reopen_confirm_organization_customer_path(@organization, @customer), class: 'btn btn-light no-style reopen_customer'

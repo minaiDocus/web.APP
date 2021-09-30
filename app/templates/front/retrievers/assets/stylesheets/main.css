@@ -1,11 +1,3 @@
-.sub_menu {
-  min-width: 8%;  
-}
-
-.sub_menu li {
-  padding: 7% 6%;  
-}
-
 .retriever-index li{
   text-align: center;
   font-size: 13px;  
@@ -49,15 +41,6 @@
   overflow: auto;
   font-size: 13px;
 }
-
-.sub-menu-bank-param .sub_menu{
-  min-width: 8% !important;
-}
-
-.sub-menu-bank-param .sub_menu li{
-  padding: 8% 6%;
-}
-
 
 .modal#form-bank-account .modal-body{
   max-height: 700px;
