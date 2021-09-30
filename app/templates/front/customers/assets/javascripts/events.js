@@ -135,7 +135,14 @@ function bind_customer_events() {
 
     $('form.subscription_option_form').find('.clonable_fields').remove();
     $('form.subscription_option_form').submit();
+  });
+
+  $('.td-popover').mouseover(function() {
+    $(this).find('.popover_content_customer').show();
   })
+  .mouseout(function() {
+    $(this).find('.popover_content_customer').hide();
+  });
 }
 
 

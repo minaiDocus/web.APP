@@ -137,3 +137,15 @@ table.future_packages{
 table.future_packages .total{
   border-top: 1px solid #664d03
 }
+
+.popover_content_customer {
+  position: absolute;
+  border: 1px solid #CCC;  
+  z-index: 120;
+  margin: 0px 0px 0px 15%;
+  min-width: 300px;
+  box-shadow: 2px 5px 13px -1px rgba(0,0,0,0.75);
+  -webkit-box-shadow: 2px 5px 13px -1px rgba(0,0,0,0.75);
+  -moz-box-shadow: 2px 5px 13px -1px rgba(0,0,0,0.75);
+}
+

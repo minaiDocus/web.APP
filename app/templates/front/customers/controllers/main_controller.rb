@@ -20,7 +20,8 @@ class Customers::MainController < OrganizationController
                               .order(sort_column => sort_direction)
                               .page(params[:page])
                               .per(params[:per_page])
-        @periods = Period.where(user_id: @customers.pluck(:id)).where('start_date < ? AND end_date > ?', Date.today, Date.today).includes(:user, :product_option_orders)
+        @periods = Period.where(user_id: @customers.pluck(:id)).where('start_date <= ? AND end_date >= ?', Date.today, Date.today).includes(:user, :product_option_orders)
+
         @groups = @user.groups.order(name: :asc)
       end
 

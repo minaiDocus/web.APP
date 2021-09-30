@@ -38,15 +38,23 @@
               %th Journaux sup.
               %th.text-end Action
             %tbody
-              - @customers.each do |customer|
+              - @customers.each do |customer|                 
                 %tr{ class: (!customer.still_active?)? 'inactive' : '' }
                   %td.align-middle= customer.name
                   %td.align-middle
                     %span.info
                       = link_to customer, organization_customer_path(@organization, customer)
-                  %td.align-middle= customer.created_at.strftime('%d/%m/%Y')
-                  %td.align-middle
-                    %span{ data: { bs: { toggle: 'popover on right', trigger: 'hover focus', content: "period"} }}
+                  %td.align-middle= customer.created_at.strftime('%d/%m/%Y')                  
+                  %td.align-middle.pointer
+                    .td-popover
+                      - period = @periods.select { |e| e.user == customer }.first
+                      - if period                        
+                        %span.semibold= period.product_option_orders.first.group_title
+                        - if period.product_option_orders.first.title.present?
+                          %br
+                          %i= period.product_option_orders.first.title
+                        .popover_content_customer.alert.alert-warning.hide                        
+                          = popover_content(period.product_option_orders.drop(1))                              
                   %td.text-center.align-middle= customer.subscription.try(:is_package?, 'pre_assignment_option') ? 'Activé' : '-'
                   %td.text-center.align-middle= customer.subscription.try(:is_package?, 'retriever_option') ? "Récupération banque +\nFactures sur Internet" : "-"
                   %td.align-middle= customer.subscription.try(:number_of_journals)
