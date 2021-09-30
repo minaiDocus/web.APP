@@ -9,21 +9,25 @@ class Journal{
 
   set_carousel_content_on_slide(){
     let self = this;
-    self.select_entry_type();
-    self.required_fields();
+    const set_default_carousel_slide = () => {
+      self.journal_form_modal.find('.previous').addClass('hide');
+      self.journal_form_modal.find('.validate').addClass('hide');
+      self.journal_form_modal.find('.next').removeClass('hide');
+      self.journal_form_modal.find('.next').text('Suivant');
+
+      self.select_entry_type();
+      self.required_fields();
+      self.validate_first_slide_form();
+    };
+
+    set_default_carousel_slide();
     self.update_form();
 
     $('#carousel-journal-form').on('slide.bs.carousel', function (event) {
       switch (event.to) {
         case 0:
           // do something for .journal-first-step-form
-          self.journal_form_modal.find('.previous').addClass('hide');
-          self.journal_form_modal.find('.validate').addClass('hide');
-          self.journal_form_modal.find('.next').removeClass('hide');
-          self.journal_form_modal.find('.next').text('Suivant');
-          self.required_fields();
-          self.validate_first_slide_form();
-          self.select_entry_type();
+          set_default_carousel_slide();
 
           break;
         case 1:
