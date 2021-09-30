@@ -1,10 +1,15 @@
 //=require './events'
+//**** File Sending kits JS *******/
+//=require '../../../file_sending_kits/assets/javascripts/events'
 
 class Order{
 
   constructor(){
     this.applicationJS         = new ApplicationJS();
     this.organization_id       = $('input:hidden[name="organization_id"]').val();
+    this.new_edit_order_modal  = $('#new_edit_order.modal');
+    this.select_multiple       = $('#select_for_orders.modal');
+    this.file_sending_kits_edit = $('#file_sending_kits_edit.modal');
   }
 
 
@@ -128,6 +133,29 @@ class Order{
     if((max_val - selected_val) >= 2){
       $('.select.order_paper_set_casing_count i.help-block').removeClass('hide');
     }
+  }
+
+
+  new_edit_order_view(url){
+    this.applicationJS.sendRequest({ 'url': url }).then((element)=>{
+      this.new_edit_order_modal.find('.modal-body').html('');
+      this.new_edit_order_modal.find('.modal-body').html($(element).find('#order .order-form-content').html());
+      this.new_edit_order_modal.find('.modal-title').text($(element).find('#order .modal-title-text').text());
+      this.new_edit_order_modal.find('.footer-form').remove();
+
+      if (url.indexOf("new") >= 0) {
+        $('.valid_new_edit_order.as_idocus_ajax').text('Commander');
+      }
+      else if (url.indexOf("edit") >= 0) {
+        $('.valid_new_edit_order.as_idocus_ajax').text('Valider les modifications');
+      }
+
+      this.new_edit_order_modal.modal('show');
+     
+      bind_all_events_order();
+    }).catch((error)=> { 
+      console.error(error);
+    });
   }
 
 }

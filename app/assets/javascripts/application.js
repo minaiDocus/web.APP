@@ -526,7 +526,7 @@ class ApplicationJS {
       if ($(this).is(':checked')){
         $(this).attr('checked', true);
 
-        if (class_list.indexOf("input_check_field") > -1) { $(this).closest('.form-check.form-switch').find('label.label_check_field').text('Oui'); }
+        if (class_list.indexOf("input_check_field") > -1 || class_list.indexOf("check-software") > -1) { $(this).closest('.form-check.form-switch').find('label.label_check_field').text('Oui'); }
         else { $(this).parent().find('label').text('Oui'); }
 
         if ((class_list.indexOf("check-software") > -1) || (class_list.indexOf("filter-customer") > -1)) { $(this).attr('value', 1); }
@@ -538,7 +538,7 @@ class ApplicationJS {
       else {
         $(this).attr('checked', false);
 
-        if (class_list.indexOf("input_check_field") > -1) { $(this).closest('.form-check.form-switch').find('label.label_check_field').text('Non'); }
+        if (class_list.indexOf("input_check_field") > -1 || class_list.indexOf("check-software") > -1) { $(this).closest('.form-check.form-switch').find('label.label_check_field').text('Non'); }
         else { $(this).parent().find('label').text('Non'); }
 
         if ((class_list.indexOf("check-software") > -1) || (class_list.indexOf("filter-customer") > -1)) { $(this).attr('value', 0); }
@@ -562,8 +562,8 @@ class ApplicationJS {
         class_list = $(this).attr('class').split(/\s+/);
         let element = $(this);
 
-        if (class_list.indexOf("input_check_field") > -1) {
-          element = $('.input_check_field.input_switch:checked');
+        if (class_list.indexOf("input_check_field") > -1 || class_list.indexOf("check-software") > -1) {
+          element = $('.input_check_field.input_switch:checked, .check-software.input_switch:checked');
           element.closest('.form-check.form-switch').find('label.label_check_field').text('Oui');
         }
         else {

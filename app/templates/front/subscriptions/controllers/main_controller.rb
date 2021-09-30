@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Subscriptions::MainController < OrganizationController
+class Subscriptions::MainController < CustomerController
   before_action :verify_rights
   before_action :load_customer
   before_action :verify_if_customer_is_active
@@ -23,26 +23,17 @@ class Subscriptions::MainController < OrganizationController
       end
 
       flash[:success] = 'Modifié avec succès.'
-
-      redirect_to organization_customer_path(@organization, @customer, tab: 'subscription')
     else
       flash[:error] = 'Vous devez sélectionner un forfait.'
-
-      render :edit
     end
+
+    redirect_to edit_organization_customer_subscription_path(@organization, @customer)
   end
 
   private
 
   def load_customer
     @customer = customers.find params[:customer_id]
-  end
-
-  def verify_if_customer_is_active
-    if @customer.inactive?
-      flash[:error] = t('authorization.unessessary_rights')
-      redirect_to organization_path(@organization)
-    end
   end
 
   def load_subscription

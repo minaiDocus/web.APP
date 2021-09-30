@@ -30,7 +30,7 @@ class Journals::MainController < OrganizationController
       else
         flash[:success] = text
         if @customer
-          redirect_to organization_customer_path(@organization, @customer, tab: 'journals')
+          redirect_to organization_user_journals_path(@organization, @customer)
         else
           redirect_to organization_journals_path(@organization)
         end
@@ -90,7 +90,7 @@ class Journals::MainController < OrganizationController
       else
         flash[:success] = text
         if @customer
-          redirect_to organization_customer_path(@organization, @customer, tab: 'journals')
+          redirect_to organization_user_journals_path(@organization, @customer)
         else
           redirect_to organization_journals_path(@organization)
         end
@@ -263,7 +263,7 @@ class Journals::MainController < OrganizationController
         render json: { success: true, response: text }, status: 200
       else
         flash[:error] = text
-        redirect_to organization_customer_path(@organization, @customer, tab: 'journals')
+        redirect_to organization_user_journals_path(@organization, @customer)
       end
     end
   end

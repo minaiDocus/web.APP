@@ -4,5 +4,7 @@ Rails.application.routes.draw do
     delete 'addresses/destroy/:id', to: 'main#destroy', as: 'destroy_addresses'
 
     resources :addresses, controller: 'main'
+
+    get 'organizations/:organization_id/customers/:customer_id/addresses', to: "user#index", as: 'organization_user_addresses'
   end
 end

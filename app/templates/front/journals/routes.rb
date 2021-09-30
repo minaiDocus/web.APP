@@ -15,5 +15,7 @@ Rails.application.routes.draw do
 			  resources :list_journals, only: %w(index), controller: 'list'
 			end
 		end
+
+		get 'organizations/:organization_id/customers/:customer_id/journals', to: "user#index", as: 'organization_user_journals'
   end
 end

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class AccountingPlans::MainController < OrganizationController
+class AccountingPlans::MainController < CustomerController
   before_action :load_customer
   before_action :verify_rights
   before_action :verify_if_customer_is_active
@@ -29,7 +29,7 @@ class AccountingPlans::MainController < OrganizationController
         if modified
           flash[:success] = 'Modifié avec succès.'
 
-          redirect_to organization_customer_path(@organization, @customer, tab: 'accounting_plan')          
+          redirect_to organization_customer_accounting_plan_path(@organization, @customer)
         else
           render :edit
         end
@@ -102,7 +102,7 @@ class AccountingPlans::MainController < OrganizationController
       # flash[:error] = 'Aucun fichier choisi.'
     end
     
-    redirect_to organization_customer_path(@organization, @customer, tab: 'accounting_plan')    
+    redirect_to organization_customer_accounting_plan_path(@organization, @customer)
   end
 
   def import_fec
@@ -167,7 +167,7 @@ class AccountingPlans::MainController < OrganizationController
     if params[:new_create_book_type].present?
       render partial: '/account/customers/table', locals: { providers: @customer.accounting_plan.providers, customers: @customer.accounting_plan.customers }
     else      
-      redirect_to organization_customer_path(@organization, @customer, tab: 'accounting_plan')
+      redirect_to organization_customer_accounting_plan_path(@organization, @customer)
     end
   end
 
@@ -179,7 +179,7 @@ class AccountingPlans::MainController < OrganizationController
 
     flash[:success] = 'Fournisseurs supprimés avec succès.'
     
-    redirect_to organization_customer_path(@organization, @customer, tab: 'accounting_plan')
+    redirect_to organization_customer_accounting_plan_path(@organization, @customer)
   end
 
   # DELETE /organizations/:organization_id/customers/:customer_id/accounting_plan/destroy_customers
@@ -190,7 +190,7 @@ class AccountingPlans::MainController < OrganizationController
 
     flash[:success] = 'Clients supprimés avec succès.'
     
-    redirect_to organization_customer_path(@organization, @customer, tab: 'accounting_plan')
+    redirect_to organization_customer_accounting_plan_path(@organization, @customer)
   end
 
   private

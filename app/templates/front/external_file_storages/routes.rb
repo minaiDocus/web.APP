@@ -30,5 +30,7 @@ Rails.application.routes.draw do
     end
 
     get 'oganizations/:organization_id/external_storages', to: "efs_organization#index", as: 'organization_efs'
+
+    get 'oganizations/:organization_id/customers/:customer_id/external_storages', to: "efs_user#index", as: 'organization_customer_efs'
   end
 end

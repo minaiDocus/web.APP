@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-class Customers::MainController < OrganizationController
+class Customers::MainController < CustomerController
 
   before_action :load_customer, except: %w[index info new create search]
   before_action :verify_rights, except: 'index'
-  before_action :verify_if_customer_is_active, only: %w[edit update edit_period_options update_period_options edit_knowings_options update_knowings_options edit_compta_options update_compta_options]
+  before_action :verify_if_customer_is_active, only: %w[edit update edit_setting_options update_setting_options edit_knowings_options update_knowings_options]
   before_action :verify_if_account_can_be_closed, only: %w[account_close_confirm close_account]
 
   prepend_view_path('app/templates/front/customers/views')
@@ -39,10 +39,6 @@ class Customers::MainController < OrganizationController
     @pending_journals = @customer.retrievers.where(journal_id: nil).where.not(journal_name: [nil]).distinct.pluck(:journal_name)
     
     build_softwares
-  end
-
-  def refresh_book_type
-    render partial: 'book_type'
   end
 
   # GET /organizations/:organization_id/customers/new
@@ -95,7 +91,7 @@ class Customers::MainController < OrganizationController
         flash[:error] = 'Impossible de modifier.'
       end
 
-      redirect_to organization_customer_path(@organization, @customer, tab: params[:part])
+      redirect_to organization_customer_softwares_path(@organization, @customer, software_name: params[:part])
     else
       @customer.is_group_required = @user.not_leader?
 
@@ -121,7 +117,7 @@ class Customers::MainController < OrganizationController
     else
       flash[:error] = 'Impossible de modifier.'
     end
-    redirect_to organization_customer_path(@organization, @customer, tab: params[:software])
+    redirect_to organization_customer_softwares_path(@organization, @customer, software_name: params[:software])
   end
 
   def edit_softwares_selection
@@ -134,7 +130,6 @@ class Customers::MainController < OrganizationController
 
   def update_softwares_selection
     software = @customer.create_or_update_software({columns: user_params[softwares_attributes.to_sym], software: params[:part]})
-    # TODO ... REMOVE STEP
   end
 
   # GET /account/organizations/:organization_id/customers/:id/edit_exact_online
@@ -158,7 +153,7 @@ class Customers::MainController < OrganizationController
           @customer.exact_online.try(:reset)
           redirect_to authenticate_account_exact_online_path(customer_id: @customer.id)
         else
-          redirect_to organization_customer_path(@organization, @customer, tab: 'exact_online')
+          redirect_to organization_customer_softwares_path(@organization, @customer, software_name: 'exact_online')
         end
       else
         # TODO ... REMOVE STEP
@@ -188,7 +183,7 @@ class Customers::MainController < OrganizationController
 
         flash[:success] = 'Modifié avec succès'
 
-        redirect_to organization_customer_path(@organization, @customer, tab: 'my_unisoft')
+        redirect_to organization_customer_softwares_path(@organization, @customer, software_name: 'my_unisoft')
       else
         # TODO ... REMOVE STEP
       end
@@ -213,11 +208,12 @@ class Customers::MainController < OrganizationController
     if @customer.update(period_options_params) && @customer.update(compta_options_params)
       if @customer.configured?
         flash[:success] = 'Modifié avec succès.'
-        redirect_to organization_customer_path(@organization, @customer, tab: 'compta')
       end
     else
-      render 'edit_setting_options'
+      flash[:success] = "impossible de modifier : #{@customer.errors.messages.to_s}"
     end
+
+    redirect_to edit_setting_options_organization_customer_path(@organization, @customer)
 
   end
 
@@ -293,54 +289,6 @@ class Customers::MainController < OrganizationController
 
   private
 
-  def can_manage?
-    @user.leader? || @user.manage_customers
-  end
-
-  def verify_rights
-    authorized = true
-    authorized = false unless can_manage?
-    if action_name.in?(%w[account_close_confirm close_account]) && params[:close_now] == '1' && !@user.is_admin
-      authorized = false
-    end
-    if action_name.in?(%w[info new create destroy]) && !@organization.is_active
-      authorized = false
-    end
-    if action_name.in?(%w[info new create]) && !(@user.leader? || @user.groups.any?)
-      authorized = false
-    end
-    if action_name.in?(%w[edit_period_options update_period_options]) && !@customer.authorized_upload?
-      authorized = false
-    end
-    if action_name.in?(%w[edit_exact_online update_exact_online]) && !@organization.try(:exact_online).try(:used?)
-      authorized = false
-    end
-    # if action_name.in?(%w[edit_my_unisoft update_my_unisoft]) && !@organization.try(:my_unisoft).try(:used?)
-    #   authorized = false
-    # end
-
-    unless authorized
-      flash[:error] = t('authorization.unessessary_rights')
-      redirect_to organization_path(@organization)
-    end
-  end
-
-  def verify_if_customer_is_active
-    if @customer.inactive?
-      flash[:error] = t('authorization.unessessary_rights')
-
-      redirect_to organization_path(@organization)
-    end
-  end
-
-  def verify_if_account_can_be_closed
-    if !@customer.subscription.commitment_end?(false) && !params[:close_now]
-      flash[:error] = 'Ce dossier est souscrit à un forfait avec un engagement de 12 mois'
-
-      redirect_to organization_customer_path(@organization, @customer)
-    end
-  end
-
   def user_params
     attributes = [
       :company,
@@ -386,10 +334,6 @@ class Customers::MainController < OrganizationController
     params.require(:user).permit(my_unisoft_attributes: %i[id is_used auto_deliver encrypted_api_token check_api_token])
   end
 
-  def configuration_options_params
-    # TODO ...
-  end
-
   def period_options_params
     if current_user.is_admin
       params.require(:user).permit(
@@ -420,34 +364,7 @@ class Customers::MainController < OrganizationController
                                  ])
   end
 
-
-  def build_softwares
-    Interfaces::Software::Configuration::SOFTWARES.each do |software|
-      @customer.send("build_#{software}".to_sym) if @customer.send(software.to_sym).nil?
-    end
-  end
-  
-
   def softwares_attributes
     "#{Interfaces::Software::Configuration.h_softwares[params[:part]]}_attributes"
   end
-
-  def load_customer
-    @customer = customers.find(params[:id])
-  end
-
-  def sort_column
-    params[:sort] || 'created_at'
-  end
-  helper_method :sort_column
-
-  def sort_direction
-    params[:direction] || 'desc'
-  end
-  helper_method :sort_direction
-
-  def is_max_number_of_journals_reached?
-    @customer.account_book_types.count >= @customer.options.max_number_of_journals
-  end
-  helper_method :is_max_number_of_journals_reached?
 end

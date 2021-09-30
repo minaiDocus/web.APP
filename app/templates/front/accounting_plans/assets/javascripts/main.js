@@ -76,21 +76,9 @@ class AccountingPlan {
     });
   }
 
-  get_accounting_plan_view(){    
-    let self = this;
-    let customer_id = $('input:hidden[name="customer_id"]').val();
-      
-    self.applicationJS.sendRequest({ 'url': '/organizations/' + self.organization_id + '/customers/' + customer_id + '/accounting_plan' }).then((element)=>{
-      $('#customer-content .tab-content .tab-pane#accounting-plan').html($(element).find('#accounting_plan').html());
-      self.get_vat_accounts_view(customer_id); 
-
-      ApplicationJS.set_checkbox_radio(self);        
-    });
-  }
-
   main() {
     let self = this;
-    if ($('#accounting-plan #auto-update-accounting-plan').length > 0) {
+    if ($('form#auto_update_accounting_plan #auto-update-accounting-plan').length > 0) {
       this.set_auto_update();
     }
   
@@ -120,6 +108,8 @@ class AccountingPlan {
 
     }, 3000);
     }
+
+    this.get_vat_accounts_view();
 
     this.edit_provider_customer();
     this.handle_edit_delete_sub_menu();    
@@ -160,15 +150,6 @@ class AccountingPlan {
 }
 
 jQuery(function() {
-  if ($('.load-accounting-plan').length > 0){
-    let accounting_plan = new AccountingPlan();
-    accounting_plan.get_accounting_plan_view();
-    accounting_plan.get_vat_accounts_view();
-  }
-  else
-  {
-    let accounting_plan = new AccountingPlan();
-    accounting_plan.main();
-    accounting_plan.get_vat_accounts_view();
-  }
+  let accounting_plan = new AccountingPlan();
+  accounting_plan.main();
 });

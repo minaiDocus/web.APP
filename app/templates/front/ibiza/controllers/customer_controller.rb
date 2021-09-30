@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Ibiza::CustomerController < OrganizationController
+class Ibiza::CustomerController < CustomerController
   before_action :load_customer
   before_action :verify_rights
 
@@ -29,6 +29,10 @@ class Ibiza::CustomerController < OrganizationController
   end
 
   private
+
+  def load_customer
+    @customer = customers.find(params[:customer_id])
+  end
 
   def can_manage?
     @user.leader? || @user.manage_customers

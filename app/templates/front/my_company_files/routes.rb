@@ -10,7 +10,8 @@ Rails.application.routes.draw do
         get  :callback
       end
 
-      resources :customers, only: [], controller: 'customer' do
+      resources :customers, only: [], controller: 'user_mcf_storage' do
+        get 'my_company_files', to: 'user_mcf_storage#index', as: 'my_company_files'
         member do
           get   'edit_mcf'
           post  'retake_mcf_errors'

@@ -69,58 +69,6 @@ function bind_customer_events() {
     AppEmit('search_text');
   });
 
-  $('#edit_customer_csv_descriptor').unbind('click').bind('click', function(e){ AppEmit('csv_descriptor_edit_customer_format', { id: $(this).data('id'), organization_id: $(this).data('organization-id') }) });
-
-  /*$('.valid_subscription_edit').unbind('click').bind('click', function(e) {
-    e.preventDefault();
-
-    const form = $('form#subscription_package_form');
-
-    AppEmit('update_subscription', { url: form.attr('action'), data: form.serialize()});
-  });*/
-
-
-  $('.new_edit_order_url').unbind('click').bind('click', function(e) {
-    e.stopPropagation();
-
-    const url = $(this).attr('link');
-
-    AppEmit('new_edit_order_view', { url: url });
-  });
-
-
-  $('.select_for_orders').unbind('click').bind('click', function(e) {
-    e.stopPropagation();
-
-    const url = $(this).attr('link');
-
-    AppEmit('select_for_orders', { url: url });
-
-    $('#select_for_orders').modal('show');
-  });
-
-  $('.edit-file-sending-kits').unbind('click').bind('click', function(e) {
-    e.preventDefault();
-
-    const url = $(this).attr('link');
-
-    AppEmit('edit_file_sending_kits_view', { url: url});
-  });
-
-  $('.validate_file_sending_kits_edit').unbind('click').bind('click', function(e) {
-    e.stopPropagation();
-    $('form#edit_file_sending_kit_form').submit();
-  });
-
-  /* ******* NEED TO VERIFY CAROUSEL SLIDE FORM WHEN CHOOSE TO USE IT ***** */
-
-  /*$('.next.copy_account_book_type_btn').unbind('click.copy_journals').bind('click.copy_journals', function(e) {
-    e.stopPropagation();
-    $('#create-customer.modal form#copy_account_book_type_form').submit();
-  });*/
-
-  /* ******* NEED TO VERIFY CAROUSEL SLIDE FORM WHEN CHOOSE TO USE IT ***** */
-
 
   $('#ibizabox_tab').unbind('click.show_ibizabox').bind('click.show_ibizabox', function(e) {
     e.stopPropagation();

@@ -2,7 +2,6 @@
 function applied_manual_paper_set_order(){
   let elements = $('tbody#fsk_paper_set_orders tr');
   if (elements.length > 0) {
-    console.log('FF');
     let total_price = 0
     elements.each(function(index, element){
       let period = 1;
@@ -93,25 +92,12 @@ function file_sending_kits_main_events() {
     applied_manual_paper_set_order();
   });
 
-  /*$('select#fsk_orders_paper_set_start_date').asMultiSelect({
-    'noneText': 'Selectionner une affectations',
-    'allText': 'Tous séléctionnés'
-  });
-
-  $('select#fsk_orders_paper_set_end_date').asMultiSelect({
-    'noneText': 'Selectionner un type de règles',
-    'allText': 'Tous séléctionnés'
-  });*/
-
-
   $('.select_for_orders').unbind('click').bind('click', function(e) {
     e.stopPropagation();
 
     const url = $(this).attr('link');
 
     AppEmit('select_for_orders', { url: url });
-
-    $('#select_for_orders').modal('show');
   });
 
 

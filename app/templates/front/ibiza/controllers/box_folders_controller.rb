@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Ibiza::BoxFoldersController < OrganizationController
+class Ibiza::BoxFoldersController < CustomerController
   before_action :load_customer
   before_action :verify_rights
   before_action :verify_if_customer_is_active
@@ -23,6 +23,10 @@ class Ibiza::BoxFoldersController < OrganizationController
   end
 
   private
+
+  def load_customer
+    @customer = customers.find(params[:customer_id])
+  end
 
   def verify_rights
     is_ok = false

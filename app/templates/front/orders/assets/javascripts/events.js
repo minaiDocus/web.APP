@@ -42,6 +42,15 @@ function bind_all_events_order(){
     });
   }
 
+
+  $('.new_edit_order_url').unbind('click').bind('click', function(e) {
+    e.stopPropagation();
+
+    const url = $(this).attr('link');
+
+    AppEmit('new_edit_order_view', { url: url });
+  });
+
   ApplicationJS.set_checkbox_radio();
 }
 

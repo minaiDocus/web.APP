@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
-class MyCompanyFiles::CustomerController < OrganizationController
+class MyCompanyFiles::UserMcfStorageController < CustomerController
 
   before_action :load_customer
   before_action :verify_rights
 
   prepend_view_path('app/templates/front/my_company_files/views')
+
+  def index; end
 
   def edit_mcf; end
 
@@ -16,16 +18,17 @@ class MyCompanyFiles::CustomerController < OrganizationController
       retake_mcf_documents
     end
 
-    redirect_to organization_customer_path(@organization, @customer, tab: 'mcf')
+    redirect_to organization_customer_my_company_files_path(@organization, @customer)
   end
 
   def update_mcf
     if @customer.update(mcf_params)
       flash[:success] = 'Modifié avec succès.'
-      redirect_to organization_customer_path(@organization, @customer, tab: 'mcf')
     else
-      render :edit_mcf
+      flash[:success] = "Impossible de modifier: #{@customer.errors.messages.to_s}"
     end
+
+    redirect_to organization_customer_my_company_files_path(@organization, @customer)
   end
 
   private
@@ -60,6 +63,6 @@ class MyCompanyFiles::CustomerController < OrganizationController
   end
 
   def load_customer
-    @customer = customers.find(params[:id])
+    @customer = customers.find(params[:id] || params[:customer_id])
   end
 end

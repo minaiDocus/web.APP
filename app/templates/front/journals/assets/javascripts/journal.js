@@ -169,6 +169,11 @@ class Journal{
       let label = vat_account.find('input[type="text"].vat_accounts_label, input[type="number"].vat_accounts_label').val();
       let vat_accounts_field = vat_account.find('input[type="text"].vat_accounts').val();
       let conterpart_vat_accounts_field = vat_account.find('input[type="text"].vat_accounts_conterpart').val();
+      let vat_account_exonorated_field = vat_account.find('input[type="text"].vat_account_exonorated').val();
+
+      if (!(vat_account_exonorated_field === null || vat_account_exonorated_field === '' || vat_account_exonorated_field === undefined)){
+        vat_accounts['-1'] = [vat_account_exonorated_field];
+      }
 
       if ((label === self.default_vat_accounts_label) || label === 'Compte de TVA par défaut' ){
         label = '0';
@@ -204,8 +209,6 @@ class Journal{
           let conterpart_vat_account = raw_vat_account[1]
 
           if ((rate.indexOf(self.default_vat_accounts_label) >= 0) || (rate === 'Compte de TVA par défaut') || (rate === '0')){
-            vat_account = vat_account || 445660; /* SET DEFAULT VALUE TO 445660 WHEN IT IS EMPTY*/
-            conterpart_vat_account = conterpart_vat_account || 70054614; // TODO ==> NEED TO SET DEFAULT VALUE HERE
             $('input[type="text"]#account_book_type_default_vat_accounts').attr('value', vat_account);
             $('input[type="text"]#account_book_type_default_conterpart_accounts').attr('value', conterpart_vat_account);
 
@@ -215,6 +218,9 @@ class Journal{
               $('input[type="text"]#account_book_type_default_vat_accounts').attr('value', '');
               $('input[type="text"]#account_book_type_default_conterpart_accounts').attr('value', '');
             }
+          }
+          else if (rate === '-1'){
+            $('input[type="text"]#account_book_type_vat_account_exonorated').attr('value', vat_account);
           }
           else if (!($.inArray(rate, rate_vat_accounts_values) > -1 || $.inArray(vat_account, vat_accounts_values) > -1) || $.inArray(conterpart_vat_account, vat_accounts_values) > -1 ){
             if (!(rate === '' || rate === 'undefined' || rate === null || rate === undefined || vat_account === '' || vat_account === 'undefined' || vat_account === null || vat_account === undefined || (rate.indexOf(self.default_vat_accounts_label) >= 0) || rate === '0')){

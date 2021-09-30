@@ -7,6 +7,8 @@ function bind_softwares_setting_events(){
 
     $('#use-software-' + $(this).parent().attr('id')).modal('show');
   });
+
+  $('#edit_customer_csv_descriptor').unbind('click').bind('click', function(e){ AppEmit('csv_descriptor_edit_customer_format', { id: $(this).data('id'), organization_id: $(this).data('organization-id') }) });
 }
 
 jQuery(function() {
