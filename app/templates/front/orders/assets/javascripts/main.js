@@ -17,6 +17,7 @@ jQuery(function () {
   AppListenTo('check_casing_size_and_count', (e)=>{ order.check_casing_size_and_count(); });
 
   AppListenTo('new_edit_order_view', (e)=>{ order.new_edit_order_view(e.detail.url); });
+  AppListenTo('rebind_order_events', (e)=>{ bind_all_events_order(); });
 
   AppListenTo('select_for_orders', (e)=>{ order.select_for_orders(e.detail.url); });
   AppListenTo('handle_select_for_orders_result', (e)=>{ order.handle_select_for_orders_result(e.detail.response); });

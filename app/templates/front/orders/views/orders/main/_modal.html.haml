@@ -1,4 +1,4 @@
-- validation_param = param_encode({ url: "/organizations/#{@organization.id}/customers/#{@customer.id}/orders", method: 'post', form: { id: 'new_edit_order_customer', dump_action: true }, html: { target: '#orders.tab-pane table' }, modal: { id: 'new_edit_order' }})
+- validation_param = param_encode({ url: "/organizations/#{@organization.id}/customers/#{@customer.id}/orders", method: 'post', form: { id: 'new_edit_order_customer', dump_action: true }, redirect_to: { url: organization_customer_orders_path(@organization, @customer), method: 'get', html: { target: '#orders_list table' } }, modal: { id: 'new_edit_order' }, after_send: 'rebind_order_events'})
 .modal#new_edit_order
   .modal-dialog{ style: 'min-width: 1024px' }
     .modal-content
