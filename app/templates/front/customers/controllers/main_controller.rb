@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Customers::MainController < OrganizationController
+class Customers::MainController < CustomerController
 
   before_action :load_customer, except: %w[index info new create search]
   before_action :verify_rights, except: 'index'
@@ -38,10 +38,6 @@ class Customers::MainController < OrganizationController
     @pending_journals = @customer.retrievers.where(journal_id: nil).where.not(journal_name: [nil]).distinct.pluck(:journal_name)
     
     build_softwares
-  end
-
-  def refresh_book_type
-    render partial: 'book_type'
   end
 
   # GET /organizations/:organization_id/customers/new
@@ -430,20 +426,6 @@ class Customers::MainController < OrganizationController
   def softwares_attributes
     "#{Interfaces::Software::Configuration.h_softwares[params[:part]]}_attributes"
   end
-
-  def load_customer
-    @customer = customers.find(params[:id])
-  end
-
-  def sort_column
-    params[:sort] || 'created_at'
-  end
-  helper_method :sort_column
-
-  def sort_direction
-    params[:direction] || 'desc'
-  end
-  helper_method :sort_direction
 
   def is_max_number_of_journals_reached?
     @customer.account_book_types.count >= @customer.options.max_number_of_journals

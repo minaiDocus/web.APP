@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Orders::MainController < OrganizationController
+class Orders::MainController < CustomerController
   before_action :load_customer
   before_action :load_order_prices
   before_action :verify_rights
@@ -7,6 +7,10 @@ class Orders::MainController < OrganizationController
   before_action :verify_editability, only: %w[edit update destroy]
 
   prepend_view_path('app/templates/front/orders/views')
+
+  def index
+    @orders = @customer.orders.order(created_at: :desc)    
+  end
 
   # GET /organizations/:organization_id/customers/:customer_id/orders/new
   def new

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Subscriptions::MainController < OrganizationController
+class Subscriptions::MainController < CustomerController
   before_action :verify_rights
   before_action :load_customer
   before_action :verify_if_customer_is_active
@@ -36,13 +36,6 @@ class Subscriptions::MainController < OrganizationController
 
   def load_customer
     @customer = customers.find params[:customer_id]
-  end
-
-  def verify_if_customer_is_active
-    if @customer.inactive?
-      flash[:error] = t('authorization.unessessary_rights')
-      redirect_to organization_path(@organization)
-    end
   end
 
   def load_subscription
