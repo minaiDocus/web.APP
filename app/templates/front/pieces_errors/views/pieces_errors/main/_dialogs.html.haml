@@ -8,8 +8,8 @@
         %form#filter-ignored-pre-assignment-form
           .form-group
             %label.semibold Date de création
-            .select-container.no-padding.w-100.date.date-picker
-              %input{ type: :text }
+            .select-container.no-padding.w-100.date
+              = text_field_tag 'filter_contains[created_at]', (params[:filter_contains][:created_at] rescue ''), class: 'daterange'
 
           .form-group
             %label.semibold N° pièce
@@ -28,7 +28,8 @@
 
           .form-group
             %label.semibold Statut
-            = select_tag 'filter_contains[pre_assignment_state]', options_for_select([['Pré-affectation ignorée', 'ignored'], ['En cours de renvoi à la pré-affectation', 'force_processing']], (params[:filter_contains][:pre_assignment_state] rescue '')), include_blank: true
+            .select-container.no-padding.w-100
+              = select_tag 'filter_contains[pre_assignment_state]', options_for_select([['Pré-affectation ignorée', 'ignored'], ['En cours de renvoi à la pré-affectation', 'force_processing']], (params[:filter_contains][:pre_assignment_state] rescue '')), include_blank: true, class: 'form-select'
 
       .modal-footer
         %button.btn.btn-light.semibold.cancel{ type: :button } Annuler
@@ -44,8 +45,8 @@
         %form#filter-duplicated-pre-assignment-form
           .form-group
             %label.semibold Date de création
-            .select-container.no-padding.w-100.date.date-picker
-              %input{ type: :text }
+            .select-container.no-padding.w-100.date
+              = text_field_tag 'duplicate_contains[created_at]', (params[:duplicate_contains][:created_at] rescue ''), class: 'daterange'
 
           .form-group
             %label.semibold Nom de la société
@@ -74,8 +75,8 @@
 
           .form-group
             %label.semibold Date d'opération
-            .select-container.no-padding.w-100.date.date-picker
-              %input{ type: :text }
+            .select-container.no-padding.w-100.date
+              = text_field_tag 'duplicate_contains[date]', (params[:duplicate_contains][:date] rescue ''), class: 'daterange'
         
       .modal-footer
         %button.btn.btn-light.semibold.cancel{ type: :button } Annuler

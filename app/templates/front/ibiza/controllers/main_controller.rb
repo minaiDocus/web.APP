@@ -13,6 +13,9 @@ class Ibiza::MainController < OrganizationController
   # PUT /organizations/:organization_id/ibiza
   def update
     if @ibiza.update(ibiza_params)
+      #Clear cache of IbizaLib::Client base domain
+      Rails.cache.delete(['ibiza_base_domaine', @ibiza.access_token]) if @ibiza.access_token.present?
+
       if @ibiza.need_to_verify_access_tokens?
         IbizaLib::VerifyAccessTokens.new(@ibiza.id.to_s).execute
       end

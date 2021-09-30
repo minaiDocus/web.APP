@@ -702,14 +702,15 @@
                         %i (L'organisation n'a pas de format csv configuré)
                     %td
                       - if @user.leader? || @user.manage_customers
-                        .alignright
-                          - if @customer.csv_descriptor.try(:use_own_format?)
-                            - if @organization.csv_descriptor.try(:directive).present?
-                              - idocus_params = param_encode({ url: deactivate_custom_user_csv_descriptor_path(@organization.id, @customer.id), method: 'post', confirm: "Voulez-vous vraiment utiliser le format défini pour l'organisation?" })
-                              %button.btn.btn-secondary.as_idocus_ajax{ type: 'button', idocus: idocus_params } Utiliser le format de l'organisation
-                            %button.btn.btn-primary#edit_customer_csv_descriptor{ type: 'button', data: { id: @customer.id, organization_id: @organization.id } } Modifier le format propre au dossier
-                          - else
-                            %button.btn.btn-primary#edit_customer_csv_descriptor{ type: 'button', data: { id: @customer.id, organization_id: @organization.id } } Créer un format propre au dossier
+                        .col-md-12.clearfix.mb-3
+                          .float-end
+                            - if @customer.csv_descriptor.try(:use_own_format?)
+                              - if @organization.csv_descriptor.try(:directive).present?
+                                - idocus_params = param_encode({ url: deactivate_custom_user_csv_descriptor_path(@organization.id, @customer.id), method: 'post', confirm: "Voulez-vous vraiment utiliser le format défini pour l'organisation?" })
+                                %button.btn.btn-secondary.as_idocus_ajax{ type: 'button', idocus: idocus_params } Utiliser le format de l'organisation
+                              %button.btn.btn-primary#edit_customer_csv_descriptor{ type: 'button', data: { id: @customer.id, organization_id: @organization.id } } Modifier le format propre au dossier
+                            - else
+                              %button.btn.btn-primary#edit_customer_csv_descriptor{ type: 'button', data: { id: @customer.id, organization_id: @organization.id } } Créer un format propre au dossier
             .modal#csv_descriptor_modal 
               .modal-dialog
                 .modal-content

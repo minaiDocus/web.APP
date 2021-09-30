@@ -85,6 +85,7 @@ class Journal{
     let self = this;
     $('.previous-next-controls .validate').unbind('click.submit_journal').bind('click.submit_journal', function(e) {
       e.stopPropagation();
+      AppToggleLoading('show');
 
       if (no_entry_selected) {
         $('.carousel_item_last_slide').remove();
@@ -253,7 +254,7 @@ class Journal{
       $('.pre-assignment-attributes').removeClass('hide');
       $('.no_entry_selected').addClass('hide');
     }
-    else if (parseInt($("#account_book_type_entry_type").val()) === 0){
+    else if( ['0', '1', '4'].find((e)=>{ return parseInt(e) === parseInt( $("#account_book_type_entry_type").val() ) }) ){
       $('.pre-assignment-attributes').addClass('hide');
       $('.no_entry_selected').removeClass('hide');
     }

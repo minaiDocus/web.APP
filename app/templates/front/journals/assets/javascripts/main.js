@@ -4,10 +4,12 @@ jQuery(function () {
   let journal = new Journal();
   journal.main();
 
-  $('#journal .edit_journal_analytics').unbind('click').bind('click', function(e){ 
-    let journal_id = $(this).data('journal-id');
-    let customer_id = $(this).data('customer-id');
-    let code = $(this).data('code');
+  AppListenTo('compta_analytic.edit_journal_compta', (e)=>{
+    let elem = e.detail.obj;
+    let journal_id = $(elem).data('journal-id');
+    let customer_id = $(elem).data('customer-id');
+    let code = $(elem).data('code');
+
     journal.edit_analytics(journal_id, customer_id, code);
   });
 

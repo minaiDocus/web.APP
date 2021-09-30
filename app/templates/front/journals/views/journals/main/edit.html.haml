@@ -5,8 +5,7 @@
 #journal.edit
   - if @customer.try(:uses_ibiza_analytics?)
     .w-100.text-end
-      %a.btn.btn-primary.edit_journal_analytics{ href: '#', data: { code: @customer.code, customer_id: @customer.id, journal_id: @journal.id } }Édition Compta Analytique
+      - idocus_params = param_encode({ name: 'compta_analytic.edit_journal_compta' })
+      %a.btn.btn-primary.edit_journal_analytics.as_idocus_emit{ idocus: idocus_params, href: '#', data: { code: @customer.code, customer_id: @customer.id, journal_id: @journal.id } }Édition Compta Analytique
     = render file: Rails.root.join('app/templates/front/compta_analytics/views/compta_analytics/_analytics.html.haml'), locals: { with_validate_button: true }
   = render partial: 'form'
-
-= javascript_include_tag 'front/journals/assets/javascripts/main'

@@ -2,7 +2,7 @@
   = simple_form_for @customer, url: organization_customer_ibiza_path(@organization, @customer), html: { class: 'form-horizontal label-medium', id: 'edit_ibiza_form' } do |f|
     = f.simple_fields_for :ibiza do |sf|
       = sf.hidden_field :id
-      = sf.input :ibiza_id, label: 'Sélectionner le dossier correspondant dans iBiza', collection: [], input_html: { style: 'display:none', data: { original_value: @customer.try(:ibiza).try(:ibiza_id), users_list_url: organization_ibiza_users_path(@organization, format: 'json'), placeholder: 'Choisir un dossier' }, class: 'form-control' }
+      = sf.input :ibiza_id, label: 'Sélectionner le dossier correspondant dans iBiza', collection: [], input_html: { data: { original_value: @customer.try(:ibiza).try(:ibiza_id), users_list_url: organization_ibiza_users_path(@organization, format: 'json'), placeholder: 'Choisir un dossier' }, class: 'form-control' }
 
       .form-group
         - auto_deliver = @customer.try(:ibiza).try(:auto_deliver) || -1

@@ -144,11 +144,7 @@ class Pack::Piece < ApplicationRecord
     query = query.where('pack_pieces.number LIKE ?', "%#{options[:piece_number]}%")              if options[:piece_number].present?
     query = query.where('pack_pieces.pre_assignment_state = ?', options[:pre_assignment_state])  if options[:pre_assignment_state].present?
 
-    if options[:created_at]
-      options[:created_at].each do |operator, value|
-        query = query.where("pack_pieces.created_at #{operator} ?", value) if operator.in?(['>=', '<='])
-      end
-    end
+    query = query.where("pack_pieces.created_at BETWEEN '#{CustomUtils.parse_date_range_of(options[:created_at]).join("' AND '")}'") if options[:created_at].present?
 
     query = query.where('pack_pieces.name LIKE ? OR pack_pieces.tags LIKE ? OR pack_pieces.content_text LIKE ?', "%#{text}%", "%#{text}%", "%#{text}%") if text.present?
 

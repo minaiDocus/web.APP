@@ -3,11 +3,56 @@
     .carousel-inner
       .carousel-item.active
         .journal-first-step-form
-          = f.label :name, hint: journal_name_hint, :class => "semibold"
-          .select-container.no-padding.w-100
-            = f.input :name, label: false, input_html: { class: 'required_field', disabled: is_journal_name_disabled }
-          - if @customer && @customer.uses?(:ibiza)
-            - if @organization.ibiza.configured?
+          - if @organization.specific_mission
+            = f.label :name, label: 'Attribuez un nom de code dossier iDocus', hint: 'Ce code sera repris dans la charte de nommage de tous vos fichiers transmis.', :class => "semibold"
+            .select-container.no-padding.w-100
+              = f.input :name, label: false, :placeholder => 'ex: AC', input_html: { class: 'required_field'}
+            = f.label :description, label: 'Nom du dossier iDocus', hint: 'Inscrivez ici un nom familier pour votre dossier.', :class => "semibold"
+            .select-container.no-padding.w-100
+              = f.input :description, label: false, :placeholder => 'ex: (Achats)', input_html: { class: 'required_field'}
+          - else
+            = f.label :name, hint: journal_name_hint, :class => "semibold"
+            .select-container.no-padding.w-100
+              = f.input :name, label: false, input_html: { class: 'required_field', disabled: is_journal_name_disabled }
+            = f.label :description, :class => "semibold"
+            .select-container.no-padding.w-100
+              = f.input :description, label: false, input_html: { class: 'required_field'}
+
+          - unless @organization.specific_mission
+            - if @customer && @customer.uses?(:ibiza)
+              - if @organization.ibiza.configured?
+                .block_input.clearfix
+                  = f.label :pseudonym, :class => "semibold"
+                  .select-container.no-padding.w-100
+                    = f.input :pseudonym, label: false, wrapper_html: { class: "external_account_book_type" }
+                .form-group.clearfix{ style: 'margin-bottom: 18px' }
+                  .label-section
+                    %label
+                  .control-section
+                    .block_selection_journals.w-100
+                      .help-block{style: 'margin-top: 2px; margin-left: 0px'} Journaux Ibiza :
+                      = select_tag 'select_external_journal', options_for_select(journals_for_select(@journal.pseudonym), @journal.pseudonym), size: 8, style: "height: auto", class: 'form-control select form-select form-select-sm optional'
+                    %i.help-block si différent de "Code journal" ci-dessus
+                
+                  = f.label :use_pseudonym_for_import, :class => "semibold"
+                  .select-container.no-padding.w-100
+                    = f.input :use_pseudonym_for_import, as: :boolean, label: false, label_html: { class: 'semibold form-check-label' }, wrapper_html: { class: 'form-check-input input_switch input_check_field pseudonyme_for_import', id: 'account_book_type_pseudonyme_for_import' }
+                    %label.semibold{class: 'form-check-label label_check_field', for: 'account_book_type_pseudonyme_for_import'} Non
+                    %i.help-block "Utiliser le code journal comptable comme répértoire d'import (Ibiza box), Si non, utiliser le code journal iDocus"
+              - else
+                .form-group.clearfix
+                  .label-section
+                    %label.control-label.semibold= t('simple_form.labels.account_book_type.pseudonym')
+                  .control-section
+                    %select.select.disabled{ disabled: 'disabled', class: 'form-control select form-select form-select-sm optional' }
+                    %p
+                      = render 'shared/ibiza_not_configured_warning'
+            - elsif @customer && (@customer.uses?(:exact_online) || @customer.my_unisoft.try(:used?))
+              - if @customer.exact_online.try(:fully_configured?)
+                - text_journal = "Journaux Exact Online :"
+              - elsif @customer.my_unisoft.try(:used?)
+                - text_journal = "Journaux My Unisoft :"
+
               .block_input.clearfix
                 .row
                   .col-md-10
@@ -15,64 +60,21 @@
                     .select-container.no-padding.w-100
                       = f.input :pseudonym, label: false, wrapper_html: { class: "external_account_book_type" }
                   .col-md-2
-                    %a{href: '#', style:"padding: 0 5px 10px 5px", id: "toogle_external_journal_list"}
+                    %a{href: '#',  style: "padding: 0 5px 10px 5px", id: "toogle_external_journal_list"}
                       = glyphicon('chevron-bottom')
               .form-group.clearfix{ style: 'margin-bottom: 18px' }
                 .label-section
                   %label
                 .control-section
                   .block_selection_journals
-                    .help-block{style: 'margin-top: 2px; margin-left: 0px'} Journaux Ibiza :
+                    .help-block{style: 'margin-top: 2px; margin-left: 0px'}
+                      = text_journal
                     = select_tag 'select_external_journal', options_for_select(journals_for_select(@journal.pseudonym), @journal.pseudonym), size: 8, style: "height: auto", class: 'form-control select form-select form-select-sm optional'
                   %i.help-block si différent de "Code journal" ci-dessus
-              
-              .form-group.row
-                .col-md-10
-                  = f.label :use_pseudonym_for_import, :class => "semibold"
-                .col-md-2
-                  .form-check.form-switch.idocus-custom-form-check
-                    = f.input :use_pseudonym_for_import, as: :boolean, label: false, label_html: { class: 'semibold form-check-label' }, wrapper_html: { class: 'form-check-input input_switch input_check_field pseudonyme_for_import', id: 'account_book_type_pseudonyme_for_import' }, hint: "Utiliser le code journal comptable comme répértoire d'import (Ibiza box), Si non, utiliser le code journal iDocus"
-                    %label.semibold{class: 'form-check-label label_check_field', for: 'account_book_type_pseudonyme_for_import'} Non
             - else
-              .form-group.clearfix
-                .label-section
-                  %label.control-label.semibold= t('simple_form.labels.account_book_type.pseudonym')
-                .control-section
-                  %select.select.disabled{ disabled: 'disabled', class: 'form-control select form-select form-select-sm optional' }
-                  %p
-                    = render 'shared/ibiza_not_configured_warning'
-          - elsif @customer && (@customer.uses?(:exact_online) || @customer.my_unisoft.try(:used?))
-            - if @customer.exact_online.try(:fully_configured?)
-              - text_journal = "Journaux Exact Online :"
-            - elsif @customer.my_unisoft.try(:used?)
-              - text_journal = "Journaux My Unisoft :"
-
-            .block_input.clearfix
-              .row
-                .col-md-10
-                  = f.label :pseudonym, :class => "semibold"
-                  .select-container.no-padding.w-100
-                    = f.input :pseudonym, label: false, wrapper_html: { class: "external_account_book_type" }
-                .col-md-2
-                  %a{href: '#',  style: "padding: 0 5px 10px 5px", id: "toogle_external_journal_list"}
-                    = glyphicon('chevron-bottom')
-            .form-group.clearfix{ style: 'margin-bottom: 18px' }
-              .label-section
-                %label
-              .control-section
-                .block_selection_journals
-                  .help-block{style: 'margin-top: 2px; margin-left: 0px'}
-                    = text_journal
-                  = select_tag 'select_external_journal', options_for_select(journals_for_select(@journal.pseudonym), @journal.pseudonym), size: 8, style: "height: auto", class: 'form-control select form-select form-select-sm optional'
-                %i.help-block si différent de "Code journal" ci-dessus
-          - else
-            = f.label :pseudonym, hint: 'Si différent de "Code journal iDocus"', :class => "semibold"
-            .select-container.no-padding.w-100
-              = f.input :pseudonym, label: false
-
-          = f.label :description, :class => "semibold"
-          .select-container.no-padding.w-100
-            = f.input :description, label: false, input_html: { class: 'required_field'}
+              = f.label :pseudonym, hint: 'Si différent de "Code journal iDocus"', :class => "semibold"
+              .select-container.no-padding.w-100
+                = f.input :pseudonym, label: false
 
           - if !@customer || is_preassignment_authorized? || (@customer && @customer.subscription.is_package?('ido_x'))
             = f.input :entry_type, collection: account_book_type_entry_type_for_select(@organization, @customer), include_blank: false, label_html: { class: 'semibold' }, input_html: { class: 'form-control select form-select form-select-sm optional'}
@@ -81,7 +83,7 @@
         - if @organization.knowings.try(:is_configured?)
           .knowings-configuration.hide
             = f.input :domain, collection: journal_domain_for_select, include_blank: false, label_html: { class: 'semibold' }, input_html: { class: 'form-control select form-select form-select-sm optional'}
-        .no_entry_selected.hide Aucun type de pré-saisie comptable séléctionné.
+        .no_entry_selected.hide Aucun type de pré-saisie comptable.
         - if !@customer || is_preassignment_authorized?
           .pre-assignment-attributes.hide
             = f.input :currency, collection: journal_currencies, include_blank: false, selected: (@journal.currency || "EUR"), hint: "Les écritures seront converties vers cette devise avec le taux de change de la date de facture", label_html: { class: 'control-label semibold' }, input_html: { class: 'form-control select form-select form-select-sm optional'}
@@ -161,6 +163,7 @@
                   .form-check.form-switch.idocus-custom-form-check
                     = f.input :jefacture_enabled, as: :boolean, label: false, label_html: { class: 'semibold form-check-label' }, input_html: { class: 'form-check-input input_switch input_check_field', id: 'book-type-jefacture-enabled' }
                     %label.semibold{class: 'form-check-label label_check_field', for: 'book-type-jefacture-enabled'} Non
+
       .carousel-item
         .carousel_item_last_slide
           - if !@customer || (@customer && @customer.subscription.is_package?('mail_option'))

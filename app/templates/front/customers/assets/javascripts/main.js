@@ -8,7 +8,7 @@
 //=require '../../../orders/assets/javascripts/order'
 
 //**** journals JS *******/
-//=require '../../../journals/assets/javascripts/journal'
+//=require '../../../journals/assets/javascripts/main'
 
 //**** my company files JS *******/
 //=require '../../../my_company_files/assets/javascripts/events'
@@ -35,10 +35,6 @@ class Customer{
       this.load_settings_options_view();    
       this.filter_customer();
       this.get_customer_edit_view();
-
-      if ($('#customer.edit.ibiza').length > 0 ) {
-        this.get_ibiza_customers_list($('#ibiza-customers-list'));
-      }
       this.show_ibiza_customer();
 
       if ($('#personalize_subscription_package_form').length > 0 ) {
@@ -378,6 +374,7 @@ class Customer{
     };
 
     const get_ibiza_customers_list = (selector) => {
+      AppToggleLoading('show');
       this.applicationJS.sendRequest({
         'url': selector.data('users-list-url'),
         'type': 'GET',
@@ -396,7 +393,8 @@ class Customer{
             }
             selector.append(option_html);
           }
-          selector.show();
+
+          AppToggleLoading('hide');
           selector.chosen({
             search_contains: true,
             no_results_text: 'Aucun résultat correspondant à'
@@ -708,16 +706,6 @@ jQuery(function () {
   AppListenTo('edit_file_sending_kits_view', (e)=>{ customer.edit_file_sending_kits_view(e.detail.url); });
 
   /*AppListenTo('new_account_book_type_view', (e)=>{ customer.new_account_book_type_view(e.detail.url); });*/
-
-  let journal = new Journal();
-  journal.main();
-
-  $('#journal .edit_journal_analytics').unbind('click').bind('click', function(e){ 
-    let journal_id = $(this).data('journal-id');
-    let customer_id = $(this).data('customer-id');
-    let code = $(this).data('code');
-    journal.edit_analytics(journal_id, customer_id, code);
-  });
 
   AppListenTo('compta_analytics.validate_analysis', (e)=>{ journal.update_analytics(e.detail.data) });
 

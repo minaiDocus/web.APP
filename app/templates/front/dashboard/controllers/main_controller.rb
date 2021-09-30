@@ -4,6 +4,8 @@ class Dashboard::MainController < FrontController
 
   def index
     @favorites = @user.favorite_customers.try(:customer_ids) || []
+
+    @news_present = @user.news_read_at ? News.published.where('published_at > ?', @user.news_read_at).exists? : News.exists?
   end
 
   def add_customer_to_favorite

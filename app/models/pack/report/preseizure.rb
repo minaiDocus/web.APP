@@ -44,17 +44,8 @@ class Pack::Report::Preseizure < ApplicationRecord
     preseizures = preseizures.where("users.company LIKE ?", "%#{contains[:company]}%") if contains[:company].present?
     preseizures = preseizures.where(cached_amount: contains[:amount]) if contains[:amount].present?
 
-    if contains[:created_at]
-      contains[:created_at].each do |operator, value|
-        preseizures = preseizures.where("pack_report_preseizures.created_at #{operator} ?", value) if operator.in?(['>=', '<='])
-      end
-    end
-
-    if contains[:date]
-      contains[:date].each do |operator, value|
-        preseizures = preseizures.where("date #{operator} ?", value) if operator.in?(['>=', '<='])
-      end
-    end
+    preseizures = preseizures.where("pack_report_preseizures.created_at BETWEEN '#{CustomUtils.parse_date_range_of(contains[:created_at]).join("' AND '")}'") if contains[:created_at].present?
+    preseizures = preseizures.where("pack_report_preseizures.date BETWEEN '#{CustomUtils.parse_date_range_of(contains[:date]).join("' AND '")}'")             if contains[:date].present?
 
     preseizures.distinct
   end
@@ -70,10 +61,7 @@ class Pack::Report::Preseizure < ApplicationRecord
     preseizures = preseizures.exported            if options[:is_delivered].present? && options[:is_delivered].to_i == 4
     preseizures = preseizures.not_exported        if options[:is_delivered].present? && options[:is_delivered].to_i == 5
 
-    # preseizures = preseizures.where("DATE_FORMAT(pack_report_preseizures.created_at, '%Y-%m-%d') #{options[:created_at_operation].tr('012', ' ><')}= ?", options[:created_at])                        if options[:created_at].present?
-    # preseizures = preseizures.where("DATE_FORMAT(pack_report_preseizures.date, '%Y-%m-%d') #{options[:date_operation].tr('012', ' ><')}= ?", options[:date])                                          if options[:date].present?
-    # preseizures = preseizures.where("DATE_FORMAT(pack_report_preseizures.delivery_tried_at, '%Y-%m-%d') #{options[:delivery_tried_at_operation].tr('012', ' ><')}= ?", options[:delivery_tried_at])   if options[:delivery_tried_at].present?
-
+    preseizures = preseizures.where("pack_report_preseizures.created_at BETWEEN '#{CustomUtils.parse_date_range_of(options[:created_at]).join("' AND '")}'")                if options[:created_at].present?
     preseizures = preseizures.where("pack_report_preseizures.date BETWEEN '#{CustomUtils.parse_date_range_of(options[:date]).join("' AND '")}'")                            if options[:date].present?
     preseizures = preseizures.where("pack_report_preseizures.delivery_tried_at BETWEEN '#{CustomUtils.parse_date_range_of(options[:delivery_tried_at]).join("' AND '")}'")  if options[:delivery_tried_at].present?
 

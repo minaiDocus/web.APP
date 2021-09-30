@@ -1,4 +1,4 @@
-﻿.customer-form-content  
+﻿.customer-form-content
   = simple_form_for @customer, url: customer_form_url(@organization, @customer), html: { class: 'form form-horizontal margin0 subscription_option_form', id: 'customer-form-data' } do |f|
     .carousel.slide#carousel_customer_form{  "data-bs-touch" => "false", "data-bs-interval" => "false" }
       .carousel-inner
@@ -63,8 +63,8 @@
                         .form-check.form-switch.idocus-custom-form-check
                           = o.input :is_taxable, as: :boolean, label: false, label_html: { class: 'required semibold form-check-label' }, input_html: { class: 'form-check-input input_switch input_check_field', id: 'check-taxable-options' }
                           %label.semibold{class: 'form-check-label label_check_field', for: 'check-taxable-options'} Non
-                
-                - unless @organization.specific_mission
+
+                - if !@organization.specific_mission && params[:action].in?(%w(new create))
                   .mb-5
                   %h6.semibold Logiciels comptables utilisés:
                   %hr
