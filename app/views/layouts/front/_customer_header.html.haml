@@ -52,62 +52,62 @@
                 %li.nav-item.no-margin
                   %a.semibold.nav-link#ibizabox_tab{ class: ('active' if (controller_path == 'ibiza/box_documents' && action_name == 'index')), href: organization_customer_ibizabox_documents_path(@organization, @customer) } iBiza Box
               %li.nav-item.dropdown.no-margin
-                %a.semibold.nav-link.dropdown-toggle#softwares-list{ "data-bs-toggle" => "dropdown", "aria-expanded" => "false", href: '#' } Logiciels comptables / export csv
+                %a.semibold.nav-link.dropdown-toggle#softwares-list{ "data-bs-toggle" => "dropdown", "aria-expanded" => "false", href: '#', class: ('active' if (controller_path == 'software_setting/user' && action_name == 'index')) } Logiciels comptables / export csv
                 %ul.dropdown-menu{ "aria-labelledby" => "softwares-list" }
                   - if software_uses('ibiza')   
                     %li.clearfix
-                      %a.semibold.nav-link.dropdown-item#ibiza-tab{ href: '#' } 
+                      %a.semibold.nav-link.dropdown-item#ibiza-tab{ href: organization_customer_softwares_path(@organization, @customer, software_name: 'ibiza') }
                         %span.float-start iBiza
                         - if @customer.uses?(:ibiza)
                           = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'float-end' })
                   - if software_uses('exact_online')
                     %li.clearfix
-                      %a.semibold.nav-link.dropdown-item#exact-online-tab{ href: '#' } 
+                      %a.semibold.nav-link.dropdown-item#exact-online-tab{ href: organization_customer_softwares_path(@organization, @customer, software_name: 'exact_online') }
                         %span.float-start Exact Online
                         - if @customer.uses?(:exact_online)
                           = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'float-end' })
                   - if software_uses('my_unisoft')
                     %li.clearfix
-                      %a.semibold.nav-link.dropdown-item#my-unisoft-tab{ href: '#' } 
+                      %a.semibold.nav-link.dropdown-item#my-unisoft-tab{ href: organization_customer_softwares_path(@organization, @customer, software_name: 'my_unisoft') }
                         %span.float-start My Unisoft
                         - if @customer.uses?(:my_unisoft)
                           = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'float-end' })
                   - if @organization.try(:coala).try(:used?)  
                     %li.clearfix
-                      %a.semibold.nav-link.dropdown-item#coala-tab{ href: '#' } 
+                      %a.semibold.nav-link.dropdown-item#coala-tab{ href: organization_customer_softwares_path(@organization, @customer, software_name: 'coala') }
                         %span.float-start Coala
                         - if @customer.uses?(:coala)
                           = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'float-end' })
                   - if @organization.try(:quadratus).try(:used)
                     %li.clearfix
-                      %a.semibold.nav-link.dropdown-item#quadratus-tab{ href: '#' } 
+                      %a.semibold.nav-link.dropdown-item#quadratus-tab{ href: organization_customer_softwares_path(@organization, @customer, software_name: 'quadratus') }
                         %span.float-start Quadratus
                         - if @customer.uses?(:quadratus)
                           = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'float-end' })
                   - if @organization.try(:cegid).try(:used?)
                     %li.clearfix
-                      %a.semibold.nav-link.dropdown-item#cegid-tab{ href: '#' } 
+                      %a.semibold.nav-link.dropdown-item#cegid-tab{ href: organization_customer_softwares_path(@organization, @customer, software_name: 'cegid') }
                         %span.float-start Cegid
                         - if @customer.uses?(:cegid)
                           = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'float-end' })
                   - if @organization.try(:fec_agiris).try(:used?)
                     %li.clearfix
-                      %a.semibold.nav-link.dropdown-item#fec-agiris-tab{ href: '#' } 
+                      %a.semibold.nav-link.dropdown-item#fec-agiris-tab{ href: organization_customer_softwares_path(@organization, @customer, software_name: 'fec_agiris') }
                         %span.float-start Fec Agiris
                         - if @customer.uses?(:fec_agiris)
                           = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'float-end' })
                   - if @organization.try(:fec_acd).try(:used?)
                     %li.clearfix
-                      %a.semibold.nav-link.dropdown-item#fec-acd-tab{ href: '#' } 
+                      %a.semibold.nav-link.dropdown-item#fec-acd-tab{ href: organization_customer_softwares_path(@organization, @customer, software_name: 'fec_acd') }
                         %span.float-start Fec ACD
                         - if @customer.uses?(:fec_acd)
                           = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'float-end' })
                   - if @organization.try(:csv_descriptor).try(:used?)
                     %li.clearfix
-                      %a.semibold.nav-link.dropdown-item#csv-descriptor-tab{ href: '#' } 
+                      %a.semibold.nav-link.dropdown-item#csv-descriptor-tab{ href: organization_customer_softwares_path(@organization, @customer, software_name: 'csv_descriptor') }
                         %span.float-start Format d’export (.csv)
                         - if @customer.uses?(:csv_descriptor)
-                          = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'float-end' })   
+                          = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'float-end' })
               %li.nav-item.no-margin
                 %a.semibold.nav-link#accounting-plan-tab{ class: ('active' if (controller_path == 'accounting_plans/main' && (action_name == 'show' || action_name == 'import_fec'))), href: organization_customer_accounting_plan_path(@organization, @customer) } Plan comptable
               - if @organization.mcf_settings.try(:access_token).present? || @customer.try(:mcf_documents).try(:not_processable).try(:any?)

@@ -501,18 +501,6 @@ class Customer{
     ApplicationJS.set_checkbox_radio();
   }
 
-  load_csv_descriptor(user_id, organization_id){
-    let ajax_params = {
-                        url: `/organizations/${organization_id}/csv_descriptor/${user_id}/format_setting`,
-                        type: 'GET',
-                        dataType: 'HTML',
-                        target: '#csv_descriptors.edit',
-                        target_dest: '#edit_csv_descriptor_format'
-                      };
-
-    this.applicationJS.sendRequest(ajax_params).then((e)=>{ $('.modal#csv_descriptor_modal').modal('show'); });
-  }
-
 
   bind_ibiza_user_events(){
     this.rebind_customer_all_events();
@@ -531,8 +519,6 @@ jQuery(function () {
   AppListenTo('close_or_reopen_confirm', (e)=>{ customer.close_or_reopen_confirm(e.detail.url, e.detail.data); });
 
   AppListenTo('compta_analytics.validate_analysis', (e)=>{ journal.update_analytics(e.detail.data) });
-
-  AppListenTo('csv_descriptor_edit_customer_format', (e)=>{ customer.load_csv_descriptor(e.detail.id, e.detail.organization_id) });
 
   AppListenTo('bind_ibiza_user_events', (e)=>{ customer.bind_ibiza_user_events(); });
  

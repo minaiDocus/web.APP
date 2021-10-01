@@ -54,6 +54,12 @@ class CustomerController < OrganizationController
     end
   end
 
+  def build_softwares
+    Interfaces::Software::Configuration::SOFTWARES.each do |software|
+      @customer.send("build_#{software}".to_sym) if @customer.send(software.to_sym).nil?
+    end
+  end
+
   def load_customer
     @customer = customers.find(params[:id])
   end

@@ -90,7 +90,7 @@ class Customers::MainController < CustomerController
         flash[:error] = 'Impossible de modifier.'
       end
 
-      redirect_to organization_customer_path(@organization, @customer, tab: params[:part])
+      redirect_to organization_customer_softwares_path(@organization, @customer, software_name: params[:part])
     else
       @customer.is_group_required = @user.not_leader?
 
@@ -116,7 +116,7 @@ class Customers::MainController < CustomerController
     else
       flash[:error] = 'Impossible de modifier.'
     end
-    redirect_to organization_customer_path(@organization, @customer, tab: params[:software])
+    redirect_to organization_customer_softwares_path(@organization, @customer, software_name: params[:software])
   end
 
   def edit_softwares_selection
@@ -129,7 +129,6 @@ class Customers::MainController < CustomerController
 
   def update_softwares_selection
     software = @customer.create_or_update_software({columns: user_params[softwares_attributes.to_sym], software: params[:part]})
-    # TODO ... REMOVE STEP
   end
 
   # GET /account/organizations/:organization_id/customers/:id/edit_exact_online
@@ -153,7 +152,7 @@ class Customers::MainController < CustomerController
           @customer.exact_online.try(:reset)
           redirect_to authenticate_account_exact_online_path(customer_id: @customer.id)
         else
-          redirect_to organization_customer_path(@organization, @customer, tab: 'exact_online')
+          redirect_to organization_customer_softwares_path(@organization, @customer, software_name: 'exact_online')
         end
       else
         # TODO ... REMOVE STEP
@@ -183,7 +182,7 @@ class Customers::MainController < CustomerController
 
         flash[:success] = 'Modifié avec succès'
 
-        redirect_to organization_customer_path(@organization, @customer, tab: 'my_unisoft')
+        redirect_to organization_customer_softwares_path(@organization, @customer, software_name: 'my_unisoft')
       else
         # TODO ... REMOVE STEP
       end
@@ -288,54 +287,6 @@ class Customers::MainController < CustomerController
 
   private
 
-  def can_manage?
-    @user.leader? || @user.manage_customers
-  end
-
-  def verify_rights
-    authorized = true
-    authorized = false unless can_manage?
-    if action_name.in?(%w[account_close_confirm close_account]) && params[:close_now] == '1' && !@user.is_admin
-      authorized = false
-    end
-    if action_name.in?(%w[info new create destroy]) && !@organization.is_active
-      authorized = false
-    end
-    if action_name.in?(%w[info new create]) && !(@user.leader? || @user.groups.any?)
-      authorized = false
-    end
-    if action_name.in?(%w[edit_period_options update_period_options]) && !@customer.authorized_upload?
-      authorized = false
-    end
-    if action_name.in?(%w[edit_exact_online update_exact_online]) && !@organization.try(:exact_online).try(:used?)
-      authorized = false
-    end
-    # if action_name.in?(%w[edit_my_unisoft update_my_unisoft]) && !@organization.try(:my_unisoft).try(:used?)
-    #   authorized = false
-    # end
-
-    unless authorized
-      flash[:error] = t('authorization.unessessary_rights')
-      redirect_to organization_path(@organization)
-    end
-  end
-
-  def verify_if_customer_is_active
-    if @customer.inactive?
-      flash[:error] = t('authorization.unessessary_rights')
-
-      redirect_to organization_path(@organization)
-    end
-  end
-
-  def verify_if_account_can_be_closed
-    if !@customer.subscription.commitment_end?(false) && !params[:close_now]
-      flash[:error] = 'Ce dossier est souscrit à un forfait avec un engagement de 12 mois'
-
-      redirect_to organization_customer_path(@organization, @customer)
-    end
-  end
-
   def user_params
     attributes = [
       :company,
@@ -381,10 +332,6 @@ class Customers::MainController < CustomerController
     params.require(:user).permit(my_unisoft_attributes: %i[id is_used auto_deliver encrypted_api_token check_api_token])
   end
 
-  def configuration_options_params
-    # TODO ...
-  end
-
   def period_options_params
     if current_user.is_admin
       params.require(:user).permit(
@@ -414,14 +361,6 @@ class Customers::MainController < CustomerController
                                    preseizure_date_option
                                  ])
   end
-
-
-  def build_softwares
-    Interfaces::Software::Configuration::SOFTWARES.each do |software|
-      @customer.send("build_#{software}".to_sym) if @customer.send(software.to_sym).nil?
-    end
-  end
-  
 
   def softwares_attributes
     "#{Interfaces::Software::Configuration.h_softwares[params[:part]]}_attributes"

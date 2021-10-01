@@ -69,8 +69,6 @@ function bind_customer_events() {
     AppEmit('search_text');
   });
 
-  $('#edit_customer_csv_descriptor').unbind('click').bind('click', function(e){ AppEmit('csv_descriptor_edit_customer_format', { id: $(this).data('id'), organization_id: $(this).data('organization-id') }) });
-
 
   $('#ibizabox_tab').unbind('click.show_ibizabox').bind('click.show_ibizabox', function(e) {
     e.stopPropagation();
