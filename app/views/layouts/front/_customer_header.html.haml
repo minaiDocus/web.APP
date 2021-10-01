@@ -109,7 +109,7 @@
                         - if @customer.uses?(:csv_descriptor)
                           = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'float-end' })   
               %li.nav-item.no-margin
-                %a.semibold.nav-link#accounting-plan-tab{ class: ('active' if params[:tab] == 'accounting_plan'), href: '#' } Plan comptable
+                %a.semibold.nav-link#accounting-plan-tab{ class: ('active' if (controller_path == 'accounting_plans/main' && (action_name == 'show' || action_name == 'import_fec'))), href: organization_customer_accounting_plan_path(@organization, @customer) } Plan comptable
               - if @organization.mcf_settings.try(:access_token).present? || @customer.try(:mcf_documents).try(:not_processable).try(:any?)
                 %li.nav-item.no-margin{ "role" => "presentation" }
                   %a.semibold.nav-link#mcf-tab{ class: ('active' if (controller_path == 'my_company_files/user_mcf_storage' && action_name == 'index')), href: organization_customer_my_company_files_path(@organization, @customer) } My Company Files
