@@ -1,9 +1,5 @@
 //= require './events'
 
-//**** my company files JS *******/
-//=require '../../../my_company_files/assets/javascripts/events'
-//=require '../../../my_company_files/assets/javascripts/mcf_customer'
-
 class Customer{
 
   constructor(){
@@ -538,12 +534,7 @@ jQuery(function () {
 
   AppListenTo('csv_descriptor_edit_customer_format', (e)=>{ customer.load_csv_descriptor(e.detail.id, e.detail.organization_id) });
 
-  let mcf = new McfCustomer();
-  AppListenTo('show_mcf_edition', (e)=>{ mcf.show_mcf_edition(e.detail.url); });
-
-
   AppListenTo('bind_ibiza_user_events', (e)=>{ customer.bind_ibiza_user_events(); });
-
  
   customer.main();
 });
