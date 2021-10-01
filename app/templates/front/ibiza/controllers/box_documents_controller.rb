@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Ibiza::BoxDocumentsController < OrganizationController
+class Ibiza::BoxDocumentsController < CustomerController
   before_action :load_customer
   before_action :load_document, except: %w[index select validate]
 
@@ -63,6 +63,10 @@ class Ibiza::BoxDocumentsController < OrganizationController
   end
 
   private
+
+  def load_customer
+    @customer = customers.find(params[:customer_id])
+  end
 
   def load_document
     @document = @customer.temp_documents.from_ibizabox.find(params[:id])

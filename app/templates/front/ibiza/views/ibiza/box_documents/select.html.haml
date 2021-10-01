@@ -31,7 +31,7 @@
               %td.pages= document.pages_number
       = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: select_organization_customer_ibizabox_documents_path(@organization, @customer), target: '.historic_content', total_pages: @documents.total_pages }
       .form-actions.margin1top
-        - idocus_params = param_encode({ url: validate_organization_customer_ibizabox_documents_path, form: 'validate_ibizabox_documents', method: 'post', html: { target: '#ibizabox_documents', target_dest: '.select_content' } })
+        - idocus_params = param_encode({ url: validate_organization_customer_ibizabox_documents_path, form: 'validate_ibizabox_documents', method: 'post', html: { target: '#ibizabox_documents_historic' } })
         = submit_tag 'Intégrer les documents sélectionnés', class: 'btn btn-primary as_idocus_ajax', data: { confirm: t('actions.confirm') }, idocus: idocus_params
 
   = render 'dialogs'

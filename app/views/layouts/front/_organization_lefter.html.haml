@@ -72,7 +72,7 @@
               %span.link_principal{class: (controller_path == 'journals/main')? 'active' : ''}= t('organizations.journals')
       %li{ data: { href: "#{@organization.id}/customers" } }
         %a{href: organization_customers_path(@organization) }
-          - active_customer_tab = ((controller_path == 'customers/main' && (action_name == 'index' || action_name == 'show')) || (controller_path == 'subscriptions/main' && action_name == 'edit') || (controller_path == 'orders/main' && action_name == 'index') || (controller_path == 'my_company_files/user_mcf_storage' && action_name == 'index') )
+          - active_customer_tab = ((controller_path == 'customers/main' && (action_name == 'index' || action_name == 'show')) || (controller_path == 'subscriptions/main' && action_name == 'edit') || (controller_path == 'orders/main' && action_name == 'index') || (controller_path == 'my_company_files/user_mcf_storage' && action_name == 'index') || (controller_path == 'ibiza/box_documents' && action_name == 'index') )
           %span.link_principal{class: active_customer_tab ? 'active' : ''}= t('organizations.customers')
       - if @organization.is_active && !@organization.specific_mission
         %li{ data: { href: "#{@organization.id}/account_number_rules" } }
