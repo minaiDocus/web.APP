@@ -12,24 +12,18 @@
 
 /* TO REMOVE */
 
-.padding-group-collaborator .sub_menu {
-  position: relative !important;
-  width: 120px;
+.groups .sub_menu {
+  right: auto;
 }
 
 .collaborators.page-content {
   margin-bottom: 7%;
 }
 
-.padding-group-collaborator {
-  margin: 0 1% !important;
-  width: 30%;
-}
-
 .form-group{
   margin-bottom: 1% !important;
 }
 
-.select-container input{
-  padding: 0.5%;
+.select-container input, .select-container textarea {
+  padding: 2%;  
 }

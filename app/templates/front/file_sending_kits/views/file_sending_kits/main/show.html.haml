@@ -31,7 +31,7 @@
             = link_to "workshop_labels.pdf", workshop_labels_organization_file_sending_kit_path(@organization), target: '_blank', class: 'file_sending_kit_path'
     
     .form-group.text-end
-      = link_to t('actions.edit'), '#', link: edit_organization_file_sending_kit_path(@organization), class: 'btn btn-primary bold edit-file-sending-kits'
+      = link_to t('actions.edit'), '#', link: edit_organization_file_sending_kit_path(@organization), class: 'btn btn-light bold edit-file-sending-kits'
       = link_to 'Générer', '#', link: select_organization_file_sending_kit_path(@organization), class: 'btn btn-primary bold select_for_orders'
 
 = render partial: 'file_sending_kit_modal'

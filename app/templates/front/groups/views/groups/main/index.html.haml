@@ -21,42 +21,42 @@
   - @groups.each_slice(3) do |groups|
     .row.mt-3
       - groups.each do |group|
-        .col-md-4.box.no-margin.m-2.padding-group-collaborator
-          .head.row
-            .col-md-11
-              .title.semibold
-                = link_to group.name, organization_group_path(@organization, group), class: 'show_details_group'
-              .content-box= group.created_at.strftime('%d%m%Y')
-            .col-md-1
-              .action.submenu_action.edit_group.pointer.list-groupe
-                %span.glyph= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
-              .sub_menu.text-start.hide
-                %ul.no-margin.no-padding.regular.edit-delete{id: "group-#{group.id}"}
-                  - if @organization.is_active
-                    - if @user.leader? || @user.manage_groups
-                      %li.edit.group.new_edit
-                        = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Éditer', '#', link: edit_organization_group_path(@organization, group), class: 'edit_organization_group'
-                    - if @user.leader?
-                      - if group.is_dropbox_authorized
-                        - confirm = "Attention ! la suppression de ce groupe entraîne l'arrêt du déversement automatique de ses documents dans votre dropbox. Voulez-vous continuer ?"
-                      - else
-                        - confirm = 'Etês vous sûr ?'
-                      %li.delete.red-label
-                        = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' supprimer', '#', text: confirm, link: organization_group_path(@organization, group), class: 'destroy_group'
-          %br        
-          .body.content-box
-            = group.description
+        .col-md-4.no-margin.m-2.groups
+          .box.p-4
+            .head.row
+              .col-md-11
+                %h6= link_to group.name, organization_group_path(@organization, group), class: 'show_details_group no-style black-label bold'
+                .content-box= group.created_at.strftime('%d%m%Y')
+              .col-md-1
+                .action.submenu_action.edit_group.pointer.list-groupe
+                  %span.glyph= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
+                .sub_menu.text-start.hide
+                  %ul.no-margin.no-padding.regular.edit-delete{id: "group-#{group.id}"}
+                    - if @organization.is_active
+                      - if @user.leader? || @user.manage_groups
+                        %li.edit.group.new_edit
+                          = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Éditer', '#', link: edit_organization_group_path(@organization, group), class: 'edit_organization_group'
+                      - if @user.leader?
+                        - if group.is_dropbox_authorized
+                          - confirm = "Attention ! la suppression de ce groupe entraîne l'arrêt du déversement automatique de ses documents dans votre dropbox. Voulez-vous continuer ?"
+                        - else
+                          - confirm = 'Etês vous sûr ?'
+                        %li.delete.red-label
+                          = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' supprimer', '#', text: confirm, link: organization_group_path(@organization, group), class: 'destroy_group'
+            %br        
+            .body.content-box
+              = group.description
 
-            .row.mt-3
-              .col-md-11
-                .semibold Nombre de collaborateurs :
-              .col-md-1
-                %span.badge.badge-secondary.badge-sm.semibold= group.collaborators.count
-            .row.mt-2
-              .col-md-11
-                .semibold Nombre de clients :
-              .col-md-1
-                %span.badge.badge-secondary.badge-sm.semibold= group.customers.count
+              .row.mt-3
+                .col-md-11
+                  .semibold Nombre de collaborateurs :
+                .col-md-1
+                  %span.badge.badge-secondary.badge-sm.semibold= group.collaborators.count
+              .row.mt-2
+                .col-md-11
+                  .semibold Nombre de clients :
+                .col-md-1
+                  %span.badge.badge-secondary.badge-sm.semibold= group.customers.count
 
 
   .modal#add_edit_group
@@ -78,10 +78,10 @@
         .modal-header
           %h5.modal-title.bold.text-center Détail du groupe
           %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
-        .modal-body
+        .modal-body.back-grey
           Chargement ...
         .modal-footer
-          %button.btn.btn-light{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'} Fermer
+          %button.btn.btn-default{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'} Fermer
 
   .modal#search_group_filter
     .modal-dialog
