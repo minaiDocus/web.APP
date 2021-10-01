@@ -190,8 +190,7 @@
           .form-group.derivationRight
             .text-end
               - if !@organization.specific_mission && @customer.active? && (@user.leader? || @user.organization_rights_is_customer_journals_management_authorized)
-                %button.btn.btn-light{ 'data-bs-target' => '#copy-existing-journal', 'data-bs-toggle' => 'modal' }
-                  %span.me-2= glyphicon('plus', { color: "#72AA42", size: '15'})
+                %button.btn.btn-dark.no-margin{ 'data-bs-target' => '#copy-existing-journal', 'data-bs-toggle' => 'modal' }
                   %span Copier depuis la base existant
 
               %button.btn.btn-primary.bold.new-journal.new_edit_account_book_type{link: new_organization_customer_journal_path(@organization, @customer)}
@@ -273,16 +272,16 @@
             .row
               .col-md-6.text-start.notif-booktype
                 %span Pré-saisie comptable activée pour le dossier :
-                %span.badge{ class: 'bg-' + (@customer.options.is_preassignment_authorized ? 'success fs-origin' : 'danger fs-origin') }
+                %span.badge{ class: 'semibold bg-' + (@customer.options.is_preassignment_authorized ? 'success fs-origin' : 'danger fs-origin') }
                   = @customer.options.is_preassignment_authorized ? t('yes_value') : t('no_value')
                 - unless @customer.options.is_preassignment_authorized
                   %i.margin1left
-                    = link_to '(Activer la pré-saisie comptable)', edit_organization_customer_subscription_path(@organization, @customer)
+                    = link_to '(Activer la pré-saisie comptable)', edit_organization_customer_subscription_path(@organization, @customer), class: 'no-style'
               .col-md-6.text-end.notif-booktype
                 = "#{@customer.account_book_types.count}/#{@customer.options.max_number_of_journals} journaux comptables utilisés"
                 - if @customer.options.max_number_of_journals < 10
                   %i.text-muted
-                    = link_to '(Augmenter le total autorisé de journaux comptables)', organization_customer_path(@organization, @customer, tab: 'subscription')
+                    = link_to '(Augmenter le total autorisé de journaux comptables)', organization_customer_path(@organization, @customer, tab: 'subscription'), class: 'no-style'
 
         - if !@organization.specific_mission && @customer.active? && (@user.leader? || @user.organization_rights_is_customer_journals_management_authorized)
           .modal#copy-existing-journal

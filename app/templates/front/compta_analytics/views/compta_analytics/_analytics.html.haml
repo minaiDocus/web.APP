@@ -1,14 +1,14 @@
 - with_validate_button = with_validate_button rescue false
-#comptaAnalysisEdition.modal.fade{ style: "width: '570px'" }
+#comptaAnalysisEdition.modal.fade
   .modal-dialog
     .modal-content
       .modal-header
         %h3 Édition Compta Analytique
         %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
-      .modal-body
+      .modal-body.back-grey
         .journal_hint.hide
-          %span.badge.badge-warning.fs-origin Attention : 
-          Configurer une analyse comptable par défaut sur un journal permet d'attribuer automatiquement l'analyse sur les futures pièces du journal
+          %span.badge.bg-warning.fs-origin Attention : 
+          %span.warning-span Configurer une analyse comptable par défaut sur un journal permet d'attribuer automatiquement l'analyse sur les futures pièces du journal
         %p.length_alert
         - if @user.organization.ibiza.try(:configured?)
           %form#compta_analytic_form_modal

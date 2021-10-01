@@ -147,3 +147,11 @@ table.table.list_customers tr.inactive td, table.table.list_customers tr.inactiv
 table.table.list_customers tr.inactive .sub_menu{
   color: white;
 }
+
+#comptaAnalysisEdition .modal-dialog {
+  min-width: 1024px !important;
+}
+
+.warning-span{
+  font-size: 13px;
+}

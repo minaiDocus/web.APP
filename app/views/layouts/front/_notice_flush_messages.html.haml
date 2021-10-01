@@ -1,24 +1,26 @@
 #idocus_notifications_messages.semibold
   .notice.notice-internal-error.hide
-    .icon-alert
-      = glyphicon('warning', {size: '16', color: '#FF4848'})
-      %span.error_title.bold
+    .alert.alert-warning.alert-dismissible.fade.show.alert-type{ class: flash.present? ? '' : 'hide'}
+      %span.me-2= glyphicon('warning', {size: '16', color: '#664d03'})        
+      %span.error-title.bold Attention
+      %button.float-end.btn-close{ "data-bs-dismiss": "alert", "aria-label": "Close" }
+      .message-alert
         - if flash.present?
-          Attention
-        - else
-          = t('flush_notifications.bug_error')
-      %span.float-end.pointer.close_error
-        = glyphicon('x', {size: '16', color: '#8e8e8e'})
-    .message-alert
-      - if flash.present?
-        - flash.each do |name, msg|
-          %ul
-            - if msg.present? && name.to_s == 'error'
-              %li.msg_present= msg
-      - else
+          - flash.each do |name, msg|
+            %ul
+              - if msg.present? && name.to_s == 'error'
+                %li.msg_present= msg        
+
+    .alert.alert-danger.alert-dismissible.fade.show.alert-type{ class: flash.present? ? 'hide' : ''}
+      %span.me-2= glyphicon('warning', {size: '16', color: '#842029'})      
+      %span.error-title.bold= t('views.flush_notifications.bug_error')
+      %button.float-end.btn-close{ "data-bs-dismiss": "alert", "aria-label": "Close" }
+      .message-alert
         Nous faisons tout notre possible pour régler le problème au plus vite. Merci de votre patience
+
   .notice.notice-internal-success.text-center.text-white.hide
-    .message-alert.bold
+    .alert.alert-success.alert-dismissible.fade.show
+      %span.float-end= glyphicon('circle-check', {size: '16', color: "#0f5132"})
       - flash.each do |name, msg|
         - if msg.present? && name.to_s == 'success'
           .row-fluid.derivationLeft.msg_present
