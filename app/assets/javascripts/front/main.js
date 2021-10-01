@@ -1,7 +1,58 @@
 //= require '../application'
 //= require '../dynamic_events'
 
+function init_menu_animation(){
+  let to_animate = GetCache('menu_animation');
+
+  //special menu animation : keep it here
+  $('nav.navbar.main_menu').unbind('click.animation').bind('click.animation', function(){ SetCache('menu_animation', 'yes', 1); })
+
+  if(to_animate != 'no'){
+    $('.navbar.main_menu').addClass('showMenu');
+    $('footer.main_footer').addClass('showFooter');
+
+    let organization_lefter = $('.organizations .lefter');
+    if(organization_lefter.length > 0){
+      organization_lefter.find('ul li.direct_links').addClass('hide');
+      let duration = 500;
+      organization_lefter.find('ul li.direct_links').each(function(e){
+        duration = duration + 150
+        setTimeout((f)=>{
+          $(this).addClass('derivationLeft');
+          $(this).removeClass('hide');
+        }, duration);
+      });
+    }
+
+    SetCache('menu_animation', 'no', 60);
+  }
+}
+
+function custom_dynamic_animation(){
+  if( $('.animatedGroups').length > 0 ){
+    $('.animatedGroups').each(function(e){
+      let parent = $(this);
+      let duration = 300;
+      parent.find('.animatedChild').each(function(j){
+        duration = duration + 200;
+        setTimeout((f)=>{
+          $(this).addClass('didMove');
+
+          if($(this).hasClass('toLeft'))
+            $(this).addClass('derivationLeft');
+          else if($(this).hasClass('toRight'))
+            $(this).addClass('derivationRight');
+
+          $(this).removeClass('animatedChild');
+        }, duration)
+      })
+    });
+  }
+}
+
+
 function bind_globals_events(){
+  custom_dynamic_animation();
   custom_dynamic_height();
   elements_initializer();
   iDocus_event_emiter();
@@ -171,6 +222,8 @@ function check_flash_messages(){
 }
 
 jQuery(function () {
+  init_menu_animation();
+
   bind_globals_events();
 
   ApplicationJS.set_checkbox_radio();

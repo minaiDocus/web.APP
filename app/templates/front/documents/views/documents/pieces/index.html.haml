@@ -28,10 +28,10 @@
       - packs_right = []
       - @packs.each_with_index do |pack, index|
         - ((index % 2) == 0)? packs_left << pack : packs_right << pack
-      .w-50.derivationLeft
-        = render partial: 'pack_box', locals: { packs: packs_left }
-      .w-50.derivationRight
-        = render partial: 'pack_box', locals: { packs: packs_right }
+      .w-50.animatedGroups
+        = render partial: 'pack_box', locals: { packs: packs_left, animation: 'toLeft' }
+      .w-50.animatedGroups
+        = render partial: 'pack_box', locals: { packs: packs_right, animation: 'toRight' }
     - else
       .no-data-found.box= t('global.no-data-found')
 

@@ -167,6 +167,10 @@ tbody.retractable.slidedown tr {
   animation-duration: 0.8s;
 }
 
+.animatedGroups .animatedChild{
+  display: none;
+}
+
 .derivationLeft {
   animation-name: derivationLeft;
   animation-duration: 0.8s;

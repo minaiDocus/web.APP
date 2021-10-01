@@ -29,10 +29,10 @@
         - count       = @favorites.size
         - count_right = (count/2)
         - count_left  = count - count_right
-        .w-50
-          = render partial: 'my_favorite_customers', locals: { favorites: @favorites.first(count_left) }
-        .w-50
-          = render partial: 'my_favorite_customers', locals: { favorites: @favorites.last(count_right) }
+        .w-50.animatedGroups
+          = render partial: 'my_favorite_customers', locals: { favorites: @favorites.first(count_left), animation: 'toLeft' }
+        .w-50.animatedGroups
+          = render partial: 'my_favorite_customers', locals: { favorites: @favorites.last(count_right), animation: 'toRight' }
       - else
         .no-favorite-customer= t('dashboard.no_favorite_customer')
 

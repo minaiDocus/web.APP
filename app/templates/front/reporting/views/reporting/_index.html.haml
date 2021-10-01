@@ -3,7 +3,7 @@
 %input#organization_id{ type: 'hidden', name: 'organization_id', value: @report_organization.id }
 
 .container-fluid.reporting
-  .row
+  .row.derivationRight
     .col-md-9
       %h1.bold
         = t('reporting.reporting_text') + ' : '
@@ -19,18 +19,19 @@
 
   .mb-5
 
-  %ul.nav.nav-tabs.ms-3{ "role" => "tablist" }    
-    %li.nav-item.no-margin{ "role" => "presentation" }
-      %button.semibold.nav-link.active#documents-selection-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#invoices", type: :button, "role" => "tab", "aria-controls" => "invoices", "aria-selected" => "false"} 
-        Facturations
-    %li.nav-item.no-margin{ "role" => "presentation" }
-      %button.semibold.nav-link#statistics-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#statistics", type: :button, "role" => "tab", "aria-controls" => "statistics", "aria-selected" => "true" }
-        Statistiques
-        %span.badge.bg-dark= "#{1.month.ago.strftime('%d/%m/%y')} - #{Time.now.strftime('%d/%m/%y')}"
-  
-  .tab-content.mb-4
-    .tab-pane.box.no-margin.active#invoices{ "role" => "tabpanel", "aria-labelledby" => "invoices-tab" }
-    .tab-pane.no-margin#statistics{ "role" => "tabpanel", "aria-labelledby" => "statistics-tab" }
-      = render file: Rails.root.join('app/templates/front/reporting/views/reporting/statistics/_index.html.haml')
+  .derivationLeft
+    %ul.nav.nav-tabs.ms-3{ "role" => "tablist" }    
+      %li.nav-item.no-margin{ "role" => "presentation" }
+        %button.semibold.nav-link.active#documents-selection-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#invoices", type: :button, "role" => "tab", "aria-controls" => "invoices", "aria-selected" => "false"} 
+          Facturations
+      %li.nav-item.no-margin{ "role" => "presentation" }
+        %button.semibold.nav-link#statistics-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#statistics", type: :button, "role" => "tab", "aria-controls" => "statistics", "aria-selected" => "true" }
+          Statistiques
+          %span.badge.bg-dark= "#{1.month.ago.strftime('%d/%m/%y')} - #{Time.now.strftime('%d/%m/%y')}"
+    
+    .tab-content.mb-4
+      .tab-pane.box.no-margin.active#invoices{ "role" => "tabpanel", "aria-labelledby" => "invoices-tab" }
+      .tab-pane.no-margin#statistics{ "role" => "tabpanel", "aria-labelledby" => "statistics-tab" }
+        = render file: Rails.root.join('app/templates/front/reporting/views/reporting/statistics/_index.html.haml')
 
 = javascript_include_tag 'front/reporting/assets/javascripts/main'

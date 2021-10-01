@@ -1,5 +1,5 @@
 - packs.each do |pack|
-  .box
+  .box.animatedChild{ class: animation }
     .row
       .col-md-5
         %h5.pack.semibold= pack.name.to_s.gsub('all', '').strip

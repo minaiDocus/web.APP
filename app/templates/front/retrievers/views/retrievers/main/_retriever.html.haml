@@ -1,4 +1,4 @@
-.w-50{ class: (index % 2 == 0) ? 'derivationLeft' : 'derivationRight' }
+.w-50.animatedChild{ class: animation }
   .box
     .row
       .col-md-6
@@ -28,7 +28,8 @@
         %span.badge.semibold{ class: "badge-#{badge_type_of(retriever)}" }= state_of(retriever)
       .col-md-3.text-end
         %span.action-group.ms-1.pointer.retriever_infos{ title: "Créer le : #{retriever.created_at.strftime('%d-%m-%Y %H:%M:%S')} / Modifier le: #{retriever.updated_at.strftime('%d-%m-%Y %H:%M:%S')}"}= glyphicon('info', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
-        %span.action-group.ms-1.pointer.trigger_connection{ title: 'Synchronisation', data: { id: retriever.id }}= glyphicon('loop-circular', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
-        - if retriever.budgea_id
-          %span.action-group.ms-1.pointer.edit_connection{ title: 'Édition', data: { retriever: retriever.to_json } }= glyphicon('pencil', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+        - if !@is_specific_mission
+          %span.action-group.ms-1.pointer.trigger_connection{ title: 'Synchronisation', data: { id: retriever.id }}= glyphicon('loop-circular', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+        - if (@is_budgea && retriever.budgea_id) || @is_specific_mission
+          %span.action-group.ms-1.pointer.edit_connection{ title: 'Edition', data: { retriever: retriever.to_json, banking_provider: (@is_budgea)? 'budgea' : 'internal' } }= glyphicon('pencil', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
         %span.action-group.ms-1.pointer.delete_connection{ title: 'Suppression', data: { id: retriever.id }}= glyphicon('trash', { size: '20', color:'red'})

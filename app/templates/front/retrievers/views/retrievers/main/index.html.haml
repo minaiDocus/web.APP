@@ -37,9 +37,9 @@
   .retrievers-list
     - if @retrievers.size > 0
       - @retrievers.each_slice(2) do |retrievers|
-        .row.retriever-content
+        .row.retriever-content.animatedGroups
           - retrievers.each_with_index do |retriever, index|
-            = render partial: 'retriever', locals: { retriever: retriever, index: index }
+            = render partial: 'retriever', locals: { retriever: retriever, animation: (index % 2 == 0) ? 'toLeft' : 'toRight' }
     - else
       .no-data-found.box= t('global.no-data-found')
 

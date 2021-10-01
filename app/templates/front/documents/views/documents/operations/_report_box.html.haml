@@ -1,5 +1,5 @@
 - reports.each do |report|
-  .box
+  .box.animatedChild{ class: animation }
     .row
       .col-md-5
         %h5.pack.semibold= report.name.gsub('all', '').strip

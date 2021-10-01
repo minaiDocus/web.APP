@@ -15,12 +15,12 @@
 .organizations.mb-5
   .lefter    
     %ul.principal
-      %li{ data: { href: 'organization_home' } }
+      %li.direct_links{ data: { href: 'organization_home' } }
         %a{href: organization_path(@organization) }
           %span.link_principal{class: (controller_path == 'organizations/main' && action_name == 'show')? 'active' : ''}= t('organizations.home')
 
       // ======================== PARAMETERS ===============================
-      %li{ data: { href: "parametres" } }
+      %li.direct_links{ data: { href: "parametres" } }
         %span.chevron= glyphicon('chevron-right', { color: "#1A1A1A"})
         %span.chevron{ style: "display: none;" }= glyphicon('chevron-bottom', { color: "#1A1A1A"})
         %span.link_principal.parameters{class: (toggle_submenu ? 'active' : '')}= t('views.standards.setting').capitalize.pluralize
@@ -62,29 +62,29 @@
       // =================== PARAMETERS ===============================
 
       - if @user.leader? || @user.manage_collaborators
-        %li{ data: { href: "#{@organization.id}/collaborateurs" } }
+        %li.direct_links{ data: { href: "#{@organization.id}/collaborateurs" } }
           %a{href: organization_collaborators_path(@organization) }
             %span.link_principal{class: (controller_path == 'collaborators/main')? 'active' : ''}= t('organizations.collaborators')
       - if @organization.is_active
         - if (@user.leader? || @user.manage_journals) && !@organization.specific_mission
-          %li{ data: { href: "#{@organization.id}/journals" } }
+          %li.direct_links{ data: { href: "#{@organization.id}/journals" } }
             %a{href: organization_journals_path(@organization) }
               %span.link_principal{class: (controller_path == 'journals/main')? 'active' : ''}= t('organizations.journals')
-      %li{ data: { href: "#{@organization.id}/customers" } }
+      %li.direct_links{ data: { href: "#{@organization.id}/customers" } }
         %a{href: organization_customers_path(@organization) }
           %span.link_principal{class: (controller_path == 'customers/main')? 'active' : ''}= t('organizations.customers')
       - if @organization.is_active && !@organization.specific_mission
-        %li{ data: { href: "#{@organization.id}/account_number_rules" } }
+        %li.direct_links{ data: { href: "#{@organization.id}/account_number_rules" } }
           %a{href: organization_account_number_rules_path(@organization) }
             %span.link_principal{class: (controller_path == 'account_number_rules/main')? 'active' : ''}= t('organizations.bank_assignment')
       - unless @organization.specific_mission
-        %li{ data: { href: "#{@organization.id}/paper_set_orders" } }
+        %li.direct_links{ data: { href: "#{@organization.id}/paper_set_orders" } }
           %a{href: organization_paper_set_orders_path(@organization) }
             %span.link_principal{class: (controller_path == 'paper_set_orders/main')? 'active' : ''}= t('organizations.paper_set_order')
-      %li{ data: { href: "#{@organization.id}/account_sharing" } }
+      %li.direct_links{ data: { href: "#{@organization.id}/account_sharing" } }
         %a{href: account_sharings_organization_path(@organization) }
           %span.link_principal{class: (controller_path == 'account_sharings/organization')? 'active' : ''}= t('folders.shared_folders')
-      %li{ data: { href: "#{@organization.id}/invoices" } }
+      %li.direct_links{ data: { href: "#{@organization.id}/invoices" } }
         %a{href: organization_invoices_path(@organization) }
           %span.link_principal{class: (controller_path == 'invoices/main')? 'active' : ''}= t('organizations.invoices')
 

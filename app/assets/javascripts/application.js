@@ -189,15 +189,13 @@
     }
   }
 
-  
-
 
 /************************ MAIN CLASS ********************************/
 class ApplicationJS {
   constructor(){
     this.parseJsVar();
 
-    // console.log( VARIABLES.get('controller_path') );
+    console.log( "Controller: " + VARIABLES.get('controller_path') );
     this.parseJsVar = this.parseJsVar.bind(this);
   }
 
@@ -253,7 +251,7 @@ class ApplicationJS {
       $('#idocus_notifications_messages .notice-internal-error .message-alert').html(html);
 
       $('#idocus_notifications_messages .notice-internal-error').slideDown('fast');
-      setTimeout(function(){$('.notice-internal-error').fadeOut('');}, 15000);
+      setTimeout(function(){$('.notice-internal-error').fadeOut('');}, 30000);
     }
   }
 

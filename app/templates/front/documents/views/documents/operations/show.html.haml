@@ -35,9 +35,9 @@
   .main-content.derivationLeft
     - if @preseizures.size > 0
       - @preseizures.each_slice(2) do |_preseizures|
-        .row
-          - _preseizures.each do |preseizure|
-            = render partial: 'operation_box', locals: { preseizure: preseizure }
+        .row.animatedGroups
+          - _preseizures.each_with_index do |preseizure, index|
+            = render partial: 'operation_box', locals: { preseizure: preseizure, animation: (index % 2 == 0)? 'toLeft' : 'toRight' }
     - else
       .no-data-found.grey-label.semibold.box= t('global.no-data-found')
 

@@ -24,10 +24,10 @@
       - reports_right = []
       - @reports.each_with_index do |report, index|
         - ((index % 2) == 0)? reports_left << report : reports_right << report
-      .w-50.derivationLeft
-        = render partial: 'report_box', locals: { reports: reports_left }
-      .w-50.derivationRight
-        = render partial: 'report_box', locals: { reports: reports_right }
+      .w-50.animatedGroups
+        = render partial: 'report_box', locals: { reports: reports_left, animation: 'toLeft' }
+      .w-50.animatedGroups
+        = render partial: 'report_box', locals: { reports: reports_right, animation: 'toRight' }
     - else
       .no-data-found.box= t('global.no-data-found')
 
