@@ -8,12 +8,12 @@ function init_menu_animation(){
   $('nav.navbar.main_menu').unbind('click.animation').bind('click.animation', function(){ SetCache('menu_animation', 'yes', 1); })
 
   if(to_animate != 'no'){
+    let organization_lefter = $('.organizations .lefter');
+    organization_lefter.find('ul li.direct_links').addClass('hide');
     $('.navbar.main_menu').addClass('showMenu');
     $('footer.main_footer').addClass('showFooter');
 
-    let organization_lefter = $('.organizations .lefter');
     if(organization_lefter.length > 0){
-      organization_lefter.find('ul li.direct_links').addClass('hide');
       let duration = 500;
       organization_lefter.find('ul li.direct_links').each(function(e){
         duration = duration + 150
@@ -229,6 +229,9 @@ jQuery(function () {
   ApplicationJS.set_checkbox_radio();
 
   check_flash_messages();
+
+  /** Custom hide alert messages error **/
+  AppListenTo('close_alert_errors', (e)=>{ $('.notice.notice-internal-error').slideUp('fast'); });
 
   /* SCROLLING TO THE BOTTOM */
   $('.body_content').scroll(function() {

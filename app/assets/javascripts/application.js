@@ -195,7 +195,7 @@ class ApplicationJS {
   constructor(){
     this.parseJsVar();
 
-    console.log( "Controller: " + VARIABLES.get('controller_path') );
+    // console.log( "Controller: " + VARIABLES.get('controller_path') );
     this.parseJsVar = this.parseJsVar.bind(this);
   }
 
@@ -220,7 +220,7 @@ class ApplicationJS {
     {
       is_present = 'true';
     }
-    else
+    else if(page)
     {
       html = $(page).find('.notice-internal-success').html();
       is_present = $(page).find('.notice-internal-success .msg_present');
@@ -237,6 +237,7 @@ class ApplicationJS {
   noticeErrorMessageFrom(page=null, message = null, danger=false){
     var html = message;
     var is_present = null;
+
     var used_alert = '#idocus_notifications_messages .notice-internal-error .alert.alert-warning';
     var not_used_alert = '#idocus_notifications_messages .notice-internal-error .alert.alert-danger';
     
@@ -246,23 +247,24 @@ class ApplicationJS {
     }
     
 
-    $(not_used_alert).hide();
-    $(used_alert).show();
+    $(not_used_alert).addClass('hide');
+    $(used_alert).removeClass('hide');
     if(message)
     {
       is_present = 'true';
     }
-    else
+    else if(page)
     {
       html = $(page).find(`${used_alert} .message-alert`).html();
       is_present = $(page).find(`${used_alert} .msg_present`);
     }
 
     if(is_present.length > 0){
-      $(`${used_alert} .message-alert`).html(html);
+      if(VARIABLES.get('rails_env') != 'production')
+        $(`${used_alert} .message-alert`).html(html);
 
       $('#idocus_notifications_messages .notice-internal-error').slideDown('fast');
-      setTimeout(function(){$('.notice-internal-error').fadeOut('');}, 30000);
+      setTimeout(function(){$('#idocus_notifications_messages .notice-internal-error').slideUp('fast');}, 30000);
     }
   }
 
