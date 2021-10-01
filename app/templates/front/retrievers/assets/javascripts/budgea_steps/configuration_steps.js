@@ -37,6 +37,7 @@ class ConfigurationSteps{
 
     if(this.current_step == 1)
     {
+      this.current_connector = null;
       this.current_step_object = this.objectStep1;
       this.primary_button.text('Suivant');
       this.secondary_button.attr('disabled', 'disabled');

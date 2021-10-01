@@ -234,21 +234,32 @@ class ApplicationJS {
     }
   }
 
-  noticeErrorMessageFrom(page=null, message = null){
+  noticeErrorMessageFrom(page=null, message = null, danger=false){
     var html = message;
     var is_present = null;
+    var used_alert = '#idocus_notifications_messages .notice-internal-error .alert.alert-warning';
+    var not_used_alert = '#idocus_notifications_messages .notice-internal-error .alert.alert-danger';
+    
+    if(danger){
+      used_alert = '#idocus_notifications_messages .notice-internal-error .alert.alert-danger';
+      not_used_alert = '#idocus_notifications_messages .notice-internal-error .alert.alert-warning';
+    }
+    
+
+    $(not_used_alert).hide();
+    $(used_alert).show();
     if(message)
     {
       is_present = 'true';
     }
     else
     {
-      html = $(page).find('.notice-internal-error .message-alert').html();
-      is_present = $(page).find('.notice-internal-error .msg_present');
+      html = $(page).find(`${used_alert} .message-alert`).html();
+      is_present = $(page).find(`${used_alert} .msg_present`);
     }
 
     if(is_present.length > 0){
-      $('#idocus_notifications_messages .notice-internal-error .message-alert').html(html);
+      $(`${used_alert} .message-alert`).html(html);
 
       $('#idocus_notifications_messages .notice-internal-error').slideDown('fast');
       setTimeout(function(){$('.notice-internal-error').fadeOut('');}, 30000);
@@ -340,7 +351,7 @@ class ApplicationJS {
           }, 1000);
         },
         error: function(result){          
-          self.noticeErrorMessageFrom(null, result.responseText);
+          self.noticeErrorMessageFrom(null, result.responseText, true);
 
           if(success)
             success(result);
