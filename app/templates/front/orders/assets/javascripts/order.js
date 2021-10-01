@@ -158,35 +158,4 @@ class Order{
     });
   }
 
-
-  select_for_orders(url){
-    this.applicationJS.sendRequest({ 'url': url }).catch((error)=> {
-      console.log(error)
-    }).then((element)=>{
-      this.select_multiple.find('.modal-body').html($(element).find('.file_sending_kits_select').html());
-      this.select_multiple.find('.form-footer-content').remove();
-
-      file_sending_kits_main_events();
-      bind_all_events_order();
-    });
-  }
-
-  handle_select_for_orders_result(response){
-    this.select_multiple.find('.form-footer-content').remove();
-    file_sending_kits_main_events();
-    this.rebind_customer_all_events();
-  }
-
-  edit_file_sending_kits_view(url){
-    this.applicationJS.sendRequest({ 'url': url }).then((element)=>{
-      this.file_sending_kits_edit.find('.modal-body').html($(element).find('.file_sending_kits_edit').html());
-      this.select_multiple.modal('hide');
-      this.file_sending_kits_edit.modal('show');
-
-      bind_all_events_order();
-    }).catch((error)=> { 
-      console.error(error);
-    });
-  }
-
 }

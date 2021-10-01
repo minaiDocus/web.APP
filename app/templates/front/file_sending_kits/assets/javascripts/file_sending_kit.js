@@ -41,13 +41,14 @@ class FileSendingKit{
       $("#generate-manual-paper-set-order").removeAttr('disabled');
       $(".canceling-manual-order").removeAttr("disabled");
     });
-
-     /*file_sending_kits_main_events();*/
   }
 
   edit_file_sending_kits_view(url){
     this.applicationJS.sendRequest({ 'url': url }).then((element)=>{
       this.file_sending_kits_edit.find('.modal-body').html($(element).find('.file_sending_kits_edit').html());
+      if ((this.select_multiple).hasClass('show')) {
+        this.select_multiple.modal('hide');
+      }
       this.file_sending_kits_edit.modal('show');
     }).catch((error)=> { 
       console.error(error);
@@ -55,15 +56,20 @@ class FileSendingKit{
   }
 
   select_for_orders(url){
-    this.applicationJS.sendRequest({ 'url': url }).catch((error)=> {
-      console.log(error)
-    }).then((element)=>{
+    this.applicationJS.sendRequest({ 'url': url }).then((element)=>{
       this.select_multiple.find('.modal-body').html($(element).find('.file_sending_kits_select').html());
-      this.select_multiple.find('.form-footer-content').remove();
+      this.remve_footer_content();
+
+      this.select_multiple.modal('show');
+    }).catch((error)=> {
+      console.log(error)
     });
   }
 
+  remve_footer_content(){ this.select_multiple.find('.form-footer-content').remove(); }
+
   select_for_multiple_result(response){
-    this.select_multiple.find('.form-footer-content').remove();
+    this.remve_footer_content();
+    file_sending_kits_main_events();
   }
 }
