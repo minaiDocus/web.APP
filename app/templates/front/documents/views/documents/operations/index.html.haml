@@ -1,32 +1,32 @@
 = stylesheet_link_tag 'front/documents/assets/stylesheets/main'
 
 .container-fluid
-  .row.derivationLeft
-    .col-md-8
+  .row
+    .col-md-8.derivationLeft
       %h1
         %span.me-2 Lots opération bancaires
         %span.badge.badge-secondary.regular.datas_size= @reports.total_count
-    .col-md-3
+    .col-md-3.derivationRight
       .search-content
         .row.no-margin
           .col-md-1.no-padding.text-center.glass
             = glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })
           .col-md-11.no-padding.no-margin
             %input#search_input{placeholder: 'Rechercher'}
-    .col-md-1.no-padding
+    .col-md-1.no-padding.derivationRight
       %button.btn.btn-light.more-filter.w-100.semibold        
         %span.me-2 Filtrer
         %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
-  .row.main-content.derivationRight
+  .row.main-content
     - if @reports.size > 0
       - count       = @reports.size
       - reports_left  = []
       - reports_right = []
       - @reports.each_with_index do |report, index|
         - ((index % 2) == 0)? reports_left << report : reports_right << report
-      .w-50
+      .w-50.derivationLeft
         = render partial: 'report_box', locals: { reports: reports_left }
-      .w-50
+      .w-50.derivationRight
         = render partial: 'report_box', locals: { reports: reports_right }
     - else
       .no-data-found.box= t('global.no-data-found')

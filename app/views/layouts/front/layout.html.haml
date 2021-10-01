@@ -31,10 +31,14 @@
 
   = render partial: 'layouts/front/footer'
 
+  #news_box
+
   .loading_box.hide
     .box.text-center
       %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}
       %label.mt-2.semibold Chargement
 
   .scroll-on-top.pointer.hide
-    .scroll-arrow= glyphicon('arrow-top', { size: '16', color: 'rgba(26, 26, 26, 0.7)' }) 
+    .scroll-arrow= glyphicon('arrow-top', { size: '16', color: 'rgba(26, 26, 26, 0.7)' })
+
+  = javascript_include_tag 'front/news/assets/javascripts/main'

@@ -1,45 +1,45 @@
 = stylesheet_link_tag 'front/retrievers/assets/stylesheets/main'
 
 .container-fluid
-  .row.derivationLeft
-    .col-md-6.text-start
+  .row
+    .col-md-6.text-start.derivationLeft
       %h1.bold
         Mes automates
         %span.badge.badge-secondary.regular.total-count= @retrievers.total_count
-    .col-md-2.text-start
+    .col-md-2.text-start.derivationRight
       = select_tag 'account_id', options_for_select(customers_active.unshift(['Tous', 'all']), @account.try(:id) || 'all'), include_blank: false, class: 'form-select'
-    .col-md-1.text-center
+    .col-md-1.text-center.derivationRight
       %button.btn.btn-light.semibold.retriever-filter.w-100{ disabled: false }
         %span.me-2 Filtrer
         %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
     - if @is_budgea
-      .col-md-2.text-center
+      .col-md-2.text-center.derivationRight
         %button.btn.btn-light-primary.semibold.list-retriever.w-100{ disabled: false }
           %span.me-4= glyphicon('list', { size: '15', color: '#0d6efd'})
           %span Automates disponibles
-      .col-md-1.text-center
+      .col-md-1.text-center.derivationRight
         %button.btn.btn-primary.semibold.add-retriever.w-100{ disabled: false }
           %span.me-2= glyphicon('plus', { size: '15', color: '#FFFF'})
           %span Ajouter
     - if @is_bridge
-      .col-md-3.text-center
+      .col-md-3.text-center.derivationRight
         %button.btn.btn-primary.add-bridge-retriever.semibold.w-100
           %span.me-2= glyphicon('plus', { size: '15', color: '#FFFF'})
           %span Ajouter un automate bancaire
     - if @is_specific_mission
-      .col-md-3.text-center
+      .col-md-3.text-center.derivationRight
         %button.btn.btn-primary.add-internal-retriever.semibold.w-100
           %span.me-2= glyphicon('plus', { size: '15', color: '#FFFF'})
           %span Ajouter un automate spécifique
 
   .mb-4
 
-  .retrievers-list.derivationRight
+  .retrievers-list
     - if @retrievers.size > 0
       - @retrievers.each_slice(2) do |retrievers|
         .row.retriever-content
-          - retrievers.each do |retriever|
-            = render partial: 'retriever', locals: { retriever: retriever }
+          - retrievers.each_with_index do |retriever, index|
+            = render partial: 'retriever', locals: { retriever: retriever, index: index }
     - else
       .no-data-found.box= t('global.no-data-found')
 

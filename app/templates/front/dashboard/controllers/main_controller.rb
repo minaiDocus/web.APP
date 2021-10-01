@@ -4,8 +4,6 @@ class Dashboard::MainController < FrontController
 
   def index
     @favorites = @user.favorite_customers.try(:customer_ids) || []
-
-    @news_present = @user.news_read_at ? News.published.where('published_at > ?', @user.news_read_at).exists? : News.exists?
   end
 
   def add_customer_to_favorite
@@ -16,9 +14,9 @@ class Dashboard::MainController < FrontController
 
     @favorites = @user.reload.favorite_customers.try(:customer_ids) || []
 
-    flash['success'] = 'Dossier favoris mis à jour avec succès'
+    json_flash['success'] = 'Dossier favoris mis à jour avec succès'
 
-    render :index
+    render json: { json_flash: json_flash }, status: 200
   end
 
   def choose_default_summary

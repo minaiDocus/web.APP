@@ -40,7 +40,7 @@
 
 
 
-- validation_param = param_encode({ url: "/dashboard/add_customer_to_favorite", method: 'post', form:{ id: 'send_customer_to_favorite' }, html: { target: '#container-box' }, modal: { id: 'add-to-favorite' } })
+- validation_param = param_encode({ url: "/dashboard/add_customer_to_favorite", method: 'post', form:{ id: 'send_customer_to_favorite' }, redirect_to: { url: dashboard_index_path, html: { target: '#container-box' } }, modal: { id: 'add-to-favorite' } })
 
 #add-to-favorite.modal.fade{'aria-hidden' => 'true', 'aria-labelledby' => 'myFavoriteModalLabel', :role => 'dialog', :tabindex => '-1'}
   .modal-dialog{:role => 'document'}

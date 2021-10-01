@@ -49,7 +49,6 @@
   100% { opacity: 1; }
 }
 
-
 @mozkeyframes slideDown {
   from  { max-height: 0px; }
   to { max-height: 500px; }
