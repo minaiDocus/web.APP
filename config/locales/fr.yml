@@ -200,9 +200,9 @@ fr:
     my_favorite_folders: Mes dossiers favoris
     view_my_documents: Voir mes documents
     add_folder_to_favorite: Ajouter un dossier aux favoris
-    no_favorite_customer: Veuillez ajoutés vos dossiers favories
+    no_favorite_customer: Veuillez ajouter vos dossiers favoris
     search_folder: Rechercher un dossier
-    edit_action: Éditer vos dossiers favories
+    edit_action: Éditer vos dossiers favoris
     cancel_action: Annuler
     configuration_state: État de la configuration
     configuration_text: Le dossier client est configuré de façon optimale
@@ -336,7 +336,7 @@ fr:
     external_storage: Configurer les stockages externes
     notification: Notifications et remontées d'alertes
     my_documents: Mes documents
-    bank_operations: Opération bancaire
+    bank_operations: Opérations bancaires
     my_company: Mon organisation
     reporting: Reporting
     my_retrievers: Mes automates
