@@ -16,7 +16,6 @@ set :linked_dirs, fetch(:linked_dirs, []).push(
 )
 
 set :linked_files, fetch(:linked_files, []).push(
-  'config/bearer.yml',
   'config/database.yml',
   'config/secrets.yml',
   'config/dematbox.yml',
@@ -30,7 +29,6 @@ set :linked_files, fetch(:linked_files, []).push(
   'config/smtp.yml',
   'config/ftp_delivery.yml',
   'config/storage.yml',
-  'config/elastic_apm.yml',
   'config/supplier_recognition.yml',
   'config/api_authentication.yml',
   'config/jefacture.yml',
