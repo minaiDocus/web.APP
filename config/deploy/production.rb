@@ -1,6 +1,6 @@
 set :deploy_to, '/home/deploy/main/'
 
-set :repo_url, 'git@github.com:i-docus/main.git'
+set :repo_url, 'git@github.com:i-docus/web.APP.git'
 
 set :branch, 'master'
 

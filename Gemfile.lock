@@ -69,11 +69,6 @@ GEM
       htmlentities (~> 4.3.1)
       nokogiri (>= 1.4.1)
       rubyzip (~> 1.0.0)
-    backbone-on-rails (1.2.0.0)
-      eco
-      ejs
-      jquery-rails
-      railties
     barby (0.6.8)
     bcrypt (3.1.16)
     bcrypt_pbkdf (1.1.0)
@@ -200,7 +195,6 @@ GEM
       execjs
     eco-source (1.1.0.rc.1)
     ed25519 (1.2.4)
-    ejs (1.1.1)
     em-websocket (0.5.2)
       eventmachine (>= 0.12.9)
       http_parser.rb (~> 0.6.0)
@@ -693,7 +687,6 @@ DEPENDENCIES
   ansi
   audited
   axlsx
-  backbone-on-rails
   barby
   bcrypt_pbkdf
   better_errors

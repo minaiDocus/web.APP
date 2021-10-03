@@ -85,7 +85,6 @@ gem 'compass-rails'
 gem 'sass-rails'
 
 # JS Libraries and JS processors
-gem 'backbone-on-rails'
 gem 'coffee-rails'
 gem 'eco'
 gem 'jquery-rails'
