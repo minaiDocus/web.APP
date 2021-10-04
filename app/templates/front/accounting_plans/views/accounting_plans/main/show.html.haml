@@ -55,7 +55,7 @@
  
   .mb-4
   %hr
-  .derivationLeft
+  .fadein
     %ul.nav.nav-tabs.ms-3{ "role" => "tablist" }
       %li.nav-item.no-margin{ "role" => "presentation" }
         %button.semibold.nav-link.active#check-provider-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#provider", type: :button, "role" => "tab", "aria-controls" => "provider-selection", "aria-selected" => "true" } 
@@ -70,7 +70,7 @@
 
     .tab-content
       .tab-pane.box.no-margin.active#provider{ "role" => "tabpanel", "aria-labelledby" => "provider-tab" }
-        .row
+        .row.derivationLeft
           .col-md-4            
           .col-md-3.text-end.no-padding
             = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', destroy_providers_organization_customer_accounting_plan_path(@organization, @customer), class: 'btn btn-danger', data: { method: :delete, confirm: 'Vous êtes sur le point de supprimer tous les fournisseurs, êtes-vous sûr ?' }
@@ -85,7 +85,7 @@
                     %span.me-2= glyphicon('cloud-download', { size: '16', color: 'white'})
                     %span Importer un CSV
         .mb-3
-        .row
+        .row.derivationRight
           .col-md-12
             %table.table.table-striped
               %thead
@@ -107,7 +107,7 @@
                     %td= provider.vat_autoliquidation_debit_account
                     %td= provider.vat_autoliquidation_credit_account
       .tab-pane.box.no-margin#customer{ "role" => "tabpanel", "aria-labelledby" => "customer-tab" }
-        .row
+        .row.derivationRight
           .col-md-4            
           .col-md-3.text-end.no-padding
             = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', destroy_customers_organization_customer_accounting_plan_path(@organization, @customer), class: 'btn btn-danger', data: { method: :delete, confirm: 'Vous êtes sur le point de supprimer tous les clients, êtes-vous sûr ?' }
@@ -123,7 +123,7 @@
                     %span Importer un CSV
 
         .mb-3
-        .row
+        .row.derivationLeft
           .col-md-12
             %table.table.table-striped.table_integration
               %thead

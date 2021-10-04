@@ -4,7 +4,7 @@
   %input#organization_id{type: :hidden, value: @organization.id, name: 'organization_id'}
   %input#customer_id{type: :hidden, value: @customer.id, name: 'customer_id'}
   = stylesheet_link_tag 'front/vat_accounts/assets/stylesheets/main'
-  .row
+  .row.derivationLeft
     .col-md-7      
     .col-md-5.text-end.no-padding
       / %button.btn.btn-light.semibold
@@ -14,7 +14,7 @@
         %span.me-2= glyphicon('plus', { size: '15', color: '#FFFF'})
         %span Ajouter un compte TVA
   .mb-3
-  .row
+  .row.derivationRight
     .col-md-12
       %table.table.table-striped.table_integration
         %thead

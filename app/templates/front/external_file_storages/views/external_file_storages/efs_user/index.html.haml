@@ -1,4 +1,4 @@
-.box
+.box.derivationLeft
   - if @user.is_admin && @customer.active?
     - external_file_storage = @customer.find_or_create_external_file_storage.reload
     - options = { size: '15', color: 'rgba(26, 26, 26, 0.7);'}
@@ -9,7 +9,7 @@
     - else
       - _redirect_to = { url: organization_customer_efs_path(@organization, @customer), method: 'get', html: { target: '#file_storages_services' } }
 
-    #file_storages_services.derivationLeft
+    #file_storages_services
       %table.table.table-striped
         %thead
           %tr
