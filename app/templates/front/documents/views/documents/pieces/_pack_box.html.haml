@@ -2,17 +2,17 @@
   .box.animatedChild{ class: animation }
     .row
       .col-md-5
-        %h5.pack.semibold= pack.name.to_s.gsub('all', '').strip
-        %h6.under_pack.regular= pack.owner.organization.name 
+        %h6.pack=link_to pack.name.to_s.gsub('all', '').strip, documents_details_path(id: pack.id), class: "no-style black-label bold"        
+        %label.under_pack.regular= pack.owner.organization.name 
       .col-md-4
         .created-date
-          %span.semibold Premier ajout le :
-          %span= pack.created_at.strftime('%d/%m/%Y')
+          %label.semibold Premier ajout le :
+          %label= pack.created_at.strftime('%d/%m/%Y')
         .updated-date
-          %span Modifié le :
-          %span= pack.updated_at.strftime('%d/%m/%Y')
-      .col-md-2.no-padding
-        .operation-count 
+          %label Modifié le :
+          %label= pack.updated_at.strftime('%d/%m/%Y')
+      .col-md-2
+        .operation-count.text-end.p-1
           %span= pack.pieces.size
       .col-md-1
         =link_to glyphicon('caret-right', { size: '20', color: '#CCC' }), documents_details_path(id: pack.id) 
@@ -34,12 +34,12 @@
           - if tag != '-'
             %span.badge.bg-dark.semibold= tag
 
-      .col-md-4.text-end
+      .col-md-4.icon-actions.text-end
         / %span.ms-2= glyphicon('flag', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
-        %span.ms-2.update_tags{title: 'Taguer le lot', data: {id: pack.id, type: 'pack'}}= glyphicon('tag', { size: '16', color:'rgba(26, 26, 26, 0.32);'})
-        %span.ms-2.download_pack_bundle{title: 'Télécharger', data: {id: pack.id}}= glyphicon('data-transfer-download', { size: '16', color:'rgba(26, 26, 26, 0.32);'})
-        %span.ms-2.download_pack_archive{title: 'Télécharger une archive zip', data: {id: pack.id}}= glyphicon('account-logout', { size: '16', color:'rgba(26, 26, 26, 0.32);', style: 'transform: rotate(90deg)'})
+        %span.ms-2.update_tags{title: 'Taguer le lot', data: {id: pack.id, type: 'pack'}}= glyphicon('tag', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
+        %span.ms-2.download_pack_bundle{title: 'Télécharger', data: {id: pack.id}}= glyphicon('data-transfer-download', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
+        %span.ms-2.download_pack_archive{title: 'Télécharger une archive zip', data: {id: pack.id}}= glyphicon('cloud-download', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
         - if @user.has_collaborator_action?
-          %span.ms-2.preseizures_export{title: 'Export écriture comptable', data:{ id: pack.id, type: 'special_piece', multi: 'true' }}= glyphicon('cloud-download', { size: '16', color:'rgba(26, 26, 26, 0.32);'})
+          %span.ms-2.preseizures_export{title: 'Export écriture comptable', data:{ id: pack.id, type: 'special_piece', multi: 'true' }}= glyphicon('external-link', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
           - if pack.user.uses_api_softwares?
-            %span.ms-2.deliver_preseizures{title: 'Livraison écriture comptable', data: {id: pack.id, type: 'special_piece', multi: 'true'}}= glyphicon('loop-circular', { size: '16', color:'rgba(26, 26, 26, 0.32);'})
+            %span.ms-2.deliver_preseizures{title: 'Livraison écriture comptable', data: {id: pack.id, type: 'special_piece', multi: 'true'}}= glyphicon('loop-circular', { size: '14', color:'rgba(26, 26, 26, 0.32);'})

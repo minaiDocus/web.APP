@@ -24,6 +24,8 @@ class Documents::UploaderController < FrontController
       to_upload = true
     end
 
+    debugger
+
     if customer && ( (customer.authorized_upload? && to_upload) || customer.organization.specific_mission )
       uploaded_document = UploadedDocument.new(File.open(file),
                                                original_filename,

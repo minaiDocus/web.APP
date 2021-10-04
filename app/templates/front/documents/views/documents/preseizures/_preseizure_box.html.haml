@@ -150,12 +150,12 @@
     - if preseizure.third_party.present?
       %span.badge.bg-dark.semibold= preseizure.third_party
 
-  .col-md-3.text-end.p-0
+  .col-md-3.icon-actions.text-end.p-0
     - if piece
-      %span.ms-2.delete_piece{title: 'Supprimer la pièce', data: {id: piece.id}}= glyphicon('trash', { size: '20', color:'#FF4848'})
-      %span.ms-2.update_tags{title: 'Taguer la pièce', data: {id: piece.id, type: 'piece'}}= glyphicon('tag', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
-    %span.ms-2.edit_preseizures{title: 'Édition écriture comptable', data:{ id: preseizure.id }}= glyphicon('pencil', { size: '20', color:'rgba(26, 26, 26, 0.32);', style: 'transform: rotate(90deg)'})
+      %span.ms-2.delete_piece{title: 'Supprimer la pièce', data: {id: piece.id}}= glyphicon('trash', { size: '14', color:'#FF4848'})
+      %span.ms-2.update_tags{title: 'Taguer la pièce', data: {id: piece.id, type: 'piece'}}= glyphicon('tag', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
+    %span.ms-2.edit_preseizures{title: 'Édition écriture comptable', data:{ id: preseizure.id }}= glyphicon('pencil', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
     - if @user.has_collaborator_action?
-      %span.ms-2.preseizures_export{title: 'Export écriture comptable', data:{ id: preseizure.id, type: 'preseizure' }}= glyphicon('cloud-download', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+      %span.ms-2.preseizures_export{title: 'Export écriture comptable', data:{ id: preseizure.id, type: 'preseizure' }}= glyphicon('cloud-download', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
       - if (preseizure.user.uses_api_softwares? && preseizure.is_not_delivered?)
-        %span.ms-2.deliver_preseizures{title: 'Livraison écriture comptable', data: { id: preseizure.id, type: 'preseizure' }}= glyphicon('loop-circular', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+        %span.ms-2.deliver_preseizures{title: 'Livraison écriture comptable', data: { id: preseizure.id, type: 'preseizure' }}= glyphicon('loop-circular', { size: '14', color:'rgba(26, 26, 26, 0.32);'})

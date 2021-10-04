@@ -2,17 +2,17 @@
   .box.animatedChild{ class: animation }
     .row
       .col-md-5
-        %h5.pack.semibold= report.name.gsub('all', '').strip
-        %h6.under_pack.regular= report.user.try(:organization).try(:name)
+        %h6.pack.semibold= link_to report.name.gsub('all', '').strip, operations_details_path(id: report.id), class: 'no-style bold black-label'
+        %label.under_pack.regular= report.user.try(:organization).try(:name)
       .col-md-4
         .created-date
-          %span.semibold Premier ajout le :
-          %span= report.preseizures.first.try(:created_at).try(:strftime, '%d/%M/%Y')
+          %label.semibold Premier ajout le :
+          %label= report.preseizures.first.try(:created_at).try(:strftime, '%d/%M/%Y')
         .updated-date
-          %span Dérnier ajout le :
-          %span= report.preseizures.last.try(:created_at).try(:strftime, '%d/%M/%Y')
+          %label Dérnier ajout le :
+          %label= report.preseizures.last.try(:created_at).try(:strftime, '%d/%M/%Y')
       .col-md-2.no-padding
-        .operation-count 
+        .operation-count.text-end.p-1
           %span= report.preseizures.where('operation_id > 0').size
       .col-md-1
         = link_to glyphicon('caret-right', { size: '18', color: '#CCC' }), operations_details_path(id: report.id)
@@ -27,9 +27,9 @@
           %span.badge.badge-warning.semibold Important
         - if report.expenses.size > 0
           %span.badge.bg-dark.semibold Notes de frais
-      .col-md-4.text-end
+      .col-md-4.icon-actions.text-end
         / %span.ms-2= glyphicon('flag', { size: '18', color:'rgba(26, 26, 26, 0.32);'})
         - if @user.has_collaborator_action?
-          %span.ms-2.preseizures_export{title: 'Export écriture comptable', data:{ id: report.id, type: 'special_operation', multi: 'true' }}= glyphicon('cloud-download', { size: '18', color:'rgba(26, 26, 26, 0.32);'})
+          %span.ms-2.preseizures_export{title: 'Export écriture comptable', data:{ id: report.id, type: 'special_operation', multi: 'true' }}= glyphicon('cloud-download', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
           - if report.user.uses_api_softwares?
-            %span.ms-2.deliver_preseizures{title: 'Livraison écriture comptable', data: {id: report.id, type: 'special_operation', multi: 'true'}}= glyphicon('loop-circular', { size: '18', color:'rgba(26, 26, 26, 0.32);'})
+            %span.ms-2.deliver_preseizures{title: 'Livraison écriture comptable', data: {id: report.id, type: 'special_operation', multi: 'true'}}= glyphicon('loop-circular', { size: '14', color:'rgba(26, 26, 26, 0.32);'})

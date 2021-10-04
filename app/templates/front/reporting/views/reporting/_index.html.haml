@@ -5,12 +5,12 @@
 .container-fluid.reporting
   .row.derivationRight
     .col-md-9
-      %h1.bold
+      %h3.bold
         = t('reporting.reporting_text') + ' : '
         %span.green-label= @report_organization.name
-    .col-md-2
+    .col-md-3
       = select_tag 'customer_filter', options_for_select(accounts_options), id: 'customer_filter', multiple: true
-    .col-md-1
+    
       / .form-group
       /   .input-group.mb-3
       /     %span.show-calendar.input-group-text{ data: { ref: 'date_filter' } }= glyphicon('calendar', { size: '14', color: 'background: rgba(26, 26, 26, 0.7)' })          

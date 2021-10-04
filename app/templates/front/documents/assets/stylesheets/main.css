@@ -16,13 +16,12 @@
   margin: 1%;
 }
 
-.operation-count{
-  padding: 10%;
-  text-align: right;
+.box.list{
+  padding: 1%;
 }
 
 .operation-count span{
-  padding: 15%;
+  padding: 8%;
   background: rgba(26, 26, 26, 0.1);
   border-radius: 8px;
 }
@@ -242,3 +241,12 @@ img{
 .restore:hover{
   font-family: Raleway-semiBold;
 }
+
+.icon-actions span svg{
+  transition: all .2s ease-in-out;
+}
+
+.icon-actions span svg:hover{
+  transform: scale(1.5) !important;
+}
+
