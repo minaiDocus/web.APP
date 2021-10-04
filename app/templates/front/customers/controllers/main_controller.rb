@@ -248,7 +248,7 @@ class Customers::MainController < CustomerController
     else
       flash[:error] = 'Impossible de clôturer immédiatement le dossier, la période a été en partie facturé.'
     end
-    redirect_to organization_customer_path(@organization, @customer)
+    redirect_to organization_customers_path(@organization)
   end
 
   # /account/organizations/:organization_id/customers/:id/account_reopen_confirm

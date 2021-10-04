@@ -419,7 +419,7 @@ class Customer{
     }
 
     this.applicationJS.sendRequest(params).then((response)=>{
-      $('.heading_customer').html($(response).find('.heading_customer').html());
+      $('.customer_container_view').html($(response).find('.customer_container_view').html());
       this.account_close_confirm_modal.modal('hide');
       this.rebind_customer_all_events();
     }).catch((response)=>{

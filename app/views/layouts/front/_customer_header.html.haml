@@ -1,4 +1,4 @@
-.heading_customer
+.heading_customer.customer_container_view
   .customer_header
     %input#organization_id{type: :hidden, value: @organization.id, name: 'organization_id'}
     %input#customer_id{type: :hidden, value: @customer.id, name: 'customer_id'}
@@ -125,17 +125,5 @@
     .customer_content.mb-5.ps-4.pe-4
       != content_for?(:content) ? yield(:content) : yield
 
-.modal#account_close_confirm
-  .modal-dialog
-    .modal-content
-      .modal-header
-        %h5.modal-title.bold Clôturer le dossier
-        %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
-      .close_reopen_confirm_content
-        .modal-body
-          Chargement ...
-        .modal-footer
-          %button.btn.btn-light.cancel{ 'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => '
-          button' } Annuler
-          %button.btn.btn-primary.bold.close.close_or_reopen_confirm{ type: :button } Clôturer le dossier
+= render file: Rails.root.join('app/templates/front/customers/views/customers/main/_customer_modal.html.haml')
 
