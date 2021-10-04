@@ -54,9 +54,9 @@
                         - if period.product_option_orders.first&.title.present?
                           %br
                           %i= period.product_option_orders.first.title
-                        - if period.product_option_orders.drop(1).size > 0
+                        - if period.product_option_orders.size > 0
                           .popover_content_customer.alert.alert-warning.hide                       
-                            = popover_content(period.product_option_orders.drop(1))                              
+                            = popover_content(period.product_option_orders)                              
                   %td.text-center.align-middle= customer.subscription.try(:is_package?, 'pre_assignment_option') ? 'Activé' : '-'
                   %td.text-center.align-middle= customer.subscription.try(:is_package?, 'retriever_option') ? "Récupération banque +\nFactures sur Internet" : "-"
                   %td.align-middle= customer.subscription.try(:number_of_journals)

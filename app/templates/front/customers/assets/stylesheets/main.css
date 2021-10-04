@@ -129,7 +129,7 @@ table.future_packages .total{
   position: absolute;
   border: 1px solid #CCC;  
   z-index: 120;
-  margin: 0px 0px 0px 15%;
+  margin: -3% 0px 0px 3%;
   min-width: 300px;
   box-shadow: 2px 5px 13px -1px rgba(0,0,0,0.75);
   -webkit-box-shadow: 2px 5px 13px -1px rgba(0,0,0,0.75);
