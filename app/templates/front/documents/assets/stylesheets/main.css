@@ -240,3 +240,11 @@ img{
 .restore:hover{
   font-family: Raleway-semiBold;
 }
+
+.icon-actions span svg{
+  transition: all .2s ease-in-out;
+}
+
+.icon-actions span svg:hover{
+  transform: scale(1.5) !important;
+}
