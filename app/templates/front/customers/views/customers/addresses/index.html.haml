@@ -1,8 +1,0 @@
-.general.derivationRight
-  .row
-    .col-md-8
-      %h3.bold Paramètres : Gestion des adresses
-
-    - addresses = OpenStruct.new({ paper_return_address: @customer.addresses.for_paper_return.first, paper_set_shipping_address: @customer.addresses.for_paper_set_shipping.first, dematbox_shipping_address: @customer.addresses.for_dematbox_shipping.first })
-
-    = render file: Rails.root.join('app/templates/front/addresses/views/addresses/_show.html.haml'), locals: { addresses: addresses, addr_for: 'user', id: @customer.id }
