@@ -9,17 +9,19 @@ class Ibiza::BoxFoldersController < CustomerController
   def update
     @folder = @customer.ibizabox_folders.find params[:id]
     if @folder.active? ? @folder.disable : @folder.enable
-      flash[:success] = "#{@folder.active? ? 'Activé' : 'Désactivé'} avec succès"
+      json_flash[:success] = "#{@folder.active? ? 'Activé' : 'Désactivé'} avec succès"
     else
-      flash[:error] = "#{@folder.active? ? 'Désactivation' : 'Activation'} échouée"
+      json_flash[:error] = "#{@folder.active? ? 'Désactivation' : 'Activation'} échouée"
     end
-    redirect_to organization_customer_path(@organization, @customer, tab: 'ibiza_box')
+
+    render json: { json_flash: json_flash }, status: 200
   end
 
   def refresh
     FileImport::Ibizabox.update_folders(@customer)
-    flash[:success] = 'Mise à jour avec succès'
-    redirect_to organization_customer_path(@organization, @customer, tab: 'ibiza_box')
+    json_flash[:success] = 'Mise à jour avec succès'
+
+    render json: { json_flash: json_flash }, status: 200
   end
 
   private

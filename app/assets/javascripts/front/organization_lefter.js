@@ -36,4 +36,12 @@ jQuery(function () {
       if(url != '' && url != '#' && url != undefined && url != null)
           app.sendRequest(ajax_params);
     });
+
+  /* CALCULATE CUSTOM_CONTENT HEIGHT */
+    if($('.customer_content_container').not('.hacked').length > 0){
+      let doc_w = $(document).innerHeight();
+      $('.customer_content_container').css('max-height', (doc_w - 420));
+      $('.customer_content_container').addClass('hacked');
+      $('.organizations').removeClass('mb-5');
+    }
 });

@@ -88,3 +88,8 @@ body {
   width: 90%;
   margin-left: 2%;
 }
+
+.customer_content_container{
+  overflow-y: auto;
+  overflow-x: hidden; 
+}
