@@ -197,5 +197,5 @@ function bind_all_events_account_number_rules(){
 }
 
 jQuery(function() {
-  bind_all_events_account_number_rules();
+  AppListenTo('window.application_auto_rebind', (e)=>{ bind_all_events_account_number_rules() });
 });

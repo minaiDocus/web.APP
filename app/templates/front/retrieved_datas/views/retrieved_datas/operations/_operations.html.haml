@@ -24,15 +24,15 @@
   %input#operations-size{ type: 'hidden', value: operations.total_count }
   .row
     .col-md-12
-      %table.table.table-striped.table_integration
+      %table.table.table-striped.table_integration#tbl_operations
         %thead            
-          %th Date Opé
-          %th Date Valeur
-          %th Service
-          %th Compte
-          %th Catégorie
-          %th Libellé
-          %th Montant
+          %th= sortable 'date', 'Date opé'
+          %th= sortable 'value_date', 'Date Valeur'
+          %th= sortable 'bank_accounts.bank_name', 'Service'
+          %th= sortable 'bank_accounts.number', 'Compte'
+          %th= sortable 'category', 'Catégorie'
+          %th= sortable 'label', 'Libellé'
+          %th= sortable 'amount', 'Montant'
           - if @user.pre_assignement_displayed?
             %th Pré-affecté
         %tbody

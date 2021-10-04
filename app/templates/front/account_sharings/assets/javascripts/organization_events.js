@@ -7,5 +7,5 @@ function bind_account_sharings_organization_events(){
 }
 
 jQuery(function() {
-  bind_account_sharings_organization_events();
+  AppListenTo('window.application_auto_rebind', (e)=>{ bind_account_sharings_organization_events() });
 });

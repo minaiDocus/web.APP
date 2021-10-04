@@ -207,7 +207,7 @@ module ApplicationHelper
 
     options = params.merge(contains)
 
-    link_to icon + title, options.permit!.merge(sort: column, direction: direction)
+    link_to icon + title, options.permit!.merge(sort: column, direction: direction), class: 'as_idocus_sortable'
   end
 
 

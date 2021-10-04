@@ -129,5 +129,5 @@ function bind_collaborator_events(){
 }
 
 jQuery(function() {
-  bind_collaborator_events();
+  AppListenTo('window.application_auto_rebind', (e)=>{ bind_collaborator_events(); })
 });

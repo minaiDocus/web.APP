@@ -16,14 +16,14 @@
         Nouvelle commande
 
   .box.mt-4.derivationLeft
-    %table.table.table-striped
+    %table.table.table-striped#tbl_orders
       %thead
-        %th Dossier
-        %th Date de commande
-        %th Société
+        %th= sortable :user_code, 'Dossier'
+        %th= sortable :created_at, 'Date de commande'
+        %th= sortable :company, 'Société'
         %th Commande
         %th= t('activerecord.models.paper_process.attributes.tracking_number').downcase
-        %th= t('activerecord.models.order.attributes.state').downcase
+        %th= sortable :state, t('activerecord.models.order.attributes.state').downcase
         %th.text-end Action
       %tbody
         - @orders.each do |order|

@@ -28,29 +28,6 @@ function init_menu_animation(){
   }
 }
 
-function custom_dynamic_animation(){
-  if( $('.animatedGroups').length > 0 ){
-    $('.animatedGroups').each(function(e){
-      let parent = $(this);
-      let duration = 300;
-      parent.find('.animatedChild').each(function(j){
-        duration = duration + 200;
-        setTimeout((f)=>{
-          $(this).addClass('didMove');
-
-          if($(this).hasClass('toLeft'))
-            $(this).addClass('derivationLeft');
-          else if($(this).hasClass('toRight'))
-            $(this).addClass('derivationRight');
-
-          $(this).removeClass('animatedChild');
-        }, duration)
-      })
-    });
-  }
-}
-
-
 function bind_globals_events(){
   custom_dynamic_animation();
   custom_dynamic_height();
@@ -63,6 +40,29 @@ function bind_globals_events(){
   /************************************************************************************/
   /* Notice flash */
     $('span.close_error').unbind('click').bind('click', function(e){ $('.notice-internal-error').fadeOut('fast'); });
+
+  /* SORTABLE */
+    $('.as_idocus_sortable').unbind('click').bind('click', function(e){
+      e.preventDefault();
+      let url    = $(this).attr('href');
+      let target = $(this).parents('table:first').attr('id');
+      let app    = new ApplicationJS();
+
+      let ajax_params = {
+                          url: url,
+                          type: 'GET',
+                          dataType: 'html',
+                          target: `#${target}`
+                        };
+
+      if(target == '' || target == undefined || target == null){
+        console.log('The sortable link doesn t have a valid target (table id is missing)');
+      }
+      else{
+        if(url != '' && url != '#' && url != undefined && url != null)
+          app.sendRequest(ajax_params);
+      }
+    });
 
   /* PAGINATIONS */
     $('.pagination .per-page').unbind('change').bind('change', function(e){
@@ -214,6 +214,9 @@ function bind_globals_events(){
   let popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
     return new bootstrap.Popover(popoverTriggerEl)
   });
+
+
+  AppEmit('window.application_auto_rebind');
 }
 
 function check_flash_messages(){

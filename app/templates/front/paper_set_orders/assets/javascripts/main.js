@@ -50,7 +50,6 @@ class PaperSetOrder{
                           $('.search-content #search_input').val(search_text);
                         }
                         this.action_locker = false;
-                        bind_all_events_paper_set_orders();
                         file_sending_kits_main_events();
                       })
                       .catch(()=>{ this.action_locker = false; });
@@ -70,7 +69,6 @@ class PaperSetOrder{
 
       this.select_multiple.find('.form-footer-content').remove();
 
-      bind_all_events_paper_set_orders();
       file_sending_kits_main_events();
     });
   }
@@ -85,8 +83,6 @@ class PaperSetOrder{
         this.create_order_multiple.find('.modal-body').html($(result).find('#paper_set_orders.order_multiple .form-content').html());
         this.create_order_multiple.find('.modal-title').html($(result).find('#paper_set_orders.order_multiple .modal-title').html());
         this.create_order_multiple.find('.form-footer-content').remove();
-
-        bind_all_events_paper_set_orders();
         /*file_sending_kits_main_events();*/
 
        }).catch((result)=>{ 
@@ -104,8 +100,7 @@ class PaperSetOrder{
       this.add_new.find('.modal-body').html($(element).find('#paper_set_order .form-content').html());
       this.add_new.find('.modal-title').html($(element).find('#paper_set_order .modal-title').html());
       this.add_new.find('.form-footer-content').remove(); 
-     
-      bind_all_events_paper_set_orders();
+
       /*file_sending_kits_main_events();*/
     });
   }
@@ -317,8 +312,7 @@ class PaperSetOrder{
       this.file_sending_kits_edit.find('.modal-body').html($(element).find('.file_sending_kits_edit').html());
       this.select_multiple.modal('hide');
       this.file_sending_kits_edit.modal('show');
-     
-      bind_all_events_paper_set_orders();
+
     }).catch((error)=> { 
       console.error(error);
     });

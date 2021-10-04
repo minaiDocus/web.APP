@@ -3,12 +3,12 @@
     = link_to 'Ajouter un contact', '#', class: 'btn btn-primary semibold edit_contact', data: { id: 0 }    
 
   .mb-4
-  %table.table.table-striped
+  %table.table.table-striped#tbl_contacts
     %thead
       %tr
-        %th Date de création
-        %th Email
-        %th Société
+        %th= sortable :created_at, 'Date de création'
+        %th= sortable :email, 'Email'
+        %th= sortable :company, 'Société'
         %th Nom
         %th Nb. de dossiers
         %th.text-end Actions

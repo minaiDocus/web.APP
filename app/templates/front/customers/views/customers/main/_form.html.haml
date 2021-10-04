@@ -5,7 +5,7 @@
         .carousel-item.active
           .row.customer-base-form
             .col-md-6.derivationLeft
-              .box.height_groups.groups_1
+              .box.heightGroups.groups_1
                 %h5.semibold Identification du client
                 %hr
                 = f.label :company, :class => "required semibold"
@@ -31,7 +31,7 @@
                 .select-container.no-padding.w-100
                   = f.input :email, label: false, input_html: { class: 'email_field required_field', placeholder: "clement@idocus.com", :required => true }, hint: "Le courriel sert d’identifiant à iDocus et de contact principal en cas de besoin de la part d’iDocus"
             .col-md-6.derivationRight
-              .bg-light.height_groups.groups_1.clearfix.small-shadow.p-3.height_groups.groups_1
+              .bg-light.heightGroups.groups_1.clearfix.small-shadow.p-3
                 %h5.semibold Paramètre de base
                 %hr
                 - unless @organization.specific_mission

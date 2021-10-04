@@ -55,17 +55,8 @@ class Operation < ApplicationRecord
     collection = collection.where("label LIKE ?",    "%#{contains[:label]}%")    unless contains[:label].blank?
     collection = collection.where("category LIKE ?", "%#{contains[:category]}%") unless contains[:category].blank?
 
-    if contains[:date]
-      contains[:date].each do |operator, value|
-        collection = collection.where("date #{operator} ?", value) if operator.in?(['>=', '<='])
-      end
-    end
-
-    if contains[:value_date]
-      contains[:value_date].each do |operator, value|
-        collection = collection.where("value_date #{operator} ?", value) if operator.in?(['>=', '<='])
-      end
-    end
+    collection = collection.where("date BETWEEN '#{CustomUtils.parse_date_range_of(contains[:date]).join("' AND '")}'") if contains[:date].present?
+    collection = collection.where("value_date BETWEEN '#{CustomUtils.parse_date_range_of(contains[:value_date]).join("' AND '")}'") if contains[:value_date].present?
 
     if contains[:bank_account].present? && (contains[:bank_account][:number].present? || contains[:bank_account][:bank_name].present?)
       collection = collection.joins(:bank_account)

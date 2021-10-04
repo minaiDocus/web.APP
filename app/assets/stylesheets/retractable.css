@@ -28,24 +28,24 @@
 }
 
 @mozkeyframes showLogin {
-  from { max-height: 0px; }
-  to { max-height: 900px; }
+  0% { transform: scale(1.2); }
+  100% { transform: scale(1); }
   0% { opacity: 0; }
-  10% { opacity: 0.5; }
+  40% { opacity: 0.5; }
   100% { opacity: 1; }
 }
 @webkitkeyframes showLogin {
-  from { max-height: 0px; }
-  to { max-height: 900px; }
+  0% { transform: scale(1.2); }
+  100% { transform: scale(1); }
   0% { opacity: 0; }
-  10% { opacity: 0.5; }
+  40% { opacity: 0.5; }
   100% { opacity: 1; }
 }
 @keyframes showLogin {
-  from { max-height: 0px; }
-  to { max-height: 900px; }
+  0% { transform: scale(1.2); }
+  100% { transform: scale(1); }
   0% { opacity: 0; }
-  10% { opacity: 0.5; }
+  40% { opacity: 0.5; }
   100% { opacity: 1; }
 }
 
@@ -141,10 +141,47 @@
 }
 
 
+@mozkeyframes shine {
+  0%{ background-position: 0; }
+  60% { background-position: 180px; }
+  100% { background-position: 180px; }
+}
+@webkitkeyframes shine {
+  0%{ background-position: 0; }
+  60% { background-position: 180px; }
+  100% { background-position: 180px; }
+}
+@keyframes shine{
+  0%{ background-position: 0; }
+  60% { background-position: 180px; }
+  100% { background-position: 180px; }
+}
+
+
 // CSS ANIMATED
 .blink {
   animation: blink 2s steps(1) infinite;
   -webkit-animation: blink 2s steps(1) infinite;
+}
+
+.shine{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  padding: 12px 48px;
+  color: #ffffff;
+  background: linear-gradient(to right, #4d4d4d 0, white 10%, #4d4d4d 20%);
+  background-position: 0;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 3s infinite linear;
+  animation-fill-mode: forwards;
+  -webkit-text-size-adjust: none;
+  font-weight: 600;
+  font-size: 16px;
+  text-decoration: none;
+  white-space: nowrap;
 }
 
 .retractable.slidedown {
@@ -183,6 +220,12 @@ tbody.retractable.slidedown tr {
   position: relative;
 }
 
+.showLogin{
+  overflow: hidden;
+  animation-name: showLogin;
+  animation-duration: 1.2s;
+}
+
 .showMenu{
   animation-name: showMenu;
   animation-duration: 0.6s;
@@ -214,12 +257,6 @@ tbody.retractable.slidedown tr {
   animation-delay: 0.7s;
   width: 90%;
   padding-top: 5%;
-}
-
-.showLogin{
-  overflow: hidden;
-  animation-name: showLogin;
-  animation-duration: 1.2s;
 }
 
 // CSS NORMAL

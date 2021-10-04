@@ -3,13 +3,13 @@
     = link_to 'Partager un dossier', '#', class: 'btn btn-primary semibold share_account_btn'
 
   .mb-4
-  %table.table.table-striped
+  %table.table.table-striped#tbl_accounts
     %thead
       %tr
-        %th Date
+        %th= sortable :created_at, 'Date'
         %th Dossier
         %th Client ou contact
-        %th Etat
+        %th= sortable :is_approved, 'Etat'
         %th.text-end Actions
     %tbody
       - @account_sharings.each do |account_sharing|

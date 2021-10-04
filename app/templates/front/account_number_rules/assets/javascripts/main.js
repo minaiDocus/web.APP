@@ -39,7 +39,6 @@ class AccountNumberRule{
                           $('.search-content #search_input').val(search_text);
                         }
                         this.action_locker = false;
-                        bind_all_events_account_number_rules();
                       })
                       .catch(()=>{ this.action_locker = false; });
   }
@@ -63,8 +62,6 @@ class AccountNumberRule{
 
       this.add_new_rule_modal.find('.modal-body').html($(element).find(from).html());
       this.add_new_rule_modal.find('.modal-title').text(modal_title);
-
-      bind_all_events_account_number_rules();
     });
   }
 

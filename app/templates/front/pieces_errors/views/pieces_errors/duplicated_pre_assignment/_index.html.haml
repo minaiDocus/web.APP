@@ -12,17 +12,17 @@
         %span Marquer comme duplication ceux séléctionnées
   .row
     .col-md-12
-      %table.table.table-striped.table_integration
+      %table.table.table-striped.table_integration#tbl_duplicated_pieces
         %thead            
           %th.text-center
             .form-check
               %input.form-check-input.pointer.float-none.check-all-piece-ignored{ type: :checkbox, value: "" }
-          %th Date de création
-          %th N° pièce
-          %th N° facture
-          %th Tiers
-          %th Montant
-          %th Date d'opération              
+          %th= sortable :created_at, 'Date de création'
+          %th= sortable :piece_name, 'N° pièce'
+          %th= sortable :piece_number, 'N° facture'
+          %th= sortable :third_party, 'Tiers'
+          %th= sortable :amount, 'Montant'
+          %th= sortable :date, "Date d'opération"
           %th Statut
           %th.text-end Action
         %tbody

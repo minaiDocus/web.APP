@@ -61,7 +61,7 @@ class RetrievedDatas::OperationsController < RetrieverController
   end
 
   def sort_column
-    if params[:sort].in? ['date', 'bank_accounts.bank_name', 'bank_accounts.number', 'category', 'label', 'amount']
+    if params[:sort].in? ['date', 'value_date', 'bank_accounts.bank_name', 'bank_accounts.number', 'category', 'label', 'amount']
       params[:sort]
     else
       'date'

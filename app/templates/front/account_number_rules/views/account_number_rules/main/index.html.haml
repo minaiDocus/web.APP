@@ -46,17 +46,17 @@
           
       .row.mt-5
         .col-md-12
-          %table.table.table-striped.table_integration
+          %table.table.table-striped.table_integration#tbl_account_number_rules
             %thead
               %th.text-center
                 .form-check
                   = check_box_tag 'master_checkbox', 0, false, class: 'form-check-input pointer float-none check-all-bank-rule'
-              %th Nom de la règle
-              %th Affecté à
-              %th Type de règle
-              %th Catégorisation
-              %th Contenu recherche
-              %th N° de compte
+              %th= sortable :name, 'Nom de la règle'
+              %th= sortable :affect, 'Affecté à'
+              %th= sortable :rule_type, 'Type de règle'
+              %th= sortable :categorization, 'Catégorisation'
+              %th= sortable :content, 'Contenu recherche'
+              %th= sortable :third_party_account, 'N° de compte'
               %th.text-end Action
             %tbody
               - @account_number_rules.each do |rule|

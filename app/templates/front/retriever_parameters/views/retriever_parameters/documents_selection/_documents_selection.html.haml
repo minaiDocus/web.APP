@@ -10,17 +10,17 @@
 
   .row
     .col-md-12
-      %table.table.table-striped.table_integration
+      %table.table.table-striped.table_integration#tbl_documents
         %thead            
           %th.text-center
             .form-check
               %input.form-check-input.pointer.float-none.check-all-bank-account{ type: :checkbox, value: "" }
-          %th Date de la récupération
-          %th Service
-          %th Date
-          %th Nom original
-          %th Nb. pages
-          %th Montant
+          %th= sortable :created_at, 'Date de la récupération'
+          %th= sortable :retriever_id , 'Service'
+          %th= sortable :date, 'Date'
+          %th= sortable :name, 'Nom original'
+          %th= sortable :pages_number, 'Nb. pages'
+          %th= sortable :amount, 'Montant'
         %tbody
           - if documents.any?
             - documents.each do |document|

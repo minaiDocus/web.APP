@@ -24,13 +24,13 @@
     .box.derivationRight
       .row
         .col-md-12
-          %table.table.table-striped.table_integration
+          %table.table.table-striped.table_integration#tbl_lists
             %thead            
               %th Nom
-              %th.date= t('activerecord.models.common.attributes.created_at')
-              %th= t('activerecord.models.user.attributes.formatted_identifier')
+              %th.date= sortable :created_at, t('activerecord.models.common.attributes.created_at')
+              %th= sortable :code, t('activerecord.models.user.attributes.formatted_identifier')
               %th Groupe
-              %th= t('activerecord.models.member.attributes.role')
+              %th= sortable :role, t('activerecord.models.member.attributes.role')
               %th.text-end Action
             %tbody
               - @members.each do |member|

@@ -147,5 +147,5 @@ function bind_customer_events() {
 
 
 jQuery(function() {
- bind_customer_events();
+  AppListenTo('window.application_auto_rebind', (e)=>{ bind_customer_events(); }) ;
 });

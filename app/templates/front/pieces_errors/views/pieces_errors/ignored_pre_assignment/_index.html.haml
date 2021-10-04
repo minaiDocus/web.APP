@@ -13,17 +13,17 @@
 
   .row
     .col-md-12
-      %table.table.table-striped.table_ignored_pre_assignment
+      %table.table.table-striped.table_ignored_pre_assignment#tbl_ignored_pieces
         %thead            
           %th.text-center
             .form-check
               %input.form-check-input.pointer.float-none.check-all-piece-ignored{ type: :checkbox, value: '' }
-          %th Date de création
-          %th N° pièce
-          %th N° facture
+          %th= sortable :created_at, 'Date de création'
+          %th= sortable :name, 'N° pièce'
+          %th= sortable :number, 'N° facture'
           %th Nom de lot
           %th Remarque
-          %th Statut
+          %th= sortable :pre_assignment_state, 'Statut'
           %th.text-end Action
         %tbody
           - if @ignored_list.any?

@@ -29,7 +29,7 @@ class AccountSharingsOrganization{
                         dataType: 'html',
                       }
 
-    this.applicationJS.sendRequest(ajax_params).then((e)=>{ $('.tab-pane#shared_accounts').html(e); bind_account_sharings_organization_events(); });
+    this.applicationJS.sendRequest(ajax_params).then((e)=>{ $('.tab-pane#shared_accounts').html(e); });
   }
 
   load_contacts(page=1, per_page=20){
@@ -39,7 +39,7 @@ class AccountSharingsOrganization{
                         dataType: 'html',
                       }
 
-    this.applicationJS.sendRequest(ajax_params).then((e)=>{ $('.tab-pane#contacts').html(e); bind_account_sharings_organization_events(); });
+    this.applicationJS.sendRequest(ajax_params).then((e)=>{ $('.tab-pane#contacts').html(e); });
   }
 
   add_account(){

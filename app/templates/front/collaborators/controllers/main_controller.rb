@@ -14,9 +14,7 @@ class Collaborators::MainController < OrganizationController
                             .per(params[:per_page])
 
     @groups = @user.groups.search(search_terms(params[:group_contains]))
-                   .order(sort_column => sort_direction)
-                   .page(params[:page])
-                   .per(params[:per_page])
+                   .order(:name => :asc)
   end
 
   # GET /organizations/:organization_id/collaborators/:id

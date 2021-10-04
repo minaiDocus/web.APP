@@ -22,19 +22,58 @@ function elements_initializer(){
 }
 
 function custom_dynamic_height(){
-  window.setTimeout(()=>{
-    $('.height_groups').livequery(function(){
-      for(var i=1; i <= 5; i++) {
-        var min_height = 0;
-        if($('.height_groups.groups_'+i).length > 0){
-          $('.height_groups.groups_'+i).each(function(e){
-            if( min_height < $(this).innerHeight() ) min_height = $(this).innerHeight();
-          });
-          $('.height_groups.groups_'+i).css('min-height', min_height+'px');
+  var can_launch = true
+
+  const launch = ()=>{
+    window.setTimeout(()=>{
+      $('.heightGroups').livequery(function(){
+        console.log('seeking height');
+        for(var i=1; i <= 5; i++) {
+          var min_height = 0;
+          if($('.heightGroups.groups_'+i).length > 0){
+            $('.heightGroups.groups_'+i).each(function(e){
+              if( min_height < $(this).innerHeight() ) min_height = $(this).innerHeight();
+            });
+            $('.heightGroups.groups_'+i).css('min-height', min_height+'px');
+            can_launch = false;
+          }
         }
+
+        if(can_launch){ launch(); }
+      });
+    }, 500);
+  }
+
+  launch();
+}
+
+function custom_dynamic_animation(){
+  if( $('.animatedGroups').length > 0 ){
+    $('.animatedGroups').each(function(e){
+      let parent = $(this);
+      let step     = 200;
+      let duration = 300;
+
+      if( $(this).hasClass('reverse') ){
+        duration = (parent.find('.animatedChild').length * step) + duration;
+        step = step * -1
       }
+
+      parent.find('.animatedChild').each(function(j){
+        duration = duration + step;
+        setTimeout((f)=>{
+          $(this).addClass('didMove');
+
+          if($(this).hasClass('toLeft'))
+            $(this).addClass('derivationLeft');
+          else if($(this).hasClass('toRight'))
+            $(this).addClass('derivationRight');
+
+          $(this).removeClass('animatedChild');
+        }, duration)
+      })
     });
-  }, 5000);
+  }
 }
 
 function iDocus_event_emiter(){

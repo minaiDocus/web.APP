@@ -27,11 +27,11 @@
     .box#table_customers.derivationLeft
       .row
         .col-md-12
-          %table.table.table-striped.list_customers
+          %table.table.table-striped.list_customers#tbl_customers
             %thead
               %th Nom
-              %th Identifiant
-              %th Date
+              %th= sortable :code, 'Identifiant'
+              %th= sortable :created_at, 'Date'
               %th Forfait
               %th Pré-affectation
               %th Automates

@@ -173,5 +173,5 @@ function bind_all_events_paper_set_orders(){
 }
 
 jQuery(function() {
-  bind_all_events_paper_set_orders();
+  AppListenTo('window.application_auto_rebind', (e)=>{ bind_all_events_paper_set_orders() });
 });

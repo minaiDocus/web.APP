@@ -47,8 +47,6 @@ class Main{
       this.show_modal(target, params);
       $('.modal-footer .create_update').text('Éditer');
     }
-
-    bind_collaborator_events();
   }
 
   create_update(url, data){
@@ -66,8 +64,6 @@ class Main{
         $('.page-content .box-group-content').html($(response).find('.page-content').html());
         this.group_modal.modal('hide');
       }
-
-      bind_collaborator_events();
     }).catch((response)=>{
       if (url.indexOf("collaborators") >= 0) { this.member_modal.modal('hide'); }
       if (url.indexOf("groups") >= 0) { this.group_modal.modal('hide'); }
@@ -116,7 +112,6 @@ class Main{
       $(`.search-content input[name='${params_name}']#search_input`).val(search_text);
 
       this.action_locker = false;
-      bind_collaborator_events();
     })
     .catch(()=>{ this.action_locker = false; });
   }
@@ -137,8 +132,6 @@ class Main{
         $('.page-content .box-group-content').html($(response).find('.page-content').html());
         this.group_filter_modal.modal('hide');
       }
-
-      bind_collaborator_events();
     }).catch((response)=>{
       this.member_filter_modal.modal('hide');
       this.group_filter_modal.modal('hide');
@@ -198,7 +191,6 @@ class Main{
         $('.page-content .box-group-content').html($(element).find('.page-content').html());
         is_deleted = true
 
-        bind_collaborator_events();
         ApplicationJS.set_checkbox_radio();
       })
       .catch(()=>{ this.action_locker = false; });
@@ -223,8 +215,6 @@ class Main{
 
         this.group_show_details_modal.modal('show');
         is_already_open = true
-
-        bind_collaborator_events();
         ApplicationJS.set_checkbox_radio();
       })
       .catch(()=>{ this.action_locker = false; });
