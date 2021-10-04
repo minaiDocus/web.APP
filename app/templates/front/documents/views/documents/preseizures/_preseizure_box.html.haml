@@ -1,27 +1,29 @@
 - if piece
-  .row.m-1
+  .row
     .col-md-12
-      %h5.pack.semibold= piece.name
+      %h5.pack.semibold.no-margin= piece.name
 
 - elsif operation
   .row
     .col-md-12
       %h5.pack.semibold= operation.try(:label)
 
-.row.m-1
+.row.ms-1
   .col-md-5
-    %span= preseizure.date.strftime('%d/%m/%Y')
-    %span -         
-    %span Devise :
-    %span= preseizure.unit
+    %label
+      %span= preseizure.date.strftime('%d/%m/%Y')
+      %span -         
+      %span Devise :
+      %span= preseizure.unit
 
 - if piece
-  %br
-  .row.m-1
+  .mb-2
+  .row
     .col-md-5
-      %span Nom de tiers 
-      %span.semibold= preseizure.try(:third_party)
-.row.m-1
+      %label
+        %span Nom de tiers :
+        %span.semibold= preseizure.try(:third_party)
+.row
   .col-md-5
     - sending_date = preseizure.pre_assignment_deliveries.where(state: 'sent').first.try(:created_at)
     - if sending_date.present?
@@ -34,7 +36,7 @@
 - irregular_debit_credit_somme = verif_debit_credit_somme_of entries
 - data_analytics = data_analytic_of(preseizure)
 
-.row.ml-3.mt-3.mb-3.mr-0  
+.row.ml-3.mb-3.mr-0  
   %div{ class: "col-md-#{(data_analytics.any?) ? '6' : '12'}"}
     %label.semibold Ecritures
     %label.red-label.float-end.semibold{class: "#{irregular_debit_credit_somme ? '' : 'hide' }"}
@@ -113,7 +115,7 @@
                 %td.text-center= analysis[:ventilation].to_f.to_s + " %"
                 %td.text-center= @pre_tax_amount.to_f * (analysis[:ventilation].to_f / 100)
 
-%hr   
+%hr.no-margin.w-100
 .row.ml-1.mt-1.mb-1.mr-0
   .col-md-9
     - if preseizure.created_at >= 1.days.ago
@@ -150,7 +152,7 @@
     - if preseizure.third_party.present?
       %span.badge.bg-dark.semibold= preseizure.third_party
 
-  .col-md-3.icon-actions.text-end.p-0
+  .col-md-3.icon-actions.text-end.pe-4
     - if piece
       %span.ms-2.delete_piece{title: 'Supprimer la pièce', data: {id: piece.id}}= glyphicon('trash', { size: '14', color:'#FF4848'})
       %span.ms-2.update_tags{title: 'Taguer la pièce', data: {id: piece.id, type: 'piece'}}= glyphicon('tag', { size: '14', color:'rgba(26, 26, 26, 0.32);'})

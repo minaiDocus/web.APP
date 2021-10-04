@@ -2,8 +2,8 @@
   .box
     .row
       .col-md-6
-        %h5.pack.semibold= retriever.user.info
-        %h6.under_pack.regular 
+        %h6.pack.semibold= retriever.user.info
+        %label.under_pack.regular 
           - if retriever.provider_and_bank?
             Doc. et Op. Bancaires
           - elsif retriever.bank?
@@ -15,21 +15,21 @@
           %span= "(" + retriever.service_name + ")"
       .col-md-4
         .created-date
-          %span.semibold Premier ajout le :
-          %span= retriever.created_at.strftime("%d-%m-%Y")
+          %label.semibold Premier ajout le :
+          %label= retriever.created_at.strftime("%d-%m-%Y")
         .updated-date
-          %span Modifié le :
-          %span= retriever.updated_at.strftime("%d-%m-%Y")
+          %label Modifié le :
+          %label= retriever.updated_at.strftime("%d-%m-%Y")
       .col-md-2.text-center
-        %h3.semibold.p-3= retriever.journal_name.presence || ''
-    %hr
+        %h5.semibold= retriever.journal_name.presence || ''
+    %hr.no-margin.w-100
     .row.retriever_actions
-      .col-md-9
+      .col-md-9.pt-1
         %span.badge.semibold{ class: "badge-#{badge_type_of(retriever)}" }= state_of(retriever)
-      .col-md-3.text-end
-        %span.action-group.ms-1.pointer.retriever_infos{ title: "Créer le : #{retriever.created_at.strftime('%d-%m-%Y %H:%M:%S')} / Modifier le: #{retriever.updated_at.strftime('%d-%m-%Y %H:%M:%S')}"}= glyphicon('info', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+      .col-md-3.icon-actions.text-end.pt-1
+        %span.action-group.ms-1.pointer.retriever_infos{ title: "Créer le : #{retriever.created_at.strftime('%d-%m-%Y %H:%M:%S')} / Modifier le: #{retriever.updated_at.strftime('%d-%m-%Y %H:%M:%S')}"}= glyphicon('info', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
         - if !@is_specific_mission
-          %span.action-group.ms-1.pointer.trigger_connection{ title: 'Synchronisation', data: { id: retriever.id }}= glyphicon('loop-circular', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
+          %span.action-group.ms-1.pointer.trigger_connection{ title: 'Synchronisation', data: { id: retriever.id }}= glyphicon('loop-circular', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
         - if (@is_budgea && retriever.budgea_id) || @is_specific_mission
-          %span.action-group.ms-1.pointer.edit_connection{ title: 'Edition', data: { retriever: retriever.to_json, banking_provider: (@is_budgea)? 'budgea' : 'internal' } }= glyphicon('pencil', { size: '20', color:'rgba(26, 26, 26, 0.32);'})
-        %span.action-group.ms-1.pointer.delete_connection{ title: 'Suppression', data: { id: retriever.id }}= glyphicon('trash', { size: '20', color:'red'})
+          %span.action-group.ms-1.pointer.edit_connection{ title: 'Edition', data: { retriever: retriever.to_json, banking_provider: (@is_budgea)? 'budgea' : 'internal' } }= glyphicon('pencil', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
+        %span.action-group.ms-1.pointer.delete_connection{ title: 'Suppression', data: { id: retriever.id }}= glyphicon('trash', { size: '14', color:'red'})

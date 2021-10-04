@@ -49,10 +49,6 @@ img {
   height: 10em;
 }
 
-.box-software.selected{
-  border: 1px solid #72AA42;
-}
-
 #csv span{
   font-size: 5rem;
   margin: auto;

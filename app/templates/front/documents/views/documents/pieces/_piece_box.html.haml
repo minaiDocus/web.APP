@@ -19,12 +19,12 @@
         - preseizures = piece.preseizures      
         .box.list
           .row.list-content
-            .w-25
+            .w-25.piece-background
               .stamp-content.pagethumb.text-center
-                .image_piece.w-100
-                  %span.zoom.pdf-viewer.pointer{title: 'Visualiser la pièce', "data-content-url" => piece.get_access_url}
+                .image_piece
+                  %span.zoom.pdf-viewer.pointer.float-start.pt-2{title: 'Visualiser la pièce', "data-content-url" => piece.get_access_url}
                     = glyphicon('magnifying-glass', { size: '20', color: 'background: rgba(26, 26, 26, 0.7)'})
-                  = image_tag document_thumb_url(piece), class: 'w-50'
+                  = image_tag document_thumb_url(piece), class: 'w-50 p-2'
             - if preseizures.size == 1
               .w-75.dynamic_box{ id: "document_#{piece.id}", data: { preseizure_id: preseizures.first.id, type: 'piece' } }
                 %span.form-check.float-end           

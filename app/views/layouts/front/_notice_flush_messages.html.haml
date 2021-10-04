@@ -23,7 +23,7 @@
 
   .notice.notice-internal-success.text-center.text-white.hide
     .alert.alert-success.alert-dismissible.fade.show
-      %span.float-end= glyphicon('circle-check', {size: '16', color: "#0f5132"})
+      %span.float-end= glyphicon('circle-check', {size: '16', color: "white"})
       - flash.each do |name, msg|
         - if msg.present? && name.to_s == 'success'
           .row-fluid.derivationLeft.msg_present
