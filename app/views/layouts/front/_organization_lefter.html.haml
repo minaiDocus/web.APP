@@ -90,7 +90,7 @@
           %span.link_principal{class: (controller_path == 'invoices/main')? 'active' : ''}= t('organizations.invoices')
 
   .content
-    - if @is_customer_layout && !(controller_path == 'customers/main' && action_name == 'index')
+    - if @is_customer_layout && !(controller_path == 'customers/main' && (action_name == 'index' || action_name == 'new'))
       = render partial: 'layouts/front/customer_header'
     - else
       != content_for?(:content) ? yield(:content) : yield

@@ -1,127 +1,128 @@
 = stylesheet_link_tag 'front/organizations/assets/stylesheets/show'
 
-- if @pending_journals.present?
-  .alert
-    %strong Attention!
-    Les journaux suivants sont assignés aux automates de récupération mais ne sont pas configurés :
-    != @pending_journals.map { |j| content_tag(:strong, j) }.join(', ')
-- if @customer.active? && !is_max_number_of_journals_reached?
-  .form-group.derivationRight
-    .text-end
-      - if !@organization.specific_mission && @customer.active? && (@user.leader? || @user.organization_rights_is_customer_journals_management_authorized)
-        %button.btn.btn-light{ 'data-bs-target' => '#copy-existing-journal', 'data-bs-toggle' => 'modal' }
-          %span.me-2= glyphicon('plus', { color: "#72AA42", size: '15'})
-          %span Copier depuis la base existant
+.box
+  - if @pending_journals.present?
+    .alert
+      %strong Attention!
+      Les journaux suivants sont assignés aux automates de récupération mais ne sont pas configurés :
+      != @pending_journals.map { |j| content_tag(:strong, j) }.join(', ')
+  - if @customer.active? && !is_max_number_of_journals_reached?
+    .form-group.derivationRight
+      .text-end
+        - if !@organization.specific_mission && @customer.active? && (@user.leader? || @user.organization_rights_is_customer_journals_management_authorized)
+          %button.btn.btn-light{ 'data-bs-target' => '#copy-existing-journal', 'data-bs-toggle' => 'modal' }
+            %span.me-2= glyphicon('plus', { color: "#72AA42", size: '15'})
+            %span Copier depuis la base existant
 
-      %button.btn.btn-primary.bold.new-journal.new_edit_account_book_type{link: new_organization_customer_journal_path(@organization, @customer)}
-        %span.me-2= glyphicon('plus', { color: "#FFF", size: '15'})
-        %span Nouveau journal
-  %hr
+        %button.btn.btn-primary.bold.new-journal.new_edit_account_book_type{link: new_organization_customer_journal_path(@organization, @customer)}
+          %span.me-2= glyphicon('plus', { color: "#FFF", size: '15'})
+          %span Nouveau journal
+    %hr
 
-.derivationLeft
-  - if @organization.specific_mission
-    %table.table.table-striped
-      %thead
-        %th Code dossier
-        %th Nom dossier
-        %th Nombre d’automates
-        - if (@user.leader? || @user.organization_rights_is_customer_journals_management_authorized) && @customer.active?
-          %th Actions
-      %tbody
-        - @journals.each do |journal|
-          %tr
-            %td= journal.name
-            %td= journal.description
-            %td= journal.retrievers.count
-            - if (@user.leader? || @user.organization_rights_is_customer_journals_management_authorized) && @customer.active?
-              %td.text-end.pointer
-                .action.sub_edit_delete.list-collaborators
-                  %span.glyph= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
-                .sub_menu.text-start.hide
-                  %ul.no-margin.no-padding.regular
-                    %li.edit
-                      = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' ' + t('actions.edit'), '#', link: edit_organization_customer_journal_path(@organization, @customer, journal), class: 'new_edit_account_book_type'
-                - if @user.is_admin || false || journal.is_open_for_modification?
-                  %li.delete.red-label
-                    = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', organization_customer_journal_path(@organization, @customer, journal), method: 'delete', data: { confirm: t('actions.confirm') }
-                    - unless @user.is_admin || false
-                      %i (pour #{distance_of_time_in_words_to_now(journal.created_at + 24.hours)})
-  - else
-    %table.table.table-striped.journals_list
-      %thead
-        %th Nom journal comptable
-        %th Code
-        %th Par défaut ?
-        %th Type de pré-saisie
-        %th Type de compte
-        %th Compte tiers
-        %th Compte de charge/produit
-        %th Nombre d’automates
-        - if (@user.leader? || @user.organization_rights_is_customer_journals_management_authorized) && @customer.active?
-          %th Actions
-      %tbody
-        - @journals.each do |journal|
-          %tr
-            %td= journal.description
-            %td= journal.name
-            %td= journal.is_default ? 'Oui' : 'Non'
-            %td= t("activerecord.models.account_book_type.attributes.entry_type_#{journal.entry_type}")
-            %td
-              - if journal.is_pre_assignment_processable?
-                = journal.default_account? ? 'compte par défaut' : "compte d'attente"
-            %td= journal.meta_account_number
-            %td= journal.meta_charge_account
-            %td= journal.retrievers.count
-            - if (@user.leader? || @user.organization_rights_is_customer_journals_management_authorized) && @customer.active?
-              %td.text-end.pointer
-                .action.sub_edit_delete.list-collaborators
-                  %span.glyph= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
-                .sub_menu.text-start.hide
-                  %ul.no-margin.no-padding.regular
-                    %li.edit
-                      = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' ' + t('actions.edit'), '#', link: edit_organization_customer_journal_path(@organization, @customer, journal), class: 'new_edit_account_book_type'
-                    - if @user.is_admin || false || journal.is_open_for_modification?
-                      %li.delete.red-label
-                        - idocus_params = param_encode({ url: organization_customer_journal_path(@organization, @customer, journal), method: 'delete', confirm: t('actions.confirm'), redirect_to: { url: organization_customer_path(@organization, @customer, tab: 'journals'), method: 'get', html: { target: 'table.journals_list' } } })
-                        = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', '#', idocus: idocus_params, class: 'as_idocus_ajax'
-                        - unless @user.is_admin || false
-                          %i (pour #{distance_of_time_in_words_to_now(journal.created_at + 24.hours)})
+  .derivationLeft
+    - if @organization.specific_mission
+      %table.table.table-striped
+        %thead
+          %th Code dossier
+          %th Nom dossier
+          %th Nombre d’automates
+          - if (@user.leader? || @user.organization_rights_is_customer_journals_management_authorized) && @customer.active?
+            %th Actions
+        %tbody
+          - @journals.each do |journal|
+            %tr
+              %td= journal.name
+              %td= journal.description
+              %td= journal.retrievers.count
+              - if (@user.leader? || @user.organization_rights_is_customer_journals_management_authorized) && @customer.active?
+                %td.text-end.pointer
+                  .action.sub_edit_delete.list-collaborators
+                    %span.glyph= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
+                  .sub_menu.text-start.hide
+                    %ul.no-margin.no-padding.regular
+                      %li.edit
+                        = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' ' + t('actions.edit'), '#', link: edit_organization_customer_journal_path(@organization, @customer, journal), class: 'new_edit_account_book_type'
+                  - if @user.is_admin || false || journal.is_open_for_modification?
+                    %li.delete.red-label
+                      = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', organization_customer_journal_path(@organization, @customer, journal), method: 'delete', data: { confirm: t('actions.confirm') }
+                      - unless @user.is_admin || false
+                        %i (pour #{distance_of_time_in_words_to_now(journal.created_at + 24.hours)})
+    - else
+      %table.table.table-striped.journals_list
+        %thead
+          %th Nom journal comptable
+          %th Code
+          %th Par défaut ?
+          %th Type de pré-saisie
+          %th Type de compte
+          %th Compte tiers
+          %th Compte de charge/produit
+          %th Nombre d’automates
+          - if (@user.leader? || @user.organization_rights_is_customer_journals_management_authorized) && @customer.active?
+            %th Actions
+        %tbody
+          - @journals.each do |journal|
+            %tr
+              %td= journal.description
+              %td= journal.name
+              %td= journal.is_default ? 'Oui' : 'Non'
+              %td= t("activerecord.models.account_book_type.attributes.entry_type_#{journal.entry_type}")
+              %td
+                - if journal.is_pre_assignment_processable?
+                  = journal.default_account? ? 'compte par défaut' : "compte d'attente"
+              %td= journal.meta_account_number
+              %td= journal.meta_charge_account
+              %td= journal.retrievers.count
+              - if (@user.leader? || @user.organization_rights_is_customer_journals_management_authorized) && @customer.active?
+                %td.text-end.pointer
+                  .action.sub_edit_delete.list-collaborators
+                    %span.glyph= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
+                  .sub_menu.text-start.hide
+                    %ul.no-margin.no-padding.regular
+                      %li.edit
+                        = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' ' + t('actions.edit'), '#', link: edit_organization_customer_journal_path(@organization, @customer, journal), class: 'new_edit_account_book_type'
+                      - if @user.is_admin || false || journal.is_open_for_modification?
+                        %li.delete.red-label
+                          - idocus_params = param_encode({ url: organization_customer_journal_path(@organization, @customer, journal), method: 'delete', confirm: t('actions.confirm'), redirect_to: { url: organization_customer_path(@organization, @customer, tab: 'journals'), method: 'get', html: { target: 'table.journals_list' } } })
+                          = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', '#', idocus: idocus_params, class: 'as_idocus_ajax'
+                          - unless @user.is_admin || false
+                            %i (pour #{distance_of_time_in_words_to_now(journal.created_at + 24.hours)})
 
-- unless @organization.specific_mission
-  .form-group.derivationRight
-    .row
-      .col-md-6.text-start.notif-booktype
-        %span Pré-saisie comptable activée pour le dossier :
-        %span.badge{ class: 'bg-' + (@customer.options.is_preassignment_authorized ? 'success fs-origin' : 'danger fs-origin') }
-          = @customer.options.is_preassignment_authorized ? t('yes_value') : t('no_value')
-        - unless @customer.options.is_preassignment_authorized
-          %i.margin1left
-            = link_to '(Activer la pré-saisie comptable)', edit_organization_customer_subscription_path(@organization, @customer)
-      .col-md-6.text-end.notif-booktype
-        = "#{@customer.account_book_types.count}/#{@customer.options.max_number_of_journals} journaux comptables utilisés"
-        - if @customer.options.max_number_of_journals < 10
-          %i.text-muted
-            = link_to '(Augmenter le total autorisé de journaux comptables)', edit_organization_customer_subscription_path(@organization, @customer)
+  - unless @organization.specific_mission
+    .form-group.derivationRight
+      .row
+        .col-md-6.text-start.notif-booktype
+          %span Pré-saisie comptable activée pour le dossier :
+          %span.badge{ class: 'bg-' + (@customer.options.is_preassignment_authorized ? 'success fs-origin' : 'danger fs-origin') }
+            = @customer.options.is_preassignment_authorized ? t('yes_value') : t('no_value')
+          - unless @customer.options.is_preassignment_authorized
+            %i.margin1left
+              = link_to '(Activer la pré-saisie comptable)', edit_organization_customer_subscription_path(@organization, @customer)
+        .col-md-6.text-end.notif-booktype
+          = "#{@customer.account_book_types.count}/#{@customer.options.max_number_of_journals} journaux comptables utilisés"
+          - if @customer.options.max_number_of_journals < 10
+            %i.text-muted
+              = link_to '(Augmenter le total autorisé de journaux comptables)', edit_organization_customer_subscription_path(@organization, @customer)
 
-- if !@organization.specific_mission && @customer.active? && (@user.leader? || @user.organization_rights_is_customer_journals_management_authorized)
-  .modal#copy-existing-journal
-    .modal-dialog
-      .modal-content
-        .modal-header
-          %h5.modal-title.bold Copie depuis la base existant
-          %button.btn-close{ 'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button' }
-        .modal-body
-          - journal_names = @journals.map{|journal| journal.name}
-          - journals = @organization.account_book_types.where.not(name: journal_names).order(is_default: :desc, name: :asc)
-          - if @customer.account_book_types.count < @customer.options.max_number_of_journals && journals.any?
-            = form_tag copy_organization_customer_journals_path(@organization, @customer), method: 'POST', class: 'form-horizontal', id: 'copy_account_book_type_form' do
-              .form-group
-                %label.semibold Copier les journaux comptables depuis la base existante
-                = select_tag "journal_ids[]", options_from_collection_for_select(journals, "id", "name"), multiple: true, class: 'form-control', id: 'copy-journals-into-customer'
-        .modal-footer
-          %button.btn.btn-light.cancel{ 'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button' } Annuler
-          - idocus_params = param_encode({ url: '#url', form: { id: 'copy_account_book_type_form', dump_action: true }, modal: { id: 'copy-existing-journal' }, redirect_to: { url: organization_customer_path(@organization, @customer, tab: 'journals'), method: 'get', html: { target: 'table.journals_list' } } })
-          %button.btn.btn-primary.bold.copy_account_book_type_btn.as_idocus_ajax{ type: 'button', disabled: 'disabled', idocus: idocus_params } Copier
+  - if !@organization.specific_mission && @customer.active? && (@user.leader? || @user.organization_rights_is_customer_journals_management_authorized)
+    .modal#copy-existing-journal
+      .modal-dialog
+        .modal-content
+          .modal-header
+            %h5.modal-title.bold Copie depuis la base existant
+            %button.btn-close{ 'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button' }
+          .modal-body
+            - journal_names = @journals.map{|journal| journal.name}
+            - journals = @organization.account_book_types.where.not(name: journal_names).order(is_default: :desc, name: :asc)
+            - if @customer.account_book_types.count < @customer.options.max_number_of_journals && journals.any?
+              = form_tag copy_organization_customer_journals_path(@organization, @customer), method: 'POST', class: 'form-horizontal', id: 'copy_account_book_type_form' do
+                .form-group
+                  %label.semibold Copier les journaux comptables depuis la base existante
+                  = select_tag "journal_ids[]", options_from_collection_for_select(journals, "id", "name"), multiple: true, class: 'form-control', id: 'copy-journals-into-customer'
+          .modal-footer
+            %button.btn.btn-light.cancel{ 'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button' } Annuler
+            - idocus_params = param_encode({ url: '#url', form: { id: 'copy_account_book_type_form', dump_action: true }, modal: { id: 'copy-existing-journal' }, redirect_to: { url: organization_customer_path(@organization, @customer, tab: 'journals'), method: 'get', html: { target: 'table.journals_list' } } })
+            %button.btn.btn-primary.bold.copy_account_book_type_btn.as_idocus_ajax{ type: 'button', disabled: 'disabled', idocus: idocus_params } Copier
 
 = render file: Rails.root.join('app/templates/front/journals/views/journals/main/_modal.html.haml')
 
