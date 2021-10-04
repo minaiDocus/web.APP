@@ -309,12 +309,11 @@ function iDocus_dynamic_modals(){
 
           let last_content = $('#last_place_of_content');
           if(last_content.length > 0){
-            last_content.replaceWith( modal.find('.modal-body').html() );
-
             let content_html = ''
             try{ content_html = $(params.url); }catch(e){}
             if( content_html.length > 0 ){ content_html.addClass('hide'); }
 
+            last_content.replaceWith( modal.find('.modal-body').html() );
             modal.find('.modal-body').html('');
           }
         });
