@@ -15,4 +15,25 @@ jQuery(function () {
       }
     }
   });
+
+
+  /* SPECIAL HEADER CUSTOMER LINKS */
+    $('a.head_customer_link').unbind('click').bind('click', function(e){
+      e.preventDefault();
+      let url    = $(this).attr('href');
+      let app    = new ApplicationJS();
+
+      $('a.head_customer_link').removeClass('active');
+      $(this).addClass('active');
+
+      let ajax_params = {
+                          url: url,
+                          type: 'GET',
+                          dataType: 'html',
+                          target: '.customer_content'
+                        };
+
+      if(url != '' && url != '#' && url != undefined && url != null)
+          app.sendRequest(ajax_params);
+    });
 });
