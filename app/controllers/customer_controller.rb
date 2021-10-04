@@ -25,7 +25,7 @@ class CustomerController < OrganizationController
     if action_name.in?(%w[info new create]) && !(@user.leader? || @user.groups.any?)
       authorized = false
     end
-    if action_name.in?(%w[edit_period_options update_period_options]) && !@customer.authorized_upload?
+    if action_name.in?(%w[edit_setting_options update_setting_options]) && !@customer.authorized_upload?
       authorized = false
     end
     if action_name.in?(%w[edit_exact_online update_exact_online]) && !@organization.try(:exact_online).try(:used?)

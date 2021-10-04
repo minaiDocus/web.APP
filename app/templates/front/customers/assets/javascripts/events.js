@@ -70,12 +70,6 @@ function bind_customer_events() {
   });
 
 
-  $('#ibizabox_tab').unbind('click.show_ibizabox').bind('click.show_ibizabox', function(e) {
-    e.stopPropagation();
-    $('#ibizabox_folders_list_tab').addClass('show active');
-    $('#ibizabox_folders_list').addClass('show active');
-  });
-
   $('form.subscription_option_form .valid_subscription_edit, .submit_customer').unbind('click').bind('click', function(e){
     e.preventDefault();
 

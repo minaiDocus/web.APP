@@ -182,15 +182,12 @@ class Customers::MainController < CustomerController
           MyUnisoftLib::Setup.new({organization: @organization, customer: @customer, columns: {api_token: api_token, remove_customer: remove_customer, auto_deliver: auto_deliver}}).execute
 
         flash[:success] = 'Modifié avec succès'
-
-        redirect_to organization_customer_softwares_path(@organization, @customer, software_name: 'my_unisoft')
-      else
-        # TODO ... REMOVE STEP
       end
     else
       flash[:error] = 'Impossible de modifier'
-      render 'edit'
     end
+
+    redirect_to organization_customer_softwares_path(@organization, @customer, software_name: 'my_unisoft')
   end
 
 
@@ -214,7 +211,6 @@ class Customers::MainController < CustomerController
     end
 
     redirect_to edit_setting_options_organization_customer_path(@organization, @customer)
-
   end
 
   # GET /account/organizations/:organization_id/customers/:id/edit_knowings_options
@@ -227,8 +223,6 @@ class Customers::MainController < CustomerController
         flash[:success] = 'Modifié avec succès.'
 
         redirect_to organization_customer_path(@organization, @customer, tab: 'ged')
-      else
-        # TODO ... REMOVE STEP
       end
     else
       render 'edit_knowings_options'

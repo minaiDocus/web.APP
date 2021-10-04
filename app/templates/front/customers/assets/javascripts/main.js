@@ -402,6 +402,8 @@ class Customer{
       }
 
       this.account_close_confirm_modal.modal('show');
+
+      this.rebind_customer_all_events();
     });
   }
 
@@ -417,11 +419,11 @@ class Customer{
     }
 
     this.applicationJS.sendRequest(params).then((response)=>{
-      $('#customer-content').html($(response).find('#customer-content').html());
+      $('.heading_customer').html($(response).find('.heading_customer').html());
       this.account_close_confirm_modal.modal('hide');
-      ApplicationJS.set_checkbox_radio();
+      this.rebind_customer_all_events();
     }).catch((response)=>{
-      
+
     });
   }
 
@@ -468,7 +470,8 @@ class Customer{
       $(`.search-content input[name='user_contains[text]']#search_input`).val(search_text);
 
       this.action_locker = false;
-      ApplicationJS.set_checkbox_radio();
+ 
+      this.rebind_customer_all_events();
     })
     .catch(()=>{ this.action_locker = false; });
   }
