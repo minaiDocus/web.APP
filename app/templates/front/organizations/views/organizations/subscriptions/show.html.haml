@@ -40,7 +40,7 @@
       - idocus_params = param_encode({ url: select_options_organization_organization_subscription_path(@organization), method: 'GET', html: { target: '#organization_subscriptions', target_dest: '#modal-body-propagation' } })
       %button.btn.btn-primary.as_idocus_ajax{ idocus: idocus_params, 'data-bs-target' => '#subscriptions_propagation', 'data-bs-toggle' => 'modal', :type => 'button' } Propager les quotas
 
-.modal#subscriptions_edition 
+.modal.fade.in#subscriptions_edition 
   .modal-dialog{ style: 'min-width: 800px'}
     .modal-content
       .modal-header
@@ -53,7 +53,7 @@
           - idocus_params = param_encode({ url: "#url", method: 'patch', form:{ id: 'edit_subscription_form', dump_action: true }, modal: { id: 'subscriptions_edition' }, redirect_to: { url: organization_organization_subscription_path(@organization), method: 'GET', html: { target: '#subscripiton_organization' } } })
           %button.btn.btn-primary.valid.as_idocus_ajax{ idocus: idocus_params } Valider
 
-.modal#subscriptions_propagation 
+.modal.fade.in#subscriptions_propagation 
   .modal-dialog{ style: 'min-width: 1024px'}
     .modal-content
       .modal-header

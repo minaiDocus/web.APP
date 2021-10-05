@@ -1,4 +1,4 @@
-.modal#change-password
+.modal.fade.in#change-password
   .modal-dialog
     .modal-content
       .modal-header
@@ -24,7 +24,7 @@
         - idoc_params = param_encode({ url: '/profiles', method: 'put', form: { id: 'edit_user' }, modal: { id: 'change-password' } })
         %button.as_idocus_ajax.btn.btn-primary.semibold{ idocus: idoc_params } Valider
 
-.modal#external-file-storage
+.modal.fade.in#external-file-storage
   .modal-dialog{ style: 'max-width: 1280px' }
     .modal-content
       .modal-header

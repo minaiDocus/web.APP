@@ -27,7 +27,7 @@
             = link_to 'Supprimer', account_sharings_delete_path(account_sharing), method: :delete, data: { confirm: "Êtes-vous sûr de ne plus vouloir accéder au dossier \"#{account_sharing.account.info}\" ?" }
             &nbsp;
             %button.btn.btn-light-secondary{type:'button', :data => { bs: { :toggle => 'modal', :target => '#email_document_info'} } } Détails
-            .modal.fade{id: 'email_document_info', tabindex: '-1', role: 'dialog', aria: {labelledby: 'title_info', hidden: 'true'}}
+            .modal.fade.in{id: 'email_document_info', tabindex: '-1', role: 'dialog', aria: {labelledby: 'title_info', hidden: 'true'}}
               .modal-dialog{role: 'document', style:"max-width: 900px"}
                 .modal-content
                   #emailed_documents

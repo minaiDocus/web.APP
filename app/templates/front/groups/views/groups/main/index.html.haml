@@ -59,7 +59,7 @@
                   %span.badge.badge-secondary.badge-sm.semibold= group.customers.count
 
 
-  .modal#add_edit_group
+  .modal.fade.in#add_edit_group
     .modal-dialog
       .modal-content
         .modal-header
@@ -72,7 +72,7 @@
           %button.btn.btn-primary.bold.create_update{ type: :button } Ajouter
 
 
-  .modal#show_group_details
+  .modal.fade.in#show_group_details
     .modal-dialog
       .modal-content
         .modal-header
@@ -83,7 +83,7 @@
         .modal-footer
           %button.btn.btn-default{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'} Fermer
 
-  .modal#search_group_filter
+  .modal.fade.in#search_group_filter
     .modal-dialog
       .modal-content
         .modal-header

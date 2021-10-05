@@ -84,7 +84,7 @@
               = submit_tag t('filters.action'), class: 'btn btn-primary'
               = link_to glyphicon('x'), bank_settings_path({account_id: @account.try(:id)}), class: 'btn btn-light'
 
-  .modal.fade{id: 'create_bank_account', tabindex: '-1', 'data-focus-on' => 'input:first', role: 'dialog', aria: {labelledby: 'title_info', hidden: 'true'}}
+  .modal.fade.in{id: 'create_bank_account', tabindex: '-1', 'data-focus-on' => 'input:first', role: 'dialog', aria: {labelledby: 'title_info', hidden: 'true'}}
     .modal-dialog.modal-dialog-centered{role: 'document'}
       .modal-content
         .modal-header.text-center{style: 'background-color: #eaeaea; box-shadow: 0px 6px 18px -13px rgba(0, 0, 0, 0.75);'}

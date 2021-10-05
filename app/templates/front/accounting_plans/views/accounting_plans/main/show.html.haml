@@ -140,7 +140,7 @@
                     %td= customer.code
       .tab-pane.box.no-margin#vat_accounts{ "role" => "tabpanel", "aria-labelledby" => "vat_accounts-tab" }
     
-  .modal#edit-provider-customer
+  .modal.fade.in#edit-provider-customer
     .modal-dialog
       .modal-content
         .modal-header
@@ -151,7 +151,7 @@
             %p Loading ...        
 
   - if @params_fec.present?
-    #import_dialog.modal
+    #import_dialog.modal.fade.in
       .modal-dialog
         .modal-content
           .modal-header

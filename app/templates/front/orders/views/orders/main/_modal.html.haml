@@ -1,5 +1,5 @@
 - validation_param = param_encode({ url: "/organizations/#{@organization.id}/customers/#{@customer.id}/orders", method: 'post', form: { id: 'new_edit_order_customer', dump_action: true }, redirect_to: { url: organization_customer_orders_path(@organization, @customer), method: 'get', html: { target: '#orders_list table' } }, modal: { id: 'new_edit_order' }, after_send: 'rebind_order_events'})
-.modal#new_edit_order
+.modal.fade.in#new_edit_order
   .modal-dialog{ style: 'min-width: 1024px' }
     .modal-content
       .modal-header
@@ -14,7 +14,7 @@
           %button.btn.btn-primary.bold.valid_new_edit_order.as_idocus_ajax{ type: :button, idocus: validation_param} Ajouter
 
 - validation_param = param_encode({ url: generate_organization_file_sending_kit_path(@organization), method: 'post', form: { id: 'fsk_paper_set_orders' }, modal: { id: 'select_for_orders', close_after_success: false, close_after_error: false }, redirect_to: { url: organization_customer_orders_path(@organization, @customer), method: 'get', html: { target: '#orders_list table' }, redirect_to: { url: select_organization_file_sending_kit_path(@organization, order_customer_id: @customer.id), method: 'get', html: { target: '.file_sending_kits_select', target_dest: '#select_for_orders.modal .modal-body' }, after_send: 'select_for_multiple_result' } } })
-.modal.fade#select_for_orders
+.modal.fade.in#select_for_orders
   .modal-dialog{:role => 'document'}
     .modal-content
       .modal-header
@@ -27,7 +27,7 @@
         = link_to t('actions.edit'), '#', link: edit_organization_file_sending_kit_path(@organization), class: 'btn btn-dark bold edit-file-sending-kits' if current_user.is_developer
         %input.btn.btn-primary.bold.as_idocus_ajax{:type => 'submit', name: 'commit', value: 'Générer', 'data-disable-with' => 'Générer', idocus: validation_param}
 
-.modal.fade#file_sending_kits_edit
+.modal.fade.in#file_sending_kits_edit
   .modal-dialog{:role => 'document'}
     .modal-content
       .modal-header

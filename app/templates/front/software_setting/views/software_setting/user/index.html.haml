@@ -394,7 +394,7 @@
                         %button.btn.btn-primary#edit_customer_csv_descriptor{ type: 'button', data: { id: @customer.id, organization_id: @organization.id } } Modifier le format propre au dossier
                       - else
                         %button.btn.btn-primary#edit_customer_csv_descriptor{ type: 'button', data: { id: @customer.id, organization_id: @organization.id } } Créer un format propre au dossier
-      .modal#csv_descriptor_modal 
+      .modal.fade.in#csv_descriptor_modal 
         .modal-dialog
           .modal-content
             .modal-header

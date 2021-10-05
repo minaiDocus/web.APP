@@ -1,4 +1,4 @@
-#add-document.modal.fade{'aria-hidden' => 'true', :role => 'dialog', :tabindex => '-1'}
+#add-document.modal.fade.in{'aria-hidden' => 'true', :role => 'dialog', :tabindex => '-1'}
   .modal-dialog
     .modal-content
       %form#fileupload{ action: '/documents/uploader', method: 'POST', enctype: 'multipart/form-data', data: { params: file_upload_params.to_json } }

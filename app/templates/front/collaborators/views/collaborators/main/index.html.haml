@@ -59,7 +59,7 @@
   .box-group-content.derivationLeft
     = render file: Rails.root.join('app/templates/front/groups/views/groups/main/index.html.haml')
   
-  .modal#add_edit_collaborator
+  .modal.fade.in#add_edit_collaborator
     .modal-dialog
       .modal-content
         .modal-header
@@ -73,7 +73,7 @@
           %button.btn.btn-primary.bold.create_update{ type: :button } Ajouter
 
 
-  .modal#search_collaborator_filter
+  .modal.fade.in#search_collaborator_filter
     .modal-dialog
       .modal-content
         .modal-header

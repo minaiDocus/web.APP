@@ -55,7 +55,7 @@
           
   .mb-5
 
-.modal.fade#select_for_orders
+.modal.fade.in#select_for_orders
   .modal-dialog{:role => 'document'}
     .modal-content
       .modal-header
@@ -74,7 +74,7 @@
         - else
           %input.btn.btn-primary.valid-paper-set-order{:type => 'submit', name: 'commit', value: 'Commander', id: 'valid-paper-set-order', 'data-disable-with' => 'Commander'}
 
-.modal.fade#create_order_multiple
+.modal.fade.in#create_order_multiple
   .modal-dialog{:role => 'document', style: 'min-width: 1024px'}
     .modal-content
       .modal-header
@@ -87,7 +87,7 @@
         %input.btn.btn-primary.create-paper-set-order-multiple{:type => 'submit', name: 'commit', value: 'Commander', id: 'create-paper-set-order-multiple', 'data-disable-with' => 'Commander', class: "btn btn-primary#{' valid-manual-paper-set-order' if manual_paper_set_order}"}
 
 
-.modal.fade#add-new-paper-set-order
+.modal.fade.in#add-new-paper-set-order
   .modal-dialog{:role => 'document'}
     .modal-content
       .modal-header
@@ -99,7 +99,7 @@
         %button.btn.btn-light.semibold.cancel{ 'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', type: :button } Annuler
         %input.btn.btn-primary.add-paper-set-order{:type => 'submit', name: 'commit', value: 'Commander', id: 'add-paper-set-order', 'data-disable-with' => 'Commander'}
 
-.modal.fade#file_sending_kits_edit
+.modal.fade.in#file_sending_kits_edit
   .modal-dialog{:role => 'document'}
     .modal-content
       .modal-header
@@ -112,7 +112,7 @@
         %button.btn.btn-primary.bold.validate_file_sending_kits_edit{ type: :button} Valider les modifications
 
 
-.modal#edit-kit-box
+.modal.fade.in#edit-kit-box
   .modal-dialog
     .modal-content
       .modal-header

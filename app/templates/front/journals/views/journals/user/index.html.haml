@@ -105,7 +105,7 @@
               = link_to '(Augmenter le total autorisé de journaux comptables)', edit_organization_customer_subscription_path(@organization, @customer)
 
   - if !@organization.specific_mission && @customer.active? && (@user.leader? || @user.organization_rights_is_customer_journals_management_authorized)
-    .modal#copy-existing-journal
+    .modal.fade.in#copy-existing-journal
       .modal-dialog
         .modal-content
           .modal-header
