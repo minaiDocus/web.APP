@@ -52,9 +52,9 @@
 /*********** JQuery mixing *********************/
   $.fn.asDateRange = function(option={}){
     $.each(this, function(e){
-        let el = $(this);
+      let el = $(this);
 
-        if( !el.hasClass('mixed-to-date-range') ){
+      if( !el.hasClass('for_main_modal') && !el.hasClass('mixed-to-date-range') ){
         let initial_value = el.val();
         let final_value   = '';
 
@@ -81,7 +81,7 @@
   }
 
   $.fn.asMultiSelect = function(options={}){
-    if( !this.hasClass('mixed-to-multi') ){
+    if( !this.hasClass('for_main_modal') && !this.hasClass('mixed-to-multi') ){
       this.searchableOptionList(options);
       this.addClass('mixed-to-multi');
     }
@@ -255,11 +255,11 @@ class ApplicationJS {
     }
     else if(page)
     {
-      html = $(page).find(`${used_alert} .message-alert`).html();
+      html = $(page).find(`${used_alert} .message-alert`).html() || "Une erreur inattendue s'est produite. Veuillez réessayer ultérieurement";
       is_present = $(page).find(`${used_alert} .msg_present`);
     }
 
-    if(is_present.length > 0){
+    if(is_present.length > 0 && html != '' && html != undefined && html != null){
       if(VARIABLES.get('rails_env') != 'production')
         $(`${used_alert} .message-alert`).html(html);
 
@@ -358,11 +358,8 @@ class ApplicationJS {
           if(success)
             success(result);
 
-          window.setTimeout((e)=>{
-            if(params.no_loading !== true){
-              if( !($('div.loading_box').hasClass('force')) )
-                $('div.loading_box').addClass('hide');
-            }
+          window.setTimeout((e)=>{ 
+            $('div.loading_box').addClass('hide');
             bind_globals_events();
           }, 1000);
         }

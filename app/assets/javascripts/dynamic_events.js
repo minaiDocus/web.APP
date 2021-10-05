@@ -296,6 +296,9 @@ function iDocus_dynamic_modals(){
 
         modal.modal('show');
 
+        $('.for_main_modal').removeClass('for_main_modal');
+        elements_initializer();
+
         window.setTimeout(()=>{ 
           if(params.after_show)
             AppEmit(params.after_show, { obj: element });
@@ -311,7 +314,9 @@ function iDocus_dynamic_modals(){
           if(last_content.length > 0){
             let content_html = ''
             try{ content_html = $(params.url); }catch(e){}
-            if( content_html.length > 0 ){ content_html.addClass('hide'); }
+            if( content_html.length > 0 ){
+              content_html.addClass('hide');
+            }
 
             last_content.replaceWith( modal.find('.modal-body').html() );
             modal.find('.modal-body').html('');
