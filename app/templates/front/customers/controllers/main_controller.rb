@@ -97,11 +97,11 @@ class Customers::MainController < CustomerController
 
       if Subscription::UpdateCustomer.new(@customer, user_params).execute
         flash[:success] = 'Modifié avec succès'
-
-        redirect_to organization_customer_path(@organization, @customer)
       else
-        redirect_to organization_customer_path(@organization, @customer, tab: 'information')
+        flash[:error] = "Impossible de modifier: #{@customer.errors.messages.to_s}"
       end
+
+      redirect_to organization_customer_path(@organization, @customer)
     end
   end
 
