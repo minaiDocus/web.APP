@@ -12,8 +12,7 @@
         Kit courrier
         %span.badge.badge-secondary.badge-sm.regular= @orders_count
     .col-md-1.text-end.no-padding
-      - modal_params = param_encode({ url: '#paper_set_order_filter', title: "Filtrer Kit courrier", after_show: 'rebind_paper_set_order_events' })
-      %button.btn.btn-light.semibold.as_idocus_modal{ idocus: modal_params  }
+      %button.btn.btn-light.semibold.open_paper_set_order_filter
         %span.me-2 Filtrer
         %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
     .col-md-2.text-end
@@ -49,10 +48,10 @@
                 %span= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
               .sub_menu.text-start.hide
                 %ul.no-margin.no-padding.regular
-                  %li.add
+                  %li.new.open_new_edit
                     = link_to glyphicon('plus', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Recommander', new_organization_paper_set_order_path(@organization, template: order), title: 'Recommander le même kit'
                   - if order.pending? && (Time.now < order.created_at + 24.hours)
-                    %li.edit.edit-paper-set-order
+                    %li.edit.open_new_edit
                       = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Éditer', edit_organization_paper_set_order_path(@organization, order), title: 'Éditer'
                     %li.delete.red-label
                       = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', organization_paper_set_order_path(@organization, order), method: :delete, data: { confirm: t('actions.confirm') }, title: 'Supprimer'
