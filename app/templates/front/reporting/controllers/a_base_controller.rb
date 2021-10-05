@@ -23,7 +23,7 @@ class Reporting::ABaseController < FrontController #Must be loaded first that's 
 
     # @date_range    = CustomUtils.parse_date_range_of(params[:date_range])
     # @date_range    = ['2021-07-01 00:00:00', '2021-08-01 23:59:59'] #For test
-    @date_range    = [1.month.ago.strftime('%Y-%m-%d 00:00:00'), Time.now.strftime('%Y-%m-%d 23:59:59')] #For now
+    @date_range    = [15.days.ago.strftime('%Y-%m-%d 00:00:00'), Time.now.strftime('%Y-%m-%d 23:59:59')] #For now
 
     if params[:ids].present? && params[:ids] != "null"
       if params[:ids].is_a?(Array)

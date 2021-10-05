@@ -6,8 +6,10 @@ class News::MainController < FrontController
 
   def index
     @news_present = @user.news_read_at ? News.published.where('published_at > ?', @user.news_read_at).exists? : News.exists?
-    @news = ::News.published.where(target_audience: target_audience).order(created_at: :desc).limit(5)
-    @user.update_column(:news_read_at, Time.now)
+    if @news_present
+      @news = ::News.published.where(target_audience: target_audience).order(created_at: :desc).limit(5)
+      @user.update_column(:news_read_at, Time.now)
+    end
 
     render partial: 'index'
   end
