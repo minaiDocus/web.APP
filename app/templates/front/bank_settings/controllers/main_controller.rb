@@ -79,7 +79,7 @@ class BankSettings::MainController < RetrieverController
   end
 
   def bank_setting_params
-    params.require(:bank_account).permit(:journal, :currency, :accounting_number, :foreign_journal, :temporary_account, :start_date, :lock_old_operation, :permitted_late_days)
+    params.require(:bank_account).permit(:number, :journal, :currency, :accounting_number, :foreign_journal, :temporary_account, :start_date, :lock_old_operation, :permitted_late_days, :ebics_enabled_starting)
   end
 
   def verif_account
@@ -106,6 +106,7 @@ class BankSettings::MainController < RetrieverController
       :lock_old_operation,
       :permitted_late_days,
       :api_name,
+      :ebics_enabled_starting,
       :original_currency => [:id, :symbol, :prefix, :crypto, :precision, :marketcap, :datetime, :name])
   end
 

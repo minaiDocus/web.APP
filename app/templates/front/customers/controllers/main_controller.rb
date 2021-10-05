@@ -300,8 +300,9 @@ class Customers::MainController < CustomerController
       { ibiza_attributes: %i[id is_used ibiza_id auto_deliver is_analysis_activated is_analysis_to_validate] },
       { exact_online_attributes: %i[id is_used auto_deliver client_id client_secret] },
       { my_unisoft_attributes: %i[id is_used auto_deliver encrypted_api_token check_api_token] },
-      { coala_attributes: %i[id is_used auto_deliver] },
+      { coala_attributes: %i[id is_used auto_deliver internal_id] },
       { fec_agiris_attributes: %i[id is_used auto_deliver] },
+      { fec_acd_attributes: %i[id is_used auto_deliver] },
       { cegid_attributes: %i[id is_used auto_deliver] },
       { quadratus_attributes: %i[id is_used auto_deliver] },
       { csv_descriptor_attributes: %i[id is_used auto_deliver use_own_csv_descriptor_format] }

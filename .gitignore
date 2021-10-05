@@ -23,6 +23,7 @@ config/deploy/sandbox.rbs
 config/api_authentication.yml
 config/bearer.yml
 config/budgea.yml
+/config/cedricom.yml
 config/database.yml
 config/dematbox.yml
 config/dematbox_service_api.yml

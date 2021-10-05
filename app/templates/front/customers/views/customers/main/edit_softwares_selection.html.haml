@@ -39,6 +39,10 @@
                       %td
                         = hidden_field_tag :part, 'coala'
                         = f.check_box :is_used, style: "position:unset"
+                    %tr
+                      %td Identifiant unique du dossier
+                      %td= f.input :internal_id, as: 'string', label: false
+
                   -if software.to_s == 'quadratus' && @organization.try(:quadratus).try(:used?)
                     %tr
                       %td Ce dossier utilise Quadratus ?

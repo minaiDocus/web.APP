@@ -213,3 +213,17 @@ Bridge::RefreshAllUsersItemsWorker:
 Bridge::RefreshAllUsersTransactionsWorker:
   queue: bridge
   cron: 0 */2 * * *
+
+## Cedricom ##
+
+Cedricom::GetListWorker:
+  queue: cedricom
+  cron: 0 12 * * *
+
+Cedricom::FetchReceptionstWorker:
+  queue: cedricom
+  cron: 0 13 * * *
+
+Cedricom::ImportTransactionsWorker:
+  queue: cedricom
+  cron: 0 14 * * *

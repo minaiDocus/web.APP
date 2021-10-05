@@ -34,7 +34,9 @@ set :linked_files, fetch(:linked_files, []).push(
   'config/api_authentication.yml',
   'config/jefacture.yml',
   'config/bridge.yml',
-  'config/my_unisoft.yml'
+  'config/my_unisoft.yml',
+  'config/cedricom.yml'
+
 )
 
 set :slack_url, 'https://hooks.slack.com/services/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'
