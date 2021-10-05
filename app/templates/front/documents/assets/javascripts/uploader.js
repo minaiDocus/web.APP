@@ -66,7 +66,8 @@ class DocumentsUploader{
           result.forEach((opt)=>{ options += `<option compta-processable="${opt[2]}" value="${opt[1]}">${opt[0]}</option>` });
           me.input_journal.html(options);
 
-          me.input_journal.unbind('change').bind('change', function(e, self){
+          me.input_journal.unbind('change').bind('change', (e)=>{
+            let self = e.target;
             me.fetch_analytics();
 
             let option_processable = $(self).find('option[value="'+$(self).val()+'"]').attr('compta-processable');
