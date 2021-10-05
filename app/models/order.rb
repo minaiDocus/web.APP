@@ -175,17 +175,13 @@ class Order < ApplicationRecord
       user_ids = User.where("code LIKE ?", "%#{contains[:user_code]}%").pluck(:id)
     end
 
-    if contains[:created_at]
-      contains[:created_at].each do |operator, value|
-        orders = orders.where("created_at #{operator} ?", value) if operator.in?(['>=', '<='])
-      end
-    end
-
     if contains[:price_in_cents_wo_vat]
       contains[:price_in_cents_wo_vat].each do |operator, value|
         orders = orders.where("price_in_cents_wo_vat #{operator} ?", value) if operator.in?(['>=', '<='])
       end
     end
+
+    orders = orders.where("created_at BETWEEN '#{CustomUtils.parse_date_range_of(contains[:created_at]).join("' AND '")}'") if contains[:created_at].present?
 
     orders = orders.where(type:    contains[:type])  if contains[:type].present?
     orders = orders.where(state:   contains[:state]) if contains[:state].present?
@@ -212,11 +208,7 @@ class Order < ApplicationRecord
       _ids = PaperProcess.kits.where("tracking_number LIKE ?", "%#{contains[:tracking_number]}%").pluck(:order_id)
     end
 
-    if contains[:created_at]
-      contains[:created_at].each do |operator, value|
-        collection = collection.where("orders.created_at #{operator} ?", value) if operator.in?(['>=', '<='])
-      end
-    end
+    collection = collection.where("orders.created_at BETWEEN '#{CustomUtils.parse_date_range_of(contains[:created_at]).join("' AND '")}'") if contains[:created_at].present?
 
     collection = collection.where(id: _ids)                  if _ids.any?
     collection = collection.where(state:   contains[:state]) if contains[:state].present?
