@@ -2,7 +2,7 @@
   .row.derivationLeft
     .col-md-11.text-start
       %h1.bold Mes pieces
-    .col-md-1.text-start.p-1
+    .col-md-1.text-start.p-1.filter_button
       %button.btn.btn-light.semibold.piece-errors-filter.w-100{ disabled: false }
         %span.me-2 Filtrer
         %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
@@ -19,7 +19,7 @@
         %button.semibold.nav-link#duplicated-pre-assignment-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#duplicated-pre-assignment", type: :button, "role" => "tab", "aria-controls" => "duplicated-pre-assignment", "aria-selected" => "false"} 
           Ecritures comptables en doublon
           %span.ms-1.badge.badge-secondary.regular#total-duplicated-pre-assignment 0
-      %li.nav-item.no-margin{ "role" => "presentation" }
+      %li.nav-item.no-margin.no-filter{ "role" => "presentation" }
         %button.semibold.nav-link#failed-delivery-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#failed-delivery", type: :button, "role" => "tab", "aria-controls" => "failed-delivery", "aria-selected" => "false"} 
           Erreur livraison d'écritures comptables
           %span.ms-1.badge.badge-secondary.regular#total-failed-delivery 0

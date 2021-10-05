@@ -1,4 +1,11 @@
 function bind_all_events(){
+  $('ul.nav.nav-tabs li.nav-item').unbind('click.filter').bind('click.filter', function(e){
+    if( $(this).hasClass('no-filter') )
+      $('.filter_button').addClass('hide');
+    else
+      $('.filter_button').removeClass('hide')
+  })
+
   $('.piece-errors-filter').unbind('click')
   $(".piece-errors-filter").bind('click',function(e) {
     e.stopPropagation();
