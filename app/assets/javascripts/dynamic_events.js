@@ -296,9 +296,6 @@ function iDocus_dynamic_modals(){
 
         modal.modal('show');
 
-        $('.for_main_modal').removeClass('for_main_modal');
-        elements_initializer();
-
         window.setTimeout(()=>{ 
           if(params.after_show)
             AppEmit(params.after_show, { obj: element });

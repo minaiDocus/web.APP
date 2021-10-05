@@ -54,7 +54,7 @@
     $.each(this, function(e){
       let el = $(this);
 
-      if( !el.hasClass('for_main_modal') && !el.hasClass('mixed-to-date-range') ){
+      if( !el.hasClass('mixed-to-date-range') ){
         let initial_value = el.val();
         let final_value   = '';
 
@@ -81,7 +81,7 @@
   }
 
   $.fn.asMultiSelect = function(options={}){
-    if( !this.hasClass('for_main_modal') && !this.hasClass('mixed-to-multi') ){
+    if( !this.hasClass('mixed-to-multi') ){
       this.searchableOptionList(options);
       this.addClass('mixed-to-multi');
     }
