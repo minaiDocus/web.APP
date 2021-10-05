@@ -255,12 +255,15 @@ class ApplicationJS {
     }
     else if(page)
     {
-      html = $(page).find(`${used_alert} .message-alert`).html() || "Une erreur inattendue s'est produite. Veuillez réessayer ultérieurement";
+      html = $(page).find(`${used_alert} .message-alert`).html();
       is_present = $(page).find(`${used_alert} .msg_present`);
     }
 
-    if(is_present.length > 0 && html != '' && html != undefined && html != null){
-      if(VARIABLES.get('rails_env') != 'production')
+    if(html == '' || html == undefined || html == null)
+      html = "Une erreur inattendue s'est produite. Veuillez réessayer ultérieurement";
+
+    if(is_present.length > 0){
+      if(VARIABLES.get('rails_env') != 'production' || !danger)
         $(`${used_alert} .message-alert`).html(html);
 
       $('#idocus_notifications_messages .notice-internal-error').slideDown('fast');

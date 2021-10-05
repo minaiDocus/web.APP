@@ -1,6 +1,6 @@
 - @pieces.each_slice(4) do |pieces|
   // -- grid type
-  .box.grid{ class: @user.pre_assignement_displayed? ? 'hide' : '' } 
+  .box.grid.animatedChild.toLeft{ class: @user.pre_assignement_displayed? ? 'hide' : '' } 
     .row.grid-content
       - pieces.each do |piece|
         .col-md-3
@@ -17,7 +17,7 @@
     - pieces.each do |piece|
       .preseizures_box
         - preseizures = piece.preseizures      
-        .box.list
+        .box.list.animatedChild.toLeft
           .row.list-content
             .w-25.piece-background
               .stamp-content.pagethumb.text-center.h-100
@@ -50,7 +50,7 @@
                   %input.form-check-input.pointer.float-none.select-document{ data: { id: piece.id }, type: :checkbox, value: "" }
                 %h1 Aucune écriture comptable
   - else
-    .preseizures_box.hide
+    .preseizures_box.hide.animatedChild.toLeft
       .p-5 Ecriture comptable non disponible
 
 
