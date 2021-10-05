@@ -102,8 +102,8 @@ class Main{
 
     this.applicationJS.sendRequest(ajax_params)
     .then((response)=>{
-      if (type === 'members') {
-        $('.page-content .collaborators-content').html($(response).find('.page-content').html());
+      if (type === 'collaborators') {
+        $('.page-content .collaborators-content').html($(response).find('.page-content .collaborators-content').html());
       }
       else if (type === 'groups') {
         $('.page-content .box-group-content').html($(response).find('.page-content').html());
