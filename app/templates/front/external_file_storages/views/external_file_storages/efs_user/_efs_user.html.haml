@@ -5,7 +5,7 @@
   - member = @member rescue user
   - _redirect_to = { url: organization_collaborator_path(@organization, member, tab: 'file_storages'), method: 'get', html: { target: '#file_storages_services' } }
 - else
-  - _redirect_to = { url: organization_customer_path(@organization, user, tab: 'file-storages'), method: 'get', html: { target: '#file_storages_services' } }
+  - _redirect_to = { url: organization_customer_efs_path(@organization, user, tab: 'file-storages'), method: 'get', html: { target: '#file_storages_services' } }
 
 #file_storages_services.derivationLeft
   %table.table.table-striped
