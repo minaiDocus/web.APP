@@ -409,19 +409,22 @@ class Customer{
 
   close_or_reopen_confirm(url, data={}){
     let params = {};
+    let redirect_to = `/organizations/${(url.split('organizations/')[1].split('/customers')[0] || this.organization_id)}/customers`;
 
     if (url.indexOf("reopen_account") >= 0) {
-      /*params = {'url': url, 'type': 'PATCH', 'dataType': 'html'};*/
       params = {'url': url, 'type': 'POST', data: { _method: 'PATCH' }, 'dataType': 'html'};
+      let raw_customer_ids = url.split('/');
+      let  customer_id = raw_customer_ids[raw_customer_ids.length - 2]
+      redirect_to = `${redirect_to}/${customer_id}`;
     }
     else if (url.indexOf("close_account") >= 0) {
       params = {'url': url, 'data': data, 'type': 'POST', 'dataType': 'html'};
     }
 
     this.applicationJS.sendRequest(params).then((response)=>{
-      $('.customer_container_view').html($(response).find('.customer_container_view').html());
       this.account_close_confirm_modal.modal('hide');
-      this.rebind_customer_all_events();
+
+      window.location.replace(redirect_to);
     }).catch((response)=>{
 
     });
