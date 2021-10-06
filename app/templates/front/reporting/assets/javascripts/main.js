@@ -31,13 +31,17 @@ function handle_customer_change(statistics){
   if(!VARIABLES['reporting_customer_change'])
   {
     VARIABLES['reporting_customer_change'] = true;
-    setTimeout(()=>{
-      AppToggleLoading('show');
 
-      load_reporting_invoices();
-      statistics.load_all();
+    try{ clearTimeout(VARIABLES['reporting_customer_change_timer']); }catch(e){ console.log(e) };
+    VARIABLES['reporting_customer_change_timer'] = null;
 
-    }, 2000);
+    VARIABLES['reporting_customer_change_timer'] = setTimeout(()=>{
+                                                                    AppToggleLoading('show');
+
+                                                                    load_reporting_invoices();
+                                                                    statistics.load_all();
+
+                                                                  }, 2000);
   }
 }
 

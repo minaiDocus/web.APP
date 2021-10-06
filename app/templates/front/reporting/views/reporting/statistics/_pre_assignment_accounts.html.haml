@@ -7,7 +7,11 @@
     %th.text-right= t('reporting.share_default_account')
   %tbody
     - @reports.each do |report|
-      - all_accounts_size, anomaly_accounts_size, waiting_accounts_size, default_accounts_size = accounts_repartition_stat(report.user)
+      - result = accounts_repartition_stat(report.user)
+      - all_accounts_size     = result[:all_accounts_size]
+      - anomaly_accounts_size = result[:anomaly_accounts_size]
+      - waiting_accounts_size = result[:waiting_accounts_size]
+      - default_accounts_size = result[:default_accounts_size]
 
       %tr
         %td.text-left= report.name

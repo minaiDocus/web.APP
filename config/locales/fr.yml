@@ -232,6 +232,7 @@ fr:
     share_anomaly_account: Part de compte anomalie
     share_default_account: Part de compte par défaut
     folder_name: Nom du dossier
+    updated_at: Date de modification
     pack_name: Nom du lot
     last_document_date: Date du dernier doc.
     retriever: Automate

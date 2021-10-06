@@ -8,7 +8,7 @@ class Reporting::StatisticsController < Reporting::ABaseController
   def injected_documents
     respond_to do |format|
       format.html do
-        @packs = Pack.where("created_at BETWEEN '#{@date_range.join("' AND '")}'").where(owner_id: @customers_ids).order(updated_at: :asc).limit(10)
+        @packs = Pack.where("created_at BETWEEN '#{@date_range.join("' AND '")}'").where(owner_id: @customers_ids).order(updated_at: :desc).limit(10)
 
         render partial: 'lastest_sending_docs'
       end
@@ -23,7 +23,6 @@ class Reporting::StatisticsController < Reporting::ABaseController
           pieces_count << Pack::Piece.where(user_id: @customers_ids).where("DATE_FORMAT(created_at, '%d%m%Y') = '#{date.strftime("%d%m%Y")}'").count
         end
 
-        
         render json: { range_date: range_date, pieces_count: pieces_count, max_count: pieces_count.max, min_count: pieces_count.min }, state: 200
       end
     end
@@ -32,7 +31,7 @@ class Reporting::StatisticsController < Reporting::ABaseController
   def pre_assignment_accounts
     respond_to do |format|
       format.html do
-        @reports = Pack::Report.where("created_at BETWEEN '#{@date_range.join("' AND '")}'").where(user_id: @customers_ids).order(updated_at: :asc).limit(10)
+        @reports = Pack::Report.where("created_at BETWEEN '#{@date_range.join("' AND '")}'").where(user_id: @customers_ids).order(updated_at: :desc).limit(10)
 
         render partial: 'pre_assignment_accounts'
       end
@@ -68,7 +67,7 @@ class Reporting::StatisticsController < Reporting::ABaseController
   end
 
   def retrievers_report
-    @retrievers = Retriever.where("created_at BETWEEN '#{@date_range.join("' AND '")}'").where(user_id: @customers_ids)
+    @retrievers = Retriever.where("updated_at BETWEEN '#{@date_range.join("' AND '")}'").where(user_id: @customers_ids)
 
     respond_to do |format|
         format.html do

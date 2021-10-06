@@ -240,15 +240,12 @@ class ApplicationJS {
 
     var used_alert = '#idocus_notifications_messages .notice-internal-error .alert.alert-warning';
     var not_used_alert = '#idocus_notifications_messages .notice-internal-error .alert.alert-danger';
-    
+
     if(danger){
       used_alert = '#idocus_notifications_messages .notice-internal-error .alert.alert-danger';
       not_used_alert = '#idocus_notifications_messages .notice-internal-error .alert.alert-warning';
     }
-    
 
-    $(not_used_alert).addClass('hide');
-    $(used_alert).removeClass('hide');
     if(message)
     {
       is_present = 'true';
@@ -263,11 +260,14 @@ class ApplicationJS {
       html = "Une erreur inattendue s'est produite. Veuillez réessayer ultérieurement";
 
     if(is_present.length > 0){
+      $(not_used_alert).addClass('hide');
+      $(used_alert).removeClass('hide');
+
       if(VARIABLES.get('rails_env') != 'production' || !danger)
         $(`${used_alert} .message-alert`).html(html);
 
       $('#idocus_notifications_messages .notice-internal-error').slideDown('fast');
-      setTimeout(function(){$('#idocus_notifications_messages .notice-internal-error').slideUp('fast');}, 30000);
+      setTimeout(function(){ $('#idocus_notifications_messages .notice-internal-error').slideUp('fast'); }, 30000);
     }
   }
 
@@ -355,7 +355,7 @@ class ApplicationJS {
             bind_globals_events();
           }, 1000);
         },
-        error: function(result){          
+        error: function(result){
           self.noticeErrorMessageFrom(null, result.responseText, true);
 
           if(success)

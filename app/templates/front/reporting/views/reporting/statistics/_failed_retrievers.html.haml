@@ -1,14 +1,15 @@
 %h4.bold= t('reporting.failed_retrievers')
 %table.table.table-striped
   %thead
-    %th.text-left= t('reporting.folder_name')
-    %th.text-center= t('reporting.retriever')
-    %th.text-right= t('reporting.status')
+    %th.text-start.w-25= t('reporting.folder_name')
+    %th.text-center.w-25= t('reporting.updated_at')
+    %th.text-center.w-25= t('reporting.retriever')
+    %th.text-end.w-25= t('reporting.state')
   %tbody
     - @retrievers.each do |retriever|
       %tr
-        %td.text-left= retriever.user.info
-        %td.text-center= retriever.service_name
-        %td.text-right 
-          .badge.badge-secondary
-            = retriever.error_message
+        %td.text-start.w-25= retriever.user.info
+        %td.text-center.w-25= retriever.updated_at.strftime("%d/%m/%Y")
+        %td.text-center.w-25= retriever.service_name
+        %td.text-end.w-25
+          = retriever.error_message
