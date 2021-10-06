@@ -36,10 +36,10 @@
         .col-md-12
           %h6.bold= t('dashboard.folder_activity')
           .row              
-            .col-md-4
+            .col-md-3
               %span
                 %span= t('dashboard.last_pack_added') + ' :'
-            .col-md-3.text-end
+            .col-md-4.text-end
               %span
                 %span= infos.try(:last_pack).try(:name).try(:gsub, ' all', '') || '-'
                 = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#', class: 'support-chat-link'
@@ -47,10 +47,10 @@
       .row
         .col-md-12
           .row
-            .col-md-4
+            .col-md-3
               %span
                 %span= t('dashboard.last_activity') + ' :'
-            .col-md-3.text-end
+            .col-md-4.text-end
               %span
                 %span= infos.try(:last_pack).try(:updated_at).try(:strftime, '%d/%m/%Y %H:%M:%S') || '-'
                 = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#', class: 'support-chat-link'
@@ -60,9 +60,9 @@
         .col-md-10
           %h6.bold= t('dashboard.add_documents')
           .row
-            .col-md-4
+            .col-md-5
               %span= t('dashboard.errors_found') + ' :'
-            .col-md-3.text-end
+            .col-md-2.text-end
               %span= infos.try(:temp_docs_error_size).to_i
               = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#', class: 'support-chat-link'
           - if infos.try(:retriever_option_active)
@@ -73,9 +73,9 @@
                 %span= infos.try(:retriever_error_size).to_i
                 = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#', class: 'support-chat-link'
           .row
-            .col-md-4
+            .col-md-5
               %span= t('dashboard.pre_assignement_duplicated') + ' :'
-            .col-md-3.text-end
+            .col-md-2.text-end
               %span= infos.try(:duplicated_preseizures_size).to_i
               = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#', class: 'support-chat-link'
         .col-md-1.no-padding.semibold.text-end

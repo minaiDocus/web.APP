@@ -149,3 +149,12 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+@media (max-width: 1280px) {
+  p, .btn{
+    font-size: 13px;
+  }
+  .box, .favorite-customer-content, h6{
+    font-size: 0.8rem;
+  }
+}

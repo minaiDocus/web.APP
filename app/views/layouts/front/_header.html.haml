@@ -2,7 +2,7 @@
 
 %nav.navbar.navbar-expand-lg.fixed-top.main_menu
   .row.w-100.no-margin
-    .col-md-1.text-center
+    .col-md-1.text-center.content-logo
       = link_to image_tag('logo/tiny_logo_2.png', alt: 'logo iDocus'), '/', class: 'navbar-brand no-margin', data:{ href: '/' }
     .col-md-9.menu
       %ul.navbar-nav
@@ -59,7 +59,7 @@
               =link_to t('layouts.retriever.parameters'), retriever_parameters_path, class: (controller_path == 'retriever_parameters/main')? 'dropdown-item active' : 'dropdown-item'
 
     .col-md-2.user-menu
-      %ul.navbar-nav.me-4.float-end.mt-2
+      %ul.navbar-nav.float-end
         - if Rails.env != 'production'
           %li.nav-item.me-4
             %span.badge.rounded-pill.bg-light.text-dark.regular.mt-2=  Rails.env

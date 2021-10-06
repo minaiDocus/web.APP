@@ -263,13 +263,11 @@ table td
   margin: 10% auto
 
 .menu 
-  .navbar-nav 
+  .navbar-nav
     .nav-item a
       color: #1A1A1A
-
     .active, .nav-link:hover  
       border-bottom: 3px solid #C1D837
-
     .active:hover
       border-bottom: none
   .dropdown-item:active, .dropdown-item.active
@@ -277,6 +275,10 @@ table td
     color: #FFFFFF !important
     font-family: Raleway-semiBold
 
+.user-menu
+  .navbar-nav
+    margin-right: 1.5rem
+    margin-top: 0.5rem
 
 .rotate
   transform: rotate(90deg)
@@ -426,7 +428,7 @@ table td
   border-radius: 3px !important
   a
     padding: 3% 6%
-    font-size: 13px !important
+    font-size: 13px
     color: rgba(26, 26, 26, 0.7) !important
 
 .support-chat
@@ -747,3 +749,71 @@ input[type=radio], input[type=checkbox], select
 
 .icon-actions span svg:hover
   transform: scale(1.5) !important
+
+.footer_marginer
+  height: 12rem
+
+@media (max-width: 1280px)
+  // HEADER
+  h1
+    font-size: 20px
+  h3
+    font-size: 14px
+  nav.main_menu 
+    padding: 0 !important
+    li
+      font-size: 13px
+      a.dropdown-item
+        font-size: 11px
+      svg.oi-icon
+        width: 14px !important
+        height: 14px !important
+    .dropdown-menu
+      min-width: 10rem
+      padding: 0
+      box-shadow: 1px 1px 2px rgba(26, 26, 26, 0.24);
+      a
+        padding: 0.25rem 1rem
+  .user-menu 
+    .navbar-nav
+      margin-top: 4px !important
+    #notifications_notifier
+      width: 285px
+      .notification
+        padding: 1px 6px
+        .media-body
+          a
+            padding: 0
+          ul 
+            padding: 0
+          strong
+            font-size: 13px
+          p
+            font-size: 11px
+    #see_all_notifications
+      .btn
+        font-size: 11px
+  .content-logo
+    padding-top: 5px
+  //FOOTER
+  .main_footer
+    padding: 13px !important
+    .contact-number, p
+      font-size: 12px
+    .open-time
+      padding: 2px 3px
+      font-size: inherit
+    .number
+      img
+        width: 150px
+    a svg
+      height: 12px
+  //BODY
+  .body_content
+    margin-top: 50px
+    h1
+      font-size: 26px
+    h3
+      font-size: 18px
+    h5
+      font-size: 14px
