@@ -39,6 +39,8 @@ class RetrieverController < FrontController
   def verif_account
     @account = accounts.first if not @account
 
+    @customer = @account
+
     redirect_to retrievers_path if not @account
   end
 end
