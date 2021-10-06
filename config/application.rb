@@ -120,7 +120,7 @@ module Idocus
     ActionMailer::Base.default from: 'iDocus <notification@idocus.com>', reply_to: 'Support iDocus <support@idocus.com>'
 
     Raven.configure do |config|
-      config.dsn = 'https://8a88cb7b80654dc5bd2bc9bfd8b160a0:b79bb42c43bc4c918442ebd04f5f61b9@sentry.idocus.com/2'
+      config.dsn = 'https://9691c9b4f05b4aa0b4122d178a8e3ba8:a579629d78d743688003de34d1bded75@sentry.idocus.com/7'
       config.environments = ['sandbox', 'staging', 'production']
     end
   end
