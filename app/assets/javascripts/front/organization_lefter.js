@@ -20,6 +20,10 @@ jQuery(function () {
   /* SPECIAL HEADER CUSTOMER LINKS */
     $('a.head_customer_link').unbind('click').bind('click', function(e){
       e.preventDefault();
+
+      if( $(this).hasClass('active') )
+        return false
+
       let url    = $(this).attr('href');
       let app    = new ApplicationJS();
 

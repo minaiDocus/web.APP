@@ -65,6 +65,14 @@ function bind_all_events(){
   $('.modal#filter-documents-selection button.cancel').unbind('click').bind('click', (e)=>{ AppEmit('retriever_parameters_filter_page', { target: 'documents-selection', action: 'reset'}); });
   $('.modal#filter-banks-params button.cancel').unbind('click').bind('click', (e)=>{ AppEmit('retriever_parameters_filter_page', { target: 'banks-params', action: 'reset'}); });
 
+  $('li.navigation_links').unbind('click.need_filter').bind('click.need_filter', function(e){
+    if($(this).hasClass('no-filter')){
+      $('button.filter-banks').addClass('hide');
+    }else{
+      $('button.filter-banks').removeClass('hide');
+    }
+  });
+
 }
 
 jQuery(function() {
