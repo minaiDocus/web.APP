@@ -6,7 +6,7 @@
         .col-md-3
           .stamp-content{ id: "document_grid_#{piece.id}", data: { preseizure_id: piece.preseizures.first.try(:id) } }
             .image_piece.text-center
-              %span.zoom.pdf-viewer.pointer{title: 'Visualiser la pièce', "data-content-url" => piece.get_access_url}
+              %span.zoom.pdf-viewer.pointer.float-start{title: 'Visualiser la pièce', "data-content-url" => piece.get_access_url}
                 = glyphicon('magnifying-glass', { size: '20', color: 'background: rgba(26, 26, 26, 0.7)'})
               = image_tag document_thumb_url(piece)
             .label-content.text-center.p-2= piece.name
@@ -45,10 +45,11 @@
                       .dynamic_box{ id: "document_#{index}_#{piece.id}", data: { preseizure_id: preseizure.id, type: 'piece' } }
                         = render file: Rails.root.join('app/templates/front/documents/views/documents/preseizures/_preseizure_box.html.haml'), locals: { preseizure: preseizure, piece: piece, operation: nil }
             - else
-              .w-75.text-center.no-preseizure{ id: "document_#{piece.id}" }
-                %span.form-check.float-end            
+              .w-75.text-center{ id: "document_#{piece.id}" }
+                %span.form-check.float-end.p-3           
                   %input.form-check-input.pointer.float-none.select-document{ data: { id: piece.id }, type: :checkbox, value: "" }
-                %h1 Aucune écriture comptable
+                .no-preseizure
+                  %h1 Aucune écriture comptable
   - else
     .preseizures_box.hide.animatedChild.toLeft
       .p-5 Ecriture comptable non disponible

@@ -1,49 +1,46 @@
 #customer.edit.exact_online.derivationRight
-  - unless @customer.configured?
-    .box
-      = render 'customers/main/steps'
-  .card
-    .card-header
-      - if @customer.configured?
-        %h3 
-          Édition des options Exact Online du client : 
-          = link_to @customer, organization_customer_path(@organization, @customer, tab: 'exact_online'), class: 'fs-origin'
-      - else
-        %h3
-          Configuration Exact Online pour le dossier : 
-          %span.text-info.fs-origin= @customer
-
-    = simple_form_for @customer, url: update_exact_online_organization_customer_path(@organization, @customer), html: { class:  'form-horizontal label-medium' } do |f|
-      .card-body
-        .box.bg-light
+  = simple_form_for @customer, url: update_exact_online_organization_customer_path(@organization, @customer), html: { class:  'form-horizontal label-medium', id: 'exact-online-form' } do |f|       
+    %h6.semibold Clé API Exact Online :    
+    .form-group
+      = f.simple_fields_for :exact_online do |e|
+        = e.hidden_field :id
+        .select-container.no-padding.w-100
+          = e.input :client_id, input_html: { class: 'check-api-value'}
+        .select-container.no-padding.w-100
+          = e.input :client_secret, input_html: { class: 'check-api-value'}
+        .form-group.mt-2
+          - auto_deliver = @customer.try(:exact_online).try(:auto_deliver) || -1
           .row
-            .col-md-7
-              %h4 Clé API Exact Online
-              %hr
-              = f.simple_fields_for :exact_online do |e|
-                = e.hidden_field :id
-                = e.input :client_id
-                = e.input :client_secret
-                = e.input :auto_deliver, collection: auto_deliver_options, as: :radio_buttons
-            .col-md-5
-              Vous devez fournir votre identifiant api depuis votre compte "Exact Online" pour établir la liaison iDocus/Exact Online
-              %br
-              La création de votre clé api est disponible
-              = link_to 'ici', 'https://apps.exactonline.com/fr/fr-FR/V2', target: '_blank'
-              %br
-              %br
-              %span.badge.badge-warning.fs-origin
-                Attention :
-              &nbsp;&nbsp;L'URL de redirection de la clé api créée dans Exact Online doit être obligatoirement :
-              %br
-              %span.badge.badge-secondary.fs-origin
-                = subscribe_account_exact_online_url
-      .card-footer
-        .form-actions.margin0bottom
-          - if @customer.configured?
-            = f.submit t('actions.submit'), class: 'btn btn-primary'
-            = link_to t('actions.cancel'), organization_customer_path(@organization, @customer, tab: 'exact_online'), class: 'btn btn-light'
-          - else
-            = link_to t('actions.previous_step'), previous_organization_customer_setup_path(@organization, @customer), class: 'btn btn-secondary'
-            = link_to t('actions.complete_later'), complete_later_organization_customer_setup_path(@organization, @customer), class: 'btn btn-light'
-            = f.submit t('actions.next_step'), class: 'btn btn-primary', disabled: true
+            .col-md-4
+              = label_tag 'user[exact_online_attributes][auto_deliver]', t('activerecord.models.software_exact_online.attributes.auto_deliver'), class: 'semibold'
+            .col-md-4
+              .form-check.form-check-inline               
+                = radio_button_tag 'user[exact_online_attributes][auto_deliver]', auto_deliver_options[0][1], auto_deliver == -1, class: 'form-check-input'
+                %label.form-check-label Paramètres du cabinet
+            .col-md-2
+              .form-check.form-check-inline
+                = radio_button_tag 'user[exact_online_attributes][auto_deliver]', auto_deliver_options[1][1], auto_deliver == 0, class: 'form-check-input compta-user-options'
+                %label.form-check-label Manuel
+            .col-md-2
+              .form-check.form-check-inline
+                = radio_button_tag 'user[exact_online_attributes][auto_deliver]', auto_deliver_options[2][1], auto_deliver == 1, class: 'form-check-input compta-user-options'
+                %label.form-check-label Auto          
+  
+    %hr
+    .alert.alert-warning
+      Vous devez fournir votre identifiant api depuis votre compte "Exact Online" pour établir la liaison iDocus/Exact Online
+      %br
+      La création de votre clé api est disponible
+      = link_to 'ici', 'https://apps.exactonline.com/fr/fr-FR/V2', target: '_blank', class: 'no-style red-label semibold'
+      %br
+      %br
+      %span.badge.bg-danger.mb-1.bold Attention
+      %br           
+      L'URL de redirection de la clé api créée dans Exact Online doit être obligatoirement :
+      %span.badge.bg-dark.semibold
+        = subscribe_exact_online_url
+
+  .idocus_modal_buttons
+    - if @customer.configured?
+      - idocus_params = param_encode({ url: update_exact_online_organization_customer_path(@organization, @customer), method: 'post', form:{ id: 'exact-online-form', dump_action: true }, modal: { id: '#' }, redirect_to: { url: organization_customer_path(@organization, @customer, tab: 'exatct_online'), html: { target: '.exact_online_configuration' } } })
+      %button.btn.btn-primary.exact_online_validation.as_idocus_ajax{ type: :button, idocus: idocus_params, disabled: true } Valider

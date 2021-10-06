@@ -19,6 +19,8 @@ class Customer{
     this.add_customer();
     this.filter_customer();
     this.show_ibiza_customer();
+    this.show_exact_online_customer();
+    this.show_my_unisoft_customer();
 
     if ($('#personalize_subscription_package_form').length > 0 ) {
       this.check_input_number();
@@ -349,6 +351,31 @@ class Customer{
     show_ibiza_list(ibiza_checkbox_selector);
   }
 
+  show_exact_online_customer(){
+    if ($('#exact-online-form').length > 0 ) {
+      $('.check-api-value').change(function() {        
+        if ($('#user_exact_online_attributes_client_id').val() != '' && $('#user_exact_online_attributes_client_secret').val() != ''){
+          $('button[type=button].exact_online_validation').removeAttr('disabled');
+        }
+        else{
+          $('button[type=button].exact_online_validation').attr('disabled', true);
+        }
+      });
+    }
+  }
+
+  show_my_unisoft_customer(){
+    if ($('#my-unisoft-form').length > 0 ) {
+      $('.key-my-unisoft').change(function() {        
+        if ($(this).val() != ''){
+          $('button[type=button].my_unisoft_validation').removeAttr('disabled');
+        }
+        else{
+          $('button[type=button].my_unisoft_validation').attr('disabled', true);
+        }
+      });
+    }
+  }
 
   get_customer_first_step_form(){
     this.applicationJS.sendRequest({ 'url': '/organizations/' + this.organization_id + '/customers/new' }).then((element)=>{
@@ -484,11 +511,6 @@ class Customer{
     bind_customer_events();
     ApplicationJS.set_checkbox_radio();
   }
-
-
-  bind_ibiza_user_events(){
-    this.rebind_customer_all_events();
-  }
 }
 
 
@@ -502,7 +524,7 @@ jQuery(function () {
   AppListenTo('close_or_reopen_confirm_view', (e)=>{ customer.close_or_reopen_confirm_view(e.detail.url, e.detail.target); });
   AppListenTo('close_or_reopen_confirm', (e)=>{ customer.close_or_reopen_confirm(e.detail.url, e.detail.data); });
 
-  AppListenTo('bind_ibiza_user_events', (e)=>{ customer.bind_ibiza_user_events(); });
+  AppListenTo('bind_api_user_events', (e)=>{ customer.rebind_customer_all_events(); });
  
   customer.main();
 });

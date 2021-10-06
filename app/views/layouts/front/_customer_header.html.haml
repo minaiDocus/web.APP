@@ -77,7 +77,7 @@
                         %span.float-start Coala
                         - if @customer.uses?(:coala)
                           = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'float-end' })
-                  - if @organization.try(:quadratus).try(:used)
+                  - if @organization.try(:quadratus).try(:used?)
                     %li.clearfix
                       %a.head_customer_link.semibold.nav-link.dropdown-item#quadratus-tab{ href: organization_customer_softwares_path(@organization, @customer, software_name: 'quadratus') }
                         %span.float-start Quadratus

@@ -16,7 +16,7 @@
         %input{ type: 'hidden', id: 'piece_name_separator_hidden', name: 'software_ibiza[piece_name_format_separator]', value: ibiza.try(:piece_name_separator) || '_' }
         %input{ type: 'hidden', id: 'description_hidden', name: 'software_ibiza[description]', value: '{}' }
         %input{ type: 'hidden', id: 'description_separator_hidden', name: 'software_ibiza[description_separator]', value: ibiza.try(:description_separator) || '_' }
-        .select-container.no-padding.w-100
+        .select-container.w-100.ps-3.pe-0.pt-0.pb-0
           = f.input :specific_url_options, label_html: { class: 'semibold' }, placeholder: 'https://webservice.irf-cloud.com/IRFService/services/IRFService.svc', hint: "Pour connecter iBiZa à iDocus, Vous pouvez spécifier votre URL de connexion (Par défaut: https://webservice.irf-cloud.com/IRFService/services/IRFService.svc)"
         .to_change_box
           .select-container.no-padding.w-100

@@ -62,3 +62,11 @@
   font-size: 40px;
   color: rgba(26,26,26,0.7);
 }
+
+.form-check-input[type='checkbox']{
+  margin-top: 14%
+}
+
+.form-check-input[type='checkbox']:checked{
+  margin-top: 12%
+}

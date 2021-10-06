@@ -1,29 +1,34 @@
 #customer.edit.my_unisoft.derivationRight
   %input{ type: :hidden, id: "organization_id", value: "#{@organization.id}"}
   %input{ type: :hidden, id: "customer_id", value: "#{@customer.id}"}
-  .card
-    .card-header
-      %h3
-        Configuration My Unisoft pour le dossier : 
-        %span.text-info.fs-origin= @customer
-
-    = simple_form_for @customer, url: update_my_unisoft_organization_customer_path(@organization, @customer), html: { class:  'form-horizontal label-medium' } do |f|
-      .card-body
+  %h6.semibold Liaison avec My Unisoft
+  .mb-4
+  = simple_form_for @customer, url: update_my_unisoft_organization_customer_path(@organization, @customer), html: { class:  'form-horizontal label-medium', id: 'my-unisoft-form' } do |f|
+    .accept_my_unisoft{ class: ('hide' unless @customer.try(:my_unisoft).try(:used?)) }  
+    = f.simple_fields_for :my_unisoft do |m|
+      .select-container.no-padding.w-100
+        = m.input :encrypted_api_token, required: false,  label: 'Veuillez entrer votre Clé API :', input_html: {  :value => "#{@customer.try(:my_unisoft).try(:encrypted_api_token)}", class: 'key-my-unisoft' }
+      .form-group.mt-2
+        - auto_deliver = @customer.try(:my_unisoft).try(:auto_deliver) || -1
         .row
-          .col-md-12
-            .card.accept_my_unisoft{ class: ('hide' unless @customer.try(:my_unisoft).try(:used?)) }
-              .card-header
-                %h4 Liaison avec My Unisoft
-              .card-body
-                = f.simple_fields_for :my_unisoft do |m|
-                  = m.input :encrypted_api_token, required: false,  label: 'Veuillez entrer votre Clé API :', input_html: {  :value => "#{@customer.try(:my_unisoft).try(:encrypted_api_token)}", :style =>"width: 655px" }
-                  = m.input :auto_deliver, as: :radio_buttons, collection: auto_deliver_options, label: 'Souhaitez-vous livrer automatiquement les écritures ? '
-                  %input#auto_deliver_customer{ type: :hidden, name: "auto_deliver_customer", value: "#{@customer.try(:my_unisoft).try(:auto_deliver?)}"}
-                  %input#check_api_token{ type: :hidden, name: "check_api_token", value: "#{@customer.try(:my_unisoft).try(:encrypted_api_token).present?}"}
+          .col-md-4
+            = label_tag 'user[my_unisoft_attributes][auto_deliver]', t('activerecord.models.software_my_unisoft.attributes.auto_deliver'), class: 'semibold'
+          .col-md-4
+            .form-check.form-check-inline               
+              = radio_button_tag 'user[my_unisoft_attributes][auto_deliver]', auto_deliver_options[0][1], auto_deliver == -1, class: 'form-check-input'
+              %label.form-check-label Paramètres du cabinet
+          .col-md-2
+            .form-check.form-check-inline
+              = radio_button_tag 'user[my_unisoft_attributes][auto_deliver]', auto_deliver_options[1][1], auto_deliver == 0, class: 'form-check-input compta-user-options'
+              %label.form-check-label Manuel
+          .col-md-2
+            .form-check.form-check-inline
+              = radio_button_tag 'user[my_unisoft_attributes][auto_deliver]', auto_deliver_options[2][1], auto_deliver == 1, class: 'form-check-input compta-user-options'
+              %label.form-check-label Auto      
+      %input#auto_deliver_customer{ type: :hidden, name: "auto_deliver_customer", value: "#{@customer.try(:my_unisoft).try(:auto_deliver?)}"}
+      %input#check_api_token{ type: :hidden, name: "check_api_token", value: "#{@customer.try(:my_unisoft).try(:encrypted_api_token).present?}"}
 
-      .card-footer
-        .form-actions.margin0bottom
-          = f.submit t('actions.submit'), class: 'btn btn-primary'
-          = link_to t('actions.cancel'), organization_customer_path(@organization, @customer, tab: 'my_unisoft'), class: 'btn btn-light'
-          .float-right.loading.hide
-            %img{ src: "/assets/application/bar_loading.gif", alt: "chargement..."}
+  .idocus_modal_buttons
+    - if @customer.configured?
+      - idocus_params = param_encode({ url: update_my_unisoft_organization_customer_path(@organization, @customer), method: 'post', form:{ id: 'my-unisoft-form', dump_action: true }, modal: { id: '#' }, redirect_to: { url: organization_customer_path(@organization, @customer, tab: 'exatct_online'), html: { target: '.my_unisoft_configuration' } } })
+      %button.btn.btn-primary.my_unisoft_validation.as_idocus_ajax{ type: :button, idocus: idocus_params, disabled: true } Valider

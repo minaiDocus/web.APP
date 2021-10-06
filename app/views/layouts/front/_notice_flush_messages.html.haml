@@ -22,8 +22,7 @@
           Nous faisons tout notre possible pour régler le problème au plus vite. Merci de votre patience
 
   .notice.notice-internal-success.text-center.text-white.hide
-    .alert.alert-success.alert-dismissible.fade.show
-      %span.float-end= glyphicon('circle-check', {size: '16', color: "white"})
+    .no-margin.alert-dismissible.fade.show      
       - flash.each do |name, msg|
         - if msg.present? && name.to_s == 'success'
           .row-fluid.derivationLeft.msg_present
