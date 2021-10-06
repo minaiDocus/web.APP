@@ -9,7 +9,7 @@ class ReportingCharts{
           labels: data['range_date'],
           datasets: [
             {
-              label: "TODO(info)",
+              label: "Nb. Documents",
               backgroundColor: ["#C1D837", "#C1D837","#C1D837","#C1D837","#C1D837","#C1D837","#C1D837"],
               data: data['pieces_count']
             }
@@ -50,7 +50,7 @@ class ReportingCharts{
          title: {
             display: false,
             fontsize: 17,
-            text: 'TODOreporting....',
+            text: 'Livraison',
             align: 'start'
           },
           legend: {
@@ -90,7 +90,12 @@ class ReportingCharts{
     let failedRetrieversData = retrievers_data(labelName, valueData, backgroundColorValue, hoverBackgroundColorValue);
 
     $('label.actif_retrievers_percentage').text(data['actif_percentage'] + '%');
+    if(data['actif_percentage'] > 0)
+      $('label.actif_retrievers_percentage').removeClass('hide');
+
     $('label.failed_retrievers_percentage').text(data['error_percentage'] + '%');
+    if(data['error_percentage'] > 0)
+      $('label.failed_retrievers_percentage').removeClass('hide');
 
     $('#chart_retriever_active').append('<span>AAAAA</span>')
 
