@@ -12,28 +12,31 @@
         %th= sortable :is_approved, 'Etat'
         %th.text-end Actions
     %tbody
-      - @account_sharings.each do |account_sharing|
-        %tr
-          %td.date= account_sharing.created_at.strftime('%d/%m/%Y %H:%M')
-          %td= link_to account_sharing.account.info, '#'
-          %td
-            - if account_sharing.collaborator.is_guest
-              = account_sharing.collaborator.info
-            - else
-              = link_to account_sharing.collaborator.info, '#'
-          %td= account_sharing.is_approved? ? 'Partagé' : 'En attente de validation'
-          %td.text-end.pointer
-            .action.sub_edit_delete
-              %span= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
-            .sub_menu.text-start.hide
-              %ul.no-margin.no-padding.regular
-                - unless account_sharing.is_approved?
+      - if @account_sharings.any?
+        - @account_sharings.each do |account_sharing|
+          %tr
+            %td.date= account_sharing.created_at.strftime('%d/%m/%Y %H:%M')
+            %td= link_to account_sharing.account.info, '#'
+            %td
+              - if account_sharing.collaborator.is_guest
+                = account_sharing.collaborator.info
+              - else
+                = link_to account_sharing.collaborator.info, '#'
+            %td= account_sharing.is_approved? ? 'Partagé' : 'En attente de validation'
+            %td.text-end.pointer
+              .action.sub_edit_delete
+                %span= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
+              .sub_menu.text-start.hide
+                %ul.no-margin.no-padding.regular
+                  - unless account_sharing.is_approved?
+                    %li
+                      %span.me-1= glyphicon('share', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
+                      %span= link_to 'Partager', account_sharings_organization_accept_path(@organization, account_sharing), method: :post, data: { confirm: "Êtes-vous sûr de vouloir partager le dossier \"#{account_sharing.account.info}\" au contact \"#{account_sharing.collaborator.info}\" ?" }
                   %li
-                    %span.me-1= glyphicon('share', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                    %span= link_to 'Partager', account_sharings_organization_accept_path(@organization, account_sharing), method: :post, data: { confirm: "Êtes-vous sûr de vouloir partager le dossier \"#{account_sharing.account.info}\" au contact \"#{account_sharing.collaborator.info}\" ?" }       
-                %li
-                  %span.red-label.me-1= glyphicon('action-undo', { size: '15', color: "#445E2B" })
-                  %span= link_to 'Annuler', account_sharings_organization_destroy_account_path(@organization, account_sharing), method: :delete, data: { confirm: "Êtes-vous sûr de vouloir annuler le partage du dossier \"#{account_sharing.account.info}\" au contact \"#{account_sharing.collaborator.info}\" ?" }, class: 'red-label semibold'      
-        
+                    %span.red-label.me-1= glyphicon('action-undo', { size: '15', color: "#445E2B" })
+                    %span= link_to 'Annuler', account_sharings_organization_destroy_account_path(@organization, account_sharing), method: :delete, data: { confirm: "Êtes-vous sûr de vouloir annuler le partage du dossier \"#{account_sharing.account.info}\" au contact \"#{account_sharing.collaborator.info}\" ?" }, class: 'red-label semibold'
+      - else
+        %tr
+          %td{colspan: 5, class: 'text-center'} Aucun resultat
 
   = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { name: 'sharing_accounts', total_pages: @account_sharings.total_pages }

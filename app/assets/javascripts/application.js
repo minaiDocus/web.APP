@@ -295,6 +295,7 @@ class ApplicationJS {
           let destination = params.target_dest || target || null;
           if(target)
           {
+            console.log(result);
             let source_html = '';
             try{
               source_html = $(result).find(target)[0].outerHTML;
