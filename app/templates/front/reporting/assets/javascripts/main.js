@@ -39,8 +39,15 @@ function handle_customer_change(statistics){
                                                                     AppToggleLoading('show');
 
                                                                     load_reporting_invoices();
-                                                                    statistics.load_all();
 
+                                                                    if( $('li.reporting_links.statistics').hasClass('active') )
+                                                                    {
+                                                                      statistics.load_all();
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                      $('li.reporting_links.statistics').addClass('need_refresh');
+                                                                    }
                                                                   }, 2000);
   }
 }
@@ -53,5 +60,13 @@ jQuery(function() {
   VARIABLES['reporting_customer_change'] = false;
 
   handle_customer_change(statistics);
+
+  AppListenTo('reporting_load_statistics', (e)=>{ 
+    VARIABLES['reporting_loading'] = 0;
+    VARIABLES['reporting_customer_change'] = true;
+
+    AppToggleLoading('show');
+    statistics.load_all(); 
+  });
   AppListenTo('reporting_load_all', (e)=>{ handle_customer_change(statistics); });
 });

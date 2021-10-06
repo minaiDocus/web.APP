@@ -24,6 +24,8 @@ class ReportingStatistics {
     if(VARIABLES['reporting_loading'] <= 0){
       VARIABLES['reporting_loading'] = 0;
       VARIABLES['reporting_customer_change'] = false;
+
+      $('li.reporting_links.statistics').removeClass('need_refresh');
       AppToggleLoading('hide');
     }
   }
