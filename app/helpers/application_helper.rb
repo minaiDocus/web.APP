@@ -26,6 +26,35 @@ module ApplicationHelper
       }) }, 2500);"), { type: "text/javascript", style: 'display: none', class: "#{class_name.downcase}_#{function.downcase}" }, escape: false).html_safe
   end
 
+
+  def render_async(url, params={}, no_loading=false)
+    target = rand.to_s.split('.')[1]
+
+    _display = 'none'
+    _loader  = content_tag(:div).html_safe
+    if(no_loading == false)
+      _display = 'inline-block'
+      _loader  = content_tag(:img, nil, { src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}).html_safe
+    end
+
+    _js_tag = content_tag(:div, javascript_tag("
+                              jQuery(function(){
+                                const launcher = new ApplicationJS();
+                                const ajax_params = {
+                                                      url: '#{url}',
+                                                      type: 'GET',
+                                                      data: #{params.to_json},
+                                                      no_loading: true
+                                                    };
+                                launcher.sendRequest(ajax_params).then((e)=>{ $('.async_#{target}').replaceWith(e); });
+                              })
+                            ")).html_safe
+
+    content_tag :div, { style: "display: #{_display}", class: "async_#{target}" }, escape: false do
+      _loader + _js_tag
+    end
+  end
+
   def logo_url
     image_path('logo/tiny_logo.png')
   end

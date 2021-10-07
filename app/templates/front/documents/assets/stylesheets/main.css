@@ -248,3 +248,7 @@ img{
 .icon-actions span svg:hover{
   transform: scale(1.5) !important;
 }
+
+.content-operation{
+  min-height: 170px;
+}

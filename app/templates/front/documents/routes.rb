@@ -20,6 +20,7 @@ Rails.application.routes.draw do
     get 'operations', to: 'operations#index', as: 'operations'
     get 'operations/:id', to: 'operations#show', as: 'operations_details'
 
+    get 'preseizures/infos', to: 'preseizures#index', as: 'preseizures_infos'
     post 'preseizures/update', to: 'preseizures#update', as: 'preseizures_update'
     post 'preseizures/account/:id/update', to: 'preseizures#update_account', as: 'preseizures_update_account'
     get 'preseizures/accounts_list/:account_id', to: 'preseizures#accounts_list', as: 'preseizures_accounts_list'

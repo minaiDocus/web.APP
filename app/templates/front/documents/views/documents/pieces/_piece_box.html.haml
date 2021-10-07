@@ -29,7 +29,7 @@
               .w-75.dynamic_box{ id: "document_#{piece.id}", data: { preseizure_id: preseizures.first.id, type: 'piece' } }
                 %span.form-check.float-end           
                   %input.form-check-input.pointer.float-none.select-document{ data: { id: piece.id }, type: :checkbox, value: "" }
-                = render file: Rails.root.join('app/templates/front/documents/views/documents/preseizures/_preseizure_box.html.haml'), locals: { preseizure: preseizures.first, piece: piece, operation: nil }
+                = render_async preseizures_infos_path, { id: preseizures.first.id }
             - elsif preseizures.size >= 1
               .w-75{ id: "document_#{piece.id}" }
                 %span.form-check.float-end            
@@ -43,7 +43,7 @@
                   - preseizures.each_with_index do |preseizure, index|
                     .tab-pane.box.no-margin{ class: "#{(index == 0) ? 'active' : ''}", "id" => "preseizure-#{preseizure.id}", "role" => "tabpanel", "aria-labelledby" => "preseizure-#{preseizure.id}-tab" }
                       .dynamic_box{ id: "document_#{index}_#{piece.id}", data: { preseizure_id: preseizure.id, type: 'piece' } }
-                        = render file: Rails.root.join('app/templates/front/documents/views/documents/preseizures/_preseizure_box.html.haml'), locals: { preseizure: preseizure, piece: piece, operation: nil }
+                        = render_async preseizures_infos_path, { id: preseizure.id }
             - else
               .w-75.text-center{ id: "document_#{piece.id}" }
                 %span.form-check.float-end.p-3           

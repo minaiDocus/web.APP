@@ -5,6 +5,10 @@ class Documents::PreseizuresController < FrontController
 
   before_action :load_preseizure, except: %w[accounts_list]
 
+  def index
+    render partial: 'preseizure_box', locals: { preseizure: @preseizure, piece: @preseizure.try(:piece), operation: @preseizure.try(:operation) }
+  end
+
   def show
     if params[:view] == 'by_type'
       if @preseizure.operation
