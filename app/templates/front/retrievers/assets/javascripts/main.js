@@ -45,6 +45,7 @@ class RetrieverMain{
 
     this.applicationJS.sendRequest(ajax_params)
                       .then((e)=>{
+                        $('.choose_retriever_action').html($(e).find('.choose_retriever_action').html());
                         if(this.page > 1)
                         {
                           if($(e).find('.no-data-found').length == 0){

@@ -12,25 +12,28 @@
       %button.btn.btn-light.semibold.retriever-filter.w-100{ disabled: false }
         %span.me-2 Filtrer
         %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
-    - if @is_budgea
-      .col-md-2.resp-view.text-center.derivationRight
-        %button.btn.btn-light-primary.semibold.list-retriever.w-100{ disabled: false }
-          %span.me-4= glyphicon('list', { size: '15', color: '#0d6efd'})
-          %span Automates disponibles
-      .col-md-1.resp-view.text-center.derivationRight
-        %button.btn.btn-primary.semibold.add-retriever.w-100{ disabled: false }
-          %span.me-2= glyphicon('plus', { size: '15', color: '#FFFF'})
-          %span Ajouter
-    - if @is_bridge
-      .col-md-3.resp-view.text-center.derivationRight
-        %button.btn.btn-primary.add-bridge-retriever.semibold.w-100
-          %span.me-2= glyphicon('plus', { size: '15', color: '#FFFF'})
-          %span Ajouter un automate bancaire
-    - if @is_specific_mission
-      .col-md-3.resp-view.text-center.derivationRight
-        %button.btn.btn-primary.add-internal-retriever.semibold.w-100
-          %span.me-2= glyphicon('plus', { size: '15', color: '#FFFF'})
-          %span Ajouter un automate spécifique
+    .col-md-3
+      .row.choose_retriever_action
+        - if !@all_selected
+          - if @is_budgea
+            .col-md-8.text-center.derivationRight
+              %button.btn.btn-light-primary.semibold.list-retriever.w-100{ disabled: false }
+                %span.me-4= glyphicon('list', { size: '15', color: '#0d6efd'})
+                %span Automates disponibles
+            .col-md-4.text-center.derivationRight
+              %button.btn.btn-primary.semibold.add-retriever.w-100{ disabled: false }
+                %span.me-2= glyphicon('plus', { size: '15', color: '#FFFF'})
+                %span Ajouter
+          - elsif @is_bridge
+            .col-md-12.text-center.derivationRight
+              %button.btn.btn-primary.add-bridge-retriever.semibold.w-100
+                %span.me-2= glyphicon('plus', { size: '15', color: '#FFFF'})
+                %span Ajouter un automate bancaire
+          - elsif @is_specific_mission
+            .col-md-12.text-center.derivationRight
+              %button.btn.btn-primary.add-internal-retriever.semibold.w-100
+                %span.me-2= glyphicon('plus', { size: '15', color: '#FFFF'})
+                %span Ajouter un automate spécifique
 
   .mb-4
 

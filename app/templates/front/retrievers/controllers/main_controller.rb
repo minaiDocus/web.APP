@@ -9,6 +9,12 @@ class Retrievers::MainController < RetrieverController
   prepend_view_path('app/templates/front/retrievers/views')
 
   def index
+    @all_selected = true
+
+    if (params[:account_id].present? && params[:account_id] != 'all') || (session[:retrievers_account_id].present? && session[:retrievers_account_id] != 'all')
+      @all_selected = false
+    end
+
     retrievers = if @account
                    @account.retrievers
                  else
