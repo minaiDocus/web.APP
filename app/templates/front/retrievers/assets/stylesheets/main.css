@@ -53,4 +53,12 @@ form.form-group .control-section input, form.form-group .control-section textare
   padding: 1%;
   background: rgba(26, 26, 26, 0.04);
 }
+
+.retriever-content{
+  min-height: 134px;
+}
+
+.retriever-content .retriever-box{
+  min-height: 89%;
+}
     
