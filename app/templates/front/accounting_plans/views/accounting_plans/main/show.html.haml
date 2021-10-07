@@ -148,7 +148,9 @@
           %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
         .modal-body.back-grey
           .form-group
-            %p Loading ...        
+            %p Loading ...
+        .modal-footer
+          .p-2
 
   - if @params_fec.present?
     #import_dialog.modal.fade.in

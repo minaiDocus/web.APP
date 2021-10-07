@@ -12,7 +12,7 @@ class Documents::PreseizuresController < FrontController
   def show
     if params[:view] == 'by_type'
       if @preseizure.operation
-        render file: Rails.root.join('app/templates/front/documents/views/documents/operations/_operation_box.html.haml'), locals: { preseizure: @preseizure }
+        render file: Rails.root.join('app/templates/front/documents/views/documents/operations/_operation_box.html.haml'), locals: { preseizure: @preseizure, animation: 'toLeft' }
       else
         @pieces = [@preseizure.piece]
         render file: Rails.root.join('app/templates/front/documents/views/documents/pieces/_piece_box.html.haml')

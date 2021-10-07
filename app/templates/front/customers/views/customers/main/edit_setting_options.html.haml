@@ -33,7 +33,7 @@
         - else
           %label
             Appairez ici un scanner iDocus'Box (Produit Sagemcom). Si vous n'avez pas de scanner,
-            = link_to 'vous pouvez en commander un.', organization_customer_path(@organization, @customer, tab: 'orders'), class: 'no-style green-label semibold', target: '_blank'
+            = link_to 'vous pouvez en commander un.', organization_customer_orders_path(@organization, @customer), class: 'no-style green-label semibold', target: '_blank'
             %br
             Afin d'appairer le scanner, merci de suivre les instructions du
             = link_to "mode d'emploi Sagemcom", download_document_path(name: 'Livret_utilisation_Dematbox.pdf'), class: 'no-style green-label semibold'
