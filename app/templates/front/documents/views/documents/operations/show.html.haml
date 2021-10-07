@@ -35,7 +35,7 @@
   .main-content.derivationLeft
     - if @preseizures.size > 0
       - @preseizures.each_slice(2) do |_preseizures|
-        .row.animatedGroups
+        .row.animatedGroups.content-row-operations
           - _preseizures.each_with_index do |preseizure, index|
             = render partial: 'operation_box', locals: { preseizure: preseizure, animation: (index % 2 == 0)? 'toLeft' : 'toRight' }
     - else

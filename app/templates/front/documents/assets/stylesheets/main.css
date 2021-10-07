@@ -249,6 +249,10 @@ img{
   transform: scale(1.5) !important;
 }
 
-.content-operation{
-  min-height: 170px;
+.content-row-operations{
+  min-height: 175px;
+}
+
+.content-row-operations .content-operation{
+  min-height: 94%;
 }
