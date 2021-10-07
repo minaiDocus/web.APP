@@ -16,6 +16,7 @@ class Documents::PiecesController < FrontController
   # GET /documents/:id
   def show
     _options = options
+    _options = { page: params[:page], per_page: 8 } #IMPORTANT: per_page option must be a multiple of 4 and > 8 (needed by grid type view)
     _options[:ids] = options[:piece_ids] if options[:piece_ids].present?
 
     # TODO : optimize created_at search
@@ -154,7 +155,7 @@ class Documents::PiecesController < FrontController
       params[:by_piece] = params[:by_piece].present? ? params[:by_piece].merge(params[:by_all].permit!) : params[:by_all]
     end
 
-    options = { page: params[:page], per_page: 16 } #IMPORTANT: per_page option must be a multiple of 4 and > 4 (needed by grid type view)
+    options = { page: params[:page], per_page: 16 } #IMPORTANT: per_page option must be a multiple of 4 and > 8 (needed by grid type view)
     options[:sort] = true
 
     options[:piece_created_at] = params[:by_piece].try(:[], :created_at)

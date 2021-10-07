@@ -119,5 +119,5 @@ jQuery(function() {
   AppListenTo('retriever_specific_setup_validate', (e)=>{ main.specific_setup_validate(e.detail.banking_provider); })
 
   AppListenTo('retriever_reload_all', (e)=>{ main.load_retrievers('one'); });
-  AppListenTo('on_scroll_end', (e)=>{ main.load_retrievers('next_page'); });
+  AppListenTo('documents_next_page', (e)=>{ main.load_retrievers('next_page'); });
 });

@@ -114,5 +114,5 @@ jQuery(function() {
 
   AppListenTo('compta_analytics.validate_analysis', (e)=>{ main.update_analytics(e.detail.data) });
 
-  AppListenTo('on_scroll_end', (e)=>{ main.load_next_page(); });
+  AppListenTo('documents_next_page', (e)=>{ main.load_next_page(); });
 });

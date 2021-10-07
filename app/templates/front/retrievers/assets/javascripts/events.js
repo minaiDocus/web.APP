@@ -150,8 +150,33 @@ function bind_all_events(){
   $('#add-retriever button.secondary').bind('click', function(e){
     AppEmit('add_retriever_secondary_action');
   });
+
+  $(".more-result").unbind('click').bind('click', function(e){ AppEmit('documents_next_page'); })
 }
 
 jQuery(function() {
   bind_all_events();
+
+    /* SCROLLING TO THE BOTTOM */
+  $('.body_content').scroll(function() {
+    let content_h  = $('.body_content').outerHeight();
+    let content    = document.getElementsByClassName("body_content")[0];
+    let c_position = content.scrollHeight - content.scrollTop
+
+    const show_hide_more_result = (action)=>{
+      if(action == 'show'){
+        $('.more-result').show('slow');
+      }else{
+        // $('.more_result_button').hide('slow');
+        $('.more-result').hide('slow');
+      }
+    }
+
+    if(c_position > (content_h + 200))
+      show_hide_more_result('hide');
+
+    if(c_position == content_h){
+      show_hide_more_result('show');
+    }
+  });
 });

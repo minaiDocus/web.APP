@@ -148,14 +148,34 @@ function bind_all_events(){
     $("#PdfViewerDialog .modal-body .view-content iframe.src-piece").attr("src", url);
     $("#PdfViewerDialog").modal('show');
   });
+
+  $(".more-result").unbind('click').bind('click', function(e){ AppEmit('documents_next_page'); })
 }
 
 jQuery(function() {
   bind_all_events();
 
-  $(window).scroll(function() {
-    if($(window).scrollTop() + $(window).height() == $(document).height()) {
-      AppEmit('documents_next_page');
+  /* SCROLLING TO THE BOTTOM */
+  $('.body_content').scroll(function() {
+    let content_h  = $('.body_content').outerHeight();
+    let content    = document.getElementsByClassName("body_content")[0];
+    let c_position = content.scrollHeight - content.scrollTop
+
+    const show_hide_more_result = (action)=>{
+      if(action == 'show'){
+        $('.more-result').show('slow');
+      }else{
+        // $('.more_result_button').hide('slow');
+        $('.more-result').hide('slow');
+      }
+    }
+
+    if(c_position > (content_h + 200))
+      show_hide_more_result('hide');
+
+    if(c_position == content_h){
+      // AppEmit('documents_next_page');
+      show_hide_more_result('show');
     }
   });
 });
