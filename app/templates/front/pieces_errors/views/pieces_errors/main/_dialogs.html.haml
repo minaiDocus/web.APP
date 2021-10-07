@@ -81,3 +81,40 @@
       .modal-footer
         %button.btn.btn-light.semibold.cancel{ type: :button } Annuler
         %button.btn.btn-primary.semibold.validate{ type: :button } Filtrer
+
+.modal.fade.in#show_ignored_pieces
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.modal-title.bold Pièces ignorées à la pré-affectation
+        %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+      .modal-body
+        .row
+          .col-md-8.text-start
+            %h5.name
+          .col-md-4.text-end#navigation
+            = check_box_tag 'checker', 0, false, class: 'checkbox_checker form-check-input m-2', style: 'font-size: 150%;'
+            %a.left.btn.btn-light
+              = glyphicon('chevron-left', size: '13')
+            %a.right.btn.btn-light
+              = glyphicon('chevron-right', size: '13')
+        .text-center
+          %iframe.piece.w-100{ src: '', style: 'min-height: 600px;' }
+
+.modal.fade.in#show_duplicated_pieces
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.modal-title.bold Différence : doublons de pré-affectation
+        %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+      .modal-body
+        .row
+          .col-md-6.text-center
+            %h5 Doublon
+          .col-md-6.text-center
+            %h5 Original
+        .row
+          .col-md-6.text-center
+            %iframe.duplicate.w-100{ src: '', style: 'min-height: 600px;' }
+          .col-md-6.text-center
+            %iframe.original.w-100{ src: '', style: 'min-height: 600px;' }

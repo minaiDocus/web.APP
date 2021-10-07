@@ -16,7 +16,7 @@
         %thead            
           %th.text-center
             .form-check
-              %input.form-check-input.pointer.float-none.check-all-piece-ignored{ type: :checkbox, value: "" }
+              %input.form-check-input.pointer.float-none.check-all-piece-ignored.duplicated{ type: :checkbox, value: "" }
           %th= sortable :created_at, 'Date de création'
           %th= sortable :piece_name, 'N° pièce'
           %th= sortable :piece_number, 'N° facture'
@@ -71,13 +71,14 @@
                 %td.text-end.pointer
                   .action.sub-menu-piece-ignored.pt-2
                     %span= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
-                    .sub_menu.text-start.hide
-                      %ul.no-margin.no-padding.regular                      
-                        %li.edit
-                          %span.me-1= glyphicon('eye', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                          %span Voir
+                  .sub_menu.text-start.hide
+                    %ul.no-margin.no-padding.regular
+                      %li.show_duplicated_piece
+                        = link_to glyphicon('eye', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Voir la pièce', '#', class: ("do-showPieces custom_popover duplicated_piece"), title: 'Voir la différence entre les 2 pièces PDF', data: { duplicate_url: object.piece.try(:cloud_content_object).try(:url), original_url: similar_preseizure.try(:piece).try(:cloud_content_object).try(:url), content: ""  }
+                        / TO RMOVE AFTER TEST
+                        / = link_to glyphicon('eye', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Voir la pièce', '#', class: ("do-showPieces custom_popover duplicated_piece"), title: 'Voir la différence entre les 2 pièces PDF', data: { duplicate_url: object.piece.try(:cloud_content_object).try(:url), original_url: similar_preseizure.try(:piece).try(:cloud_content_object).try(:url), content: "<div class='row-fluid'><div class='span6 aligncenter'><h5>Doublon</h5></div><div class='span6 aligncenter'><h5>Original</h5></div></div><div style='width: 1000px; height: 500px; padding: 10px;' class='aligncenter'><iframe class='duplicate' src='#{object.piece.try(:cloud_content_object).try(:url)}' style='width:470px; height:483px;'></iframe><iframe class='original' src='#{similar_preseizure.try(:piece).try(:cloud_content_object).try(:url)}' style='width:470px; height:483px;'></iframe></div>"  }
           - else
             %tr
-              %td{colspan: 9}= t('global.no-data-found')
+              %td.text-center{colspan: 9}= t('global.no-data-found')
 
   = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { name: 'duplicated-pre-assignment', mark: 'pieces_errors', total_pages: @duplicates.total_pages }

@@ -17,7 +17,7 @@
         %thead            
           %th.text-center
             .form-check
-              %input.form-check-input.pointer.float-none.check-all-piece-ignored{ type: :checkbox, value: '' }
+              %input.form-check-input.pointer.float-none.check-all-piece-ignored.ignored{ type: :checkbox, value: '' }
           %th= sortable :created_at, 'Date de création'
           %th= sortable :name, 'N° pièce'
           %th= sortable :number, 'N° facture'
@@ -27,11 +27,11 @@
           %th.text-end Action
         %tbody
           - if @ignored_list.any?
-            - @ignored_list.each do |piece|
+            - @ignored_list.each_with_index do |piece, ind|
               %tr
                 %td.text-center
                   .form-check
-                    %input.form-check-input.pointer.float-none.check-piece-ignored{ type: :checkbox, data: { value: piece.id } }
+                    %input.form-check-input.pointer.float-none.check-piece-ignored{ type: :checkbox, class: "checkbox checker_piece_#{ind}", data: { value: piece.id } }
                 %td= piece.created_at.strftime('%d-%m-%Y')
                 %td= piece.name
                 %td= piece.number                
@@ -45,13 +45,12 @@
                 %td.text-end.pointer
                   .action.sub-menu-piece-ignored
                     %span= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
-                    .sub_menu.text-start.hide
-                      %ul.no-margin.no-padding.regular                      
-                        %li.edit
-                          %span.me-1= glyphicon('eye', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                          %span Voir
+                  .sub_menu.text-start.hide
+                    %ul.no-margin.no-padding.regular
+                      %li.show_ignored_piece
+                        = link_to glyphicon('eye', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Voir la pièce', '#', class: ("do-showPieces custom_popover ignored_piece piece_#{ind}"), title: 'Voir la pièces', data: { piece_index: ind, piece_name: piece.name, piece_url: piece.cloud_content_object.url, content: html_piece_view(piece) }
           - else
             %tr
-              %td{colspan: 8}= t('global.no-data-found')
+              %td.text-center{colspan: 8}= t('global.no-data-found')
 
     = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { name: 'ignored-pre-assignment', mark: 'pieces_errors', total_pages: @ignored_list.total_pages }
