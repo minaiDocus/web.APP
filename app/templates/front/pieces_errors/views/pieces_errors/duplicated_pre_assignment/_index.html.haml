@@ -75,8 +75,6 @@
                     %ul.no-margin.no-padding.regular
                       %li.show_duplicated_piece
                         = link_to glyphicon('eye', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Voir la pièce', '#', class: ("do-showPieces custom_popover duplicated_piece"), title: 'Voir la différence entre les 2 pièces PDF', data: { duplicate_url: object.piece.try(:cloud_content_object).try(:url), original_url: similar_preseizure.try(:piece).try(:cloud_content_object).try(:url), content: ""  }
-                        / TO RMOVE AFTER TEST
-                        / = link_to glyphicon('eye', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Voir la pièce', '#', class: ("do-showPieces custom_popover duplicated_piece"), title: 'Voir la différence entre les 2 pièces PDF', data: { duplicate_url: object.piece.try(:cloud_content_object).try(:url), original_url: similar_preseizure.try(:piece).try(:cloud_content_object).try(:url), content: "<div class='row-fluid'><div class='span6 aligncenter'><h5>Doublon</h5></div><div class='span6 aligncenter'><h5>Original</h5></div></div><div style='width: 1000px; height: 500px; padding: 10px;' class='aligncenter'><iframe class='duplicate' src='#{object.piece.try(:cloud_content_object).try(:url)}' style='width:470px; height:483px;'></iframe><iframe class='original' src='#{similar_preseizure.try(:piece).try(:cloud_content_object).try(:url)}' style='width:470px; height:483px;'></iframe></div>"  }
           - else
             %tr
               %td.text-center{colspan: 9}= t('global.no-data-found')
