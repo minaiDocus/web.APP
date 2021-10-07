@@ -225,9 +225,6 @@ function check_flash_messages(){
 }
 
 jQuery(function () {
-
-  alert($(window).width());  
-
   init_menu_animation();
 
   bind_globals_events();

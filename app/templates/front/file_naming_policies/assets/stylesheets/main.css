@@ -65,3 +65,10 @@ label{
   padding: 0.5%;
   font-size: 17px;
 }
+
+
+@media (max-width: 1280px) {
+  .ui-sortable .sortable_child{
+    font-size: 0.8rem !important;
+  }
+}

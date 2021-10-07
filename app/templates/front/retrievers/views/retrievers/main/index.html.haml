@@ -6,28 +6,28 @@
       %h3.bold
         Mes automates
         %span.badge.badge-secondary.regular.total-count= @retrievers.total_count
-    .col-md-2.text-start.derivationRight
+    .col-md-2.text-start.resp-view.derivationRight
       = select_tag 'account_id', options_for_select(customers_active.unshift(['Tous', 'all']), @account.try(:id) || 'all'), include_blank: false, class: 'form-select'
-    .col-md-1.text-center.derivationRight
+    .col-md-1.resp-view.text-center.derivationRight
       %button.btn.btn-light.semibold.retriever-filter.w-100{ disabled: false }
         %span.me-2 Filtrer
         %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
     - if @is_budgea
-      .col-md-2.text-center.derivationRight
+      .col-md-2.resp-view.text-center.derivationRight
         %button.btn.btn-light-primary.semibold.list-retriever.w-100{ disabled: false }
           %span.me-4= glyphicon('list', { size: '15', color: '#0d6efd'})
           %span Automates disponibles
-      .col-md-1.text-center.derivationRight
+      .col-md-1.resp-view.text-center.derivationRight
         %button.btn.btn-primary.semibold.add-retriever.w-100{ disabled: false }
           %span.me-2= glyphicon('plus', { size: '15', color: '#FFFF'})
           %span Ajouter
     - if @is_bridge
-      .col-md-3.text-center.derivationRight
+      .col-md-3.resp-view.text-center.derivationRight
         %button.btn.btn-primary.add-bridge-retriever.semibold.w-100
           %span.me-2= glyphicon('plus', { size: '15', color: '#FFFF'})
           %span Ajouter un automate bancaire
     - if @is_specific_mission
-      .col-md-3.text-center.derivationRight
+      .col-md-3.resp-view.text-center.derivationRight
         %button.btn.btn-primary.add-internal-retriever.semibold.w-100
           %span.me-2= glyphicon('plus', { size: '15', color: '#FFFF'})
           %span Ajouter un automate spécifique

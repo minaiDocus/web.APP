@@ -124,3 +124,26 @@
   width:843px; 
   height:415px;
 }
+
+@media (max-width: 1280px) {
+  .table tbody {
+    font-size: 11px;
+  }
+
+  .form-select{
+    padding: 0.3rem 2rem 0.3rem 0.4rem;
+    font-size: 0.7rem;
+  }
+
+  .form-select option, label.red-label{  
+    font-size: 11px;
+  }
+
+  .label-legend {
+    font-size: 13px;
+  }
+
+  .list-legend {
+    font-size: 11px !important;
+  }
+}

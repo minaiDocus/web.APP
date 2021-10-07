@@ -255,11 +255,9 @@ img{
 
 .content-row-operations .content-operation{
   min-height: 94%;
+}
 
 @media (max-width: 1280px) {
-  .btn{
-    font-size: 11px;
-  }
 
   label{
     font-size: 12px;
@@ -323,5 +321,4 @@ img{
   .fileinput-button{
     font-size: 13px;
   }
->>>>>>> 4f0ff29... ResponsiveDesign : primary page
 }

@@ -70,3 +70,21 @@
 .form-check-input[type='checkbox']:checked{
   margin-top: 12%
 }
+
+@media (max-width: 1280px) {
+  .box-software a{
+    padding: 25% 0 0 0;
+  }
+
+  .use-software{
+    font-size: 30px;
+  }
+
+  .image-software{
+    width: 80%;
+  }
+
+  .form-check-input[type="checkbox"]:checked {
+    margin-top: 50%;
+  }
+}

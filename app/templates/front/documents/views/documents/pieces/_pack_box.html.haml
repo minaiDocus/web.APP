@@ -1,10 +1,10 @@
 - packs.each do |pack|
   .box.animatedChild{ class: animation }
     .row
-      .col-md-5
+      .col-md-4
         %h6.pack=link_to pack.name.to_s.gsub('all', '').strip, documents_details_path(id: pack.id), class: "no-style black-label bold"        
         %label.under_pack.regular= pack.owner.organization.name 
-      .col-md-4
+      .col-md-5
         .created-date
           %label.semibold Premier ajout le :
           %label= pack.created_at.strftime('%d/%m/%Y')

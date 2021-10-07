@@ -93,3 +93,9 @@ body {
   overflow-y: auto;
   overflow-x: hidden; 
 }
+
+@media (max-width: 1280px) {
+  .lefter ul.principal {
+    font-size: 11px;    
+  }
+}
