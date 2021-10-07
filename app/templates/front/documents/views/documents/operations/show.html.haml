@@ -2,12 +2,12 @@
 
 .container-fluid
   .row.derivationLeft
-    .col-md-1
+    .col-md-1.return-back
       %button.btn.btn-default
         %a{href: operations_path}
           %span.me-2= glyphicon('arrow-left', {size: '12', color: '#72AA42'})
           %span Retour
-    .col-md-7.no-padding{ id: 'current_report', data: { id: @report.id } }
+    .col-md-7.no-padding.report_pack{ id: 'current_report', data: { id: @report.id } }
       %h3.bold.mt-2
         %span.me-2= @report.name.gsub('all', '').strip
         %span.badge.badge-secondary.regular.datas_size= @preseizures.total_count
@@ -25,7 +25,7 @@
 
   .row.box.p-4.derivationRight
     .col-md-9
-    .col-md-3.text-end
+    .col-md-3.icon-actions.text-end
       - if @user.has_collaborator_action?
         %span.pointer.ms-2.preseizures_export{title: 'Export écriture', data:{ id: @report.id, type: 'special_operation', multi: 'true' }}= glyphicon('cloud-download', { size: '18', color:'rgba(26, 26, 26, 0.32);'})
         %span.pointer.ms-2.deliver_preseizures{title: 'Livraison écriture comptable', data: { id: @report.id, type: 'special_operation', multi: 'true'}}= glyphicon('loop-circular', { size: '18', color:'rgba(26, 26, 26, 0.32);'})

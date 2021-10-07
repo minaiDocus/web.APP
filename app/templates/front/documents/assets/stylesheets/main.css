@@ -255,4 +255,73 @@ img{
 
 .content-row-operations .content-operation{
   min-height: 94%;
+
+@media (max-width: 1280px) {
+  .btn{
+    font-size: 11px;
+  }
+
+  label{
+    font-size: 12px;
+  }
+
+  h6, .operation-count{
+    font-size: 0.8rem;
+  }
+
+  .btn svg, .search-content svg{ 
+    width: 11px !important;
+    height: 11px !important;
+  }
+
+  .search-content{
+    margin-right: 8px;
+  }
+
+  .search-content input{
+    font-size: 13px;
+    padding: 6px;
+  }
+
+  .badge{
+    font-size: 0.60em;
+    font-weight: 600;
+  }
+
+  .caret-right svg, .zoom svg{
+    width: 15px !important;
+    height: 15px !important;
+  }
+
+  .icon-actions svg{
+    width: 12px !important;
+    height: 12px !important;
+  }
+
+  .return-back{
+    width: 10%;
+    margin-top: 5px;
+  }
+
+  .report_pack{
+    width: 56%;
+  }
+
+  .image_piece img{
+
+  }
+
+  .modal .form-select, .modal .form-control{
+    padding: 0.3rem 2rem 0.3rem 0.4rem;
+    font-size: 0.7rem;
+  }
+
+  .form-select option, label.red-label{  
+    font-size: 11px;
+  }
+
+  .fileinput-button{
+    font-size: 13px;
+  }
+>>>>>>> 4f0ff29... ResponsiveDesign : primary page
 }

@@ -14,7 +14,7 @@
       .col-md-2
         .operation-count.text-end.p-1
           %span= pack.pieces.size
-      .col-md-1
+      .col-md-1.caret-right
         =link_to glyphicon('caret-right', { size: '20', color: '#CCC' }), documents_details_path(id: pack.id) 
     %hr.w-100.no-margin   
     .row

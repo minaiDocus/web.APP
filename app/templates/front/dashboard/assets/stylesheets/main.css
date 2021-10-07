@@ -157,4 +157,26 @@ input:checked + .slider:before {
   .box, .favorite-customer-content, h6{
     font-size: 0.8rem;
   }
+
+  .sol-inner-container{
+    height: 40px;
+    font-size: 13px;
+  }
+
+  .sol-caret-container svg{
+    width: 12px !important;
+    height: 12px !important;
+  }
+
+  .sol-selected-display-item{
+    font-size: 0.7em;
+  }
+
+  .sol-label {
+    font-size: 11px;
+  }
+
+  .no-favorite-customer{
+    padding: 5% 15%;
+  }
 }

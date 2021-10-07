@@ -4,7 +4,8 @@
     %form{ action: dashboard_index_path, method: 'GET', class: 'form-inline margin0bottom' }
       .form-group
         %label{ for: 'user_code'  } Visualiser et agir en tant que :
-        %input.form-control#user_code{  placeholder: 'code utilisateur', value: session[:user_code].presence, name: 'user_code' }      
+        .select-container.no-padding.w-100
+          %input#user_code{  placeholder: 'code utilisateur', value: session[:user_code].presence, name: 'user_code' }      
       %hr
       .row
         .col-md-4.text-center.for-margin-right.no-margin.ps-0.pe-0.semibold

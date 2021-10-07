@@ -9,6 +9,7 @@
 .auto-scroll-div ul.nav{
   width: 870px;
   flex-wrap: unset;
+  white-space: nowrap;
 }
 
 .auto-scroll-div .dropdown-menu.show{    

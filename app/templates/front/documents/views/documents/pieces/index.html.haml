@@ -13,13 +13,13 @@
             = glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })
           .col-md-11.no-padding.no-margin
             %input#search_input{ name:'pack_name', placeholder: 'Rechercher' }
-    .col-md-1.text-center.derivationRight
+    .col-md-1.no-padding.text-center.derivationRight
       %button.btn.btn-light.more-filter.w-100.semibold        
         %span.me-2 Filtrer
         %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
     .col-md-2.derivationRight
       %button.btn.btn-primary.add-document.w-100.semibold
-        %span.me-3= glyphicon('plus', { size: '16', color: '#FFFF'})
+        %span.me-2= glyphicon('plus', { size: '16', color: '#FFFF'})
         %span Ajouter des documents
   .mb-4
   .row.main-content

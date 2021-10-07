@@ -2,12 +2,12 @@
 
 .container-fluid
   .row.derivationLeft
-    .col-md-1.text-end
+    .col-md-1.return-back.text-end
       %button.btn.btn-default
         %a{href: '/documents'}
           %span.me-2= glyphicon('arrow-left', {size: '12', color: '#72AA42'})
           %span Retour
-    .col-md-7.no-padding{ id: 'current_pack', data: { id: @pack.id } }
+    .col-md-7.no-padding.report_pack{ id: 'current_pack', data: { id: @pack.id } }
       %h3.bold.mt-2
         %span.me-2= @pack.name.gsub('all', '')
         %span.badge.badge-secondary.regular.datas_size= @pieces.total_count
@@ -38,8 +38,8 @@
       .col-md-1.no-padding.text-left.change-view.to-grid.hide= glyphicon('media-pause', { size: '14', color:'rgba(26, 26, 26, 0.32);', style: 'transform: rotate(90deg)' })
     - else
       .col-md-1.no-padding.text-left
-    .col-md-9
-    .col-md-2.icon-actions.text-end      
+    .col-md-8
+    .col-md-3.icon-actions.text-end      
       - if @pack.owner.uses_ibiza_analytics?
         %span.pointer.ms-2.action-selected.edit_compta_analysis.hide{ title: 'Édition compta. analytiques', data: { code: @pack.owner.code, is_used: @pack.owner.uses_ibiza_analytics?.to_s } }= glyphicon('pencil', { size: '18', color:'rgba(26, 26, 26, 0.32);'})
       %span.pointer.ms-2.download_pack_bundle{title: 'Télécharger', data: {id: @pack.id}}= glyphicon('data-transfer-download', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
