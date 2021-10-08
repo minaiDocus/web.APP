@@ -39,4 +39,13 @@ jQuery(function () {
     let url = e.detail.obj.data('url');
     $('#invoice_view iframe').attr('src', url);
   })
+
+  // Need to hide some elements [vs reload page] on hidden(close) modal
+  $('#general_idocus_main_modal').on('hidden.bs.modal', function () {
+    // window.location.reload();
+
+    $('#synchronization').addClass('hide');
+    $('#integration').addClass('hide');
+    $('#invoice_view iframe').attr('src', '');
+  });
 });
