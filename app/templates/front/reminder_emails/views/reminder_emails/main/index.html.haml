@@ -52,3 +52,5 @@
                         = link_to glyphicon('envelope-open', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Envoyer', '#', class: 'as_idocus_ajax', idocus: idocus_params
 
       = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: organization_reminder_emails_path(@organization.id), target: '#reminder-email-table', total_pages: @reminder_emails.total_pages }
+
+= javascript_include_tag 'front/reminder_emails/assets/javascripts/main'

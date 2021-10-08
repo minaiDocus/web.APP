@@ -11,7 +11,7 @@
         = f.input :subject, input_html: { class: 'input-xxlarge' }
     .form-group
       .select-container.no-padding.w-100
-        = f.input :content, :as => :ckeditor, :input_html => {class: 'ckeditor', :ckeditor => {:toolbar => 'mini'}}
+        = f.input :content, as: :ckeditor, input_html: { class: 'ckeditor', ckeditor: { toolbar: 'mini' }}
 
     .mb-4
     / .form-group
@@ -33,5 +33,5 @@
 
   .idocus_modal_buttons
     - redirection = { url: organization_reminder_emails_path(@organization.id), method: 'GET', html: { target: '.reminder-email-content' } }
-    - idocus_params= param_encode({ url: '#url', form: { id: 'email_configuration', dump_action: true }, redirect_to: redirection, modal: { id: '#' } })
+    - idocus_params = param_encode({ url: '#url', form: { id: 'email_configuration', dump_action: true }, before_send: 'update_reminder_email_content', redirect_to: redirection, modal: { id: '#' } })
     %button.btn.btn-primary.as_idocus_ajax{ type: 'button', idocus: idocus_params }= t('actions.submit')
