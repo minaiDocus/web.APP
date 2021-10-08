@@ -241,7 +241,6 @@ class PaperSetOrder{
     orders.each(function(i){
       let order = this;
       let paper_set_casing_size  = parseInt($(order).find("select[name*='paper_set_casing_size']").val());
-      console.log(paper_set_casing_size);
 
       let paper_set_folder_count_index = parseInt($(order).find("select[name*='paper_set_folder_count']").val()) - 5;
       let start_date = new Date($(order).find("select[name*='paper_set_start_date']").val());
@@ -267,8 +266,6 @@ class PaperSetOrder{
       $(order).find('.price').html(price + ",00€");
       $('.total_price').html(total_price + ",00€ HT");
     });
-
-    console.log('vita le price');
   }
 
   update_table_casing_counts(index){

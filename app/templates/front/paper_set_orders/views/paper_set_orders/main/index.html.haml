@@ -32,7 +32,7 @@
       %tbody
         - @orders.each do |order|
           %tr
-            %td.text-table-green.semibold= link_to "#{order.user.info}", organization_customer_path(@organization, order.user_id, tab: 'orders')
+            %td.text-table-green.semibold= link_to "#{order.user.info}", organization_customer_orders_path(@organization, customer_id: order.user_id)
             %td= order.created_at.strftime('%d/%m/%y')
             %td= truncate(order.company, length: 20, separator: ' ')
             %td
