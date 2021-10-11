@@ -62,11 +62,11 @@ class Admin::Organizations::MainController < OrganizationController
   private
 
   def verify_admin_rights
-    redirect_to root_url unless @user.is_admin
+    redirect_to root_url unless current_user.is_admin
   end
 
   def organization_params
-    if @user.is_admin
+    if current_user.is_admin
       params.require(:organization).permit(
         :name,
         :code,
