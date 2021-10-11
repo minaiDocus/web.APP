@@ -28,7 +28,7 @@ module ApplicationHelper
 
 
   def render_async(url, params={}, no_loading=false)
-    target = rand.to_s.split('.')[1]
+    target = ApplicationController.renderer_async_id
 
     _display = 'none'
     _loader  = content_tag(:div).html_safe

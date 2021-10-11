@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
 
   helper_method :format_price, :format_price_00
   before_action :configure_permitted_parameters, only: [:login_user!]
+  before_action :init_vars
   before_action :set_raven_context
 
   if %w[staging sandbox production].include?(Rails.env)
@@ -14,6 +15,17 @@ class ApplicationController < ActionController::Base
   end
   #around_action :catch_error if %w[sandbox production test].include?(Rails.env)
   #around_action :log_visit
+
+  def self.renderer_async_id
+    begin
+      @@renderer_async_id = @@renderer_async_id.to_i + 1
+    rescue
+      @@renderer_async_id = 1
+    end
+
+    @@renderer_async_id
+  end
+
 
   def after_sign_in_path_for(resource_or_scope)
     # TODO : reactivate when paths are sanitized
@@ -139,8 +151,13 @@ class ApplicationController < ActionController::Base
     @json_flash[index] = data
   end
 
-  def set_raven_context
+  def init_vars
     @json_flash = {}
+    #init renderer_async_id
+    @@renderer_async_id = rand.to_s.split('.')[1]
+  end
+
+  def set_raven_context
     Raven.user_context(id: session[:current_user_id]) # or anything else in session
     Raven.extra_context(params: params.to_unsafe_h, url: request.url)
   end

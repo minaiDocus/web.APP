@@ -28,37 +28,39 @@
           %li{ data: { href: "#{@organization.id}/edit" } }
             %a{href: edit_organization_path(@organization) }
               %span.link_slave{class: (organization_edit ? 'active' : '')}= t('organizations.general')
-          %li{ data: { href: "#{@organization.id}/file_naming_policy/edit" } }
-            %a{href: edit_organization_file_naming_policy_path(@organization) }
-              %span.link_slave{class: (file_naming_policy_edit ? 'active' : '')}= t('organizations.pdf_naming')
-          %li{ data: { href: "#{@organization.id}/reminder_emails" } }
-            %a{href: organization_reminder_emails_path(@organization) }
-              %span.link_slave{class: (reminder_emails_index ? 'active' : '')}= t('organizations.reminder_emails')
-          %li{ data: { href: "#{@organization.id}/addresses/" } }
-            %a{href: organization_addresses_path(@organization) }
-              %span.link_slave{class: (addresses_index ? 'active' : '')}= t('organizations.address_management')
-          %li{ data: { href: "#{@organization.id}/efs" } }
-            %a{href: organization_efs_path(@organization) }
-              %span.link_slave{class: (organization_efs ? 'active' : '')}= t('organizations.efs')
-          %li{ data: { href: "#{@organization.id}/softwares" } }
-            %a{href: softwares_list_path(@organization) }
-              %span.link_slave{class: (organization_software_setting ? 'active' : '')}= t('organizations.software')
-          - if (@user.leader? && !@organization.specific_mission)
-            %li{ data: { href: "#{@organization.id}/edit_payment" } }
-              %a{href: edit_payment_organization_path(@organization) }
-                %span.link_slave{class: (organization_edit_payment ? 'active' : '')}= t('organizations.payment_method')
-          - if @user.is_admin && !@organization.specific_mission
-            %li{ data: { href: "#{@organization.id}/subscription" } }
-              %a{href: organization_organization_subscription_path(@organization) }
-                %span.link_slave{class: (organization_subscription ? 'active' : '')}= t('organizations.subscription')
-          - if CustomUtils.is_manual_paper_set_order?(@organization) && @user.is_prescriber
-            %li{ data: { href: "#{@organization.id}/file_sending_kit" } }
-              %a{href: select_organization_file_sending_kit_path(@organization) }
-                %span.link_slave{class: (organization_file_sending_kit ? 'active' : '')} Kit d'envoi de numérisation
-          - elsif @user.is_admin && !@organization.specific_mission
-            %li{ data: { href: "#{@organization.id}/file_sending_kit" } }
-              %a{href: organization_file_sending_kit_path(@organization) }
-                %span.link_slave{class: (organization_file_sending_kit ? 'active' : '')} Kit d'envoi de documents
+          - if @organization.is_active
+            %li{ data: { href: "#{@organization.id}/addresses/" } }
+              %a{href: organization_addresses_path(@organization) }
+                %span.link_slave{class: (addresses_index ? 'active' : '')}= t('organizations.address_management')
+            - unless @organization.specific_mission
+              %li{ data: { href: "#{@organization.id}/file_naming_policy/edit" } }
+                %a{href: edit_organization_file_naming_policy_path(@organization) }
+                  %span.link_slave{class: (file_naming_policy_edit ? 'active' : '')}= t('organizations.pdf_naming')
+              %li{ data: { href: "#{@organization.id}/reminder_emails" } }
+                %a{href: organization_reminder_emails_path(@organization) }
+                  %span.link_slave{class: (reminder_emails_index ? 'active' : '')}= t('organizations.reminder_emails')
+              %li{ data: { href: "#{@organization.id}/efs" } }
+                %a{href: organization_efs_path(@organization) }
+                  %span.link_slave{class: (organization_efs ? 'active' : '')}= t('organizations.efs')
+              %li{ data: { href: "#{@organization.id}/softwares" } }
+                %a{href: softwares_list_path(@organization) }
+                  %span.link_slave{class: (organization_software_setting ? 'active' : '')}= t('organizations.software')
+              - if @user.is_admin
+                %li{ data: { href: "#{@organization.id}/subscription" } }
+                  %a{href: organization_organization_subscription_path(@organization) }
+                    %span.link_slave{class: (organization_subscription ? 'active' : '')}= t('organizations.subscription')
+              - if CustomUtils.is_manual_paper_set_order?(@organization) && @user.is_prescriber
+                %li{ data: { href: "#{@organization.id}/file_sending_kit" } }
+                  %a{href: select_organization_file_sending_kit_path(@organization) }
+                    %span.link_slave{class: (organization_file_sending_kit ? 'active' : '')} Kit d'envoi de numérisation
+              - elsif @user.is_admin
+                %li{ data: { href: "#{@organization.id}/file_sending_kit" } }
+                  %a{href: organization_file_sending_kit_path(@organization) }
+                    %span.link_slave{class: (organization_file_sending_kit ? 'active' : '')} Kit d'envoi de documents
+              - if @user.leader?
+                %li{ data: { href: "#{@organization.id}/edit_payment" } }
+                  %a{href: edit_payment_organization_path(@organization) }
+                    %span.link_slave{class: (organization_edit_payment ? 'active' : '')}= t('organizations.payment_method')
       // =================== PARAMETERS ===============================
 
       - if @user.leader? || @user.manage_collaborators
