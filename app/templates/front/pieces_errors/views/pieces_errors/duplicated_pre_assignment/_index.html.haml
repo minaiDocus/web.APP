@@ -79,4 +79,4 @@
             %tr
               %td.text-center{colspan: 9}= t('global.no-data-found')
 
-  = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { name: 'duplicated-pre-assignment', mark: 'pieces_errors', total_pages: @duplicates.total_pages }
+  = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { name: 'duplicated-pre-assignment', filter: 'filter-duplicated-pre-assignment-form', mark: 'pieces_errors', total_pages: @duplicates.total_pages }

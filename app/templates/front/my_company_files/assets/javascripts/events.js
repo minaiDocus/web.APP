@@ -20,5 +20,5 @@ function bind_mcf_customer_events() {
 }
 
 jQuery(function() {
-  bind_mcf_customer_events();
+ AppListenTo('window.application_auto_rebind', (e)=>{ bind_mcf_customer_events(); });
 });

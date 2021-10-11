@@ -22,5 +22,5 @@
           - if(params[:page].to_i > 1)
             %span.pointer.previous-page{id: "previous-page-#{name}", data: { url: url, target: target, filter: filter, name: name, per_page: (params[:per_page].presence || 20), mark: mark, current_page: (params[:page] || total_pages), total_pages: total_pages }}= glyphicon('chevron-left', { size: '15', color: "#1A1A1A" })
         .col-md-1
-          - if(params[:page].to_i < total_pages)
+          - if(params[:page].to_i < total_pages && total_pages > 1)
             %span.pointer.next-page{id: "next-page-#{name}", data: { url: url, target: target, filter: filter, name: name, per_page: (params[:per_page].presence || 20), mark: mark, current_page: (params[:page] || 1), total_pages: total_pages }}= glyphicon('chevron-right', { size: '15', color: "#1A1A1A" })

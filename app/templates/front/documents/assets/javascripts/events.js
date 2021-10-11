@@ -149,7 +149,7 @@ function bind_all_events(){
     $("#PdfViewerDialog").modal('show');
   });
 
-  $(".more-result").unbind('click').bind('click', function(e){ AppEmit('documents_next_page'); })
+  $(".more-result").unbind('click').bind('click', function(e){ $(this).hide('fast'); AppEmit('documents_next_page'); })
 }
 
 jQuery(function() {
@@ -163,10 +163,10 @@ jQuery(function() {
 
     const show_hide_more_result = (action)=>{
       if(action == 'show'){
-        $('.more-result').show('slow');
+        $('.more-result').show('fast');
       }else{
         // $('.more_result_button').hide('slow');
-        $('.more-result').hide('slow');
+        $('.more-result').hide('fast');
       }
     }
 

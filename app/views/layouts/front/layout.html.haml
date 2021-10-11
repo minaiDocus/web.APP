@@ -38,13 +38,14 @@
       %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}
       %label.mt-2.semibold Chargement
 
-
-  // For more result system (used by "Mes documents" AND "Opération bancaires" AND "Automates")
-  .more-result.pointer.hide{ "data-bs-toggle"=>"popover", "data-bs-trigger"=>"hover", "data-bs-content"=>"Plus de résultat", "data-bs-placement"=>"left"}
-    .scroll-arrow= glyphicon('plus', { size: '16', color: 'rgba(26, 26, 26, 0.7)' })
-
   .scroll-on-top.pointer.hide
     .scroll-arrow= glyphicon('arrow-top', { size: '16', color: 'rgba(26, 26, 26, 0.7)' })
+
+  // For more result system (used by "Mes documents" AND "Opération bancaires" AND "Automates")
+  %button.btn.btn-light.more-result.hide.w-25
+    / %span.me-2= glyphicon('arrow-bottom', {size: '12', color: '#72AA42'})
+    %span Plus de résultat
+    %span.ms-2= glyphicon('arrow-bottom', {size: '12', color: '#72AA42'})
 
   = javascript_include_tag 'front/news/assets/javascripts/main'
   = javascript_declare_var 'rails_env', Rails.env

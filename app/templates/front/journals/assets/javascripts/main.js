@@ -1,8 +1,27 @@
 //= require './journal'
 
+function searchable_option_copy_journals_list() {
+  let checked_count = 0;
+
+  $('select#copy-journals-into-customer').removeClass('form-control');
+  $('select#copy-journals-into-customer').asMultiSelect({
+    'noneText': 'Selectionner un/des journaux',
+    'allText': 'Tous séléctionnés',
+    events: {
+      onChange: function(sol, changedElements) {
+        changedElements['0'].checked ? checked_count ++ : checked_count --;
+        (checked_count > 0) ? $('.copy_account_book_type_btn').removeAttr('disabled') : $('.copy_account_book_type_btn').attr('disabled', 'disabled');
+      },
+    }
+  });
+}
+
+
 jQuery(function () {
   let journal = new Journal();
   journal.main();
+
+  AppListenTo('window.application_auto_rebind', (e)=>{ searchable_option_copy_journals_list(); });
 
   AppListenTo('compta_analytic.edit_journal_compta', (e)=>{
     let elem = e.detail.obj;

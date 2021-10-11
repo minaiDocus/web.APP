@@ -89,9 +89,14 @@ body {
   margin-left: 2%;
 }
 
+.heading_customer{
+  max-height: 38em;
+}
+
 .customer_content_container{
   overflow-y: auto;
-  overflow-x: hidden; 
+  overflow-x: hidden;
+  max-height: 42.7em;
 }
 
 @media (max-width: 1280px) {

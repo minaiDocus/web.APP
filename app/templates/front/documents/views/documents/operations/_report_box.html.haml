@@ -4,7 +4,7 @@
       .col-md-5
         %h6.pack.semibold= link_to report.name.gsub('all', '').strip, operations_details_path(id: report.id), class: 'no-style bold black-label'
         %label.under_pack.regular= report.user.try(:organization).try(:name)
-      .col-md-4
+      .col-md-4.no-padding
         .created-date
           %label.semibold Premier ajout le :
           %label= report.preseizures.first.try(:created_at).try(:strftime, '%d/%M/%Y')

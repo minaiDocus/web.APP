@@ -71,7 +71,7 @@ function bind_all_events_paper_set_orders(){
       AppEmit('update_price');
     });
 
-    $('select').unbind('change').bind('change', function(e) {
+    $('select').unbind('change.update_price').bind('change.update_price', function(e) {
       if ($(this).attr('id') === 'order_paper_set_start_date' || $(this).attr('id') === 'order_paper_set_end_date' ) {
         AppEmit('update_casing_counts');
       }
@@ -114,7 +114,7 @@ function bind_all_events_paper_set_orders(){
       AppEmit('update_table_price');
     });
 
-    $('select').unbind('change').bind('change', function(e) { AppEmit('update_table_price'); });
+    $('select').unbind('change.update_table_price').bind('change.update_table_price', function(e) { AppEmit('update_table_price'); });
     $('.date_order').unbind('change').bind('change', function(e) {
       const index = $(this).attr("data-index");
       AppEmit('update_table_casing_counts', { index: index}).then((e)=>{

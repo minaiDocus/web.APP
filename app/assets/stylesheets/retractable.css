@@ -27,6 +27,21 @@
   100% { opacity: 1; }
 }
 
+
+@mozkeyframes scaleIn {
+  from { opacity: 0; transform: scale(1.06) }
+  to { opacity: 1; transform: scale(1) }
+}
+@webkitkeyframes scaleIn {
+  from { opacity: 0; transform: scale(1.06) }
+  to { opacity: 1; transform: scale(1) }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(1.06) }
+  to { opacity: 1; transform: scale(1) }
+}
+
+
 @mozkeyframes showLogin {
   0% { transform: scale(1.2); }
   100% { transform: scale(1); }
@@ -201,6 +216,12 @@ tbody.retractable.slidedown tr {
 .fadein {
   opacity: 1;
   animation-name: fadeIn;
+  animation-duration: 0.8s;
+}
+
+.scalein{
+  opacity: 1;
+  animation-name: scaleIn;
   animation-duration: 0.8s;
 }
 

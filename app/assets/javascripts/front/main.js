@@ -88,14 +88,16 @@ function bind_globals_events(){
         else
           url2 = `${url2}?${page_params}`;
 
-        if(filter)
-          url2 = `${url2}&${ $(`form#${filter}`).serialize() }`;
+        if(filter){
+          try{ url2 = `${url2}&${ $(`form#${filter}`).serialize() }` }catch{};
+        }
 
         ApplicationJS.launch_async({ url: url2, method: 'GET', html: { target: target } }).then((e)=>{ emit_pagination_events() });
       }else{
         emit_pagination_events();
       }
     });
+
     $('.pagination .previous-page').unbind('click').bind('click', function(e){
       let url          = $(this).data('url');
       let target       = $(this).data('target');
@@ -121,8 +123,9 @@ function bind_globals_events(){
           else
             url2 = `${url2}?${page_params}`;
 
-          if(filter)
-            url2 = `${url2}&${ $(`form#${filter}`).serialize() }`;
+          if(filter){
+            try{ url2 = `${url2}&${ $(`form#${filter}`).serialize() }` }catch{};
+          }
 
           ApplicationJS.launch_async({ url: url2, method: 'GET', html: { target: target } }).then(e=>{ emit_pagination_events(); });
         }
@@ -157,8 +160,9 @@ function bind_globals_events(){
           else
             url2 = `${url2}?${page_params}`;
 
-          if(filter)
-            url2 = `${url2}&${ $(`form#${filter}`).serialize() }`;
+          if(filter){
+            try{ url2 = `${url2}&${ $(`form#${filter}`).serialize() }` }catch{};
+          }
 
           ApplicationJS.launch_async({ url: url2, method: 'GET', html: { target: target } }).then(e=>{ emit_pagination_events(); });
         }
