@@ -88,3 +88,27 @@ p{
 .modal .back-grey{
   background: rgba(26, 26, 26, 0.04);
 }
+
+
+@media (max-width: 1280px) {
+  .form-switch .form-check-input {
+    height: 1em;
+    margin-top: 20%;
+  }
+
+  .label-package{
+    font-size: 1.4rem;
+  }
+
+  .description{
+    font-size: 0.7rem;
+  }
+
+  p{
+    font-size: 0.7rem;
+  }
+
+  .price{
+    font-size: 14px;
+  }
+}

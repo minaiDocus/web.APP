@@ -171,12 +171,12 @@
   
   %hr
   .form-group.row.w-100
-    .col-md-4.text-center
+    .col-md-6.text-start
       - if current_user.is_admin
         .form-check.form-check-inline.me-5
           %label.form-check-label Appliquer tout de suite les options à la baisse ?
           = check_box_tag 'subscription[is_to_apply_now]', true, false, class: 'form-check-input'
-    .col-md-8.text-start
+    .col-md-6.text-start
       %h5
         Prix du forfait avec les options sélectionnées :
         %b.total_price.bold 0,00 €
@@ -184,7 +184,8 @@
 - if @subscription.try(:futur_packages) && @subscription.try(:futur_packages) != @subscription.try(:current_package)
   .text-center
     .alert.alert-warning.mb-3{ class: "#{(@subscription && @subscription.try(:futur_packages).present? && @subscription.try(:futur_packages) != '[]') ? '' : 'hide' }" }
-      %h4.bold Votre abonnement du mois prochain:
+      %h4.bold Votre abonnement du mois prochain :
+      %hr
       %table.future_packages
         %tbody
           - total_price = 0

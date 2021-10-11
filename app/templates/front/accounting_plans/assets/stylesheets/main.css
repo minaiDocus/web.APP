@@ -17,3 +17,13 @@
 #import_dialog.modal .modal-dialog{
   min-width: 1024px;
 }
+
+@media (max-width: 1280px) {
+  .filestyle.form-control{
+    font-size: 0.7rem;
+  }
+
+  .badge.bg-info{
+    font-size: 0.55em;
+  }
+}

@@ -93,7 +93,7 @@
               .row
                 .col-md-6.semibold
                   = f.label :account_type, label: 'Configuration du journal'
-                  %span.pointer{ "data-bs-toggle" => "tooltip", "data-bs-placement" => "bottom", "data-bs-html" => "true", "title" => "<u>Compte d’attente</u> : la pré-saisie comptable sera effectuée avec les informations issues du plan comptable de votre outil comptable. Si il n’y a pas d’informations dans ce plan de compte, iDocus saisira les écritures dans les comptes d’attente paramétrés ici. <b>Compte par défaut</b> : iDocus saisira systématiquement toutes les factures déposées dans le journal comptable sur les comptes paramétrés sans se référer au plan comptable." }= glyphicon('info', { size: '15', color: 'rgba(26, 26, 26, 0.32)'} )          
+                  %span.pointer{ "data-bs-toggle": "tooltip", "data-bs-placement": "bottom", "data-bs-html": "true", "title": "<u>Compte d’attente</u> : la pré-saisie comptable sera effectuée avec les informations issues du plan comptable de votre outil comptable. Si il n’y a pas d’informations dans ce plan de compte, iDocus saisira les écritures dans les comptes d’attente paramétrés ici. <b>Compte par défaut</b> : iDocus saisira systématiquement toutes les factures déposées dans le journal comptable sur les comptes paramétrés sans se référer au plan comptable." }= glyphicon('info', { size: '15', color: 'rgba(26, 26, 26, 0.32)'} )          
                 .col-md-6
                   .form-check.form-check-inline                 
                     %label.form-check-label Compte d'attente
@@ -127,11 +127,11 @@
                         %i.help-block Compte de TVA par défaut appliqué à tous les documents dans le journal comptable iDocus
                     .col-md-3
                       .select-container.no-padding.w-100
-                        %input.book-code-software.mb-2.p-2{ type: 'text', name: 'account_book_type[vat_accounts_rate]', value: 445660, :class => 'form-control string optional vat_accounts', id: 'account_book_type_default_vat_accounts', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => 'Compte de TVA relative au taux' }
+                        %input.book-code-software.mb-2.p-2{ type: 'text', name: 'account_book_type[vat_accounts_rate]', :class => 'form-control string optional vat_accounts', id: 'account_book_type_default_vat_accounts', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => 'Compte de TVA relative au taux' }
                         %i.help-block= "Compte de TVA relative au taux : #{hint}"
                     .col-md-3
                       .select-container.no-padding.w-100
-                        %input.book-code-software.mb-2.p-2{ type: 'text', name: 'account_book_type[vat_accounts_conterpart]', value: 445660, :class => 'form-control string optional vat_accounts_conterpart', id: 'account_book_type_default_conterpart_accounts', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => 'Compte contre partie relative au taux' }
+                        %input.book-code-software.mb-2.p-2{ type: 'text', name: 'account_book_type[vat_accounts_conterpart]', :class => 'form-control string optional vat_accounts_conterpart', id: 'account_book_type_default_conterpart_accounts', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => 'Compte contre partie relative au taux' }
                         %i.help-block Compte contre partie relative au taux
                 = hidden_field_tag 'required_new_vat_accounts_element', 'can_be_required', hint_input: hint, hint_label: 'Compte de TVA par défaut appliqué à tous les documents dans le journal comptable iDocus'
                 = f.input :vat_accounts, as: :hidden, input_html: { id: 'account-book-type-vat-accounts-hidden' }
@@ -196,16 +196,16 @@
     .row
       .col-md-3
         .select-container.no-padding.w-100
-          %input.book-code-software.mb-2.p-2{ name: 'account_book_type[vat_accounts_label]', type: 'number', value: 10, min: 1, max: 20, step: 0.1, :class => 'form-control string optional vat_accounts_label account_book_type_label_vat_accounts', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => 'Taux de TVA (1-20)%' }
+          %input.book-code-software.mb-2.p-2{ name: 'account_book_type[vat_accounts_label]', type: 'number', value: 1, min: 1, max: 20, step: 0.1, :class => 'form-control string optional vat_accounts_label account_book_type_label_vat_accounts', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => 'Taux de TVA (1-20)%' }
             %i.help-block.vat_accounts_label_error
       .col-md-4
         .select-container.no-padding.w-100
-          %input.book-code-software.mb-2.p-2{ name: 'account_book_type[vat_accounts_rate]', value: 445660, :class => 'form-control string optional vat_accounts', type: 'text', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => 'Compte de TVA relative au taux' }
+          %input.book-code-software.mb-2.p-2{ name: 'account_book_type[vat_accounts_rate]', :class => 'form-control string optional vat_accounts', type: 'text', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => 'Compte de TVA relative au taux' }
           %i.help-block Compte de TVA relative au taux
       .col-md-4
         .select-container.no-padding.w-100
-          %input.book-code-software.mb-2.p-2{ name: 'account_book_type[vat_accounts_conterpart]', value: 70054614, :class => 'form-control string optional vat_accounts_conterpart', type: 'text', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => 'Compte contre partie relative au taux' }
+          %input.book-code-software.mb-2.p-2{ name: 'account_book_type[vat_accounts_conterpart]', :class => 'form-control string optional vat_accounts_conterpart', type: 'text', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => 'Compte contre partie relative au taux' }
           %i.help-block Compte contre partie relative au taux
       .col-md-1
-        %button.btn.btn-danger.remove_vat_accounts_field{type: :button}
+        %button.btn.btn-light-danger.remove_vat_accounts_field{type: :button}
           %span= glyphicon('trash', { size: '14', color: "#FF4848" })

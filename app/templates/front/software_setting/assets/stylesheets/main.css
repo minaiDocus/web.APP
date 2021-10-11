@@ -67,10 +67,6 @@
   margin-top: 14%
 }
 
-.form-check-input[type='checkbox']:checked{
-  margin-top: 12%
-}
-
 @media (max-width: 1280px) {
   .box-software a{
     padding: 25% 0 0 0;
@@ -84,7 +80,40 @@
     width: 80%;
   }
 
-  .form-check-input[type="checkbox"]:checked {
-    margin-top: 50%;
+  .form-check-input[type="checkbox"]{
+    margin-top: 43%;
+  }
+
+  .customer_content .form-check-input[type="checkbox"]{
+    margin-top: 28%;
+  }
+
+  .customer_content .select-container input{
+    padding: 4%;
+  }
+
+  .modal#csv_descriptor_modal .modal-dialog{
+    min-width: 1160px;
+  }
+
+  .modal#csv_descriptor_modal .oi-icon{
+    width: 10px !important;
+    height: 10px !important;
+  }
+
+  .legend table tbody, .foot-legend{
+    font-size: 11px !important;
+  }
+
+  #csv_descriptors.edit .input-prepend .on, #csv_descriptors.edit .input-prepend .off {
+    font-size: 15px !important;
+  }
+
+  h4{
+    font-size: 1.2rem;
+  }
+
+  input#software_csv_descriptor_comma_as_number_separator{
+    margin-top: 0.4rem !important;    
   }
 }

@@ -117,8 +117,8 @@
             - if @customer.account_book_types.count < @customer.options.max_number_of_journals && journals.any?
               = form_tag copy_organization_customer_journals_path(@organization, @customer), method: 'POST', class: 'form-horizontal', id: 'copy_account_book_type_form' do
                 .form-group
-                  %label.semibold Copier les journaux comptables depuis la base existante
-                  = select_tag "journal_ids[]", options_from_collection_for_select(journals, "id", "name"), multiple: true, class: 'form-control', id: 'copy-journals-into-customer'
+                  %label.regular Copier les journaux comptables depuis la base existante
+                  = select_tag "journal_ids[]", options_from_collection_for_select(journals, "id", "name"), multiple: true, class: '', id: 'copy-journals-into-customer'
           .modal-footer
             %button.btn.btn-light.cancel{ 'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button' } Annuler
             - idocus_params = param_encode({ url: '#url', form: { id: 'copy_account_book_type_form', dump_action: true }, modal: { id: 'copy-existing-journal' }, redirect_to: { url: organization_user_journals_path(@organization, @customer), method: 'get', html: { target: 'table.journals_list' } } })

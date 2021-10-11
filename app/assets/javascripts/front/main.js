@@ -219,6 +219,11 @@ function bind_globals_events(){
     return new bootstrap.Popover(popoverTriggerEl)
   });
 
+  let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+  let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl)
+  })
+
 
   AppEmit('window.application_auto_rebind');
 }

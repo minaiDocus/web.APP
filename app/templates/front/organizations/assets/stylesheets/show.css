@@ -122,10 +122,6 @@
   border-bottom-width: 0px;
 }
 
-a.add_vat_account_field{
-  float: inline-end;
-}
-
 a.remove_vat_accounts_field:hover {
   color: #FF4848 !important;
 }
@@ -144,5 +140,9 @@ a.remove_vat_accounts_field:hover {
 
   .modal#file_sending_kits_edit .modal-dialog{
     min-width: 778px;
+  }
+
+  #journal-form .form-switch .form-check-input{
+    margin-top: 10% !important; 
   }
 }

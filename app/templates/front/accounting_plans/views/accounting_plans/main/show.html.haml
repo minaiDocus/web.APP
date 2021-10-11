@@ -71,17 +71,17 @@
     .tab-content
       .tab-pane.box.no-margin.active#provider{ "role" => "tabpanel", "aria-labelledby" => "provider-tab" }
         .row.derivationLeft
-          .col-md-4            
+          .col-md-3           
           .col-md-3.text-end.no-padding
             = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', destroy_providers_organization_customer_accounting_plan_path(@organization, @customer), class: 'btn btn-danger', data: { method: :delete, confirm: 'Vous êtes sur le point de supprimer tous les fournisseurs, êtes-vous sûr ?' }
             = link_to glyphicon('pencil', { size: '15', color: '#72AA42'}) + ' Éditer', edit_organization_customer_accounting_plan_path(@organization, @customer), class: 'btn btn-light edit provider'
-          .col-md-5
+          .col-md-6
             = form_tag import_organization_customer_accounting_plan_path(@organization, @customer), method: 'patch', multipart: true do
               .row
                 .col-md-7
                   = file_field_tag :providers_file, class: 'filestyle form-control', data: { classButton: 'btn btn-warning import_accounting', input: true, buttonText: glyphicon('file') + ' CSV' }
                 .col-md-5
-                  %button.btn.btn-dark.import_accounting#import_providers_account
+                  %button.btn.btn-dark.import_accounting#import_providers_account.w-100
                     %span.me-2= glyphicon('cloud-download', { size: '16', color: 'white'})
                     %span Importer un CSV
         .mb-3
@@ -108,17 +108,17 @@
                     %td= provider.vat_autoliquidation_credit_account
       .tab-pane.box.no-margin#customer{ "role" => "tabpanel", "aria-labelledby" => "customer-tab" }
         .row.derivationRight
-          .col-md-4            
+          .col-md-3          
           .col-md-3.text-end.no-padding
             = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', destroy_customers_organization_customer_accounting_plan_path(@organization, @customer), class: 'btn btn-danger', data: { method: :delete, confirm: 'Vous êtes sur le point de supprimer tous les clients, êtes-vous sûr ?' }
             = link_to glyphicon('pencil', { size: '15', color: '#72AA42'}) + ' Éditer', edit_organization_customer_accounting_plan_path(@organization, @customer), class: 'btn btn-light edit customer'
-          .col-md-5
+          .col-md-6
             = form_tag import_organization_customer_accounting_plan_path(@organization, @customer), method: 'patch', multipart: true do
               .row
                 .col-md-7
                   = file_field_tag :customers_file, class: 'filestyle form-control', data: { classButton: 'btn btn-warning import_accounting', input: true, buttonText: glyphicon('file') + ' CSV' }
                 .col-md-5
-                  %button.btn.btn-dark.import_accounting#import_providers_account
+                  %button.btn.btn-dark.import_accounting#import_providers_account.w-100
                     %span.me-2= glyphicon('cloud-download', { size: '16', color: 'white'})
                     %span Importer un CSV
 

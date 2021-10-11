@@ -42,7 +42,7 @@ class Journal{
           $('.add_vat_account_field').unbind('click.more_vats').bind('click.more_vats', function(e) {
             e.stopPropagation();
 
-            self.add_vat_account_field(10, 445660, 70054614);
+            self.add_vat_account_field('', '', '');
 
             self.remove_vat_account_field();
           });
@@ -109,9 +109,9 @@ class Journal{
 
     let cloned_field = '.account_book_type_vat_accounts_field';
 
-    $(cloned_field + ' input[name="account_book_type[vat_accounts_label]"]').attr('value', rate);
-    $(cloned_field + ' input[name="account_book_type[vat_accounts_rate]"]').attr('value', vat_account);
-    $(cloned_field + ' input[name="account_book_type[vat_accounts_conterpart]"]').attr('value', conterpart_account);
+    $(cloned_field + ' input[name="account_book_type[vat_accounts_label]"]').attr('placeholer', rate);
+    $(cloned_field + ' input[name="account_book_type[vat_accounts_rate]"]').attr('placeholer', vat_account);
+    $(cloned_field + ' input[name="account_book_type[vat_accounts_conterpart]"]').attr('placeholer', conterpart_account);
 
     let input_field = $(cloned_field);
 

@@ -1,7 +1,9 @@
+= stylesheet_link_tag 'front/csv_descriptors/assets/stylesheets/main'
+
 .box.bg-light
   %h4 Liste des champs disponibles
   %hr
-  .row
+  .row.legend
     .col-md-6
       %table.table.table-condensed.table-striped
         %tbody
@@ -83,7 +85,7 @@
           %tr
             %th.name Autre
             %th.hint texte libre
-  .row
+  .row.foot-legend
     .col-md-12
       * Le format de date se compose avec les données suivante :
       %br

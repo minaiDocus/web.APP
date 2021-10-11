@@ -70,5 +70,6 @@ label{
 @media (max-width: 1280px) {
   .ui-sortable .sortable_child{
     font-size: 0.8rem !important;
+    width: 22% !important;
   }
 }

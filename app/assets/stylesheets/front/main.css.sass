@@ -568,7 +568,7 @@ table td
   background-color: #FFF
 
 i
-  font-size: 0.8rem
+  font-size: 12px
 
 i.remark
   font-size: 0.55rem
@@ -835,12 +835,17 @@ input[type=radio], input[type=checkbox], select
     min-width: 770px
 
   .form-check-input
-    width: 0.8em
-    height: 0.8em
-    margin-top: 0.5em
+    width: 1em
+    height: 1em    
 
-  .nav-tabs li.nav-item
-    font-size: 0.8rem
+  .form-switch 
+    .form-check-input
+      width: 2em
+      height: 1.2em
+      margin-top: 50%
+
+  .nav-tabs li.nav-item, .dropdown-menu
+    font-size: 0.8rem !important
 
   .form-select    
     font-size: 0.7rem !important
@@ -872,3 +877,11 @@ input[type=radio], input[type=checkbox], select
 
   .sol-label
     font-size: 11px
+
+  .table
+    .form-check-input
+      width: 1em
+      height: 1em
+
+  i
+    font-size: 10px
