@@ -38,6 +38,8 @@ jQuery(function () {
                         };
 
       if(url != '' && url != '#' && url != undefined && url != null)
-          app.sendRequest(ajax_params);
+          app.sendRequest(ajax_params).then((e)=>{
+            window.history.replaceState({}, '', url);
+          });
     });
 });

@@ -62,19 +62,29 @@ class SgiApiServices::GroupDocument
     end
 
     def create_new_temp_document(json_content, _temp_document_ids, merged_dir, temp_pack)
-      json_content['pieces'].each do |pieces|
+      p "================== Bursting temp_documents : #{_temp_document_ids.size} -  #{merged_dir} - #{temp_pack.try(:name)}====================="
+      begin
+        files_input(_temp_document_ids, merged_dir, temp_pack)
+      rescue
+        raise
+      end
+
+      p "================== Parsing pieces : #{json_content['pieces'].size}====================="
+      json_content['pieces'].each_with_index do |pieces, index|
         try_again = 0
 
         begin
-          files_input(_temp_document_ids, merged_dir, temp_pack)
-
           pages       = []
           ids         = pieces.map{|piece| piece['id'] }
           merged_dirs = pieces.map{|piece| File.join(merged_dir, "#{piece['id']}")}
           pieces.map{|piece| pages << piece['pages']}
 
+          p "================== #{index} / #{ json_content['pieces'].size } ====================="
+          p "================== Create temp doc : #{pieces.size} => Tds: #{ ids.join(',') } / Pages : #{pages.join(', ')}====================="
           result = CreateTempDocumentFromGrouping.new(temp_pack, pages, ids, merged_dirs, try_again).execute
 
+
+          p "================= Result: #{result} ================================================="
           raise if !result && try_again < 3
         rescue
           FileUtils.rm_rf(Dir["#{merged_dir}/*"])
@@ -294,7 +304,12 @@ class SgiApiServices::GroupDocument
       found_with_parents  = TempDocument.where(parents_documents_pages: parents_pages).first
       found_with_checksum = TempDocument.where(original_fingerprint: checksum).where.not(parents_documents_ids: []).first
 
-      return true if found_with_parents || found_with_checksum
+
+      if found_with_parents || found_with_checksum
+        p "========================== Already Found : With_parents: #{found_with_parents.try(:id)} / With_checksum: #{found_with_checksum.try(:id)} ======================="
+        p "===================#{parents_pages.join(', ')}=================="
+        return true
+      end
 
       temp_document                             = TempDocument.new
       temp_document.temp_pack                   = @temp_pack
