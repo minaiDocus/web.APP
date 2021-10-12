@@ -35,7 +35,7 @@ class Notifications::Documents < Notifications::Notifier
       end
 
       create_notification({
-        url: Rails.application.routes.url_helpers.account_documents_url(ActionMailer::Base.default_url_options),
+        url: Rails.application.routes.url_helpers.documents_url(ActionMailer::Base.default_url_options),
         user: user,
         notice_type: 'document_being_processed',
         title: 'Traitement de document',
@@ -65,7 +65,7 @@ class Notifications::Documents < Notifications::Notifier
       end
 
       create_notification({
-        url:         Rails.application.routes.url_helpers.account_paper_processes_url(ActionMailer::Base.default_url_options),
+        url:         Rails.application.routes.url_helpers.kits_url(ActionMailer::Base.default_url_options),
         user:        user,
         notice_type: 'new_scanned_documents',
         title:       'Nouveau document papier reçu',
@@ -143,7 +143,7 @@ class Notifications::Documents < Notifications::Notifier
     end
 
     create_notification({
-      url:         Rails.application.routes.url_helpers.account_documents_url(ActionMailer::Base.default_url_options),
+      url:         Rails.application.routes.url_helpers.documents_url(ActionMailer::Base.default_url_options),
       user:        user,
       notice_type: 'published_document',
       title:       list.size == 1 ? 'Nouveau document disponible' : 'Nouveaux documents disponibles',

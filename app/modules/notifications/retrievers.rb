@@ -66,7 +66,7 @@ class Notifications::Retrievers < Notifications::Notifier
   def notify_action_needed
     if @retriever.user.notify.try(:r_action_needed)
       create_notification({
-        url: account_retrievers_url(account_id: @retriever.user.id),
+        url: retrievers_url(account_id: @retriever.user.id),
         user: @retriever.user,
         notice_type: 'retriever_action_needed',
         title: 'Automate - Une action est nécessaire',
@@ -186,7 +186,7 @@ class Notifications::Retrievers < Notifications::Notifier
   def notify_no_bank_account_configured
     prescribers.each do |prescriber|
       create_notification({
-        url:         account_bank_accounts_url(@retriever.user),
+        url:         retriever_parameters_url(@retriever.user),
         user:        prescriber,
         notice_type: 'retriever_no_bank_account_configured',
         title:       'Automate - En attente de configuration',

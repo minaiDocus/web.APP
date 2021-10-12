@@ -42,6 +42,6 @@ class Notifications::PaperQuotas < Notifications::Notifier
   private
 
   def url
-    @url ||= Rails.application.routes.url_helpers.account_reporting_url(ActionMailer::Base.default_url_options)
+    @url ||= Rails.application.routes.url_helpers.reporting_statistics_index_url({organization_id: @arguments[:organization].id}.merge(ActionMailer::Base.default_url_options))
   end
 end

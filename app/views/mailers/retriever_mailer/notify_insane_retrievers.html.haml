@@ -14,7 +14,7 @@
       %tbody
         - @insane_retrievers.each do |retriever|
           %tr
-            %td= link_to retriever.user.code, account_retrievers_url(user_code: retriever.user.code)
+            %td= link_to retriever.user.code, retrievers_url(user_code: retriever.user.code)
             %td
               - if retriever.provider_and_bank?
                 Doc. et Op. Bancaires

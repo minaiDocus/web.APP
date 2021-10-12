@@ -20,7 +20,7 @@ class Notifications::Ftp < Notifications::Notifier
 
   def notify_organization_ftp_auth_failure
     result = create_notification({
-      url:         Rails.application.routes.url_helpers.account_organization_url(@arguments[:ftp].organization, { tab: 'ftp' }.merge(ActionMailer::Base.default_url_options)),
+      url:         Rails.application.routes.url_helpers.organization_efs_url(@arguments[:ftp].organization, { tab: 'ftp' }.merge(ActionMailer::Base.default_url_options)),
       user:        @user,
       notice_type: 'org_ftp_auth_failure',
       title:       'Import/Export FTP - Reconfiguration requise',
@@ -32,7 +32,7 @@ class Notifications::Ftp < Notifications::Notifier
 
   def notify_user_ftp_auth_failure
     result = create_notification({
-      url:         Rails.application.routes.url_helpers.account_profile_url({ panel: 'efs_management', anchor: 'ftp' }.merge(ActionMailer::Base.default_url_options)),
+      url:         Rails.application.routes.url_helpers.profiles_url(ActionMailer::Base.default_url_options),
       user:        @user,
       notice_type: 'ftp_auth_failure',
       title:       'Livraison FTP - Reconfiguration requise',

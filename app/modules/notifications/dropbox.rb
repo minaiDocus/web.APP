@@ -46,6 +46,6 @@ class Notifications::Dropbox < Notifications::Notifier
   end
 
   def url
-    Rails.application.routes.url_helpers.account_profile_url({ panel: 'efs_management', anchor: 'dropbox' }.merge(ActionMailer::Base.default_url_options))
+    Rails.application.routes.url_helpers.profiles_url(ActionMailer::Base.default_url_options)
   end
 end

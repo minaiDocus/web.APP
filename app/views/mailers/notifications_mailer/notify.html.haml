@@ -7,7 +7,7 @@
     Bonjour #{@notification.user.name},
     %br
     != @markdown.render @notification.message
-    = link_to 'Voir sur iDocus', link_through_account_notification_url(@notification)
+    = link_to 'Voir sur iDocus', link_through_notification_url(@notification)
     %br
     %br
     Cordialement,

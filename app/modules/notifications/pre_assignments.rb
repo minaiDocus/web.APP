@@ -21,7 +21,7 @@ class Notifications::PreAssignments < Notifications::Notifier
       end
 
       create_notification({
-        url: Rails.application.routes.url_helpers.account_pre_assignment_blocked_duplicates_path,
+        url: Rails.application.routes.url_helpers.pieces_errors_path,
         user: collaborator.user,
         notice_type: 'detected_preseizure_duplication',
         title: count == 1 ? 'Pré-affectation bloqué' : 'Pré-affectations bloqués',
@@ -60,7 +60,7 @@ class Notifications::PreAssignments < Notifications::Notifier
       end
 
       create_notification({
-        url: Rails.application.routes.url_helpers.account_documents_path,
+        url: Rails.application.routes.url_helpers.documents_path,
         user: prescriber,
         notice_type: 'new_pre_assignment_available',
         title: list.size == 1 ? 'Nouvelle pré-affectation disponible' : 'Nouvelles pré-affectations disponibles',
@@ -91,7 +91,7 @@ class Notifications::PreAssignments < Notifications::Notifier
           end
 
           create_notification({
-            url: Rails.application.routes.url_helpers.account_documents_url(ActionMailer::Base.default_url_options),
+            url: Rails.application.routes.url_helpers.documents_url(ActionMailer::Base.default_url_options),
             user: collaborator,
             notice_type: 'pre_assignment_export',
             title: "Export d'écritures comptables disponibles",
@@ -116,7 +116,7 @@ class Notifications::PreAssignments < Notifications::Notifier
       return if count == 0
 
       create_notification({
-        url: Rails.application.routes.url_helpers.account_pre_assignment_ignored_path,
+        url: Rails.application.routes.url_helpers.pieces_errors_path,
         user: collaborator,
         notice_type: 'pre_assignment_ignored_piece',
         title: count == 1 ? 'Pièce ignorée à la pré-affectation' : 'Pièces ignorées à la pré-affectation',
@@ -142,7 +142,7 @@ class Notifications::PreAssignments < Notifications::Notifier
 
       if collaborator.notify.try(:detected_preseizure_duplication)
         create_notification({
-          url: Rails.application.routes.url_helpers.account_pre_assignment_blocked_duplicates_path,
+          url: Rails.application.routes.url_helpers.pieces_errors_path,
           user: collaborator,
           notice_type: 'unblocked_preseizure',
           title: count == 1 ? 'Pré-affectation débloqué' : 'Pré-affectations débloqués',
@@ -196,7 +196,7 @@ class Notifications::PreAssignments < Notifications::Notifier
       end
 
       create_notification({
-        url:         Rails.application.routes.url_helpers.account_pre_assignment_delivery_errors_path,
+        url:         Rails.application.routes.url_helpers.pieces_errors_path,
         user:        user,
         notice_type: 'pre_assignment_delivery_failure',
         title:       deliveries.size == 1 ? 'Livraison de pré-affectation échouée' : 'Livraisons de pré-affectation échouées',

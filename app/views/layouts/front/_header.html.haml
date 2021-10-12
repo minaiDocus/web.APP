@@ -44,11 +44,11 @@
               .dropdown-menu{"aria-labelledby" => "navbardropdownmenureporting"}
                 - @user.organizations.each do |organization|
                   - if organization.is_suspended
-                    = link_to "/reporting/#{organization.id}", class: (organization.id == @organization.try(:id))? 'dropdown-item active' : 'dropdown-item' do
+                    = link_to reporting_statistics_index_path(organization_id: organization.id), class: (organization.id == @organization.try(:id))? 'dropdown-item active' : 'dropdown-item' do
                       = organization.name
                       %i (Suspendu)
                   - else
-                    = link_to organization.name, "/reporting/#{organization.id}", class: (organization.id == @organization.try(:id))? 'dropdown-item active' : 'dropdown-item'
+                    = link_to organization.name, reporting_statistics_index_path(organization_id: organization.id), class: (organization.id == @organization.try(:id))? 'dropdown-item active' : 'dropdown-item'
         - if accounts.detect { |e| e.options.is_retriever_authorized } || @user.organization.specific_mission
           - is_retriever_active = controller_path == 'retrievers/main' || controller_path == 'retrieved_datas/main' || controller_path == 'retriever_parameters/main'
           %li.nav-item.dropdown{ class: (is_retriever_active)? 'active' : '' }

@@ -7,7 +7,7 @@
     Bonjour,
     %br
     %br
-    Le client #{link_to @order.user.code, account_organization_customer_url(@order.user.organization, @order.user, tab: 'orders')} vient de passer une commande d'un Kit envoi courrier avec les caractéristiques suivantes :
+    Le client #{link_to @order.user.code, organization_customer_orders_url(@order.user.organization, @order.user)} vient de passer une commande d'un Kit envoi courrier avec les caractéristiques suivantes :
     %br
     \- N° de commande :
     = @order.id
@@ -34,7 +34,9 @@
     = period_type
     %br
     %br
-    Pour créer le kit, merci de suivre ce lien : #{link_to account_organization_url(@order.user.organization, tab: 'file_sending_kit'), account_organization_url(@order.user.organization, tab: 'file_sending_kit')}
+    - organization = @order.user.organization
+    - link =  (CustomUtils.is_manual_paper_set_order?(organization) && @order.user.is_prescriber) ? select_organization_file_sending_kit_path(organization) : organization_file_sending_kit_path(organization)
+    Pour créer le kit, merci de suivre ce lien : #{link_to link, link}
     %br
     %br
     Cordialement,
