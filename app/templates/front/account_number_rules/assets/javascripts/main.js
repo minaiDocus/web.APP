@@ -62,6 +62,9 @@ class AccountNumberRule{
 
       this.add_new_rule_modal.find('.modal-body').html($(element).find(from).html());
       this.add_new_rule_modal.find('.modal-title').text(modal_title);
+      this.add_new_rule_modal.find('.validate-account-number-rule').attr('disabled', true);
+
+      this.validate_account_number_rule_fields();
     });
   }
 
@@ -74,7 +77,7 @@ class AccountNumberRule{
       }
     });
 
-    if (required_fields_count === 6) { 
+    if (required_fields_count >= 6) {
       this.add_new_rule_modal.find('.validate-account-number-rule').removeAttr('disabled');
       bind_all_events_account_number_rules();
     }

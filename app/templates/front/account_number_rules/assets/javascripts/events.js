@@ -111,7 +111,8 @@ function bind_all_events_account_number_rules(){
   });
 
   $('.required_field')
-  .unbind('keypress keyup keydown input change').bind('keypress keyup keydown input change', function(e) {
+  .unbind('keypress.account_number_rules keyup.account_number_rules keydown.account_number_rules input.account_number_rules change.account_number_rules')
+  .bind('keypress.account_number_rules keyup.account_number_rules keydown.account_number_rules input.account_number_rules change.account_number_rules', function(e) {
     AppEmit('validate_account_number_rule_fields');
   });
 
