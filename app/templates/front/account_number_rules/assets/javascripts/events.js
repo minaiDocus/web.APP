@@ -1,12 +1,23 @@
 function bind_all_events_account_number_rules(){
   function multi_select_for(target= 'add-modal') {
     if (target === 'add-modal') {
-      $('select#customers-list').asMultiSelect({
+      /*$('select#customers-list').asMultiSelect({
         'noneText': 'Selectionner un/des clients affectés par la règle',
         'allText': 'Tous séléctionnés'
       });
 
       $('select#groups-list').asMultiSelect({
+        'noneText': 'Selectionner un/des groupe(s) affectés par la règle',
+        'allText': 'Tous séléctionnés'
+      });*/
+
+
+      $('select#customers-list').searchableOptionList({
+        'noneText': 'Selectionner un/des clients affectés par la règle',
+        'allText': 'Tous séléctionnés'
+      });
+
+      $('select#groups-list').searchableOptionList({
         'noneText': 'Selectionner un/des groupe(s) affectés par la règle',
         'allText': 'Tous séléctionnés'
       });
@@ -92,20 +103,15 @@ function bind_all_events_account_number_rules(){
 
     AppEmit('add_account_number_rule');
 
-    multi_select_for('add-modal');      
-
     $('#add-new-rule').modal('show');
   });
 
   $('.edit-account-number-rule').unbind('click').bind('click', function(e) {
-    e.stopPropagation();
     e.preventDefault();
 
     let elements = $(this).attr('href').split('/');
 
     AppEmit('edit_account_number_rule', { id: elements[elements.length - 2] });
-
-    multi_select_for('add-modal');
 
     $('#add-new-rule').modal('show');
   });
@@ -139,14 +145,12 @@ function bind_all_events_account_number_rules(){
     show_affect_to($(this).val());
   });
 
-  
-  show_affect_to($('select#affect-rule-to').val());
-  /*multi_select_for('download-modal');*/
+
   $('.sub_rule_menu li.download')
   .unbind('click').bind('click',function(e) {
     e.stopPropagation();
 
-    /*multi_select_for('download-modal');*/
+    show_affect_to($('select#affect-rule-to').val());
 
     $('#import-rule').modal('show');
   });
