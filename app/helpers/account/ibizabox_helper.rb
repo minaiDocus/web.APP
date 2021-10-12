@@ -31,11 +31,11 @@ module Account::IbizaboxHelper
   def ibizabox_state_label(state)
     case state
     when 'processing'
-      'fs-origin badge badge-warning'
+      'badge bg-warning semibold'
     when 'ready'
-      'fs-origin badge badge-success'
+      'badge bg-success semibold'
     when 'inactive'
-      'fs-origin badge badge-secondary'
+      'badge bg-secondary semibold'
     end
   end
 end

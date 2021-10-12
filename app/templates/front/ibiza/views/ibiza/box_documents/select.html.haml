@@ -1,11 +1,11 @@
 .ibizabox_documents
   .row
     .col-md-10
-      %h5
+      %h5.semibold
         Sélection de documents ibiza box restant à intégrer du client
         %span.badge.bg-secondary= @documents.size
-    .col-md-2.float-end.no-padding
-      %button.btn.btn-light.open_ibizabox_documents_filter.semibold{ 'data-bs-toggle'=>'modal', 'data-bs-target'=>"#filter_#{action_name}" }
+    .col-md-2.text-center.no-padding
+      %button.btn.btn-light.w-75.open_ibizabox_documents_filter.semibold{ 'data-bs-toggle'=>'modal', 'data-bs-target'=>"#filter_#{action_name}" }
         %span.me-2 Filtrer
         %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
   %hr
@@ -13,10 +13,10 @@
     = form_tag validate_organization_customer_ibizabox_documents_path, method: 'patch', class: 'form form-horizontal', id: 'validate_ibizabox_documents' do
       = hidden_field_tag 'document_contains[name]',    (params[:document_contains][:name] rescue '')
       = hidden_field_tag 'document_contains[journal]', (params[:document_contains][:journal] rescue '')
-      %table.table.table-bordered-inner.table-condensed.table-striped.margin1top.margin0bottom.table-detachable-head
+      %table.table.table-striped
         %thead
-          %tr.bg-brown.text-white
-            %th= check_box_tag 'master_checkbox', 0, false
+          %tr
+            %th= check_box_tag 'master_checkbox', 0, false, class: 'form-check-input'
             %th= sortable :created_at,              'Date de la récupération'
             %th= sortable :journal,                 'Journal'
             %th= sortable :original_file_name,       'Nom original'
@@ -24,7 +24,7 @@
         %tbody
           - @documents.each do |document|
             %tr
-              %td= check_box_tag "document_ids[]", document.id, false, class: 'checkbox'
+              %td= check_box_tag "document_ids[]", document.id, false, class: 'checkbox form-check-input'
               %td= l(document.created_at)
               %td= document.journal
               %td= link_to document.original_file_name, organization_customer_ibizabox_document_path(@organization, @customer, document), target: '_blank'

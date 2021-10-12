@@ -38,9 +38,9 @@
             %td.text-end.pointer
               .action
                 %span= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
-              .sub_menu.text-start.hide
-                %ul.no-margin.no-padding.regular
-                  - if order.pending? && (Time.now < order.created_at + 24.hours)                                             
+              - if order.pending? && (Time.now < order.created_at + 24.hours)
+                .sub_menu.text-start.hide
+                  %ul.no-margin.no-padding.regular                                                               
                     %li
                       %span.me-1= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
                       %span= link_to 'Modifier', "#", class: 'new_edit_order_url', link: edit_organization_customer_order_path(@organization, @customer, order)

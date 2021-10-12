@@ -6,16 +6,16 @@
       #ibizabox_folders_list.box.derivationLeft
         .row
           .col-md-10
-            %h5
+            %h5.semibold
               Liste des répertoires accessibles
               %span.badge.bg-secondary= @customer.ibizabox_folders.count
-          .col-md-2.float-end.no-padding
+          .col-md-2.text-center.no-padding
             - idocus_params = param_encode({ url: refresh_organization_customer_ibizabox_folders_path(@organization, @customer), method: 'patch', confirm: 'Etes vous sûr?', redirect_to: { url: organization_customer_ibizabox_documents_path, method: 'get', html: { target: '#ibizabox_folders_list' } }})
-            = link_to 'Rafraîchir', '#', class: 'btn btn-primary margin1right as_idocus_ajax', idocus: idocus_params
+            = link_to 'Rafraîchir', '#', class: 'btn btn-primary w-75 as_idocus_ajax', idocus: idocus_params
 
         %table.table.table-striped.table-condensed.margin1bottom.table-bordered-inner.table-detachable-head
           %thead
-            %tr.bg-brown.text-white
+            %tr
               %th Code journal idocus
               %th Répertoire Ibiza
               %th Périodes accessibles
@@ -44,18 +44,18 @@
       #ibizabox_documents_historic.box.derivationRight
         .row
           .col-md-10
-            %h5
+            %h5.semibold
               Historique des documents récupérés depuis la box iBiza du client
               %span.badge.bg-secondary= @documents_count
-          .col-md-2.float-end.no-padding
-            %button.btn.btn-light.open_ibizabox_documents_filter.semibold{ 'data-bs-toggle'=>'modal', 'data-bs-target'=>"#filter_#{action_name}" }
+          .col-md-2.text-center.no-padding
+            %button.btn.btn-light.w-75.open_ibizabox_documents_filter.semibold{ 'data-bs-toggle'=>'modal', 'data-bs-target'=>"#filter_#{action_name}" }
               %span.me-2 Filtrer
               %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
         %hr
         %div{ id: "ibizabox_#{action_name}" }
-          %table.table.table-bordered-inner.table-condensed.table-striped.margin1top.margin1bottom.table-detachable-head
+          %table.table.table-striped
             %thead
-              %tr.bg-brown.text-white
+              %tr
                 %th Date de la récupération
                 %th Journal
                 %th Nom original

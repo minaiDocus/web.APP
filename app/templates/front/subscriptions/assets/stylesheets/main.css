@@ -111,4 +111,8 @@ p{
   .price{
     font-size: 14px;
   }
+
+  .form-switch .form-check-label{
+    margin-left: -15%; 
+  }
 }
