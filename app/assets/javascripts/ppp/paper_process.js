@@ -1,5 +1,3 @@
-//=require '../application'
-
 (function() {
   var create_return_labels, day, isKitFormValid, month, new_return_labels, year;
 
@@ -70,7 +68,7 @@
     return good;
   };
 
-  jQuery(function() {
+  initJS = function(){
     var base, customer_codes;
     if ($('#kits').length > 0) {
       base = 'kits';
@@ -84,17 +82,20 @@
     if ($('#returns').length > 0) {
       base = 'returns';
     }
-    $('.date select').on('change', function() {
+
+    $('.date select').unbind('change.ppp').bind('change.ppp', function() {
       return window.location.href = "/" + base + "/" + (year()) + "/" + (month()) + "/" + (day());
     });
-    $('#paper_process_tracking_number').keyup(function() {
+
+    $('#paper_process_tracking_number').unbind('keyup.ppp').bind('keyup.ppp', function() {
       if ($(this).val().length === 13) {
         return $('#paper_process_customer_code').focus();
       }
     });
+
     if ($('#kits, #receipts, #returns').length > 0) {
       customer_codes = $('#kits, #receipts, #returns').data('codes');
-      $('#paper_process_customer_code').keyup(function() {
+      $('#paper_process_customer_code').unbind('keyup.ppp').bind('keyup.ppp', function() {
         if ($.inArray($(this).val(), customer_codes) >= 0) {
           if ($('#kits').length > 0) {
             return $('#paper_process_journals_count').focus();
@@ -105,8 +106,9 @@
           }
         }
       });
+
       if ($('#kits').length > 0) {
-        $(window).keydown(function(event) {
+        $(window).unbind('keydown.ppp').bind('keydown.ppp', function(event) {
           if ((event.keyCode === 13) && (isKitFormValid(customer_codes) === false)) {
             event.preventDefault();
             return false;
@@ -115,12 +117,12 @@
       }
     }
 
-    $('.ppp-filter').unbind('click').bind('click', function(e){
+    $('.ppp-filter').unbind('click.ppp').bind('click.ppp', function(e){
       e.preventDefault();
       $('#ppp-filter.modal').modal('show');
     });
 
-    $('#paper_process_letter_type').keyup(function() {
+    $('#paper_process_letter_type').unbind('keyup.ppp').bind('keyup.ppp', function() {
       var val;
       val = $(this).val();
       if (val === '5' || val === '500') {
@@ -134,9 +136,19 @@
         return $('#new_paper_process').submit();
       }
     });
+
     return $('#returnLabelsDialog').on('shown.bs.modal', function() {
       return new_return_labels();
     });
+  }
+
+  jQuery(function() {
+    initJS();
+    AppListenTo('paper_set_order_reset_filter', (e)=>{
+      $('#filter-documents-selection-form').trigger("reset");
+    });
+
+    AppListenTo('window.application_auto_rebind', (e)=>{ initJS() });
   });
 
 }).call(this);

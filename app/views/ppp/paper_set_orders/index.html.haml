@@ -7,12 +7,12 @@
     .col-md-2.text-center
       %button.btn.btn-primary.semibold.ppp-filter.w-100
         %span.me-2 Filtrer
-        %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
+        %span= glyphicon('transfer', { size: '15', color: '#FFF', style: 'transform: rotate(90deg)'})
 
   .mb-4
 
-  .box
-    %table.table.table-condensed.table-striped.table-detachable-head.table-bordered-inner
+  .box.paper-set-orders-lst.derivationRight
+    %table#paper-set-orders-tbl.table.table-condensed.table-striped.table-detachable-head.table-bordered-inner
       %thead
         %tr.text-grey
           %th= sortable :created_at, t('activerecord.models.common.attributes.created_at').downcase
@@ -22,7 +22,7 @@
           %th période
           %th= sortable :state, t('activerecord.models.order.attributes.state').downcase
           %th= t('activerecord.models.paper_process.attributes.tracking_number').downcase
-      %tbody.retractable.slidedown
+      %tbody
         - @orders.each do |order|
           %tr
             %td= l order.created_at, format: :standard
@@ -41,7 +41,7 @@
             %td= Order.state_machine.states[order.state].human_name
             %td= link_to_paper_tracking(order.kit) if order.kit.try(:tracking_number)
 
-    = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { name: 'ppp-list-documents', mark: 'paper_set_orders', total_pages: @orders_count  }
+    = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: paper_set_orders_path, filter: 'filter-documents-selection-form', target: '.paper-set-orders-lst', name: 'ppp-list-documents', mark: 'paper_set_orders', total_pages: @orders_count  }
 
 .modal.fade.in#ppp-filter
   .modal-dialog
@@ -54,7 +54,7 @@
           .form-group
             %label.semibold Date de création
             .select-container.no-padding.w-100
-              %input.date.daterange{name: 'order_contains[date]', type: :text, value: params[:order_contains].try(:[], :date) }
+              %input.date.daterange{name: 'order_contains[created_at]', type: :text, value: params[:order_contains].try(:[], :created_at) }
 
           .form-group
             %label.semibold Code du dossier
@@ -74,5 +74,7 @@
               %option{value: 'processed' } Traitée
 
       .modal-footer
-        %button.btn.btn-light.semibold.cancel{ type: :button } Annuler
-        %button.btn.btn-primary.semibold.validate{ type: :button } Valider
+        - idocus_params = param_encode({ url: paper_set_orders_path, method: 'get', html: { target: '#paper_set_orders' }, modal: { id: 'ppp-filter' }, before_send: 'paper_set_order_reset_filter' })
+        %button.btn.btn-light.semibold.as_idocus_ajax{ type: :button, idocus: idocus_params } Annuler
+        - idocus_params = param_encode({ url: paper_set_orders_path, method: 'get', form: { id: 'filter-documents-selection-form' }, html: { target: '#paper_set_orders' }, modal: { id: 'ppp-filter' } })
+        %button.btn.btn-primary.semibold.as_idocus_ajax{ type: :button, idocus: idocus_params } Valider

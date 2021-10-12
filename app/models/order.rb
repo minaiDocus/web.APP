@@ -183,6 +183,7 @@ class Order < ApplicationRecord
 
     orders = orders.where("created_at BETWEEN '#{CustomUtils.parse_date_range_of(contains[:created_at]).join("' AND '")}'") if contains[:created_at].present?
 
+    orders = orders.where(tracking_number:    contains[:tracking_number])  if contains[:tracking_number].present?
     orders = orders.where(type:    contains[:type])  if contains[:type].present?
     orders = orders.where(state:   contains[:state]) if contains[:state].present?
     orders = orders.where(user_id: user_ids)         if user_ids.any?

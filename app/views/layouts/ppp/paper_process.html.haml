@@ -5,7 +5,8 @@
     %meta{ content: 'text/html; charset=UTF-8', 'http-equiv' => 'Content-type' }
     %link{ rel: 'shortcut icon', type: 'image/ico', href: image_path('favicon.ico') }    
     %link{ :rel => 'shortcut icon', :type => "image/ico", :href => image_path('favicon.ico') }
-    = stylesheet_link_tag 'front/main'    
+    = stylesheet_link_tag 'front/main'
+    = javascript_include_tag 'front/main'
   %body
     #wrap.extern
       %nav.navbar.navbar-expand-lg.fixed-top.sticky-top
@@ -31,12 +32,20 @@
               %span &#124;
               %span= link_to 'déconnexion', destroy_user_session_path, method: :delete, class: 'red-label semibold'
     #next-nav-wrapper
-    .body_content
+    .body_content.no-margin
       .container-fluid= yield
+      .footer_marginer
     #push
+
+    .loading_box.hide
+      .box.text-center
+        %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}
+        %label.mt-2.semibold Chargement
 
     .scroll-on-top.pointer.hide
       .scroll-arrow= glyphicon('arrow-top', { size: '16', color: 'rgba(26, 26, 26, 0.7)' })
     = render partial: 'layouts/front/footer'
+
+    = render partial: 'layouts/front/notice_flush_messages'
     = render '/shared/google_analytics'
   = javascript_include_tag 'ppp/paper_process'
