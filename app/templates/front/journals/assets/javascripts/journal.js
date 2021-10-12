@@ -251,7 +251,8 @@ class Journal{
   validate_first_slide_form(){
     let self = this;
 
-    $('input[type="text"].required_field').unbind('keypress input').bind('keypress input', function(e) { self.required_fields(); });
+    $('input[type="text"].required_field').unbind('keypress.journal_form_field input.journal_form_field')
+    .bind('keypress.journal_form_field input.journal_form_field', function(e) { self.required_fields(); });
   }
 
   update_form(){
@@ -344,9 +345,6 @@ class Journal{
         self.journal_form_modal.modal('show');
 
         ApplicationJS.set_checkbox_radio();
-        self.required_fields();
-        self.validate_first_slide_form();
-        self.select_entry_type();
         self.set_carousel_content_on_slide();
       });
     });

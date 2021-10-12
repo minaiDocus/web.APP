@@ -33,8 +33,8 @@ function bind_customer_events() {
   });
 
 
-  $('input.required_field').unbind('keypress input')
-  .bind('keypress input', function(e) {
+  $('input.required_field').unbind('keypress.customer_form_field input.customer_form_field')
+  .bind('keypress.customer_form_field input.customer_form_field', function(e) {
     AppEmit('validate_first_slide_form');
   });
 

@@ -63,7 +63,7 @@ class Customers::MainController < CustomerController
       else
         Subscription::Form.new(@customer.subscription, @user, request).submit(params[:subscription])
 
-        redirect_to organization_customer_path(@organization, @customer, tab: 'journals')
+        redirect_to organization_user_journals_path(@organization, @customer)
       end
     else
       flash[:error] = errors_to_list @customer.errors.messages
