@@ -4,32 +4,32 @@
 
 .bank-affectation
   .row.derivationRight
-    .col-md-6
+    .col-md-5
       %h3.bold
         Règle d'affectations bancaires
         %span.badge.badge-secondary.badge-sm.regular= @account_number_rules_count
-    .col-md-3.no-padding
+    .col-md-2.no-padding
       .input-group.mb-3.search-content
         %span.input-group-text#basic-addon1= glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })          
         %input.form-control#search_input{ type: :text, "aria-label" => "Rechercher", "aria-describedby" => "basic-addon1", name:'account_number_rule_contains[search_text]', placeholder: 'Rechercher' }
-    .col-md-1.text-center.no-padding
-      %button.btn.btn-light.more-filter.semibold
+    .col-md-2.text-center.no-padding
+      %button.btn.btn-light.more-filter.semibold.w-75
         %span.me-2 Filtrer
         %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
-    .col-md-2.no-padding
-      %button.btn.btn-primary.semibold.add-rule
+    .col-md-3.no-padding
+      %button.btn.btn-primary.semibold.add-rule.w-100
         %span.me-2 Ajouter une règle    
         %span.chevron-add-rule= glyphicon('chevron-bottom', { size: '15', color: '#FFFF'})
-        .m-2
+        %hr.m-2
         .sub_rule_menu.text-start.hide
           %ul.no-margin.no-padding.regular
-            %li.add
-              %span.me-1= glyphicon('plus', { size: '12', color: 'rgba(26, 26, 26, 0.7);'})
-              %span Créer une règle
+            %li.add.p-1
+              %span.me-1= glyphicon('plus', { size: '12', color: 'white'})
+              %span.semibold Créer une règle
             .m-1
-            %li.download
-              %span.me-1= glyphicon('cloud-download', { size: '12', color: 'rgba(26, 26, 26, 0.7);'})
-              %span Importer une règle      
+            %li.download.p-1
+              %span.me-1= glyphicon('cloud-download', { size: '12', color: 'white'})
+              %span.semibold Importer une règle      
 
   .box.derivationLeft
     = form_tag(export_or_destroy_organization_account_number_rules_path(@organization), method: :post) do
@@ -40,7 +40,7 @@
             %br Vous pouvez exporter les règles sélectionnées ou les supprimer.
         .col-md-3.text-end
           %button.btn.btn-light-secondary.semibold.add-document.m-1#export-rule{type: 'submit', name: 'export_or_destroy', value: 'export', disabled: 'disabled'} Exporter sur Excel
-          %button.btn.btn-light-secondary.semibold.add-document.m-1#delete-rule{type: 'submit', name: 'export_or_destroy', value: 'destroy', 'data-confirm' => 'Etes-vous sûr de vouloir supprimer les règles sélectionnées ?', disabled: 'disabled'} Supprimer
+          %button.btn.btn-light-secondary.semibold.add-document.m-1.no-margin#delete-rule{type: 'submit', name: 'export_or_destroy', value: 'destroy', 'data-confirm' => 'Etes-vous sûr de vouloir supprimer les règles sélectionnées ?', disabled: 'disabled'} Supprimer
         .col-md-3.text-end
           %button.btn.btn-default.skip_accounting_plan.semibold
             %span.me-2= glyphicon('cog', { size: '12', color: '#72AA42'})
