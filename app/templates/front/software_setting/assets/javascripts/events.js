@@ -9,6 +9,10 @@ function bind_softwares_setting_events(){
   });
 
   $('#edit_customer_csv_descriptor').unbind('click').bind('click', function(e){ AppEmit('csv_descriptor_edit_customer_format', { id: $(this).data('id'), organization_id: $(this).data('organization-id') }) });
+
+  if ($('.custgomer_softwares_setting_list').length > 0){ $('.head_customer_link#softwares-list').addClass('show active'); }
+
+  ApplicationJS.set_checkbox_radio();
 }
 
 jQuery(function() {

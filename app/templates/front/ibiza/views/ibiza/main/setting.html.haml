@@ -39,7 +39,7 @@
               = f.hint 'Cette option peut être ré-écrite au niveau de chaque dossier.'
             .col-md-1
               .form-check.form-switch.idocus-custom-form-check
-                = f.input :auto_deliver, as: :boolean, label: false, label_html: { class: 'semibold form-check-label' }, input_html: { class: 'form-check-input input_switch input_check_field', id: 'auto_deliver' }
+                = f.input :auto_deliver, as: :boolean, label: false, label_html: { class: 'semibold form-check-label' }, input_html: { class: 'form-check-input input_switch input_check_field check-software', id: 'auto_deliver' }
                 %label.semibold{class: 'form-check-label label_check_field', for: 'auto_deliver'} Non
         .form-group
           .row
@@ -49,7 +49,7 @@
               = f.hint 'Cette option peut être ré-écrite au niveau de chaque dossier.'
             .col-md-1
               .form-check.form-switch.idocus-custom-form-check
-                = f.input :is_analysis_activated, as: :boolean, label: false, label_html: { class: 'semibold form-check-label' }, input_html: { class: 'form-check-input input_switch input_check_field', id: 'is_analysis_activated' }
+                = f.input :is_analysis_activated, as: :boolean, label: false, label_html: { class: 'semibold form-check-label' }, input_html: { class: 'form-check-input input_switch input_check_field check-software', id: 'is_analysis_activated' }
                 %label.semibold{class: 'form-check-label label_check_field', for: 'is_analysis_activated'} Non
         .form-group
           .row
@@ -59,7 +59,7 @@
               = f.hint "Cette option suspend l'envoi en pré-affectation des pièces, en passant par une validation manuelle des analyses comptables, Les pièces téléversées via le site ou mobile ne sont pas concernées (peut être ré-écrite au niveau de chaque dossier)."
             .col-md-1
               .form-check.form-switch.idocus-custom-form-check
-                = f.input :is_analysis_to_validate, as: :boolean, label: false, label_html: { class: 'semibold form-check-label' }, input_html: { class: 'form-check-input input_switch input_check_field', id: 'is_analysis_to_validate' }
+                = f.input :is_analysis_to_validate, as: :boolean, label: false, label_html: { class: 'semibold form-check-label' }, input_html: { class: 'form-check-input input_switch input_check_field check-software', id: 'is_analysis_to_validate' }
                 %label.semibold{class: 'form-check-label label_check_field', for: 'is_analysis_to_validate'} Non
         .form-group
           %label.semibold Format du nom de la pièce iDocus dans iBiZa (par défaut colonne “pièce” dans iBiza)

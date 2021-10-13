@@ -24,7 +24,7 @@
             = sf.hint 'Cette option peut être écrasée dans le paramétrage dossier client'
           .col-md-1
             .form-check.form-switch.idocus-custom-form-check
-              = sf.input :auto_deliver, as: :boolean, label: false, label_html: { class: 'form-check-label' }, input_html: { checked: @organization.send(software.to_sym).try(:auto_deliver?), id: 'auto_deliver_software', class: 'form-check-input input_switch input_check_field'}
+              = sf.input :auto_deliver, as: :boolean, label: false, label_html: { class: 'form-check-label' }, input_html: { checked: @organization.send(software.to_sym).try(:auto_deliver?), id: 'auto_deliver_software', class: 'form-check-input input_switch input_check_field check-software'}
               %label.semibold{class: 'form-check-label label_check_field', for: 'auto_deliver_software'} Non
     %hr
     .row.box.no-margin.derivationLeft
