@@ -33,6 +33,7 @@ class Collaborators::MainController < OrganizationController
       flash[:success] = 'Créé avec succès.'
       redirect_to organization_collaborators_path(@organization)
     else
+      flash[:error] = "Impossible de créer ce collaborateur : #{@member.errors.messages.to_s}."
       redirect_to organization_collaborators_path(@organization)
     end
   end

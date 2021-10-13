@@ -46,7 +46,7 @@ function bind_collaborator_events(){
   })
 
 
-  $('.search-content #search_input').unbind('keyup').bind('keyup', function(e){
+  $('.search-content .search_input_text').unbind('keyup.apply_searchable').bind('keyup.apply_searchable', function(e){
     e.stopPropagation();
 
     let name = $(this).attr('name');

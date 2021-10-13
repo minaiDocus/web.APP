@@ -1,7 +1,4 @@
 = form_tag organization_collaborators_path(@organization), method: :get, class: 'form-filter member_f search_contains_filter' do
-  = hidden_field_tag :direction, sort_direction
-  = hidden_field_tag :sort, sort_column
-  = hidden_field_tag :per_page, per_page
   .form-group
     .label-section
       = label_tag 'user_contains[company]', t('activerecord.models.user.attributes.company'), class: 'semibold'

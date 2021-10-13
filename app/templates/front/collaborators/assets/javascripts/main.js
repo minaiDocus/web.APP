@@ -86,7 +86,7 @@ class Main{
     }
 
     if (search_pattern) {
-      search_text = $(`.search-content input[name='${params_name}']#search_input`).val();
+      search_text = $(`.search-content input[name='${params_name}'].search_input_text`).val();
       if(search_text && search_text != ''){ params.push(`${params_name}=${encodeURIComponent(search_text)}`); }
     }
 
@@ -109,7 +109,7 @@ class Main{
         $('.page-content .box-group-content').html($(response).find('.page-content').html());
       }
 
-      $(`.search-content input[name='${params_name}']#search_input`).val(search_text);
+      $(`.search-content input[name='${params_name}'].search_input_text`).val(search_text);
 
       this.action_locker = false;
     })

@@ -10,8 +10,8 @@
           %span.badge.badge-secondary.badge-sm.regular= @members.count
       .col-md-2.no-padding
         .input-group.mb-3.search-content
-          %span.input-group-text.member-search#basic-addon1= glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })
-          %input.form-control#search_input{ type: :text, "aria-label" => "Rechercher", "aria-describedby" => "basic-addon1", name:'user_contains[text]', placeholder: 'Rechercher' }
+          %span.input-group-text.member-search#basic-addon_collaborator= glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })
+          %input.form-control#search_input_collaborator.search_input_text{ type: :text, "aria-label" => "Rechercher", "aria-describedby" => "basic-addon_collaborator", name:'user_contains[text]', placeholder: 'Rechercher' }
       .col-md-1.text-center.no-padding
         %button.btn.btn-light.more-filter.member_filter.semibold
           %span.me-2 Filtrer

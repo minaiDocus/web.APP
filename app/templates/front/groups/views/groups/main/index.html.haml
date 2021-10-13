@@ -6,8 +6,8 @@
         %span.badge.badge-secondary.badge-sm.regular= @groups.size
     .col-md-2.no-padding
       .input-group.mb-3.search-content
-        %span.input-group-text.group-search#basic-addon1= glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })
-        %input.form-control#search_input{ type: :text, "aria-label" => "Rechercher", "aria-describedby" => "basic-addon1", name:'group_contains[text]', placeholder: 'Rechercher' } 
+        %span.input-group-text.group-search#basic-addon_group= glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })
+        %input.form-control#search_input_groups.search_input_text{ type: :text, "aria-label" => "Rechercher", "aria-describedby" => "basic-addon_group", name:'group_contains[text]', placeholder: 'Rechercher' } 
     .col-md-1.text-center.no-padding
       %button.btn.btn-light.more-filter.group_filter.semibold
         %span.me-2 Filtrer
@@ -91,9 +91,6 @@
           %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
         .modal-body
           = form_tag organization_groups_path(@organization), method: :get, class: 'form-filter group_f search_contains_filter' do
-            = hidden_field_tag :direction, sort_direction
-            = hidden_field_tag :sort, sort_column
-            = hidden_field_tag :per_page, per_page
             .form-group
               .label-section
                 = label_tag 'group_contains[name]', t('activerecord.models.group.attributes.name')
