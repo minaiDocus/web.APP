@@ -5,7 +5,7 @@ class McfCustomer{
 
   show_mcf_edition(url){
     const edit_mcf = $('#edit_mcf_customer_modal.modal');
-    AppToggleLoading('show');
+    AppLoading('show');
     this.applicationJS.sendRequest({ 'url': url }).then((element)=>{
       edit_mcf.find('.modal-body').html($(element).find('#customer.edit.mcf').html());
       edit_mcf.modal('show');
@@ -34,11 +34,11 @@ class McfCustomer{
         user_mcf_storage.show();
 
         $('button.validate_user_mcf_storage').removeAttr('disabled');
-        AppToggleLoading('hide');
+        AppLoading('hide');
       });
     }).catch((error)=> {
       user_mcf_storage.after(`<span class="badge bg-danger error">Erreur : ${error} ==> connexion non autorisé à accéder à My Company Files</span>`);
-      AppToggleLoading('hide');
+      AppLoading('hide');
     });
   }
 }

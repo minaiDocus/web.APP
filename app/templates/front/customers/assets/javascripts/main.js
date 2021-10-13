@@ -300,7 +300,7 @@ class Customer{
     };
 
     const get_ibiza_customers_list = (selector) => {
-      AppToggleLoading('show');
+      AppLoading('show');
       this.applicationJS.sendRequest({
         'url': selector.data('users-list-url'),
         'type': 'GET',
@@ -320,7 +320,7 @@ class Customer{
             selector.append(option_html);
           }
 
-          AppToggleLoading('hide');
+          AppLoading('hide');
           selector.chosen({
             search_contains: true,
             no_results_text: 'Aucun résultat correspondant à'

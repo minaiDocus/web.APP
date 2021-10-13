@@ -40,7 +40,7 @@ class DocumentsAnalytics{
         beforeSend: function(){
           me.bind_events();
           $('#analytic .fields, .no_compta_analysis, .help-block').hide();
-          AppToggleLoading('show');
+          AppLoading('show');
         },
         success: function(data){
           me.analytics = data['analytics'];
@@ -66,10 +66,10 @@ class DocumentsAnalytics{
 
           me.bind_events();
 
-          AppToggleLoading('hide');
+          AppLoading('hide');
         },
         error: function(data){
-          AppToggleLoading('hide');
+          AppLoading('hide');
           $('#analytic .fields, .help-block').hide();
           $('.no_compta_analysis').show();
 

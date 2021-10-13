@@ -36,7 +36,7 @@ class ConfigurationStep1{
     if( current_account != 'all' && parseInt(current_account) > 0 ){
       this.mainConfig.main_modal.modal('show');
 
-      AppToggleLoading('show');
+      AppLoading('show');
       this.mainConfig.budgeaApi.get_user_tokens()
                                 .then((e)=>{
                                   this.fetch_connectors();
@@ -117,7 +117,7 @@ class ConfigurationStep1{
       }
     });
 
-    AppToggleLoading('hide');
+    AppLoading('hide');
 
     select.html(options);
     $('.step1 .connectors-size').text(total_size);

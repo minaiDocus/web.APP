@@ -127,7 +127,7 @@ function bind_all_events_paper_set_orders(){
 
   $('.add-paper-set-order, .create-paper-set-order-multiple').unbind('click').bind('click', function(e) {
     e.stopPropagation();
-    AppToggleLoading('show');
+    AppLoading('show');
     $('#valid-manual-paper-set-order.paper_set_order_form, #default.paper_set_order_form').submit();
   });
 

@@ -147,7 +147,7 @@
 
 /******************* GLOBAL FUNCTIONS *********************/
   // Type must be 'show' or 'hide'
-  AppToggleLoading = (type='show') => {
+  AppLoading = (type='show') => {
     if(type == 'show'){
       $('div.loading_box').addClass('force');
       $('div.loading_box').removeClass('hide');

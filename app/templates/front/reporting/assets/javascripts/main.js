@@ -22,7 +22,7 @@ function load_reporting_invoices(){
     if(VARIABLES['reporting_loading'] <= 0){
       VARIABLES['reporting_loading'] = 0;
       VARIABLES['reporting_customer_change'] = false;
-      AppToggleLoading('hide');
+      AppLoading('hide');
     }
   });
 }
@@ -36,7 +36,7 @@ function handle_customer_change(statistics){
     VARIABLES['reporting_customer_change_timer'] = null;
 
     VARIABLES['reporting_customer_change_timer'] = setTimeout(()=>{
-                                                                    AppToggleLoading('show');
+                                                                    AppLoading('show');
 
                                                                     load_reporting_invoices();
 
@@ -65,7 +65,7 @@ jQuery(function() {
     VARIABLES['reporting_loading'] = 0;
     VARIABLES['reporting_customer_change'] = true;
 
-    AppToggleLoading('show');
+    AppLoading('show');
     statistics.load_all(); 
   });
   AppListenTo('reporting_load_all', (e)=>{ handle_customer_change(statistics); });

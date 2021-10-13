@@ -57,7 +57,7 @@ function bind_customer_events() {
   $('form.subscription_option_form .valid_subscription_edit, .submit_customer').unbind('click').bind('click', function(e){
     e.preventDefault();
 
-    AppToggleLoading('show');
+    AppLoading('show');
 
     $('form.subscription_option_form').find('.clonable_fields').remove();
     $('form.subscription_option_form').submit();

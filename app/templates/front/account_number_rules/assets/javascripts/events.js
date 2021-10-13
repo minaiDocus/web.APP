@@ -133,7 +133,7 @@ function bind_all_events_account_number_rules(){
 
   $('.validate-account-number-rule').unbind('click').bind('click', function(e) {
     e.preventDefault();
-    AppToggleLoading('show');
+    AppLoading('show');
     $('form.account-number-rule-form')[0].submit();
   });
 

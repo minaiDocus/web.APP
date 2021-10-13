@@ -85,7 +85,7 @@ class Journal{
     let self = this;
     $('.previous-next-controls .validate').unbind('click.submit_journal').bind('click.submit_journal', function(e) {
       e.stopPropagation();
-      AppToggleLoading('show');
+      AppLoading('show');
 
       if (no_entry_selected) {
         $('.carousel_item_last_slide').remove();
