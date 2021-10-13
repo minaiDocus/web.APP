@@ -54,7 +54,7 @@ function bind_customer_events() {
   });
 
 
-  $('form.subscription_option_form .valid_subscription_edit, .submit_customer').unbind('click').bind('click', function(e){
+  $('form.subscription_option_form .valid_subscription_edit').unbind('click').bind('click', function(e){
     e.preventDefault();
 
     AppLoading('show');

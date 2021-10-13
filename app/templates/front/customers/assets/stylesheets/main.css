@@ -157,11 +157,36 @@ table.table.list_customers tr.inactive .sub_menu{
 }
 
 @media (max-width: 1280px) {
-  .form-check-input {
+  .form-check-input {    
     margin-top: 0.4em !important;
   }
 
   .select-container input, .select-container textarea {
     padding: 2%;
+  }
+
+  .modal #personalize_subscription_package_form .form-switch .form-check-input {
+    height: 1em;
+    margin-top: 13% !important;
+  }
+
+  .modal .label-package{
+    font-size: 1.4rem;
+  }
+
+  .modal .description{
+    font-size: 0.7rem;
+  }
+
+  .modal p{
+    font-size: 0.7rem;
+  }
+
+  .modal .price{
+    font-size: 14px;
+  }
+
+  .modal .form-switch .form-check-label{
+    margin-left: 0; 
   }
 }

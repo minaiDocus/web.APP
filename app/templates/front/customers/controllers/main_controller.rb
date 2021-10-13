@@ -58,18 +58,15 @@ class Customers::MainController < CustomerController
     end
 
     if @customer.persisted?
-      if @organization.specific_mission
-        redirect_to organization_customer_path(@organization, @customer)
-      else
-        Subscription::Form.new(@customer.subscription, @user, request).submit(params[:subscription])
-
-        redirect_to organization_user_journals_path(@organization, @customer)
-      end
+      Subscription::Form.new(@customer.subscription, @user, request).submit(params[:subscription]) if not @organization.specific_mission
+      
+      json_flash[:success] = "Creér avec succès"
     else
-      flash[:error] = errors_to_list @customer.errors.messages
-
-      redirect_to organization_customer_path(@organization, @customer)
+      
+      json_flash[:error] = errors_to_list @customer.errors.messages      
     end
+
+    render json: { json_flash: json_flash, url: organization_customer_path(@organization, @customer) }, status: 200
   end
 
   # GET /account/organizations/:organization_id/customers/:id/edit

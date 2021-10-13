@@ -525,6 +525,8 @@ jQuery(function () {
   AppListenTo('close_or_reopen_confirm', (e)=>{ customer.close_or_reopen_confirm(e.detail.url, e.detail.data); });
 
   AppListenTo('bind_api_user_events', (e)=>{ customer.rebind_customer_all_events(); });
- 
+  
   customer.main();
+
+  AppListenTo('show_new_customer', (e)=>{ if (e.detail.response.json_flash.success) { window.location.href = e.detail.response.url } });  
 });

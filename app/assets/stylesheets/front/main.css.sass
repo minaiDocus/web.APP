@@ -748,6 +748,13 @@ input[type=radio], input[type=checkbox], select
 .footer_marginer
   height: 7rem
 
+.form-control:focus, .select-container input:focus
+  border-color: #cad953 !important
+  box-shadow: 0 0 0 0.25rem rgb(211, 222, 85)
+
+.select-container input:focus-visible
+  border-color: #cad953 !important
+
 @media (max-width: 1280px)
   // HEADER
   h1
@@ -857,20 +864,12 @@ input[type=radio], input[type=checkbox], select
   .modal p, .modal i
     font-size: 11px !important
 
-  .action svg
-    width: 11px !important
-    height: 11px !important
-
   .action li
     font-size: 11px
 
   .sol-inner-container
     height: 40px
     font-size: 13px
-
-  .sol-caret-container svg
-    width: 12px !important
-    height: 12px !important
 
   .sol-selected-display-item
     font-size: 0.7em
@@ -885,3 +884,12 @@ input[type=radio], input[type=checkbox], select
 
   i
     font-size: 10px
+
+  .search-content
+    input
+      font-size: 0.7rem
+
+  span 
+    svg
+      width: 12px !important
+      height: 12px !important

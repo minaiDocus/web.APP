@@ -1,5 +1,5 @@
 ﻿.customer-form-content.p-2
-  = simple_form_for @customer, url: customer_form_url(@organization, @customer), html: { class: 'form form-horizontal margin0 subscription_option_form', id: 'customer-form-data' } do |f|
+  = simple_form_for @customer, url: customer_form_url(@organization, @customer), method: :post, html: { class: 'form form-horizontal margin0 subscription_option_form', id: 'create-customer-form-data' } do |f|
     .carousel.slide#carousel_customer_form{  "data-bs-touch" => "false", "data-bs-interval" => "false" }
       .carousel-inner
         .carousel-item.active
@@ -20,16 +20,16 @@
                   = f.input :code, hint: "Doit impérativement commencer par : #{@organization.code}%, 15 caractères alphanumériques maximum, code cabinet inclus.", label: false, input_html: { class: 'code_field required_field', placeholder: "IDOC%CLIENT10", disabled: ('disabled' if action_name.in? %w(edit update)) }, :required => true
                 = f.label :first_name, :class => "semibold"
                 .select-container.no-padding.w-100
-                  = f.input :first_name, label: false, input_html: { class: 'first_name_field', placeholder: "ex : Clément" }
+                  = f.input :first_name, label: false, input_html: { class: 'first_name_field' }
                 = f.label :last_name, :class => "semibold"
                 .select-container.no-padding.w-100
-                  = f.input :last_name, label: false, input_html: { class: 'last_name_field', placeholder: "ex : Lefebure" }
+                  = f.input :last_name, label: false, input_html: { class: 'last_name_field' }
                 = f.label :phone_number, :class => "semibold"
                 .select-container.no-padding.w-100
-                  = f.input :phone_number, label: false, input_html: { class: 'phone_number_field', placeholder: "0601020304" }
+                  = f.input :phone_number, label: false, input_html: { class: 'phone_number_field' }
                 = f.label :email, :class => "required semibold"
                 .select-container.no-padding.w-100
-                  = f.input :email, label: false, input_html: { class: 'email_field required_field', placeholder: "clement@idocus.com", :required => true }, hint: "Le courriel sert d’identifiant à iDocus et de contact principal en cas de besoin de la part d’iDocus"
+                  = f.input :email, label: false, input_html: { class: 'email_field required_field', :required => true }, hint: "Le courriel sert d’identifiant à iDocus et de contact principal en cas de besoin de la part d’iDocus"
             .col-md-6.derivationRight
               .bg-light.heightGroups.groups_1.clearfix.small-shadow.p-3
                 %h5.semibold Paramètre de base
@@ -50,7 +50,7 @@
                         = f.input :act_as_a_collaborator_into_pre_assignment, as: :boolean, label: false, label_html: { class: 'required semibold form-check-label', id: 'check-collaborator-pre-assignment' }, input_html: { class: 'form-check-input input_switch input_check_field' }
                         %label.semibold{class: 'form-check-label label_check_field', for: 'check-collaborator-pre-assignment'} Non
                 = f.input :group_ids, collection: @user.groups.order(name: :asc), label: 'A quel groupe, le dossier doit-il être attribué ?', label_html: { class: 'control-label required semibold' }, input_html: { class: 'select optional searchable-option-list', id: 'select-group-list', include_blank: true, multiple: true } 
-                = f.association :manager, collection: managers_options_for_select, include_blank: false, label: 'Quel est le collaborateur en charge du dossier?', hint: 'IMPORTANT! Indiquer le collaborateur en charge du dossier permettra à iDocus de le contacter en cas de soucis. Autrement tous les mails seront adressés à l’administrateur de l’organisation.', label_html: { class: 'control-label required semibold' }, input_html: { class: 'form-control select form-select form-select-sm optional', id: 'select-customer-list'}
+                = f.association :manager, collection: managers_options_for_select, include_blank: false, label: 'Qui est le collaborateur en charge du dossier?', hint: 'IMPORTANT! Indiquer le collaborateur en charge du dossier permettra à iDocus de le contacter en cas de soucis. Autrement tous les mails seront adressés à l’administrateur de l’organisation.', label_html: { class: 'control-label required semibold' }, input_html: { class: 'form-control select form-select optional', id: 'select-customer-list'}
                 - unless @organization.specific_mission
                   .form-group.row
                     .col-md-10
@@ -133,9 +133,9 @@
                     .softwares-section
                       - if @organization.try(:ibiza).try(:used?)
                         = f.simple_fields_for :ibiza do |software|
-                          = software.input :ibiza_id, collection: [], label: 'Dossier correspondant dans iBiZa', label_html: { class: 'control-label required semibold' }, input_html: { class: 'form-control select optional ibiza-customers-list', id: 'ibiza-customers-list', placeholder: 'Choisir un dossier', data: { original_value: nil, users_list_url: organization_ibiza_users_path(@organization, format: 'json') }, multiple: false } 
+                          = software.input :ibiza_id, collection: [], label: 'Dossier correspondant dans iBiZa', label_html: { class: 'control-label required semibold' }, input_html: { class: 'form-control select form-select optional ibiza-customers-list', id: 'ibiza-customers-list', placeholder: 'Choisir un dossier', data: { original_value: nil, users_list_url: organization_ibiza_users_path(@organization, format: 'json') }, multiple: false } 
 
-        .carousel-item.back-grey
+        .carousel-item
           .subscription-base-form
             - unless @organization.specific_mission
               = render 'subscription_options'
