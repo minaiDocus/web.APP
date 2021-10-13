@@ -8,6 +8,7 @@ class RPBanksParams{
   }
 
   fetch_connectors(){
+    AppLoading('show');
     if(this.connectors.length > 0)
     {
       this.fill_connectors();
@@ -62,6 +63,8 @@ class RPBanksParams{
     });
 
     select.html(options);
+
+    AppLoading('hide');
   }
 
   bank_activation(id, type='disable'){

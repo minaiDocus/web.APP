@@ -75,6 +75,8 @@ class ConfigurationStep4{
 
   configuration_finished(){
     try{ this.mainConfig.main_modal.modal('hide'); }catch(e){}
-    this.mainConfig.applicationJS.noticeSuccessMessageFrom(null, 'Configuration automate terminée.');
+    this.mainConfig.applicationJS.sendRequest({ url: '/retrievers', type: 'GET', target: '.retrievers-list' }).then((e)=>{
+      this.mainConfig.applicationJS.noticeSuccessMessageFrom(null, 'Configuration automate terminée.');
+    });
   }
 }

@@ -19,7 +19,7 @@
             %tr
               %td.text-center
                 .form-check
-                  = check_box_tag 'bank_accounts[]', account['id'], local_accounts.include?(account['id']), class: 'form-check-input pointer float-none check-bank-account'
+                  = check_box_tag 'bank_accounts[]', account['id'], local_accounts.include?(account['id']), id: "bank_accounts_#{account['id']}", class: 'form-check-input pointer float-none check-bank-account'
               %td= account['name']
               %td= account['number']
     

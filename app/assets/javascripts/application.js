@@ -56,7 +56,7 @@
 
       if( !el.hasClass('mixed-to-date-range') ){
         let initial_value = el.val();
-        let final_value   = '';
+        let is_deleted    = false;
 
         el.daterangepicker(option);
         el.addClass('mixed-to-date-range');
@@ -69,10 +69,18 @@
             if(initial_value == undefined || initial_value == '' || initial_value == null)
               el.val('');
 
-            el.unbind('keyup.custom_keyup_date').bind('keyup.custom_keyup_date', function(e){ final_value = el.val(); });
+            el.unbind('keyup.custom_keyup_date').bind('keyup.custom_keyup_date', function(e){
+              if(el.val() == '' || el.val() == undefined || el.val() == null)
+                is_deleted = true;
+              else
+                is_deleted = false;
+            });
 
             el.unbind('blur.custom_blur_date').bind('blur.custom_blur_date', function(e){
-              if(!final_value){ el.val(''); }
+              if(is_deleted){
+                el.val('');
+                is_deleted = false;
+              };
             });
           }
         }

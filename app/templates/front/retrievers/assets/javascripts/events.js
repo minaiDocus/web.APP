@@ -155,7 +155,7 @@ function bind_all_events(){
 }
 
 jQuery(function() {
-  bind_all_events();
+  AppListenTo('window.application_auto_rebind', (e)=>{ bind_all_events() });
 
     /* SCROLLING TO THE BOTTOM */
   $('.body_content').scroll(function() {
