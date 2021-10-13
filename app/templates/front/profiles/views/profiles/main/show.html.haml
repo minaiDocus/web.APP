@@ -3,8 +3,6 @@
 .container-fluid
   .row.derivationLeft
     .col-md-8.text-start
-      %h3.bold
-        Mon compte
     .col-md-2.text-center
       - unless organizations_suspended? && @user.active?
         %button.btn.btn-light-primary.semibold.change-password.w-100{'data-bs-target' => '#change-password', 'data-bs-toggle' => 'modal', :type => 'button'}

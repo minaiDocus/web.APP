@@ -133,4 +133,17 @@ module Interfaces::User::Customer
       false
     end
   end
+
+  def banking_provider
+    is_budgea = self.options.banking_provider == 'budget_insight'
+    is_bridge = self.options.banking_provider == 'bridge'
+
+    if !is_budgea && !is_bridge
+      is_budgea = self.organization.banking_provider == 'budget_insight'
+      is_bridge = self.organization.banking_provider == 'bridge'
+    end
+
+    return 'budget_insight' if is_budgea
+    return 'bridge'         if is_bridge
+  end
 end

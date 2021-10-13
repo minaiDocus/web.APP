@@ -14,7 +14,7 @@
         %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
     .col-md-3
       .row.choose_retriever_action
-        - if !@all_selected
+        - if @account
           - if @is_budgea
             .col-md-8.text-center.derivationRight
               %button.btn.btn-light-primary.semibold.list-retriever.w-100{ disabled: false }

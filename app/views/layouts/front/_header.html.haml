@@ -15,9 +15,8 @@
             .dropdown-menu{"aria-labelledby" => "navbardropdownmenudocuments"}
               =link_to t('layouts.pieces_and_pre_assignment'), documents_path, class: (controller_path == 'documents/pieces')? 'dropdown-item active' : 'dropdown-item'
               =link_to t('layouts.pieces_errors'), pieces_errors_path, class: (controller_path == 'pieces_errors/main')? 'dropdown-item active' : 'dropdown-item'
-          - if @user.pre_assignement_displayed?
-            %li.nav-item{ class: (controller_path == 'documents/operations')? 'active' : '' }
-              =link_to t('layouts.bank_operations'), operations_path, class: 'nav-link bold'
+          %li.nav-item{ class: (controller_path == 'documents/operations')? 'active' : '' }
+            =link_to t('layouts.bank_operations'), operations_path, class: 'nav-link bold'
 
         - if @user.collaborator?
           - if @user.has_one_organization?

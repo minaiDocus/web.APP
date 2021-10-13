@@ -9,12 +9,6 @@ class Retrievers::MainController < RetrieverController
   prepend_view_path('app/templates/front/retrievers/views')
 
   def index
-    @all_selected = true
-
-    if (params[:account_id].present? && params[:account_id] != 'all') || (session[:retrievers_account_id].present? && session[:retrievers_account_id] != 'all')
-      @all_selected = false
-    end
-
     retrievers = if @account
                    @account.retrievers
                  else
@@ -186,20 +180,11 @@ class Retrievers::MainController < RetrieverController
   end
 
   def get_banking_provider
-    @is_budgea = false
-    @is_bridge = false
-    @is_specific_mission = false
+    @is_specific_mission = @user.organization.specific_mission
 
-    if @user.organization.specific_mission
-      @is_specific_mission = true
-    elsif @account && @account.options.banking_provider == 'budget_insight'
-      @is_budgea = true
-    elsif @account && @account.options.banking_provider == 'bridge'
-      @is_bridge = true
-    elsif @user.organization.banking_provider == 'budget_insight'
-      @is_budgea = true
-    elsif @user.organization.banking_provider == 'bridge'
-      @is_bridge = true
-    end
+    return false if not @account
+
+    @is_budgea = @account.banking_provider == 'budget_insight'
+    @is_bridge = @account.banking_provider == 'bridge'
   end
 end
