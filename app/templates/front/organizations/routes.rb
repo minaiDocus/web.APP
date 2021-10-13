@@ -7,10 +7,6 @@ Rails.application.routes.draw do
       get   :edit_options,          on: :collection
       get   :edit_software_users,   on: :member
       get   :close_confirm,         on: :member
-      get   :edit_payment,          on: :member
-      post  :prepare_payment,       on: :member
-      post  :confirm_payment,       on: :member
-      post  :revoke_payment,        on: :member
       patch :update_options,        on: :collection
       patch :update_software_users, on: :member
 

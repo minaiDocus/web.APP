@@ -1,13 +1,70 @@
 # frozen_string_literal: true
-class Payments::MainController < FrontController
+class Payments::MainController < OrganizationController
+  before_action :apply_membership,               except: :debit_mandate_notify
+  before_action :verify_rights,                  except: :debit_mandate_notify
+
+  skip_before_action :load_organization,         only: :debit_mandate_notify
   skip_before_action :login_user!,               only: :debit_mandate_notify
   skip_before_action :load_user_and_role,        only: :debit_mandate_notify, raise: false
   skip_before_action :verify_suspension,         only: :debit_mandate_notify, raise: false
   skip_before_action :verify_authenticity_token, only: :debit_mandate_notify, raise: false
 
-  # GET /account/payment/use_debit_mandate
-  def use_debit_mandate
-    redirect_to organization_path(@user.organization, tab: 'payments')
+  prepend_view_path('app/templates/front/payments/views')
+
+  # GET /account/organizations/:id/edit_payment
+  def edit_payment; end
+
+  def prepare_payment
+    debit_mandate = @organization.debit_mandate
+
+    if debit_mandate.pending?
+      debit_mandate.title             = payment_params[:gender]
+      debit_mandate.firstName         = payment_params[:first_name]
+      debit_mandate.lastName          = payment_params[:last_name]
+      debit_mandate.email             = payment_params[:email]
+      debit_mandate.invoiceLine1      = payment_params[:address]
+      debit_mandate.invoiceLine2      = payment_params[:address_2]
+      debit_mandate.invoiceCity       = payment_params[:city]
+      debit_mandate.invoicePostalCode = payment_params[:postal_code]
+      debit_mandate.invoiceCountry    = payment_params[:country]
+    end
+
+    if debit_mandate.save
+      mandate = Billing::DebitMandateResponse.new debit_mandate
+      mandate.prepare_order
+
+      if mandate.errors
+        render json: { success: false, message: mandate.errors }, status: 200
+      else
+        debit_mandate.update(reference: mandate.order_reference, transactionStatus: 'started')
+
+        render json: { success: true, frame_64: mandate.get_frame }, status: 200
+      end
+    else
+      render json: { success: false, message: debit_mandate.errors.message }, status: 200
+    end
+  end
+
+  def confirm_payment
+    debit_mandate = @organization.debit_mandate
+    if debit_mandate.started?
+      Billing::DebitMandateResponse.new(debit_mandate).confirm_payment
+    end
+
+    render json: { success: true, debit_mandate: @organization.debit_mandate.reload }, status: 200
+  end
+
+  def revoke_payment
+    if @user.is_admin && params[:revoke_confirm] == 'true'
+      result = Billing::DebitMandateResponse.new(@organization.debit_mandate).send(:revoke_payment)
+      if result.present?
+        json_flash[:error]   = result
+      else
+        json_flash[:success] = 'Mandat supprimé avec succès.'
+      end
+    end
+
+    render json: { json_flash: json_flash }, status: 200
   end
 
   # POST /account/payment/debit_mandate_notify
@@ -33,5 +90,38 @@ class Payments::MainController < FrontController
     # else
     #   render plain: 'Erreur'
     # end
+  end
+
+  private
+
+  def verify_rights
+    unless @user.is_admin
+      authorized = false
+      if current_user.is_admin && action_name.in?(%w[prepare_payment confirm_payment])
+        authorized = true
+      elsif action_name.in?(%w[prepare_payment confirm_payment]) && @user.leader?
+        authorized = true
+      end
+
+      unless authorized
+        flash[:error] = t('authorization.unessessary_rights')
+        redirect_to organization_path(@organization)
+      end
+    end
+  end
+
+  def payment_params
+    params.permit(
+      :gender,
+      :first_name,
+      :last_name,
+      :email,
+      :phone_number,
+      :address,
+      :address_2,
+      :city,
+      :postal_code,
+      :country
+    )
   end
 end

@@ -87,72 +87,16 @@ class Organizations::MainController < OrganizationController
   # GET /account/organizations/:id/close_confirm
   def close_confirm; end
 
-  # GET /account/organizations/:id/edit_payment
-  def edit_payment; end
-
-  def prepare_payment
-    debit_mandate = @organization.debit_mandate
-
-    if debit_mandate.pending?
-      debit_mandate.title             = payment_params[:gender]
-      debit_mandate.firstName         = payment_params[:first_name]
-      debit_mandate.lastName          = payment_params[:last_name]
-      debit_mandate.email             = payment_params[:email]
-      debit_mandate.invoiceLine1      = payment_params[:address]
-      debit_mandate.invoiceLine2      = payment_params[:address_2]
-      debit_mandate.invoiceCity       = payment_params[:city]
-      debit_mandate.invoicePostalCode = payment_params[:postal_code]
-      debit_mandate.invoiceCountry    = payment_params[:country]
-    end
-
-    if debit_mandate.save
-      mandate = Billing::DebitMandateResponse.new debit_mandate
-      mandate.prepare_order
-
-      if mandate.errors
-        render json: { success: false, message: mandate.errors }, status: 200
-      else
-        debit_mandate.update(reference: mandate.order_reference, transactionStatus: 'started')
-
-        render json: { success: true, frame_64: mandate.get_frame }, status: 200
-      end
-    else
-      render json: { success: false, message: debit_mandate.errors.message }, status: 200
-    end
-  end
-
-  def confirm_payment
-    debit_mandate = @organization.debit_mandate
-    if debit_mandate.started?
-      Billing::DebitMandateResponse.new(debit_mandate).confirm_payment
-    end
-
-    render json: { success: true, debit_mandate: @organization.debit_mandate.reload }, status: 200
-  end
-
-  def revoke_payment
-    if @user.is_admin && params[:revoke_confirm] == 'true'
-      result = Billing::DebitMandateResponse.new(@organization.debit_mandate).send(:revoke_payment)
-      if result.present?
-        json_flash[:error]   = result
-      else
-        json_flash[:success] = 'Mandat supprimé avec succès.'
-      end
-    end
-
-    render json: { json_flash: json_flash }, status: 200
-  end
-
   private
 
   def verify_rights
     unless @user.is_admin
       authorized = false
-      if current_user.is_admin && action_name.in?(%w[index edit_options update_options edit_software_users update_software_users new create prepare_payment confirm_payment suspend unsuspend])
+      if current_user.is_admin && action_name.in?(%w[index edit_options update_options edit_software_users update_software_users new create suspend unsuspend])
         authorized = true
       elsif action_name.in?(%w[show]) && @user.is_prescriber
         authorized = true
-      elsif action_name.in?(%w[edit update edit_software_users update_software_users prepare_payment confirm_payment]) && @user.leader?
+      elsif action_name.in?(%w[edit update edit_software_users update_software_users]) && @user.leader?
         authorized = true
       end
 
@@ -217,21 +161,6 @@ class Organizations::MainController < OrganizationController
         { :my_unisoft_attributes => %i[id is_used auto_deliver] }
       )
     end
-  end
-
-  def payment_params
-    params.permit(
-      :gender,
-      :first_name,
-      :last_name,
-      :email,
-      :phone_number,
-      :address,
-      :address_2,
-      :city,
-      :postal_code,
-      :country
-    )
   end
 
   def to_redirect
