@@ -400,11 +400,6 @@ class Customer{
     $('.customer-filter').unbind('click').bind('click',function(e) {
       e.stopPropagation();
 
-      $('#group-filter').multiSelect({
-        'noneText': 'Selectionner un/des groupes',
-        'allText': 'Tous séléctionnés'
-      });
-
       $('#customers-filter').modal('show');
 
       ApplicationJS.set_checkbox_radio();

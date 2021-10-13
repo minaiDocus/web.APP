@@ -189,4 +189,20 @@ table.table.list_customers tr.inactive .sub_menu{
   .modal .form-switch .form-check-label{
     margin-left: 0; 
   }
+
+  .sub_menu {
+    min-width: 18%;
+  }
+
+  #customers-filter.modal .col-form-label{
+    font-size: 0.7rem;
+  }
+
+  #customers-filter.modal .select-container input{
+    padding: 1%;
+  }
+
+  #customers-filter.modal .form-switch .form-check-input{
+    height: 0.9em;
+  }
 }

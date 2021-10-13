@@ -27,3 +27,19 @@
 .select-container input, .select-container textarea {
   padding: 2%;  
 }
+
+.content-list-group{
+  min-height: 10px;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 1280px) {
+  .content-list-group{
+    min-height: 10px;
+    font-size: 0.7rem;
+  }
+
+  .modal .select-container input, .modal .select-container textarea {
+    padding: 1%;
+  } 
+}

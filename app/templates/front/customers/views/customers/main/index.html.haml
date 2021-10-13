@@ -110,7 +110,7 @@
                 = text_field_tag 'user_contains[email]', (params[:user_contains][:email] rescue ''), class: 'form-control filter-field'
             .form-group
               = label_tag 'group_ids[]', 'Filtrer par groupe', class: 'semibold'
-              = select_tag 'group_ids[]', options_from_collection_for_select(@user.groups.order(name: :asc), :id, :name, (params[:group_ids] rescue '')), include_blank: true, class: 'form-control form-select form-select-sm filter-field', id: 'group-filter', multiple: true
+              = select_tag 'group_ids[]', options_from_collection_for_select(@user.groups.order(name: :asc), :id, :name, (params[:group_ids] rescue '')), include_blank: true, class: 'searchable-option-list', id: 'group-filter', multiple: true
             .form-group
               = label_tag 'user_contains[collaborator_id]', 'Filtrer par collaborateur', class: 'semibold'
               = select_tag 'user_contains[collaborator_id]', options_from_collection_for_select(@organization.collaborators.order(code: :asc), :id, :code, (params[:user_contains][:collaborator_id] rescue '')), include_blank: true, class: 'form-control form-select form-select-sm filter-field', id: 'collaborator-filter', multiple: false
