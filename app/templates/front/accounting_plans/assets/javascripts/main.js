@@ -73,6 +73,7 @@ class AccountingPlan {
     let customer_id = $('input:hidden[name="customer_id"]').val();
     this.applicationJS.sendRequest({ 'url': '/organizations/' + this.organization_id + '/customers/' + customer_id + '/accounting_plan/vat_accounts' }).then((result)=>{
       $('#vat_accounts').html($(result).find('#vat_accounts').html());
+      $('.vat_accounts_count').text($(result).find('#vat_accounts').attr('vat_accounts_count'));
     });
   }
 

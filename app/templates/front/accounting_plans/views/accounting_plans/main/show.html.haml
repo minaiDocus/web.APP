@@ -66,7 +66,9 @@
           Clients
           %span.ms-1.badge.badge-secondary.regular= @accounting_plan.customers.size
       %li.nav-item.no-margin{ "role" => "presentation" }
-        %button.semibold.nav-link#check-vat_accounts-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#vat_accounts", type: :button, "role" => "tab", "aria-controls" => "vat_accounts-selection", "aria-selected" => "false"} TVA
+        %button.semibold.nav-link#check-vat_accounts-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#vat_accounts", type: :button, "role" => "tab", "aria-controls" => "vat_accounts-selection", "aria-selected" => "false"}
+          TVA
+          %span.ms-1.badge.badge-secondary.regular.vat_accounts_count 0
 
     .tab-content
       .tab-pane.box.no-margin.active#provider{ "role" => "tabpanel", "aria-labelledby" => "provider-tab" }

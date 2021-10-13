@@ -22,7 +22,7 @@
   .select-container.no-padding.w-100
     = f.input :content, as: :text, label: false, input_html: { class: 'account-number-rules-content required_field', placeholder: 'ex: "station" 2015' }
     - text_helper = "- recherche: station 2015 match avec libellé: Prélèvement station 2015 001\n- recherche: station 2015 ne match pas avec libellé : Prélèvement station janvier 2015 001\n- recherche: station 2015 ne match pas avec libellé : Prélèvement préstation 2015 001\n- recherche: station*2015 match avec libellé: Prélèvement station janvier 2015 001\n- recherche: *station*2015 match avec libellé: Prélèvement préstation janvier 2015 001\n- recherche: *station*2015 ne match pas avec libellé: Prélèvement préstation janvier 2015001\n- recherche: *station*2015* match avec libellé: Prélèvement préstation janvier 2015001"
-    %span.pointer{ "data-bs-toggle" => "tooltip", "data-bs-placement" => "bottom", "data-bs-html" => "true", "title" => "#{text_helper}" }
+    %span.pointer.customize_tooltip.no-padding.w-100{ "data-bs-toggle" => "tooltip", "data-bs-placement" => "top", "data-bs-html" => "true", "data-bs-container" =>"body", "title" =>text_helper }
       = glyphicon('info', { size: '12', color: 'rgba(26, 26, 26, 0.7)'})
       %i.help-block Utiliser un asterisque (*) pour représenter du texte ou caractère avant/après le contenu recherché
       
