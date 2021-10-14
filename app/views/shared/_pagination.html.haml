@@ -9,7 +9,7 @@
   - if total_pages.to_i > 0
     .col-md-6
       .row{ class: (no_per_page == true)? 'hide' : '' }
-        .col-md-2.text-end
+        .col-md-3.text-end
           %label Afficher par
         .col-md-2
           = select_tag "per-page-#{name}", options_for_select([[20, 20], [50, 50], [100, 100]], params[:per_page].presence || 20), class: "per-page #{name} form-select form-select-sm", data: { url: url, target: target, filter: filter, name: name, current_page: (params[:page] || 1), mark: mark }, "aria-label" => ".form-select-sm"

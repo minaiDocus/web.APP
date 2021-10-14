@@ -85,17 +85,6 @@ function bind_all_events_account_number_rules(){
     }
   });
 
-  $('button.add-rule').unbind('click').bind('click',function(e) {
-    e.stopPropagation();
-
-    if ($(this).find('.sub_rule_menu').hasClass('hide')){
-      $(this).find('.sub_rule_menu').removeClass('hide')
-    }
-    else {
-      $(this).find('.sub_rule_menu').addClass('hide')
-    }    
-  });
-
   multi_select_for('add-modal');
   $('.sub_rule_menu li.add')
   .unbind('click').bind('click',function(e) {

@@ -134,6 +134,10 @@ a.remove_vat_accounts_field:hover {
     font-size: 1.5rem;
   }
 
+  span{
+    font-size: 0.7rem;
+  }
+
   .acceuil_organizations .statistic_board .repartition {
     min-height: 446px;
   }

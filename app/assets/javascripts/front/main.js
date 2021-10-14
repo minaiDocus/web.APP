@@ -206,6 +206,17 @@ function bind_globals_events(){
     $(this).parent().find('.sub_menu').removeClass('hide');
   });
 
+  $('button.add-rule').unbind('click').bind('click',function(e) {
+    e.stopPropagation();
+
+    if ($(this).find('.sub_rule_menu').hasClass('hide')){
+      $(this).find('.sub_rule_menu').removeClass('hide')
+    }
+    else {
+      $(this).find('.sub_rule_menu').addClass('hide')
+    }    
+  });
+
   $(document).unbind('click.organizations').bind('click.organizations',function(e){
     if ($('.sub_menu').is(':visible')) {
       $('.sub_menu').addClass('hide');

@@ -7,16 +7,23 @@
       Les journaux suivants sont assignés aux automates de récupération mais ne sont pas configurés :
       != @pending_journals.map { |j| content_tag(:strong, j) }.join(', ')
   - if @customer.active? && !is_max_number_of_journals_reached?
-    .form-group.derivationRight
-      .text-end
-        - if !@organization.specific_mission && @customer.active? && (@user.leader? || @user.organization_rights_is_customer_journals_management_authorized)
-          %button.btn.btn-light{ 'data-bs-target' => '#copy-existing-journal', 'data-bs-toggle' => 'modal' }
-            %span.me-2= glyphicon('plus', { color: "#72AA42", size: '15'})
-            %span Copier depuis la base existant
-
-        %button.btn.btn-primary.bold.new-journal.new_edit_account_book_type{link: new_organization_customer_journal_path(@organization, @customer)}
-          %span.me-2= glyphicon('plus', { color: "#FFF", size: '15'})
-          %span Nouveau journal
+    .form-group.derivationRight.no-margin
+      .w-100
+        .text-end
+          %button.btn.btn-primary.semibold.add-rule.w-25
+            %span.me-2 Ajouter une Journal    
+            %span.chevron-add-rule= glyphicon('chevron-bottom', { size: '15', color: '#FFFF'})
+            %hr.m-2
+            .sub_rule_menu.text-start.hide
+              %ul.no-margin.no-padding.regular
+                %li.p-1.new-journal.new_edit_account_book_type{link: new_organization_customer_journal_path(@organization, @customer)}
+                  %span.me-1= glyphicon('plus', { size: '12', color: 'white'})
+                  %span.semibold Nouveau
+                .m-1
+                - if !@organization.specific_mission && @customer.active? && (@user.leader? || @user.organization_rights_is_customer_journals_management_authorized)
+                  %li.p-1{ 'data-bs-target' => '#copy-existing-journal', 'data-bs-toggle' => 'modal' }
+                    %span.me-1= glyphicon('plus', { size: '12', color: 'white'})
+                    %span.semibold Copier depuis la base existant
     %hr
 
   .derivationLeft
@@ -93,16 +100,16 @@
       .row
         .col-md-6.text-start.notif-booktype
           %span Pré-saisie comptable activée pour le dossier :
-          %span.badge{ class: 'bg-' + (@customer.options.is_preassignment_authorized ? 'success fs-origin' : 'danger fs-origin') }
+          %span.badge.semibold{ class: 'bg-' + (@customer.options.is_preassignment_authorized ? 'success fs-origin' : 'danger fs-origin') }
             = @customer.options.is_preassignment_authorized ? t('yes_value') : t('no_value')
           - unless @customer.options.is_preassignment_authorized
             %i.margin1left
-              = link_to '(Activer la pré-saisie comptable)', edit_organization_customer_subscription_path(@organization, @customer)
+              = link_to '(Activer la pré-saisie comptable)', edit_organization_customer_subscription_path(@organization, @customer), class: 'no-style'
         .col-md-6.text-end.notif-booktype
-          = "#{@customer.account_book_types.count}/#{@customer.options.max_number_of_journals} journaux comptables utilisés"
+          %span= "#{@customer.account_book_types.count}/#{@customer.options.max_number_of_journals} journaux comptables utilisés"
           - if @customer.options.max_number_of_journals < 10
             %i.text-muted
-              = link_to '(Augmenter le total autorisé de journaux comptables)', edit_organization_customer_subscription_path(@organization, @customer)
+              = link_to '(Augmenter le total autorisé de journaux comptables)', edit_organization_customer_subscription_path(@organization, @customer), class: 'no-style'
 
   - if !@organization.specific_mission && @customer.active? && (@user.leader? || @user.organization_rights_is_customer_journals_management_authorized)
     .modal.fade.in#copy-existing-journal
