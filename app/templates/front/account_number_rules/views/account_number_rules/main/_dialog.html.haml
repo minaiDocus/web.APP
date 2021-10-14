@@ -44,32 +44,29 @@
         %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
       = form_tag import_organization_account_number_rules_path(@organization), method: 'patch', multipart: true, class: 'form-horizontal' do
         .modal-body
-          %p.regular.mb-4 Une règle d'affectation doit avoir un nom unique. Si des règles dans le fichier d'import portent le même nom qu'une règle déjà existante, ces règles seront auto incrémentées.
-          %hr
-          .form-group
-            .row
-              .col-md-6
-                .label-section
-                  = label_tag 'import_file', (glyphicon('cloud-upload', { size: '15', color: '#72AA42'}) + ' Importer un fichier (format .csv)'), class: 'btn btn-light bold', for: 'import_number_rules_file'
-                .control-section
-                  .select-container.no-padding.w-100
-                    = file_field_tag :file, class: 'filestyle', style: 'visibility:hidden;', id: 'import_number_rules_file'
-              .col-md-6
-                .file_import_csv_example.row.p-1.text-center
-                  = link_to "Télécharger le modèle d'import .csv", import_model_organization_account_number_rules_path(@organization), class: 'btn btn-secondary bold'
+          %p.regular.mb-4 Une règle d'affectation doit avoir un nom unique. Si des règles dans le fichier d'import portent le même nom qu'une règle déjà existante, ces règles seront auto incrémentées.         
 
           .form-group
             .label-section
               = label_tag 'account_number_rule[affect]', t('activerecord.models.account_number_rule.attributes.affect'), class: 'semibold', for: 'affect-rule-to'
             .control-section
-              = select_tag 'account_number_rule[affect]', options_for_select([['Organisation', 'organization'], ['Client', 'user']]), include_blank: true, id: 'affect-rule-to', class: 'form-control select form-select form-select-sm optional'
+              = select_tag 'account_number_rule[affect]', options_for_select([['Organisation', 'organization'], ['Client', 'user']]), include_blank: false, id: 'affect-rule-to', class: 'form-control select form-select optional'
               %i.bloc_helper Ne pourra plus être changé par la suite
 
           = render partial: 'affect_to_form'
           
+          .form-group
+            .row            
+              .col-md-8
+                .control-section
+                  = file_field_tag :file, class: 'filestyle form-control', data: { classButton: 'btn btn-secondary', input: true, buttonText: glyphicon('file') + '' }, accept: "text/plain", id: 'import_number_rules_file'
+              .col-md-4
+                .w-100.text-center
+                  = submit_tag 'Importer', class: 'btn btn-dark import-csv w-75'
         .modal-footer
-          %button.btn.btn-light.cancel{ type: :button, 'aria-label' => 'Close', 'data-bs-dismiss' => 'modal' } Annuler
-          = submit_tag 'Importer', class: 'btn btn-primary import-csv'
+          .row.w-100.text-end
+            = link_to "Télécharger le modèle d'import .csv", import_model_organization_account_number_rules_path(@organization), class: 'btn btn-default bold'           
+          
 
 .modal#filter-rule
   .modal-dialog
