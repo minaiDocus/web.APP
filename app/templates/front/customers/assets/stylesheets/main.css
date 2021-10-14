@@ -156,6 +156,7 @@ table.table.list_customers tr.inactive .sub_menu{
   font-size: 13px;
 }
 
+
 @media (max-width: 1280px) {
   .form-check-input {    
     margin-top: 0.4em !important;
