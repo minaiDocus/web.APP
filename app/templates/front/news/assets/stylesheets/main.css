@@ -11,6 +11,10 @@
   border-bottom: 1px solid #ceb594a3;
 }
 
+.toast .toast-header strong{
+  max-width: 500px;
+}
+
 .toast .toast-body{
   background-color: #faebd75e;
 }

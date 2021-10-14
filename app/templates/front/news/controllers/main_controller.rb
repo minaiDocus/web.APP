@@ -5,11 +5,10 @@ class News::MainController < FrontController
   prepend_view_path('app/templates/front/news/views')
 
   def index
-    @news_present = @user.news_read_at ? News.published.where('published_at > ?', @user.news_read_at).exists? : News.exists?
-    if @news_present
-      @news = ::News.published.where(target_audience: target_audience).order(created_at: :desc).limit(5)
-      @user.update_column(:news_read_at, Time.now)
-    end
+    @news = News.published.where(target_audience: target_audience).where('published_at > ?', current_user.news_read_at || 1.week.ago).order(published_at: :desc).limit(5)
+
+    @news_present = @news.size > 0
+    current_user.update_column(:news_read_at, Time.now) if @news_present
 
     render partial: 'index'
   end
@@ -17,6 +16,6 @@ class News::MainController < FrontController
   private
 
   def target_audience
-    @user.is_prescriber ? %w[everyone collaborators] : %w[everyone customers]
+    current_user.is_prescriber ? %w[everyone collaborators] : %w[everyone customers]
   end
 end
