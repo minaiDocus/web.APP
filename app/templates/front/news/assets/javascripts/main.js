@@ -31,5 +31,5 @@ class NewsMain{
 jQuery(function() {
   let main = new NewsMain();
 
-  setTimeout(()=>{ main.get_latest_news(); }, 3000);
+  setTimeout(()=>{ main.get_latest_news(); }, 1000);
 });
