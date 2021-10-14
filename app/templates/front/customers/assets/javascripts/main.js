@@ -291,11 +291,18 @@ class Customer{
 
 
   show_ibiza_customer(){
+    let ibiza_softwares_section = $('#create-customer-form-data .softwares-section');
     const show_ibiza_list = (selector) => {
       if ($(selector).is(':checked')) {
-        $('#customer-form-data .softwares-section').css('display', 'block');
+        ibiza_softwares_section.css('display', 'block');
+        ibiza_softwares_section.attr('load', 'YES');
       } else {
-        $('#customer-form-data .softwares-section').css('display', 'none');
+        ibiza_softwares_section.css('display', 'none');
+        ibiza_softwares_section.attr('load', 'NO');
+      }
+
+      if ( (ibiza_softwares_section.attr('load') === 'YES') && $('#create-customer-form-data .softwares-section .ibiza-customers-list').length > 0) {
+        get_ibiza_customers_list($('#create-customer-form-data .softwares-section .ibiza-customers-list'));
       }
     };
 
@@ -329,7 +336,9 @@ class Customer{
       });
     }
 
-    const ibiza_checkbox_selector = $('#customer-form-data input[type="checkbox"].check-ibiza');
+    const ibiza_checkbox_selector = $('#create-customer-form-data input[type="checkbox"].check-ibiza');
+
+    show_ibiza_list(ibiza_checkbox_selector);
 
     ibiza_checkbox_selector.change(function() {
       show_ibiza_list(this);
@@ -343,12 +352,6 @@ class Customer{
         update_ibiza_btn.removeAttr('disabled');
       }
     }
-
-    if ($('#customer-form-data .softwares-section .ibiza-customers-list').length > 0) {
-      get_ibiza_customers_list($('#customer-form-data .softwares-section .ibiza-customers-list'));
-    }
-
-    show_ibiza_list(ibiza_checkbox_selector);
   }
 
   show_exact_online_customer(){

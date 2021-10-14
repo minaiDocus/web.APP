@@ -130,7 +130,7 @@
                             = software.input :is_used, as: :boolean, label: false, input_html: { disabled: !@organization.try(:sage).try(:used?), class: 'form-check-input pointer float-none softwares_setting check-sage m-1', id: 'check-sage' }
                             %label.ms-2.semibold{class: 'form-check-label', for: 'check-sage'} Sage
                   .form-group
-                    .softwares-section
+                    .softwares-section{load: 'NO'}
                       - if @organization.try(:ibiza).try(:used?)
                         = f.simple_fields_for :ibiza do |software|
                           = software.input :ibiza_id, collection: [], label: 'Dossier correspondant dans iBiZa', label_html: { class: 'control-label required semibold' }, input_html: { class: 'form-control select form-select optional ibiza-customers-list', id: 'ibiza-customers-list', placeholder: 'Choisir un dossier', data: { original_value: nil, users_list_url: organization_ibiza_users_path(@organization, format: 'json') }, multiple: false } 
