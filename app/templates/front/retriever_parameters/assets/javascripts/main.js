@@ -72,7 +72,6 @@ class RetrievedParametersMain{
                         }
 
                         this.action_locker = false;
-                        bind_all_events();
                       })
                       .catch(()=>{ this.action_locker = false; });
   }

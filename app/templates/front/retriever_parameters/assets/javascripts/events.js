@@ -73,15 +73,15 @@ function bind_all_events(){
     }
   });
 
-  $('.check-all-bank-account').bind('click').unbind('click', function(e){
-    $('input.selected_document').prop( 'checked', $('.check-all-bank-account').is(':checked') );
+  $('.check-all-bank-account').unbind('click').bind('click', function(e){
+    $('input.selected_document').prop('checked', $('.check-all-bank-account').is(':checked') );
   });
 
-  $('input.selected_document').bind('click').unbind('click', function(e){
+  $('input.selected_document').unbind('click').bind('click', function(e){
     $('.check-all-bank-account').prop('checked', false);
   });
 }
 
 jQuery(function() {
-  bind_all_events();
+  AppListenTo('window.application_auto_rebind', (e)=>{  bind_all_events(); })
 });
