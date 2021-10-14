@@ -23,9 +23,14 @@ class Documents::PiecesController < FrontController
     #_options[:piece_created_at] = params[:by_piece].try(:[], :created_at)
     #_options[:piece_created_at_operation] = params[:by_piece].try(:[], :created_at_operation)
 
+    pack = Pack.find(params[:id])
+
     @pieces_deleted = Pack::Piece.unscoped.where(pack_id: params[:id]).deleted.presence || []
 
     @pieces = @pack.pieces.search(params[:text], _options).distinct.order(created_at: :desc).page(_options[:page]).per(_options[:per_page])
+    
+    @temp_pack      = TempPack.find_by_name(pack.name)
+    @temp_documents = @temp_pack.temp_documents.not_published
   end
 
   def delete

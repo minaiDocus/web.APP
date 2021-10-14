@@ -1,6 +1,6 @@
 .text-canvas-reporting{
   position: absolute;
-  margin: 46px -24px;
+  margin: 46px -30px;
   font-size: 30px;
 }
 
@@ -34,4 +34,10 @@
   .multi-select-menuitem {    
     font-size: 10px;
 	}
+
+  .text-canvas-reporting{    
+    margin: 32px -20px;
+    font-size: 20px;
+  }
+
 }

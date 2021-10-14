@@ -100,7 +100,7 @@ abbr
   border: none
 
 .btn-light
-  background: #FFFFFF
+  background: inherit
   border: 1px solid #72AA42
   box-sizing: border-box
   border-radius: 8px
@@ -759,6 +759,10 @@ input[type=radio], input[type=checkbox], select
 .select-container input:focus-visible
   border-color: #cad953 !important
 
+#wrap
+  .user-action
+    margin-top: 10px !important
+
 @media (max-width: 1280px)
   // HEADER
   h1
@@ -767,8 +771,8 @@ input[type=radio], input[type=checkbox], select
     font-size: 14px
   nav.main_menu 
     padding: 0 !important
-    li
-      font-size: 13px
+    font-size: 13px
+    li      
       a.dropdown-item
         font-size: 11px
       svg.oi-icon
@@ -892,8 +896,18 @@ input[type=radio], input[type=checkbox], select
   .search-content
     input
       font-size: 0.7rem
+    .glass
+      margin-top: 1% !important
 
   span, .sub_menu
     svg
       width: 12px !important
       height: 12px !important
+
+  #wrap
+    .navbar-brand
+      img
+        margin: 13% auto
+    .user-action
+      margin-top: 10px !important
+      padding: 0 !important

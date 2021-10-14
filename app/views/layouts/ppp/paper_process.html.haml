@@ -9,11 +9,11 @@
     = javascript_include_tag 'front/main'
   %body
     #wrap.extern
-      %nav.navbar.navbar-expand-lg.fixed-top.sticky-top
+      %nav.navbar.navbar-expand-lg.fixed-top.sticky-top.main_menu.no-padding
         .row.w-100.no-margin
           .col-md-1.text-center
             = link_to image_tag('logo/tiny_logo_2.png', alt: 'logo iDocus'), root_path, class: 'navbar-brand no-margin', data:{ href: '/' }
-          .col-md-8.menu
+          .col-md-6.menu
             %ul.navbar-nav
               %li.nav-item{ class: ('active' if controller_name == 'paper_set_orders') }
                 = link_to 'Commandes', paper_set_orders_path, class: 'nav-link bold'
@@ -26,7 +26,7 @@
               %li.nav-item{ class: ('active' if controller_name == 'returns') }
                 = link_to 'Retour', returns_path, class: 'nav-link bold'
           - if current_user
-            .col-md-3.text-end.p-3
+            .col-md-5.text-end.user-action
               %span.text-grey.semibold Connecté en tant que
               %span= link_to current_user.email, root_path, class: 'green-label semibold'
               %span &#124;

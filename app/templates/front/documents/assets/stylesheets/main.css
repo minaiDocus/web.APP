@@ -129,7 +129,7 @@ hr{
 }
 
 img{  
-  filter: drop-shadow(0px 4px 16px rgba(26, 26, 26, 0.24));
+  filter: drop-shadow(0px 4px 16px rgba(26, 26, 26, 0.08));
 }
 
 .list-content .image_piece{  
@@ -305,8 +305,10 @@ img{
     width: 56%;
   }
 
-  .image_piece img{
-
+  .image_piece img {
+    width: 180px !important;
+    height: 263px !important;
+    margin-right: 2rem !important;
   }
 
   .modal .form-select, .modal .form-control{

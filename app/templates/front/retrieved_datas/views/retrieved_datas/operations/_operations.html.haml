@@ -1,22 +1,23 @@
 .derivationLeft
+  - waiting_operations_count = 1
   - if waiting_operations_count > 0 || current_user.is_admin
     .row
-      .col-md-6
-      .col-md-3.text-end
-        - if current_user.is_admin
+      %div{ class: "col-md-#{ (waiting_operations_count > 0 && current_user.is_admin) ? 6 : 9}"}
+      - if current_user.is_admin
+        .col-md-3.text-end        
           - idocus_param = param_encode({ url: '/retrieved/unlock_operations', method: 'post', confirm: 'Etes vous sûr?', form: { id: 'filter-operations-form' }, after_send: 'retrieved_datas_reload_operations' })
-          %button.btn.btn-danger.semibold.force-preseizures.as_idocus_ajax{ idocus: idocus_param, type: 'button' }
-            %span.me-2= glyphicon('aperture', { size: '15', color: '#FF4848'})
-            %span Débloquer les opérations
+          %button.btn.btn-default.semibold.force-preseizures.as_idocus_ajax{ idocus: idocus_param, type: 'button' }
+            %span.me-2= glyphicon('aperture', { size: '15', color: '#72AA42'})
+            %span Débloquer les
             %span.count-operation= waiting_operations_count
             %span opération(s)
-      .col-md-3.text-end
-        - if waiting_operations_count > 0
+      - if waiting_operations_count > 0
+        .col-md-3.text-end        
           - idocus_param = param_encode({ url: '/retrieved/force_operations', method: 'post', confirm: 'Etes vous sûr?', form:{ id: 'filter-operations-form' }, after_send: 'retrieved_datas_reload_operations' })
-          %button.btn.btn-danger.semibold.force-preseizures.as_idocus_ajax{ idocus: idocus_param, type: 'button' }
-            %span.me-2= glyphicon('aperture', { size: '15', color: '#FF4848'})
+          %button.btn.btn-dark.semibold.force-preseizures.as_idocus_ajax{ idocus: idocus_param, type: 'button' }
+            %span.me-2= glyphicon('aperture', { size: '15', color: 'white'})
             %span Forcer la pré-affectation de
-            %span.count-operation= waiting_operations_count
+            %span.bold.count-operation= waiting_operations_count
             %span opération(s)
 
   .mb-4

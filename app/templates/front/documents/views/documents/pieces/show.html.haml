@@ -10,9 +10,9 @@
     .col-md-7.no-padding.report_pack{ id: 'current_pack', data: { id: @pack.id } }
       %h3.bold.mt-2
         %span.me-2= @pack.name.gsub('all', '')
-        %span.badge.badge-secondary.regular.datas_size= @pieces.total_count
+        %span.badge.bg-dark.semibold.regular.datas_size= @pieces.total_count.to_s + " piece(s) traitée(s)"
         - if @pieces_deleted.count > 0
-          %span.badge.badge-danger.semibold.deleted-piece-count
+          %span.badge.bg-danger.semibold.deleted-piece-count
             = @pieces_deleted.count.to_s + " pièce(s) supprimée(s)"
             .content-list-pieces-deleted.text-start.regular.hide
               %ul
@@ -20,6 +20,9 @@
                   %li.pointer{"data-content" => html_piece_view(piece_deleted), id: piece_deleted.id}
                     %span #{piece_deleted.name} supprimée le #{piece_deleted.delete_at.try(:to_date)} par #{piece_deleted.delete_by}
                     %span.float-end.restore{ data: {"piece-id": piece_deleted.id}} Restaurer
+        - if @temp_documents.count > 0
+          %span.badge.bg-info.semibold= @temp_documents.count.to_s + " piece(s) en cours de traitement"
+            
     .col-md-3   
       .search-content
         .row.no-margin
