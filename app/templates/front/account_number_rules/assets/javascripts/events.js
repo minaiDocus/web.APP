@@ -86,23 +86,14 @@ function bind_all_events_account_number_rules(){
   });
 
   multi_select_for('add-modal');
-  $('.sub_rule_menu li.add')
+  $('.create_or_update_account_number_rules')
   .unbind('click').bind('click',function(e) {
-    e.stopPropagation();
+    if ($(this).hasClass('new')) { e.stopPropagation(); }
+    else if ($(this).hasClass('duplicate') || $(this).hasClass('edit')) { e.preventDefault();}
 
-    AppEmit('add_account_number_rule');
+    const url = $(this).attr('href');
 
-    $('#add-new-rule').modal('show');
-  });
-
-  $('.edit-account-number-rule').unbind('click').bind('click', function(e) {
-    e.preventDefault();
-
-    let elements = $(this).attr('href').split('/');
-
-    AppEmit('edit_account_number_rule', { id: elements[elements.length - 2] });
-
-    $('#add-new-rule').modal('show');
+    AppEmit('create_or_update_account_number_rules', { url: url });
   });
 
   $('.required_field')

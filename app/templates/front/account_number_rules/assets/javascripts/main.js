@@ -44,30 +44,6 @@ class AccountNumberRule{
   }
 
 
-  get_account_number_rule_view(id=0){
-    let url  = `/organizations/${this.organization_id}/account_number_rules/new`;
-
-    if (id > 0) { url  = `/organizations/${this.organization_id}/account_number_rules/${id}/edit`; }
-
-    this.applicationJS.sendRequest({ 'url': url }).catch((error)=> { 
-      console.log(error)
-    }).then((element)=>{
-      let from        = '#account_number_rule.new';
-      let modal_title = 'Ajouter une règle';
-
-      if (id > 0) { 
-        from        = '#account_number_rule.edit';
-        modal_title = 'Éditer une règle';
-      }
-
-      this.add_new_rule_modal.find('.modal-body').html($(element).find(from).html());
-      this.add_new_rule_modal.find('.modal-title').text(modal_title);
-      this.add_new_rule_modal.find('.validate-account-number-rule').attr('disabled', true);
-
-      this.validate_account_number_rule_fields();
-    });
-  }
-
   validate_account_number_rule_fields(){
     let required_fields_count = 0;
 
@@ -83,12 +59,33 @@ class AccountNumberRule{
     }
   }
 
-  add_account_number_rule(){
-    this.get_account_number_rule_view();
-  }
+  create_or_update_account_number_rules(url){
+    this.applicationJS.sendRequest({ 'url': url }).catch((error)=> { 
+      console.log(error)
+    }).then((element)=>{
+      let from        = '#account_number_rule.new';
+      let modal_title = 'Créer une nouvelle règle';
+      let modal_btn_validate = 'Ajouter';
 
-  edit_account_number_rule(id){
-    this.get_account_number_rule_view(id);
+      if (url.indexOf("/edit") >= 0) {
+        from        = '#account_number_rule.edit';
+        modal_title = 'Éditer une règle';
+        modal_btn_validate = 'Éditer';
+      }
+      else if (url.indexOf("template=") >= 0) {
+        modal_title = 'Dupliquer cette règle';
+        modal_btn_validate = 'Dupliquer';
+      }
+
+      this.add_new_rule_modal.find('.modal-body').html($(element).find(from).html());
+      this.add_new_rule_modal.find('.modal-title').text(modal_title);
+      this.add_new_rule_modal.find('.validate-account-number-rule').text(modal_btn_validate);
+      this.add_new_rule_modal.find('.validate-account-number-rule').attr('disabled', true);
+
+      this.add_new_rule_modal.modal('show');
+
+      this.validate_account_number_rule_fields();
+    });
   }
 
   skip_accounting_plan(url, account_list, account_validation){
@@ -105,8 +102,7 @@ jQuery(function() {
 
   let account_number_rule = new AccountNumberRule();
 
-  AppListenTo('add_account_number_rule', (e)=>{ account_number_rule.add_account_number_rule(); });
-  AppListenTo('edit_account_number_rule', (e)=>{ account_number_rule.edit_account_number_rule(e.detail.id); });
+  AppListenTo('create_or_update_account_number_rules', (e)=>{ account_number_rule.create_or_update_account_number_rules(e.detail.url); });
   AppListenTo('validate_account_number_rule_fields', (e)=>{ account_number_rule.validate_account_number_rule_fields(); });
 
   AppListenTo('skip_accounting_plan', (e)=>{ account_number_rule.skip_accounting_plan(e.detail.url, e.detail.account_list, e.detail.account_validation); });

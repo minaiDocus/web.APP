@@ -24,7 +24,7 @@
         %hr.m-2
         .sub_rule_menu.text-start.hide
           %ul.no-margin.no-padding.regular
-            %li.add.p-1
+            %li.new.p-1.create_or_update_account_number_rules{href: new_organization_account_number_rule_path(@organization)}
               %span.me-1= glyphicon('plus', { size: '12', color: 'white'})
               %span.semibold Créer une règle
             .m-1
@@ -85,10 +85,9 @@
                     .sub_menu.text-start.hide
                       %ul.no-margin.no-padding.regular                      
                         %li.edit
-                          = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Éditer', edit_organization_account_number_rule_path(@organization, rule), class: 'edit-account-number-rule', title: 'Éditer'
+                          = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Éditer', edit_organization_account_number_rule_path(@organization, rule), class: 'edit create_or_update_account_number_rules', title: 'Éditer'
                         %li.duplicate
-                          %span.me-1= glyphicon('layers', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
-                          %span Dupliquer
+                          = link_to glyphicon('layers', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'}) + ' Dupliquer', new_organization_account_number_rule_path(@organization, template: rule), class: 'duplicate create_or_update_account_number_rules', title: 'Créer une règle en se basant sur cette règle'
                         %li.delete.red-label
                           = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', organization_account_number_rule_path(@organization, rule), class: 'delete-account-number', method: :delete, data: { confirm: t('actions.confirm') }, title: 'Supprimer'
 
