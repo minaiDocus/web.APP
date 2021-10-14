@@ -3,7 +3,11 @@
 class BudgeaApi{
   constructor(){
     this.applicationJS = new ApplicationJS();
-    this.activate_encryption = false;
+    //IMPORTANT : SET TO TRUE OR FALSE TO ACTIVATE / DEACTIVATE BUDGEA ENCRYPTION
+      // ENCRYPTION DOESN T WORK ON LOCAL MACHINE
+      this.activate_encryption = true && ( VARIABLES.get('rails_env') != 'development' );
+      console.log("is encryption activated : " + this.activate_encryption);
+
 
     this.encryptor = null;
     this.user_profiles = {};
@@ -882,7 +886,7 @@ class BudgeaApi{
       cryptographer = new Jose.WebCryptographer();
       public_rsa_key = Jose.Utils.importRsaPublicKey(this.api_ky, "RSA-OAEP");
       this.encryptor = new JoseJWE.Encrypter(cryptographer, public_rsa_key);
-      return this.encryptor.addHeader("kid", this.api_ky.kid);
+      this.encryptor.addHeader("kid", this.api_ky.kid);
     }
   };
 
