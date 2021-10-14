@@ -64,9 +64,8 @@
                 .w-100.text-center
                   = submit_tag 'Importer', class: 'btn btn-dark import-csv w-75'
         .modal-footer
-          .row.w-100.text-end
-            = link_to "Télécharger le modèle d'import .csv", import_model_organization_account_number_rules_path(@organization), class: 'btn btn-default bold'           
-          
+          .row.w-100.text-center
+            = link_to "Télécharger le modèle d'import .csv", import_model_organization_account_number_rules_path(@organization), class: 'btn btn-default bold w-75 m-auto'
 
 .modal#filter-rule
   .modal-dialog

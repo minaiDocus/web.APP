@@ -21,14 +21,14 @@
       %button.btn.btn-primary.semibold.add-rule.w-75
         %span.me-2 Ajouter une règle    
         %span.chevron-add-rule= glyphicon('chevron-bottom', { size: '15', color: '#FFFF'})
-        %hr.m-2
+        %hr.no-margin
         .sub_rule_menu.text-start.hide
           %ul.no-margin.no-padding.regular
-            %li.new.p-1.create_or_update_account_number_rules{href: new_organization_account_number_rule_path(@organization)}
+            %li.sub-btn-link.new.p-1.create_or_update_account_number_rules{href: new_organization_account_number_rule_path(@organization)}
               %span.me-1= glyphicon('plus', { size: '12', color: 'white'})
               %span.semibold Créer une règle
             .m-1
-            %li.download.p-1
+            %li.sub-btn-link.download.p-1
               %span.me-1= glyphicon('cloud-download', { size: '12', color: 'white'})
               %span.semibold Importer une règle      
 

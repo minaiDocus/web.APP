@@ -298,6 +298,15 @@ tbody.retractable.slidedown tr {
   color: #3d5d23 !important;
 }
 
+.sub-btn-link{
+  transition: all 0.2s ease-out;
+}
+
+.sub-btn-link:hover{
+  /*border-bottom: 1px solid #fff;*/
+  padding-left: 3% !important;
+}
+
 // CSS NORMAL
 
 .retractable.with-menu {

@@ -11,18 +11,18 @@
       .w-100
         .text-end
           %button.btn.btn-primary.semibold.add-rule.w-25
-            %span.me-2 Ajouter une Journal    
+            %span.me-2 Ajouter un Journal    
             %span.chevron-add-rule= glyphicon('chevron-bottom', { size: '15', color: '#FFFF'})
-            %hr.m-2
+            %hr.no-margin
             .sub_rule_menu.text-start.hide
               %ul.no-margin.no-padding.regular
-                %li.p-1.new-journal.new_edit_account_book_type{link: new_organization_customer_journal_path(@organization, @customer)}
+                %li.sub-btn-link.p-1.new-journal.new_edit_account_book_type{link: new_organization_customer_journal_path(@organization, @customer)}
                   %span.me-1= glyphicon('plus', { size: '12', color: 'white'})
                   %span.semibold Nouveau
                 .m-1
                 - if !@organization.specific_mission && @customer.active? && (@user.leader? || @user.organization_rights_is_customer_journals_management_authorized)
-                  %li.p-1{ 'data-bs-target' => '#copy-existing-journal', 'data-bs-toggle' => 'modal' }
-                    %span.me-1= glyphicon('plus', { size: '12', color: 'white'})
+                  %li.sub-btn-link.p-1{ 'data-bs-target' => '#copy-existing-journal', 'data-bs-toggle' => 'modal' }
+                    %span.me-1= glyphicon('elevator', { size: '12', color: 'white'})
                     %span.semibold Copier depuis la base existant
     %hr
 
