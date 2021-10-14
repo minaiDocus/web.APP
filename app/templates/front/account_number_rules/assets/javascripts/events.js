@@ -198,6 +198,13 @@ function bind_all_events_account_number_rules(){
   $('.search-content #search_input').unbind('keyup').bind('keyup', function(e){ if(e.key == 'Enter'){ /*e.keyCode == 13*/ AppEmit('account_number_rule_contains_search_text'); } });
   $('.bank-affectation #basic-addon1').unbind('click').bind('click', function(e){ AppEmit('account_number_rule_contains_search_text'); });
 
+  $('span.customize_tooltip').mouseover(function() {
+    $(this).find('.account_number_rules_popover_content').show();
+  })
+  .mouseout(function() {
+    $(this).find('.account_number_rules_popover_content').hide();
+  });
+
   ApplicationJS.set_checkbox_radio();
 }
 
