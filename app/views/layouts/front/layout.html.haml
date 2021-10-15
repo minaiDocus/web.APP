@@ -22,10 +22,9 @@
       = render partial: 'layouts/front/organization_lefter'
     - else
       != content_for?(:content) ? yield(:content) : yield
-    .footer_marginer
 
   = render partial: 'layouts/front/main_modal'
-  // = render partial: 'layouts/front/support_chat'
+  = render partial: 'shared/zendesk_help'
   = render partial: 'layouts/front/notice_flush_messages'
   = render partial: 'shared/as_user'
 
@@ -48,4 +47,5 @@
     %span.ms-2= glyphicon('arrow-bottom', {size: '12', color: '#72AA42'})
 
   = javascript_include_tag 'front/news/assets/javascripts/main'
+  = render partial: 'shared/google_analytics'
   = javascript_declare_var 'rails_env', Rails.env

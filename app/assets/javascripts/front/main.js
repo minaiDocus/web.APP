@@ -2,8 +2,16 @@
 //= require '../dynamic_events'
 
 function calculate_footer_marginer(){
-  let footer_h = $('footer')[0].offsetHeight;
-  $('.footer_marginer').css('height', footer_h);
+  let window_h = $(window).outerHeight();
+  let margin     = parseFloat($('.body_content').css('margin-top').replace('px', ''));
+  let footer_h   = $('footer').outerHeight();
+  let customer_h = 0;
+
+  if( $('.customer_header').length > 0 ){
+    customer_h = $('.customer_header').outerHeight();
+  }
+
+  $('.body_content').css('max-height', (window_h - margin - footer_h) + customer_h);
 }
 
 function init_menu_animation(){

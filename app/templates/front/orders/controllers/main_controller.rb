@@ -138,6 +138,7 @@ class Orders::MainController < CustomerController
         end
       end
     end
+
     unless authorized
       flash[:error] = t('authorization.unessessary_rights')
 
