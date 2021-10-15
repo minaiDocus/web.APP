@@ -1,5 +1,4 @@
 .derivationLeft
-  - waiting_operations_count = 1
   - if waiting_operations_count > 0 || current_user.is_admin
     .row
       %div{ class: "col-md-#{ (waiting_operations_count > 0 && current_user.is_admin) ? 6 : 9}"}

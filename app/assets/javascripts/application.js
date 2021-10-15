@@ -308,14 +308,23 @@ class ApplicationJS {
               source_html = $(result).find(target)[0].outerHTML;
             }catch(e){
               let found = false;
-              if(/^[.]/.test(target)){
-                if( $(result).hasClass(target.replace('.', '')) ){ found = true; source_html = $(result)[0].outerHTML; }
-              }else if( /^[#]/.test(target) ){
-                if( $(result).attr('id') == target.replace('#', '') ){ found = true; source_html = $(result)[0].outerHTML; }
+
+              try{
+                if(/^[.]/.test(target)){
+                  if( $(result).hasClass(target.replace('.', '')) ){ found = true; source_html = $(result)[0].outerHTML; }
+                }else if( /^[#]/.test(target) ){
+                  if( $(result).attr('id') == target.replace('#', '') ){ found = true; source_html = $(result)[0].outerHTML; }
+                }
+              }
+              catch(err){
+                console.log(err);
               }
 
-              if(!found)
-                console.error(e);
+              if(!found){
+                window.setTimeout((el)=>{
+                  window.location.reload();
+                }, 1000);
+              }
             }
 
             if(params.mode == 'append'){
