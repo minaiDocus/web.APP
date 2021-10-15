@@ -38,16 +38,17 @@ class DocumentDelivery < ApplicationRecord
 
     temp_pack.update_pack_state
 
-    temp_document = temp_documents.where(original_file_name: options[:original_file_name]).first
+    temp_document   = temp_documents.where(original_file_name: options[:original_file_name]).first
+    temp_document ||= temp_documents.where(original_fingerprint: DocumentTools.checksum(file.path)).first
 
-    is_valid = DocumentTools.completed?(file.path)
+    is_valid = DocumentTools.modifiable?(file.path)
 
     if temp_document
       replace temp_document, file if is_valid
     else
       opts = options.dup
 
-      opts[:is_locked]            = true
+      opts[:is_locked]             = true
       opts[:is_content_file_valid] = is_valid
 
       temp_document = AddTempDocumentToTempPack.execute(temp_pack, file, opts)

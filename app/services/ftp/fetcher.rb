@@ -24,8 +24,8 @@ class Ftp::Fetcher
         uncomplete_deliveries.each { |file_path| ftp.delete("#{file_path}.uncomplete") rescue false }
       end
 
-
       ready_dirs(dirs).each do |dir|
+        p "==== Traiement de : #{dir} ======"
         ftp.chdir dir
         date      = dir[0..9]
         position = dir[11..-7] || 1
@@ -34,11 +34,21 @@ class Ftp::Fetcher
 
         document_delivery = DocumentDelivery.find_or_create_by(date, provider, position)
 
+        p "========== Scan en cours =============="
+
         file_names = valid_file_names(ftp.nlst.sort)
+        counts     = file_names.try(:size).to_i
+
+        p "=========== Total: #{counts} ============"
 
         grouped_packs(file_names).each do |pack_name, file_names|
           documents = []
-          file_names.each do |file_name|
+          p "=========== Pack: #{pack_name} ============"
+
+          file_names.each_with_index do |file_name, index|
+            counts = counts - 1
+            p "=========== Traitement: #{file_name} : #{counts} / #{file_names.size} ============"
+
             document = document_delivery.temp_documents.where(original_file_name: file_name).first
 
             if !document || (document && document.unreadable?)
@@ -55,12 +65,17 @@ class Ftp::Fetcher
 
             documents << document
             corrupted_documents << document if document.unreadable? && !document.is_corruption_notified
+
+            
+            sleep(5) if (index % 15) == 0
           end
 
           if documents.select(&:unreadable?).count == 0 && documents.select(&:is_locked).count > 0
             document_ids = documents.map(&:id)
             TempDocument.where(id: document_ids).update_all(is_locked: false)
           end
+
+          sleep(3)
         end
 
         ftp.chdir '..'
@@ -77,6 +92,8 @@ class Ftp::Fetcher
 
         # notify corrupted documents
         next unless corrupted_documents.count > 0
+
+        next #WORKARROUND: ALWAYS SKIP NOTIFIYNG CORRUPTED DOCUMENT
 
         subject = '[iDocus] Documents corrompus'
         content = "Livraison : #{dir}\n"
@@ -192,6 +209,25 @@ class Ftp::Fetcher
         if file_path && file_path.match(/\.uploaded$/)
           dir = File.basename file_path, '.*'
           dir = @root_path + dir
+
+          log_document = {
+            subject: "[FtpFetcher] - scanned uploaded file",
+            name: "ftp fetcher",
+            error_group: "[FtpFetcher] scanned uploaded file",
+            erreur_type: "[FtpFetcher] - scanned uploaded file",
+            date_erreur: Time.now.strftime('%Y-%m-%d %H:%M:%S'),
+            more_information: {
+              file_path: file_path,
+              dir: dir.to_s,
+              dir_exist: File.exist?(dir)
+            }
+          }
+
+          begin
+            ErrorScriptMailer.error_notification(log_document, { attachements: [{ name: File.basename(file_path), file: File.open(file_path) }] }).deliver
+          rescue
+            ErrorScriptMailer.error_notification(log_document).deliver
+          end
 
           if File.exist?(dir)
             if Dir.glob(dir + '/*').size == File.read(file_path).to_i
