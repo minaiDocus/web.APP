@@ -8,9 +8,10 @@
           %span.me-2= glyphicon('arrow-left', {size: '12', color: '#72AA42'})
           %span Retour
     .col-md-7.no-padding.report_pack{ id: 'current_pack', data: { id: @pack.id } }
-      %h3.bold.mt-2
+      %h3.bold.mt-1
         %span.me-2= @pack.name.gsub('all', '')
-        %span.badge.bg-dark.semibold.regular.datas_size= @pieces.total_count.to_s + " piece(s) traitée(s)"
+        - if @pieces.total_count > 0
+          %span.badge.bg-dark.semibold.regular.datas_size= @pieces.total_count
         - if @pieces_deleted.count > 0
           %span.badge.bg-danger.semibold.deleted-piece-count
             = @pieces_deleted.count.to_s + " pièce(s) supprimée(s)"
@@ -20,9 +21,6 @@
                   %li.pointer{"data-content" => html_piece_view(piece_deleted), id: piece_deleted.id}
                     %span #{piece_deleted.name} supprimée le #{piece_deleted.delete_at.try(:to_date)} par #{piece_deleted.delete_by}
                     %span.float-end.restore{ data: {"piece-id": piece_deleted.id}} Restaurer
-        - if @temp_documents.count > 0
-          %span.badge.bg-info.semibold= @temp_documents.count.to_s + " piece(s) en cours de traitement"
-            
     .col-md-3   
       .search-content
         .row.no-margin
@@ -42,6 +40,10 @@
     - else
       .col-md-1.no-padding.text-left
     .col-md-8
+      - if @temp_documents.count > 0
+        %span= glyphicon('pulse', { size: '12' })
+        %label.semibold Piece(s) en cours de traitement : 
+        %span.badge.bg-info.semibold= @temp_documents.count.to_s
     .col-md-3.icon-actions.text-end      
       - if @pack.owner.uses_ibiza_analytics?
         %span.pointer.ms-2.action-selected.edit_compta_analysis.hide{ title: 'Édition compta. analytiques', data: { code: @pack.owner.code, is_used: @pack.owner.uses_ibiza_analytics?.to_s } }= glyphicon('pencil', { size: '18', color:'rgba(26, 26, 26, 0.32);'})

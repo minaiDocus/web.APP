@@ -80,7 +80,7 @@ module Interfaces::Software::Configuration
 
   def used?
     if self.is_a?(Software::Ibiza)
-      is_used || access_token.present? || access_token_2.present?
+      is_used && ( access_token.present? || access_token_2.present? )
     else
       is_used
     end

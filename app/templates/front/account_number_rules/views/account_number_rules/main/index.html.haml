@@ -40,8 +40,8 @@
             Les règles ci-dessous s'appliquent aux opérations récupérées dans les automates.
             %br Vous pouvez exporter les règles sélectionnées ou les supprimer.
         .col-md-3.text-end
-          %button.btn.btn-light-secondary.semibold.add-document.m-1#export-rule{type: 'submit', name: 'export_or_destroy', value: 'export', disabled: 'disabled'} Exporter sur Excel
-          %button.btn.btn-light-secondary.semibold.add-document.m-1.no-margin#delete-rule{type: 'submit', name: 'export_or_destroy', value: 'destroy', 'data-confirm' => 'Etes-vous sûr de vouloir supprimer les règles sélectionnées ?', disabled: 'disabled'} Supprimer
+          %button.btn.btn-light-secondary.semibold.add-document#export-rule{type: 'submit', name: 'export_or_destroy', value: 'export', disabled: 'disabled'} Exporter sur Excel
+          %button.btn.btn-light-secondary.semibold.add-document.no-margin#delete-rule{type: 'submit', name: 'export_or_destroy', value: 'destroy', 'data-confirm' => 'Etes-vous sûr de vouloir supprimer les règles sélectionnées ?', disabled: 'disabled'} Supprimer
         .col-md-3.text-end
           %button.btn.btn-default.skip_accounting_plan.semibold
             %span.me-2= glyphicon('cog', { size: '12', color: '#72AA42'})
