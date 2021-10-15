@@ -4,7 +4,7 @@ function calculate_space(link){
 
   var button_width = link.outerWidth() + 10
   var parent_width = parent_div.innerWidth() - (button_width * 2)
-  var target_width = document.querySelector('.auto-scroll-div').offsetWidth
+  var target_width = $('.auto-scroll-div')[0].offsetWidth
 
   window.parent_width = parent_width;
   window.target_width = target_width;
@@ -22,21 +22,23 @@ function generate_auto_scroll_for_div(link, direction){
 }
 
 function show_hide_overflow(){
-  button_span = $('.main-menu-content.auto-scroll-div').parent('div').find('span[class^="auto-scroll-span"]').first();
-  calculate_space(button_span)
+  if( $('.auto-scroll-div').length > 0 ){
+    button_span = $('.main-menu-content.auto-scroll-div').parent('div').find('span[class^="auto-scroll-span"]').first();
+    calculate_space(button_span)
 
-  if (window.parent_width < window.target_width){
-      $('span[class^="auto-scroll-span"]').removeClass('hide')
-      $('.auto-scroll-div').removeClass('mr-auto')
-  }
-  else{    
-    $('span[class^="auto-scroll-span"]').addClass('hide')
-    $('.auto-scroll-div').addClass('mr-auto')
+    if (window.parent_width < window.target_width){
+        $('span[class^="auto-scroll-span"]').removeClass('hide')
+        $('.auto-scroll-div').removeClass('mr-auto')
+    }
+    else{    
+      $('span[class^="auto-scroll-span"]').addClass('hide')
+      $('.auto-scroll-div').addClass('mr-auto')
+    }
   }
 }
 
 jQuery(function () {  
-  if($('.auto-scroll-div').length > 0){ show_hide_overflow(); }
+  show_hide_overflow();
 
   $( window ).resize(function() {
     show_hide_overflow();
@@ -48,7 +50,7 @@ jQuery(function () {
       generate_auto_scroll_for_div($(this), direction);
     });
 
-  $('.auto-scroll-div .dropdown a').click(function(e){
+  $('.auto-scroll-div .dropdown a').unbind('click').bind('click', function(e){
     $('.auto-scroll-div .dropdown-menu').css({ 'position' : 'fixed !important', 'right' : 'auto', 'top' : 'auto', 'left' : $(this).offset().left });
   });
 });

@@ -1,6 +1,11 @@
 //= require '../application'
 //= require '../dynamic_events'
 
+function calculate_footer_marginer(){
+  let footer_h = $('footer')[0].offsetHeight;
+  $('.footer_marginer').css('height', footer_h);
+}
+
 function init_menu_animation(){
   let to_animate = GetCache('menu_animation');
 
@@ -245,6 +250,8 @@ function check_flash_messages(){
 }
 
 jQuery(function () {
+  calculate_footer_marginer();
+
   init_menu_animation();
 
   bind_globals_events();
@@ -255,6 +262,11 @@ jQuery(function () {
 
   /** Custom hide alert messages error **/
   AppListenTo('close_alert_errors', (e)=>{ $('.notice.notice-internal-error').slideUp('fast'); });
+
+  /** Calculate footer marginer height **/
+  $(window).resize(function(e){
+    calculate_footer_marginer();
+  })
 
   /* SCROLLING TO THE BOTTOM */
   $('.body_content').scroll(function() {

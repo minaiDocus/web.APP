@@ -94,10 +94,6 @@ body {
   margin-left: 2%;
 }
 
-.heading_customer{
-  max-height: 38em;
-}
-
 .customer_content_container{
   overflow-y: auto;
   overflow-x: hidden;
