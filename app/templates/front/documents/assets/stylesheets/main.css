@@ -328,7 +328,7 @@ img{
     height: 0.8em;
   }
 
-  #more-filter.modal .modal-dialog {
+  #more-filter.modal .modal-dialog, #filter-ignored-pre-assignment.modal .modal-dialog, #filter-duplicated-pre-assignment.modal .modal-dialog{
     min-width: 500px;
   }
 
