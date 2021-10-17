@@ -4,7 +4,7 @@
     %th.text-left= t('reporting.pack_name')
     %th.text-right= t('reporting.last_document_date')
   %tbody
-    - @packs.each do |pack|
+    - @pieces.each do |piece|
       %tr
-        %td.text-left= pack.name.gsub(' all', '')
-        %td.text-right= pack.updated_at.strftime('%d/%m/%Y')
+        %td.text-left= piece.user.code
+        %td.text-right= piece.updated_at.strftime('%d/%m/%Y')

@@ -8,7 +8,7 @@ class Reporting::StatisticsController < Reporting::ABaseController
   def injected_documents
     respond_to do |format|
       format.html do
-        @packs = Pack.where("created_at BETWEEN '#{@date_range.join("' AND '")}'").where(owner_id: @customers_ids).order(updated_at: :asc).limit(10)
+        @pieces = Pack::Piece.where(user: @customers_ids).joins(:user).select(:updated_at, :user_id).group(:user_id).order(updated_at: :asc).limit(10)
 
         render partial: 'lastest_sending_docs'
       end
