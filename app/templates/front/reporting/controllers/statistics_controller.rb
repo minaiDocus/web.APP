@@ -20,7 +20,7 @@ class Reporting::StatisticsController < Reporting::ABaseController
           date = i.days.ago
           range_date << date.strftime("%d/%m")
 
-          pieces_count << Pack::Piece.where(user_id: @customers_ids).where("created_at = '#{date.strftime("%Y-%m-%d")}'").count
+          pieces_count << Pack::Piece.where(user_id: @customers_ids).where("DATE(created_at) = '#{date.strftime("%Y-%m-%d")}'").count
         end
 
         render json: { range_date: range_date, pieces_count: pieces_count, max_count: pieces_count.max, min_count: pieces_count.min }, state: 200
