@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Documents::PiecesController < FrontController
-  skip_before_action :login_user!, only: %w[download piece handle_bad_url temp_document get_tag already_exist_document], raise: false
+  skip_before_action :login_user!, only: %w[download get_piece_file handle_bad_url temp_document get_tag already_exist_document], raise: false
   before_action :load_pack, only: %w[show]
 
   prepend_view_path('app/templates/front/documents/views')
