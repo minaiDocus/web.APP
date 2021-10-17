@@ -39,17 +39,17 @@
           %th Statut de la liaison
           %td
             - if @mcf_settings.try(:access_token).present?
-              %span.badge.badge-success OK
+              %span.badge.bg-success OK
             - else
-              %span.badge.badge-default Non configuré
+              %span.badge.bg-light.text-dark Non configuré
         - if @mcf_settings.try(:access_token).present?
           %tr
             %th Livraison activé ?
             %td
               - if @mcf_settings.try(:is_delivery_activated)
-                %span.badge.badge-success= t('yes_value')
+                %span.badge.bg-success= t('yes_value')
               - else
-                %span.badge.badge-important= t('no_value')
+                %span.badge.bg-important= t('no_value')
         %tr
           %th Chemin de livraison
           %td= @mcf_settings.try(:delivery_path_pattern) || McfSettings.new.delivery_path_pattern

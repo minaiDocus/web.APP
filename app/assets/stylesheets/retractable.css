@@ -174,11 +174,11 @@
 
 
 // CSS ANIMATED
-.btn, .scroll-on-top{
+.btn, .scroll-on-top, .animated-pointer{
   transition: all 0.2s ease-out;
 }
 
-.btn:hover, .scroll-on-top:hover{
+.btn:hover, .scroll-on-top:hover, .animated-pointer:hover{
   transform: scale(1.06);
   opacity: 0.8;
 }

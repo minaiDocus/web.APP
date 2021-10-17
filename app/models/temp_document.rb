@@ -34,7 +34,7 @@ class TempDocument < ApplicationRecord
   has_one_attached :cloud_raw_content
   has_one_attached :cloud_content_thumbnail
 
-  has_attached_file :content, styles: { medium: ['92x133', :png] },
+  has_attached_file :content, styles: { medium: ['176x248', :png] },
                               path: ':rails_root/files/:rails_env/:class/:mongo_id_or_id/:filename',
                               url: '/account/documents/processing/:id/download/:style'
   do_not_validate_attachment_file_type :content

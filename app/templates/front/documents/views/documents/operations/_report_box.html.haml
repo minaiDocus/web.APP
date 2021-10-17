@@ -1,6 +1,6 @@
 - reports.each do |report|
   - detail_path = (@user.pre_assignement_displayed?)? operations_details_path(id: report.id) : '#'
-  .box.animatedChild{ class: animation }
+  .box.animatedChild.animated-pointer{ class: animation }
     .row
       .col-md-5
         %h6.pack.semibold= link_to report.name.gsub('all', '').strip, detail_path, class: 'no-style bold black-label'

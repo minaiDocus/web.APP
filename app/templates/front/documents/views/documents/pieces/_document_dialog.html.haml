@@ -8,11 +8,11 @@
       .modal-body.m-2.document-content.no-padding
 
 #PdfViewerDialog.modal.fade.in{'aria-hidden' => 'true', :role => 'dialog', :tabindex => '-1'}
-  .modal-dialog
+  .modal-dialog{ style: 'min-width: 1180px;' }
     .modal-content
       .modal-header
         %h5.modal-title.bold Visionner le document
         %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
       .modal-body{style: "max-height: none !important; padding:0;"}
         .view-content
-          %iframe.src-piece{ src: "" }
+          %iframe.src-piece{ src: "", style: "height: 700px" }
