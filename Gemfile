@@ -23,6 +23,7 @@ gem 'oauth'
 
 # Error handling
 gem 'sentry-raven'
+gem 'appsignal'
 
 # Image / File processing
 gem 'activestorage-openstack'

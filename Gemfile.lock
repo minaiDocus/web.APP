@@ -60,6 +60,8 @@ GEM
       gyoku (>= 0.4.0)
       nokogiri
     ansi (1.5.0)
+    appsignal (3.0.14)
+      rack
     arel (9.0.0)
     audited (5.0.1)
       activerecord (>= 5.0, < 6.2)
@@ -685,6 +687,7 @@ DEPENDENCIES
   activerecord-session_store
   activestorage-openstack
   ansi
+  appsignal
   audited
   axlsx
   barby
