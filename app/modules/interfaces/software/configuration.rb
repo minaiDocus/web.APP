@@ -80,7 +80,11 @@ module Interfaces::Software::Configuration
 
   def used?
     if self.is_a?(Software::Ibiza)
-      is_used && ( access_token.present? || access_token_2.present? )
+      if owner_type == 'User'
+        is_used
+      else
+        is_used && ( access_token.present? || access_token_2.present? )
+      end
     else
       is_used
     end

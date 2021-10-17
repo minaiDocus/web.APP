@@ -1,5 +1,5 @@
 - packs.each do |pack|
-  .box.animatedChild{ class: animation }
+  .box.animatedChild.animated-pointer{ class: animation }
     .row
       .col-md-4
         %h6.pack=link_to pack.name.to_s.gsub('all', '').strip, documents_details_path(id: pack.id), class: "no-style black-label bold"        

@@ -14,13 +14,13 @@
             %th Etat :
             %td#debit_state
               - if @organization.try(:debit_mandate).try(:pending?)
-                %span.bg-light.text-dark.fs-origin Non configuré
+                %span.badge.bg-light.text-dark Non configuré
               - elsif @organization.try(:debit_mandate).try(:started?)
-                %span.bg-warning.text-dark.fs-origin En attente utilisateur ...
+                %span.badge.bg-warning.text-dark En attente utilisateur ...
               - elsif @organization.try(:debit_mandate).try(:configured?)
-                %span.bg-success.fs-origin OK
+                %span.badge.bg-success OK
               - else
-                %span.bg-dark.fs-origin Information non valide
+                %span.badge.bg-dark Information non valide
           %tr
             %th Banque :
             %td#debit_bic= @organization.try(:debit_mandate).try(:bic)

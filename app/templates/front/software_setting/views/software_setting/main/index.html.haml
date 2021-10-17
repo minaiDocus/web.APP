@@ -44,7 +44,7 @@
               - else
                 - url = activate_software_path(@organization, software)
                 - confirm = "Voulez vous vraiment activer ce logiciel?"
-              .col-md-4.box-software.pointer{ id: software, class: (@organization.send(software.to_sym).try(:used?))? 'selected' : '' }                
+              .col-md-4.box-software.pointer.animated-pointer{ id: software, class: (@organization.send(software.to_sym).try(:used?))? 'selected' : '' }                
                 %a.no-style.w-100{ href: url, data: { confirm: confirm, method: 'post' } }
                   - if img_list[software.to_sym].present?
                     %img{ class: "image-software #{software}", alt: 'logo-quadratus', src: img_list[software.to_sym] }

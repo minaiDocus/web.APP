@@ -1,7 +1,7 @@
 - favorites.each do |user_id|
   - infos = FavoriteCustomer.get_infos_of(user_id)
 
-  .box.animatedChild{ class: animation }
+  .box.animatedChild.animated-pointer{ class: animation }
     .favorite-list
       .row
         .col-md-10.float-start

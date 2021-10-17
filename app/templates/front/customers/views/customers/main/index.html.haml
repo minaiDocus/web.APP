@@ -123,7 +123,7 @@
                 = check_box_tag 'user_contains[is_inactive]', 0, (params[:user_contains][:is_inactive].present? && params[:user_contains][:is_inactive] == 1 rescue false), class: "form-check-input input_switch input_check_field filter-customer filter-field"
 
           .modal-footer
-            %button.btn.btn-light.cancel{ 'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button' } Annuler
+            = link_to 'Annuler', organization_customers_path(@organization), class: 'btn btn-light cancel'
             = submit_tag t('filters.action'), class: 'btn btn-primary semibold btn-filter'
 
   .modal.fade.in#create-customer{ data: { 'bs-backdrop': "static" } }

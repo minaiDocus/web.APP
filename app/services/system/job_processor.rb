@@ -68,8 +68,8 @@ class System::JobProcessor
       p "#{job.name.strip} - #{result.to_s}" if result.to_i > 0
     end
 
-    di = SidekiqUniqueJobs::Digests.all
-    di.each{|d| SidekiqUniqueJobs::Digests.delete_by_digest d}
+    # di = SidekiqUniqueJobs::Digests.all
+    # di.each{|d| SidekiqUniqueJobs::Digests.delete_by_digest d}
 
     staffs = StaffingFlow.processing_preassignment
     p "Processing preassignments - #{staffs.size}"
