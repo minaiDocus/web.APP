@@ -42,6 +42,7 @@
         %tbody{id: ( manual_paper_set_order ? 'fsk_paper_set_orders' : '')}
           - order_active_customers = params[:order_customer_id].present? ? @organization.customers.active.where(id: params[:order_customer_id]) : @organization.customers.active.order(code: :asc)
           - order_active_customers.each do |client|
+            
             - if client&.subscription&.current_period&.is_active?(:mail_option) || client&.subscription&.current_period&.is_active?(:digitize_option)
               - if manual_paper_set_order
                 - current_order = client.orders.paper_sets.order(updated_at: :desc).first
@@ -96,8 +97,6 @@
           = submit_tag 'Générer', class: 'btn btn-primary no-margin', id:'generate-manual-paper-set-order'
         - else
           = submit_tag t('actions.submit'), class: 'btn btn-primary'
-        
-
 
 = render partial: 'file_sending_kit_modal'
 

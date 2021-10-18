@@ -105,9 +105,9 @@
           if(name.match(/\[\](.+)/))
           {
             if(strict && this.value)
-              obj[c_name] = this.value;
+              obj[name] = this.value;
             else if(!strict)
-              obj[c_name] = this.value;
+              obj[name] = this.value;
           }
           else if(name.match(/\[\]$/)){
             let obj_index = name.replace(/\[\]/g, '');
