@@ -44,6 +44,6 @@ config/supplier_recognition.yml
 config/symmetric-encryption.yml
 
 # Ignore master key for decrypting credentials and more.
-/config/master.key
+# /config/master.key
 config/storage.yml
 /config/bridge.yml
