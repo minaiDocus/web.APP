@@ -57,4 +57,4 @@
               = select_tag 'favorite_customers', options_for_select(favorite_options, @favorites), class: 'select-customer searchable-option-list', id: 'select-customer-to-favorite', include_blank: false, multiple: true
       .modal-footer
         %button.btn.btn-light.semibold{'data-bs-dismiss' => 'modal', :type => 'button'}= t('dashboard.cancel_action')
-        %button.btn.btn-primary.semibold.as_idocus_ajax{ :type => 'button', id: 'add-customer-to-favorite', idocus: validation_param}= t('dashboard.edit_action')
+        %button.btn.btn-primary.semibold.as_idocus_ajax{ :type => 'button', id: 'add-customer-to-favorite', idocus: validation_param}= t('dashboard.validate')

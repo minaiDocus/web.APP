@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Payments::MainController < OrganizationController
   before_action :apply_membership,               except: :debit_mandate_notify
-  before_action :verify_rights,                  except: :debit_mandate_notify
+  before_action :verify_rights,                  except: %w[debit_mandate_notify revoke_payment]
 
   skip_before_action :load_organization,         only: :debit_mandate_notify
   skip_before_action :login_user!,               only: :debit_mandate_notify
@@ -55,13 +55,15 @@ class Payments::MainController < OrganizationController
   end
 
   def revoke_payment
-    if @user.is_admin && params[:revoke_confirm] == 'true'
+    if current_user.is_admin && params[:revoke_confirm] == 'true'
       result = Billing::DebitMandateResponse.new(@organization.debit_mandate).send(:revoke_payment)
       if result.present?
         json_flash[:error]   = result
       else
         json_flash[:success] = 'Mandat supprimé avec succès.'
       end
+    else
+      json_flash[:error]   = t('authorization.unessessary_rights')
     end
 
     render json: { json_flash: json_flash }, status: 200
@@ -95,18 +97,12 @@ class Payments::MainController < OrganizationController
   private
 
   def verify_rights
-    unless @user.is_admin
-      authorized = false
-      if current_user.is_admin && action_name.in?(%w[prepare_payment confirm_payment])
-        authorized = true
-      elsif action_name.in?(%w[prepare_payment confirm_payment]) && @user.leader?
-        authorized = true
-      end
+    authorized = false
+    authorized = true if current_user.is_admin || @user.leader?
 
-      unless authorized
-        flash[:error] = t('authorization.unessessary_rights')
-        redirect_to organization_path(@organization)
-      end
+    if not authorized
+      flash[:error] = t('authorization.unessessary_rights')
+      redirect_to organization_path(@organization)
     end
   end
 
