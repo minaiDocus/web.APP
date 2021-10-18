@@ -22,7 +22,8 @@ class Organizations::MainController < OrganizationController
 
   # GET /account/organizations/:id/
   def show
-    @organization_statistic = SubscriptionStatistic.where(organization_id: @organization.id).first
+    @organization_statistic = SubscriptionStatistic.where(organization_id: @organization.id).last
+
     @stat_customers_labels = []
     @stat_customers_values = []
 

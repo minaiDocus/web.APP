@@ -8,10 +8,10 @@
       .col-md-4.no-padding
         .created-date
           %label.semibold Premier ajout le :
-          %label= report.preseizures.first.try(:created_at).try(:strftime, '%d/%M/%Y')
+          %label= report.preseizures.first.try(:created_at).try(:strftime, '%d/%m/%Y')
         .updated-date
           %label Dérnier ajout le :
-          %label= report.preseizures.last.try(:created_at).try(:strftime, '%d/%M/%Y')
+          %label= report.preseizures.last.try(:created_at).try(:strftime, '%d/%m/%Y')
       .col-md-2.no-padding
         .operation-count.text-end.p-1
           %span= report.preseizures.where('operation_id > 0').size
