@@ -31,11 +31,18 @@ class Addresses::MainController < FrontController
         address.assign_attributes( address_params(:paper_set_shipping) )
         address.is_for_paper_return       = false
         address.is_for_dematbox_shipping  = false
-      elsif params[:dematbox_shipping]
-        address = object.addresses.for_dematbox_shipping.first || object.addresses.new(is_for_dematbox_shipping: true)
-        address.is_for_paper_set_shipping = false
-        address.is_for_paper_return       = false
-        address.assign_attributes( address_params(:dematbox_shipping) )
+      else
+        if object.is_a?(User) && params[:dematbox_shipping]
+          address = object.addresses.for_dematbox_shipping.first || object.addresses.new(is_for_dematbox_shipping: true)
+          address.is_for_paper_set_shipping = false
+          address.is_for_paper_return       = false
+          address.assign_attributes( address_params(:dematbox_shipping) )
+        elsif object.is_a?(Organization) && params[:billing]
+          address = object.addresses.for_billing.first || object.addresses.new(is_for_billing: true)
+          address.is_for_paper_set_shipping = false
+          address.is_for_paper_return       = false
+          address.assign_attributes( address_params(:billing) )
+        end
       end
 
       if address
@@ -81,6 +88,7 @@ class Addresses::MainController < FrontController
       :door_code,
       :other,
       :phone,
+      :is_for_billing,
       :is_for_paper_return,
       :is_for_paper_set_shipping,
       :is_for_dematbox_shipping

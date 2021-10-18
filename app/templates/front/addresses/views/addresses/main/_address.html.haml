@@ -10,6 +10,8 @@
           %h6.semibold= t('activerecord.models.address.attributes.paper_set_shipping')
         - if type == 'dematbox_shipping'
           %h6.semibold= t('activerecord.models.address.attributes.dematbox_shipping')
+        - if type == 'billing'
+          %h6.semibold= t('activerecord.models.address.attributes.billing')
     .col-md-4.text-end
       - if address.try(:id).to_i > 0
         %button.btn.destroy_address{ data: { id: address.try(:id).to_i, type: type } }

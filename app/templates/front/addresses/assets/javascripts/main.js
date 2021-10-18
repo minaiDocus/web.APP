@@ -9,13 +9,19 @@ class AddressesMain{
 
     let paper_return       = $('#addresses_management form.paper_return_form').serializeObject(true);
     let paper_set_shipping = $('#addresses_management form.paper_set_shipping_form').serializeObject(true);
-    let dematbox_shipping  = $('#addresses_management form.dematbox_shipping_form').serializeObject(true);
+    let dematbox_shipping  = null
+    let billing            = null
+
+    if(addr_for == 'organization')
+      billing            = $('#addresses_management form.billing_form').serializeObject(true);
+    else
+      dematbox_shipping  = $('#addresses_management form.dematbox_shipping_form').serializeObject(true);
 
     let ajax_params = {
                         url: '/addresses/update_all',
                         type: 'POST',
                         dataType: 'json',
-                        data: { id: id, addr_for: addr_for, paper_return: paper_return, paper_set_shipping: paper_set_shipping, dematbox_shipping: dematbox_shipping },
+                        data: { id: id, addr_for: addr_for, paper_return: paper_return, paper_set_shipping: paper_set_shipping, dematbox_shipping: dematbox_shipping, billing: billing },
                       };
     this.applicationJS.sendRequest(ajax_params);
   }

@@ -1,5 +1,5 @@
 ﻿.customer-form-content.p-2
-  = simple_form_for @customer, url: customer_form_url(@organization, @customer), method: :post, html: { class: 'form form-horizontal margin0 subscription_option_form', id: 'create-customer-form-data' } do |f|
+  = simple_form_for @customer, url: customer_form_url(@organization, @customer), html: { class: 'form form-horizontal margin0 subscription_option_form', id: 'create-customer-form-data' } do |f|
     .carousel.slide#carousel_customer_form{  "data-bs-touch" => "false", "data-bs-interval" => "false" }
       .carousel-inner
         .carousel-item.active
