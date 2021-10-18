@@ -26,9 +26,9 @@ Notifications::RetrieversWorker:
 Notifications::ScansNotDeliveredNotificationWorker:
   queue: high
   cron: '0 1 * * *'
-Notifications::PaperQuotaReachedWorker:
-  queue: default
-  cron: '0 8 * * *'
+# Notifications::PaperQuotaReachedWorker:
+#   queue: default
+#   cron: '0 8 * * *'
 Notifications::PublishedDocumentDailyWorker:
   queue: default
   cron: '0 8 * * *'
@@ -64,18 +64,9 @@ DataProcessor::OperationsWorker:
   queue: default
   cron: '*/10 * * * * *'
 
-# DataProcessor::RetrievedDataWorker:
-#   queue: high
-#   cron: '*/2 * * * * *'
-
 DataProcessor::McfWorker:
   queue: default
   cron: '0 */5 * * * *'
-
-## resume budgea retriever connector state
-# Retriever::ResumeBudgeaWorker:
-#   queue: default
-#   cron: '0 */15 * * * *'
 
 ## Accounting flow workers
 
@@ -85,49 +76,35 @@ Ftp::FetcherWorker:
 
 RetrieveEmailedDocumentWorker:
   queue: default
-  cron: '*/10 * * * * *'
+  cron: '30 */6 * * * *'
 
 
 ## File import
 
 FileImport::DropboxWorker:
   queue: file_import
-  cron: '*/10 * * * * *'
-
-FileImport::FtpFromAllWorker:
-  queue: file_import
-  cron: '0 0 */6 * * *'
+  cron: '0 */8 * * * *'
 
 FileImport::IbizaboxWorker:
   queue: file_import
-  cron: '0 0 */6 * * *'
+  cron: '30 */11 * * * *'
 
+FileImport::SftpFromAllWorker:
+  queue: file_import
+  cron: '0 15 */6 * * *'
+
+FileImport::FtpFromAllWorker:
+  queue: file_import
+  cron: '0 30 */6 * * *'
 
 
 RetrieveOcrProcessedDocumentWorker:
   queue: default
   cron: '*/10 * * * * *'
 
-# SendToGroupingWorker:
-#   queue: default
-#   cron: '*/2 * * * * *'
-
-# GroupDocumentWorker:
-#   queue: default
-#   cron: '*/2 * * * * *'
-
 PublishDocumentWorker:
   queue: high
   cron: '*/2 * * * * *'
-
-# SendPieceToPreAssignmentWorker:
-#   queue: high
-#   cron: '*/5 * * * * *'
-
-# RetrievePreAssignmentsWorker:
-#   queue: high
-#   cron: '*/10 * * * * *'
-
 
 
 ## Pre assignment builder & delivery
@@ -176,6 +153,27 @@ DataVerificator::DailyDataVerifierWorker:
   queue: default
   cron: '0 3 * * *'
 
+## Staffing flows
+
+Staffingflow::GroupingWorker:
+  queue: default
+  cron: '*/20 * * * * *'
+
+Staffingflow::PreassignmentWorker:
+  queue: default
+  cron: '*/20 * * * * *'
+
+Staffingflow::JefactureWorker:
+  queue: default
+  cron: '*/20 * * * * *'
+
+
+## Archive resend document corrupted
+
+Archive::ResendDocumentCorruptedWorker:
+  queue: default
+  cron: '0 0 */1 * * *'
+
 ## Delivery workers
 
 DeliverFileToDropbox: &deliver_file_defaults
@@ -201,7 +199,6 @@ DeliverFileToKnowings:
 DeliverFileToMcf:
   <<: *deliver_file_defaults
   args: mcf
-
 
 ## Bridge ##
 

@@ -53,7 +53,7 @@ class Admin::Reporting::MainController < BackController
   def row_organization
     @year = begin
               Integer(params[:year])
-            rescue StandardError
+            rescue
               Time.now.year
             end
     date = Date.parse("#{@year}-01-01")
@@ -69,7 +69,7 @@ class Admin::Reporting::MainController < BackController
   def total_footer
     @year = begin
               Integer(params[:year])
-            rescue StandardError
+            rescue
               Time.now.year
             end
 

@@ -66,7 +66,7 @@ class FtpsSetting::OrganizationController < OrganizationController
   def verify_rights
     unless @user.leader?
       flash[:error] = t('authorization.unessessary_rights')
-      redirect_to account_organization_path(@organization)
+      redirect_to organization_path(@organization)
     end
   end
 

@@ -10,9 +10,9 @@ class Documents::MainController < FrontController
       obj = Pack::Piece.where(id: Array(params[:ids])).first
     elsif params[:type] == 'preseizure'
       obj = Pack::Report::Preseizure.where(id: Array(params[:ids])).first
-    elsif params[:pack] == 'pack'
+    elsif params[:type] == 'pack'
       obj = Pack.where(id: Array(params[:ids])).first
-    elsif params[:report] == 'report'
+    elsif params[:type] == 'report'
       obj = Pack::Report.where(id: Array(params[:ids])).first
     end
 
