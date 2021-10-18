@@ -1,3 +1,3 @@
 collection @users
 
-extends 'compta/show'
+extends 'ppp/compta/show'
