@@ -1,3 +1,4 @@
 class BaseMailer < ActionMailer::Base
-  prepend_view_path "app/views/mailers"
+  # TEMPFIX : don t add view path to views/mailers
+  # prepend_view_path "app/views/mailers"
 end
