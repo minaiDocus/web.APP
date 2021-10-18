@@ -137,16 +137,18 @@ img{
   border-radius: 8px;
 }
 
-.grid img{
-  width: 80%;
-}
-
-.grid-content .image_piece {
-  padding: 4% 6% 4% 14%;
-}
-
 .grid .image_piece{
-  padding: 4% 9%;
+  padding-top: 10%;
+  height: 250px
+}
+
+.grid img{
+  width: 30%;
+}
+
+.grid .zoom{
+  margin-left: 20%;
+  margin-right: -20%;
 }
 
 .image_piece:hover{
@@ -175,7 +177,7 @@ img{
 }
 
 .no-preseizure{
-  padding: 9%;
+  padding: 7%;
   border: 1px solid #EAEAEA;
   border-radius: 8px;
 }
@@ -257,6 +259,14 @@ img{
   min-height: 94%;
 }
 
+.list .image_piece img{
+  width: 50%;
+}
+
+.image_piece img{
+  margin: auto;
+}
+
 @media (max-width: 1280px) {
   label{
     font-size: 12px;
@@ -304,12 +314,6 @@ img{
     width: 56%;
   }
 
-  .image_piece img {
-    width: 180px !important;
-    height: 263px !important;
-    margin-right: 2rem !important;
-  }
-
   .modal .form-select, .modal .form-control{
     padding: 0.3rem 2rem 0.3rem 0.4rem;
     font-size: 0.7rem;
@@ -334,5 +338,13 @@ img{
 
   .box{
     box-shadow: 0 8px 15px 0 rgba(51, 51, 51, 0.1);
+  }
+
+  .grid img{
+    width: 45%;
+  }
+
+  .list .image_piece img{
+    width: 55%;
   }
 }

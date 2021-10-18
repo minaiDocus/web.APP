@@ -1,6 +1,6 @@
 - @pieces.each_slice(4) do |pieces|
   // -- grid type
-  .box.grid.animatedChild.toLeft{ class: @user.pre_assignement_displayed? ? 'hide' : '' } 
+  .box.grid.animatedChild.toLeft{ class: (!@user.pre_assignement_displayed? || params[:grid_or_list_view] == 'grid')? '' : 'hide' } 
     .row.grid-content
       - pieces.each do |piece|
         .col-md-3
@@ -17,14 +17,14 @@
     - pieces.each do |piece|
       .preseizures_box
         - preseizures = piece.preseizures      
-        .box.list.animatedChild.toLeft
+        .box.list.animatedChild.toLeft{ class: params[:grid_or_list_view] != 'grid' ? '' : 'hide' }
           .row.list-content
             .w-25.piece-background
               .stamp-content.pagethumb.text-center.h-100
                 .image_piece.h-100.animated-pointer
                   %span.zoom.pdf-viewer.pointer.float-start.p-2{title: 'Visualiser la pièce', "data-content-url" => piece.get_access_url}
                     = glyphicon('magnifying-glass', { size: '20', color: 'background: rgba(26, 26, 26, 0.7)'})
-                  = image_tag document_thumb_url(piece), class: 'w-50 p-3 me-5'
+                  = image_tag document_thumb_url(piece), class: 'p-3 me-5'
             - if preseizures.size == 1
               .w-75.dynamic_box{ id: "document_#{piece.id}", data: { preseizure_id: preseizures.first.id, type: 'piece' } }
                 %span.form-check.float-end           
@@ -48,11 +48,29 @@
               .w-75.text-center{ id: "document_#{piece.id}" }
                 %span.form-check.float-end.p-3           
                   %input.form-check-input.pointer.float-none.select-document{ data: { id: piece.id }, type: :checkbox, value: "" }
+                .row.p-3
+                  .col-md-12.text-start
+                    %h5.pack.semibold.no-margin= piece.name
                 .no-preseizure
-                  %h1 Aucune écriture comptable
+                  %h3 Aucune écriture comptable
+                %hr.w-100
+                  .row.ml-1.mb-1.mr-0
+                    .col-md-12.text-start
+                      - delivery_state = piece.get_state_to('text')
+                      - if ['delivery_failed', 'duplication', 'piece_ignored'].include?(delivery_state)
+                        %span.badge.badge-danger.semibold= t("pieces.delivery_state.#{delivery_state}")
+                      - elsif ['awaiting_analytics', 'awaiting_pre_assignment', 'delivery_pending'].include?(delivery_state)
+                        %span.badge.badge-warning.semibold= t("pieces.delivery_state.#{delivery_state}")
+                      - elsif delivery_state != 'none'
+                        %span.badge.badge-success.semibold= t("pieces.delivery_state.#{delivery_state}")
+
+                      - piece.get_tags.split(' - ').each_slice(3).first.try(:each) do |tag|
+                        - if tag != '-'
+                          %span.badge.bg-dark.semibold= tag
   - else
     .preseizures_box.hide.animatedChild.toLeft
       .p-5 Ecriture comptable non disponible
+
 
 
 

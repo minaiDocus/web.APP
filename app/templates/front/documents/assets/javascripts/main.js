@@ -36,6 +36,12 @@ class DocumentsMain{
     if(search_pattern && search_pattern != ''){ data.push(`text=${encodeURIComponent(search_pattern)}`); }
     if(this.page > 1){ data.push(`page=${this.page}`) }
 
+    let grid_or_list_view = 'list'
+    if($('.box.grid').length > 0 && $('.box.grid').not('.hide').length > 0){
+      grid_or_list_view = 'grid'
+    }
+    data.push(`grid_or_list_view=${grid_or_list_view}`)
+
     this.ajax_params['target'] = (append)? null : '.main-content';
     this.ajax_params['data']   = data.join('&');
 

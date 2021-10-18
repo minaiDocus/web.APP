@@ -24,13 +24,16 @@
         %span Nom de tiers :
         %span.semibold= preseizure.try(:third_party)
 .row
-  .col-md-5
-    - sending_date = preseizure.pre_assignment_deliveries.where(state: 'sent').first.try(:created_at)
-    - if sending_date.present?
+  .col-md-12
+    - delivery = preseizure.pre_assignment_deliveries.where(state: 'sent').first
+    - delivery = preseizure.pre_assignment_deliveries.where(state: 'error').last if not delivery
+    - if delivery
       %span Dernier envoi iBiza 
-      %span.semibold= sending_date.strftime("%d/%m/%Y")
+      %span.semibold= delivery.try(:updated_at).strftime("%d/%m/%Y")
       %span - 
-      %span= sending_date.strftime("%Hh%M")
+      %span= delivery.try(:updated_at).strftime("%Hh%M")
+      - if delivery.try(:state) != 'sent' && delivery.try(:error_message)
+        %span.ms-3.badge.bg-danger= "Erreur : #{delivery.try(:error_message)}"
 
 - entries  = preseizure.entries
 - irregular_debit_credit_somme = verif_debit_credit_somme_of entries

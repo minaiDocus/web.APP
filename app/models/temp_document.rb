@@ -186,7 +186,7 @@ class TempDocument < ApplicationRecord
     begin
       temp_document.is_thumb_generated = true
 
-      image = MiniMagick::Image.read(temp_document.cloud_content.download).format('png').resize('92x133')
+      image = MiniMagick::Image.read(temp_document.cloud_content.download).format('png').resize('176x248')
 
       temp_document.cloud_content_thumbnail.attach(io: File.open(image.tempfile), 
                                                    filename: "#{base_file_name}.png", 
