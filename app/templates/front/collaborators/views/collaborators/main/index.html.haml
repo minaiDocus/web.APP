@@ -2,62 +2,65 @@
 
 .collaborators.page-content
   %input#organization_id{type: :hidden, value: @organization.id, name: 'organization_id'}
-  .collaborators-content
-    .row.derivationLeft
-      .col-md-5
-        %h3.bold
-          Liste des collaborateurs
-          %span.badge.badge-secondary.badge-sm.regular= @members.count
-      .col-md-2.no-padding
-        .input-group.mb-3.search-content
-          %span.input-group-text.member-search#basic-addon_collaborator= glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })
-          %input.form-control#search_input_collaborator.search_input_text{ type: :text, "aria-label" => "Rechercher", "aria-describedby" => "basic-addon_collaborator", name:'user_contains[text]', placeholder: 'Rechercher' }
-      .col-md-2.text-center.no-padding
-        %button.btn.btn-light.more-filter.member_filter.semibold.w-75
-          %span.me-2 Filtrer
-          %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
-      .col-md-3.collaborator-column.no-padding
-        %button.btn.btn-primary.create.collaborator.new_edit.semibold.w-100
-          %span.me-3= glyphicon('plus', { size: '14', color: '#FFFF'})
-          %span Ajouter un collaborateur
 
-    .box.derivationRight
-      .row
-        .col-md-12
-          %table.table.table-striped.table_integration#tbl_lists
-            %thead            
-              %th Nom
-              %th.date= sortable :created_at, t('activerecord.models.common.attributes.created_at')
-              %th= sortable :code, t('activerecord.models.user.attributes.formatted_identifier')
-              %th Groupe
-              %th= sortable :role, t('activerecord.models.member.attributes.role')
-              %th.text-end Action
-            %tbody
-              - @members.each do |member|
-                %tr
-                  %td.semibold= member.name
-                  %td.date= member.created_at.strftime('%d/%m/%Y')
-                  %td.user_info.text-table-green
-                    / TODO ////
-                    %span.info= link_to member.info, organization_collaborator_path(@organization, member)
-                  %td.date= member.groups.select(:name).join(', ')
-                  %td= t('activerecord.models.member.attributes.role_values.' + member.role)
-                  %td.text-end.pointer
-                    .action.sub_edit_delete.list-collaborators
-                      %span.glyph= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
-                    .sub_menu.text-start.hide
-                      %ul.no-margin.no-padding.regular.edit-delete{id: "member-#{member.id}"}
-                        %li.edit.collaborator.new_edit
-                          %span= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                          &nbsp;Éditer
-                        - if @organization.is_active && !member.user.is_admin && (@user.leader? || member.collaborator?)
-                          %li.delete.red-label
-                            = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', organization_collaborator_path(@organization, member), data: { method: :delete, confirm: "Êtes-vous sûr de vouloir supprimer ce compte définitivement ? Cette action est irréversible." }
+  - if @user.manage_collaborators
+    .collaborators-content
+      .row.derivationLeft
+        .col-md-5
+          %h3.bold
+            Liste des collaborateurs
+            %span.badge.badge-secondary.badge-sm.regular= @members.count
+        .col-md-2.no-padding
+          .input-group.mb-3.search-content
+            %span.input-group-text.member-search#basic-addon_collaborator= glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })
+            %input.form-control#search_input_collaborator.search_input_text{ type: :text, "aria-label" => "Rechercher", "aria-describedby" => "basic-addon_collaborator", name:'user_contains[text]', placeholder: 'Rechercher' }
+        .col-md-2.text-center.no-padding
+          %button.btn.btn-light.more-filter.member_filter.semibold.w-75
+            %span.me-2 Filtrer
+            %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
+        .col-md-3.collaborator-column.no-padding
+          %button.btn.btn-primary.create.collaborator.new_edit.semibold.w-100
+            %span.me-3= glyphicon('plus', { size: '14', color: '#FFFF'})
+            %span Ajouter un collaborateur
 
-          = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { name: 'members', total_pages: @members.total_pages }
+      .box.derivationRight
+        .row
+          .col-md-12
+            %table.table.table-striped.table_integration#tbl_lists
+              %thead            
+                %th Nom
+                %th.date= sortable :created_at, t('activerecord.models.common.attributes.created_at')
+                %th= sortable :code, t('activerecord.models.user.attributes.formatted_identifier')
+                %th Groupe
+                %th= sortable :role, t('activerecord.models.member.attributes.role')
+                %th.text-end Action
+              %tbody
+                - @members.each do |member|
+                  %tr
+                    %td.semibold= member.name
+                    %td.date= member.created_at.strftime('%d/%m/%Y')
+                    %td.user_info.text-table-green
+                      / TODO ////
+                      %span.info= link_to member.info, organization_collaborator_path(@organization, member)
+                    %td.date= member.groups.select(:name).join(', ')
+                    %td= t('activerecord.models.member.attributes.role_values.' + member.role)
+                    %td.text-end.pointer
+                      .action.sub_edit_delete.list-collaborators
+                        %span.glyph= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
+                      .sub_menu.text-start.hide
+                        %ul.no-margin.no-padding.regular.edit-delete{id: "member-#{member.id}"}
+                          %li.edit.collaborator.new_edit
+                            %span= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
+                            &nbsp;Éditer
+                          - if @organization.is_active && !member.user.is_admin && (@user.leader? || member.collaborator?)
+                            %li.delete.red-label
+                              = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', organization_collaborator_path(@organization, member), data: { method: :delete, confirm: "Êtes-vous sûr de vouloir supprimer ce compte définitivement ? Cette action est irréversible." }
 
-  .box-group-content.derivationLeft
-    = render file: Rails.root.join('app/templates/front/groups/views/groups/main/index.html.haml')
+            = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { name: 'members', total_pages: @members.total_pages }
+
+  - if @user.manage_groups
+    .box-group-content.derivationLeft
+      = render file: Rails.root.join('app/templates/front/groups/views/groups/main/index.html.haml')
   
   .modal.fade.in#add_edit_collaborator
     .modal-dialog

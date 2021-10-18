@@ -252,7 +252,7 @@ fr:
     efs: Stockages externes
     payment_method: Mode de Paiement
     subscription: Abonnement
-    collaborators: Collaborateurs
+    collaborators: Collaborateurs & Groupes
     customers: Clients
     journals: Journaux comptables
     bank_assignment: Affectation bancaires

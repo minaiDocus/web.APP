@@ -63,7 +63,7 @@
                     %span.link_slave{class: (organization_edit_payment ? 'active' : '')}= t('organizations.payment_method')
       // =================== PARAMETERS ===============================
 
-      - if @user.leader? || @user.manage_collaborators
+      - if @user.leader? || @user.manage_collaborators || @user.manage_groups
         %li.direct_links{ data: { href: "#{@organization.id}/collaborateurs" } }
           %a{href: organization_collaborators_path(@organization) }
             %span.link_principal{class: (controller_path == 'collaborators/main')? 'active' : ''}= t('organizations.collaborators')

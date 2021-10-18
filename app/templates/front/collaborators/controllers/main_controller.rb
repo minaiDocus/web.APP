@@ -150,7 +150,7 @@ class Collaborators::MainController < OrganizationController
   private
 
   def verify_rights
-    if @user.leader? || @user.manage_collaborators
+    if @user.leader? || @user.manage_collaborators || @user.manage_groups
       if action_name.in?(%w[new create destroy edit update]) && !@organization.is_active
         flash[:error] = t('authorization.unessessary_rights')
         redirect_to organization_path(@organization)
