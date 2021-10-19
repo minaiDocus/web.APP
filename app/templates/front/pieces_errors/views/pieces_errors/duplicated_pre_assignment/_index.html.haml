@@ -3,13 +3,14 @@
 
   .form-group
     .w-100.text-end
-      - if @user.has_collaborator_action?        
+      - if @user.has_collaborator_action? && @user.still_active?     
         %button.btn.btn-danger.semibold#unlock-preseizures
           %span.me-2= glyphicon('aperture', { size: '15', color: '#FF4848'})
           %span Débloquer ceux séléctionnées
-      %button.btn.btn-default.semibold.no-margin#confirm-duplication
-        %span.me-2= glyphicon('circle-check', { size: '15', color: '#72AA42'})
-        %span Marquer comme duplication ceux séléctionnées
+      - if @user.still_active?
+        %button.btn.btn-default.semibold.no-margin#confirm-duplication
+          %span.me-2= glyphicon('circle-check', { size: '15', color: '#72AA42'})
+          %span Marquer comme duplication ceux séléctionnées
   .row
     .col-md-12
       %table.table.table-striped.table_integration#tbl_duplicated_pieces

@@ -6,8 +6,8 @@ class Payments::MainController < OrganizationController
   skip_before_action :load_organization,         only: :debit_mandate_notify
   skip_before_action :login_user!,               only: :debit_mandate_notify
   skip_before_action :load_user_and_role,        only: :debit_mandate_notify, raise: false
-  skip_before_action :verify_suspension,         only: :debit_mandate_notify, raise: false
   skip_before_action :verify_authenticity_token, only: :debit_mandate_notify, raise: false
+  skip_before_action :verify_suspension
 
   prepend_view_path('app/templates/front/payments/views')
 

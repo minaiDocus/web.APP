@@ -3,7 +3,7 @@
 .collaborators.page-content
   %input#organization_id{type: :hidden, value: @organization.id, name: 'organization_id'}
 
-  - if @user.manage_collaborators
+  - if @user.leader? || @user.manage_collaborators
     .collaborators-content
       .row.derivationLeft
         .col-md-5
@@ -58,7 +58,7 @@
 
             = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { name: 'members', total_pages: @members.total_pages }
 
-  - if @user.manage_groups
+  - if @user.leader? || @user.manage_groups
     .box-group-content.derivationLeft
       = render file: Rails.root.join('app/templates/front/groups/views/groups/main/index.html.haml')
   

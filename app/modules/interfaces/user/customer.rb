@@ -117,11 +117,11 @@ module Interfaces::User::Customer
   end
 
   def authorized_all_upload?
-    (self.try(:options).try(:upload_authorized?) && authorized_bank_upload?) || self.organization.specific_mission
+    (self.try(:options).try(:upload_authorized?) && authorized_bank_upload?) || self.organization.try(:specific_mission)
   end
 
   def authorized_upload?
-    self.try(:options).try(:upload_authorized?) || authorized_bank_upload? || self.organization.specific_mission
+    self.try(:options).try(:upload_authorized?) || authorized_bank_upload? || self.organization.try(:specific_mission)
   end
 
   def authorized_bank_upload?
@@ -140,8 +140,8 @@ module Interfaces::User::Customer
     is_bridge = self.options.banking_provider == 'bridge'
 
     if !is_budgea && !is_bridge
-      is_budgea = self.organization.banking_provider == 'budget_insight'
-      is_bridge = self.organization.banking_provider == 'bridge'
+      is_budgea = self.organization.try(:banking_provider) == 'budget_insight'
+      is_bridge = self.organization.try(:banking_provider) == 'bridge'
     end
 
     return 'budget_insight' if is_budgea

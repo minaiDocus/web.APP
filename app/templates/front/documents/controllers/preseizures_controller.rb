@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Documents::PreseizuresController < FrontController
+  skip_before_action :verify_if_active, only: %w[index show]
   prepend_view_path('app/templates/front/documents/views')
 
   before_action :load_preseizure, except: %w[accounts_list]

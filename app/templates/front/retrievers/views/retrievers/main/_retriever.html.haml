@@ -29,6 +29,8 @@
     .row.retriever_actions
       .col-md-9.pt-1
         %span.badge.semibold{ class: "badge-#{badge_type_of(retriever)}" }= state_of(retriever)
+        - if retriever.state != 'ready' && retriever.error_message.present?
+          %span.badge.semibold.bg-danger{ data: { "bs-toggle" => 'popover', "bs-trigger" => "hover", "bs-placement" => 'top', "bs-content" => retriever.error_message.to_s } }= retriever.error_message.to_s.truncate(30)
       .col-md-3.icon-actions.text-end.pt-1
         %span.action-group.ms-1.pointer.retriever_infos{ title: "Créé le : #{retriever.created_at.strftime('%d-%m-%Y %H:%M:%S')} / Modifié le: #{retriever.updated_at.strftime('%d-%m-%Y %H:%M:%S')}"}= glyphicon('info', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
         - if (retriever.budgea_id && !is_specific_mission)

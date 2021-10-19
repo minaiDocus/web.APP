@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class PiecesErrors::DuplicatedPreAssignmentController < FrontController
+  skip_before_action :verify_if_active, only: %w[index]
   prepend_view_path('app/templates/front/pieces_errors/views')
 
   # GET /account/pre_assignment_blocked_duplicates
