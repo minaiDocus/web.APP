@@ -33,7 +33,6 @@
 //= require daterangepicker
 //= require custom_popover
 //= require app_listener
-//= require dynamic_hide_menu
 
 /********** GLOBAL VARIABLES ********/
   var GLOBAL = {}
@@ -154,6 +153,17 @@
 
 
 /******************* GLOBAL FUNCTIONS *********************/
+  AppParseVars = ()=>{
+    $('span.js_var_setter').each(function(e){
+      let name  = $(this).attr('id').replace('js_var_', '').trim();
+      let value = $(this).text().trim();
+
+      VARIABLES.set(name, atob(value));
+
+      console.log(VARIABLES.get('has_next_page'));
+    });
+  }
+
   // Type must be 'show' or 'hide'
   AppLoading = (type='show') => {
     if(type == 'show'){
@@ -201,19 +211,7 @@
 /************************ MAIN CLASS ********************************/
 class ApplicationJS {
   constructor(){
-    this.parseJsVar();
-
     // console.log( "Controller: " + VARIABLES.get('controller_path') );
-    this.parseJsVar = this.parseJsVar.bind(this);
-  }
-
-  parseJsVar(){
-    $('span.js_var_setter').each(function(e){
-      let name  = $(this).attr('id').replace('js_var_', '').trim();
-      let value = $(this).text().trim();
-
-      VARIABLES.set(name, atob(value));
-    });
   }
 
   noticeAllMessageFrom(page=null){
@@ -590,3 +588,5 @@ class ApplicationJS {
     }
   }
 }
+
+jQuery(function () { AppParseVars() });

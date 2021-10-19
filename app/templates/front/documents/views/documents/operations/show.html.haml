@@ -33,6 +33,7 @@
         %input.form-check-input.pointer.float-none.select-all{ type: :checkbox, value: "" }
 
   .main-content.derivationLeft
+    = javascript_declare_var 'has_more_result', (@preseizures.size > 0 && @preseizures.total_count > @preseizures.size).to_s
     - if @preseizures.size > 0
       - @preseizures.each_slice(2) do |_preseizures|
         .row.animatedGroups.content-row-operations

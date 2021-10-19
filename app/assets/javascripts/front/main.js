@@ -1,5 +1,6 @@
 //= require '../application'
 //= require '../dynamic_events'
+//= require '../dynamic_hide_menu'
 
 function calculate_footer_marginer(){
   let window_h = $(window).outerHeight();
@@ -42,6 +43,7 @@ function init_menu_animation(){
 }
 
 function bind_globals_events(){
+  AppParseVars();
   custom_dynamic_animation();
   custom_dynamic_height();
   elements_initializer();
