@@ -52,7 +52,7 @@
             %span= link_to "Télécharger le modèle d'import .csv", import_model_organization_customer_accounting_plan_path(@organization, @customer), class: 'no-style'
     
     
- - autoliquidation_exist = @accounting_plan.active_providers.select{ |prov| prov.vat_autoliquidation }.size > 0
+  - autoliquidation_exist = @accounting_plan.active_providers.select{ |prov| prov.vat_autoliquidation }.size > 0
   .mb-4
   %hr
   .fadein
