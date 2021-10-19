@@ -125,13 +125,14 @@ module Interfaces::User::Customer
   end
 
   def authorized_bank_upload?
-    period = self.try(:subscription).try(:current_period)
+    self.try(:options).try(:retriever_authorized?)
+    #period = self.try(:subscription).try(:current_period)
 
-    if period
-      self.try(:options).try(:retriever_authorized?) && period.is_active?(:retriever_option)
-    else
-      false
-    end
+    #if period
+    #  self.try(:options).try(:retriever_authorized?) && period.is_active?(:retriever_option)
+    #else
+    #  false
+    #end
   end
 
   def banking_provider

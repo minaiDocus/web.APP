@@ -30,14 +30,18 @@
       - @packs.each_with_index do |pack, index|
         - ((index % 2) == 0)? packs_left << pack : packs_right << pack
       .w-50.animatedGroups
-        = render partial: 'pack_box', locals: { packs: packs_left, animation: 'toLeft' }
+        = render partial: 'pack_box', locals: { packs_with_failed_delivery_ids: @packs_with_failed_delivery_ids,
+                                                packs: packs_left,
+                                                animation: 'toLeft' }
       .w-50.animatedGroups
-        = render partial: 'pack_box', locals: { packs: packs_right, animation: 'toRight' }
+        = render partial: 'pack_box', locals: { packs_with_failed_delivery_ids: @packs_with_failed_delivery_ids,
+                                                packs: packs_right,
+                                                animation: 'toRight' }
     - else
       .no-data-found.box= t('global.no-data-found')
 
 = render partial: 'document_dialog'
-= render partial: 'upload_dialog'
+= render partial: 'upload_dialog' if @render_upload
 
 = javascript_include_tag 'front/documents/assets/javascripts/pieces'
 

@@ -8,9 +8,12 @@ class Documents::PiecesController < FrontController
 
   # GET /documents
   def index
-    @packs = Pack.search(params.try(:[], :by_piece).try(:[], :content), options).distinct.order(updated_at: :desc).page(options[:page]).per(options[:per_page])
+    @packs = Pack.includes(pieces: [:expense], owner: [:organization, :ibiza, :exact_online, :my_unisoft]).search(params.try(:[], :by_piece).try(:[], :content), options).distinct.order(updated_at: :desc).page(options[:page]).per(options[:per_page])
+    @packs_with_failed_delivery_ids = packs_with_failed_delivery
 
     @period_service = Billing::Period.new user: @user
+
+    @render_upload = request.xhr? ? false : true
   end
 
   # GET /documents/:id
@@ -155,12 +158,20 @@ class Documents::PiecesController < FrontController
 
   private
 
+  def packs_with_failed_delivery
+    reports = Pack::Report.where(pack_id: @packs.map(&:id))
+    preseizures = Pack::Report::Preseizure.failed_delivery.where(report_id: reports.pluck(:id))
+    reports_with_failed_delivery = Pack::Report.where(id: preseizures.pluck(:report_id))
+
+    Pack.where(id: reports_with_failed_delivery.pluck(:pack_id)).pluck(:id)
+  end
+
   def options
     if params[:by_all].present?
       params[:by_piece] = params[:by_piece].present? ? params[:by_piece].merge(params[:by_all].permit!) : params[:by_all]
     end
 
-    options = { page: params[:page], per_page: 16 } #IMPORTANT: per_page option must be a multiple of 4 and > 8 (needed by grid type view)
+    options = { page: params[:page], per_page: 40 } #IMPORTANT: per_page option must be a multiple of 4 and > 8 (needed by grid type view)
     options[:sort] = true
 
     options[:piece_created_at] = params[:by_piece].try(:[], :created_at)

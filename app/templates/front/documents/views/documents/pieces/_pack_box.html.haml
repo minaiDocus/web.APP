@@ -21,10 +21,10 @@
       .col-md-8.pt-1
         - if pack.created_at >= 1.days.ago
           %span.badge.badge-success.semibold Nouveau
-        - if pack.has_not_delivered_preseizures?
+        - if pack.id.in?(packs_with_failed_delivery_ids)
           %span.badge.badge-danger.semibold Ecritures non livrées
-        - if pack.pieces.where(created_at: [7.days.ago..Time.now]).size >= 20
-          %span.badge.badge-warning.semibold Important
+        - if pack.pieces.size >= 20
+          %span.badge.badge-warning.semibold Lot conséquent
         - if pack.pieces.collect(&:expense).any?
           %span.badge.bg-dark.semibold Notes de frais
         - if not pack.is_fully_processed

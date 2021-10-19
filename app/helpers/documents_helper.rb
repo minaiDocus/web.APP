@@ -222,7 +222,16 @@ module DocumentsHelper
     if @user.organization.specific_mission
       @user.organization.customers.active.order(code: :asc)
     else
-      @file_upload_users_list ||= accounts.active.order(code: :asc).select do |user|
+      @file_upload_users_list ||= accounts.includes(:options, :ibiza, :subscription, organization: [:ibiza,
+                                                                                                    :exact_online,
+                                                                                                    :my_unisoft,
+                                                                                                    :coala,
+                                                                                                    :quadratus,
+                                                                                                    :cegid,
+                                                                                                    :csv_descriptor,
+                                                                                                    :fec_agiris]).
+                                active.order(code: :asc).select do |user|
+
         user.authorized_upload?
       end
     end
@@ -232,21 +241,26 @@ module DocumentsHelper
     if has_multiple_accounts?
       result = {}
 
+      account_book_types = AccountBookType.where(user: file_upload_users_list)
+
       file_upload_users_list.each do |user|
+        user_account_book_types = account_book_types.select { |abt| abt.user_id == user.id }.sort_by(&:name)
+        user_bank_processable_account_book_types = user_account_book_types.select { |ubpabt| ubpabt.entry_type == 4 || ubpabt.domain == 'BQ - Banque' }
+
         period_service              = Billing::Period.new user: user
         journals                    = []
         journals_compta_processable = []
 
         if user.authorized_all_upload? || user.try(:options).try(:upload_authorized?)
-          journals = user.account_book_types.order(name: :asc).map do |j|
+          journals = user_account_book_types.map do |j|
             j.name + ' ' + j.description
           end
-          journals_compta_processable  = user.account_book_types.order(name: :asc).map do |j|
+          journals_compta_processable  = user_account_book_types.map do |j|
             j.name if j.compta_processable?
           end.compact
         elsif user.authorized_bank_upload?
-          journals = user.account_book_types.bank_processable.map{|j| j.name + ' ' + j.description}
-          journals_compta_processable = user.account_book_types.bank_processable.map{|j| j.name if j.compta_processable? }
+          journals = user_bank_processable_account_book_types.map{|j| j.name + ' ' + j.description}
+          journals_compta_processable = user_bank_processable_account_book_types.map{|j| j.name if j.compta_processable? }
         end
 
         hsh = {
