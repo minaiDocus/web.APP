@@ -58,6 +58,7 @@
         %input.form-check-input.pointer.float-none.select-all{ type: :checkbox, value: "" }
 
   .main-content.animatedGroups
+    = javascript_declare_var 'has_next_page', (@pieces.size > 0 && @pieces.total_count > @pieces.size).to_s
     - if @pieces.size > 0
       = render partial: 'piece_box'
     - else

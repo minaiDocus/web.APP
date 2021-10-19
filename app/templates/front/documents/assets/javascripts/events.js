@@ -163,6 +163,7 @@ jQuery(function() {
 
     const show_hide_more_result = (action)=>{
       if(action == 'show'){
+        //if(VARIABLES.get('has_next_page') !== false);
         $('.more-result').show('fast');
       }else{
         // $('.more_result_button').hide('slow');

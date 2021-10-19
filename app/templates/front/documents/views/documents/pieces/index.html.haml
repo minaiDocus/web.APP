@@ -23,6 +23,7 @@
         %span Ajouter des documents
   .mb-4
   .row.main-content
+    = javascript_declare_var 'has_next_page', (@packs.size > 0 && @packs.total_count > @packs.size).to_s
     - if @packs.size > 0
       - count       = @packs.size
       - packs_left  = []
