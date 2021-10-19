@@ -2,7 +2,7 @@
   - if waiting_operations_count > 0 || current_user.is_admin
     .row
       %div{ class: "col-md-#{ (waiting_operations_count > 0 && current_user.is_admin) ? 6 : 9}"}
-      - if current_user.is_admin
+      - if current_user.is_admin && 1 == 0
         .col-md-3.text-end        
           - idocus_param = param_encode({ url: '/retrieved/unlock_operations', method: 'post', confirm: 'Etes vous sûr?', form: { id: 'filter-operations-form' }, after_send: 'retrieved_datas_reload_operations' })
           %button.btn.btn-default.semibold.force-preseizures.as_idocus_ajax{ idocus: idocus_param, type: 'button' }
@@ -47,7 +47,7 @@
                 %td= operation.label
                 %td= operation.amount.to_s + " €"
                 - if @user.pre_assignement_displayed?
-                  %td Oui
+                  %td= is_operation_pre_assigned(operation)
           - else
             %tr
               %td{colspan: 8}= t('global.no-data-found')

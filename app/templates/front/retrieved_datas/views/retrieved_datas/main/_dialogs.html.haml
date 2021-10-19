@@ -17,6 +17,17 @@
               %input.date.daterange#value-date{ name: 'banking_operation_contains[value_date]', type: :text }
 
           .form-group
+            %label.semibold Service
+            .select-container.no-padding.w-100
+              %input{ name: 'banking_operation_contains[bank_account][bank_name]', type: :text }
+
+
+          .form-group
+            %label.semibold Compte
+            .select-container.no-padding.w-100
+              %input{ name: 'banking_operation_contains[bank_account][number]', type: :text }
+
+          .form-group
             %label.semibold Catégorie
             .select-container.no-padding.w-100
               %input{ name: 'banking_operation_contains[category]', type: :text }
@@ -26,13 +37,14 @@
             .select-container.no-padding.w-100
               %input{ name: 'banking_operation_contains[label]', type: :text }
 
-          .form-group
-            %label.semibold Pré-affectation
-            %select.form-select#preseizure{ name: 'banking_operation_contains[pre_assigned]', "aria-label" => "Default select"  }              
-              %option{value: ''}
-              %option{value: 'pre_assigned'} Oui
-              %option{value: 'not_pre_assigned'} Non
-              %option{value: 'is_waiting'} En attente
+          - if @user.pre_assignement_displayed?
+            .form-group
+              %label.semibold Pré-affectation
+              %select.form-select#preseizure{ name: 'banking_operation_contains[pre_assigned]', "aria-label" => "Default select"  }              
+                %option{value: ''}
+                %option{value: 'pre_assigned'} Oui
+                %option{value: 'not_pre_assigned'} Non
+                %option{value: 'is_waiting'} En attente
 
       .modal-footer
         %button.btn.btn-light.semibold.cancel.reset-filter{ data: { target: 'operations' }, type: :button } Annuler
