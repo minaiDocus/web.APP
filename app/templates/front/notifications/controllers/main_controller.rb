@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 class Notifications::MainController < FrontController
-  skip_before_action :verify_suspension, only: :latest, raise: false
-  skip_before_action :verify_if_active, raise: false
+  skip_before_action :verify_suspension
+  skip_before_action :verify_if_active
+
   before_action :load_notifications, except: :link_through
 
   prepend_view_path('app/templates/front/notifications/views')

@@ -2,6 +2,9 @@
 class News::MainController < FrontController
   layout false
 
+  skip_before_action :verify_suspension
+  skip_before_action :verify_if_active
+
   prepend_view_path('app/templates/front/news/views')
 
   def index

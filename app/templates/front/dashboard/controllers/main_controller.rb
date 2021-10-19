@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 class Dashboard::MainController < FrontController
+  skip_before_action :verify_suspension
+  skip_before_action :verify_if_active
+
   prepend_view_path('app/templates/front/dashboard/views')
 
   def index

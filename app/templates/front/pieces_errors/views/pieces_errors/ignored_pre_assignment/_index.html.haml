@@ -3,13 +3,14 @@
 
   .form-group
     .w-100.text-end
-      - if @user.has_collaborator_action?          
+      - if @user.has_collaborator_action? && @user.still_active?
         %button.btn.btn-danger.semibold#resend-to-pre-assignment
           %span.me-2= glyphicon('aperture', { size: '15', color: '#FF4848'})
           %span Renvoyer et forcer la pré-affectation
-      %button.btn.btn-default.semibold.no-margin#confirm-ignorance
-        %span.me-2= glyphicon('circle-check', { size: '15', color: '#72AA42'})
-        %span Marquer la séléction comme vu
+      - if @user.still_active?
+        %button.btn.btn-default.semibold.no-margin#confirm-ignorance
+          %span.me-2= glyphicon('circle-check', { size: '15', color: '#72AA42'})
+          %span Marquer la séléction comme vu
 
   .row
     .col-md-12

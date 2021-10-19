@@ -2,6 +2,7 @@
 
 class Documents::MainController < FrontController
   skip_before_action :login_user!, only: %w[download piece handle_bad_url temp_document get_tag already_exist_document], raise: false
+  skip_before_action :verify_if_active, only: %w[export_options export_preseizures download_archive download_bundle get_tags update_tags]
 
   prepend_view_path('app/templates/front/documents/views')
 

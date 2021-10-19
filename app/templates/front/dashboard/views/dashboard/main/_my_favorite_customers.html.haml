@@ -12,7 +12,7 @@
             %span.text-muted-light= infos.try(:message)
 
         .col-md-1.no-padding.semibold.text-end
-          = tag_state infos.try(:document_state)
+          = tag_state infos.try(:active) ? infos.try(:document_state) : 'cloturé'
         .col-md-1.text-center
           = link_to glyphicon('chevron-right', {size: '17', color: '#b5a6a6'}), '#', class: 'favorite-link', id: infos.try(:id)
 

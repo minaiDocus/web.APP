@@ -118,13 +118,6 @@ class ApplicationController < ActionController::Base
     klass.new(object)
   end
 
-  def verify_if_active
-    if @user&.inactive? && !controller_name.in?(%w[profiles documents])
-      flash[:error] = t('authorization.unessessary_rights')
-      redirect_to documents_path
-    end
-  end
-
   def load_recent_notifications
     if @user
       @last_notifications = @user.notifications.order(is_read: :asc, created_at: :desc).limit(5)
@@ -264,12 +257,19 @@ class ApplicationController < ActionController::Base
   end
   helper_method :true_user
 
+  def verify_if_active
+    if !organizations_suspended? && @user&.inactive?
+      flash[:error] = t('authorization.unessessary_rights')
+      redirect_to documents_path
+    end
+  end
+
   def verify_suspension
-    if controller_name == 'suspended'
-      redirect_to root_path unless organizations_suspended? && @user.active?
-    elsif organizations_suspended? && @user.active?
-      unless ((controller_name == 'organizations' && action_name == 'show') || controller_name == 'payments') && @user.leader?
-        redirect_to account_suspended_path
+    if controller_path == 'suspended/main'
+      redirect_to root_path unless organizations_suspended?
+    elsif organizations_suspended?
+      unless ((controller_path == 'organizations/main' && action_name == 'show')) && @user.leader?
+        redirect_to suspended_path
       end
     end
   end

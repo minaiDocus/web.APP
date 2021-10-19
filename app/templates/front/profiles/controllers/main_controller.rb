@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Profiles::MainController < FrontController
+  skip_before_action :verify_if_active, only: %w[show]
+
   prepend_view_path('app/templates/front/profiles/views')
 
   # GET /profiles
