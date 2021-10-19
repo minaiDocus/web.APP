@@ -36,7 +36,7 @@ class Journals::MainController < OrganizationController
         end
       end
     else
-      json_flash[:error] = errors_to_list @journal.errors.messages
+      json_flash[:error] = errors_to_list @journal
 
       if params[:new_create_book_type].present?
         render json: { success: true, response: @journal.errors.messages }, status: 200
@@ -102,7 +102,7 @@ class Journals::MainController < OrganizationController
         end
       end
     else
-      json_flash[:error] = errors_to_list journal.errors.messages
+      json_flash[:error] = errors_to_list journal
 
       if params[:new_create_book_type].present?
         render json: { success: true, response: journal.errors.messages }, status: 200

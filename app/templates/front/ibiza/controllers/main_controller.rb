@@ -29,7 +29,7 @@ class Ibiza::MainController < OrganizationController
 
       json_flash[:success] = 'Modifié avec succès.'
     else
-      json_flash[:error] = errors_to_list @ibiza.errors.messages
+      json_flash[:error] = errors_to_list @ibiza
     end
 
     render json: { json_flash: json_flash }, status: 200

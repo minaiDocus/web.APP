@@ -62,7 +62,7 @@ class Orders::MainController < CustomerController
 
       json_flash[:success] = 'Votre commande de Kit envoi courrier a été prise en compte.'
     else
-      json_flash[:error] = errors_to_list(@order.errors.messages) rescue "Une erreur s'est produite lors de la commande, Veuillez réessayer plus tard svp..."
+      json_flash[:error] = errors_to_list(@order) rescue "Une erreur s'est produite lors de la commande, Veuillez réessayer plus tard svp..."
     end
 
     render json: { json_flash: json_flash }, status: 200
@@ -84,7 +84,7 @@ class Orders::MainController < CustomerController
 
       json_flash[:success] = 'Votre commande a été modifiée avec succès.'
     else
-      json_flash[:error] = errors_to_list(@order.errors.messages) rescue "Une erreur s'est produite lors de la mise à jour, Veuillez réessayer plus tard svp..."
+      json_flash[:error] = errors_to_list(@order) rescue "Une erreur s'est produite lors de la mise à jour, Veuillez réessayer plus tard svp..."
     end
 
     render json: { json_flash: json_flash }, status: 200

@@ -29,7 +29,7 @@ class ExternalFileStorages::AuthorizationController < OrganizationController
     if efs.save
       json_flash[:success] = 'Modifié avec succès.'
     else
-      json_flash[:error] = errors_to_list efs.errors.messages
+      json_flash[:error] = errors_to_list efs
     end
     
     render json: { json_flash: json_flash }, status: 200

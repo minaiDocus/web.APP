@@ -26,7 +26,7 @@ class BankSettings::MainController < RetrieverController
     if @bank_account.persisted?
       flash[:success] = 'Créé avec succès.'
     else
-      flash[:error] = errors_to_list @bank_account.errors.messages
+      flash[:error] = errors_to_list @bank_account
     end
 
     redirect_to bank_settings_path({ account_id: @account.id , id: @bank_account.id})

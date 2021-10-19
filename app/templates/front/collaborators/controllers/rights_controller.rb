@@ -13,7 +13,7 @@ class Collaborators::RightsController < OrganizationController
     if @member.update(membership_params)
       flash[:success] = 'Modifié avec succès.'
     else
-      flash[:error] = errors_to_list @member.errors.messages
+      flash[:error] = errors_to_list @member
     end
 
     # render json: { json_flash: json_flash }, status: 200
