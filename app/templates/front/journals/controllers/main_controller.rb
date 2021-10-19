@@ -28,18 +28,24 @@ class Journals::MainController < OrganizationController
       if params[:new_create_book_type].present?
         render json: { success: true, response: { text: text } }, status: 200
       else
-        flash[:success] = text
+        json_flash[:success] = text
         if @customer
-          redirect_to organization_user_journals_path(@organization, @customer)
+          render json: { json_flash: json_flash, response_url: organization_user_journals_path(@organization, @customer) }
         else
-          redirect_to organization_journals_path(@organization)
+          render json: { json_flash: json_flash, response_url: organization_journals_path(@organization) }
         end
       end
     else
+      json_flash[:error] = errors_to_list @journal.errors.messages
+
       if params[:new_create_book_type].present?
         render json: { success: true, response: @journal.errors.messages }, status: 200
       else
-        render :new
+        if @customer
+          render json: { json_flash: json_flash, response_url: organization_user_journals_path(@organization, @customer) }
+        else
+          render json: { json_flash: json_flash, response_url: organization_journals_path(@organization) }
+        end
       end
     end
   end
@@ -88,18 +94,24 @@ class Journals::MainController < OrganizationController
       if params[:new_create_book_type].present?
         render json: { success: true, response: { text: text } }, status: 200
       else
-        flash[:success] = text
+        json_flash[:success] = text
         if @customer
-          redirect_to organization_user_journals_path(@organization, @customer)
+          render json: { json_flash: json_flash, response_url: organization_user_journals_path(@organization, @customer) }
         else
-          redirect_to organization_journals_path(@organization)
+          render json: { json_flash: json_flash, response_url: organization_journals_path(@organization) }
         end
       end
     else
+      json_flash[:error] = errors_to_list journal.errors.messages
+
       if params[:new_create_book_type].present?
         render json: { success: true, response: journal.errors.messages }, status: 200
       else
-        render :edit
+         if @customer
+          render json: { json_flash: json_flash, response_url: organization_user_journals_path(@organization, @customer) }
+        else
+          render json: { json_flash: json_flash, response_url: organization_journals_path(@organization) }
+        end
       end
     end
   end
