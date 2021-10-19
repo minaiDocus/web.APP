@@ -94,12 +94,12 @@ class AccountingPlans::MainController < CustomerController
 
     if file
       if @accounting_plan.import(file, type)
-        # flash[:success] = 'Importé avec succès.'
+        flash[:success] = 'Importé avec succès.'
       else
-        # flash[:error] = 'Fichier non valide.'
+        flash[:error] = 'Fichier non valide.'
       end
     else
-      # flash[:error] = 'Aucun fichier choisi.'
+      flash[:error] = 'Aucun fichier choisi.'
     end
     
     redirect_to organization_customer_accounting_plan_path(@organization, @customer)

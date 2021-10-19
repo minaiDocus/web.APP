@@ -26,4 +26,6 @@ jQuery(function() {
   AppListenTo('documents_search_text', (e)=>{ main.load_packs(true); });
 
   AppListenTo('documents_next_page', (e)=>{ main.load_next_page(); });
+
+  AppListenTo('document_customer_filter', (e)=>{ setTimeout(()=>{ main.load_packs(true); }, 2000 ) });
 });

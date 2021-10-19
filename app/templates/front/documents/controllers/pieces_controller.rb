@@ -20,7 +20,9 @@ class Documents::PiecesController < FrontController
   # GET /documents/:id
   def show
     _options = options
-    _options = { page: params[:page], per_page: 8 } #IMPORTANT: per_page option must be a multiple of 4 and > 8 (needed by grid type view)
+    _options[:page] = params[:page] #IMPORTANT: per_page option must be a multiple of 4 and > 8 (needed by grid type view)
+    _options[:per_page] =  8       #IMPORTANT: per_page option must be a multiple of 4 and > 8 (needed by grid type view)
+
     _options[:ids] = options[:piece_ids] if options[:piece_ids].present?
 
     # TODO : optimize created_at search
@@ -59,7 +61,9 @@ class Documents::PiecesController < FrontController
 
         if parents_documents.any?
           parents_documents.each do |parent_document|
-            if parent_document.children.size == parent_document.children.fingerprint_is_nil.size
+            blank_children =  parent_document.children.select{ |child| child.fingerprint_is_nil? }
+
+            if parent_document.children.size == blank_children.size
               parent_document.original_fingerprint    = nil
               parent_document.content_fingerprint     = nil
               parent_document.raw_content_fingerprint = nil
@@ -178,26 +182,46 @@ class Documents::PiecesController < FrontController
     options[:piece_created_at] = params[:by_piece].try(:[], :created_at)
     options[:piece_created_at_operation] = params[:by_piece].try(:[], :created_at_operation)
 
-    options[:piece_position] = params[:by_piece].try(:[], :position)
-    options[:piece_position_operation] = params[:by_piece].try(:[], :position_operation)
+    options[:position] = params[:by_piece].try(:[], :position)
+    options[:position_operation] = params[:by_piece].try(:[], :position_operation)
 
     options[:name] = params[:text]
     options[:tags] = params[:by_piece].try(:[], :tags)
 
     options[:pre_assignment_state] = params[:by_piece].try(:[], :state_piece)
+    options[:piece_number] = params[:by_piece].try(:[], :piece_number)
+
+    options[:pre_assignment_is_delivered] = params[:by_preseizure].try(:[], 'is_delivered')
+    
+    options[:delivery_tried_at] = params[:by_preseizure].try(:[], 'delivery_tried_at')
+    options[:pre_assignment_date] = params[:by_preseizure].try(:[], 'date')
+    
+
+    options[:third_party] = params[:by_preseizure].try(:[], 'third_party')
+    options[:piece_number] = params[:by_preseizure].try(:[], 'piece_number')
+
+    options[:amount] = params[:by_preseizure].try(:[], 'amount')
+    options[:amount_operation] = params[:by_preseizure].try(:[], 'amount_operation')
 
     options[:owner_ids] = if params[:view].present? && params[:view] != 'all'
-                            _user = accounts.find(params[:view])
-                            _user ? [_user.id] : []
+                            params[:view].split(',')                            
                           else
                             account_ids
                           end
 
-    if params[:by_preseizure].present? && (params[:by_preseizure].try(:[], 'is_delivered').present? || params[:by_preseizure].try(:[], 'delivery_tried_at').present? || params[:by_preseizure].try(:[], 'date').present? || params[:by_preseizure].try(:[], 'amount').present?)
-      piece_ids = Pack::Report::Preseizure.where(user_id: options[:owner_ids], operation_id: ['', nil]).filter_by(params[:by_preseizure]).distinct.pluck(:piece_id).presence || [0]
+    if params[:by_preseizure].present? && (params[:by_preseizure].try(:[], 'is_delivered') != "" || params[:by_preseizure].try(:[], 'third_party') != "" || params[:by_preseizure].try(:[], 'delivery_tried_at') != "" || params[:by_preseizure].try(:[], 'date') != "" || params[:by_preseizure].try(:[], 'amount') != '')
+      piece_ids = Pack::Report::Preseizure.where(user_id: options[:owner_ids]).where('piece_id > 0').filter_by(params[:by_preseizure]).distinct.pluck(:piece_id).presence || [0]
     end
 
     options[:piece_ids] = piece_ids if piece_ids.present?
+     
+    if not params[:by_all].present?
+      options = session[:params_document_piece] if session[:params_document_piece].present? && !params[:reinit].present?
+      session.delete(:params_document_piece) if params[:reinit].present?
+    else
+      session.delete(:params_document_piece)
+      session[:params_document_piece] = options
+    end
 
     options
   end

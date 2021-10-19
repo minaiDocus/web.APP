@@ -32,7 +32,7 @@ class DocumentsMain{
     let search_pattern = $('.search-content #search_input').val();
 
     let data = [];
-    if(serialize_form){ data.push($('#pack_filter_form').serialize().toString()); }
+    if(serialize_form){ data.push($('#pack_filter_form').serialize().toString()); } else { data.push( `reinit=true` )}
     if(search_pattern && search_pattern != ''){ data.push(`text=${encodeURIComponent(search_pattern)}`); }
     if(this.page > 1){ data.push(`page=${this.page}`) }
 
@@ -41,6 +41,11 @@ class DocumentsMain{
       grid_or_list_view = 'grid'
     }
     data.push(`grid_or_list_view=${grid_or_list_view}`)
+
+    if ($('#customer_document_filter').val()){
+      data.push( 'view=' + $('#customer_document_filter').val() )
+    }
+
 
     this.ajax_params['target'] = (append)? null : '.main-content';
     this.ajax_params['data']   = data.join('&');

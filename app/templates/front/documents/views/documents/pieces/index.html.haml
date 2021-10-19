@@ -22,6 +22,12 @@
         %span.me-2= glyphicon('plus', { size: '16', color: '#FFFF'})
         %span Ajouter des documents
   .mb-4
+
+  .row.box.p-2
+    .form-group.no-margin.w-100
+      .float-end.w-25.pt-1
+        = select_tag 'customer_document_filter', options_for_select(accounts_options), id: 'customer_document_filter', multiple: true
+
   .row.main-content
     = javascript_declare_var 'has_next_page', (@packs.size > 0 && @packs.total_count > @packs.size).to_s
     - if @packs.size > 0

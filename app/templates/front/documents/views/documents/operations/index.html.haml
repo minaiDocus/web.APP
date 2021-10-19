@@ -18,6 +18,12 @@
         %span.me-2 Filtrer
         %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
   .mb-4
+
+  .row.box.p-2
+    .form-group.no-margin.w-100
+      .float-end.w-25.pt-1
+        = select_tag 'customer_document_filter', options_for_select(accounts_options), id: 'customer_document_filter', multiple: true
+
   .row.main-content
     = javascript_declare_var 'has_more_result', (@reports.size > 0 && @reports.total_count > @reports.size).to_s
     - if @reports.size > 0

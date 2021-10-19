@@ -24,4 +24,6 @@ jQuery(function() {
   AppListenTo('documents_search_text', (e)=>{ main.load_reports(true); });
 
   AppListenTo('documents_next_page', (e)=>{ main.load_next_page(); });
+
+  AppListenTo('document_customer_filter', (e)=>{ setTimeout(()=>{ main.load_reports(true); }, 2000 ) });
 });

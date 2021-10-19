@@ -1,6 +1,10 @@
 function bind_all_events(){
   $('#delivery-date.daterange, #invoice-date.daterange').val('');
 
+  $('#customer_document_filter').multiSelect({
+    "noneText": "Choix de(s) dossier(s)"
+  });
+
   $('.more-filter').unbind('click').bind('click',function(e) {
     e.stopPropagation();
     $('#more-filter').modal('show');
@@ -103,6 +107,8 @@ function bind_all_events(){
       }
     }
   });
+
+  $('#customer_document_filter').unbind('change').bind('change', function(e){ AppEmit('document_customer_filter'); });
 
   $('.grid .stamp-content').unbind('dblclick').bind('dblclick',function(e) {
     e.stopPropagation();
