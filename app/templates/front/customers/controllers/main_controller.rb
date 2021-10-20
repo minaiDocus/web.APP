@@ -63,7 +63,7 @@ class Customers::MainController < CustomerController
       json_flash[:success] = "Creér avec succès"
     else
       
-      json_flash[:error] = errors_to_list @customer.errors.messages      
+      json_flash[:error] = errors_to_list @customer      
     end
 
     render json: { json_flash: json_flash, url: organization_customer_path(@organization, @customer) }, status: 200

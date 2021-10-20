@@ -33,7 +33,7 @@ class RetrieverParameters::BanksParamsController < RetrieverController
       message = 'Créé avec succès.'
     else
       success = false
-      message = errors_to_list @bank_account.errors.messages
+      message = errors_to_list @bank_account
     end
 
     render json: { success: success, message: message }, status: 200
@@ -60,7 +60,7 @@ class RetrieverParameters::BanksParamsController < RetrieverController
       message = "Modifié avec succès."
     else
       success = false
-      message = errors_to_list @bank_account.errors.messages
+      message = errors_to_list @bank_account
     end
 
     render json: { success: success, message: message.to_s }, status: 200

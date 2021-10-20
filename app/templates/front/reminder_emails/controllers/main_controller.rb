@@ -37,7 +37,7 @@ class ReminderEmails::MainController < OrganizationController
     if @reminder_email.save
       json_flash[:success] = 'Créé avec succès.'
     else
-      json_flash[:error] = errors_to_list @reminder_email.errors.messages
+      json_flash[:error] = errors_to_list @reminder_email
     end
 
     render json: { json_flash: json_flash }, status: 200
@@ -53,7 +53,7 @@ class ReminderEmails::MainController < OrganizationController
     if @reminder_email.update(reminder_email_params)
       json_flash[:success] = 'Modifié avec succès.'
     else
-      json_flash[:error] = errors_to_list @reminder_email.errors.messages
+      json_flash[:error] = errors_to_list @reminder_email
     end
 
     render json: { json_flash: json_flash }, status: 200

@@ -46,7 +46,7 @@ class Addresses::MainController < FrontController
       end
 
       if address
-        error << errors_to_list(address.errors.messages) unless address.save
+        error << errors_to_list(address) unless address.save
       end
     end
 

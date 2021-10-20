@@ -91,8 +91,23 @@ class Journal{
         $('.carousel_item_last_slide').remove();
       }
 
-      $('form#new-journal-form, form#edit-journal-form').submit();
-      self.journal_form_modal.modal('hide');
+      let applicationJS = new ApplicationJS();
+      let data = $('form#new-journal-form, form#edit-journal-form').serialize();
+
+      let ajax_params = {
+                          url: $('form#new-journal-form, form#edit-journal-form').attr('action'),
+                          type: $('form#new-journal-form, form#edit-journal-form').attr('method'),
+                          data: data,
+                          dataType: 'json'
+                        }
+
+      applicationJS.sendRequest(ajax_params).then((e)=>{
+        AppLoading('hide');
+
+        if(!e.json_flash.error){
+          setTimeout(()=>{ window.location.href = e.response_url }, 2000);
+        }
+      });
     });
   }
 

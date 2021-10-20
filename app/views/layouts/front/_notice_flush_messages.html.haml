@@ -3,8 +3,8 @@
 #idocus_notifications_messages.semibold
   .notice.notice-internal-error.hide
     .alert.alert-warning.alert-dismissible.fade.show.alert-type{ class: flash.present? ? '' : 'hide' }
-      %span.me-2= glyphicon('warning', {size: '16', color: '#664d03'})        
-      %span.error-title.bold Attention
+      %span.fs-6.me-2= glyphicon('warning', {size: '16', color: '#664d03'})        
+      %span.fs-6.error-title.bold Attention
       %button.float-end.btn-close.as_idocus_emit{ "aria-label": "Close", idocus: emit_params }
       .message-alert
         - if flash.present?
@@ -14,8 +14,8 @@
                 %li.msg_present= msg        
 
     .alert.alert-danger.alert-dismissible.fade.show.alert-type.hide
-      %span.me-2= glyphicon('warning', {size: '16', color: '#842029'})      
-      %span.error-title.bold= t('views.flush_notifications.bug_error')
+      %span.fs-6.me-2= glyphicon('warning', {size: '16', color: '#842029'})      
+      %span.fs-6.error-title.bold= t('views.flush_notifications.bug_error')
       %button.float-end.btn-close.as_idocus_emit{ "aria-label": "Close", idocus: emit_params }
       .message-alert
         .msg_present

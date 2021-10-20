@@ -130,11 +130,17 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def errors_to_list(errors=[])
+  def errors_to_list(object=nil)
     contents = ''
 
-    errors.each do |key, val|
-      contents += "<li class='errors_element'><strong>#{key.to_s}: </strong>#{ val.join('; ') rescue val.to_s }</li>"
+    if object
+      name   = object.model_name.param_key
+      errors = object.try(:errors).try(:messages) || []
+      errors.each do |key, val|
+        label = t("simple_form.labels.#{name}.#{key.to_s}")
+        label = key.to_s if label.match(/translation missing/)
+        contents += "<li class='errors_element'><span class='fs-6 italic'>#{label}: </span><span class='bold fs-6'>#{ val.join('; ') rescue val.to_s }</span></li>"
+      end
     end
 
     "<ul class='errors_list'>#{contents}</ul>".html_safe

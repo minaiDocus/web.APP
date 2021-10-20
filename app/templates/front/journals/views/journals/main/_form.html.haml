@@ -180,6 +180,8 @@
               = f.label :instructions, :class => "semibold"
               .select-container.no-padding.w-100
                 = f.input :instructions, as: :text, label: false, input_html: { maxlength: 400 }
+          - else
+            Aucune information << option courrier >>
 
           - unless @customer
             .default-options

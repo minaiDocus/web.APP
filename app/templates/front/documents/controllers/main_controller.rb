@@ -165,6 +165,7 @@ class Documents::MainController < FrontController
         end
       end
 
+      preseizures = preseizures.select{ |preseizure| preseizure.is_not_delivered? }
       if preseizures.any?
         preseizures.group_by(&:report_id).each do |_report_id, preseizures_by_report|
           PreAssignment::CreateDelivery.new(preseizures_by_report, %w[ibiza exact_online my_unisoft]).execute
