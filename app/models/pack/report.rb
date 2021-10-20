@@ -4,9 +4,11 @@ class Pack::Report < ApplicationRecord
 
   has_many   :expenses,     class_name: 'Pack::Report::Expense',    inverse_of: :report, dependent: :destroy
   has_many   :preseizures,  class_name: 'Pack::Report::Preseizure', inverse_of: :report, dependent: :destroy
+  has_many   :temp_preseizures,  class_name: 'Pack::Report::TempPreseizure', inverse_of: :report, dependent: :destroy
   has_many   :remote_files, as: :remotable, dependent: :destroy
   has_many   :pre_assignment_deliveries
   has_many   :pre_assignment_exports
+
 
   belongs_to :user
   belongs_to :pack, optional: true
@@ -33,12 +35,6 @@ class Pack::Report < ApplicationRecord
     reports = self.all
     software.nil? ? reports.where.not(is_delivered_to: [nil, '']) : reports.where("is_delivered_to = '#{software}'")
   end
-
-  def operations
-    preseizures = self.preseizures.where('operation_id > 0') || []
-    (preseizures.any?)? preseizures.collect(&:operation).flatten.compact : []
-  end
-
 
   def journal(options={ name_only: true })
     #TODO : separate journal and journal name
@@ -137,7 +133,7 @@ class Pack::Report < ApplicationRecord
     self.preseizures.not_deleted.delivered(software).first.present?
   end
 
-  def set_delivery_message_for(software='ibiza', message)
+  def set_delivery_message_for(software='ibiza', message="can t open connection")
     begin
       mess = self.delivery_message.present? ? JSON.parse(self.delivery_message) : {}
     rescue
@@ -161,6 +157,12 @@ class Pack::Report < ApplicationRecord
     end
     mess
   end
+
+  def operations
+    preseizures = self.preseizures.where('operation_id > 0') || []
+    (preseizures.any?)? preseizures.collect(&:operation).flatten.compact : []
+  end
+
 
   def has_not_delivered_preseizures?
     self.preseizures.where('pack_report_preseizures.delivery_message <> "{}" AND pack_report_preseizures.delivery_message <> null AND pack_report_preseizures.delivery_message <> ""').size > 0
