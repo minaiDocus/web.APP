@@ -94,6 +94,13 @@
     }
   }
 
+
+  $.fn.asSearchableList = function(options={}){
+    if( !this.hasClass('mixed-to-searchable') ){
+      
+    }
+  }
+
   $.fn.serializeObject = function(strict=false){
     var o = {};
     var a = this.serializeArray();

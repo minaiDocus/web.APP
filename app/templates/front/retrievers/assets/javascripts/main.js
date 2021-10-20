@@ -1,6 +1,7 @@
 //=require './events'
 //=require './budgea_api'
 //=require './retrievers_list'
+//=require './budgea_actions'
 //=require './budgea_steps/configuration_steps'
 
 class RetrieverMain{
