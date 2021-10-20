@@ -39,6 +39,7 @@ class DocumentsUploader{
 
     $('#add-document form#fileupload .hidden_analytic_fields').html('');
     $(".analytic_resume_box").html('');
+
     AppEmit('compta_analytics.main_loading', { code: this.current_code, pattern: this.input_journal.val(), type: 'journal', is_used: use_analytics });
   }
 
@@ -88,16 +89,19 @@ jQuery(function() {
 
   uploader.input_user.unbind('change').on('change', function(e){ uploader.fill_journals_and_periods(); });
 
-  //first loading
-  if(uploader.input_user.val())
-    uploader.fill_journals_and_periods();
-
-
   uploader.start_button.livequery(function(){ 
     $('#add-document .btn-add').unbind('click.addition').bind('click.addition', function(e){ VARIABLES.set('can_reload_packs', true); });
   });
 
-  uploader.base_modal.on('shown.bs.modal', function(e){ uploader.initialize_params();});
+  uploader.base_modal.on('shown.bs.modal', function(e){ 
+    uploader.initialize_params();
+
+    //first loading
+    window.setTimeout(()=>{
+      if(uploader.input_user.val())
+        uploader.fill_journals_and_periods();
+    }, 500)
+  });
   uploader.base_modal.on('hide.bs.modal', function(e){ uploader.reload_packs(); });
 
   AppListenTo('compta_analytics.hide_modal', (e)=>{

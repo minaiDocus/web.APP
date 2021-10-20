@@ -238,52 +238,48 @@ module DocumentsHelper
   end
 
   def file_upload_params
-    if has_multiple_accounts?
-      result = {}
+    result = {}
 
-      account_book_types = AccountBookType.where(user: file_upload_users_list)
+    account_book_types = AccountBookType.where(user: file_upload_users_list)
 
-      file_upload_users_list.each do |user|
-        user_account_book_types = account_book_types.select { |abt| abt.user_id == user.id }.sort_by(&:name)
-        user_bank_processable_account_book_types = user_account_book_types.select { |ubpabt| ubpabt.entry_type == 4 || ubpabt.domain == 'BQ - Banque' }
+    file_upload_users_list.each do |user|
+      user_account_book_types = account_book_types.select { |abt| abt.user_id == user.id }.sort_by(&:name)
+      user_bank_processable_account_book_types = user_account_book_types.select { |ubpabt| ubpabt.entry_type == 4 || ubpabt.domain == 'BQ - Banque' }
 
-        period_service              = Billing::Period.new user: user
-        journals                    = []
-        journals_compta_processable = []
+      period_service              = Billing::Period.new user: user
+      journals                    = []
+      journals_compta_processable = []
 
-        if user.authorized_all_upload? || user.try(:options).try(:upload_authorized?)
-          journals = user_account_book_types.map do |j|
-            j.name + ' ' + j.description
-          end
-          journals_compta_processable  = user_account_book_types.map do |j|
-            j.name if j.compta_processable?
-          end.compact
-        elsif user.authorized_bank_upload?
-          journals = user_bank_processable_account_book_types.map{|j| j.name + ' ' + j.description}
-          journals_compta_processable = user_bank_processable_account_book_types.map{|j| j.name if j.compta_processable? }
+      if user.authorized_all_upload? || user.try(:options).try(:upload_authorized?)
+        journals = user_account_book_types.map do |j|
+          j.name + ' ' + j.description
         end
-
-        hsh = {
-          journals: journals,
-          journals_compta_processable: journals_compta_processable,
-          periods:  options_for_period(period_service),
-          is_analytic_used: (user.try(:ibiza).try(:ibiza_id?) && user.uses?(:ibiza) && user.try(:ibiza).try(:compta_analysis_activated?))
-        }
-
-        if period_service.prev_expires_at
-          hsh[:message] = {
-            period: period_option_label(period_service.period_duration, Time.now - period_service.period_duration.month),
-            date:   l(period_service.prev_expires_at, format: '%d %B %Y à %H:%M')
-          }
-        end
-
-        result[user.code] = hsh
+        journals_compta_processable  = user_account_book_types.map do |j|
+          j.name if j.compta_processable?
+        end.compact
+      elsif user.authorized_bank_upload?
+        journals = user_bank_processable_account_book_types.map{|j| j.name + ' ' + j.description}
+        journals_compta_processable = user_bank_processable_account_book_types.map{|j| j.name if j.compta_processable? }
       end
 
-      result
-    else
-      {}
+      hsh = {
+        journals: journals,
+        journals_compta_processable: journals_compta_processable,
+        periods:  options_for_period(period_service),
+        is_analytic_used: (user.try(:ibiza).try(:ibiza_id?) && user.uses?(:ibiza) && user.try(:ibiza).try(:compta_analysis_activated?))
+      }
+
+      if period_service.prev_expires_at
+        hsh[:message] = {
+          period: period_option_label(period_service.period_duration, Time.now - period_service.period_duration.month),
+          date:   l(period_service.prev_expires_at, format: '%d %B %Y à %H:%M')
+        }
+      end
+
+      result[user.code] = hsh
     end
+
+    result
   end
 
   def verif_debit_credit_somme_of(preseizure_entries)
