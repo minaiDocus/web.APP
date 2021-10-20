@@ -67,13 +67,13 @@
 
           / - if retriever.waiting_selection?
           /   - if retriever.provider?
-          /     = link_to 'Sélectionnez vos documents', select_account_retrieved_documents_path({ account_id: retriever.user.id, document_contains: { retriever_id: retriever }}), class: 'btn btn-primary'
+          /     = link_to 'Sélectionnez vos documents', retrievers_historics_path(tab: 'documents'), class: 'btn btn-primary'
           /   - else
-          /     = link_to 'Sélectionnez vos comptes', account_bank_accounts_path({ account_id: retriever.user.id, bank_account_contains: { retriever_id: retriever, retriever_budgea_id: retriever.budgea_id }}), class: 'btn btn-primary'
+          /     = link_to 'Sélectionnez vos comptes', retrievers_historics_path, class: 'btn btn-primary'
 
           //bridge actions
         - elsif retriever.bridge_id
-          = link_to glyphicon('pencil', { size: '14', color:'rgba(26, 26, 26, 0.32);'}), Bridge::EditItem.new(retriever.user, retriever).execute, title: 'Editer', class: 'btn btn-light', target: '_blank', rel: 'tooltip'
-          = link_to glyphicon('trash', { size: '14', color:'red'}), bridge_delete_path(retriever_id: retriever.id), title: 'Supprimer', class: 'btn btn-light', target: '_blank', rel: 'tooltip'
-          = link_to "Lancer la procédure d'authentification", Bridge::OtpItem.new(retriever.user, retriever).execute, class: 'btn.btn-primary', target: '_blank' if retriever.bridge_status == 1010
-          = link_to "Lancer la procédure d'authentification", Bridge::ValidateProItem.new(retriever.user).execute, class: 'btn.btn-primary', target: '_blank' if retriever.bridge_status == 1100
+          = link_to glyphicon('pencil', { size: '14', color:'rgba(26, 26, 26, 0.32);'}), Bridge::EditItem.new(retriever.user, retriever).execute, title: 'Editer', class: 'ms-1 animated-pointer', target: '_blank', rel: 'tooltip'
+          = link_to glyphicon('trash', { size: '14', color:'red'}), bridge_delete_path(retriever_id: retriever.id), title: 'Supprimer', class: 'ms-1 animated-pointer', target: '_blank', rel: 'tooltip'
+          = link_to "Lancer la procédure d'authentification", Bridge::OtpItem.new(retriever.user, retriever).execute, class: 'btn btn-primary', target: '_blank' if retriever.bridge_status == 1010
+          = link_to "Lancer la procédure d'authentification", Bridge::ValidateProItem.new(retriever.user).execute, class: 'btn btn-primary', target: '_blank' if retriever.bridge_status == 1100

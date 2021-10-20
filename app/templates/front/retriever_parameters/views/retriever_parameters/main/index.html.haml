@@ -5,7 +5,7 @@
     .col-md-8.text-start
       %h3.bold Paramètres Divers
     .col-md-3.p-1
-      = select_tag 'account_id', options_for_select(customers_active, @account.try(:id)), include_blank: false, class: 'form-select'
+      = select_tag 'account_id', options_for_select(customers_active, @account.try(:id)), include_blank: false, class: 'chosen-list w-100'
     .col-md-1.text-start.p-1
       %button.btn.btn-light.semibold.retriever-filter-others.w-100.filter-banks.hide{ disabled: false }
         %span.me-2 Filtrer

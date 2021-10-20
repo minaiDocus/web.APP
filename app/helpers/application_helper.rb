@@ -4,17 +4,11 @@ module ApplicationHelper
   def javascript_declare_var(name, value='')
     # content_tag :span, Base64.encode64(value.to_s), class: 'js_var_setter', id: "js_var_#{name}", style: 'display: none'
     content_tag(:div, javascript_tag("
+      document.write('<span class=\"hide js_var_setter\" id=\"js_var_#{name}\">#{Base64.encode64(value.to_s).strip}</span>');
       jQuery(function(){
-        if($('.js_var_setter#js_var_#{name}').length > 0)
-        {
-          $('.js_var_setter#js_var_#{name}').text('#{Base64.encode64(value.to_s).strip}');
-        }
-        else
-        {
-          $('footer').append('<span class=\"hide js_var_setter\" id=\"js_var_#{name}\">#{Base64.encode64(value.to_s).strip}</span>');
-        }
-
-        setTimeout((e)=>{ $('#js_var_setter_content_#{name}').remove() }, 1000);
+        setTimeout((e)=>{
+          $('#js_var_setter_content_#{name}').remove(); }
+        , 3000);
       });"), { type: "text/javascript", style: 'display: none', id: "js_var_setter_content_#{name}" }, escape: false).html_safe
   end
 

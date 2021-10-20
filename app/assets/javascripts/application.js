@@ -167,8 +167,6 @@
       let value = $(this).text().trim();
 
       VARIABLES.set(name, atob(value));
-
-      console.log(VARIABLES.get('has_next_page'));
     });
   }
 
@@ -219,7 +217,9 @@
 /************************ MAIN CLASS ********************************/
 class ApplicationJS {
   constructor(){
+    AppParseVars();
     // console.log( "Controller: " + VARIABLES.get('controller_path') );
+    console.log( "Env: " + VARIABLES.get('rails_env') );
   }
 
   noticeAllMessageFrom(page=null){
