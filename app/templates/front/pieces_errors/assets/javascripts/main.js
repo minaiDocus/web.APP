@@ -44,7 +44,7 @@ class PiecesErrorsMain{
     }catch(e){}
 
     let ajax_params =   {
-                          'url': `/pieces/${type.replaceAll('-', '_')}?${params.join('&')}`,
+                          'url': `/pieces/${type.replace(/\-/g, '_')}?${params.join('&')}`,
                           'dataType': 'html',
                           'target': ''
                         };

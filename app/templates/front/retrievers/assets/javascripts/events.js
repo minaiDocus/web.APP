@@ -158,6 +158,7 @@ jQuery(function() {
   AppListenTo('window.application_auto_rebind', (e)=>{ bind_all_events() });
 
     /* SCROLLING TO THE BOTTOM */
+  var end_reached = true;
   $('.body_content').scroll(function() {
     let content_h  = $('.body_content').outerHeight();
     let content    = document.getElementsByClassName("body_content")[0];
@@ -172,10 +173,11 @@ jQuery(function() {
       }
     }
 
-    if(c_position > (content_h + 200))
+    if( c_position >= (content_h + 75) ){
+      end_reached = false
       show_hide_more_result('hide');
-
-    if(c_position == content_h){
+    }else if(!end_reached){
+      end_reached = true;
       show_hide_more_result('show');
     }
   });

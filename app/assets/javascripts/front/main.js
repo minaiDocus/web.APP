@@ -279,6 +279,7 @@ jQuery(function () {
   })
 
   /* SCROLLING TO THE BOTTOM */
+  var end_reached_main = true;
   $('.body_content').scroll(function() {
     let content_h  = $('.body_content').outerHeight();
     let content    = document.getElementsByClassName("body_content")[0];
@@ -289,7 +290,11 @@ jQuery(function () {
     else
       $('.scroll-on-top').hide('slow');
 
-    if(c_position == content_h)
+    if( c_position >= (content_h + 75) ){
+      end_reached_main = false
+    }else if(!end_reached_main){
+      end_reached_main = true;
       AppEmit('on_scroll_end');
+    }
   });
 });

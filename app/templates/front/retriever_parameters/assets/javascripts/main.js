@@ -56,7 +56,7 @@ class RetrievedParametersMain{
     }catch(e){}
 
     let ajax_params =   {
-                          'url': `/retriever/${type.replaceAll('-', '_')}?${params.join('&')}`,
+                          'url': `/retriever/${type.replace(/\-/g, '_')}?${params.join('&')}`,
                           'dataType': 'html',
                           'target': ''
                         };

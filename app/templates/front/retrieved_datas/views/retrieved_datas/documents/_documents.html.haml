@@ -16,7 +16,7 @@
             - documents.each do |document|
               %tr
                 %td= l(document.created_at)
-                %td 
+                %td.semibold
                   - if document.retriever.nil?
                     %span.label supprimé
                   = document.retriever_name

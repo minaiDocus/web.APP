@@ -3,13 +3,19 @@
 module ApplicationHelper
   def javascript_declare_var(name, value='')
     # content_tag :span, Base64.encode64(value.to_s), class: 'js_var_setter', id: "js_var_#{name}", style: 'display: none'
-    content_tag(:div, javascript_tag("
-      document.write('<span class=\"hide js_var_setter\" id=\"js_var_#{name}\">#{Base64.encode64(value.to_s).strip}</span>');
-      jQuery(function(){
-        setTimeout((e)=>{
-          $('#js_var_setter_content_#{name}').remove(); }
-        , 3000);
-      });"), { type: "text/javascript", style: 'display: none', id: "js_var_setter_content_#{name}" }, escape: false).html_safe
+    _var    = content_tag(:span, Base64.encode64(value.to_s).strip, { class: 'hide js_var_setter', id: "js_var_#{name}" }).html_safe
+    _js_tag = content_tag(:div, javascript_tag("
+                                jQuery(function(){
+                                  setTimeout((e)=>{
+                                    $('#js_var_setter_content_#{name}').remove(); }
+                                  , 3000);
+                                });"
+                )).html_safe
+
+
+    content_tag :div, { style: "display: none", id: "js_var_setter_content_#{name}" }, escape: false do
+      _var + _js_tag
+    end
   end
 
   def param_encode(input)
