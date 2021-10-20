@@ -14,19 +14,22 @@ function bind_all_events_account_number_rules(){
 
       $('select#customers-list').searchableOptionList({
         'noneText': 'Selectionner un/des clients affectés par la règle',
-        'allText': 'Tous séléctionnés'
+        'allText': 'Tous séléctionnés',
+        'maxHeight': '300px'
       });
 
       $('select#groups-list').searchableOptionList({
         'noneText': 'Selectionner un/des groupe(s) affectés par la règle',
-        'allText': 'Tous séléctionnés'
+        'allText': 'Tous séléctionnés',
+        'maxHeight': '300px'
       });
     }
 
     if (target === 'download-modal') {
       $('select#affect-rule-to').asMultiSelect({
         'noneText': 'Selectionner un/des affectations',
-        'allText': 'Tous séléctionnés'
+        'allText': 'Tous séléctionnés',
+        'maxHeight': '300px'
       });
     }
 

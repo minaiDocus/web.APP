@@ -6,7 +6,7 @@
 - addresses_index               = controller_path == 'organizations/addresses' && action_name == 'index'
 - organization_software_setting = controller_path == 'software_setting/main' && action_name == 'index'
 - organization_efs              = controller_path == 'external_file_storages/efs_organization' && action_name == 'index'
-- organization_edit_payment     = controller_path == 'organizations/main' && action_name == 'edit_payment'
+- organization_edit_payment     = controller_path == 'payments/main' && action_name == 'edit_payment'
 - organization_subscription     = controller_path == 'organizations/subscriptions' && action_name == 'show'
 - organization_file_sending_kit = controller_path == 'file_sending_kits/main' && ( action_name == 'select' || action_name == 'edit' || action_name == 'show' )
 
@@ -83,7 +83,7 @@
       - unless @organization.specific_mission
         %li.direct_links{ data: { href: "#{@organization.id}/paper_set_orders" } }
           %a{href: organization_paper_set_orders_path(@organization) }
-            %span.link_principal{class: (controller_path == 'paper_set_orders/main')? 'active' : ''}= t('organizations.paper_set_order')
+            %span.link_principal{class: (controller_path == 'paper_set_orders/main')? 'active' : ''}= CustomUtils.is_manual_paper_set_order?(@organization)? 'Kits de numérisation' : t('organizations.paper_set_order')
       %li.direct_links{ data: { href: "#{@organization.id}/account_sharing" } }
         %a{href: account_sharings_organization_path(@organization) }
           %span.link_principal{class: (controller_path == 'account_sharings/organization')? 'active' : ''}= t('folders.shared_folders')

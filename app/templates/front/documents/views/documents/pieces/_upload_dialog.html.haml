@@ -9,7 +9,7 @@
           - if has_multiple_accounts?
             .form-group
               %label.semibold Code client
-              = select_tag :file_code, options_for_select(file_upload_users_list.map{ |e| [e.short_info, e.code] }), include_blank: true, data: { placeholder: 'Choisir un client'}, id: :file_code, class: 'form-select'
+              = select_tag :file_code, options_for_select(file_upload_users_list.map{ |e| [e.short_info, e.code] }), include_blank: true, data: { placeholder: 'Choisir un client'}, id: :file_code, class: 'chosen-list w-100'
           - else
             = hidden_field_tag :file_code, @user.code
           .form-group

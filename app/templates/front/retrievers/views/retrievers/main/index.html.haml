@@ -2,11 +2,11 @@
 
 .container-fluid
   .row
-    .col-md-4.text-start.derivationLeft
+    .col-md-2.text-start.derivationLeft
       %h3.bold
         Mes automates
         %span.badge.badge-secondary.regular.total-count= @retrievers.total_count
-    .col-md-8.text-start.resp-view.derivationRight
+    .col-md-10.text-start.resp-view.derivationRight
       .row.choose_retriever_action.float-end.w-50
         - if @account
           - if @is_budgea
@@ -32,7 +32,7 @@
         %button.btn.btn-light.semibold.retriever-filter.w-100{ disabled: false }
           %span.me-2 Filtrer
           %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
-      = select_tag 'account_id', options_for_select(customers_active.unshift(['Tous', 'all']), @account.try(:id) || 'all'), include_blank: false, class: 'form-select float-end w-25'
+      = select_tag 'account_id', options_for_select(customers_active.unshift(['Tous', 'all']), @account.try(:id) || 'all'), include_blank: false, class: 'chosen-list float-end w-25'
 
   .mb-4
 

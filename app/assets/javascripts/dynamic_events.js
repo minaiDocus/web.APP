@@ -1,6 +1,12 @@
 function elements_initializer(){
   $('.searchable-option-list').asMultiSelect({ maxHeight: '300px' });
 
+  $('.chosen-list').asChosenList({
+    search_contains: true,
+    no_results_text: 'Aucun résultat correspondant à',
+    inherit_select_classes: true
+  });
+
   $('.singledate').asDateRange({
     defaultBlank: true,
     "autoApply": true,

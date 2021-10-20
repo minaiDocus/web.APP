@@ -95,9 +95,10 @@
   }
 
 
-  $.fn.asSearchableList = function(options={}){
-    if( !this.hasClass('mixed-to-searchable') ){
-      
+  $.fn.asChosenList = function(options={}){
+    if( !this.hasClass('mixed-to-chosen') ){
+      this.chosen(options);
+      this.addClass('mixed-to-chosen');
     }
   }
 

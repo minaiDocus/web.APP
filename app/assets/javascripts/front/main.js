@@ -12,7 +12,7 @@ function calculate_footer_marginer(){
     customer_h = $('.customer_header').outerHeight();
   }
 
-  $('.body_content').css('max-height', (window_h - margin - footer_h) + customer_h);
+  $('.body_content').css('height', (window_h - margin - footer_h) + customer_h);
 }
 
 function init_menu_animation(){
