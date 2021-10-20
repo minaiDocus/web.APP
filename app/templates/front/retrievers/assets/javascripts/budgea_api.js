@@ -589,7 +589,7 @@ class BudgeaApi{
         }
       };
       return self.local_fetch({
-        url: "/retriever/get_retriever_infos",
+        url: "/retriever/retriever_infos",
         data: {
           id: id,
           remote_method: 'POST'
