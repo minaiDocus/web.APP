@@ -272,6 +272,10 @@ img{
   font-family: Raleway-Regular;
 }
 
+.multi-select-container{
+  padding: 10px;
+}
+
 .multi-select-container span svg{
   width: 14px !important;
   height: 14px !important;

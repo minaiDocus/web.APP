@@ -26,40 +26,39 @@
               .form-group
                 %label Nom de tiers
                 .select-container.no-padding.w-100
-                  %input{ name: 'by_preseizure[third_party]', value: (session_document_operation[:third_party] rescue nil) }
+                  %input{ name: 'by_preseizure[third_party]', value: (session_document_operation[:by_preseizure][:third_party] rescue nil) }
               .form-group
                 %label N° de pièce
                 .select-container.no-padding.w-100
-                  %input{ name: 'by_preseizure[piece_number]', value: (session_document_operation[:piece_number] rescue nil) }
+                  %input{ name: 'by_preseizure[piece_number]', value: (session_document_operation[:by_preseizure][:piece_number] rescue nil) }
               .form-group
                 %label Livraison/Export écriture comptable
-                = select_tag 'by_preseizure[is_delivered]', options_for_select([['Livrée', 1], ['Non livrée', 2], ['Avec erreur',3], ['Téléchargée', 4], ['Non récupérée', 5]], (session_document_operation[:pre_assignment_is_delivered] rescue nil)), include_blank: true, class: 'form-select', id: 'delivery'
+                = select_tag 'by_preseizure[is_delivered]', options_for_select([['Livrée', 1], ['Non livrée', 2], ['Avec erreur',3], ['Téléchargée', 4], ['Non récupérée', 5]], (session_document_operation[:by_preseizure][:is_delivered] rescue nil)), include_blank: true, class: 'form-select', id: 'delivery'
               .form-group
                 %label Date de livraison              
                 .input-group.mb-3
                   %span.show-calendar.input-group-text{ data: { ref: 'delivery-date' } }= glyphicon('calendar', { size: '14', color: 'background: rgba(26, 26, 26, 0.7)' })       
-                  %input.form-control.value-content.date.daterange#delivery-date{ type: :text, name: 'by_preseizure[delivery_tried_at]', value: (session_document_operation[:delivery_tried_at] rescue nil)}
+                  %input.form-control.value-content.date.daterange#delivery-date{ type: :text, name: 'by_preseizure[delivery_tried_at]', value: (session_document_operation[:by_preseizure][:delivery_tried_at] rescue nil)}
                   %span.show-calendar.input-group-text-right{ data: { ref: 'delivery-date' } }= glyphicon('chevron-bottom', { size: '12', color: 'background: rgba(26, 26, 26, 0.7)' })             
               .form-group
                 %label Date de facture
                 .input-group.mb-3
                   %span.show-calendar.input-group-text{ data: { ref: 'invoice-date' } }= glyphicon('calendar', { size: '14', color: 'background: rgba(26, 26, 26, 0.7)' })
-                  %input.form-control.value-content.date.daterange#invoice-date{ type: :text, name: 'by_preseizure[date]', value: (session_document_operation[:pre_assignment_date] rescue nil)}
+                  %input.form-control.value-content.date.daterange#invoice-date{ type: :text, name: 'by_preseizure[date]', value: (session_document_operation[:by_preseizure][:pre_assignment_date] rescue nil)}
                   %span.show-calendar.input-group-text-right{ data: { ref: 'invoice-date' } }= glyphicon('chevron-bottom', { size: '12', color: 'background: rgba(26, 26, 26, 0.7)' })
               .form-group
                 %label Montant
                 .row
                   .col-md-4.compare-choice
-                    = select_tag 'by_preseizure[amount_operation]', options_for_select([['Eg à', 0], ['Sup - Eg à', 1], ['Inf - Eg à', 2]], (session_document_operation[:amount_operation] rescue nil)), include_blank: false, class: 'form-select', id: 'compare'
+                    = select_tag 'by_preseizure[amount_operation]', options_for_select([['Eg à', 0], ['Sup - Eg à', 1], ['Inf - Eg à', 2]], (session_document_operation[:by_preseizure][:amount_operation] rescue nil)), include_blank: false, class: 'form-select', id: 'compare'
                   .col-md-8
                     .select-container
-                      %input.value-content{ name: 'by_preseizure[amount]', value: (session_document_operation[:amount] rescue nil) }
+                      %input.value-content{ name: 'by_preseizure[amount]', value: (session_document_operation[:by_preseizure][:amount] rescue nil) }
                 
 
       .modal-footer
         .row.w-100
-          .col-md-8.d-inline-block
-            %button.btn.btn-default.semibold.btn-reinit{:type => 'button', id: 'launch-reinit'} Réinitialiser    
+          .col-md-8.d-inline-block            
           .col-md-4.d-inline-block.ps-1.text-end
             %button.btn.btn-light.semibold{'data-bs-dismiss' => 'modal', :type => 'button'} Annuler
             %button.btn.btn-primary.semibold.btn-add{:type => 'button', id: 'launch-filter'} Filtrer

@@ -25,5 +25,5 @@ jQuery(function() {
 
   AppListenTo('documents_next_page', (e)=>{ main.load_next_page(); });
 
-  AppListenTo('document_customer_filter', (e)=>{ setTimeout(()=>{ main.load_reports(true); }, 2000 ) });
+  AppListenTo('document_customer_filter', (e)=>{ main.load_reports(true); });
 });

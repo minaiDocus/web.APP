@@ -39,38 +39,36 @@ class Documents::OperationsController < FrontController
     options[:position_operation] = params[:by_piece].try(:[], :position_operation)
 
     options[:name] = params[:text]
+    options[:by_preseizure] = params[:by_preseizure]
 
-    options[:pre_assignment_is_delivered] = params[:by_preseizure].try(:[], 'is_delivered')
-    
-    options[:delivery_tried_at] = params[:by_preseizure].try(:[], 'delivery_tried_at')
-    options[:date] = params[:by_preseizure].try(:[], 'date')    
-
-    options[:third_party] = params[:by_preseizure].try(:[], 'third_party')
-    options[:piece_number] = params[:by_preseizure].try(:[], 'piece_number')
-
-    options[:amount] = params[:by_preseizure].try(:[], 'amount')
-    options[:amount_operation] = params[:by_preseizure].try(:[], 'amount_operation')
+    if !params[:by_all].present? && !params[:by_preseizure].present?      
+      options = session[:params_document_operation] if session[:params_document_operation].present? && !params[:reinit].present?
+      session.delete(:params_document_operation)    if params[:reinit].present?            
+    end
 
     options[:user_ids] = if params[:view].present? && params[:view] != 'all'
-                            params[:view].split(',')   
+                        params[:view].split(',')
+                      elsif session[:params_document_operation].try(:[], :user_ids).present?
+                        session[:params_document_operation][:user_ids]               
+                      else
+                        account_ids
+                      end
+
+    options[:journal] =   if params[:journal].present? 
+                            params[:journal].split(',')
+                          elsif session[:params_document_operation].try(:[], :journal).present?
+                            session[:params_document_operation][:journal]
                           else
-                            account_ids
+                            []
                           end
 
-    if params[:by_preseizure].present? && (params[:by_preseizure].try(:[], 'is_delivered') != "" || params[:by_preseizure].try(:[], 'third_party') != "" || params[:by_preseizure].try(:[], 'delivery_tried_at') != "" || params[:by_preseizure].try(:[], 'date') != "" || params[:by_preseizure].try(:[], 'amount') != '')
-      reports_ids = Pack::Report::Preseizure.where(user_id: options[:user_ids]).where('operation_id > 0').filter_by(params[:by_preseizure]).distinct.pluck(:report_id).presence || [0]      
+    if options[:by_preseizure].present? && (options[:by_preseizure].try(:[], 'is_delivered') != "" || options[:by_preseizure].try(:[], 'third_party') != "" || options[:by_preseizure].try(:[], 'delivery_tried_at') != "" || options[:by_preseizure].try(:[], 'date') != "" || options[:by_preseizure].try(:[], 'amount') != '')
+      reports_ids = Pack::Report::Preseizure.where(user_id: options[:user_ids]).where('operation_id > 0').filter_by(options[:by_preseizure]).distinct.pluck(:report_id).presence || [0]      
     end
 
-    options[:ids] = reports_ids if reports_ids.present?
-     
-    if not params[:by_all].present?
-      options = session[:params_document_operation] if session[:params_document_operation].present? && !params[:reinit].present?
-      session.delete(:params_document_operation) if params[:reinit].present?
-    else
-      session.delete(:params_document_operation)
-      session[:params_document_operation] = options
-    end
-
+    options[:ids] = reports_ids if reports_ids.present?    
+ 
+    session[:params_document_operation] = options.dup.reject{ |k,v| k == :ids } unless params[:reinit].present?
     options
   end
 

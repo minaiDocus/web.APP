@@ -5,6 +5,10 @@ function bind_all_events(){
     "noneText": "Choix de(s) dossier(s)"
   });
 
+  $('#journal_document_filter').multiSelect({
+    "noneText": "Choix journaux"
+  });
+
   $('.more-filter').unbind('click').bind('click',function(e) {
     e.stopPropagation();
     $('#more-filter').modal('show');
@@ -108,7 +112,9 @@ function bind_all_events(){
     }
   });
 
-  $('#customer_document_filter').unbind('change').bind('change', function(e){ AppEmit('document_customer_filter'); });
+  $('.filter-customer-journal').unbind('click').bind('click', function(e){ AppEmit('document_customer_filter'); });
+
+  $('.to-filter').unbind('click').bind('click', function(e){ $('#badge-filter').val($(this).attr('id')); AppEmit('filter_pack_badge'); });
 
   $('.grid .stamp-content').unbind('dblclick').bind('dblclick',function(e) {
     e.stopPropagation();
@@ -121,7 +127,7 @@ function bind_all_events(){
   });
 
   $('#more-filter .modal-footer .btn-add').unbind('click').bind('click', function(){ AppEmit('documents_load_datas'); });
-  $('#more-filter .modal-footer .btn-reinit').unbind('click').bind('click', function(){ AppEmit('documents_reinit_datas'); });
+  $('.btn-reinit').unbind('click').bind('click', function(){ AppEmit('documents_reinit_datas'); });
 
   $('.search-content #search_input').unbind('keyup').bind('keyup', function(e){ if(e.key == 'Enter'){ /*e.keyCode == 13*/ AppEmit('documents_search_text'); } });
   $('.search-content .glass svg').unbind('click').bind('click', function(e){ AppEmit('documents_search_text'); });

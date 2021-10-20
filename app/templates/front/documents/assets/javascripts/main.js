@@ -32,7 +32,8 @@ class DocumentsMain{
     let search_pattern = $('.search-content #search_input').val();
 
     let data = [];
-    if(serialize_form){ data.push($('#pack_filter_form').serialize().toString()); } else { data.push( `reinit=true` )}
+    if(serialize_form){ data.push($('#pack_filter_form').serialize().toString()); } 
+    else { $('input, select').val(''); data.push( `reinit=true` );  }
     if(search_pattern && search_pattern != ''){ data.push(`text=${encodeURIComponent(search_pattern)}`); }
     if(this.page > 1){ data.push(`page=${this.page}`) }
 
@@ -46,6 +47,13 @@ class DocumentsMain{
       data.push( 'view=' + $('#customer_document_filter').val() )
     }
 
+    if($('#journal_document_filter').val()){
+      data.push( 'journal=' + $('#journal_document_filter').val() )
+    }
+
+    if($('#badge-filter').val()){
+      data.push( 'badge_filter=' + $('#badge-filter').val() )
+    }
 
     this.ajax_params['target'] = (append)? null : '.main-content';
     this.ajax_params['data']   = data.join('&');

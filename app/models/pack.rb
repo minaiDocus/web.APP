@@ -78,17 +78,45 @@ class Pack < ApplicationRecord
     
     # WARN : do not change "unless..nil?" to "if..present?, an empty owner_ids must be passed to the query
     query = query.where(owner_id: options[:owner_ids]) unless options[:owner_ids].nil?
+
     query = query.joins(:pieces).where(pack_pieces: { id: options[:piece_ids] }) unless options[:piece_ids].nil?
 
     query = query.joins(:pieces).where('packs.name LIKE ? OR packs.tags LIKE ? OR pack_pieces.name LIKE ? OR pack_pieces.tags LIKE ? OR pack_pieces.content_text LIKE ?', "%#{text}%", "%#{text}%", "%#{text}%",  "%#{text}%", "%#{text}%") if text.present?
 
     query = query.joins(:owner).where('packs.name LIKE ? OR LOWER(users.company) LIKE ? ', "%#{options[:name]}%", "%#{options[:name].downcase}%") if options[:name].present?
+
+    if options[:journal].present?
+      _query_journal = ""
+      _query_or = ""
+
+      options[:journal].each do |jl| 
+        _query_journal += _query_or + "packs.name LIKE '% #{jl} %'"
+        _query_or = " OR "
+      end
+
+      query = query.where(_query_journal)
+    end
+
     query = query.joins(:pieces).where("packs.tags LIKE ? OR pack_pieces.tags LIKE ?", "%#{options[:tags]}%", "%#{options[:tags]}%") if options[:tags].present?
 
     query = query.joins(:pieces).where("DATE_FORMAT(pack_pieces.created_at, '%Y-%m-%d') #{options[:piece_created_at_operation].tr('012', ' ><')}= ?", options[:piece_created_at]) if options[:piece_created_at]
     query = query.joins(:pieces).where("pack_pieces.position #{options[:position_operation].tr('012', ' ><')}= ?", options[:position]) if options[:position].present?
 
     query = query.joins(:pieces).where(pack_pieces: { pre_assignment_state: options[:pre_assignment_state].try(:split, ',') }) if options[:pre_assignment_state].present?
+
+    if options[:badge_filter].present?
+      case options[:badge_filter]
+      when 'new-pack'
+        query = query.where('created_at > ?', 1.days.ago)
+      when 'preseizure-not-delivered'
+        query
+      when 'pack-consequent'
+        # query = query.joins(:pieces).having('COUNT(pack_pieces.id) >= 20')
+        query
+      else
+        query
+      end
+    end
 
     query = query.order(updated_at: :desc) if options[:sort] == true
 

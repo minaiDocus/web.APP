@@ -9,7 +9,7 @@ class Documents::PiecesController < FrontController
 
   # GET /documents
   def index
-    @packs = Pack.includes(pieces: [:expense], owner: [:organization, :ibiza, :exact_online, :my_unisoft]).search(params.try(:[], :by_piece).try(:[], :content), options).distinct.order(updated_at: :desc).page(options[:page]).per(options[:per_page])
+    @packs = Pack.includes(pieces: [:expense], owner: [:organization, :ibiza, :exact_online, :my_unisoft]).search(params.try(:[], :by_piece).try(:[], :content), options.reject{ |k,v| k == :ids}).distinct.order(updated_at: :desc).page(options[:page]).per(options[:per_page])
     @packs_with_failed_delivery_ids = packs_with_failed_delivery
 
     @period_service = Billing::Period.new user: @user
@@ -191,38 +191,45 @@ class Documents::PiecesController < FrontController
     options[:pre_assignment_state] = params[:by_piece].try(:[], :state_piece)
     options[:piece_number] = params[:by_piece].try(:[], :piece_number)
 
-    options[:pre_assignment_is_delivered] = params[:by_preseizure].try(:[], 'is_delivered')
-    
-    options[:delivery_tried_at] = params[:by_preseizure].try(:[], 'delivery_tried_at')
-    options[:pre_assignment_date] = params[:by_preseizure].try(:[], 'date')
-    
+    options[:by_preseizure] = params[:by_preseizure]
 
-    options[:third_party] = params[:by_preseizure].try(:[], 'third_party')
-    options[:piece_number] = params[:by_preseizure].try(:[], 'piece_number')
-
-    options[:amount] = params[:by_preseizure].try(:[], 'amount')
-    options[:amount_operation] = params[:by_preseizure].try(:[], 'amount_operation')
+    if !params[:by_all].present? && !params[:by_piece].present? && !params[:by_preseizure].present?      
+      options = session[:params_document_piece] if session[:params_document_piece].present? && !params[:reinit].present?
+      session.delete(:params_document_piece)    if params[:reinit].present?            
+    end
 
     options[:owner_ids] = if params[:view].present? && params[:view] != 'all'
-                            params[:view].split(',')                            
+                            params[:view].split(',')
+                          elsif session[:params_document_piece].try(:[], :owner_ids).present?
+                            session[:params_document_piece][:owner_ids]               
                           else
                             account_ids
                           end
 
-    if params[:by_preseizure].present? && (params[:by_preseizure].try(:[], 'is_delivered') != "" || params[:by_preseizure].try(:[], 'third_party') != "" || params[:by_preseizure].try(:[], 'delivery_tried_at') != "" || params[:by_preseizure].try(:[], 'date') != "" || params[:by_preseizure].try(:[], 'amount') != '')
-      piece_ids = Pack::Report::Preseizure.where(user_id: options[:owner_ids]).where('piece_id > 0').filter_by(params[:by_preseizure]).distinct.pluck(:piece_id).presence || [0]
+    options[:journal] =   if params[:journal].present? 
+                            params[:journal].split(',')
+                          elsif session[:params_document_piece].try(:[], :journal).present?
+                            session[:params_document_piece][:journal]
+                          else
+                            []
+                          end
+
+    options[:badge_filter] =  if params[:badge_filter].present?
+                                params[:badge_filter] 
+                              elsif session[:params_document_piece].try(:[], :badge_filter).present?
+                                session[:params_document_piece][:badge_filter]
+                              else
+                                ""
+                              end
+
+
+    if options[:by_preseizure].present? && (options[:by_preseizure].try(:[], 'is_delivered') != "" || options[:by_preseizure].try(:[], 'third_party') != "" || options[:by_preseizure].try(:[], 'delivery_tried_at') != "" || options[:by_preseizure].try(:[], 'date') != "" || options[:by_preseizure].try(:[], 'amount') != '')
+      piece_ids = Pack::Report::Preseizure.where(user_id: options[:owner_ids]).where('piece_id > 0').filter_by(options[:by_preseizure]).distinct.pluck(:piece_id).presence || [0]
     end
 
     options[:piece_ids] = piece_ids if piece_ids.present?
-     
-    if not params[:by_all].present?
-      options = session[:params_document_piece] if session[:params_document_piece].present? && !params[:reinit].present?
-      session.delete(:params_document_piece) if params[:reinit].present?
-    else
-      session.delete(:params_document_piece)
-      session[:params_document_piece] = options
-    end
 
+    session[:params_document_piece] = options.dup.reject{ |k,v| k == :piece_ids } unless params[:reinit].present?
     options
   end
 

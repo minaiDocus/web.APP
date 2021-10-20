@@ -27,5 +27,6 @@ jQuery(function() {
 
   AppListenTo('documents_next_page', (e)=>{ main.load_next_page(); });
 
-  AppListenTo('document_customer_filter', (e)=>{ setTimeout(()=>{ main.load_packs(true); }, 2000 ) });
+  AppListenTo('document_customer_filter', (e)=>{ main.load_packs(true); });
+  AppListenTo('filter_pack_badge', (e)=>{ main.load_packs(true); });
 });

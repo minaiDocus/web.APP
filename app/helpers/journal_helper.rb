@@ -168,4 +168,12 @@ module JournalHelper
   def bank_account_type_name
     BankAccount.type_name_list
   end
+
+  def accounts_journaux(operation=false)
+    if !operation
+      accounts.map{ |acc| acc.account_book_types }.map{ |book| book.collect(&:name)}.flatten.uniq
+    else
+      accounts.map{ |acc| acc.bank_accounts.collect(&:journal) }.flatten.uniq 
+    end
+  end
 end
