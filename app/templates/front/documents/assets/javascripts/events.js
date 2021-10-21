@@ -2,16 +2,14 @@ function bind_all_events(){
   $('#delivery-date.daterange, #invoice-date.daterange').val('');
 
   $('#customer_document_filter').multiSelect({
-    "noneText": "Choix de(s) dossier(s)",
-    "maxHeight": "300px",
+    "noneText": "Choix dossiers",
   });
 
   $('#journal_document_filter').multiSelect({
     "noneText": "Choix journaux",
-    "maxHeight": "300px",
   });
 
-  $('#customer_document_filter').unbind('change').bind('change', function(e){
+  $('#customer_document_filter').unbind('change.mix_journal').bind('change.mix_journal', function(e){
     let lists        = JSON.parse( $('.user_and_journals').val() );
     let current_code = $(this).val();
 
@@ -31,7 +29,8 @@ function bind_all_events(){
       $('#journal_document_filter option').removeClass('hide');
       $('#journal_document_filter').parent().find('.multi-select-container .multi-select-menuitem').removeClass('hide');
     }
-  })
+  });
+  setTimeout(()=>{ $('#customer_document_filter').change() }, 1000); //TODO: find a better way to change the user selector
 
   $('.more-filter').unbind('click').bind('click',function(e) {
     e.stopPropagation();

@@ -15,9 +15,8 @@
             %input#search_input{placeholder: 'Rechercher'}
     .col-md-1.no-padding.derivationRight
       %button.btn.btn-light.more-filter.w-100.semibold
-        %div{ class: (session[:params_document_operation].present?)? 'blink' : '' }      
-          %span.me-2 Filtrer
-          %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
+        %span.me-2 Filtrer
+        %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
   .mb-4
 
   .main-content
@@ -25,14 +24,14 @@
       .col-md-4
       .col-md-8
         .row.pt-1
-          .col-md-6
+          .col-md-5
             .form-group.no-margin
               %input.user_and_journals{ type: 'hidden', value: user_and_journal_list(true) }
               - if accounts_options.size == (session[:params_document_operation].try(:[], :user_ids).try(:size) rescue 0)
                 = select_tag 'customer_document_filter', options_for_select(accounts_options), id: 'customer_document_filter', multiple: true
               - else
                 = select_tag 'customer_document_filter', options_for_select(accounts_options, session[:params_document_operation].try(:[], :user_ids)), id: 'customer_document_filter', multiple: true
-          .col-md-2
+          .col-md-3
             .form-group.no-margin
               = select_tag 'journal_document_filter', options_for_select(accounts_journaux(true), session[:params_document_operation].try(:[], :journal)), id: 'journal_document_filter', multiple: true
           .col-md-2.text-center.pt-1

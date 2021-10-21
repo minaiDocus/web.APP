@@ -198,16 +198,16 @@ class Documents::PiecesController < FrontController
       session.delete(:params_document_piece)    if params[:reinit].present?            
     end
 
-    options[:owner_ids] = if params[:view].present? && params[:view] != 'all'
-                            params[:view].split(',')
+    options[:owner_ids] = if params[:activate_filter].present? || (params[:view].present? && params[:view] != 'all')
+                            params[:view].try(:split, ',') || account_ids
                           elsif session[:params_document_piece].try(:[], :owner_ids).present?
                             session[:params_document_piece][:owner_ids]               
                           else
                             account_ids
                           end
 
-    options[:journal] =   if params[:journal].present? 
-                            params[:journal].split(',')
+    options[:journal] =   if params[:activate_filter].present? || params[:journal].present?
+                            params[:journal].try(:split, ',') || []
                           elsif session[:params_document_piece].try(:[], :journal).present?
                             session[:params_document_piece][:journal]
                           else

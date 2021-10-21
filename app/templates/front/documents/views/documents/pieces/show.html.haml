@@ -30,9 +30,8 @@
             %input#search_input{placeholder: 'Rechercher'}
     .col-md-1.no-padding
       %button.btn.btn-light.more-filter.semibold
-        %div{ class: (session[:params_document_piece].present?)? 'blink' : '' }
-          %span.me-2 Filtrer
-          %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
+        %span.me-2 Filtrer
+        %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
 
   .row.box.derivationRight.p-4
     - if @user.pre_assignement_displayed?
