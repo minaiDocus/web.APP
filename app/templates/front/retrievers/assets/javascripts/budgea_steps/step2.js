@@ -30,6 +30,13 @@ class ConfigurationStep2{
                                     this.form.find('.field_website').unbind('change')
                                                                     .bind('change', (e)=>{ this.check_field_website(); });
                                     this.check_field_website();
+
+                                    //Go to next step if retriever state is "Waiting_additionnal_info"
+                                    if(this.retriever.state == 'waiting_additionnal_info'){
+                                      AppLoading('show');
+                                      $('.budgea_fields').html('Connexion externe en cours .... Veuillez patientez svp!');
+                                      this.create_connector();
+                                    }
                                   });
   }
 
@@ -57,9 +64,18 @@ class ConfigurationStep2{
   }
 
   valid_fields(){
+    this.required_fields = [];
     let is_valid = true;
-    this.form.find('input').each((e, el)=>{
+
+    let selector = 'input'
+    if(this.budgea_id > 0){
+      selector = 'input.idocus_field'
+    }
+
+    this.form.find(selector).each((e, el)=>{
       if( $(el).attr('required') && ($(el).val() == null || $(el).val() == '' || $(el).val() == 'undefined') ){
+        this.required_fields.push($(el).parents('.form-group:last').find('label').text())
+
         is_valid = false;
       }
     });
@@ -110,8 +126,10 @@ class ConfigurationStep2{
                 self.mainConfig.goto(4, data.remote_response);
 
               console.log(data.remote_response);
+              AppLoading('hide');
             },
             (error)=>{
+              AppLoading('hide');
               self.mainConfig.applicationJS.noticeErrorMessageFrom(null, error.toString());
             }
           );
@@ -125,7 +143,7 @@ class ConfigurationStep2{
 
           this.mainConfig.budgeaApi.update_contact(data_contact).then(
             (data)=>{ fetch_connection() },
-            (error)=> { self.mainConfig.applicationJS.noticeErrorMessageFrom(null, error.toString()) }
+            (error)=> { AppLoading('hide'); self.mainConfig.applicationJS.noticeErrorMessageFrom(null, error.toString()) }
           )
         }else{
           fetch_connection();
@@ -133,7 +151,8 @@ class ConfigurationStep2{
 
       }
     }else{
-      self.mainConfig.applicationJS.noticeErrorMessageFrom(null, 'Veuillez remplir correctement les champs obligatoires!')
+      AppLoading('hide');
+      self.mainConfig.applicationJS.noticeErrorMessageFrom(null, `Veuillez remplir correctement les champs obligatoires! <br/><hr /><strong class='bold'>${this.required_fields.join(', ')}</strong>`)
     }
   }
 }

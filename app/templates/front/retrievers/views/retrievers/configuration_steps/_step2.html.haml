@@ -7,10 +7,10 @@
 
   .more-information
     %form#ido_form.ido_form
-      %input{ type: "hidden", name: "ido_connector_id", id: "ido_connector_id", value: @connector[:id] }
-      %input{ type: "hidden", name: "ido_budgea_id", id: "ido_budgea_id", value: @retriever.try(:budgea_id) }
-      %input{ type: "hidden", name: "ido_connector_name", id: "ido_connector_name", value: @connector[:name] }
-      %input{ type: "hidden", name: "ido_capabilities", id: "ido_capabilities", value: @connector[:capabilities].join('_') }
+      %input.idocus_field{ type: "hidden", name: "ido_connector_id", id: "ido_connector_id", value: @connector[:id] }
+      %input.idocus_field{ type: "hidden", name: "ido_budgea_id", id: "ido_budgea_id", value: @retriever.try(:budgea_id) }
+      %input.idocus_field{ type: "hidden", name: "ido_connector_name", id: "ido_connector_name", value: @connector[:name] }
+      %input.idocus_field{ type: "hidden", name: "ido_capabilities", id: "ido_capabilities", value: @connector[:capabilities].join('_') }
 
       .form-group
         %label.semibold Type de connecteur :
@@ -23,29 +23,30 @@
       .form-group
         %label.semibold Nom personnalisé
         .select-container.no-padding.w-100
-          = text_field_tag 'ido_custom_name', @retriever.try(:name) || @connector[:name], required: true
+          = text_field_tag 'ido_custom_name', @retriever.try(:name) || @connector[:name], required: true, class: 'idocus_field'
 
       - if @retriever.try(:journal) || @connector[:capabilities].include?('document')
         .form-group
           %label.semibold Journal
           .select-container.no-padding.w-100
-            = select_tag 'ido_journal', options_for_select(retriever_journals_of(@account), @retriever.try(:journal).try(:id)), include_blank: false, class: 'form-select'
+            = select_tag 'ido_journal', options_for_select(retriever_journals_of(@account), @retriever.try(:journal).try(:id)), include_blank: false, class: 'form-select idocus_field'
 
-      - CustomUtils.arrStr_to_array(@connector[:fields]).each do |field|
-        .form-group
-          %label.semibold= field[:label]
-          .select-container.no-padding.w-100
-            - required_field = field[:required].to_s == 'true' && !@retriever.try(:id)
-            - case field[:type]
-            - when 'list'
-              - class_plus = field[:name].match(/website/) ? 'field_website' : ''
-              = select_tag field[:name], options_for_select(parse_options_with(field[:values])), include_blank: !required_field, class: "form-select #{class_plus}"
-            - when 'password'
-              = password_field_tag field[:name].strip, nil, required: required_field
-            - when 'oauth'
-              = hidden_field_tag field[:name].strip, field[:value].strip, class: 'oauth'
-            - else
-              = text_field_tag field[:name].strip, nil, required: required_field
+      .budgea_fields
+        - CustomUtils.arrStr_to_array(@connector[:fields]).each do |field|
+          .form-group
+            %label.semibold= field[:label]
+            .select-container.no-padding.w-100
+              - required_field = field[:required].to_s == 'true' && !@retriever.try(:id)
+              - case field[:type]
+              - when 'list'
+                - class_plus = field[:name].match(/website/) ? 'field_website' : ''
+                = select_tag field[:name], options_for_select(parse_options_with(field[:values])), include_blank: !required_field, class: "form-select #{class_plus}"
+              - when 'password'
+                = password_field_tag field[:name].strip, nil, required: required_field
+              - when 'oauth'
+                = hidden_field_tag field[:name].strip, field[:value].strip, class: 'oauth'
+              - else
+                = text_field_tag field[:name].strip, nil, required: required_field
 
 .box.contact-box.hide
   .form-group
