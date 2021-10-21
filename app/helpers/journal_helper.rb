@@ -169,11 +169,22 @@ module JournalHelper
     BankAccount.type_name_list
   end
 
-  def accounts_journaux(operation=false)
-    if !operation
-      accounts.map{ |acc| acc.account_book_types }.map{ |book| book.collect(&:name)}.flatten.uniq
+  def user_and_journal_list(operation=false)
+    result = []
+    if operation
+      accounts.each{|account| result << { user: account.id, journals: account.bank_accounts.collect(&:journal).compact  } }
     else
-      accounts.map{ |acc| acc.bank_accounts.collect(&:journal) }.flatten.uniq 
+      accounts.each{|account| result << { user: account.id, journals: account.account_book_types.collect(&:name).compact } }
+    end
+
+    result.to_json
+  end
+
+  def accounts_journaux(operation=false)
+    if operation
+      accounts.map{ |acc| acc.bank_accounts.collect(&:journal).compact }.flatten.uniq
+    else
+      accounts.map{ |acc| acc.account_book_types }.map{ |book| book.collect(&:name).compact }.flatten.uniq
     end
   end
 end

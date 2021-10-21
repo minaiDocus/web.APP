@@ -33,7 +33,7 @@ class DocumentsMain{
 
     let data = [];
     if(serialize_form){ data.push($('#pack_filter_form').serialize().toString()); } 
-    else { $('input, select').val(''); data.push( `reinit=true` );  }
+    else { $('input, select').not('.operator').val(''); data.push( `reinit=true` );  }
     if(search_pattern && search_pattern != ''){ data.push(`text=${encodeURIComponent(search_pattern)}`); }
     if(this.page > 1){ data.push(`page=${this.page}`) }
 

@@ -2,12 +2,36 @@ function bind_all_events(){
   $('#delivery-date.daterange, #invoice-date.daterange').val('');
 
   $('#customer_document_filter').multiSelect({
-    "noneText": "Choix de(s) dossier(s)"
+    "noneText": "Choix de(s) dossier(s)",
+    "maxHeight": "300px",
   });
 
   $('#journal_document_filter').multiSelect({
-    "noneText": "Choix journaux"
+    "noneText": "Choix journaux",
+    "maxHeight": "300px",
   });
+
+  $('#customer_document_filter').unbind('change').bind('change', function(e){
+    let lists        = JSON.parse( $('.user_and_journals').val() );
+    let current_code = $(this).val();
+
+    if(current_code !== null && current_code !== undefined && current_code.length > 0){
+      $('#journal_document_filter option').addClass('hide');
+      $('#journal_document_filter').parent().find('.multi-select-container .multi-select-menuitem').addClass('hide');
+      current_code.forEach((code)=>{
+        let found_result = lists.find((e)=>{ return e.user == code })
+        if(found_result){
+          found_result.journals.forEach((journal)=>{ 
+            $(`#journal_document_filter option[value=${journal}]`).removeClass('hide');
+            $('#journal_document_filter').parent().find(`.multi-select-container .multi-select-menuitem input[value=${journal}]`).parent().removeClass('hide');
+          });
+        }
+      })
+    }else{
+      $('#journal_document_filter option').removeClass('hide');
+      $('#journal_document_filter').parent().find('.multi-select-container .multi-select-menuitem').removeClass('hide');
+    }
+  })
 
   $('.more-filter').unbind('click').bind('click',function(e) {
     e.stopPropagation();

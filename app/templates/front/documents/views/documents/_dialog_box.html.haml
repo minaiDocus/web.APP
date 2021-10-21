@@ -12,7 +12,7 @@
             %label= "Numéro d#{label_piece_operation} iDocus" 
             .w-100.row        
               .w-25
-                = select_tag 'by_all[position_operation]', options_for_select([['=', 0], ['>=', 1], ['<=', 2]], (session_document_operation[:position_operation] rescue 0)), include_blank: false, class: 'form-select'
+                = select_tag 'by_all[position_operation]', options_for_select([['=', 0], ['>=', 1], ['<=', 2]], (session_document_operation[:position_operation] rescue 0)), include_blank: false, class: 'form-select operator'
               .w-75.select-container.no-padding
                 %input{ name: 'by_all[position]', value: (session_document_operation[:position] rescue '' ) }
           - if !@is_operations
@@ -50,17 +50,16 @@
                 %label Montant
                 .row
                   .col-md-4.compare-choice
-                    = select_tag 'by_preseizure[amount_operation]', options_for_select([['Eg à', 0], ['Sup - Eg à', 1], ['Inf - Eg à', 2]], (session_document_operation[:by_preseizure][:amount_operation] rescue nil)), include_blank: false, class: 'form-select', id: 'compare'
+                    = select_tag 'by_preseizure[amount_operation]', options_for_select([['Eg à', 0], ['Sup - Eg à', 1], ['Inf - Eg à', 2]], (session_document_operation[:by_preseizure][:amount_operation] rescue nil)), include_blank: false, class: 'form-select operator', id: 'compare'
                   .col-md-8
                     .select-container
                       %input.value-content{ name: 'by_preseizure[amount]', value: (session_document_operation[:by_preseizure][:amount] rescue nil) }
                 
 
       .modal-footer
-        .row.w-100
-          .col-md-8.d-inline-block            
-          .col-md-4.d-inline-block.ps-1.text-end
-            %button.btn.btn-light.semibold{'data-bs-dismiss' => 'modal', :type => 'button'} Annuler
+        .row.w-100          
+          .col-md-12.d-inline-block.ps-1.text-end
+            %button.btn.btn-light.semibold.btn-reinit{:type => 'button', id: 'launch-reinit2', 'data-bs-dismiss' => 'modal', :type => 'button'} Réinitialiser
             %button.btn.btn-primary.semibold.btn-add{:type => 'button', id: 'launch-filter'} Filtrer
 
 #preseizures_export.modal.fade.in{'aria-hidden' => 'true', :role => 'dialog', :tabindex => '-1'}
