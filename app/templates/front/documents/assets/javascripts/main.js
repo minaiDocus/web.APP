@@ -39,7 +39,8 @@ class DocumentsMain{
     }
     else
     {
-      $('input, select').not('.operator').val(''); data.push( `reinit=true` );
+      let selector = "#pack_filter_form input, #pack_filter_form select, #customer_document_filter, #journal_document_filter, #search_input";
+      $(selector).not('.operator').val(''); data.push( `reinit=true` );
     }
 
 

@@ -28,6 +28,7 @@ class Pack::Report < ApplicationRecord
     reports = reports.where(user_id: options[:user_ids])                        if options[:user_ids].present?
     reports = reports.where('pack_reports.name LIKE ?', "%#{options[:name]}%")  if options[:name].present?
     reports = reports.preseizures.joins(:preseizures).where("pack_report_preseizures.position #{options[:position_operation].tr('012', ' ><')}= ?", options[:position]) if options[:position].present?
+    reports = reports.where( options[:journal].map{ |jl| "pack_reports.name LIKE '% #{jl} %'" }.join(' OR ') ) if options[:journal].present?
 
     reports
   end

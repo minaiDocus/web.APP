@@ -23,27 +23,27 @@
         %span Ajouter des documents
   .mb-4
 
+  .row.box.p-2
+    .col-md-4
+    .col-md-8
+      .row.pt-1
+        .col-md-5
+          .form-group.no-margin
+            %input.user_and_journals{ type: 'hidden', value: user_and_journal_list }
+            - if accounts_options.size == (session[:params_document_piece].try(:[], :owner_ids).try(:size) rescue 0)
+              = select_tag 'customer_document_filter', options_for_select(accounts_options), id: 'customer_document_filter', multiple: true
+            - else
+              = select_tag 'customer_document_filter', options_for_select(accounts_options, session[:params_document_piece].try(:[], :owner_ids)), id: 'customer_document_filter', multiple: true
+        .col-md-3
+          .form-group.no-margin
+            = select_tag 'journal_document_filter', options_for_select(accounts_journaux, session[:params_document_piece].try(:[], :journal)), id: 'journal_document_filter', multiple: true
+        .col-md-2.text-center.pt-1
+          %button.btn.btn-dark.w-100.filter-customer-journal Valider
+        .col-md-2.text-center.pt-1
+          %button.btn.btn-default.semibold.btn-reinit{:type => 'button', id: 'launch-reinit'} Réinitialiser
+
   %input#badge-filter{ type: :hidden }
   .main-content
-    .row.box.p-2
-      .col-md-4
-      .col-md-8
-        .row.pt-1
-          .col-md-5
-            .form-group.no-margin
-              %input.user_and_journals{ type: 'hidden', value: user_and_journal_list }
-              - if accounts_options.size == (session[:params_document_piece].try(:[], :owner_ids).try(:size) rescue 0)
-                = select_tag 'customer_document_filter', options_for_select(accounts_options), id: 'customer_document_filter', multiple: true
-              - else
-                = select_tag 'customer_document_filter', options_for_select(accounts_options, session[:params_document_piece].try(:[], :owner_ids)), id: 'customer_document_filter', multiple: true
-          .col-md-3
-            .form-group.no-margin
-              = select_tag 'journal_document_filter', options_for_select(accounts_journaux, session[:params_document_piece].try(:[], :journal)), id: 'journal_document_filter', multiple: true
-          .col-md-2.text-center.pt-1
-            %button.btn.btn-dark.w-100.filter-customer-journal Valider
-          .col-md-2.text-center.pt-1
-            %button.btn.btn-default.semibold.btn-reinit{:type => 'button', id: 'launch-reinit'} Réinitialiser
-
     .row
       = javascript_declare_var 'has_next_page', (@packs.size > 0 && @packs.total_count > @packs.size).to_s
       - if @packs.size > 0
