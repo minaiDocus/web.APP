@@ -28,6 +28,9 @@ class DocumentsMain{
     if(this.action_locker)
       return false
 
+    if(!append)
+      this.page = 1;
+
     this.action_locker = true;
     let search_pattern = $('.search-content #search_input').val();
 
@@ -74,7 +77,7 @@ class DocumentsMain{
                             if($(e).find('.no-data-found').length > 0){
                               this.page = -1;
                             }else{
-                              $('.main-content').append($(e).find('.main-content').html());
+                              $('.all-results').append($(e).find('.all-results').html());
                             }
                           }else{
                             $('.datas_size').html($(e).find('.datas_size').html());

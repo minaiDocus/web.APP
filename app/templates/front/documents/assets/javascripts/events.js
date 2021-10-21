@@ -1,8 +1,10 @@
 function bind_all_events(){
   $('#delivery-date.daterange, #invoice-date.daterange').val('');
 
-  $('#customer_document_filter').multiSelect({
-    "noneText": "Choix dossiers",
+  $('#customer_document_filter').asMultiSelect({
+    "texts" : { "searchplaceholder": "Choix dossiers", "noItemsAvailable": 'Aucun dossier trouvé'},
+    "resultsContainer": '.result-sol',
+    "maxHeight": "300px",
   });
 
   $('#journal_document_filter').multiSelect({

@@ -81,9 +81,9 @@ class Pack < ApplicationRecord
 
     query = query.joins(:pieces).where(pack_pieces: { id: options[:piece_ids] }) unless options[:piece_ids].nil?
 
-    query = query.joins(:pieces).where('packs.name LIKE ? OR packs.tags LIKE ? OR pack_pieces.name LIKE ? OR pack_pieces.tags LIKE ? OR pack_pieces.content_text LIKE ?', "%#{text}%", "%#{text}%", "%#{text}%",  "%#{text}%", "%#{text}%") if text.present?
+    query = query.joins(:pieces, :owner).where('packs.name LIKE ? OR packs.tags LIKE ? OR LOWER(users.company) LIKE ? OR pack_pieces.name LIKE ? OR pack_pieces.tags LIKE ? OR pack_pieces.content_text LIKE ?', "%#{text}%", "%#{text}%", "%#{text}%", "%#{text}%",  "%#{text}%", "%#{text}%") if text.present?
 
-    query = query.joins(:owner).where('packs.name LIKE ? OR LOWER(users.company) LIKE ? ', "%#{options[:name]}%", "%#{options[:name].downcase}%") if options[:name].present?
+    # query = query.joins(:owner).where('packs.name LIKE ? OR LOWER(users.company) LIKE ? ', "%#{options[:name]}%", "%#{options[:name].downcase}%") if options[:name].present?
 
     if options[:journal].present?
       _query_journal = ""

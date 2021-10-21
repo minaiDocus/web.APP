@@ -27,7 +27,7 @@
           .col-md-1.no-padding.text-center.glass
             = glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })
           .col-md-11.no-padding.no-margin
-            %input#search_input{placeholder: 'Rechercher'}
+            %input#search_input{placeholder: 'Rechercher', value: session[:params_document_piece].try(:[], :text)}
     .col-md-1.no-padding
       %button.btn.btn-light.more-filter.semibold
         %span.me-2 Filtrer

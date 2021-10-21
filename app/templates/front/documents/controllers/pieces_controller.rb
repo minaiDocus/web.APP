@@ -9,7 +9,9 @@ class Documents::PiecesController < FrontController
 
   # GET /documents
   def index
-    @packs = Pack.includes(pieces: [:expense], owner: [:organization, :ibiza, :exact_online, :my_unisoft]).search(params.try(:[], :by_piece).try(:[], :content), options.reject{ |k,v| k == :ids}).distinct.order(updated_at: :desc).page(options[:page]).per(options[:per_page])
+    _options = options
+
+    @packs = Pack.includes(pieces: [:expense], owner: [:organization, :ibiza, :exact_online, :my_unisoft]).search(_options[:text], _options.reject{ |k,v| k == :ids}).distinct.order(updated_at: :desc).page(_options[:page]).per(_options[:per_page])
     @packs_with_failed_delivery_ids = packs_with_failed_delivery
 
     @period_service = Billing::Period.new user: @user
@@ -20,6 +22,7 @@ class Documents::PiecesController < FrontController
   # GET /documents/:id
   def show
     _options = options
+
     _options[:page] = params[:page] #IMPORTANT: per_page option must be a multiple of 4 and > 8 (needed by grid type view)
     _options[:per_page] =  8       #IMPORTANT: per_page option must be a multiple of 4 and > 8 (needed by grid type view)
 
@@ -33,7 +36,7 @@ class Documents::PiecesController < FrontController
 
     @pieces_deleted = Pack::Piece.unscoped.where(pack_id: params[:id]).deleted.presence || []
 
-    @pieces = @pack.pieces.search(params[:text], _options).distinct.order(created_at: :desc).page(_options[:page]).per(_options[:per_page])
+    @pieces = @pack.pieces.search(_options[:text], _options).distinct.order(created_at: :desc).page(_options[:page]).per(_options[:per_page])
 
     @temp_pack      = TempPack.find_by_name(pack.name)
     @temp_documents = @temp_pack.temp_documents.not_published
@@ -179,13 +182,15 @@ class Documents::PiecesController < FrontController
     options = { page: params[:page], per_page: 40 } #IMPORTANT: per_page option must be a multiple of 4 and > 8 (needed by grid type view)
     options[:sort] = true
 
+    options[:text] = (params[:activate_filter].present? || params[:text].present?)? params[:text] : session[:params_document_piece].try(:[], :text)
+    options[:text] = '' if params[:reinit].present?
+
     options[:piece_created_at] = params[:by_piece].try(:[], :created_at)
     options[:piece_created_at_operation] = params[:by_piece].try(:[], :created_at_operation)
 
     options[:position] = params[:by_piece].try(:[], :position)
     options[:position_operation] = params[:by_piece].try(:[], :position_operation)
 
-    options[:name] = params[:text]
     options[:tags] = params[:by_piece].try(:[], :tags)
 
     options[:pre_assignment_state] = params[:by_piece].try(:[], :state_piece)
@@ -229,7 +234,12 @@ class Documents::PiecesController < FrontController
 
     options[:piece_ids] = piece_ids if piece_ids.present?
 
-    session[:params_document_piece] = options.dup.reject{ |k,v| k == :piece_ids } unless params[:reinit].present?
+    _temp_options = options.dup
+    _temp_options = _temp_options.reject{ |k,v| k == :piece_ids }
+    _temp_options = _temp_options.reject{ |k,v| k == :page }
+    _temp_options = _temp_options.reject{ |k,v| k == :per_page }
+    _temp_options = _temp_options.reject{ |k,v| k == :owner_ids } if options[:owner_ids].size >= 15
+    session[:params_document_piece] = _temp_options if not params[:reinit].present?
     options
   end
 
