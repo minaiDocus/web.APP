@@ -32,8 +32,6 @@ class DocumentsMain{
       this.page = 1;
 
     this.action_locker = true;
-    let search_pattern = $('.search-content #search_input').val();
-
     let data = [];
 
     if(serialize_form){
@@ -46,6 +44,7 @@ class DocumentsMain{
       $(selector).not('.operator').val(''); data.push( `reinit=true` );
     }
 
+    let search_pattern = $('.search-content #search_input').val();
 
     if(search_pattern && search_pattern != ''){ data.push(`text=${encodeURIComponent(search_pattern)}`); }
     if(this.page > 1){ data.push(`page=${this.page}`) }

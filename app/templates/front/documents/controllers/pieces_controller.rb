@@ -4,14 +4,13 @@ class Documents::PiecesController < FrontController
   skip_before_action :login_user!, only: %w[download get_piece_file get_temp_document_file handle_bad_url temp_document get_tag already_exist_document], raise: false
   skip_before_action :verify_if_active, only: %w[index show]
   before_action :load_pack, only: %w[show]
+  before_action :load_params, only: %w[index show]
 
   prepend_view_path('app/templates/front/documents/views')
 
   # GET /documents
   def index
-    _options = options
-
-    @packs = Pack.includes(pieces: [:expense], owner: [:organization, :ibiza, :exact_online, :my_unisoft]).search(_options[:text], _options.reject{ |k,v| k == :ids}).distinct.order(updated_at: :desc).page(_options[:page]).per(_options[:per_page])
+    @packs = Pack.includes(pieces: [:expense], owner: [:organization, :ibiza, :exact_online, :my_unisoft]).search(@options[:text], @options.reject{ |k,v| k == :ids}).distinct.order(updated_at: :desc).page(@options[:page]).per(@options[:per_page])
     @packs_with_failed_delivery_ids = packs_with_failed_delivery
 
     @period_service = Billing::Period.new user: @user
@@ -21,22 +20,20 @@ class Documents::PiecesController < FrontController
 
   # GET /documents/:id
   def show
-    _options = options
+    @options[:page]     = params[:page]
+    @options[:per_page] =  8       #IMPORTANT: per_page option must be a multiple of 4 and > 8 (needed by grid type view)
 
-    _options[:page] = params[:page] #IMPORTANT: per_page option must be a multiple of 4 and > 8 (needed by grid type view)
-    _options[:per_page] =  8       #IMPORTANT: per_page option must be a multiple of 4 and > 8 (needed by grid type view)
-
-    _options[:ids] = options[:piece_ids] if options[:piece_ids].present?
+    @options[:ids] = @options[:piece_ids] if @options[:piece_ids].present?
 
     # TODO : optimize created_at search
-    #_options[:piece_created_at] = params[:by_piece].try(:[], :created_at)
-    #_options[:piece_created_at_operation] = params[:by_piece].try(:[], :created_at_operation)
+    #@options[:piece_created_at] = @options[:by_piece].try(:[], :created_at)
+    #@options[:piece_created_at_operation] = @options[:by_piece].try(:[], :created_at_operation)
 
     pack = Pack.find(params[:id])
 
     @pieces_deleted = Pack::Piece.unscoped.where(pack_id: params[:id]).deleted.presence || []
 
-    @pieces = @pack.pieces.search(_options[:text], _options).distinct.order(created_at: :desc).page(_options[:page]).per(_options[:per_page])
+    @pieces = @pack.pieces.search(@options[:text], @options).distinct.order(created_at: :desc).page(@options[:page]).per(@options[:per_page])
 
     @temp_pack      = TempPack.find_by_name(pack.name)
     @temp_documents = @temp_pack.temp_documents.not_published
@@ -174,73 +171,80 @@ class Documents::PiecesController < FrontController
     Pack.where(id: reports_with_failed_delivery.pluck(:pack_id)).pluck(:id)
   end
 
-  def options
-    if params[:by_all].present?
-      params[:by_piece] = params[:by_piece].present? ? params[:by_piece].merge(params[:by_all].permit!) : params[:by_all]
+  def load_params
+    if params[:activate_filter] || params[:reinit]
+      @s_params = params
+    else
+      @s_params = (session[:params_document_piece].present?)? session[:params_document_piece] : params
     end
 
-    options = { page: params[:page], per_page: 40 } #IMPORTANT: per_page option must be a multiple of 4 and > 8 (needed by grid type view)
-    options[:sort] = true
+    to_save = {}
 
-    options[:text] = (params[:activate_filter].present? || params[:text].present?)? params[:text] : session[:params_document_piece].try(:[], :text)
-    options[:text] = '' if params[:reinit].present?
+    to_save[:text]          = @s_params[:text]                  if @s_params[:text].present?
+    to_save[:by_all]        = @s_params[:by_all]                if @s_params[:by_all].present?
+    to_save[:by_piece]      = @s_params[:by_piece]              if @s_params[:by_piece].present?
+    to_save[:by_preseizure] = @s_params[:by_preseizure]         if @s_params[:by_preseizure].present?
+    to_save[:journal]       = @s_params[:journal]               if @s_params[:journal].present?
+    to_save[:view]          = (@s_params[:view].try(:split, ',').try(:size).to_i >= 15) ? nil : @s_params[:view] if @s_params[:view]
 
-    options[:piece_created_at] = params[:by_piece].try(:[], :created_at)
-    options[:piece_created_at_operation] = params[:by_piece].try(:[], :created_at_operation)
-
-    options[:position] = params[:by_piece].try(:[], :position)
-    options[:position_operation] = params[:by_piece].try(:[], :position_operation)
-
-    options[:tags] = params[:by_piece].try(:[], :tags)
-
-    options[:pre_assignment_state] = params[:by_piece].try(:[], :state_piece)
-    options[:piece_number] = params[:by_piece].try(:[], :piece_number)
-
-    options[:by_preseizure] = params[:by_preseizure]
-
-    if !params[:by_all].present? && !params[:by_piece].present? && !params[:by_preseizure].present?      
-      options = session[:params_document_piece] if session[:params_document_piece].present? && !params[:reinit].present?
-      session.delete(:params_document_piece)    if params[:reinit].present?            
+    if params[:reinit].present?
+      session.delete(:params_document_piece)
+    else
+      session[:params_document_piece] = to_save
     end
 
-    options[:owner_ids] = if params[:activate_filter].present? || (params[:view].present? && params[:view] != 'all')
-                            params[:view].try(:split, ',') || account_ids
-                          elsif session[:params_document_piece].try(:[], :owner_ids).present?
-                            session[:params_document_piece][:owner_ids]               
+    load_options
+  end
+
+  def load_options
+    if @s_params[:by_all].present?
+      @s_params[:by_piece] = @s_params[:by_piece].present? ? @s_params[:by_piece].merge(@s_params[:by_all].permit!) : @s_params[:by_all]
+    end
+
+    @options = { page: params[:page], per_page: 40 } #IMPORTANT: per_page option must be a multiple of 4 and > 8 (needed by grid type view)
+    @options[:sort] = true
+
+    @options[:text] = @s_params.try(:[], :text).to_s
+
+    @options[:piece_created_at] = @s_params[:by_piece].try(:[], :created_at)
+    @options[:piece_created_at_operation] = @s_params[:by_piece].try(:[], :created_at_operation)
+
+    @options[:position] = @s_params[:by_piece].try(:[], :position)
+    @options[:position_operation] = @s_params[:by_piece].try(:[], :position_operation)
+
+    @options[:tags] = @s_params[:by_piece].try(:[], :tags)
+
+    @options[:pre_assignment_state] = @s_params[:by_piece].try(:[], :state_piece)
+    @options[:piece_number] = @s_params[:by_piece].try(:[], :piece_number)
+
+    @options[:by_preseizure] = @s_params[:by_preseizure]
+
+    @options[:owner_ids] = if (@s_params[:view].present? && @s_params[:view] != 'all')
+                            @s_params[:view].try(:split, ',') || account_ids        
                           else
                             account_ids
                           end
 
-    options[:journal] =   if params[:activate_filter].present? || params[:journal].present?
-                            params[:journal].try(:split, ',') || []
-                          elsif session[:params_document_piece].try(:[], :journal).present?
-                            session[:params_document_piece][:journal]
+    @options[:journal] =   if @s_params[:journal].present?
+                            @s_params[:journal].try(:split, ',') || []
                           else
                             []
                           end
 
-    options[:badge_filter] =  if params[:badge_filter].present?
-                                params[:badge_filter] 
-                              elsif session[:params_document_piece].try(:[], :badge_filter).present?
-                                session[:params_document_piece][:badge_filter]
+    @options[:badge_filter] =  if @s_params[:badge_filter].present?
+                                @s_params[:badge_filter].to_s
                               else
                                 ""
                               end
 
 
-    if options[:by_preseizure].present? && (options[:by_preseizure].try(:[], 'is_delivered') != "" || options[:by_preseizure].try(:[], 'third_party') != "" || options[:by_preseizure].try(:[], 'delivery_tried_at') != "" || options[:by_preseizure].try(:[], 'date') != "" || options[:by_preseizure].try(:[], 'amount') != '')
-      piece_ids = Pack::Report::Preseizure.where(user_id: options[:owner_ids]).where('piece_id > 0').filter_by(options[:by_preseizure]).distinct.pluck(:piece_id).presence || [0]
+    if @options[:by_preseizure].present? && (@options[:by_preseizure].try(:[], 'is_delivered') != "" || @options[:by_preseizure].try(:[], 'third_party') != "" || @options[:by_preseizure].try(:[], 'delivery_tried_at') != "" || @options[:by_preseizure].try(:[], 'date') != "" || @options[:by_preseizure].try(:[], 'amount') != '')
+      piece_ids = Pack::Report::Preseizure.where(user_id: @options[:owner_ids]).where('piece_id > 0').filter_by(@options[:by_preseizure]).distinct.pluck(:piece_id).presence || [0]
     end
 
-    options[:piece_ids] = piece_ids if piece_ids.present?
+    @options[:piece_ids] = piece_ids if piece_ids.present?
 
-    _temp_options = options.dup
-    _temp_options = _temp_options.reject{ |k,v| k == :piece_ids }
-    _temp_options = _temp_options.reject{ |k,v| k == :page }
-    _temp_options = _temp_options.reject{ |k,v| k == :per_page }
-    _temp_options = _temp_options.reject{ |k,v| k == :owner_ids } if options[:owner_ids].size >= 15
-    session[:params_document_piece] = _temp_options if not params[:reinit].present?
-    options
+    @options
   end
 
   def load_pack
