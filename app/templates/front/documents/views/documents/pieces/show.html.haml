@@ -12,7 +12,7 @@
         %span.me-2= @pack.name.gsub('all', '')
         %span.badge.bg-dark.semibold.regular.datas_size= @pieces.total_count
         - if @filters.present?
-          %span.badge.bg-info.regular.datas_size.blink Filtre active
+          %span.badge.bg-info.regular.datas_size.blink Filtre actif
         - if @pieces_deleted.count > 0
           %span.badge.bg-danger.semibold.deleted-piece-count
             = @pieces_deleted.count.to_s + " pièce(s) supprimée(s)"
