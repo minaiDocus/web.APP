@@ -155,15 +155,15 @@ class DocumentsMain{
 
     let str_params = JSON.stringify(params);
 
-    window.open(`/documents/export_preseizures/${btoa(str_params)}`)
+    window.location.href = `/documents/export_preseizures/${btoa(str_params)}`;
   }
 
   download_pack_archive(pack_id){
-    window.open(`/documents/download_archive/${pack_id}`);
+    window.location.href = `/documents/download_archive/${pack_id}`;
   }
 
   download_pack_bundle(pack_id){
-    window.open(`/documents/download_bundle/${pack_id}`);
+    window.location.href = `/documents/download_bundle/${pack_id}`
   }
 
   deliver_preseizures(elem){
