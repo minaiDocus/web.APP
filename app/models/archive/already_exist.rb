@@ -5,7 +5,7 @@ class Archive::AlreadyExist < ApplicationRecord
   belongs_to :temp_document, optional: true
 
   def get_access_url
-    "/account/documents/exist_document/#{id}/download/" + '?token=' + get_token
+    "/documents/exist_document/#{id}/download/" + '?token=' + get_token
   end
 
   def get_token

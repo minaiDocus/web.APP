@@ -27,7 +27,7 @@ class DocumentsUploader{
   reload_packs(){
     if(VARIABLES.get('can_reload_packs')){
       VARIABLES.set('can_reload_packs', false);
-      let main = new DocumentsMain;
+      let main = new DocumentsPieces();
       main.load_packs(true);
     }
   }

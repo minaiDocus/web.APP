@@ -15,7 +15,7 @@ class Documents::UploaderController < Documents::AbaseController
 
       file              = already_doc.path
       original_filename = params[:original_filename]
-      customer          = User.find_by_code params[:upload_user]
+      customer          = User.find_by_code params[:file_code]
 
       to_upload = File.exist?(file)
     elsif params[:files].present?

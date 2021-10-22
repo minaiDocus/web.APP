@@ -1,8 +1,12 @@
 # encoding: utf-8
 Rails.application.routes.draw do
   scope module: 'documents' do
+    get '/contents/original/*all', to: 'abase#handle_bad_url'
+
     post 'documents/deliver_preseizures', to: 'abase#deliver_preseizures', as: 'documents_deliver_preseizures'
     post 'documents/already_exist_document', to: 'abase#already_exist_document', as: 'already_exist_document'
+
+    get  'documents/exist_document/:id/download/', to: 'abase#exist_document', as: 'exist_document'
 
     get 'documents/tags', to: 'abase#get_tags', as: 'documents_tags'
     post 'documents/tags/update', to: 'abase#update_tags', as: 'documents_update_tags'

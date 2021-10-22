@@ -140,7 +140,7 @@
                     <td class="text-center pt-2">
                       {% if (file.link) { %}
                         <input type="hidden" class="original_filename" value="{%= file.original_file_name %}">
-                        <input type="hidden" class="upload_user" value="{%= file.user_code %}">
+                        <input type="hidden" class="file_code" value="{%= file.user_code %}">
                         <input type="hidden" class="journal" value="{%= file.journal %}">
                         <input type="hidden" class="prev_period_offset" value="{%= file.prev_period_offset %}">
                         <input type="hidden" class="api_name" value="{%= file.api_name %}">
@@ -159,5 +159,15 @@
               </tr>
           {% } %}
           </script>
+
+#AlreadyExistView.modal.fade.in
+  .modal-dialog{ style: "max-width: 1150px" }
+    .modal-content
+      .modal-header
+        %h3 Informations
+        %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+      .modal-body{style: "max-height: none !important; padding:20px;"}
+        .view-content.margin3
+      .modal-footer
 
 = render file: Rails.root.join('app/templates/front/compta_analytics/views/compta_analytics/_analytics.html.haml'), locals: { with_validate_button: false }

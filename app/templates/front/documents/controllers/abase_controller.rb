@@ -179,6 +179,41 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
 
   def already_exist_document
     @already_document = Archive::AlreadyExist.where(id: params[:id]).first
+    render partial: 'already_exist_document'
+  end
+
+
+  # GET /account/documents/exist_document/:id/download
+  def exist_document
+    auth_token = params[:token]
+    auth_token ||= request.original_url.partition('token=').last
+
+    already_doc = Archive::AlreadyExist.find(params[:id])
+    filepath    = already_doc.path
+
+    if File.exist?(filepath.to_s) && auth_token == already_doc.get_token
+      mime_type = File.extname(filepath) == '.png' ? 'image/png' : 'application/pdf'
+      # send_file(filepath, type: mime_type, filename: "document_already_exist.pdf", x_sendfile: true, disposition: 'inline')
+      send_data File.read(filepath), filename: "document_already_exist.pdf", type: mime_type, disposition: 'inline' ## TODO: Find why send file doesn't work here
+    else
+      render body: nil, status: 404
+    end
+  end
+
+  # GET /contents/original/missing.png
+  def handle_bad_url
+    token = request.original_url.partition('token=').last
+
+    @piece = Pack::Piece.where('created_at >= ?', '2019-12-28 00:00:00').where('created_at <= ?', '2019-12-31 23:59:59').find_by_token(token)
+    filepath = @piece.cloud_content_object.path(:original)
+
+    if File.exist?(filepath)
+      mime_type = File.extname(filepath) == '.png' ? 'image/png' : 'application/pdf'
+
+      send_file(filepath, type: mime_type, filename: @piece.cloud_content_object.filename, x_sendfile: true, disposition: 'inline')
+    else
+      render body: nil, status: 404
+    end
   end
 
 
@@ -313,39 +348,6 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
     if File.exist?(filepath.to_s) && (@temp_document.user.in?(accounts) || current_user.try(:is_admin) || auth_token == @temp_document.get_token)
       mime_type = File.extname(filepath) == '.png' ? 'image/png' : 'application/pdf'
       send_file(filepath, type: mime_type, filename: @temp_document.cloud_content_object.filename, x_sendfile: true, disposition: 'inline')
-    else
-      render body: nil, status: 404
-    end
-  end
-
-  # GET /account/documents/exist_document/:id/download
-  def exist_document
-    auth_token = params[:token]
-    auth_token ||= request.original_url.partition('token=').last
-
-    already_doc = Archive::AlreadyExist.find(params[:id])
-    filepath    = already_doc.path
-
-    if File.exist?(filepath.to_s) && auth_token == already_doc.get_token
-      mime_type = File.extname(filepath) == '.png' ? 'image/png' : 'application/pdf'
-      # send_file(filepath, type: mime_type, filename: "document_already_exist.pdf", x_sendfile: true, disposition: 'inline')
-      send_data File.read(filepath), filename: "document_already_exist.pdf", type: mime_type, disposition: 'inline' ## TODO: Find why send file doesn't work here
-    else
-      render body: nil, status: 404
-    end
-  end
-
-  # GET /contents/original/missing.png
-  def handle_bad_url
-    token = request.original_url.partition('token=').last
-
-    @piece = Pack::Piece.where('created_at >= ?', '2019-12-28 00:00:00').where('created_at <= ?', '2019-12-31 23:59:59').find_by_token(token)
-    filepath = @piece.cloud_content_object.path(:original)
-
-    if File.exist?(filepath)
-      mime_type = File.extname(filepath) == '.png' ? 'image/png' : 'application/pdf'
-
-      send_file(filepath, type: mime_type, filename: @piece.cloud_content_object.filename, x_sendfile: true, disposition: 'inline')
     else
       render body: nil, status: 404
     end

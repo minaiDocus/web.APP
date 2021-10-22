@@ -567,16 +567,16 @@
         self = $(e.currentTarget);
 
         var original_filename = self.parent().find('input.original_filename').val(),
-          user_code = self.parent().find('input.user_code').val(),
+          file_code = self.parent().find('input.file_code').val(),
           journal = self.parent().find('input.journal').val(),
           prev_period_offset = self.parent().find('input.prev_period_offset').val(),
           api_name = self.parent().find('input.api_name').val(),
           analytic = self.parent().find('input.analytic').val();
 
-        var data = { force: true, id: self.data('link') , original_filename: original_filename,user_code: user_code, file_account_book_type: journal, file_prev_period_offset: prev_period_offset, api_name: api_name, analytic: analytic }
+        var data = { force: true, id: self.data('link') , original_filename: original_filename, file_code: file_code, file_account_book_type: journal, file_prev_period_offset: prev_period_offset, api_name: api_name, analytic: analytic }
         self.prop('disabled', true);
         $.ajax({
-          url: '/account/documents/upload',
+          url: '/documents/uploader',
           data: data,
           type: "POST",
           dataType: 'json',
