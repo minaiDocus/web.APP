@@ -47,8 +47,8 @@ class PreseizureExport::PreseizureToTxt
 
         line[21..e]    = label[0..19]
         line[41]       = entry.type == 1 ? 'D' : 'C'
-        line[42]       = entry.amount >= 0.0 ? '+' : '-'
-        line[43..54]   = '%012d' % entry.amount_in_cents
+        line[42]       = entry.amount.to_f >= 0.0 ? '+' : '-'
+        line[43..54]   = '%012d' % entry.amount_in_cents.to_f
         line[63..68]   = preseizure.deadline_date.strftime('%d%m%y') if preseizure.deadline_date
         line[69..73]   = entry.account.lettering[0..4] if entry.account.lettering.present?
         line[74..78]   = preseizure.piece_number[0..4] if preseizure.piece_number.present?
