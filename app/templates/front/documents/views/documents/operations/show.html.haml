@@ -1,6 +1,6 @@
 = stylesheet_link_tag 'front/documents/assets/stylesheets/main'
 
-.container-fluid
+.container-fluid.main-content
   .row.derivationLeft
     .col-md-1.return-back
       %button.btn.btn-default
@@ -11,6 +11,8 @@
       %h3.bold.mt-2
         %span.me-2= @report.name.gsub('all', '').strip
         %span.badge.badge-secondary.regular.datas_size= @preseizures.total_count
+        - if @filters.present?
+          %span.badge.bg-info.regular.datas_size.blink Filtre active
     .col-md-3   
       .search-content
         .row.no-margin
@@ -32,7 +34,7 @@
       %span.pointer.form-check.d-inline.ms-2      
         %input.form-check-input.pointer.float-none.select-all{ type: :checkbox, value: "" }
 
-  .main-content.all-results.derivationLeft
+  .all-results.derivationLeft
     = javascript_declare_var 'has_more_result', (@preseizures.size > 0 && @preseizures.total_count > @preseizures.size).to_s
     - if @preseizures.size > 0
       - @preseizures.each_slice(2) do |_preseizures|

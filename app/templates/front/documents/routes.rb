@@ -1,16 +1,17 @@
 # encoding: utf-8
 Rails.application.routes.draw do
   scope module: 'documents' do
-    post 'documents/deliver_preseizures', to: 'main#deliver_preseizures', as: 'documents_deliver_preseizures'
+    post 'documents/deliver_preseizures', to: 'abase#deliver_preseizures', as: 'documents_deliver_preseizures'
+    post 'documents/already_exist_document', to: 'abase#already_exist_document', as: 'already_exist_document'
 
-    get 'documents/tags', to: 'main#get_tags', as: 'documents_tags'
-    post 'documents/tags/update', to: 'main#update_tags', as: 'documents_update_tags'
+    get 'documents/tags', to: 'abase#get_tags', as: 'documents_tags'
+    post 'documents/tags/update', to: 'abase#update_tags', as: 'documents_update_tags'
 
-    post 'documents/export_options', to: 'main#export_options', as: 'documents_export_options'
+    post 'documents/export_options', to: 'abase#export_options', as: 'documents_export_options'
     post 'documents/restore/:id', to: 'pieces#restore', as: 'restore_document'
-    get 'documents/export_preseizures/:q', to: 'main#export_preseizures', as: 'documents_export_preseizures'
-    get 'documents/download_archive/:id', to: 'main#download_archive', as: 'documents_download_archive'
-    get 'documents/download_bundle/:id', to: 'main#download_bundle', as: 'documents_download_bundle' 
+    get 'documents/export_preseizures/:q', to: 'abase#export_preseizures', as: 'documents_export_preseizures'
+    get 'documents/download_archive/:id', to: 'abase#download_archive', as: 'documents_download_archive'
+    get 'documents/download_bundle/:id', to: 'abase#download_bundle', as: 'documents_download_bundle'
 
     get 'documents', to: 'pieces#index', as: 'documents'
     post 'documents/delete', to: 'pieces#delete', as: 'delete_documents'

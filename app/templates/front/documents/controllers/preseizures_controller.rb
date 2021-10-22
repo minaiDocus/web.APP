@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-class Documents::PreseizuresController < FrontController
+class Documents::PreseizuresController < Documents::AbaseController
   skip_before_action :verify_if_active, only: %w[index show]
-  prepend_view_path('app/templates/front/documents/views')
-
   before_action :load_preseizure, except: %w[accounts_list]
+
+  prepend_view_path('app/templates/front/documents/views')
 
   def index
     render partial: 'preseizure_box', locals: { preseizure: @preseizure, piece: @preseizure.try(:piece), operation: @preseizure.try(:operation) }

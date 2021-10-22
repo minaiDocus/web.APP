@@ -32,7 +32,7 @@ function bind_all_events(){
       $('#journal_document_filter').parent().find('.multi-select-container .multi-select-menuitem').removeClass('hide');
     }
   });
-  setTimeout(()=>{ $('#customer_document_filter').change() }, 1000); //TODO: find a better way to change the user selector
+  setTimeout(()=>{ $('.hide_on_load').removeClass('hide'); $('#customer_document_filter').change() }, 1000); //TODO: find a better way to change the user selector
 
   $('.more-filter').unbind('click').bind('click',function(e) {
     e.stopPropagation();

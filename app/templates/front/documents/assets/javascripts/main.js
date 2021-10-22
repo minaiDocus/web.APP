@@ -36,7 +36,8 @@ class DocumentsMain{
 
     if(serialize_form){
       data.push($('#pack_filter_form').serialize().toString());
-      data.push(`activate_filter=true`);
+      if(!append)
+        data.push(`activate_filter=true`);
     }
     else
     {
@@ -74,13 +75,12 @@ class DocumentsMain{
                        .then((e)=>{
                           if(append){
                             if($(e).find('.no-data-found').length > 0){
+                              this.applicationJS.noticeSuccessMessageFrom(null, 'Plus aucun résultat!');
                               this.page = -1;
                             }else{
                               $('.all-results').append($(e).find('.all-results').html());
                             }
-                          }else{
-                            $('.datas_size').html($(e).find('.datas_size').html());
-                          } 
+                          }
 
                           this.action_locker = false
                           bind_all_events();

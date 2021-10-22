@@ -1,6 +1,5 @@
 # frozen_string_literal: true
-
-class Documents::MainController < FrontController
+class Documents::AbaseController < FrontController #Must be loaded first that's why there is an "A" in the name
   skip_before_action :login_user!, only: %w[download piece handle_bad_url temp_document get_tag already_exist_document], raise: false
   skip_before_action :verify_if_active, only: %w[export_options export_preseizures download_archive download_bundle get_tags update_tags]
 
@@ -178,6 +177,10 @@ class Documents::MainController < FrontController
     end
   end
 
+  def already_exist_document
+    @already_document = Archive::AlreadyExist.where(id: params[:id]).first
+  end
+
 
 ###################################################################################################
   def multi_pack_download
@@ -348,44 +351,6 @@ class Documents::MainController < FrontController
     end
   end
 
-  # POST /account/documents/restore_piece
-  def restore_piece
-    piece = Pack::Piece.unscoped.find params[:piece_id]
-
-    piece.delete_at = nil
-    piece.delete_by = nil
-
-    piece.save
-
-    temp_document = piece.temp_document
-
-    parents_documents = temp_document.parents_documents
-
-    temp_document.original_fingerprint = DocumentTools.checksum(temp_document.cloud_content_object.path)
-    temp_document.save
-
-    if parents_documents.any?
-      parents_documents.each do |parent_document|
-        parent_document.original_fingerprint = DocumentTools.checksum(parent_document.cloud_content_object.path)
-        parent_document.save
-      end
-    end
-
-    pack = piece.pack
-
-    pack.delay.try(:recreate_original_document)
-
-    temp_pack = TempPack.find_by_name(pack.name)
-
-    piece.waiting_pre_assignment if temp_pack.is_compta_processable? && piece.preseizures.size == 0 && piece.temp_document.try(:api_name) != 'invoice_auto' && !piece.pre_assignment_waiting_analytics?
-
-    render json: { success: true }, status: 200
-  end
-
-  def already_exist_document
-    @already_document = Archive::AlreadyExist.where(id: params[:id]).first
-  end
-
   private
 
   def update_multiple_preseizures_params
@@ -420,4 +385,104 @@ class Documents::MainController < FrontController
       assign_report_with(pack) if pack.present?
     end
   end
+
+  def load_params
+    session_version = 001 #IMPORTANT: CHANGE THE SESSION VERSION IF SESSION STRUCTURE HAS BEEN CHANGED
+    session_name    = @is_operations ? 'params_document_operation' : 'params_document_piece'
+
+    if params[:activate_filter] || params[:reinit]
+      @s_params = params.permit!.to_h
+    else
+      @s_params = (session[session_name.to_sym].present? && session[session_name.to_sym].try(:[], :version) == session_version)? session[session_name.to_sym][:datas] : params.permit!.to_h
+    end
+
+    @s_params = @s_params.with_indifferent_access
+
+    @s_params[:by_all]        = @s_params[:by_all].dup.reject{|k, v| k == "position_operation" } if @s_params[:by_all].present? && @s_params[:by_all].try(:[], :position).blank?
+    @s_params[:by_preseizure] = @s_params[:by_preseizure].dup.reject{|k, v| k == "amount_operation" } if @s_params[:by_preseizure].present? && @s_params[:by_preseizure].try(:[], :amount).blank?
+    @s_params = deep_compact(@s_params).with_indifferent_access
+
+    @filters = {}
+
+    @filters[:text]          = @s_params[:text]                  if @s_params[:text].present?
+    @filters[:by_all]        = @s_params[:by_all]                if @s_params[:by_all].present?
+    @filters[:by_piece]      = @s_params[:by_piece]              if @s_params[:by_piece].present?
+    @filters[:by_preseizure] = @s_params[:by_preseizure]         if @s_params[:by_preseizure].present?
+    @filters[:journal]       = @s_params[:journal]               if @s_params[:journal].present?
+    @filters[:view]          = (@s_params[:view].try(:split, ',').try(:size).to_i >= 15) ? nil : @s_params[:view] if @s_params[:view]
+
+    if params[:reinit].present?
+      session.delete(session_name.to_sym)
+    else
+      session[session_name.to_sym] = { version: session_version, datas: @filters }
+    end
+
+    load_options
+  end
+
+  def load_options
+    per_page = @is_operations ? 14 : 40 #IMPORTANT: per_page option (for documents) must be a multiple of 4 and > 8 (needed by grid type view)
+    @options = { page: params[:page], per_page: per_page }
+
+    @options[:sort] = true
+    @options[:text] = @s_params[:text]
+
+    if @s_params[:by_all].present?
+      @s_params[:by_piece] = @s_params[:by_piece].present? ? @s_params[:by_piece].merge(@s_params[:by_all].permit!) : @s_params[:by_all]
+    end
+
+    if @is_documents
+      @options[:piece_created_at]           = @s_params[:by_piece].try(:[], :created_at)
+      @options[:piece_created_at_operation] = @s_params[:by_piece].try(:[], :created_at_operation)
+
+      @options[:tags] = @s_params[:by_piece].try(:[], :tags)
+
+      @options[:pre_assignment_state] = @s_params[:by_piece].try(:[], :state_piece)
+      @options[:piece_number]         = @s_params[:by_piece].try(:[], :piece_number)
+    end
+
+    @options[:position]           = @s_params[:by_piece].try(:[], :position)
+    @options[:position_operation] = @s_params[:by_piece].try(:[], :position_operation)
+
+    @options[:by_preseizure] = @s_params[:by_preseizure]
+
+    @options[:user_ids] = if (@s_params[:view].present? && @s_params[:view] != 'all')
+                            @s_params[:view].try(:split, ',') || account_ids
+                          else
+                            account_ids
+                          end
+    @options[:owner_ids] = @options[:user_ids]
+
+    @options[:journal] =  if @s_params[:journal].present?
+                            @s_params[:journal].try(:split, ',') || []
+                          else
+                            []
+                          end
+
+    if @options[:by_preseizure].present?
+      if @is_operations
+        reports_ids = Pack::Report::Preseizure.where(user_id: @options[:user_ids]).where('operation_id > 0').filter_by(@options[:by_preseizure]).distinct.pluck(:report_id).presence || [0]
+      else
+        piece_ids   = Pack::Report::Preseizure.where(user_id: @options[:owner_ids]).where('piece_id > 0').filter_by(@options[:by_preseizure]).distinct.pluck(:piece_id).presence || [0]
+      end
+    end
+
+    @options[:ids]       = reports_ids  if reports_ids.present?
+    @options[:piece_ids] = piece_ids    if piece_ids.present?  
+
+    @options
+  end
+
+
+  def deep_compact(hsh)
+    res_hash = hsh.map do |key, value|
+      value = deep_compact(value) if value.is_a?(Hash)
+
+      value = nil if not value.present?
+      [key, value]
+    end
+
+    res_hash.to_h.compact
+  end
+
 end

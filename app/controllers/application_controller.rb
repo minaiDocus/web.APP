@@ -61,6 +61,11 @@ class ApplicationController < ActionController::Base
     user = nil
 
     if current_user&.is_admin
+      if params[:user_code].present?
+        session.delete(:params_document_operation)
+        session.delete(:params_document_piece)
+      end
+
       if params[:user_code].present? || session[:user_code].present?
         user = User.includes(:options, :ibiza, :exact_online, :my_unisoft, :coala, :cegid, :fec_agiris, :quadratus, :csv_descriptor, :organization).get_by_code(params[:user_code].presence || session[:user_code].presence)
         user ||= current_user

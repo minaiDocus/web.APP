@@ -621,7 +621,7 @@
       $('#AlreadyExistView').modal('show')
 
       $.ajax({
-        url: '/account/documents/already_exist_document',
+        url: '/documents/already_exist_document',
         data: {id : id},
         type: "POST",
         success: function(data) {
