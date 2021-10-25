@@ -9,7 +9,7 @@ class VatAccount {
 
   add_vat_account(){
     let self = this;
-    $('#add-new-vat-account').unbind('click').bind('click', function(e) {
+    $('.edit-vat-account').unbind('click').bind('click', function(e) {
       e.stopPropagation();
       e.preventDefault();
 
@@ -33,10 +33,9 @@ class VatAccount {
   get_edit_view(target='edit'){
     let self = this;
 
-    self.applicationJS.sendRequest({ 'url': '/organizations/' + self.organization_id + '/customers/' + self.customer_id + '/accounting_plan/vat_accounts/edit_multiple' }).then((element)=>{
+    self.applicationJS.sendRequest({ 'url': '/organizations/' + self.organization_id + '/customers/' + self.customer_id + '/accounting_plan/vat_accounts/edit' }).then((element)=>{
       self.add_vat_account_modal.find('.modal-body').html($(element).find('#accounting_plan.edit').html());
-      if (target === 'edit') { self.add_vat_account_modal.find('.modal-title').text('Éditer un compte TVA'); }
-      ApplicationJS.set_checkbox_radio();
+      if (target === 'edit') { self.add_vat_account_modal.find('.modal-title').text('Éditer un compte TVA'); }      
     });
   }
 
@@ -59,4 +58,6 @@ class VatAccount {
 jQuery(function() {
   let accounting_plan = new VatAccount();
   accounting_plan.main();
+
+  AppListenTo('show_accounting_plan', (e)=>{ if (e.detail.response.json_flash.success) { window.location.href = e.detail.response.url } });
 });

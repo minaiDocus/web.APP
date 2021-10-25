@@ -981,6 +981,7 @@ fr:
           vat_autoliquidation: Fournisseur auto-liquidé
           vat_autoliquidation_debit_account: Compte de TVA autoliquidée déductibe
           vat_autoliquidation_credit_account: Compte de TVA autoliquidée collectée
+
       temp_document:
         zero: 0 fichier
         one: 1 fichier

@@ -1,19 +1,3 @@
-#accounting_plan .sub_menu {
-  position: relative;
-}
-
-.sub_menu .delete a {
-  text-decoration: none;
-  cursor: pointer;
-  color: #FF4848 !important;
-}
-
-.sub_menu .edit a{
-  text-decoration: none;
-  cursor: pointer;
-  color: rgba(26, 26, 26, 0.7) !important;
-}
-
 #import_dialog.modal .modal-dialog{
   min-width: 1024px;
 }

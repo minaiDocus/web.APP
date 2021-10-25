@@ -12,6 +12,11 @@ class VatAccounts::MainController < OrganizationController
     @vat_accounts = @accounting_plan.vat_accounts
   end
 
+  def edit
+    debugger
+    
+  end
+
   # /organizations/:organization_id/customers/:customer_id/accounting_plan/vat_accounts/edit_multiple
   def edit_multiple; end
 

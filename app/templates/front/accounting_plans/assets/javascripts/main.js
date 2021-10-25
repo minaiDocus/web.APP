@@ -57,15 +57,14 @@ class AccountingPlan {
 
   edit_provider_customer(){
     let self = this;
-    $('a.edit').unbind('click').bind('click', function(e) {
+    $('.edit-accounting-plan').unbind('click').bind('click', function(e) {
       e.stopPropagation();
       e.preventDefault();
 
-      if ($(this).hasClass('provider')) { self.get_edit_view('customer-form', 'provider'); }
-      else if ($(this).hasClass('customer')) { self.get_edit_view('provider-form', 'customer'); }
+      if ($(this).hasClass('provider')) { self.get_edit_view($(this).attr("data-account-id"), 'provider'); }
+      else if ($(this).hasClass('customer')) { self.get_edit_view($(this).attr("data-account-id"), 'customer'); }
 
-      self.edit_provider_modal.modal('show');
-      ApplicationJS.set_checkbox_radio();
+      self.edit_provider_modal.modal('show');      
     })
   }
 
@@ -118,17 +117,17 @@ class AccountingPlan {
   }
 
 
-  get_edit_view(target, type){
+  get_edit_view(accounting_id, type){
     let self = this;
 
-    console.log(target);
-    console.log(type);
+    let url = '/organizations/' + self.organization_id + '/customers/' + self.customer_id + '/accounting_plan/edit?accounting_id='+ accounting_id +'&type='+ type
 
-    self.applicationJS.sendRequest({ 'url': '/organizations/' + self.organization_id + '/customers/' + self.customer_id + '/accounting_plan/edit?type='+type }).then((element)=>{
-      self.edit_provider_modal.find('.modal-body').html($(element).find('#accounting_plan').html());
-      self.edit_provider_modal.find('.'+target).remove();
-      if (type === 'customer') { self.edit_provider_modal.find('.modal-title').text('Éditer un client'); }
-      ApplicationJS.set_checkbox_radio();
+    if (accounting_id == "")
+      url = '/organizations/' + self.organization_id + '/customers/' + self.customer_id + '/accounting_plan/new?type='+ type    
+
+    self.applicationJS.sendRequest({ 'url': url }).then((element)=>{      
+      self.edit_provider_modal.find('.modal-body').html(element);
+      if (type === 'customer') { self.edit_provider_modal.find('.modal-title').text('Éditer un client'); }      
     });
   }
 
@@ -147,10 +146,17 @@ class AccountingPlan {
       e.preventDefault();
       $(this).closest('.part-account').remove();
     });
+
+    $('.li.edit-accounting-plan').unbind('click').bind('click',function(e) {
+      e.preventDefault();
+      
+    });
   }
 }
 
 jQuery(function() {
   let accounting_plan = new AccountingPlan();
   accounting_plan.main();
+
+  AppListenTo('show_accounting_plan', (e)=>{ if (e.detail.response.json_flash.success) { window.location.href = e.detail.response.url } });
 });

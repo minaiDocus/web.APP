@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   scope module: 'accounting_plans' do
     resources :organizations, only: [] do
       resources :customers, only: [] do
-        resource :accounting_plan, except: %w(new create destroy), controller: 'main' do
+        resource :accounting_plan, controller: 'main' do
           member do
             patch  :import
             post   :auto_update

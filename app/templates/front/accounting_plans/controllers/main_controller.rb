@@ -18,39 +18,65 @@ class AccountingPlans::MainController < CustomerController
   end
 
   # GET /organizations/:organization_id/customers/:customer_id/accounting_plan/edit
-  def edit; end
+  def edit
+    @accounting_plan_item = params[:type] == 'provider' ? @accounting_plan.providers.find(params[:accounting_id]) : @accounting_plan.customers.find(params[:accounting_id])
+
+    render partial: 'edit'
+  end
 
   # PUT /organizations/:organization_id/customers/:customer_id/accounting_plan/:id
   def update
-    modified = @accounting_plan.update(accounting_plan_params)
+    accounting_plan_item = params[:accounting_plan_item][:type] == 'provider' ? @accounting_plan.providers.find(params[:accounting_plan_item][:id]) : @accounting_plan.customers.find(params[:accounting_plan_item][:id])
 
-    respond_to do |format|
-      format.html {
-        if modified
-          flash[:success] = 'Modifié avec succès.'
+    accounting_plan_item.assign_attributes params[:accounting_plan_item].except(:id, :type).permit(:third_party_account, :third_party_name, :conterpart_account, :code, :vat_autoliquidation_debit_account, :vat_autoliquidation_credit_account, :vat_autoliquidation)
 
-          redirect_to organization_customer_accounting_plan_path(@organization, @customer)
-        else
-          render :edit
-        end
-      }
-      format.json {
-        if params[:destroy].present? && params[:id].present? && params[:type].present?
-          @accounting_plan.providers.find(params[:id]).destroy if params[:type] == 'provider'
-          @accounting_plan.customers.find(params[:id]).destroy if params[:type] == 'customer'
-
-          account = nil
-        elsif params[:accounting_plan].try(:[], :providers_attributes).try(:[], :id).present?
-          account = @accounting_plan.providers.find(params[:accounting_plan][:providers_attributes][:id])
-        elsif params[:accounting_plan].try(:[], :customers_attributes).try(:[], :id).present?
-          account = @accounting_plan.customers.find(params[:accounting_plan][:customers_attributes][:id])
-        else
-          account = AccountingPlanItem.unscoped.where(accounting_plan_itemable_id: @accounting_plan.id, kind: params[:type]).order(id: :desc).first
-        end
-
-        render json: { account: account  }, status: 200
-      }
+    if accounting_plan_item.save
+      json_flash[:success] = 'Modifié avec succès.'
+    else
+      json_flash[:error] = errors_to_list accounting_plan_item
     end
+
+    render json: { json_flash: json_flash, url: organization_customer_accounting_plan_path(@organization, @customer, { tab: params[:accounting_plan_item][:type]}) }, status: 200   
+  end
+
+  # POST /organizations/:organization_id/customers/:customer_id/accounting_plan/:id
+  def create
+    accounting_plan_item = AccountingPlanItem.new
+
+    accounting_plan_item.assign_attributes params[:accounting_plan_item].except(:id, :type).permit(:third_party_account, :third_party_name, :conterpart_account, :code, :vat_autoliquidation_debit_account, :vat_autoliquidation_credit_account, :vat_autoliquidation)
+
+    accounting_plan_item.accounting_plan_itemable_id   = @accounting_plan.id
+    accounting_plan_item.accounting_plan_itemable_type = "AccountingPlan"
+
+    accounting_plan_item.kind = params[:accounting_plan_item][:type]
+
+    accounting_plan_item.is_updated = true
+    
+    if accounting_plan_item.save
+      json_flash[:success] = 'Ajouté avec succès.'
+    else
+      json_flash[:error] = "Nom du tiers vide"
+    end
+
+    render json: { json_flash: json_flash, url: organization_customer_accounting_plan_path(@organization, @customer, { tab: params[:accounting_plan_item][:type]}) }, status: 200
+  end
+
+  def new
+    @accounting_plan_item = AccountingPlanItem.new
+    
+    render partial: 'edit'
+  end
+
+  def destroy
+    accounting_plan_item = params[:type] == 'provider' ? @accounting_plan.providers.find(params[:_id]) : @accounting_plan.customers.find(params[:_id])
+
+    accounting_plan_item.destroy
+
+    label_delete = params[:type] == 'provider' ? 'Fournisseur ' : 'Client'
+
+    flash[:success] = label_delete + ' supprimés avec succès.'
+
+    redirect_to organization_customer_accounting_plan_path(@organization, @customer, { tab: params[:type]})
   end
 
   # POST /organizations/:organization_id/customers/:customer_id/accounting_plan/ibiza_auto_update

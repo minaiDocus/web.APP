@@ -379,4 +379,13 @@ fr:
       pack_report_preseizure_account:
         number: Numéro
         lettering: Lettrage
+      accounting_plan_item:
+        third_party_account: Compte de tiers
+        third_party_name: Nom du tiers
+        conterpart_account: Compte de contrepartie
+        code: Code TVA
+        vat_autoliquidation: Fournisseur auto-liquidé
+        vat_autoliquidation_debit_account: Compte de TVA autoliquidée déductibe
+        vat_autoliquidation_credit_account: Compte de TVA autoliquidée collectée
+
 
