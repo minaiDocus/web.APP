@@ -76,7 +76,8 @@ class SoftwareSetting::MainController < OrganizationController
       { :fec_acd_attributes => %i[id is_used auto_deliver] },
       { :csv_descriptor_attributes => %i[id is_used auto_deliver] },
       { :exact_online_attributes => %i[id is_used auto_deliver] },
-      { :my_unisoft_attributes => %i[id is_used auto_deliver] }
+      { :my_unisoft_attributes => %i[id is_used auto_deliver] },
+      { :ibiza_attributes => %i[id is_used auto_deliver] }
     )
   end
 end

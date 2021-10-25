@@ -135,6 +135,14 @@
                         = f.simple_fields_for :ibiza do |software|
                           = software.input :ibiza_id, collection: [], label: 'Dossier correspondant dans iBiZa', label_html: { class: 'control-label required semibold' }, input_html: { class: 'form-control select form-select optional ibiza-customers-list', id: 'ibiza-customers-list', placeholder: 'Choisir un dossier', data: { original_value: nil, users_list_url: organization_ibiza_users_path(@organization, format: 'json') }, multiple: false } 
 
+                - if !@organization.specific_mission && params[:action].in?(%w(show edit update))
+                  %hr
+                  .form-group
+                    .row
+                      .col-md-12
+                        Paramètrage d'envoi par email :
+                        = link_to "#{@customer.email_code}@fw.idocus.com", upload_email_infos_organization_customer_path(@organization, @customer)
+
         .carousel-item
           .subscription-base-form
             - unless @organization.specific_mission

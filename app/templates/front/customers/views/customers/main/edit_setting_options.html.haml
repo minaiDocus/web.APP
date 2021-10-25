@@ -42,7 +42,7 @@
           %br
           %p Merci d'inscrire le code d'appairage dans le champ ci-dessous :
           .form-group
-            %label.semibold Code apparainage iDocus Box
+            %label.semibold Code apparaige iDocus Box
             .select-container.no-padding.w-100
               = text_field_tag 'pairing_code', '', placeholder: "ex : 125HKEH344"
       = f.simple_fields_for :options do |o|
@@ -133,6 +133,7 @@
               .form-check.form-check-inline
                 = radio_button_tag 'user[options_attributes][is_operation_value_date_needed]', '1', @customer.options.is_operation_value_date_needed == 1, class: 'form-check-input compta-user-options'
                 %label.form-check-label Auto
+                
       %hr
       .form-group.no-margin
         .w-100.text-end

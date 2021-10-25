@@ -1,5 +1,5 @@
 = simple_form_for @member, url: collaborator_form_url(@organization, @member), html: { class: 'form-horizontal create_update_form' } do |f|
-  - company_value = @member.persisted? ? @member.user.company : current_user.company
+  - company_value = @member.persisted? ? @member.user.try(:company) : @user.try(:company)
   = f.simple_fields_for :user do |uf|
     .form-group
       .row

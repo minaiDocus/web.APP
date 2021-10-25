@@ -23,7 +23,7 @@
       - first_active = false
       - softwares_list.each_with_index do |software, index|
         - is_active = (tab_present && params[:tab] == software) || (!tab_present && !first_active)
-        - if @organization.send(software.to_sym).try(:used?) && software == 'ibiza'
+        - if @organization.send(software.to_sym).try(:is_used) && software == 'ibiza'
           - first_active = true if is_active
           .tab-pane.no-margin#ibiza-software{ "role" => "tabpanel", "aria-labelledby" => "ibiza-software-tab", class: (is_active)? 'active' : '' }
             = render file: Rails.root.join('app/templates/front/ibiza/views/ibiza/main/setting.html.haml'), locals: { ibiza: @organization.ibiza }

@@ -278,6 +278,19 @@ class Customers::MainController < CustomerController
     end
   end
 
+  def regenerate_email_code
+    if params[:customer].present?
+      customer = User.find Base64.decode64(params[:customer])
+      if customer && customer.options.try(:is_upload_authorized) && customer.active? && customer.update_email_code
+        flash[:success] = 'Code régénéré avec succès.'
+      else
+        flash[:error] = "Impossible d'effectuer l'opération demandée"
+      end
+
+      redirect_to upload_email_infos_organization_customer_path(customer.organization, customer)
+    end
+  end
+
   private
 
   def user_params

@@ -26,6 +26,7 @@ Rails.application.routes.draw do
           patch 'update_softwares_selection'
           get 'my_unisoft_societies'
           post 'associate_society'
+          post 'regenerate_email_code'
         end
       end
     end

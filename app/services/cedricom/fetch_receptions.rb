@@ -8,7 +8,7 @@ module Cedricom
     def get_list
       xml = Hash.from_xml(Cedricom::Api.new(@organization).get_reception_list(@date))
 
-      if xml['Receptions']
+      if xml && xml['Receptions']
         xml['Receptions']['Reception'].each do |reception|
           CedricomReception.create(cedricom_id: reception['IdReception'],
                                    cedricom_reception_date: Date::strptime(reception['DateReception'], '%d%m%Y'),
