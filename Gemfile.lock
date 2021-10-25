@@ -724,8 +724,8 @@ DEPENDENCIES
   faraday_middleware
   fast_jsonapi
   ftpd
-  gio2
-  gobject-introspection
+  gio2 (= 3.4.4)
+  gobject-introspection (= 3.4.4)
   google-api-client
   google_drive
   guard-livereload
@@ -748,7 +748,7 @@ DEPENDENCIES
   oauth
   oj
   paperclip
-  poppler
+  poppler (= 3.4.4)
   posix-spawn
   prawn
   prawn-qrcode
