@@ -52,6 +52,9 @@ class Retrievers::ConfigurationStepsController < RetrieverController
 
   def budgea_step4
     ### params[local_accounts] is a collection of api_ids
+    retriever = Retriever.where(budgea_id: params[:budgea_id] || 0).first
+    Retriever.delay_for(1.minutes, queue: :low).resume(retriever.id, false) if retriever
+
     render partial: 'step4', locals: { remote_accounts: CustomUtils.arrStr_to_array(params[:remote_accounts]), local_accounts: CustomUtils.arrStr_to_array(params[:local_accounts]) }
   end
 

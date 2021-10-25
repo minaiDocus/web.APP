@@ -30,7 +30,7 @@ class ConfigurationStep4{
     let ajax_params =   {
                           'url': `/retriever/budgea_step4`,
                           'type': 'POST',
-                          'data': { local_accounts: this.local_accounts, remote_accounts: this.remote_accounts },
+                          'data': { local_accounts: this.local_accounts, remote_accounts: this.remote_accounts, budgea_id: this.connector_id },
                           'dataType': 'html',
                         };
 
@@ -76,7 +76,7 @@ class ConfigurationStep4{
   configuration_finished(){
     try{ this.mainConfig.main_modal.modal('hide'); }catch(e){}
     this.mainConfig.applicationJS.sendRequest({ url: '/retrievers', type: 'GET', target: '.retrievers-list' }).then((e)=>{
-      this.mainConfig.applicationJS.noticeSuccessMessageFrom(null, 'Configuration automate terminée.');
+      this.mainConfig.applicationJS.noticeSuccessMessageFrom(null, 'Configuration automate terminée. Votre automate sera mis à jour dans quelques minutes ...');
     });
   }
 }

@@ -202,6 +202,11 @@ class Retriever < ApplicationRecord
       collection = collection.where('name LIKE ?', "%#{contains[:name]}%") unless contains[:name].blank?
       collection
     end
+
+    def resume(id, force=false)
+      retriever = Retriever.find id
+      retriever.resume_me(force)
+    end
   end
 
   def processing?
