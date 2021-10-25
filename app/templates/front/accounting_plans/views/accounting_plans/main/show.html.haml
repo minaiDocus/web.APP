@@ -56,9 +56,15 @@
   .mb-4
   %hr
   .fadein
+    .search-content.float-end.me-3
+      .row.no-margin
+        .col-md-2.no-padding.text-center.glass
+          = glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })
+        .col-md-10.no-padding.no-margin
+          %input#acc_plan_search{ name:'acc_plan_search', placeholder: 'Rechercher' }
     %ul.nav.nav-tabs.ms-3{ "role" => "tablist" }
       %li.nav-item.no-margin{ "role" => "presentation" }
-        %button.semibold.nav-link#check-provider-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#provider", type: :button, "role" => "tab", "aria-controls" => "provider-selection", "aria-selected" => "true", class: (params[:tab] == 'provider' ? 'active': '') } 
+        %button.semibold.nav-link#check-provider-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#provider", type: :button, "role" => "tab", "aria-controls" => "provider-selection", "aria-selected" => "true", class: ((params[:tab] == 'provider' || !params[:tab].present?) ? 'active': '') } 
           Fournisseurs
           %span.ms-1.badge.badge-secondary.regular= @accounting_plan.providers.size
       %li.nav-item.no-margin{ "role" => "presentation" }
@@ -71,9 +77,9 @@
           %span.ms-1.badge.badge-secondary.regular.vat_accounts_count 0
 
     .tab-content
-      .tab-pane.box.no-margin#provider{ "role" => "tabpanel", "aria-labelledby" => "provider-tab", class: (params[:tab] == 'provider' ? 'active': '') }
+      .tab-pane.box.no-margin#provider{ "role" => "tabpanel", "aria-labelledby" => "provider-tab", class: ((params[:tab] == 'provider' || !params[:tab].present?) ? 'active': '') }
         .row.derivationLeft
-          .col-md-1          
+          .col-md-1
           .col-md-5.text-end.no-padding
             = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer tout', destroy_providers_organization_customer_accounting_plan_path(@organization, @customer), class: 'btn btn-danger', data: { method: :delete, confirm: 'Vous êtes sur le point de supprimer tous les fournisseurs, êtes-vous sûr ?' }
             %button.edit-accounting-plan.btn.btn-light.provider{ type: :button, "data-account-id" => "" }
@@ -93,14 +99,15 @@
           .col-md-12
             %table.table.table-striped
               %thead
-                %th= t('activerecord.models.accounting_plan_item.attributes.third_party_name')
-                %th= t('activerecord.models.accounting_plan_item.attributes.third_party_account')
-                %th= t('activerecord.models.accounting_plan_item.attributes.conterpart_account')
-                %th= t('activerecord.models.accounting_plan_item.attributes.code')
-                %th{ class: autoliquidation_exist ? '' : 'hide' }= t('activerecord.models.accounting_plan_item.attributes.vat_autoliquidation')
-                %th{ class: autoliquidation_exist ? '' : 'hide' }= t('activerecord.models.accounting_plan_item.attributes.vat_autoliquidation_debit_account')
-                %th{ class: autoliquidation_exist ? '' : 'hide' }= t('activerecord.models.accounting_plan_item.attributes.vat_autoliquidation_credit_account')
-                %th.text-end Actions          
+                %tr.header
+                  %th= t('activerecord.models.accounting_plan_item.attributes.third_party_name')
+                  %th= t('activerecord.models.accounting_plan_item.attributes.third_party_account')
+                  %th= t('activerecord.models.accounting_plan_item.attributes.conterpart_account')
+                  %th= t('activerecord.models.accounting_plan_item.attributes.code')
+                  %th{ class: autoliquidation_exist ? '' : 'hide' }= t('activerecord.models.accounting_plan_item.attributes.vat_autoliquidation')
+                  %th{ class: autoliquidation_exist ? '' : 'hide' }= t('activerecord.models.accounting_plan_item.attributes.vat_autoliquidation_debit_account')
+                  %th{ class: autoliquidation_exist ? '' : 'hide' }= t('activerecord.models.accounting_plan_item.attributes.vat_autoliquidation_credit_account')
+                  %th.text-end Actions
               %tbody
                 - @accounting_plan.providers.each do |provider|                  
                   %tr                    
@@ -111,7 +118,7 @@
                     %td{ class: autoliquidation_exist ? '' : 'hide' }= provider.vat_autoliquidation ? icon_ok(options) : icon_not_ok(options)
                     %td{ class: autoliquidation_exist ? '' : 'hide' }= provider.vat_autoliquidation_debit_account
                     %td{ class: autoliquidation_exist ? '' : 'hide' }= provider.vat_autoliquidation_credit_account
-                    %td.text-end.pointer
+                    %td.text-end.pointer.allow-action
                       .action.sub_edit_delete
                         %span.glyph= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
                       .sub_menu.text-start.hide
@@ -120,7 +127,7 @@
                             %span.me-2= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
                             %span= t('actions.edit')
                           %li
-                            = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', organization_customer_accounting_plan_path(@organization, @customer, { _id: provider.id, type: 'provider' }), data: { method: :delete, confirm: 'Voulez-vous vraiement supprimer ce fournisseur ?' } 
+                            = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', organization_customer_accounting_plan_path(@organization, @customer, { _id: provider.id, type: 'provider' }), data: { method: :delete, confirm: 'Voulez-vous vraiment supprimer ce fournisseur ?' }
 
       .tab-pane.box.no-margin#customer{ "role" => "tabpanel", "aria-labelledby" => "customer-tab", class: (params[:tab] == 'customer' ? 'active': '') }
         .row.derivationRight
@@ -145,11 +152,12 @@
           .col-md-12
             %table.table.table-striped.table_integration
               %thead
-                %th= t('activerecord.models.accounting_plan_item.attributes.third_party_name')
-                %th= t('activerecord.models.accounting_plan_item.attributes.third_party_account')
-                %th= t('activerecord.models.accounting_plan_item.attributes.conterpart_account')
-                %th= t('activerecord.models.accounting_plan_item.attributes.code')
-                %th.text-end Actions        
+                %tr.header
+                  %th= t('activerecord.models.accounting_plan_item.attributes.third_party_name')
+                  %th= t('activerecord.models.accounting_plan_item.attributes.third_party_account')
+                  %th= t('activerecord.models.accounting_plan_item.attributes.conterpart_account')
+                  %th= t('activerecord.models.accounting_plan_item.attributes.code')
+                  %th.text-end Actions
               %tbody
                 - @accounting_plan.customers.each do |customer|
                   %tr
@@ -157,7 +165,7 @@
                     %td= customer.third_party_account
                     %td= customer.conterpart_account
                     %td= customer.code
-                    %td.text-end.pointer
+                    %td.text-end.pointer.allow-action
                       .action.sub_edit_delete
                         %span.glyph= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})
                       .sub_menu.text-start.hide
@@ -166,7 +174,7 @@
                             %span.me-2= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
                             %span= t('actions.edit')
                           %li
-                            = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', organization_customer_accounting_plan_path(@organization, @customer, { _id: customer.id, type: 'customer' }), data: { method: :delete, confirm: 'Voulez-vous vraiement supprimer ce client ?' }
+                            = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', organization_customer_accounting_plan_path(@organization, @customer, { _id: customer.id, type: 'customer' }), data: { method: :delete, confirm: 'Voulez-vous vraiment supprimer ce client ?' }
 
       .tab-pane.box.no-margin#vat_accounts{ "role" => "tabpanel", "aria-labelledby" => "vat_accounts-tab", class: (params[:tab] == 'vat_accounts' ? 'active': '') }
     

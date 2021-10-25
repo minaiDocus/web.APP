@@ -1,0 +1,12 @@
+- url = @vat_accounts.persisted? ? organization_customer_accounting_plan_vat_account_path(@organization, @customer) : organization_customer_accounting_plan_vat_accounts_path(@organization, @customer)
+
+= simple_form_for @vat_accounts, url: url, html: { id: 'vat_account_edit_form', class: 'form-group' } do |f|
+  = f.label :code, label: t('activerecord.models.vat_account.attributes.code'), class: 'semibold'
+  .select-container.no-padding.w-100
+    = f.input :code, label: false
+  = f.label :nature, label: t('activerecord.models.vat_account.attributes.nature'), class: 'semibold'
+  .select-container.no-padding.w-100
+    = f.input :nature, label: false
+  = f.label :account_number, label: t('activerecord.models.vat_account.attributes.account_number'), class: 'semibold'
+  .select-container.no-padding.w-100
+    = f.input :account_number, label: false

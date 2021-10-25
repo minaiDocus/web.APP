@@ -64,7 +64,7 @@ class AccountingPlan {
       if ($(this).hasClass('provider')) { self.get_edit_view($(this).attr("data-account-id"), 'provider'); }
       else if ($(this).hasClass('customer')) { self.get_edit_view($(this).attr("data-account-id"), 'customer'); }
 
-      self.edit_provider_modal.modal('show');      
+      self.edit_provider_modal.modal('show');
     })
   }
 
@@ -147,9 +147,16 @@ class AccountingPlan {
       $(this).closest('.part-account').remove();
     });
 
-    $('.li.edit-accounting-plan').unbind('click').bind('click',function(e) {
+    $('.search-content input#acc_plan_search').unbind('keyup').bind('keyup',function(e) {
       e.preventDefault();
-      
+      let _find_text = $(this).val().toLowerCase();
+
+      $('.tab-pane.active .table tr').not('.header').each(function(e) {
+        if ($.trim($(this).children().not('.allow-action').text().toLowerCase().indexOf(_find_text)) > -1)
+          $(this).show();
+        else
+          $(this).hide();
+      });
     });
   }
 }

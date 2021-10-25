@@ -13,15 +13,14 @@ class VatAccount {
       e.stopPropagation();
       e.preventDefault();
 
-      self.get_edit_view('.customer-form');
+      self.get_edit_view($(this).attr('data-vat-account-id'));
 
       self.add_vat_account_modal.modal('show');
-      // ApplicationJS.set_checkbox_radio();
     })
   }
 
   main() {
-    if ($('#vat_accounts #add-new-vat-account').length > 0) {
+    if ($('#vat_accounts .edit-vat-account').length > 0) {
       this.add_vat_account();
     }
 
@@ -30,12 +29,18 @@ class VatAccount {
   }
 
 
-  get_edit_view(target='edit'){
-    let self = this;
+  get_edit_view(id=0){
+    let self = this;    
 
-    self.applicationJS.sendRequest({ 'url': '/organizations/' + self.organization_id + '/customers/' + self.customer_id + '/accounting_plan/vat_accounts/edit' }).then((element)=>{
-      self.add_vat_account_modal.find('.modal-body').html($(element).find('#accounting_plan.edit').html());
-      if (target === 'edit') { self.add_vat_account_modal.find('.modal-title').text('Éditer un compte TVA'); }      
+    let url = '/organizations/' + self.organization_id + '/customers/' + self.customer_id + '/accounting_plan/vat_accounts/'+ id +'/edit';
+
+    if (id == 0)
+      url = '/organizations/' + self.organization_id + '/customers/' + self.customer_id + '/accounting_plan/vat_accounts/new';
+    
+    self.applicationJS.sendRequest({ 'url': url }).then((element)=>{
+      self.add_vat_account_modal.find('.modal-body').html($(element));
+
+      if (id != 0) { self.add_vat_account_modal.find('.modal-title').text('Éditer un compte TVA'); }      
     });
   }
 
