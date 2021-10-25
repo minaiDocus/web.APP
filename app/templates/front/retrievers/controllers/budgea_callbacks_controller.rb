@@ -1,8 +1,7 @@
 # frozen_string_literal: true
-class Retrievers::BudgeaCallbacksController < RetrieverController
-  skip_before_action :verify_authenticity_token
+class Retrievers::BudgeaCallbacksController < ApiController
+  skip_before_action :authenticate_current_user
   skip_before_action :verify_rights
-  skip_before_action :load_account
 
   def user_synced
     if params['user'].present? && params["connections"].present?
