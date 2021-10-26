@@ -122,18 +122,24 @@ class Journal{
   add_vat_account_field(rate, vat_account, conterpart_account){
     let self = this;
 
+    rate = rate || 10
+
     let cloned_field = '.account_book_type_vat_accounts_field';
 
-    $(cloned_field + ' input[name="account_book_type[vat_accounts_label]"]').attr('placeholer', rate);
-    $(cloned_field + ' input[name="account_book_type[vat_accounts_rate]"]').attr('placeholer', vat_account);
-    $(cloned_field + ' input[name="account_book_type[vat_accounts_conterpart]"]').attr('placeholer', conterpart_account);
+    $('.pre-assignment-attributes #account_book_type_with_default_vat_accounts').append($(cloned_field).html());    
 
-    let input_field = $(cloned_field);
+    let cloned_field_child = $('.pre-assignment-attributes #account_book_type_with_default_vat_accounts .account_book_type_vat_accounts:last-child');
 
-    $('.pre-assignment-attributes #account_book_type_with_default_vat_accounts').after(input_field.html());
+    cloned_field_child.find('select[name="account_book_type[vat_accounts_label]"]').val(rate);
+    cloned_field_child.find('input[name="account_book_type[vat_accounts_rate]"]').val(vat_account);
+    cloned_field_child.find('input[name="account_book_type[vat_accounts_conterpart]"]').val(conterpart_account);    
+
+    if( ![10, 8.5, 5.5, 2.1].find((e)=>{ return e == rate })){
+      cloned_field_child.addClass('hide');
+      cloned_field_child.find('select[name="account_book_type[vat_accounts_label]"]').replaceWith(`<input type="text" value="${rate}" name="account_book_type[vat_accounts_label]" class="vat_accounts_label">`);
+    }
 
     $('.account_book_type_label_vat_accounts').focus();
-
 
     $('.account_book_type_label_vat_accounts').unbind('blur keypress input change').bind('blur keypress input change', function(e) {
       let error_message_target = $('.vat_accounts_label_error');
@@ -153,11 +159,7 @@ class Journal{
       }
 
       if (e.type === 'input'){
-        value = $(this).val();
-        if (parseFloat(value) < 1 || parseFloat(value) > 20){
-          current_target.html('Taux de TVA doit être inclus entre (1-20%)').show().delay(5000).fadeOut('slow');
-          return false;
-        }
+        value = $(this).val();  
       }
 
       current_target.css('color', '#FF4848');
@@ -181,7 +183,7 @@ class Journal{
 
     $(form).each(function() {
       let vat_account = $(this);
-      let label = vat_account.find('input[type="text"].vat_accounts_label, input[type="number"].vat_accounts_label').val();
+      let label = vat_account.find('input[type="text"].vat_accounts_label, select.vat_accounts_label').val();
       let vat_accounts_field = vat_account.find('input[type="text"].vat_accounts').val();
       let conterpart_vat_accounts_field = vat_account.find('input[type="text"].vat_accounts_conterpart').val();
       let vat_account_exonorated_field = vat_account.find('input[type="text"].vat_account_exonorated').val();
@@ -218,10 +220,12 @@ class Journal{
     if (!(vat_accounts === '' || vat_accounts === null || vat_accounts === 'undefined' || vat_accounts === undefined)) {
       try {
         vat_accounts = JSON.parse(vat_accounts);
+
         for(let rate in vat_accounts){
           let raw_vat_account = vat_accounts[rate];
           let vat_account = raw_vat_account[0];
           let conterpart_vat_account = raw_vat_account[1]
+
 
           if ((rate.indexOf(self.default_vat_accounts_label) >= 0) || (rate === 'Compte de TVA par défaut') || (rate === '0')){
             $('input[type="text"]#account_book_type_default_vat_accounts').attr('value', vat_account);
