@@ -10,8 +10,9 @@
     %ul.nav.nav-tabs.ms-4{ "role" => "tablist" }
       - first_active = false
       - softwares_list.each_with_index do |software, index|
+        - is_used   = ( @organization.send(software.to_sym).try(:used?) || @organization.send(software.to_sym).try(:is_used) && software == 'ibiza' )
         - is_active = (tab_present && params[:tab] == software.to_s) || (!tab_present && !first_active)        
-        - if @organization.send(software.to_sym).try(:used?)
+        - if is_used
           - first_active = true if is_active
           %li.nav-item.no-margin{ "role" => "presentation" }
             %button.semibold.nav-link{ id: "#{software}-software-tab", "data-bs-toggle" => "tab", "data-bs-target" => "##{software}-software", type: :button, "role" => "tab", "aria-controls" => "#{software}-software", "aria-selected" => "true", class: (is_active)? 'active' : '' }= Interfaces::Software::Configuration::SOFTWARES_HUMAN_NAME[software.to_sym]
@@ -38,13 +39,14 @@
         - softwares_list.each_slice(3) do |group|
           .row.derivationRight
             - group.each do |software|
-              - if @organization.send(software.to_sym).try(:used?)
+              - is_used   = ( @organization.send(software.to_sym).try(:used?) || @organization.send(software.to_sym).try(:is_used) && software == 'ibiza' )
+              - if is_used
                 - url = deactivate_software_path(@organization, software)
                 - confirm = "Voulez vous vraiment désactiver ce logiciel?"
               - else
                 - url = activate_software_path(@organization, software)
                 - confirm = "Voulez vous vraiment activer ce logiciel?"
-              .col-md-4.box-software.pointer.animated-pointer{ id: software, class: (@organization.send(software.to_sym).try(:used?))? 'selected' : '' }                
+              .col-md-4.box-software.pointer.animated-pointer{ id: software, class: is_used ? 'selected' : '' }
                 %a.no-style.w-100{ href: url, data: { confirm: confirm, method: 'post' } }
                   - if img_list[software.to_sym].present?
                     %img{ class: "image-software #{software}", alt: 'logo-quadratus', src: img_list[software.to_sym] }

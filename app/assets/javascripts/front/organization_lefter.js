@@ -18,7 +18,7 @@ jQuery(function () {
 
 
   /* SPECIAL HEADER CUSTOMER LINKS */
-    $('a.head_customer_link').unbind('click').bind('click', function(e){
+    $('a.head_customer_link').unbind('click.head_customer').bind('click.head_customer', function(e){
       e.preventDefault();
 
       if( $(this).hasClass('active') )

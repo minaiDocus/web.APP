@@ -1,6 +1,6 @@
 = stylesheet_link_tag 'front/software_setting/assets/stylesheets/main'
 
-.custgomer_softwares_setting_list
+.customer_softwares_setting_list
   - if @organization.try(:ibiza).try(:used?) && params[:software_name] == 'ibiza'
     #ibiza
       .derivationLeft.box.no-margin
