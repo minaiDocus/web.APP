@@ -455,7 +455,7 @@ class ApplicationJS {
                     $(this).parents().each((a, parent)=>{
                       if( $(parent).hasClass('form-group') ){
                         let label = $(parent).find('label').text();
-                        errors.push( `<strong>${ label || $(this).attr('name') }</strong>: est obligatoire` );
+                        errors.push( `<strong>${ label || $(this).attr('name') }</strong>: est vide.` );
                         return false; //break
                       }
                     });

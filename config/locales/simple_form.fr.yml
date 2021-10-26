@@ -133,7 +133,7 @@ fr:
       group:
         members: Collaborateurs
         customers: Clients
-      vat_account:
+      accounting_plan_vat_account:
         code: Code TVA
         nature: Nature
         account_number: Numéro de compte

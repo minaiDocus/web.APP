@@ -55,7 +55,7 @@ class AccountingPlans::MainController < CustomerController
     if accounting_plan_item.save
       json_flash[:success] = 'Ajouté avec succès.'
     else
-      json_flash[:error] = "Nom du tiers vide"
+      json_flash[:error] = errors_to_list accounting_plan_item
     end
 
     render json: { json_flash: json_flash, url: organization_customer_accounting_plan_path(@organization, @customer, { tab: params[:accounting_plan_item][:type]}) }, status: 200

@@ -1,29 +1,17 @@
-= simple_form_for @accounting_plan_item, url: organization_customer_accounting_plan_path(@organization, @customer), html: { id: 'accounting_edit_form', class: 'form-group' } do |f|
+= simple_form_for @accounting_plan_item, url: organization_customer_accounting_plan_path(@organization, @customer), html: { id: 'accounting_edit_form' }, wrapper: :form_v3 do |f|
   = f.input :id, :as => :hidden
   = f.input :type, as: :hidden, :input_html => { :value => params[:type] }
-  = f.label :third_party_account, label: t('activerecord.models.accounting_plan_item.attributes.third_party_account'), class: 'semibold'
-  .select-container.no-padding.w-100
-    = f.input :third_party_account, label: false
-  = f.label :third_party_name, label: t('activerecord.models.accounting_plan_item.attributes.third_party_name'), class: 'semibold'
-  .select-container.no-padding.w-100
-    = f.input :third_party_name, label: false
-  = f.label :conterpart_account, label: t('activerecord.models.accounting_plan_item.attributes.conterpart_account'), class: 'semibold'
-  .select-container.no-padding.w-100
-    = f.input :conterpart_account, label: false
-  = f.label :code, label: t('activerecord.models.accounting_plan_item.attributes.code'), class: 'semibold'
-  .select-container.no-padding.w-100
-    = f.input :code, label: false
+  = f.input :third_party_account, required: true
+  = f.input :third_party_name
+  = f.input :conterpart_account
+  = f.input :code
   - if params[:type] == 'provider'
     .hide
-      = f.label :vat_autoliquidation_debit_account, label: t('activerecord.models.accounting_plan_item.attributes.vat_autoliquidation_debit_account'), class: 'semibold'
-      .select-container.no-padding.w-100
-        = f.input :vat_autoliquidation_debit_account, label: false
-      = f.label :vat_autoliquidation_credit_account, label: t('activerecord.models.accounting_plan_item.attributes.vat_autoliquidation_credit_account'), class: 'semibold'
-      .select-container.no-padding.w-100
-        = f.input :vat_autoliquidation_credit_account, label: false
+      = f.input :vat_autoliquidation_debit_account
+      = f.input :vat_autoliquidation_credit_account
       .row
         .col-md-10.form-group.no-margin
-          = f.label :vat_autoliquidation, label: t('activerecord.models.accounting_plan_item.attributes.vat_autoliquidation'), class: 'control-label semibold form-check-label'
+          = f.label :vat_autoliquidation, class: 'control-label semibold form-check-label'
         .col-md-2
           .form-check.form-switch.idocus-custom-form-check
             = f.input :vat_autoliquidation, as: :boolean, label: false, input_html: { class: 'form-check-input input_switch input_check_field check-vat-autoliquidation', id: 'check-vat-autoliquidation' }
