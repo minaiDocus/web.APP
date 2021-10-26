@@ -22,7 +22,7 @@
       .col-md-8.pt-1
         - if pack.created_at >= 1.days.ago
           %span.badge.badge-success.semibold.to-filter.pointer#new-pack Nouveau
-        - if pack.id.in?(packs_with_failed_delivery_ids)
+        - if @user.pre_assignement_displayed? && pack.id.in?(packs_with_failed_delivery_ids)
           %span.badge.badge-danger.semibold.to-filter.pointer#preseizure-not-delivered Ecritures non livrées
         - if pack.pieces.size >= 20
           %span.badge.badge-warning.semibold.to-filter.pointer#pack-consequent Lot conséquent

@@ -22,7 +22,7 @@
       .col-md-8
         - if report.created_at >= 1.days.ago
           %span.badge.badge-success.semibold Nouveau
-        - if report.has_not_delivered_preseizures?
+        - if @user.pre_assignement_displayed? && report.has_not_delivered_preseizures?
           %span.badge.badge-danger.semibold Ecritures non livrées
         - if report.preseizures.where(created_at: [7.days.ago..Time.now]).size >= 20
           %span.badge.badge-warning.semibold Lot conséquent
