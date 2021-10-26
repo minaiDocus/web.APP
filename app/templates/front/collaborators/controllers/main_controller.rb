@@ -30,12 +30,12 @@ class Collaborators::MainController < OrganizationController
   def create
     @member = User::Collaborator::Create.new(member_params, @organization).execute
     if @member.persisted?
-      flash[:success] = 'Créé avec succès.'
-      redirect_to organization_collaborators_path(@organization)
+      json_flash[:success] = 'Créé avec succès.'
     else
-      flash[:error] = errors_to_list @member
-      redirect_to organization_collaborators_path(@organization)
+      json_flash[:error] = errors_to_list @member
     end
+
+    render json: { json_flash: json_flash }, status: 200
   end
 
   # GET /organizations/:organization_id/collaborators/:id/edit
@@ -45,17 +45,25 @@ class Collaborators::MainController < OrganizationController
   def update
     from_show = params[:from_show].present?
 
-    updater = User::Collaborator::Update.new(@member, member_params)
-    if updater.execute
-      flash[:success] = 'Modifié avec succès.'
+    member = User::Collaborator::Update.new(@member, member_params).execute
+    if member.valid?
+      message = 'Modifié avec succès.'
 
       if from_show
+        flash[:success] = message
         redirect_to organization_collaborator_path(@organization, @member, tab: 'information')
       else
-        redirect_to organization_collaborators_path(@organization)
+        render json: { json_flash: { success: message } }, status: 200
       end
     else
-      redirect_to organization_collaborators_path(@organization)
+      error = errors_to_list member
+
+      if from_show
+        flash[:error] = error
+        redirect_to organization_collaborator_path(@organization, @member, tab: 'information')
+      else
+        render json: { json_flash: { error: error } }, status: 200
+      end
     end
   end
 

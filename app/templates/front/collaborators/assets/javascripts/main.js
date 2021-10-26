@@ -56,16 +56,11 @@ class Main{
       'type': 'POST',
       'dataType': 'html',
     }).then((response)=>{
-      if (url.indexOf("collaborators") >= 0) {
-        $('.page-content .collaborators-content').html($(response).find('.page-content .collaborators-content').html());
-        this.member_modal.modal('hide');
-      }
-      else if (url.indexOf("groups") >= 0) {
+      if (url.indexOf("groups") >= 0) {
         $('.page-content .box-group-content').html($(response).find('.page-content .box-group-content').html());
         this.group_modal.modal('hide');
       }
     }).catch((response)=>{
-      if (url.indexOf("collaborators") >= 0) { this.member_modal.modal('hide'); }
       if (url.indexOf("groups") >= 0) { this.group_modal.modal('hide'); }
     });
   }

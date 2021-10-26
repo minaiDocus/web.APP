@@ -20,6 +20,6 @@ class User::Collaborator::Update
       end
     end
 
-    @member.valid?
+    @member
   end
 end

@@ -142,7 +142,12 @@ class ApplicationController < ActionController::Base
       name   = object.model_name.param_key
       errors = object.try(:errors).try(:messages) || []
       errors.each do |key, val|
-        label = t("simple_form.labels.#{name}.#{key.to_s}")
+        if key.match(/\./)
+          label = t("simple_form.labels.#{key.to_s}")
+        else
+          label = t("simple_form.labels.#{name}.#{key.to_s}")
+        end
+        
         label = key.to_s if label.match(/translation missing/)
         contents += "<li class='errors_element'><span class='fs-6 italic'>#{label}: </span><span class='bold fs-6'>#{ val.join('; ') rescue val.to_s }</span></li>"
       end

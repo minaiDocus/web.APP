@@ -73,7 +73,8 @@
           
         .modal-footer
           %button.btn.btn-light.cancel{ 'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button' } Annuler
-          %button.btn.btn-primary.bold.create_update{ type: :button } Ajouter
+          - idocus_params = param_encode({ url: '#url', form: { id: 'collaborator_edition_form', dump_action: true, validate: false }, modal: { id: 'add_edit_collaborator' }, redirect_to: { url: organization_collaborators_path(@organization), html: { target: '.collaborators-content' } } })
+          %button.btn.btn-primary.bold.as_idocus_ajax{ type: :button, idocus: idocus_params } Valider
 
 
   .modal.fade.in#search_collaborator_filter
