@@ -6,7 +6,7 @@
       .row.derivationRight
         .col-md-10
           %h3.bold
-            Intégration automatique des factures
+            = t('invoices.auto_invoice_integration')
             %span.badge.badge-secondary.badge-sm.regular= @invoice_settings.size
         .col-md-2.text-center
           - modal_params = param_encode({ url: '#integration', title: t('invoices.auto_invoice_integration'), after_show: 'integration_bind_user_change' })

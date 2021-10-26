@@ -58,8 +58,8 @@
                           - if period.product_option_orders.size > 0
                             .popover_content_customer.alert.alert-warning.hide                       
                               = popover_content(period.product_option_orders)                              
-                    %td.text-center.align-middle= customer.subscription.try(:is_package?, 'pre_assignment_option') ? 'Activé' : '-'
-                    %td.text-center.align-middle= customer.subscription.try(:is_package?, 'retriever_option') ? "Récupération banque +\nFactures sur Internet" : "-"
+                    %td.text-center.align-middle= customer.options.is_preassignment_authorized ? 'Activé' : '-'
+                    %td.text-center.align-middle= customer.options.is_retriever_authorized ? "Activé" : "-"
                     %td.align-middle= customer.subscription.try(:number_of_journals)
                     %td.text-end.pointer.align-middle
                       .action.sub_edit_delete.list-collaborators

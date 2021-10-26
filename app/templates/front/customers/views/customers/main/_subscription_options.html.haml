@@ -98,7 +98,7 @@
         .row
           .col-md-8.text-end
             %label.price.bold
-              = Subscription::Package.price_of(:ido_classique)
+              = Subscription::Package.price_of(:ido_classique).to_f + Subscription::Package::PRICES_LIST[:pre_assignment_option].to_f
               %span €/mois
           .col-md-4.text-center
             = radio_button_tag 'subscription[subscription_option]', 'ido_classique', ((@subscription && current_package.include?('ido_classique')) || !@subscription), class: 'form-check-input ido_classique radio-button', data: { package: "ido_classique" }

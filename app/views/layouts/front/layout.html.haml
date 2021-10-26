@@ -7,14 +7,15 @@
       - else
         = t('layouts.title')
     %meta{ :content => "text/html; charset=UTF-8", "http-equiv" => "Content-type" }
+    %meta{ :charset => "UTF-8" }
     %meta{ name: "viewport", content: "width=device-width, initial-scale=1" }
     = yield(:head)
 
     %link{ :rel => 'shortcut icon', :type => "image/ico", :href => image_path('favicon.ico') }
     = csrf_meta_tag
     = stylesheet_link_tag 'front/main'
-    = javascript_include_tag 'front/main'
-    = javascript_include_tag Ckeditor.cdn_url
+    = javascript_include_tag 'front/main', charset: 'utf-8'
+    = javascript_include_tag Ckeditor.cdn_url, charset: 'utf-8'
 
   = render partial: 'layouts/front/header'  
   .body_content
@@ -46,6 +47,6 @@
     %span Plus de résultats
     %span.ms-2= glyphicon('arrow-bottom', {size: '12', color: '#FFF'})
 
-  = javascript_include_tag 'front/news/assets/javascripts/main'
+  = javascript_include_tag 'front/news/assets/javascripts/main', charset: 'utf-8'
   = render partial: 'shared/google_analytics'
   = javascript_declare_var 'rails_env', Rails.env
