@@ -33,7 +33,7 @@
     .row.ido-x-content.package-options.p-4.hide
       .col-md-6
         .form-group
-          = label_tag 'user[jefacture_account_id]', "Identifiant Jefactrure (SIREN)", class: 'col-form-label semibold'
+          = label_tag 'user[jefacture_account_id]', "Identifiant Jefacture (SIREN)", class: 'col-form-label semibold'
           .select-container.no-padding.w-100
             = text_field_tag 'user[jefacture_account_id]', @customer.jefacture_account_id, class: 'form-control ido_x_option option_checkbox', disabled: !current_package.include?('ido_x'), placeholder: "ex : 278 254 652"
       .col-md-6.journal-numbers

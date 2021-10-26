@@ -62,7 +62,7 @@ fr:
         first_name: Prénom
         last_name: Nom
         email: Courriel
-        jefacture_account_id: Identifiant Jefactrure (SIREN)
+        jefacture_account_id: Identifiant Jefacture (SIREN)
         phone_number: Numéro de téléphone
         is_pre_assignement_displayed: Activer la vue écriture comptable dans l'onglet 'Mes Documents' pour ce compte
         act_as_a_collaborator_into_pre_assignment: Donner les droits collaborateur dans l'onglet 'Mes Documents' pour ce compte
