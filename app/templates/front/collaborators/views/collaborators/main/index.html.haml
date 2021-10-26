@@ -59,9 +59,10 @@
             = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { name: 'members', total_pages: @members.total_pages }
 
   - if @user.leader? || @user.manage_groups
-    .box-group-content.derivationLeft
-      = render file: Rails.root.join('app/templates/front/groups/views/groups/main/index.html.haml')
+    = render_async organization_groups_path(@organization)
   
+  = render file: Rails.root.join('app/templates/front/groups/views/groups/main/_dialogs.html.haml')
+
   .modal.fade.in#add_edit_collaborator
     .modal-dialog
       .modal-content
@@ -75,7 +76,6 @@
           %button.btn.btn-light.cancel{ 'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button' } Annuler
           - idocus_params = param_encode({ url: '#url', form: { id: 'collaborator_edition_form', dump_action: true, validate: false }, modal: { id: 'add_edit_collaborator' }, redirect_to: { url: organization_collaborators_path(@organization), html: { target: '.collaborators-content' } } })
           %button.btn.btn-primary.bold.as_idocus_ajax{ type: :button, idocus: idocus_params } Valider
-
 
   .modal.fade.in#search_collaborator_filter
     .modal-dialog

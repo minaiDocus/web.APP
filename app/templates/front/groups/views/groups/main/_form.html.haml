@@ -1,4 +1,4 @@
-= simple_form_for @group, url: (action_name.in?(%w(new create)) ? organization_groups_path(@organization) : organization_group_path(@organization, @group)), html: { class: ' form-horizontal create_update_form' } do |f|
+= simple_form_for @group, url: (action_name.in?(%w(new create)) ? organization_groups_path(@organization) : organization_group_path(@organization, @group)), html: { id: 'groups_edition_form', class: ' form-horizontal create_update_form' } do |f|
   - if @user.leader?    
     = f.label :name, label: t('activerecord.models.group.attributes.name'), :class => "semibold"
     .select-container.no-padding.w-100

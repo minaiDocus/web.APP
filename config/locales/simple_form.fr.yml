@@ -131,6 +131,8 @@ fr:
         organizations: Organisations membre du groupe
         is_auto_membership_activated: Membre automatique des organisations du groupe ?
       group:
+        name: Nom
+        description: Description
         members: Collaborateurs
         customers: Clients
       accounting_plan_vat_account:

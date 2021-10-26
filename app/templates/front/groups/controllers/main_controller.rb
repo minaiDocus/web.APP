@@ -8,6 +8,8 @@ class Groups::MainController < OrganizationController
   # GET /organizations/:organization_id/groups
   def index
     base_content
+
+    render partial: 'index'
   end
 
   # GET /organizations/:organization_id/groups/:id
@@ -24,10 +26,11 @@ class Groups::MainController < OrganizationController
 
     if @group.save
       FileImport::Dropbox.changed(@group.collaborators)
-      flash[:success] = 'Créé avec succès.'
-      redirect_to organization_groups_path(@organization)
+      json_flash[:success] = 'Créé avec succès.'
+      render json: { json_flash: json_flash }, status: 200
     else
-      render :new
+      json_flash[:error] = errors_to_list @group
+      render json: { json_flash: json_flash }, status: 200
     end
   end
 
@@ -41,10 +44,11 @@ class Groups::MainController < OrganizationController
     if @group.update(safe_group_params)
       collaborators = (@group.collaborators + previous_collaborators).uniq
       FileImport::Dropbox.changed(collaborators)
-      flash[:success] = 'Modifié avec succès.'
-      redirect_to organization_groups_path(@organization)
+      json_flash[:success] = 'Modifié avec succès.'
+      render json: { json_flash: json_flash }, status: 200
     else
-      render :edit
+      json_flash[:error] = errors_to_list @group
+      render json: { json_flash: json_flash }, status: 200
     end
   end
 
@@ -52,12 +56,9 @@ class Groups::MainController < OrganizationController
   def destroy
     @group.destroy
     FileImport::Dropbox.changed(@group.collaborators)
-    flash[:success] = 'Supprimé avec succès.'
-    #redirect_to organization_groups_path(@organization)
+    json_flash[:success] = 'Supprimé avec succès.'
 
-    base_content
-
-    render :index
+    render json: { json_flash: json_flash }, status: 200
   end
 
   private
@@ -97,12 +98,13 @@ class Groups::MainController < OrganizationController
   def safe_group_params
     if @user.leader?
       safe_ids = @organization.members.map(&:id).map(&:to_s)
-      ids = params[:group][:member_ids]
+      ids = params[:group].try(:[], :member_ids) || []
       ids.delete_if { |id| !id.in?(safe_ids) }
       params[:group][:member_ids] = ids
     end
+
     safe_ids = @organization.customers.map(&:id).map(&:to_s)
-    ids = params[:group][:customer_ids]
+    ids = params[:group].try(:[], :customer_ids) || []
     ids.delete_if { |id| !id.in?(safe_ids) }
     params[:group][:customer_ids] = ids
 
@@ -121,12 +123,12 @@ class Groups::MainController < OrganizationController
   end
 
   def sort_column
-    params[:sort] || 'created_at'
+    params[:sort] || 'name'
   end
   helper_method :sort_column
 
   def sort_direction
-    params[:direction] || 'desc'
+    params[:direction] || 'asc'
   end
   helper_method :sort_direction
 end

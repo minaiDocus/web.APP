@@ -327,9 +327,7 @@ class ApplicationJS {
               }
 
               if(!found){
-                window.setTimeout((el)=>{
-                  window.location.reload();
-                }, 1000);
+                window.setTimeout((el)=>{ window.location.reload(); }, 1000);
               }
             }
 
