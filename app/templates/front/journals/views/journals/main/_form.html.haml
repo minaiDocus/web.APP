@@ -111,13 +111,13 @@
             - if !@customer || @customer.options.is_taxable
               %fieldset.mb-3{class: 'border p-2', style: 'border:1px solid #999; border-radius:0px; padding: 17px !important'}
                 %h5.semibold.vat_account_field Compte de TVA
-                / .form-group.clearfix.string.optional.account_book_type_vat_accounts#vat_account_exonorated
-                /   .row
-                /     .col-md-6
-                /       %label.semibold Compte exonéré de TVA
-                /     .col-md-6
-                /       .select-container.no-padding.w-100
-                /         %input.mb-2.p-2{type: 'text', name: 'account_book_type[vat_account_exonorated]', id: 'account_book_type_vat_account_exonorated', class: 'form-control string optional vat_account_exonorated', placeholder: 'Compte exonoré de TVA ex: 452137', title: 'Compte exonéré de TVA', data: { toggle: 'tooltip', placement: 'top'}}
+                .form-group.clearfix.string.optional.account_book_type_vat_accounts#vat_account_exonorated.hide
+                  .row
+                    .col-md-6
+                      %label.semibold Compte exonéré de TVA
+                    .col-md-6
+                      .select-container.no-padding.w-100
+                        %input.mb-2.p-2{type: 'text', name: 'account_book_type[vat_account_exonorated]', id: 'account_book_type_vat_account_exonorated', class: 'form-control string optional vat_account_exonorated', placeholder: 'Compte exonoré de TVA ex: 452137', title: 'Compte exonéré de TVA', data: { toggle: 'tooltip', placement: 'top'}}
                 - hint = !@customer ? 'obligatoire mais ne sera utilisé que pour les clients assujettis à la TVA' : ''
                 .form-group.clearfix.string.optional.account_book_type_vat_accounts#account_book_type_with_default_vat_accounts
                   .row

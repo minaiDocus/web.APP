@@ -12,7 +12,7 @@ Rails.application.routes.draw do
     post 'documents/tags/update', to: 'abase#update_tags', as: 'documents_update_tags'
 
     post 'documents/export_options', to: 'abase#export_options', as: 'documents_export_options'
-    post 'documents/restore/:id', to: 'pieces#restore', as: 'restore_document'
+    post 'documents/restore', to: 'pieces#restore', as: 'restore_document'
     get 'documents/export_preseizures/:q', to: 'abase#export_preseizures', as: 'documents_export_preseizures'
     get 'documents/download_archive/:id', to: 'abase#download_archive', as: 'documents_download_archive'
     get 'documents/download_bundle/:id', to: 'abase#download_bundle', as: 'documents_download_bundle'

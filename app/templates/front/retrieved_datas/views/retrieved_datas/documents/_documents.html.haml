@@ -8,6 +8,7 @@
           %th= sortable :retriever_id, 'Service'
           %th= sortable :date, 'Date'
           %th= sortable :name, 'Nom original'
+          %th= 'Nom iDocus'
           %th= sortable :pages_number, 'Nb pages'
           %th= sortable :amount, 'Montant'
         %tbody
@@ -21,6 +22,7 @@
                   = document.retriever_name
                 %td= l(document.metadata['date'], format: '%d %b %Y') rescue ''
                 %td= link_to document.metadata['name']+ '.pdf', '#', class: 'do-showDocument', data: { url: document.get_access_url }
+                %td= document.piece.try(:name)
                 %td= document.pages_number
                 %td= document.metadata['amount'].to_s + ' €'
           - else

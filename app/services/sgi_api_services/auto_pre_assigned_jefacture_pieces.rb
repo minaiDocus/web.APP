@@ -113,6 +113,8 @@ class SgiApiServices::AutoPreAssignedJefacturePieces
       errors << "Journal #{piece.pack.name.split[1]} non trouvé" if not journal
       errors << "Pièce id: #{data_validated["piece_id"]}, nom: #{piece.name} a déjà traitée" if piece && piece.preseizures.any?
       errors << "TempPreseizure #{data_validated["temp_preseizure_id"]} non trouvé" if not temp_preseizure
+      errors << "Data third_party empty" if not data_validated['third_party'].present?
+      errors << "Data entries empty" if not data_validated['entries'].present?
 
       if errors.empty?
         temp_preseizure.raw_preseizure['third_party'] = data_validated['third_party']
