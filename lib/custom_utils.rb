@@ -148,5 +148,9 @@ class CustomUtils
 
       ["IDOC", "MCN", "CEN"].include?(organization.code)
     end
+
+    def can_create_budgea_documents(organization)
+      ["IDOC", "AFH"].include?(organization.code)
+    end
   end
 end

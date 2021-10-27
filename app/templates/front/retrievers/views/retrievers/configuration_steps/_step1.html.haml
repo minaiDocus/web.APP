@@ -13,19 +13,20 @@
         .urls-box
 
     .form-group
-      %label.semibold
-        Choisissez parmis la liste suivante :
-        %i.badge.badge-success.semibold.connectors-size 0
-      .row.hide
-        .col-md-3.pt-2
-          %label Type :
+      .row
         .col-md-6
-          %select.form-select#choose-selector{ name: 'choose-selector', "aria-label" => "Default select"  }
-            %option{ value: 'all' } Tous
-            %option{ value: 'bank' } Banques
-            %option{ value: 'document' } Fournisseurs
-        .col-md-3.pt-1
+          %label.semibold
+            Choisissez parmis la liste suivante :
           %i.badge.badge-success.semibold.connectors-size 0
+        .col-md-6
+          .row.bank_and_document_selector{ class: CustomUtils.can_create_budgea_documents(@user.organization) ? 'can_create_documents' : 'hide' }
+            .col-md-3.pt-2
+              %label Type :
+            .col-md-9
+              %select.form-select#choose-selector{ name: 'choose-selector', "aria-label" => "Default select"  }
+                %option{ value: 'all' } Tous
+                %option{ value: 'bank' } Banques
+                %option{ value: 'document' } Fournisseurs
     .form-group
       %select.form-select#connectors-list{ name: 'connectors-list', "aria-label" => "Default select", "size" => '15' }
         %option Chargement en cours ...

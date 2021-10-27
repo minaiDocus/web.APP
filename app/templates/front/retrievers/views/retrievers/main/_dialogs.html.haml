@@ -73,7 +73,7 @@
           .form-group.no-margin
             %ul.connectors-list.banks
 
-        .box.overflow-auto.hide
+        .box.overflow-auto{ class: CustomUtils.can_create_budgea_documents(@user.organization) ? '' : 'hide' }
           .form-group.no-margin              
             %label.semibold Document
             %span.badge.badge-secondary.regular.providers-size 0              
