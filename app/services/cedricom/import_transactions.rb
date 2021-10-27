@@ -223,13 +223,21 @@ module Cedricom
       operations
     end
 
+    def check_duplicated(bank_account, cedricom_operation)
+      bank_account.operations.where(api_name: 'cedricom', label: cedricom_operation[:long_label], date: cedricom_operation[:date], amount: cedricom_operation[:amount]).first
+    end
+
     def save_operation(bank_account, cedricom_operation)
+      duplicate_ope = check_duplicated bank_account, cedricom_operation
+
+      return duplicate_ope if duplicate_ope
+
       operation = Operation.new
 
-      operation.user   = bank_account&.user
-      operation.date   = cedricom_operation[:date]
-      operation.amount = cedricom_operation[:amount]
-      operation.label  = cedricom_operation[:long_label]
+      operation.user         = bank_account&.user
+      operation.date         = cedricom_operation[:date]
+      operation.amount       = cedricom_operation[:amount]
+      operation.label        = cedricom_operation[:long_label]
       operation.api_name     = 'cedricom'
       operation.value_date   = cedricom_operation[:value_date]
       operation.organization = bank_account&.user&.organization ? bank_account&.user&.organization : @reception.organization
