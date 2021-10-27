@@ -36,6 +36,13 @@ class StaffingFlow < ApplicationRecord
     end
   end
 
+  def self.set_to_ready(id)
+    sf = StaffingFlow.find id
+
+    sf.state = 'ready'
+    sf.save
+  end
+
   def self.reinject(pack_name_list=[], type)
     count = 0
 

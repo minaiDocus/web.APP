@@ -18,8 +18,7 @@ class Staffingflow::GroupingWorker
       UniqueJobs.for "staffing_flow_grouping-#{staffing_id}" do
         sf = StaffingFlow.find(staffing_id)
         params = sf.params
-        SgiApiServices::GroupDocument.processing(params[:json_content], params[:temp_document_ids], params[:temp_pack_id]) if sf.processing
-        sf.processed
+        SgiApiServices::GroupDocument.processing(params[:json_content], params[:temp_document_ids], params[:temp_pack_id], sf) if sf.processing
       end
     end
   end

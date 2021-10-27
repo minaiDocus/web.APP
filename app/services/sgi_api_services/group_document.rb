@@ -5,17 +5,20 @@ class SgiApiServices::GroupDocument
   FILE_NAME_PATTERN_2 = /\A([A-Z0-9]+_*[A-Z0-9]*_[A-Z][A-Z0-9]+_\d{4}([01T]\d)*)_\d{3,4}_\d{3}\.pdf\z/i
 
   class << self
-    def processing(json_content, _temp_document_ids, temp_pack_id)
+    def processing(json_content, _temp_document_ids, temp_pack_id, staffing_flow)
       CustomUtils.mktmpdir('api_group_document') do |dir|
         temp_pack = TempPack.where(id: temp_pack_id).first
 
         if temp_pack
           create_new_temp_document(json_content, _temp_document_ids, dir, temp_pack)
 
+          sf_to_processed = true
           temp_pack.temp_documents.where(id: _temp_document_ids).each do |temp_document|
             if temp_document.children.size > 0
               temp_document.update(state: 'bundled')
             else
+              sf_to_processed = false
+
               mail_info = {
                 subject: "[SgiApiServices::GroupDocument] create temp document errors (can't create a child)",
                 name: "SgiApiServices::CreateTempDocumentFromGrouping-cannot-create-child",
@@ -30,6 +33,31 @@ class SgiApiServices::GroupDocument
               }
 
               ErrorScriptMailer.error_notification(mail_info).deliver
+            end
+          end
+
+          if sf_to_processed
+            staffing_flow.processed
+          else
+            if(staffing_flow.created_at < 36.hours.ago)
+              staffing_flow.processed
+
+              mail_info = {
+                subject: "[SgiApiServices::GroupDocument]- Staffing flow aborted",
+                name: "SgiApiServices::CreateTempDocumentFromGrouping-staffing flow aborted",
+                error_group: "[sgi-api-services-create-temp-document-from-grouping] Staffing flow aborted",
+                erreur_type: "create temp document with errors - Staffing flow aborted",
+                date_erreur: Time.now.strftime('%Y-%m-%d %H:%M:%S'),
+                more_information: {
+                  staffing_flow: staffing_flow.id,
+                  temp_pack_id: temp_pack.id,
+                  temp_pack_name: temp_pack.name
+                }
+              }
+
+              ErrorScriptMailer.error_notification(mail_info).deliver
+            else
+              StaffingFlow.delay_for(30.minutes, queue: :low).set_to_ready(staffing_flow.id)
             end
           end
         end

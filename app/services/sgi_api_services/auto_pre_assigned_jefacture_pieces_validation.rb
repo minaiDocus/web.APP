@@ -64,7 +64,7 @@ class SgiApiServices::AutoPreAssignedJefacturePiecesValidation
 
             ErrorScriptMailer.error_notification(log_document).deliver
 
-            return false
+            to_validate = true
           end
 
           if to_validate
