@@ -29,6 +29,7 @@
             %tr
               %td{ colspan: 7 }= t('global.no-data-found')
 
+
   = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { name: 'documents', mark: 'retrieved_data', total_pages: documents.total_pages }
 
   .modal.fade.in#retrieved_document
@@ -40,3 +41,4 @@
         .modal-body
           %iframe{ :src => "", :id => "retrieved-document", style: "height: 700px; width: 100%" }
         .modal-footer
+
