@@ -1,6 +1,4 @@
 function bind_all_events(){
-
-
   $('.retriever-filter-historic').unbind('click')
   $(".retriever-filter-historic").bind('click',function(e) {
     e.stopPropagation()
@@ -16,6 +14,12 @@ function bind_all_events(){
 
   $('.modal button.reset-filter').unbind('click');
   $('.modal button.reset-filter').bind('click', function(e){ AppEmit('retrieved_datas_reset_filter', { type: $(this).attr('data-target') }) });
+
+  $('.do-showDocument').unbind('click').bind('click', function(e){
+    $('#retrieved_document.modal').find('.modal-body iframe#retrieved-document').attr('src', $(this).attr('data-url'));
+    $('#retrieved_document.modal').modal('show');
+  })
+
 }
 
 jQuery(function() {
