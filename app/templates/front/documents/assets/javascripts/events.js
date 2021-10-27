@@ -209,15 +209,18 @@ jQuery(function() {
       }
     }
 
-    // console.log("content_h : " + content_h);
-    // console.log("c_pos : " + c_position);
-
     if( c_position >= (content_h + 75) ){
       end_reached = false
       show_hide_more_result('hide');
     }else if(!end_reached){
       end_reached = true;
       show_hide_more_result('show');
+    }
+    if ($('.verif-fixed-action').offset().top <= 100){
+      $('.action-fixed').addClass('fixed-to-top');
+    }
+    else{
+      $('.action-fixed').removeClass('fixed-to-top');      
     }
   });
 });

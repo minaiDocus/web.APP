@@ -33,8 +33,8 @@
       %button.btn.btn-light.more-filter.semibold
         %span.me-2 Filtrer
         %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
-
-  .row.box.derivationRight.p-4
+  .verif-fixed-action
+  .row.box.derivationRight.p-4.action-fixed
     - if @user.pre_assignement_displayed?
       .col-md-1.no-padding.text-left.change-view.to-list= glyphicon('grid-two-up', { size: '14', color:'rgba(26, 26, 26, 0.32);' })
       .col-md-1.no-padding.text-left.change-view.to-grid.hide= glyphicon('media-pause', { size: '14', color:'rgba(26, 26, 26, 0.32);', style: 'transform: rotate(90deg)' })

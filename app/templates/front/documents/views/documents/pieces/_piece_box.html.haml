@@ -50,12 +50,12 @@
                   %input.form-check-input.pointer.float-none.select-document{ data: { id: piece.id }, type: :checkbox, value: "" }
                 .row.p-3
                   .col-md-12.text-start
-                    %h5.pack.semibold.no-margin= piece.name
+                    %h5.pack.semibold.no-margin.grey-label= piece.name
                 .no-preseizure
-                  %h3 Aucune écriture comptable
+                  %h3.grey-label Aucune écriture comptable
                 %hr.w-100
                   .row.ml-1.mb-1.mr-0
-                    .col-md-12.text-start
+                    .col-md-9.text-start
                       - delivery_state = piece.get_state_to('text')
                       - if ['delivery_failed', 'duplication', 'piece_ignored'].include?(delivery_state)
                         %span.badge.badge-danger.semibold= t("pieces.delivery_state.#{delivery_state}")
@@ -67,6 +67,10 @@
                       - piece.get_tags.split(' - ').each_slice(3).first.try(:each) do |tag|
                         - if tag != '-'
                           %span.badge.bg-dark.semibold= tag
+                    - if piece
+                      .col-md-3.icon-actions.text-end.pe-4
+                        %span.ms-2.update_tags{title: 'Taguer la pièce', data: {id: piece.id, type: 'piece'}}= glyphicon('tag', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
+                        %span.ms-2.delete_piece{title: 'Supprimer la pièce', data: {id: piece.id}}= glyphicon('trash', { size: '14', color:'#FF4848'})
   - else
     .preseizures_box.hide.animatedChild.toLeft
       .p-5 Ecriture comptable non disponible
