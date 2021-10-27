@@ -80,6 +80,11 @@ function bind_all_events(){
   $('input.selected_document').unbind('click').bind('click', function(e){
     $('.check-all-bank-account').prop('checked', false);
   });
+
+  $('.do-showDocument').unbind('click').bind('click', function(e){
+    $('#retrieved_document.modal').find('.modal-body iframe#retrieved-document').attr('src', $(this).attr('data-url'));
+    $('#retrieved_document.modal').modal('show');
+  });
 }
 
 jQuery(function() {
