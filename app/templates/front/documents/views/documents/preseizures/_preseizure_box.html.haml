@@ -36,6 +36,7 @@
         %span.ms-3.badge.bg-danger= "Erreur : #{delivery.try(:error_message)}"
 
 - entries  = preseizure.entries
+- pre_tax_amount = entries.select { |entry| entry.account.type == 2 }.try(:first).try(:amount) || 0
 - irregular_debit_credit_somme = verif_debit_credit_somme_of entries
 - data_analytics = data_analytic_of(preseizure)
 
@@ -116,7 +117,7 @@
                     -if analysis[:axis3].present?
                       %li.semibold= analysis[:axis3]
                 %td.text-center= analysis[:ventilation].to_f.to_s + " %"
-                %td.text-center= @pre_tax_amount.to_f * (analysis[:ventilation].to_f / 100)
+                %td.text-center= pre_tax_amount.to_f * (analysis[:ventilation].to_f / 100)
 
 %hr.no-margin.w-100
 .row.ml-1.mt-1.mb-1.mr-0
