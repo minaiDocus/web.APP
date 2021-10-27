@@ -161,12 +161,22 @@
 
 
 /******************* GLOBAL FUNCTIONS *********************/
+  AppDecode64 = (str_64) =>{
+    try{
+      //This is a workarround for decoding utf-8 encoded string from base64
+      //WARNING: escape IS DEPRECATED: MAY NOT WORK ON CERTAIN BROWSER
+      return decodeURIComponent( escape( atob(str_64) ) )
+    }catch(e){
+      return atob(str_64)
+    }
+  }
+
   AppParseVars = ()=>{
     $('span.js_var_setter').each(function(e){
       let name  = $(this).attr('id').replace('js_var_', '').trim();
       let value = $(this).text().trim();
 
-      VARIABLES.set(name, atob(value));
+      VARIABLES.set(name, AppDecode64(value));
     });
   }
 

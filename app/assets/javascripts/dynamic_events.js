@@ -95,7 +95,7 @@ function iDocus_event_emiter(){
     if( authorized_events.find((t)=>{ return t == current_event }) || authorized_events.length == 0 ){
       let emit_params = null;
       try{
-        emit_params = JSON.parse( atob($(this).attr('idocus')) );
+        emit_params = JSON.parse( AppDecode64($(this).attr('idocus')) );
       }catch(e){
         if(VARIABLES.get('rails_env') != 'production')
           emit_params = JSON.parse( $(this).attr('idocus') );
@@ -124,7 +124,7 @@ function iDocus_ajax_links(){
     if( authorized_events.find((t)=>{ return t == current_event }) || authorized_events.length == 0 ){
       let idocus_params = null;
       try{
-        idocus_params = JSON.parse( atob($(this).attr('idocus')) );
+        idocus_params = JSON.parse( AppDecode64($(this).attr('idocus')) );
       }catch(e){
         if(VARIABLES.get('rails_env') != 'production')
           idocus_params = JSON.parse( $(this).attr('idocus') );
@@ -177,7 +177,7 @@ function iDocus_dynamic_modals(){
     let element = $(this);
     let params  = null;
     try{
-      params = JSON.parse( atob($(this).attr('idocus')) );
+      params = JSON.parse( AppDecode64($(this).attr('idocus')) );
     }catch(e){
       if(VARIABLES.get('rails_env') != 'production')
         params = JSON.parse( $(this).attr('idocus') );
