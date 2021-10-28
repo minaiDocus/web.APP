@@ -36,16 +36,14 @@
 
                         - modal_params = param_encode({ url: '#synchronization', title: 'Synchroniser les factures dépuis la période sélectionnée', after_show: 'set_synchronisation_id' })
                         %li.invoice-setting-action.as_idocus_modal{ idocus: modal_params, 'data-id' => invoice_setting.id }
-                          %span.me-1= glyphicon('loop', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                          %span Synchroniser les factures
+                          = link_to glyphicon('loop', { size: '15', color: "rgba(26, 26, 26, 0.7)" }) + ' Synchroniser les factures', '#'
                         / %li.invoice-setting-action.edit
                         /   %span.me-1= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
                         /   %span Éditer
 
                         - idocus_params = param_encode({ url: remove_organization_invoices_path(@organization, id: invoice_setting.id), method: 'delete', confirm: 'Etes vous sûr?', redirect_to: { url: organization_invoices_path(@organization), method: 'get', html: { target: '.main_content' } } })
                         %li.invoice-setting-action.red-label.as_idocus_ajax{ idocus: idocus_params }
-                          %span.me-1= glyphicon('trash', { size: '15', color: "#FF4848" })
-                          %span Supprimer
+                          = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', '#', class: 'red-label'
 
 
         = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: organization_invoices_path(@organization), name: 'integration', target: '.table_integration', total_pages: @invoice_settings.total_pages }
@@ -87,8 +85,7 @@
                           %input.invoice-action-data{type: :hidden, name: 'invoice-action-data', link: organization_invoice_path(invoice.id), title: "#{invoice.number}.pdf"}
                           - modal_params = param_encode({ url: '#invoice_view', style: 'min-width: 1041px;', title: 'Facture', before_show: 'set_iframe_url', with_cancel: false })
                           %li.invoice-action.view.as_idocus_modal{ idocus: modal_params, data: { url: download_organization_invoices_path(@organization, invoice.id) }  }
-                            %span.me-1= glyphicon('eye', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                            %span Voir
+                            = link_to glyphicon('eye', { size: '15', color: "rgba(26, 26, 26, 0.7)" }) + ' Voir', '#'
                           / %li.invoice-action
                           /   %span.me-1= glyphicon('cloud-download', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
                           /   %span Télécharger

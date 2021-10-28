@@ -27,11 +27,9 @@
               .sub_menu.text-start.hide
                 %ul.no-margin.no-padding.regular
                   %li.edit_contact{ data: { id: guest_collaborator.id } }
-                    %span.me-1= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                    %span Modifier
+                    = link_to glyphicon('pencil', { size: '15', color: "rgba(26, 26, 26, 0.7)" }) + ' Éditer', '#'
                   %li
-                    %span.red-label.me-1= glyphicon('trash', { size: '15', color: "#445E2B" })
-                    %span= link_to 'Supprimer', account_sharings_organization_destroy_contact_path(@organization, guest_collaborator), method: :delete, data: { confirm: "Êtes-vous sûr de vouloir supprimer le contact \"#{guest_collaborator.info}\" ?" }
+                    = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', account_sharings_organization_destroy_contact_path(@organization, guest_collaborator), method: :delete, data: { confirm: "Êtes-vous sûr de vouloir supprimer le contact \"#{guest_collaborator.info}\" ?" }, class: 'red-label semibold'
       - else
         %tr
           %td{colspan: 6, class: 'text-center'} Aucun resultat

@@ -42,12 +42,10 @@
                 .sub_menu.text-start.hide
                   %ul.no-margin.no-padding.regular                                                               
                     %li
-                      %span.me-1= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                      %span= link_to 'Modifier', "#", class: 'new_edit_order_url', link: edit_organization_customer_order_path(@organization, @customer, order)
+                      = link_to glyphicon('pencil', { size: '15', color: "rgba(26, 26, 26, 0.7)" }) + ' Éditer', '#', class: 'new_edit_order_url', link: edit_organization_customer_order_path(@organization, @customer, order)
                     %li
                       - idocus_params = param_encode({ url: organization_customer_order_path(@organization, @customer, order), confirm: t('actions.confirm'), method: 'delete', redirect_to: { url: organization_customer_orders_path(@organization, @customer), method: 'get', html: { target: '#orders_list table' } } })
-                      %span.me-1= glyphicon('action-undo', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                      %span= link_to 'Annuler', '#', class: 'as_idocus_ajax', idocus: idocus_params                   
+                      = link_to glyphicon('action-undo', { size: '15', color: "#FF4848" }) + ' Annuler', '#', class: 'red-label as_idocus_ajax', idocus: idocus_params             
 
     .form-group.no-margin
       .w-100.text-end

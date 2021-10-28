@@ -3,8 +3,8 @@
 .container-fluid.main-content
   .row.derivationLeft
     .col-md-1.return-back.text-end
-      %button.btn.btn-default
-        %a{ href: '/documents' }
+      %a{ href: '/documents' }
+        %button.btn.btn-default
           %span.me-2= glyphicon('arrow-left', {size: '12', color: '#72AA42'})
           %span Retour
     .col-md-7.no-padding.report_pack{ id: 'current_pack', data: { id: @pack.id } }

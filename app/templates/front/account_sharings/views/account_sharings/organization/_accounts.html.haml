@@ -30,11 +30,9 @@
                 %ul.no-margin.no-padding.regular
                   - unless account_sharing.is_approved?
                     %li
-                      %span.me-1= glyphicon('share', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                      %span= link_to 'Partager', account_sharings_organization_accept_path(@organization, account_sharing), method: :post, data: { confirm: "Êtes-vous sûr de vouloir partager le dossier \"#{account_sharing.account.info}\" au contact \"#{account_sharing.collaborator.info}\" ?" }
+                      = link_to glyphicon('share', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Partager', account_sharings_organization_accept_path(@organization, account_sharing), method: :post, data: { confirm: "Êtes-vous sûr de vouloir partager le dossier \"#{account_sharing.account.info}\" au contact \"#{account_sharing.collaborator.info}\" ?" }
                   %li
-                    %span.red-label.me-1= glyphicon('action-undo', { size: '15', color: "#445E2B" })
-                    %span= link_to 'Annuler', account_sharings_organization_destroy_account_path(@organization, account_sharing), method: :delete, data: { confirm: "Êtes-vous sûr de vouloir annuler le partage du dossier \"#{account_sharing.account.info}\" au contact \"#{account_sharing.collaborator.info}\" ?" }, class: 'red-label semibold'
+                    = link_to glyphicon('action-undo', { size: '15', color: "#FF4848" }) + ' Annuler', account_sharings_organization_destroy_account_path(@organization, account_sharing), method: :delete, data: { confirm: "Êtes-vous sûr de vouloir annuler le partage du dossier \"#{account_sharing.account.info}\" au contact \"#{account_sharing.collaborator.info}\" ?" }, class: 'red-label semibold'
       - else
         %tr
           %td{colspan: 5, class: 'text-center'} Aucun resultat

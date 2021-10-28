@@ -51,7 +51,7 @@
                         = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' ' + t('actions.edit'), '#', link: edit_organization_customer_journal_path(@organization, @customer, journal), class: 'new_edit_account_book_type'
                   - if @user.is_admin || false || journal.is_open_for_modification?
                     %li.delete.red-label
-                      = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', organization_customer_journal_path(@organization, @customer, journal), method: 'delete', data: { confirm: t('actions.confirm') }
+                      = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', organization_customer_journal_path(@organization, @customer, journal), method: 'delete', data: { confirm: t('actions.confirm') }, class: 'red-label'
                       - unless @user.is_admin || false
                         %i (pour #{distance_of_time_in_words_to_now(journal.created_at + 24.hours)})
     - else
@@ -91,7 +91,7 @@
                       - if @user.is_admin || false || journal.is_open_for_modification?
                         %li.delete.red-label
                           - idocus_params = param_encode({ url: organization_customer_journal_path(@organization, @customer, journal), method: 'delete', confirm: t('actions.confirm'), redirect_to: { url: organization_user_journals_path(@organization, @customer), method: 'get', html: { target: 'table.journals_list' } } })
-                          = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', '#', idocus: idocus_params, class: 'as_idocus_ajax'
+                          = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', '#', idocus: idocus_params, class: 'as_idocus_ajax red-label'
                           - unless @user.is_admin || false
                             %i (pour #{distance_of_time_in_words_to_now(journal.created_at + 24.hours)})
 

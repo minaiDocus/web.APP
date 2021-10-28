@@ -44,7 +44,7 @@
                   %li.edit{journal_id: journal.id}
                     = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Éditer', '#', link: edit_organization_journal_path(@organization, journal), class: 'new_edit_account_book_type'
                   %li.delete.red-label
-                    = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', organization_journal_path(@organization, journal), method: 'delete', data: { confirm: t('actions.confirm') }
+                    = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', organization_journal_path(@organization, journal), method: 'delete', data: { confirm: t('actions.confirm') }, class: 'red-label'
 
     = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { name: 'journales', total_pages: @journals.total_pages } 
 

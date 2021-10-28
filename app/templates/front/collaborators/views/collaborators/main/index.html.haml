@@ -50,8 +50,7 @@
                       .sub_menu.text-start.hide
                         %ul.no-margin.no-padding.regular.edit-delete{id: "member-#{member.id}"}
                           %li.edit.collaborator.new_edit
-                            %span= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                            &nbsp;Éditer
+                            = link_to glyphicon('pencil', { size: '15', color: "rgba(26, 26, 26, 0.7)" }) + ' Éditer', '#'
                           - if @organization.is_active && !member.user.is_admin && (@user.leader? || member.collaborator?)
                             %li.delete.red-label
                               = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', organization_collaborator_path(@organization, member), data: { method: :delete, confirm: "Êtes-vous sûr de vouloir supprimer ce compte définitivement ? Cette action est irréversible." }

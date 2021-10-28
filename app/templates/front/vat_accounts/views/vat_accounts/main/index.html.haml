@@ -35,8 +35,7 @@
                 .sub_menu.text-start.hide
                   %ul.no-margin.no-padding.regular
                     %li.edit-vat-account{ "data-vat-account-id" => vat_account.id }
-                      %span.me-2= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                      %span= t('actions.edit')
+                      = link_to glyphicon('pencil', { size: '15', color: "rgba(26, 26, 26, 0.7)" }) + ' Éditer', '#'
                     %li= link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', organization_customer_accounting_plan_vat_account_path(@organization, @customer, { id: vat_account.id }), data: { method: :delete, confirm: 'Voulez-vous vraiment supprimer ce client ?' }, class: 'red-label'        
 
   .modal#add-vat-account

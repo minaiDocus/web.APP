@@ -36,16 +36,13 @@
                       %ul.no-margin.no-padding.regular
                         - if not bank_account.is_to_be_disabled?           
                           %li.edit{ data: { id: bank_account.id } }
-                            %span.me-1= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                            %span Editer
+                            = link_to glyphicon('pencil', { size: '15', color: "rgba(26, 26, 26, 0.7)" }) + ' Éditer', '#'
                         - if bank_account.can_be_deleted?
                           %li.activation{ data: { id: bank_account.id, type: 'disable' } }
-                            %span.red-label.me-1= glyphicon('trash', { size: '15', color: "#FF4848" })
-                            %span Supprimer
+                            = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', '#', class: 'red-label'
                         - elsif bank_account.can_be_reopened?
                           %li.activation{ data: { id: bank_account.id, type: 'enable' } }
-                            %span.me-1= glyphicon('check', { size: '15', color: "#72AA42" })
-                            %span Activer
+                            = link_to glyphicon('check', { size: '15', color: "#72AA42" }) + ' Activé', '#', class: 'green-label-dark'
           - else
             %tr
               %td{colspan: 7}= t('global.no-data-found')

@@ -124,16 +124,15 @@
                       .sub_menu.text-start.hide
                         %ul.no-margin.no-padding.regular
                           %li.edit-accounting-plan.provider{ "data-account-id" => provider.id }
-                            %span.me-2= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                            %span= t('actions.edit')
+                            = link_to glyphicon('pencil', { size: '15', color: "rgba(26, 26, 26, 0.7)" }) + ' Éditer', '#'
                           %li
-                            = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', organization_customer_accounting_plan_path(@organization, @customer, { _id: provider.id, type: 'provider' }), data: { method: :delete, confirm: 'Voulez-vous vraiment supprimer ce fournisseur ?' }
+                            = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', organization_customer_accounting_plan_path(@organization, @customer, { _id: provider.id, type: 'provider' }), data: { method: :delete, confirm: 'Voulez-vous vraiment supprimer ce fournisseur ?' }, class: 'red-label'
 
       .tab-pane.box.no-margin#customer{ "role" => "tabpanel", "aria-labelledby" => "customer-tab", class: (params[:tab] == 'customer' ? 'active': '') }
         .row.derivationRight
-          .col-md-3          
-          .col-md-3.text-end.no-padding
-            = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', destroy_customers_organization_customer_accounting_plan_path(@organization, @customer), class: 'btn btn-danger', data: { method: :delete, confirm: 'Vous êtes sur le point de supprimer tous les clients, êtes-vous sûr ?' }
+          .col-md-1       
+          .col-md-5.text-end.no-padding
+            = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer tout', destroy_customers_organization_customer_accounting_plan_path(@organization, @customer), class: 'btn btn-danger', data: { method: :delete, confirm: 'Vous êtes sur le point de supprimer tous les clients, êtes-vous sûr ?' }
             %button.edit-accounting-plan.btn.btn-light.customer{ type: :button, "data-account-id" => "" }
               %span.me-2= glyphicon('plus', { size: '15', color: '#72AA42'})
               %span Ajouter un client
@@ -171,10 +170,9 @@
                       .sub_menu.text-start.hide
                         %ul.no-margin.no-padding.regular
                           %li.edit-accounting-plan.customer{ "data-account-id" => customer.id }
-                            %span.me-2= glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                            %span= t('actions.edit')
+                            = link_to glyphicon('pencil', { size: '15', color: "rgba(26, 26, 26, 0.7)" }) + ' Éditer', '#'
                           %li
-                            = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', organization_customer_accounting_plan_path(@organization, @customer, { _id: customer.id, type: 'customer' }), data: { method: :delete, confirm: 'Voulez-vous vraiment supprimer ce client ?' }
+                            = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', organization_customer_accounting_plan_path(@organization, @customer, { _id: customer.id, type: 'customer' }), data: { method: :delete, confirm: 'Voulez-vous vraiment supprimer ce client ?' }, class: 'red-label'
 
       .tab-pane.box.no-margin#vat_accounts{ "role" => "tabpanel", "aria-labelledby" => "vat_accounts-tab", class: (params[:tab] == 'vat_accounts' ? 'active': '') }
     

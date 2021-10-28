@@ -34,12 +34,10 @@
               - idocus_params = param_encode({ url: organization_user_file_storage_authorizations_path(@organization, user), method: 'PATCH', datas: { dropbox_extended: true }, redirect_to: _redirect_to })
               - if not user.is_dropbox_extended_authorized
                 %li.as_idocus_ajax{ idocus: idocus_params }
-                  %span.me-2= glyphicon('circle-check', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                  %span Activé
+                  = link_to glyphicon('circle-check', { size: '15', color: "#72AA42" }) + ' Activé', '#', class: 'green-label-dark semi-bold'
               - else
                 %li.as_idocus_ajax{ idocus: idocus_params }
-                  %span.me-2= glyphicon('circle-x', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                  %span Désactiver                  
+                  = link_to glyphicon('circle-x', { size: '15', color: "#FF4848" }) + ' Désactiver', '#', class: 'red-label'
       %tr
         %th Dropbox
         %td.text-center= icon_tag(external_file_storage.is_dropbox_basic_authorized?, options)
@@ -54,12 +52,10 @@
               - idocus_params = param_encode({ url: organization_user_file_storage_authorizations_path(@organization, user), method: 'PATCH', datas: { dropbox_basic: true }, redirect_to: _redirect_to })
               - if not external_file_storage.is_dropbox_basic_authorized?                                
                 %li.as_idocus_ajax{ idocus: idocus_params }
-                  %span.me-2= glyphicon('circle-check', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                  %span Activé
+                  = link_to glyphicon('circle-check', { size: '15', color: "#72AA42" }) + ' Activé', '#', class: 'green-label-dark semi-bold'
               - else
                 %li.as_idocus_ajax{ idocus: idocus_params }
-                  %span.me-2= glyphicon('circle-x', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                  %span Désactiver                  
+                  = link_to glyphicon('circle-x', { size: '15', color: "#FF4848" }) + ' Désactiver', '#', class: 'red-label'
       %tr
         %th Google Drive
         %td.text-center= icon_tag(external_file_storage.is_google_docs_authorized?, options)
@@ -74,12 +70,10 @@
               - idocus_params = param_encode({ url: organization_user_file_storage_authorizations_path(@organization, user), method: 'PATCH', datas: { google_docs: true }, redirect_to: _redirect_to })
               - if not external_file_storage.is_google_docs_authorized?
                 %li.as_idocus_ajax{ idocus: idocus_params }
-                  %span.me-2= glyphicon('circle-check', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                  %span Activé
+                  = link_to glyphicon('circle-check', { size: '15', color: "#72AA42" }) + ' Activé', '#', class: 'green-label-dark semi-bold'
               - else
                 %li.as_idocus_ajax{ idocus: idocus_params }
-                  %span.me-2= glyphicon('circle-x', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                  %span Désactiver
+                  = link_to glyphicon('circle-x', { size: '15', color: "#FF4848" }) + ' Désactiver', '#', class: 'red-label'
       %tr
         %th FTP
         %td.text-center= icon_tag(external_file_storage.is_ftp_authorized?, options)
@@ -94,12 +88,10 @@
               - idocus_params = param_encode({ url: organization_user_file_storage_authorizations_path(@organization, user), method: 'PATCH', datas: { ftp: true }, redirect_to: _redirect_to })
               - if not external_file_storage.is_ftp_authorized?
                 %li.as_idocus_ajax{ idocus: idocus_params }
-                  %span.me-2= glyphicon('circle-check', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                  %span Activé
+                  = link_to glyphicon('circle-check', { size: '15', color: "#72AA42" }) + ' Activé', '#', class: 'green-label-dark semi-bold'
               - else
                 %li.as_idocus_ajax{ idocus: idocus_params }
-                  %span.me-2= glyphicon('circle-x', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                  %span Désactiver
+                  = link_to glyphicon('circle-x', { size: '15', color: "#FF4848" }) + ' Désactiver', '#', class: 'red-label'
       %tr
         %th SFTP
         %td.text-center= icon_tag(external_file_storage.is_sftp_authorized?, options)
@@ -114,12 +106,10 @@
               - idocus_params = param_encode({ url: organization_user_file_storage_authorizations_path(@organization, user), method: 'PATCH', datas: { sftp: true }, redirect_to: _redirect_to })
               - if not external_file_storage.is_sftp_authorized?
                 %li.as_idocus_ajax{ idocus: idocus_params }
-                  %span.me-2= glyphicon('circle-check', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                  %span Activé
+                  = link_to glyphicon('circle-check', { size: '15', color: "#72AA42" }) + ' Activé', '#', class: 'green-label-dark semi-bold'
               - else
                 %li.as_idocus_ajax{ idocus: idocus_params }
-                  %span.me-2= glyphicon('circle-x', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                  %span Désactiver
+                  = link_to glyphicon('circle-x', { size: '15', color: "#FF4848" }) + ' Désactiver', '#', class: 'red-label'
       %tr.hide
         %th Box
         %td.text-center= icon_tag(external_file_storage.is_box_authorized?, options)
@@ -134,9 +124,7 @@
               - idocus_params = param_encode({ url: organization_user_file_storage_authorizations_path(@organization, user), method: 'PATCH', datas: { box: true }, redirect_to: _redirect_to })
               - if not external_file_storage.is_box_authorized?
                 %li.as_idocus_ajax{ idocus: idocus_params }
-                  %span.me-2= glyphicon('circle-check', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                  %span Activé
+                  = link_to glyphicon('circle-check', { size: '15', color: "#72AA42" }) + ' Activé', '#', class: 'green-label-dark semi-bold'
               - else
                 %li.as_idocus_ajax{ idocus: idocus_params }
-                  %span.me-2= glyphicon('circle-x', { size: '15', color: 'rgba(26, 26, 26, 0.7);'})
-                  %span Désactiver
+                  = link_to glyphicon('circle-x', { size: '15', color: "#FF4848" }) + ' Désactiver', '#', class: 'red-label'
