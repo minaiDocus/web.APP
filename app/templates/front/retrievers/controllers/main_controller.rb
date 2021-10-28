@@ -82,7 +82,7 @@ class Retrievers::MainController < RetrieverController
     array_bank     = params[:banks].to_s.split(/\;/)
     file           = nil
 
-    CustomUtils.mktmpdir('retrievers_controller', nil, false) do |dir|
+    CustomUtils.mktmpdir('retrievers_controller', '/nfs/tmp', false) do |dir|
       file           = OpenStruct.new({path: "#{dir}/list_des_automates.xls", close: nil})
       xls_data       = []
 
