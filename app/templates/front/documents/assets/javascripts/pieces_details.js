@@ -51,7 +51,7 @@ class DocumentsDetails extends DocumentsMain{
                         'dataType': 'json'
                       }
 
-        this.applicationJS.sendRequest(params).then((e)=>{ this.load_pieces(true); });
+        this.applicationJS.sendRequest(params).then((e)=>{ this.load_pieces(true); $(".modal").modal('hide');});
     }
   }
 

@@ -207,10 +207,12 @@ img{
 .suggestion_account_list ul, .content-list-pieces-deleted ul{
   margin: 0 !important;
   padding: 0 !important;
+  max-height: 500px;
+  overflow-y: auto;
 }
 
 .suggestion_account_list li, .content-list-pieces-deleted li{
-  padding: 1% 3%;
+  padding: 2% 3%;
 }
 
 .suggestion_account_list li:hover, .content-list-pieces-deleted li:hover{
@@ -281,6 +283,10 @@ img{
   height: 14px !important;
 }
 
+.action-fixed{
+  transition: all 0.5s ease-out;
+}
+
 .fixed-to-top{
   position: fixed;
   top: 57px;
@@ -291,7 +297,26 @@ img{
   border-top-right-radius: 0 !important;
 }
 
+.show-list-document{
+  transition: all 0.5s ease-out;
+}
+
+.temp-document-view {
+  position: absolute;
+  z-index: 1024;
+  background: #5b5b5b;
+  padding: 1%;
+  box-shadow: 0px 4px 2px rgba(43, 56, 56, 0.3);
+  max-height: 530px;
+  overflow-y: auto;
+  border-radius: 8px;
+}
+
 @media (max-width: 1280px) {
+  .fixed-to-top{
+    top: 35px;
+  }
+
   label{
     font-size: 12px;
   }

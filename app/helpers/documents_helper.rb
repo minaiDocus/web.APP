@@ -168,11 +168,13 @@ module DocumentsHelper
     content_tag :div, contents, style: 'width: 100%'
   end
 
-  def html_piece_view(piece)
+  def html_piece_view(piece, temp_document=false)
     contents = ''
-    contents += content_tag :h4, "Pièce n° #{piece.position} - #{piece.name}"
-    contents += content_tag :div, content_tag(:iframe, "", :src => piece.cloud_content_object.url, :class => "piece_view", :style => "width:100%; min-height:550px; max-height: 600px")
-    content_tag :div, contents, style: 'width: 750px; padding: 10px;z-index:200'
+    contents += content_tag :h4, "Pièce n° #{piece.position} - #{piece.name}" if not temp_document
+    contents += content_tag :div, content_tag(:iframe, "", :src => piece.get_access_url, :class => "piece_view", :style => "width:100%; height: 700px;")
+    content_tag :div, contents, style: 'padding: 10px; z-index:200'
+
+    contents.html_safe
   end
 
   def quarterly_of_month(month)

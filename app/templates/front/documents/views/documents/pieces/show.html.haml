@@ -19,7 +19,7 @@
             .content-list-pieces-deleted.text-start.regular.hide
               %ul
                 - @pieces_deleted.each do |piece_deleted|
-                  %li.pointer{"data-content" => html_piece_view(piece_deleted), id: piece_deleted.id}
+                  %li.get-pieces-deleted.pointer{ "data-content" => html_piece_view(piece_deleted), "data-content-url" => piece_deleted.get_access_url, id: piece_deleted.id}
                     %span #{piece_deleted.name} supprimée le #{piece_deleted.delete_at.try(:to_date)} par #{piece_deleted.delete_by}
                     %span.float-end.restore{ data: {"piece-id": piece_deleted.id}} Restaurer
     .col-md-3   
@@ -33,7 +33,9 @@
       %button.btn.btn-light.more-filter.semibold
         %span.me-2 Filtrer
         %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
-  .verif-fixed-action
+  - if @pieces.total_count > 2
+    .verif-fixed-action
+
   .row.box.derivationRight.p-4.action-fixed
     - if @user.pre_assignement_displayed?
       .col-md-1.no-padding.text-left.change-view.to-list= glyphicon('grid-two-up', { size: '14', color:'rgba(26, 26, 26, 0.32);' })
@@ -42,9 +44,22 @@
       .col-md-1.no-padding.text-left
     .col-md-8
       - if @temp_documents.count > 0
-        %span= glyphicon('pulse', { size: '12' })
-        %label.semibold Piece(s) en cours de traitement : 
-        %span.badge.bg-info.semibold= @temp_documents.count.to_s
+        .show-list-document.pointer
+          %span= glyphicon('pulse', { size: '12' })
+          %label.semibold Piece(s) en cours de traitement :
+          %span.badge.bg-info.pointer.semibold
+            = @temp_documents.count.to_s
+            .temp-document-view.hide
+              - _index = 0
+              - @temp_documents.each_slice(4) do |documents|
+                .row
+                  - documents.each do |document|
+                    - _index += 1
+                    .col-md-3
+                      .image_piece.text-center.animated-pointer{ id: "each_"+_index.to_s, "data-content" => html_piece_view(document, true), "data-each-class" => ".temp-document-view .image_piece", "data-index" => _index}
+                        = image_tag document_thumb_url(document)
+                      .white-label.p-2= document.original_file_name
+
     .col-md-3.icon-actions.text-end      
       - if @pack.owner.uses_ibiza_analytics?
         %span.pointer.ms-2.action-selected.edit_compta_analysis.hide{ title: 'Édition compta. analytiques', data: { code: @pack.owner.code, is_used: @pack.owner.uses_ibiza_analytics?.to_s } }= glyphicon('pencil', { size: '18', color:'rgba(26, 26, 26, 0.32);'})

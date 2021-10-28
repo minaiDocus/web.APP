@@ -25,7 +25,8 @@
         %span.me-2 Filtrer
         %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
 
-  .row.box.p-4.derivationRight
+  .verif-fixed-action
+  .row.box.p-4.derivationRight.action-fixed
     .col-md-9
     .col-md-3.icon-actions.text-end
       - if @user.has_collaborator_action?

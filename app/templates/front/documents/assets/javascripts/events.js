@@ -167,7 +167,7 @@ function bind_all_events(){
   $('.edit_compta_analysis').unbind('click').bind('click', function(){ AppEmit('documents_edit_analysis', { 'code': $(this).data('code'), is_used: $(this).data('is-used') }); });
 
   $('.delete_piece').unbind('click').bind('click', function(){ AppEmit('documents_delete_piece', {'obj': this}); });
-  $(".content-list-pieces-deleted .restore").unbind('click').bind('click', function(){ AppEmit('documents_restore_piece', { id: $(this).attr('data-piece-id') }); });
+  $(".restore").unbind('click').bind('click', function(e){ e.stopPropagation(); AppEmit('documents_restore_piece', { id: $(this).attr('data-piece-id') }); });
 
   $('.edit_preseizures').unbind('click').bind('click', function(){ AppEmit('documents_edit_preseizures', {'obj': this}); });
 
@@ -186,7 +186,72 @@ function bind_all_events(){
     $("#PdfViewerDialog").modal('show');
   });
 
+  $('.content-list-pieces-deleted li.get-pieces-deleted').unbind('click').bind('click', function(e){
+    $("#DeletedPiece .modal-body .view-content").html($(this).data('content'));
+
+    $("#DeletedPiece button.restore").attr("data-piece-id", $(this).attr('id'));
+
+    $("#DeletedPiece button.previous").attr("data-content", $(this).prev().attr('data-content') || '');
+    $("#DeletedPiece button.previous").attr("id", $(this).prev().attr('id') || '');
+
+    $("#DeletedPiece button.next").attr("data-content", $(this).next().attr('data-content') || '');
+    $("#DeletedPiece button.next").attr("id", $(this).next().attr('id') || '');
+
+    $("#DeletedPiece").modal('show');
+  });
+
+  $('#DeletedPiece button.previous, #DeletedPiece button.next').unbind('click').bind('click', function(e){
+    if ($(this).attr('id')){
+      $("#DeletedPiece .modal-body .view-content").html($(this).attr('data-content'));
+      $("#DeletedPiece button.restore").attr("data-piece-id", $(this).attr('id'));
+
+      let prev_content = ($(".content-list-pieces-deleted li#"+$(this).attr('id') ).prev().attr('data-content')) || '';
+      let next_content = ($(".content-list-pieces-deleted li#"+$(this).attr('id') ).next().attr('data-content')) || '';
+
+      let prev_id      = ($(".content-list-pieces-deleted li#"+$(this).attr('id')).prev().attr('id')) || '';
+      let next_id      = ($(".content-list-pieces-deleted li#"+$(this).attr('id')).next().attr('id')) || '';
+
+      $("#DeletedPiece button.previous").attr("data-content", prev_content);
+      $("#DeletedPiece button.previous").attr("id", prev_id);
+
+      $("#DeletedPiece button.next").attr("data-content", next_content);
+      $("#DeletedPiece button.next").attr("id", next_id);
+    }
+  });
+
+  $('.temp-document-view .image_piece, #TempDocument button.previous, #TempDocument button.next').unbind('click').bind('click', function(e){
+    if ($(this).attr("data-index") > 0 && $(this).attr('data-content') != ""){
+      let _index_prev = parseInt($(this).attr('data-index')) - 1;
+      let _index_next = parseInt($(this).attr('data-index')) + 1;
+
+      $("#TempDocument .modal-body .view-content").html($(this).attr('data-content'));
+
+      let _class_for_each = $(this).data('each-class');
+
+      let prev_content = $(_class_for_each + "#each_"+_index_prev).data('content') || '';
+      let next_content = $(_class_for_each + "#each_"+_index_next).data('content') || '';
+
+      $("#TempDocument button.previous").attr("data-content", prev_content);
+      $("#TempDocument button.previous").attr("data-index", _index_prev);
+      $("#TempDocument button.previous").attr("data-each-class", _class_for_each);
+
+      $("#TempDocument button.next").attr("data-content", next_content);
+      $("#TempDocument button.next").attr("data-index", _index_next);
+      $("#TempDocument button.next").attr("data-each-class", _class_for_each);
+
+      if (!$(this).hasClass('previous') && !$(this).hasClass('next')){
+        $("#TempDocument").modal('show');
+      }
+    }
+  });
+
   $(".more-result").unbind('click').bind('click', function(e){ $(this).hide('fast'); AppEmit('documents_next_page'); })
+  $('.show-list-document').mouseover(function() {
+    $(".temp-document-view").show();
+  })
+  .mouseout(function() {
+    $(".temp-document-view").hide();
+  });
 }
 
 jQuery(function() {
