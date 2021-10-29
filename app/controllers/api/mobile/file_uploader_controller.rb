@@ -49,7 +49,7 @@ class Api::Mobile::FileUploaderController < MobileApiController
     @errors = []
 
     if customer.try(:options).try(:is_upload_authorized)
-      CustomUtils.mktmpdir('file_uploader_controller') do |dir|
+      CustomUtils.mktmpdir('file_uploader_controller', nil, false) do |dir|
         @dir = dir
 
         final_file_name = "composed_mobile_img_#{Time.now.strftime('%Y%m%d%H%M%S')}.pdf"
