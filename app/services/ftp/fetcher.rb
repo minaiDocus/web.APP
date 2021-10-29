@@ -80,7 +80,8 @@ class Ftp::Fetcher
 
         ftp.chdir '..'
 
-        if document_delivery.valid_documents?
+        # if document_delivery.valid_documents?
+        if counts <= 0
           document_delivery.processed
 
           ftp.rename dir, fetched_dir(dir)
@@ -92,8 +93,6 @@ class Ftp::Fetcher
 
         # notify corrupted documents
         next unless corrupted_documents.count > 0
-
-        next #WORKARROUND: ALWAYS SKIP NOTIFIYNG CORRUPTED DOCUMENT
 
         subject = '[iDocus] Documents corrompus'
         content = "Livraison : #{dir}\n"

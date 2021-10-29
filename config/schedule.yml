@@ -72,7 +72,7 @@ DataProcessor::McfWorker:
 
 Ftp::FetcherWorker:
   queue: default
-  cron: '*/10 * * * * *'
+  cron: '0 5 */3 * * *'
 
 RetrieveEmailedDocumentWorker:
   queue: default

@@ -26,6 +26,7 @@ class Api::Sgi::V1::GroupingController < SgiApiController
 
   def process_bundle_needed
     temp_documents = []
+
     TempPack.bundle_processable.each do |temp_pack|
       temp_pack.temp_documents.by_source(params[:delivery_type]).bundle_needed.by_position.each do |temp_document|
         if temp_document.bundle_needed?
