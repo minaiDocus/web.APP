@@ -18,6 +18,9 @@ class Staffingflow::GroupingWorker
       UniqueJobs.for "staffing_flow_grouping-#{staffing_id}" do
         sf = StaffingFlow.find(staffing_id)
         params = sf.params
+
+        return false if StaffingFlow.processing_grouping.count > 3 #MAXIMUM THREAD (Concurent job)
+
         SgiApiServices::GroupDocument.processing(params[:json_content], params[:temp_document_ids], params[:temp_pack_id], sf) if sf.processing
       end
     end

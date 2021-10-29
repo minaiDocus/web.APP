@@ -18,6 +18,9 @@ class Staffingflow::JefactureWorker
       UniqueJobs.for "staffing_flow_jefacture-#{staffing_id}" do
         sf = StaffingFlow.find(staffing_id)
         params = sf.params
+
+        return false if StaffingFlow.processing_jefacture.count > 3 #MAXIMUM THREAD (Concurent job)
+
         SgiApiServices::AutoPreAssignedJefacturePieces.process(params[:temp_preseizure_id], params[:piece_id], params[:raw_preseizure]) if sf.processing
         sf.processed
       end

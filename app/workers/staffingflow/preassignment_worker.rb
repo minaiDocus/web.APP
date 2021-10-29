@@ -18,6 +18,9 @@ class Staffingflow::PreassignmentWorker
       UniqueJobs.for "staffing_flow_preassignment-#{staffing_id}" do
         sf = StaffingFlow.find(staffing_id)
         params = sf.params
+
+        return false if StaffingFlow.processing_preassignment.count > 3 #MAXIMUM THREAD (Concurent job)
+
         SgiApiServices::PushPreAsignmentService.process(params[:piece_id], params[:data_preassignment]) if sf.processing
         sf.processed
       end
