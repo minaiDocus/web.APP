@@ -246,7 +246,7 @@ class DataProcessor::RetrievedData
     # NOTE 'deleted' type is datetime
     if bank_account && account['deleted'].present?
       bank_account.operations.update_all(api_id: nil)
-      bank_account.destroy
+      Transaction::DestroyBankAccounts.new([bank_account]).execute("Destroy from retrieved data - #{account['deleted']}")
       bank_account = nil
     else
       bank_account                   = bank_account || BankAccount.new
