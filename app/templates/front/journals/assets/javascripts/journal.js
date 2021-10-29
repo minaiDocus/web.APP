@@ -192,7 +192,7 @@ class Journal{
         vat_accounts['-1'] = [vat_account_exonorated_field];
       }
 
-      if ((label === self.default_vat_accounts_label) || label === 'Compte de TVA par défaut' ){
+      if ((label === self.default_vat_accounts_label) || label === 'Compte de TVA par défaut (TVA 20%)' ){
         label = '0';
       }
 
@@ -227,7 +227,7 @@ class Journal{
           let conterpart_vat_account = raw_vat_account[1]
 
 
-          if ((rate.indexOf(self.default_vat_accounts_label) >= 0) || (rate === 'Compte de TVA par défaut') || (rate === '0')){
+          if ((rate.indexOf(self.default_vat_accounts_label) >= 0) || (rate === 'Compte de TVA par défaut (TVA 20%)') || (rate === '0')){
             $('input[type="text"]#account_book_type_default_vat_accounts').attr('value', vat_account);
             $('input[type="text"]#account_book_type_default_conterpart_accounts').attr('value', conterpart_vat_account);
 

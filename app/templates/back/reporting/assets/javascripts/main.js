@@ -30,6 +30,7 @@ $(document).ready(function() {
       url: '/admin/reporting/total_footer',
       contentType: 'application/json',
       }).success(function(response){
+        $('.custom_popover').custom_popover();
         $("#reporting .organization_list tr#total_footer").html(response)
       })
   }

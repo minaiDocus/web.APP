@@ -30,6 +30,7 @@
 //= require bootstrap-datepicker/core
 //= require retractable
 //= require dynamic_hide_menu
+//= require custom_popover
 //
 // French translation for bootstrap-datepicker
 // Lola LAI KAM <lailol@directmada.com>

@@ -39,6 +39,8 @@ class StaffingFlow < ApplicationRecord
   def self.set_to_ready(id)
     sf = StaffingFlow.find id
 
+    return false if sf.processing?
+
     sf.state = 'ready'
     sf.save
   end

@@ -6,6 +6,6 @@
 //   }
 // }
 
-// jQuery(function () {
+jQuery(function () {
 
-// });
+});

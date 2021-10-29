@@ -68,7 +68,7 @@ jQuery(function () {
 
     this.unbind('mouseleave.customPopover');
     this.bind('mouseleave.customPopover', function(e) {
-      hidePopover(); 
+      hidePopover();
     });
   };
 });
