@@ -55,7 +55,11 @@ private
   end
 
   def total_price
-    @period.products_price_in_cents_wo_vat + @period.excesses_price_in_cents_wo_vat
+    if @period.user&.code == 'NEAT%ARAPL'
+      @period.uploaded_pieces * 200
+    else
+      @period.products_price_in_cents_wo_vat + @period.excesses_price_in_cents_wo_vat
+    end
   end
 
   def excesses_price
@@ -65,7 +69,7 @@ private
   end
 
   def create_excess_order
-    return false unless @period.organization
+    return false unless @period.organization || @period.user&.code == 'NEAT%ARAPL'
 
     option = @period.reload.product_option_orders.where(name: 'excess_documents').first
 
