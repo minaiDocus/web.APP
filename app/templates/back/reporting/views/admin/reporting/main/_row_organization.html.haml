@@ -95,9 +95,9 @@
 
   - tooltip_content = content_for("title_hint_#{@organization.id}_#{i}".to_sym).gsub('"', "'").strip
   - if tooltip_content.present? && tooltip_content != '-'
-    %td.months_list.custom_popover{ data: { content: tooltip_content } }
+    %td.months_list
       .content.clearfix
-        .float-left= glyphicon('info', { class: 'mr-sm-1', color: '#000', size: 9 })
+        .float-left.custom_popover{ data: { content: tooltip_content } }= glyphicon('info', { class: 'mr-sm-1', color: '#000', size: 9 })
         .float-right= content_for "td_content_#{@organization.id}_#{i}".to_sym
   - else
     %td.months_list

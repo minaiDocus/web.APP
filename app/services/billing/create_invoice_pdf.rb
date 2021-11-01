@@ -26,6 +26,8 @@ class Billing::CreateInvoicePdf
     #_options : [notify: send notification to admin,
     #            auto_upload: send invoice to ACC%IDO and invoice_settings]
     def generate_invoice_of(organization, invoice_number=nil, _time=nil, _options={})
+
+      p "=================== Generating invoice of #{organization.code} =================="
       options = {}
       options[:notify]      = (_options[:notify] === false)? false : true
       options[:auto_upload] = (_options[:auto_upload] === false)? false : true
@@ -42,6 +44,8 @@ class Billing::CreateInvoicePdf
       return false if organization_period.nil?
       return false if organization_period.invoices.present? && invoice_number.nil?
 
+
+      p "=================== Next step =================="
       invoice = if invoice_number.present?
                   Invoice.find_by_number(invoice_number) || Invoice.new(organization_id: organization.id, number: invoice_number)
                 else
@@ -49,6 +53,8 @@ class Billing::CreateInvoicePdf
                 end
 
       return false if invoice.try(:organization_id) != organization.id
+
+      p "=================== Generating invoice : creation #{invoice.persisted?} ==============="
 
       customers_periods = Period.where(user_id: organization.customers.active_at(time.to_date).map(&:id)).where('start_date <= ? AND end_date >= ?', time.to_date, time.to_date)
 
