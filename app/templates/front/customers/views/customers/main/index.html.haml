@@ -60,7 +60,7 @@
                               = popover_content(period.product_option_orders)                              
                     %td.text-center.align-middle= customer.options.is_preassignment_authorized ? 'Activé' : '-'
                     %td.text-center.align-middle= customer.options.is_retriever_authorized ? "Activé" : "-"
-                    %td.align-middle= customer.subscription.try(:number_of_journals)
+                    %td.align-middle= (customer.subscription.try(:number_of_journals).to_i > 5)? (customer.subscription.try(:number_of_journals).to_i - 5) : 0
                     %td.text-end.pointer.align-middle
                       .action.sub_edit_delete.list-collaborators
                         %span.glyph= glyphicon('ellipses', { size: '15', color: color, style: 'transform: rotate(90deg)'})

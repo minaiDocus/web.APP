@@ -63,7 +63,7 @@
                     %tbody
                       %tr
                         %td= expense.created_at.strftime('%d/%m/%Y')
-                        %td= format_price_00(expense.amount_in_cents_w_vat) + ' €'
+                        %td= expense.amount_in_cents_w_vat.to_f.to_s + ' €'
                         %td= expense.date.strftime('%d/%m/%Y')
                         %td= expense.type
                         %td= expense.origin
