@@ -129,7 +129,7 @@
             showSelectionBelowList: false,
             allowNullSelection: false,
             scrollTarget: undefined,
-            maxHeight: undefined,
+            maxHeight: 300,
             converter: undefined,
             asyncBatchSize: 300,
             maxShow: 0

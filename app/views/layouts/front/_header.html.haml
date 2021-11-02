@@ -21,19 +21,19 @@
         - if @user.collaborator?
           - if @user.has_one_organization?
             - if @user.inactive? || @user.organizations_not_suspended? || @user.can_unsuspend?
-              - path = (organizations_suspended? && @user.active?) ? organization_path(@user.organization, tab: 'payments') : organization_path(@user.organization)
+              - path = (organizations_suspended? && @user.active?) ? edit_payment_organization_path(@user.organization) : organization_path(@user.organization)
               %li.nav-item{ class: (controller_path == 'organizations/main')? 'active' : '' }
                 =link_to t('layouts.my_company'), path, class: 'nav-link bold'
             - if @user.active? && @user.organization.is_active
               %li.nav-item{ class: (controller_path == 'reporting/main')? 'active' : '' }
-                =link_to t('layouts.reporting'), '/reporting', class: 'nav-link bold'
+                =link_to t('layouts.reporting'), "/reporting/#{@user.organization.try(:id)}", class: 'nav-link bold'
           - elsif @user.organizations_not_suspended? || @user.can_unsuspend?
             %li.nav-item.dropdown{ class: (controller_path == 'organizations/main')? 'active' : '' }
               =link_to t('layouts.my_company'), '', class: 'nav-link dropdown-toggle bold', id: 'navbardropdownmenucompany', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-bs-toggle' => "dropdown", 'role' => "button"
               .dropdown-menu.semibold{"aria-labelledby" => "navbardropdownmenucompany"}
                 - @user.organizations.each do |organization|
                   - if organization.is_suspended
-                    = link_to organization_path(organization, tab: 'payments'), class: (organization.id == @organization.try(:id))? 'dropdown-item active' : 'dropdown-item' do
+                    = link_to edit_payment_organization_path(organization), class: (organization.id == @organization.try(:id))? 'dropdown-item active' : 'dropdown-item' do
                       = organization.name
                       %i (Suspendu)
                   - else

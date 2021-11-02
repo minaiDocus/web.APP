@@ -66,14 +66,14 @@
                 %a{ href: '#', data:{ index: 'Z' }} Z
 
         .box.overflow-auto
-          .form-group.no-margin             
+          .form-group.no-margin
             %label.semibold Banques
             %span.badge.badge-secondary.regular.banks-size 0                
           %hr
           .form-group.no-margin
             %ul.connectors-list.banks
 
-        .box.overflow-auto{ class: CustomUtils.can_create_budgea_documents(@account.try(:organization)) ? '' : 'hide' }
+        .box.overflow-auto.providers-box.hide
           .form-group.no-margin              
             %label.semibold Document
             %span.badge.badge-secondary.regular.providers-size 0              

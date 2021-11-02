@@ -13,6 +13,13 @@ class RetrieversList{
   }
 
   fetch_list(){
+    let can_manage_providers = VARIABLES.get('can_manage_providers');
+
+    if(can_manage_providers == 1)
+      $('.modal#connectors-list .providers-box').removeClass('hide');
+    else
+      $('.modal#connectors-list .providers-box').addClass('hide');
+
     $('.modal#connectors-list').modal('show');
 
     if(this.connectors.length > 0){

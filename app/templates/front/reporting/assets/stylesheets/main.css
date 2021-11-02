@@ -4,6 +4,10 @@
   font-size: 30px;
 }
 
+.sol-current-selection{
+  display: none;
+}
+
 .multi-select-menu{
   max-height: 200px;
   overflow: auto;

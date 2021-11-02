@@ -82,8 +82,16 @@ class ConfigurationStep1{
     if(filter.length < 3){ filter = null };
 
     let type = 'bank';
-    if( $('.bank_and_document_selector').hasClass('can_create_documents') )
-      type = $('.step1 #choose-selector').val();
+    let can_manage_providers = VARIABLES.get('can_manage_providers');
+
+    if(can_manage_providers == 1){
+      $('.bank_and_document_selector').removeClass('hide');
+      type = $('.step1 #choose-selector').val() || 'all';
+    }
+    else{
+      $('.bank_and_document_selector').addClass('hide');
+      type = "bank";
+    }
 
     //add document capabilities if edition
     if(this.retriever['budgea_connector_id'] && this.retriever['budgea_connector_id'] > 0){

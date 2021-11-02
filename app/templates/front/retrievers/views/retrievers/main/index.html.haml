@@ -37,6 +37,7 @@
   .mb-4
 
   .retrievers-list
+    = javascript_declare_var 'can_manage_providers', CustomUtils.can_create_budgea_documents(@account.try(:organization))? 1 : 0
     - if @retrievers.size > 0
       - @retrievers.each_slice(2) do |retrievers|
         .row.retriever-content.animatedGroups
@@ -46,5 +47,5 @@
       .no-data-found.box= t('global.no-data-found')
 
 = render partial: 'dialogs'
-          
+
 = javascript_include_tag 'front/retrievers/assets/javascripts/main'

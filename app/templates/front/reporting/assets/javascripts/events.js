@@ -1,6 +1,7 @@
 function bind_all_events(){
-  $('#customer_filter').multiSelect({
-    "noneText": "Filtre par dossier"
+  $('#customer_filter').asMultiSelect({
+    texts: { searchplaceholder: "Filtre par dossier" },
+    maxHeight: '300px'
   });
 
   $('li.reporting_links').unbind('click.reporting_view').bind('click.reporting_view', function(e){

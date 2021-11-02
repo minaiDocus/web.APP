@@ -6,7 +6,7 @@ class ConfigurationStep2{
   /*** COMMON METHODS ***/
     primary_action(){ this.create_connector(); }
 
-    secondary_action(){ this.mainConfig.goto(1); }
+    secondary_action(){ if(this.budgea_id <= 0) { this.mainConfig.goto(1); } }
   /*** COMMON METHODS ***/
 
   init_form(retriever={}){
