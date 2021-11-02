@@ -150,7 +150,7 @@ class CustomUtils
     end
 
     def can_create_budgea_documents(organization)
-      ["IDOC", "AFH"].include?(organization.code)
+      ["IDOC", "AFH"].include?(organization.try(:code).to_s)
     end
   end
 end
