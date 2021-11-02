@@ -182,6 +182,12 @@ img{
   border-radius: 8px;
 }
 
+.for-expense{
+  padding: 3%;
+  border: 1px solid #EAEAEA;
+  border-radius: 8px;
+}
+
 .no-preseizure h1{
   color: #9F9F9F !important;
 }

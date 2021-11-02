@@ -120,7 +120,7 @@
                 %td.text-center= pre_tax_amount.to_f * (analysis[:ventilation].to_f / 100)
 
 %hr.no-margin.w-100
-.row.ml-1.mt-1.mb-1.mr-0
+.row
   .col-md-9
     %span.badge.bg-info.semibold= sprintf '%03d', preseizure.position || 0
     - if preseizure.created_at >= 1.days.ago
