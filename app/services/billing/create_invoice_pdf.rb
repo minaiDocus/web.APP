@@ -83,7 +83,7 @@ class Billing::CreateInvoicePdf
 
       #organization.admins.each do |admin|
       #  Notifications::Notifier.new.create_notification({
-      #    url: Rails.application.routes.url_helpers.account_profile_url({ panel: 'invoices' }.merge(ActionMailer::Base.default_url_options)),
+      #    url: Rails.application.routes.url_helpers.organization_invoices_url(ActionMailer::Base.default_url_options),
       #    user: admin,
       #    notice_type: 'invoice',
       #    title: "Nouvelle facture disponible",
