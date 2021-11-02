@@ -189,6 +189,9 @@ function iDocus_dynamic_modals(){
       if(params.style){
         modal.find('.modal-dialog').attr('style', params.style);
       }
+      if(params.content_style){
+        modal.find('.modal-content').attr('style', params.content_style);
+      }
 
       const get_content = ()=>{
         let can_get_content = true

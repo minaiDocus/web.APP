@@ -64,7 +64,7 @@
             .w-100.text-end
               - if @organization.ibiza.try(:configured?)
                 - modal_title = @customer.configured? ? "Édition des options iBiza du client : #{@customer}" : "Configuration d'iBiza pour le dossier : #{@customer}"
-                - modal_params = param_encode({ url: edit_organization_customer_ibiza_path(@organization, @customer), title: modal_title, after_show: 'bind_api_user_events', target: '#customer.edit.ibiza' , style: 'min-width: 1024px;'})
+                - modal_params = param_encode({ url: edit_organization_customer_ibiza_path(@organization, @customer), title: modal_title, after_show: 'bind_api_user_events', target: '#customer.edit.ibiza' , style: 'min-width: 1024px;', content_style: "min-height: 550px"  })
                 %button.btn.btn-light.w-25.edit_customer_ibiza.semibold.as_idocus_modal.semibold{ idocus: modal_params  } Éditer
               
   - if @organization.try(:exact_online).try(:used?) && params[:software_name] == 'exact_online'

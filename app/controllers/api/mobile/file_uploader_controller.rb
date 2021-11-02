@@ -40,9 +40,9 @@ class Api::Mobile::FileUploaderController < MobileApiController
     data = nil
 
     customer = if params[:file_code].present?
-                 accounts.active.find_by_code(params[:file_code])
+                accounts.active.find_by_code(params[:file_code])
                else
-                 @user
+                @user
                end
 
     @uploaded_files = params[:files]
