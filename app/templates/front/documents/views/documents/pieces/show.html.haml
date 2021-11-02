@@ -52,13 +52,14 @@
             .temp-document-view.hide
               - _index = 0
               - @temp_documents.each_slice(4) do |documents|
-                .row
+                .temp-document-content
                   - documents.each do |document|
                     - _index += 1
-                    .col-md-3
+                    .temp-document-content-lists
                       .image_piece.text-center.animated-pointer{ id: "each_"+_index.to_s, "data-content" => html_piece_view(document, true), "data-each-class" => ".temp-document-view .image_piece", "data-index" => _index}
                         = image_tag document_thumb_url(document)
-                      .white-label.p-2= document.original_file_name
+                      .white-label.p-2= truncate(document.original_file_name, length: 25)
+                .clearfix
 
     .col-md-3.icon-actions.text-end      
       - if @pack.owner.uses_ibiza_analytics?
