@@ -224,3 +224,9 @@ Cedricom::FetchReceptionstWorker:
 Cedricom::ImportTransactionsWorker:
   queue: cedricom
   cron: 0 14 * * *
+
+ ## Budgea ##
+
+Retriever::FetchOperationsWorker:
+  queue: default
+  cron: 0 1 * * *

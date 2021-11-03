@@ -23,6 +23,7 @@ class BankAccount < ApplicationRecord
 
   scope :used,           -> { where(is_used: true) }
   scope :bridge,         -> { where(api_name: 'bridge') }
+  scope :budgea,         -> { where(api_name: 'budgea') }
   scope :configured,     -> { where.not(journal: [nil, ''], accounting_number: [nil, '']) }
   scope :ebics_enabled,  -> { where.not(ebics_enabled_starting: nil) }  
   scope :not_configured, -> { where(journal: [nil, ''], accounting_number: [nil, '']) }
