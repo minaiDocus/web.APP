@@ -75,8 +75,32 @@ class Api::Mobile::FileUploaderController < MobileApiController
 
           data = present(uploaded_document).to_json
 
-          if uploaded_document.errors.any?
+          if uploaded_document.errors.any? && !uploaded_document.corrupted_document?
             set_errors_to_files(uploaded_document.full_error_messages)
+          end
+
+          if uploaded_document.errors.any?
+            log_document = {
+              subject: "[UploadMobile] Document error",
+              name: "UploadMobile",
+              error_group: "[UploadedMobileDocument] Document error",
+              erreur_type: "[Upload] - Document error",
+              date_erreur: Time.now.strftime('%Y-%m-%d %H:%M:%S'),
+              more_information: {
+                customer: customer.to_json,
+                uploaded_by: @user.try(:my_code),
+                size: @uploaded_files.size,
+                path: @final_file_path,
+                fingerprint: DocumentTools.checksum(@final_file_path),
+                message: uploaded_document.full_error_messages
+              }
+            }
+
+            begin
+              ErrorScriptMailer.error_notification(log_document, { attachements: [{ name: final_file_name, file: File.read(@final_file_path) }]} ).deliver
+            rescue
+              ErrorScriptMailer.error_notification(log_document).deliver
+            end
           end
         else
           set_errors_to_files("Une erreur inatendue s'est produite, veuillez relancer l'upload svp")
