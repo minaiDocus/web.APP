@@ -40,9 +40,10 @@ gem 'nested_form'
 gem 'simple_form'
 
 # System libraries binding
-gem 'gio2', '3.4.4'
-gem 'gobject-introspection', '3.4.4'
-gem 'poppler', '3.4.4'
+gem 'gio2', '3.4.9'
+gem 'gobject-introspection', '3.4.9'
+gem 'cairo-gobject', '3.4.9'
+gem 'poppler', '3.4.9'
 
 # Object renderer
 gem 'rabl'
