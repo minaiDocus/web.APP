@@ -72,7 +72,7 @@ DataProcessor::McfWorker:
 
 Ftp::FetcherWorker:
   queue: default
-  cron: '0 5 */3 * * *'
+  cron: '0 */30 * * * *'
 
 RetrieveEmailedDocumentWorker:
   queue: default
@@ -172,7 +172,7 @@ Staffingflow::JefactureWorker:
 
 Archive::ResendDocumentCorruptedWorker:
   queue: default
-  cron: '0 0 */1 * * *'
+  cron: '0 */5 * * * *'
 
 ## Delivery workers
 
