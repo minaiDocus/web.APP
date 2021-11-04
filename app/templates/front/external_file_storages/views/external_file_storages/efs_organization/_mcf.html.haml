@@ -28,7 +28,7 @@
     %hr
     .text-end
       - idocus_params = param_encode({ url:  organization_mcf_settings_path(@organization), method: 'delete', confirm: 'Voulez vous vraiment supprimer vos parametres?', redirect_to: { url: organization_efs_path(@organization, tab: 'mcf'), method: 'GET', html: { target: '.general' } } })
-      %button.btn.btn-danger.as_idocus_ajax{ type: 'button', idocus: idocus_params } Supprimer mes paramètres
+      %button.btn.btn-danger.as_idocus_ajax{ type: 'button', idocus: idocus_params } Supprimer mes paramètres de liaison MCF
 
       - idocus_params = param_encode({ url: '#url', form: { id: 'edit_mcf_settings', dump_action: true }, redirect_to: { url: organization_efs_path(@organization, tab: 'mcf'), method: 'GET', html: { target: '.general' } } })
       %button.btn.btn-primary.as_idocus_ajax{ type: 'button', idocus: idocus_params } Valider les modification

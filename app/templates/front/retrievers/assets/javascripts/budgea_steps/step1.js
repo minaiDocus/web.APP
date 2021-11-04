@@ -39,7 +39,7 @@ class ConfigurationStep1{
       AppLoading('show');
       this.mainConfig.budgeaApi.get_user_tokens()
                                 .then((e)=>{
-                                  this.fetch_connectors();
+                                  this.fetch_connectors(0);
                                   this.mainConfig.budgeaApi.check_cgu();
                                 });
     }else{
@@ -47,21 +47,24 @@ class ConfigurationStep1{
     }
   }
 
-  fetch_connectors(){
-    if(this.connectors.length > 0)
+  fetch_connectors(retry_count=0){
+    let normal_size = 400;
+
+    if(this.connectors.length >= normal_size || retry_count > 3 )
     {
       this.fill_connectors();
     }
     else
     {
       let cache_connectors = GetCache('connectors_list');
-      if(cache_connectors.length > 0)
+      if(cache_connectors.length >= normal_size)
       {
         this.connectors = cache_connectors;
         this.fill_connectors();
       }
       else
       {
+        console.log(`++++> retry_fetching: ${retry_count} / ${this.connectors.length}`);
         this.mainConfig.budgeaApi.get_connectors()
                                   .then((connectors)=>{
                                     let distinct = (value, index, self)=>{
@@ -70,7 +73,9 @@ class ConfigurationStep1{
 
                                     this.connectors = connectors.filter(distinct);
                                     SetCache('connectors_list', this.connectors);
-                                    this.fill_connectors();
+
+                                    this.fetch_connectors(retry_count + 1);
+
                                   })
                                   .catch((e)=>{ this.mainConfig.applicationJS.noticeErrorMessageFrom(null, e.toString()); })
       }
@@ -78,6 +83,8 @@ class ConfigurationStep1{
   }
 
   fill_connectors(){
+    console.log(`++++> Total: ${this.connectors.length}`);
+
     let filter     = $('.step1 #connector-search-name').val();
     if(filter.length < 3){ filter = null };
 

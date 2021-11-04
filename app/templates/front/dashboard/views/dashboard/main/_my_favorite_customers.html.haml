@@ -28,7 +28,7 @@
               - if infos.try(:active)
                 = t('dashboard.configuration_text')
               - else
-                = 'Dossier cloturé'
+                = "Dossier cloturé le: #{customer.inactive_at.strftime('%d-%m-%Y')}"
               %span= glyphicon('cog', {size: '11', color: '#b5a6a6'})
         .col-md-1.no-padding.semibold.text-end
           = tag_state ( infos.try(:active)? 'good' : 'critical' )
