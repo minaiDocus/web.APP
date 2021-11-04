@@ -1,11 +1,12 @@
 - favorites.each do |user_id|
-  - infos = FavoriteCustomer.get_infos_of(user_id)
+  - infos    = FavoriteCustomer.get_infos_of(user_id)
+  - customer = User.find(user_id)
 
   .box.animatedChild.animated-pointer{ class: animation }
     .favorite-list
       .row
         .col-md-10.float-start
-          %span.bold= infos.try(:name)
+          = link_to infos.try(:code), documents_path({ _ext: 1, k: Base64.encode64({ view: customer.id }.to_json) }), class: 'no-style bold black-label'
           %br
           %i.text-muted
             = infos.try(:name)
@@ -22,13 +23,13 @@
         .col-md-10
           %h6.bold= t('dashboard.configuration_state')
           .text-small-content
-            %p
+            %a.support-chat-link.no-style.black-label{ href: organization_customer_path(customer.try(:organization), customer) }
+              %span
               - if infos.try(:active)
                 = t('dashboard.configuration_text')
               - else
                 = 'Dossier cloturé'
-              %span
-                = link_to glyphicon('cog', {size: '11', color: '#b5a6a6'}), '#', class: 'support-chat-link'
+              %span= glyphicon('cog', {size: '11', color: '#b5a6a6'})
         .col-md-1.no-padding.semibold.text-end
           = tag_state ( infos.try(:active)? 'good' : 'critical' )
       %hr.clearfix
@@ -40,9 +41,10 @@
               %span
                 %span= t('dashboard.last_pack_added') + ' :'
             .col-md-4.text-end
-              %span
+              - link_document = infos.last_pack.present? ? documents_details_path(id: infos.last_pack.id) : '#'
+              %a.support-chat-link.no-style.black-label{ href: link_document}
                 %span= infos.try(:last_pack).try(:name).try(:gsub, ' all', '') || '-'
-                = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#', class: 'support-chat-link'
+                %span= glyphicon('chevron-right', {size: '11', color: '#b5a6a6'})
       %hr.clearfix
       .row
         .col-md-12
@@ -61,23 +63,26 @@
           %h6.bold= t('dashboard.add_documents')
           .row
             .col-md-5
-              %span= t('dashboard.errors_found') + ' :'
+              %span= t('dashboard.failed_delivery') + ' :'
             .col-md-2.text-end
-              %span= infos.try(:temp_docs_error_size).to_i
-              = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#', class: 'support-chat-link'
+              %a.support-chat-link.no-style.black-label{ href: pieces_errors_path({ _ext: 1, k: Base64.encode64({ tab: 'failed-delivery', account_id: customer.id}.to_json) })}
+                %span= infos.try(:failed_delivery).to_i
+                %span= glyphicon('chevron-right', {size: '11', color: '#b5a6a6'})
+          .row
+            .col-md-5
+              %span= t('dashboard.pre_assignement_duplicated') + ' :'
+            .col-md-2.text-end
+              %a.support-chat-link.no-style.black-label{ href: pieces_errors_path({ _ext: 1, k: Base64.encode64({ tab: 'duplicated-pre-assignment', account_id: customer.id}.to_json) }) }
+                %span= infos.try(:duplicated_preseizures_size).to_i
+                %span= glyphicon('chevron-right', {size: '11', color: '#b5a6a6'})
           - if infos.try(:retriever_option_active)
             .row
               .col-md-4
                 %span= t('dashboard.retrievers_failing') + ' :'
               .col-md-3.text-end
-                %span= infos.try(:retriever_error_size).to_i
-                = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#', class: 'support-chat-link'
-          .row
-            .col-md-5
-              %span= t('dashboard.pre_assignement_duplicated') + ' :'
-            .col-md-2.text-end
-              %span= infos.try(:duplicated_preseizures_size).to_i
-              = link_to glyphicon('chevron-right', {size: '11', color: '#b5a6a6'}), '#', class: 'support-chat-link'
+                %a.support-chat-link.no-style.black-label{ href: retrievers_path({ _ext: 1, k: Base64.encode64({ account_id: customer.id, state: 'error' }.to_json) }) }
+                  %span= infos.try(:retriever_error_size).to_i
+                  %span= glyphicon('chevron-right', {size: '11', color: '#b5a6a6'})
         .col-md-1.no-padding.semibold.text-end
           = tag_state infos.try(:anomaly_state)
           

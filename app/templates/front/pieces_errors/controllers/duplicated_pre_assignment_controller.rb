@@ -9,7 +9,7 @@ class PiecesErrors::DuplicatedPreAssignmentController < FrontController
     @duplicates = Pack::Report::Preseizure
                   .unscoped
                   .blocked_duplicates
-                  .where(user_id: account_ids)
+                  .where(user_id: params[:account_id].presence || account_ids)
                   .search(search_terms(params[:duplicate_contains]))
                   .order("#{sort_real_column} #{sort_direction}")
                   .page(params[:page])

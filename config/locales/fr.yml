@@ -213,7 +213,8 @@ fr:
     last_pack_added: Dernier lot ajouté
     last_activity: Dernière activité
     add_documents: Ajout de documents
-    errors_found: Erreurs de téléversement
+    # errors_found: Erreurs de téléversement
+    failed_delivery: Erreur livraison d'écritures
     retrievers_failing: Pannes d’automates
     pre_assignement_duplicated: Doublons en pré-affectation
     favorite_success_state: bon

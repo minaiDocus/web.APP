@@ -5,6 +5,7 @@ class Retrievers::MainController < RetrieverController
   before_action :load_retriever, except: %w[index list new export_connector_to_xls get_connector_xls new_internal create api_config]
   before_action :verify_retriever_state, except: %w[index list new export_connector_to_xls get_connector_xls new_internal edit_internal create api_config]
   before_action :load_retriever_edition, only: %w[new edit]
+  before_action :load_params, only: %w[index]
 
   prepend_view_path('app/templates/front/retrievers/views')
 
@@ -15,7 +16,7 @@ class Retrievers::MainController < RetrieverController
                    Retriever.where(user: accounts)
                  end
 
-    @retrievers = Retriever.search_for_collection(retrievers, search_terms({ name: params[:name], state: params[:state] }))
+    @retrievers = Retriever.search_for_collection(retrievers, search_terms({ name: @_params[:name], state: @_params[:state] }))
                            .joins(:user)
                            .order("#{sort_column} #{sort_direction}")
                            .page(params[:page])
@@ -186,5 +187,9 @@ class Retrievers::MainController < RetrieverController
 
     @is_budgea = @account.banking_provider == 'budget_insight'
     @is_bridge = @account.banking_provider == 'bridge'
+  end
+
+  def load_params
+    @_params = params[:_ext].present? ? JSON.parse(Base64.decode64(params[:k])).with_indifferent_access : params
   end
 end

@@ -421,6 +421,8 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
 
     if params[:activate_filter] || params[:reinit]
       @s_params = params.permit!.to_h
+    elsif params[:_ext]
+      @s_params = JSON.parse(Base64.decode64(params[:k]))
     else
       @s_params = (session[session_name.to_sym].present? && session[session_name.to_sym].try(:[], :version) == session_version)? session[session_name.to_sym][:datas] : params.permit!.to_h
     end
@@ -476,7 +478,7 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
     @options[:by_preseizure] = @s_params[:by_preseizure]
 
     @options[:user_ids] = if (@s_params[:view].present? && @s_params[:view] != 'all')
-                            @s_params[:view].try(:split, ',') || account_ids
+                            @s_params[:view].try(:split, ',') || @s_params[:view] || account_ids
                           else
                             account_ids
                           end

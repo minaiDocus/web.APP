@@ -12,26 +12,27 @@
   .mb-4
 
   .derivationRight
+    %input#_ext{ type: :hidden, "data-params" => params}
     %ul.nav.nav-tabs.ms-3{ "role" => "tablist" }
       %li.nav-item.no-margin{ "role" => "presentation" }
-        %button.semibold.nav-link.active#ignored-pre-assignment-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#ignored-pre-assignment", type: :button, "role" => "tab", "aria-controls" => "ignored-pre-assignment", "aria-selected" => "true" } 
+        %button.semibold.nav-link#ignored-pre-assignment-tab{ class: ((params[:tab] == 'ignored-pre-assignment' || params[:tab].nil?) ? 'active' : ''), "data-bs-toggle" => "tab", "data-bs-target" => "#ignored-pre-assignment", type: :button, "role" => "tab", "aria-controls" => "ignored-pre-assignment", "aria-selected" => "true" } 
           Ignorées à la pré-affectation   
           %span.ms-1.badge.badge-secondary.regular#total-ignored-pre-assignment 0
       %li.nav-item.no-margin{ "role" => "presentation" }
-        %button.semibold.nav-link#duplicated-pre-assignment-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#duplicated-pre-assignment", type: :button, "role" => "tab", "aria-controls" => "duplicated-pre-assignment", "aria-selected" => "false"} 
+        %button.semibold.nav-link#duplicated-pre-assignment-tab{ class: ((params[:tab] == 'duplicated-pre-assignment' ) ? 'active' : ''), "data-bs-toggle" => "tab", "data-bs-target" => "#duplicated-pre-assignment", type: :button, "role" => "tab", "aria-controls" => "duplicated-pre-assignment", "aria-selected" => "false"} 
           Ecritures comptables en doublon
           %span.ms-1.badge.badge-secondary.regular#total-duplicated-pre-assignment 0
       %li.nav-item.no-margin.no-filter{ "role" => "presentation" }
-        %button.semibold.nav-link#failed-delivery-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#failed-delivery", type: :button, "role" => "tab", "aria-controls" => "failed-delivery", "aria-selected" => "false"} 
+        %button.semibold.nav-link#failed-delivery-tab{ class: ((params[:tab] == 'failed-delivery' ) ? 'active' : ''), "data-bs-toggle" => "tab", "data-bs-target" => "#failed-delivery", type: :button, "role" => "tab", "aria-controls" => "failed-delivery", "aria-selected" => "false"} 
           Erreur livraison d'écritures comptables
           %span.ms-1.badge.badge-secondary.regular#total-failed-delivery 0
 
     .tab-content
-      .tab-pane.box.no-margin.active#ignored-pre-assignment{ "role" => "tabpanel", "aria-labelledby" => "ignored-pre-assignment-tab" }
+      .tab-pane.box.no-margin#ignored-pre-assignment{ class: ((params[:tab] == 'ignored-pre-assignment' || params[:tab].nil?) ? 'active' : ''), "role" => "tabpanel", "aria-labelledby" => "ignored-pre-assignment-tab" }
                   
-      .tab-pane.box.no-margin#duplicated-pre-assignment{ "role" => "tabpanel", "aria-labelledby" => "duplicated-pre-assignment-tab" }
+      .tab-pane.box.no-margin#duplicated-pre-assignment{ class: ((params[:tab] == 'duplicated-pre-assignment' ) ? 'active' : ''), "role" => "tabpanel", "aria-labelledby" => "duplicated-pre-assignment-tab" }
                   
-      .tab-pane.box.no-margin#failed-delivery{ "role" => "tabpanel", "aria-labelledby" => "failed-delivery-tab" }
+      .tab-pane.box.no-margin#failed-delivery{ class: ((params[:tab] == 'failed-delivery' ) ? 'active' : ''), "role" => "tabpanel", "aria-labelledby" => "failed-delivery-tab" }
 
 = render partial: 'dialogs'
 

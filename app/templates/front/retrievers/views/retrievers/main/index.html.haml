@@ -32,7 +32,7 @@
         %button.btn.btn-light.semibold.retriever-filter.w-100{ disabled: false }
           %span.me-2 Filtrer
           %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
-      = select_tag 'account_id', options_for_select(customers_active.unshift(['Tous', 'all']), @account.try(:id) || 'all'), include_blank: false, class: 'chosen-list float-end w-25'
+      = select_tag 'account_id', options_for_select(customers_active.unshift(['Tous', 'all']), @account.try(:id) || params[:account_id] || 'all'), include_blank: false, class: 'chosen-list float-end w-25'
 
   .mb-4
 
