@@ -12,7 +12,7 @@
         %span.me-2= @report.name.gsub('all', '').strip
         %span.badge.badge-secondary.regular.datas_size= @preseizures.total_count
         - if @filters.present?
-          %span.badge.bg-info.regular.datas_size.blink Filtre actif
+          %span.filter-info.badge.bg-info.regular.datas_size.blink Filtre actif
     .col-md-3   
       .search-content
         .row.no-margin
@@ -37,6 +37,7 @@
 
   .all-results.derivationLeft
     = javascript_declare_var 'has_more_result', (@preseizures.size > 0 && @preseizures.total_count > @preseizures.size).to_s
+    = javascript_declare_var 'is_from_operation_page', @is_operations? true : false
     - if @preseizures.size > 0
       - @preseizures.each_slice(2) do |_preseizures|
         .row.animatedGroups.content-row-operations

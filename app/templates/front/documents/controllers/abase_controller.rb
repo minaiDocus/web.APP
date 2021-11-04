@@ -46,6 +46,11 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
     export_type = params64['type']
     export_ids  = Array(params64['ids'] || [])
     export_format = params64['format']
+    @is_operations = (params64['is_operations'].to_s == 'true')? true : false
+    @is_documents  = !@is_operations
+    @pluck_preseizures = true
+
+    load_params if export_type == 'pack' || export_type == 'report'
 
     preseizures = []
 
@@ -63,11 +68,19 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
       elsif export_type == 'pack'
         pack = Pack.where(id: export_ids).first
         reports = pack.present? ? assign_report_with(pack) : []
-        preseizures = Pack::Report::Preseizure.not_deleted.where(report_id: reports.collect(&:id))
+        if @options[:by_preseizure].present?
+          preseizures = Pack::Report::Preseizure.not_deleted.where(report_id: reports.collect(&:id)).where(id: @options[:preseizure_ids])
+        else
+          preseizures = Pack::Report::Preseizure.not_deleted.where(report_id: reports.collect(&:id))
+        end
       elsif export_type == 'report'
         @report = Pack::Report.where(id: export_ids).first
         update_report
-        preseizures = Pack::Report.where(id: export_ids).first.preseizures
+        if @options[:by_preseizure].present?
+          preseizures = Pack::Report.where(id: export_ids).first.preseizures.where(id: @options[:preseizure_ids])
+        else
+          preseizures = Pack::Report.where(id: export_ids).first.preseizures
+        end
       end
     end
 
@@ -147,6 +160,12 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
       export_type = params[:type]
       export_ids  = Array(params[:ids] || [])
 
+      @is_operations = (params[:is_operations].to_s == 'true')? true : false
+      @is_documents  = !@is_operations
+      @pluck_preseizures = true
+
+      load_params if export_type == 'pack' || export_type == 'report'
+
       preseizures = []
 
       if export_ids.any?
@@ -158,9 +177,17 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
         elsif export_type == 'pack'
           pack = Pack.where(id: export_ids).first
           reports = pack.present? ? assign_report_with(pack) : []
-          preseizures = Pack::Report::Preseizure.not_deleted.where(report_id: reports.collect(&:id))
+          if @options[:by_preseizure].present?
+            preseizures = Pack::Report::Preseizure.not_deleted.where(report_id: reports.collect(&:id)).where(id: @options[:preseizure_ids])
+          else
+            preseizures = Pack::Report::Preseizure.not_deleted.where(report_id: reports.collect(&:id))
+          end
         elsif export_type == 'report'
-          preseizures = Pack::Report.where(id: export_ids).first.preseizures
+          if @options[:by_preseizure].present?
+            preseizures = Pack::Report.where(id: export_ids).first.preseizures.where(id: @options[:preseizure_ids])
+          else
+            preseizures = Pack::Report.where(id: export_ids).first.preseizures
+          end
         end
       end
 
@@ -171,9 +198,9 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
         end
       end
 
-      render json: { success: true }, status: 200
+      render json: { success: true, size: preseizures.try(:size).to_i }, status: 200
     else
-      render json: { success: true }, status: 200
+      render json: { success: true, size: 0 }, status: 200
     end
   end
 
@@ -463,14 +490,25 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
 
     if @options[:by_preseizure].present?
       if @is_operations
-        reports_ids = Pack::Report::Preseizure.where(user_id: @options[:user_ids]).where('operation_id > 0').filter_by(@options[:by_preseizure]).distinct.pluck(:report_id).presence || [0]
+        source  = Pack::Report::Preseizure.where(user_id: @options[:user_ids]).where('operation_id > 0').filter_by(@options[:by_preseizure]).distinct
+        if @pluck_preseizures
+          preseizure_ids = source.pluck(:id).presence || [0]
+        else
+          reports_ids = source.pluck(:report_id).presence || [0]
+        end
       else
-        piece_ids   = Pack::Report::Preseizure.where(user_id: @options[:owner_ids]).where('piece_id > 0').filter_by(@options[:by_preseizure]).distinct.pluck(:piece_id).presence || [0]
+        source  = Pack::Report::Preseizure.where(user_id: @options[:owner_ids]).where('piece_id > 0').filter_by(@options[:by_preseizure]).distinct
+        if @pluck_preseizures
+          preseizure_ids = source.pluck(:id).presence || [0]
+        else
+          piece_ids   = source.pluck(:piece_id).presence || [0]
+        end
       end
     end
 
-    @options[:ids]       = reports_ids  if reports_ids.present?
-    @options[:piece_ids] = piece_ids    if piece_ids.present?  
+    @options[:ids]            = reports_ids       if reports_ids.present?
+    @options[:piece_ids]      = piece_ids         if piece_ids.present?
+    @options[:preseizure_ids] = preseizure_ids    if preseizure_ids.present?
 
     @options
   end

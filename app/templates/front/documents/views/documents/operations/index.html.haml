@@ -7,7 +7,7 @@
         %span.me-2 Lots opérations bancaires
         %span.badge.badge-secondary.regular.datas_size= @reports.total_count
         - if @filters.present?
-          %span.badge.bg-info.regular.datas_size.blink Filtre actif
+          %span.filter-info.badge.bg-info.regular.datas_size.blink Filtre actif
     .col-md-3.derivationRight
       .search-content
         .row.no-margin
@@ -45,6 +45,7 @@
   .all-results
     .row
       = javascript_declare_var 'has_more_result', (@reports.size > 0 && @reports.total_count > @reports.size).to_s
+      = javascript_declare_var 'is_from_operation_page', @is_operations? true : false
       - if @reports.size > 0
         - count       = @reports.size
         - reports_left  = []

@@ -114,6 +114,8 @@ class DocumentsMain{
           params['ids']  = tmp_params['ids'];
           params['type'] = 'pack';
           information    = `Vous êtes sur le point d'exporter toutes les écritures comptables du lot`;
+          if($('span.filter-info').length > 0)
+            information += ' <span class="badge bg-info bold">liées au filtre</span>';
         }
       }
       else
@@ -126,6 +128,8 @@ class DocumentsMain{
           params['ids'] = tmp_params['ids'];
           params['type'] = 'report';
           information    = `Vous êtes sur le point d'exporter toutes les écritures comptables du lot`;
+          if($('span.filter-info').length > 0)
+            information += ' <span class="badge bg-info bold">liées au filtre</span>';
         }
       }
     }
@@ -142,7 +146,7 @@ class DocumentsMain{
                         });
 
                         $('#preseizures_export #export_type').html(html);
-                        $('#preseizures_export p.information').text(information);
+                        $('#preseizures_export p.information').html(information);
 
                         $('#preseizures_export').modal('show');
                       });
@@ -150,7 +154,8 @@ class DocumentsMain{
 
   launch_export(){
     let params = this.export_params;
-    params['format'] = $('#preseizures_export #export_type').val();
+    params['format']       = $('#preseizures_export #export_type').val();
+    params['is_operations'] = VARIABLES.get('is_from_operation_page');
 
     let str_params = JSON.stringify(params);
 
@@ -182,6 +187,8 @@ class DocumentsMain{
           params['ids']  = tmp_params['ids'];
           params['type'] = 'pack';
           information    = `Voulez vous vraiment livrer les écritures comptables non livrées du lot?`;
+          if($('span.filter-info').length > 0)
+            information += ' (Liées au filtre)';
         }
       }
       else
@@ -194,9 +201,13 @@ class DocumentsMain{
           params['ids']  = tmp_params['ids'];
           params['type'] = 'report';
           information    = `Voulez vous vraiment livrer les écritures comptables non livrées du lot?`;
+          if($('span.filter-info').length > 0)
+            information += ' (Liées au filtre)';
         }
       }
     }
+
+    params['is_operations'] = VARIABLES.get('is_from_operation_page');
 
     let ajax_params =  {
                           'url': '/documents/deliver_preseizures',
@@ -206,7 +217,7 @@ class DocumentsMain{
                         }
 
     if(confirm(information))
-      this.applicationJS.sendRequest(ajax_params).then((e)=>{ this.applicationJS.noticeSuccessMessageFrom(null, 'Livraison en cours ...'); });
+      this.applicationJS.sendRequest(ajax_params).then((e)=>{ this.applicationJS.noticeSuccessMessageFrom(null, `${e.size} livraison(s) en cours ...`); });
   }
 }
 
