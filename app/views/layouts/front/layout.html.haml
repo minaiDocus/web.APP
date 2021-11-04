@@ -29,6 +29,9 @@
   = render partial: 'layouts/front/notice_flush_messages'
   = render partial: 'shared/as_user'
 
+  - if ['retrievers/main', 'retrieved_datas/main', 'retriever_parameters/main'].include?(controller_path)
+    %span.budgea_hint_notification
+      Idocus est enregistrée sous le numéro 804067726 par l’Autorité de Contrôle Prudentiel et de Résolution comme Agent de Budget Insight, établissement de paiement agréé.
   = render partial: 'layouts/front/footer'
 
   #news_box

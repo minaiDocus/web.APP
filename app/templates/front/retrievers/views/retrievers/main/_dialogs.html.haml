@@ -120,8 +120,10 @@
         #step2.step2.steps
         #step3.step3.steps
         #step4.step4.steps
-      .modal-footer
-        .w-100.text-end
+      .modal-footer{ style: 'display: block' }
+        .w-30.float-start
+          %img{ src: "/assets/application/budgealogo.png", alt: "Budget Insight", style: 'max-width: 216px' }
+        .w-50.float-end.text-end
           %button.btn.btn-light.semibold.cancel{ type: :button, data: { 'bs-dismiss': 'modal' } } Annuler
           %button.btn.btn-secondary.semibold.secondary{ type: :button, disabled: 'disabled' } Précédent
           %button.btn.btn-primary.semibold.primary{ type: :button } Valider
