@@ -14,7 +14,8 @@
           %label= pack.updated_at.strftime('%d/%m/%Y')
       .col-md-2
         .operation-count.text-end.p-1
-          %span= pack.pieces.size
+          - pp_size = pack.pieces.size
+          %span{ class: ( pp_size >= 100) ? 'bg-yellow text-white' : '' }= pp_size
       .col-md-1.caret-right
         =link_to glyphicon('caret-right', { size: '20', color: '#CCC' }), documents_details_path(id: pack.id) 
     %hr.w-100.no-margin   
@@ -24,8 +25,6 @@
           %span.badge.badge-success.semibold.to-filter.pointer#new-pack Nouveau
         - if @user.pre_assignement_displayed? && pack.id.in?(packs_with_failed_delivery_ids)
           %span.badge.badge-danger.semibold.to-filter.pointer#preseizure-not-delivered Ecritures non livrées
-        - if pack.pieces.size >= 20
-          %span.badge.badge-warning.semibold.to-filter.pointer#pack-consequent Lot conséquent
         - if pack.pieces.collect(&:expense).any?
           %span.badge.bg-dark.semibold Notes de frais
         - if not pack.is_fully_processed

@@ -14,7 +14,8 @@
           %label= report.preseizures.last.try(:created_at).try(:strftime, '%d/%m/%Y')
       .col-md-2.no-padding
         .operation-count.text-end.p-1
-          %span= report.preseizures.where('operation_id > 0').size
+          - rp_size = report.preseizures.where('operation_id > 0').size
+          %span{ class: ( rp_size >= 100 )? 'bg-yellow text-white' : '' }= rp_size
       .col-md-1
         = link_to glyphicon('caret-right', { size: '18', color: '#CCC' }), detail_path
     %hr    
@@ -24,8 +25,6 @@
           %span.badge.badge-success.semibold Nouveau
         - if @user.pre_assignement_displayed? && report.has_not_delivered_preseizures?
           %span.badge.badge-danger.semibold Ecritures non livrées
-        - if report.preseizures.where(created_at: [7.days.ago..Time.now]).size >= 20
-          %span.badge.badge-warning.semibold Lot conséquent
         - if report.expenses.size > 0
           %span.badge.bg-dark.semibold Notes de frais
       .col-md-4.icon-actions.text-end

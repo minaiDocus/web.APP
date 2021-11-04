@@ -21,6 +21,8 @@ class Customer{
     this.show_ibiza_customer();
     this.show_exact_online_customer();
     this.show_my_unisoft_customer();
+    this.check_commitment_pending();
+
 
     if ($('#personalize_subscription_package_form').length > 0 ) {
       this.check_input_number();
@@ -32,6 +34,17 @@ class Customer{
     if ($('#journals select#copy-journals-into-customer').length > 0) { searchable_option_copy_journals_list(); }
 
     ApplicationJS.set_checkbox_radio(this);
+  }
+
+  check_commitment_pending(){
+    if( $('.form-check-input.radio-button.main-option.commitment_pending').length > 0 ){
+      $('.form-check-input.radio-button.main-option').attr('disabled', 'disabled');
+      $('.form-check-input.radio-button.main-option.commitment_pending').each(function(e){
+        if($(this).is(':checked')){
+          ($(this).removeAttr('disabled'));
+        }
+      });
+    }
   }
 
 

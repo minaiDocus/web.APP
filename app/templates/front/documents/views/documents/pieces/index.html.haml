@@ -14,7 +14,7 @@
           .col-md-1.no-padding.text-center.glass
             = glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })
           .col-md-11.no-padding.no-margin
-            %input#search_input{ name:'pack_name', placeholder: 'Rechercher', value: @options.try(:[], :text) }
+            %input#search_input{ name:'pack_name', placeholder: 'Recherche (contenu, nom du lot, dossier)', value: @options.try(:[], :text) }
     .col-md-1.no-padding.text-center.derivationRight
       %button.btn.btn-light.more-filter.w-100.semibold
         %span.me-2 Filtrer

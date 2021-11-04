@@ -28,7 +28,7 @@
           .col-md-1.no-padding.text-center.glass
             = glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })
           .col-md-11.no-padding.no-margin
-            %input#search_input{placeholder: 'Rechercher', value: session[:params_document_piece].try(:[], :text)}
+            %input#search_input{placeholder: 'Recherche (contenu, nom du lot, dossier)', value: @options.try(:[], :text)}
     .col-md-1.no-padding
       %button.btn.btn-light.more-filter.semibold
         %span.me-2 Filtrer
@@ -46,7 +46,7 @@
       - if @temp_documents.count > 0
         .show-list-document.pointer
           %span= glyphicon('pulse', { size: '12' })
-          %label.semibold Piece(s) en cours de traitement :
+          %label.semibold Piece(s) en cours d'intégration :
           %span.badge.bg-info.pointer.semibold
             = @temp_documents.count.to_s
             .temp-document-view.hide
