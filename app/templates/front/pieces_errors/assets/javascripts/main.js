@@ -39,12 +39,12 @@ class PiecesErrorsMain{
 
     if(this.per_page_of[type] > 0){ params.push(`per_page=${ this.per_page_of[type] }`); }
 
-    if ($('#_ext').attr('data-params-account-id') != undefined)
-      params.push(`account_id=${$('#_ext').attr('data-params-account-id')}`);
-
     try{
       params.push($(`.modal form#filter-${type}-form`).serialize().toString());
     }catch(e){}
+
+    if ($('#_ext').attr('data-params-account-id') != undefined)
+      params.push(`account_id=${$('#_ext').attr('data-params-account-id')}`);
 
     let ajax_params =   {
                           'url': `/pieces/${type.replace(/\-/g, '_')}?${params.join('&')}`,

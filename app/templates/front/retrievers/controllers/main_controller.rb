@@ -10,13 +10,15 @@ class Retrievers::MainController < RetrieverController
   prepend_view_path('app/templates/front/retrievers/views')
 
   def index
-    retrievers = if @account
-                   @account.retrievers
-                 else
-                   Retriever.where(user: accounts)
-                 end
+    retrievers =  if params[:account_id].present?
+                    Retriever.where(user: params[:account_id])
+                  elsif @account
+                    @account.retrievers
+                  else
+                    Retriever.where(user: accounts)
+                  end
 
-    @retrievers = Retriever.search_for_collection(retrievers, search_terms({ name: @_params[:name], state: @_params[:state] }))
+    @retrievers = Retriever.search_for_collection(retrievers, search_terms({ name: params[:name], state: params[:state] }))
                            .joins(:user)
                            .order("#{sort_column} #{sort_direction}")
                            .page(params[:page])

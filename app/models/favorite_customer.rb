@@ -26,7 +26,7 @@ class FavoriteCustomer < ApplicationRecord
       end
 
       result.all_preseizures_size        = Pack::Report::Preseizure.unscoped.where(user_id: customer.id).count
-      result.duplicated_preseizures_size = Pack::Report::Preseizure.unscoped.where(user_id: customer.id, is_blocked_for_duplication: true).count
+      result.duplicated_preseizures_size = Pack::Report::Preseizure.unscoped.joins(:organization, :piece, :user).where(user_id: customer.id, is_blocked_for_duplication: true).count
 
       result.failed_delivery = Pack::Report::Preseizure.not_deleted.failed_delivery.where(user_id: customer.id).count
 
