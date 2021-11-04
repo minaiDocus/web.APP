@@ -174,13 +174,17 @@
 
 
 // CSS ANIMATED
-.btn, .scroll-on-top, .animated-pointer{
+.btn, .scroll-on-top, .animated-pointer, .underlined-pointer{
   transition: all 0.2s ease-out;
 }
 
 .btn:hover, .scroll-on-top:hover, .animated-pointer:hover{
   transform: scale(1.06);
   opacity: 0.8;
+}
+
+.underlined-pointer:hover{
+  text-decoration: underline!important;
 }
 
 .blink {

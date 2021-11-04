@@ -210,6 +210,8 @@ fr:
     medium_state: Moyen
     critical_state: Critique
     folder_activity: Activité du dossier
+    pack_size: Nombre de lots
+    journal_size: Nombre de journaux
     last_pack_added: Dernier lot ajouté
     last_activity: Dernière activité
     add_documents: Ajout de documents
