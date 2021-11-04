@@ -614,14 +614,14 @@ class BudgeaApi{
     });
   };
 
-  webauth(user_id, id, is_new) {
-    var error, field_ido_capabilities, field_ido_custom_name, ido_connector_id, ido_connector_name, state, success;
+  webauth(user_id, id, is_new, params={}) {
+    var error, ido_capabilities, ido_custom_name, ido_connector_id, ido_connector_name, state, success;
 
-    ido_capabilities = $('#ido_capabilities');
-    ido_connector_id = $('#ido_connector_id');
-    ido_custom_name = $('#ido_custom_name');
-    ido_connector_name = $('#ido_connector_name');
-    state = btoa("{ \"user_id\": \"" + user_id + "\", \"ido_capabilities\": \"" + (ido_capabilities.val().replace('"', '\'')) + "\", \"ido_connector_id\": \"" + (ido_connector_id.val().replace('"', '\'')) + "\", \"ido_custom_name\": \"" + (ido_custom_name.val().replace('"', '\'')) + "\", \"ido_connector_name\": \"" + (ido_connector_name.val().replace('"', '\'')) + "\" }");
+    ido_capabilities = params['ido_capabilities'].replace('"', '\'');
+    ido_connector_id = params['ido_connector_id'].replace('"', '\'');
+    ido_custom_name  = params['ido_custom_name'].replace('"', '\'');
+    ido_connector_name = params['ido_connector_name'].replace('"', '\'');
+    state = btoa("{ \"user_id\": \"" + user_id + "\", \"ido_capabilities\": \"" + (ido_capabilities) + "\", \"ido_connector_id\": \"" + (ido_connector_id) + "\", \"ido_custom_name\": \"" + (ido_custom_name) + "\", \"ido_connector_name\": \"" + (ido_connector_name) + "\" }");
 
     error = function(response) {
       $('#budgea_information_fields .feedparagraph').remove();

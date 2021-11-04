@@ -92,10 +92,17 @@ class ConfigurationStep2{
       if(oauth_presence){
         let account_id = $('#account_id').val();
 
+        let options = {
+                        'ido_capabilities': this.form.find('#ido_capabilities').val(),
+                        'ido_connector_id': this.form.find('#ido_connector_id').val(),
+                        'ido_custom_name': this.form.find('#ido_custom_name').val(),
+                        'ido_connector_name': this.form.find('#ido_connector_name').val(),
+                      }
+
         if(this.budgea_id > 0)
-          this.mainConfig.budgeaApi.webauth(account_id, this.budgea_id, false);
+          this.mainConfig.budgeaApi.webauth(account_id, this.budgea_id, false, options);
         else
-          this.mainConfig.budgeaApi.webauth(account_id, this.mainConfig.current_connector['id'], true);
+          this.mainConfig.budgeaApi.webauth(account_id, this.mainConfig.current_connector['id'], true, options);
       }else{
         let all_datas   = this.form.serializeObject();
         let data_remote = JSON.parse(JSON.stringify(all_datas)); //Cloning all_datas

@@ -30,16 +30,24 @@ function load_all_actions(budgeaApi, applicationJS){
   });
 
   $('.webauth_button').unbind('click').bind('click', function(e) {
-    var id, id_connection, self;
+    var id, user_id, id_connection, self, options;
     e.preventDefault();
     self = $(this);
     if (confirm("Voulez-vous vraiement lancer la procédure d'authentification ? La synchronisation peut prendre un moment ...")) {
       id = self.attr('data-id');
+      user_id = self.attr('data-user-id');
+
       $('#loading_' + id).removeClass('hide');
       self.attr("disabled", true);
       id_connection = $('#ido_connector_id_' + id).val() || 0;
       if (id_connection !== 0) {
-        budgeaApi.webauth(id_connection, false);
+        options = {
+                    'ido_capabilities': $(`#ido_capabilities_${id}`).val(),
+                    'ido_connector_id': $(`#ido_connector_id_${id}`).val(),
+                    'ido_custom_name': $(`#ido_custom_name_${id}`).val(),
+                    'ido_connector_name': $(`#ido_connector_name_${id}`).val(),
+                  }
+        budgeaApi.webauth(user_id, id_connection, false, options);
       }
     }
   });

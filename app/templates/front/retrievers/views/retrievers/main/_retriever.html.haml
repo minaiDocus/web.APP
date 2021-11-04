@@ -54,13 +54,12 @@
             %button#decoupled.btn.btn-success.scarequire_decoupled_button{ data: { id: retriever.id } }
               Valider la reprise de la synchronisation
           - when 'webauthRequired'
-            %input{ id: "account_id_#{retriever.budgea_id}", type: :hidden, value: "#{retriever.user.id}"}
-            %input{ id: "field_ido_capabilities_#{retriever.budgea_id}", type: :hidden, value: "#{retriever.capabilities}"}
             %input{ id: "ido_connector_id_#{retriever.budgea_id}", type: :hidden, value: "#{retriever.budgea_id}"}
-            %input{ id: "field_ido_custom_name_#{retriever.budgea_id}", type: :hidden, value: ""}
-            %input{ id: "ido_connector_name_#{retriever.budgea_id}", type: :hidden, value: "#{retriever.name}"}
+            %input{ id: "ido_capabilities_#{retriever.budgea_id}", type: :hidden, value: "#{retriever.capabilities}"}
+            %input{ id: "ido_custom_name_#{retriever.budgea_id}", type: :hidden, value: "#{retriever.name}"}
+            %input{ id: "ido_connector_name_#{retriever.budgea_id}", type: :hidden, value: "#{retriever.service_name}"}
 
-            %button#webauth.btn.btn-primary.webauth_button{ data: { id: retriever.budgea_id } }
+            %button#webauth.btn.btn-primary.webauth_button{ data: { id: retriever.budgea_id, user_id: retriever.user_id } }
               Lancer la procédure d'authentification
             %span
               %img.hide{ id: "loading_#{retriever.budgea_id}", src: "/assets/application/bar_loading.gif", alt: "chargement..."}
