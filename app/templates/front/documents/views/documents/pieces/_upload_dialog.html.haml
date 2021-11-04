@@ -119,8 +119,8 @@
                   {% if (file.file_corrupted) { %}
                     <td class="name pt-3">{%=file.name%}</td>
                     <td class="message pt-3" colspan="2">
-                      <span class="badge bg-warning fs-origin">En attente</span>
-                      Votre document est en-cours de traitement
+                      <span class="badge bg-success mt-2 p-2">Envoyé</span><br />
+                      <i style='font-size: 8px!important'>Votre document est en-cours de traitement</i>
                     </td>
                   {% } else if (file.error) { %}
                     <td class="name pt-3">{%=file.name%}</td>
