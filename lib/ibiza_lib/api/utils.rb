@@ -2,7 +2,7 @@ module IbizaLib
   module Api
     class Utils
       class << self
-        def description(preseizure, fields, separator)
+        def description(preseizure, fields, separator, computed_date=nil)
           used_fields = { 'operation_label' => { 'is_used' => true, 'position' => 1 } }
 
           used_fields.merge!(fields.select { |_k, v| v['is_used'].to_i == 1 || v['is_used'] == true })
@@ -17,7 +17,17 @@ module IbizaLib
             elsif k == 'piece_number'
               preseizure.piece_number
             elsif k == 'date' && preseizure[k]
-              preseizure.date.in_time_zone('Paris').to_date.to_s
+              if preseizure.date.try(:strftime,'%Y%m%d') != computed_date.try(:strftime, '%Y%m%d')
+                preseizure.date.in_time_zone('Paris').to_date.to_s
+              else
+                nil
+              end
+            elsif (k == 'amount' || k == 'currency')
+              if preseizure[k].present? && preseizure.unit.downcase.strip != preseizure.report.journal({ name_only: false }).currency.downcase.strip
+                preseizure[k].presence
+              else
+                nil
+              end
             else
               preseizure[k].presence
             end
@@ -108,7 +118,7 @@ module IbizaLib
                       xml.accountName account.number
                       xml.term preseizure.computed_deadline_date(exercise) if preseizure.deadline_date.present?
 
-                      info = description(preseizure, fields, separator)
+                      info = description(preseizure, fields, separator, date)
                       begin
                         xml.description info
                       rescue ArgumentError => e
