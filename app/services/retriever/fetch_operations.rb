@@ -5,10 +5,15 @@ class Retriever::FetchOperations
     min_date = 2.days.ago.strftime('%Y-%m-%d')
     max_date = Time.now.strftime('%Y-%m-%d')
     results  = []
+    message  = ""
 
     users.each do |user|
-      results << DataProcessor::RetrievedData.new(nil, '', user).execute_with('operation', user.bank_accounts.collect(&:api_id), min_date, max_date) if user.still_active? && user.try(:budgea_account).try(:access_token).present? && user.bank_accounts.collect(&:retriever).any?
-      results << "\n+++++++++++++++++++++++++++++\n"
+      message = DataProcessor::RetrievedData.new(nil, '', user).execute_with('operation', user.bank_accounts.collect(&:api_id), min_date, max_date) if user.still_active? && user.try(:budgea_account).try(:access_token).present? && user.bank_accounts.collect(&:retriever).any?
+
+      if !message.match(/New operations: 0/) && !message.blank?
+        results << message
+        results << "\n+++++++++++++++++++++++++++++\n"
+      end
     end
 
     mail_result = {
