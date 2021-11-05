@@ -16,14 +16,14 @@ module IbizaLib
               preseizure.piece.name
             elsif k == 'piece_number'
               preseizure.piece_number
-            elsif k == 'date' && preseizure[k]
-              if preseizure.date.try(:strftime,'%Y%m%d') != computed_date.try(:strftime, '%Y%m%d')
+            elsif k == 'date'
+              if preseizure[k].present? && preseizure.date.try(:strftime,'%Y%m%d') != computed_date.try(:strftime, '%Y%m%d')
                 preseizure.date.in_time_zone('Paris').to_date.to_s
               else
                 nil
               end
             elsif (k == 'amount' || k == 'currency')
-              if preseizure[k].present? && preseizure.unit.downcase.strip != preseizure.report.journal({ name_only: false }).currency.downcase.strip
+              if preseizure[k].present? && preseizure.currency.to_s.downcase.strip != preseizure.report.journal({ name_only: false }).try(:currency).to_s.downcase.strip
                 preseizure[k].presence
               else
                 nil
