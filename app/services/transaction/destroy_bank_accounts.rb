@@ -5,6 +5,8 @@ class Transaction::DestroyBankAccounts
 
   def execute(reason=nil)
     @bank_accounts.each do |bank_account|
+      next if bank_account.api_name != 'budgea'
+
       bank_account.is_used = false
       bank_account.save
 
