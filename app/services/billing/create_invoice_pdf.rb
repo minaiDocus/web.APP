@@ -2,6 +2,38 @@ class Billing::CreateInvoicePdf
   attr_accessor :data
 
   class << self
+    def for_test(_time=nil, organizations=[])
+      test_dir = CustomUtils.mktmpdir('create_invoices', Rails.root.join("files/invoices_pdf"), false);
+
+      file = File.open(test_dir + "/invoices_resume.csv", 'w+');
+      file.write("Code;Organisation;Montant facture HT;Montant facture TTC;Dossiers Actifs;iDo'Classique;iDo'Micro;iDo'Nano;iDo'X;Automates;Courrier;Numérisation;Prix forfaits/Options;Remises;Montant remises;Total pièces (Quota organisation);Total opérations (Quota organisation);Total Préaff. (Quota organisation);Préaff. en excès (Quota organisation);Prix excès (Quota organisation)\n");
+      file.close
+
+      begin
+        time = _time.to_date.beginning_of_month + 15.days
+      rescue
+        time = 1.month.ago.beginning_of_month + 15.days
+      end
+
+      if organizations.present?
+        organizations.each do |organization|
+          generate_invoice_of(organization, nil, time, { notify: false, auto_upload: false, test: true, test_dir: test_dir }) if !organization.is_test && organization.is_active && !organization.is_for_admin
+        end
+      else
+        #FIDC must not be treated here
+        Organization.where.not(code: 'FIDC').billed.order(created_at: :asc).each do |organization|
+          generate_invoice_of(organization, nil, time, { notify: false, auto_upload: false, test: true, test_dir: test_dir })
+        end
+
+        #Generate FIDC invoice at last, which mean EG, FIDC, FBC have already been generated
+        Organization.where(code: 'FIDC').billed.order(created_at: :asc).each do |organization|
+          generate_invoice_of(organization, nil, time, { notify: false, auto_upload: false, test: true, test_dir: test_dir })
+        end
+      end
+
+      return test_dir
+    end
+
     def for_all
       #FIDC must not be treated here
       Organization.where.not(code: 'FIDC').billed.order(created_at: :asc).each do |organization|
@@ -26,11 +58,12 @@ class Billing::CreateInvoicePdf
     #_options : [notify: send notification to admin,
     #            auto_upload: send invoice to ACC%IDO and invoice_settings]
     def generate_invoice_of(organization, invoice_number=nil, _time=nil, _options={})
-
       p "=================== Generating invoice of #{organization.code} =================="
       options = {}
       options[:notify]      = (_options[:notify] === false)? false : true
       options[:auto_upload] = (_options[:auto_upload] === false)? false : true
+      options[:test]        = (_options[:test] === true)? true : false
+      options[:test_dir]    = _options[:test_dir].presence
 
       begin
         time = _time.to_date.beginning_of_month + 15.days
@@ -42,56 +75,72 @@ class Billing::CreateInvoicePdf
 
       return false if organization.addresses.select{ |a| a.is_for_billing }.empty?
       return false if organization_period.nil?
-      return false if organization_period.invoices.present? && invoice_number.nil?
+      return false if organization_period.invoices.present? && invoice_number.nil? && !options[:test]
 
 
       p "=================== Next step =================="
-      invoice = if invoice_number.present?
-                  Invoice.find_by_number(invoice_number) || Invoice.new(organization_id: organization.id, number: invoice_number)
-                else
-                  Invoice.new(organization_id: organization.id)
-                end
 
-      return false if invoice.try(:organization_id) != organization.id
+      if not options[:test]
+        invoice = if invoice_number.present?
+                    Invoice.find_by_number(invoice_number) || Invoice.new(organization_id: organization.id, number: invoice_number)
+                  else
+                    Invoice.new(organization_id: organization.id)
+                  end
+
+        return false if invoice.try(:organization_id) != organization.id
+      else
+        invoice = FakeObject.new
+        invoice.created_at   = Time.now
+        invoice.updated_at   = Time.now
+        invoice.number       = "#{organization.code}_#{organization.id}"
+        invoice.organization = organization
+      end
 
       p "=================== Generating invoice : creation #{invoice.persisted?} ==============="
 
       customers_periods = Period.where(user_id: organization.customers.active_at(time.to_date).map(&:id)).where('start_date <= ? AND end_date >= ?', time.to_date, time.to_date)
 
-      # NOTE update all period before generating invoices
-      customers_periods.each do |period|
-        Billing::UpdatePeriodData.new(period).execute
-        Billing::UpdatePeriod.new(period).execute
-        print '.'
-      end
+      # NOTE update all period before generating invoices (IF NOT TEST)
+      c_time = Time.now.to_date.beginning_of_month + 15.days
+      if !options[:test] || (options[:test] && c_time == time)
+        p "=================== Fetching periods and datas ==============="
 
-      Billing::UpdateOrganizationPeriod.new(organization_period).fetch_all
-      #Update discount only for organization and when generating invoice
-      Billing::DiscountBilling.update_period(organization_period, time)
+        customers_periods.each do |period|
+          Billing::UpdatePeriodData.new(period, time).execute
+          Billing::UpdatePeriod.new(period, { time: time }).execute
+          print '.'
+        end
+
+        Billing::UpdateOrganizationPeriod.new(organization_period).fetch_all
+        #Update discount only for organization and when generating invoice
+        Billing::DiscountBilling.update_period(organization_period, time)
+      end
 
       return false if customers_periods.empty? && organization_period.price_in_cents_wo_vat == 0
 
       puts "Generating invoice for organization : #{organization.name}"
       invoice.period       = organization_period
       invoice.vat_ratio    = organization.subject_to_vat ? 1.2 : 1
-      invoice.save
+      invoice.save if not options[:test]
       print "-> Invoice #{invoice.number}..."
-      Billing::CreateInvoicePdf.new(invoice, time, options[:auto_upload]).execute
 
+      Billing::CreateInvoicePdf.new(invoice, time, options[:auto_upload], { test: options[:test], test_dir: options[:test_dir] }).execute
 
-      #WORKAROUND: deactivate invoice mailer and notification if needed
+      if not options[:test]
+        #WORKAROUND: deactivate invoice mailer and notification if needed
 
-      #organization.admins.each do |admin|
-      #  Notifications::Notifier.new.create_notification({
-      #    url: Rails.application.routes.url_helpers.organization_invoices_url(ActionMailer::Base.default_url_options),
-      #    user: admin,
-      #    notice_type: 'invoice',
-      #    title: "Nouvelle facture disponible",
-      #    message: "Votre facture pour le mois de #{I18n.l(invoice.period.start_date, format: '%B')} est maintenant disponible."
-      #  }, false)
-      #end
+        #organization.admins.each do |admin|
+        #  Notifications::Notifier.new.create_notification({
+        #    url: Rails.application.routes.url_helpers.organization_invoices_url(ActionMailer::Base.default_url_options),
+        #    user: admin,
+        #    notice_type: 'invoice',
+        #    title: "Nouvelle facture disponible",
+        #    message: "Votre facture pour le mois de #{I18n.l(invoice.period.start_date, format: '%B')} est maintenant disponible."
+        #  }, false)
+        #end
 
-      #InvoiceMailer.delay(queue: :high).notify(invoice) if options[:notify]
+        #InvoiceMailer.delay(queue: :high).notify(invoice) if options[:notify]
+      end
     end
 
     def archive_invoice(time = Time.now)
@@ -113,10 +162,17 @@ class Billing::CreateInvoicePdf
     end
   end
 
-  def initialize(invoice, time=nil, auto_upload=true)
-    @invoice = invoice
-    @time    = time
+  def initialize(invoice, time=nil, auto_upload=true, test_options={})
+    @invoice     = invoice
+    @time        = time
     @auto_upload = auto_upload
+    @is_test     = test_options[:test]
+
+    if @is_test
+      @test_dir          = test_options[:test_dir]
+      @invoice_test_path = @test_dir + "/#{@invoice.number}.pdf"
+      @csv_test_path     = @test_dir + "/invoices_resume.csv"
+    end
   end
 
   def execute
@@ -124,10 +180,59 @@ class Billing::CreateInvoicePdf
 
     make_invoice_pdf
 
-    # @invoice.content = File.new "#{Rails.root}/tmp/#{@invoice.number}.pdf"
-    @invoice.cloud_content_object.attach(File.open("#{Rails.root}/tmp/#{@invoice.number}.pdf"), "#{@invoice.number}.pdf") if @invoice.save
+    invoice_path = "#{Rails.root}/tmp/#{@invoice.number}.pdf"
 
-    #auto_upload_last_invoice if @auto_upload && @invoice.present? && @invoice.persisted? #WORKAROUND : deactivate auto upload invoices if needed
+    # @invoice.content = File.new "#{Rails.root}/tmp/#{@invoice.number}.pdf"
+    if @is_test
+      organization = @invoice.organization
+      org_period   = organization.periods.where('start_date <= ? AND end_date >= ?', @time.to_date, @time.to_date).first
+      real_invoice = org_period.invoices.first
+      FileUtils.cp invoice_path, @invoice_test_path
+
+      file = File.open(@csv_test_path, 'a+')
+
+      customers           = ''
+      subscription_amount = ''
+      discount            = ''
+      discount_amount     = ''
+      excess              = ''
+
+      next_data = @data.flatten
+
+      next_data.each_with_index do |line, index|
+        line = line.to_s
+
+        if( line.match(/Nombre de dossiers actifs/) )
+          customers = line.gsub('Nombre de dossiers actifs :', '').strip
+        elsif( line.match(/Forfaits et options iDocus pour/) )
+          subscription_amount = next_data[index + 1]
+        elsif( line.match(/Autres - Remise/) )
+          discount        = line.to_s
+          discount_amount = next_data[index + 1].to_s
+        elsif( line.match(/Autres - Documents/) )
+          excess = next_data[index + 1]
+        end
+      end
+
+      ttc_amount  = @invoice.amount_in_cents_w_vat
+      ttc_amount  = ((ttc_amount).to_f / 100).to_f.to_s
+      ht_amount   = (@invoice.amount_in_cents_w_vat.to_f / @invoice.vat_ratio.to_f).round
+      ht_amount   = ((ht_amount).to_f / 100).to_f.to_s
+
+      if real_invoice && @invoice.amount_in_cents_w_vat != real_invoice.amount_in_cents_w_vat
+        amt  = (real_invoice.amount_in_cents_w_vat.to_f / 100).to_f.to_s
+        diff = ((real_invoice.amount_in_cents_w_vat.to_f - @invoice.amount_in_cents_w_vat.to_f) / 100).to_f.to_s
+        ttc_amount = "#{ttc_amount} € - (#{amt}) - [#{diff}]"
+      end
+
+      file.write("#{organization.code};#{organization.name};#{ht_amount} €;#{ttc_amount} €;#{customers};#{@basic_package_count};#{@micro_package_count};#{@nano_package_count};#{@idox_package_count};#{@retriever_package_count};#{@mail_package_count};#{@digitize_package_count};#{subscription_amount};#{discount};#{discount_amount};#{org_period.total_pieces};#{org_period.total_operations};#{org_period.compta_pieces};#{org_period.excess_compta_pieces};#{excess}\n");
+
+      file.close
+    else
+      @invoice.cloud_content_object.attach(File.open(invoice_path), "#{@invoice.number}.pdf") if @invoice.save
+    end
+
+    #auto_upload_last_invoice if @auto_upload && @invoice.present? && @invoice.persisted? && !@is_test #WORKAROUND : deactivate auto upload invoices if needed
   end
 
   def initialize_data_utilities
@@ -143,40 +248,40 @@ class Billing::CreateInvoicePdf
 
     periods = Period.where(user_id: customer_ids).where("start_date <= ? AND end_date >= ?", time.to_date, time.to_date)
 
-    mail_package_count      = 0
-    basic_package_count     = 0
-    idox_package_count      = 0
-    micro_package_count     = 0
-    nano_package_count      = 0
-    mini_package_count      = 0
-    annual_package_count    = 0
-    scan_box_package_count  = 0
-    retriever_package_count = 0
-    digitize_package_count  = 0
+    @mail_package_count      = 0
+    @basic_package_count     = 0
+    @idox_package_count      = 0
+    @micro_package_count     = 0
+    @nano_package_count      = 0
+    @mini_package_count      = 0
+    @annual_package_count    = 0
+    @scan_box_package_count  = 0
+    @retriever_package_count = 0
+    @digitize_package_count  = 0
 
     periods.each do |period|
       period.product_option_orders.each do |option|
         case option.name
         when 'basic_package_subscription'
-          basic_package_count += 1
+          @basic_package_count += 1
         when 'idox_package_subscription'
-          idox_package_count += 1
+          @idox_package_count += 1
         when 'mail_package_subscription'
-          mail_package_count += 1
+          @mail_package_count += 1
         when 'dematbox_package_subscription'
-          scan_box_package_count += 1
+          @scan_box_package_count += 1
         when 'retriever_package_subscription'
-          retriever_package_count += 1
+          @retriever_package_count += 1
         when 'annual_package_subscription'
-          annual_package_count += 1
+          @annual_package_count += 1
         when 'micro_package_subscription'
-          micro_package_count += 1
+          @micro_package_count += 1
         when 'nano_package_subscription'
-          nano_package_count += 1
+          @nano_package_count += 1
         when 'mini_package_subscription'
-          mini_package_count += 1
+          @mini_package_count += 1
         when 'digitize_package_subscription'
-          digitize_package_count += 1
+          @digitize_package_count += 1
         end
       end
     end
@@ -191,40 +296,40 @@ class Billing::CreateInvoicePdf
       ['Forfaits et options iDocus pour ' + @previous_month.downcase + ' ' + @year.to_s + ' :', format_price(@total) + " €"]
     ]
 
-    if micro_package_count > 0
-      @data << ["- #{micro_package_count} forfait#{'s' if micro_package_count > 1} iDo'Micro", '']
+    if @micro_package_count > 0
+      @data << ["- #{@micro_package_count} forfait#{'s' if @micro_package_count > 1} iDo'Micro", '']
     end
 
-    if nano_package_count > 0
-      @data << ["- #{nano_package_count} forfait#{'s' if nano_package_count > 1} iDo'Nano", '']
+    if @nano_package_count > 0
+      @data << ["- #{@nano_package_count} forfait#{'s' if @nano_package_count > 1} iDo'Nano", '']
     end
 
-    if mini_package_count > 0
-      @data << ["- #{mini_package_count} forfait#{'s' if mini_package_count > 1} iDo'Mini", '']
+    if @mini_package_count > 0
+      @data << ["- #{@mini_package_count} forfait#{'s' if @mini_package_count > 1} iDo'Mini", '']
     end
 
-    if basic_package_count > 0
-      @data << ["- #{basic_package_count} forfait#{'s' if basic_package_count > 1} iDo'Classique", '']
+    if @basic_package_count > 0
+      @data << ["- #{@basic_package_count} forfait#{'s' if @basic_package_count > 1} iDo'Classique", '']
     end
 
-    if idox_package_count > 0
-      @data << ["- #{idox_package_count} forfait#{'s' if idox_package_count > 1} iDo'X", '']
+    if @idox_package_count > 0
+      @data << ["- #{@idox_package_count} forfait#{'s' if @idox_package_count > 1} iDo'X", '']
     end
 
-    if mail_package_count > 0
-      @data << ["- #{mail_package_count} option#{'s' if mail_package_count > 1} Courrier", '']
+    if @mail_package_count > 0
+      @data << ["- #{@mail_package_count} option#{'s' if @mail_package_count > 1} Courrier", '']
     end
 
-    if scan_box_package_count > 0
-      @data << ["- #{scan_box_package_count} forfait#{'s' if scan_box_package_count > 1} iDo'Box", '']
+    if @scan_box_package_count > 0
+      @data << ["- #{@scan_box_package_count} forfait#{'s' if @scan_box_package_count > 1} iDo'Box", '']
     end
 
-    if retriever_package_count > 0
-      @data << ["- #{retriever_package_count} option#{'s' if retriever_package_count > 1} Automates", '']
+    if @retriever_package_count > 0
+      @data << ["- #{@retriever_package_count} option#{'s' if @retriever_package_count > 1} Automates", '']
     end
 
-    if annual_package_count > 0
-      @data << ["- #{annual_package_count} forfait#{'s' if annual_package_count > 1} Pack Annuel", '']
+    if @annual_package_count > 0
+      @data << ["- #{@annual_package_count} forfait#{'s' if @annual_package_count > 1} Pack Annuel", '']
     end
 
     if ordered_paper_set_count > 0
@@ -235,8 +340,8 @@ class Billing::CreateInvoicePdf
       @data << ["- #{ordered_scanner_count} commande#{'s' if ordered_scanner_count > 1} de scanner#{'s' if ordered_scanner_count > 1} iDo'Box", '']
     end
 
-    if digitize_package_count > 0
-      @data << ["- #{digitize_package_count} option#{'s' if digitize_package_count > 1} Numérisation", '']
+    if @digitize_package_count > 0
+      @data << ["- #{@digitize_package_count} option#{'s' if @digitize_package_count > 1} Numérisation", '']
     end
 
     options = begin

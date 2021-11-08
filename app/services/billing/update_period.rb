@@ -9,11 +9,14 @@ class Billing::UpdatePeriod
 
   def execute
     @period.with_lock(timeout: 3, retries: 30, retry_sleep: 0.1) do
+      time = @options[:time] || Time.now
+      @time_end = time.to_date.end_of_month
+
       @subscription.reload
 
       @period.duration = @subscription.period_duration
 
-      if !@period.organization
+      if not @period.organization
         copyable_keys.each do |key|
           @period[key] = @subscription[key]
         end
@@ -91,7 +94,7 @@ class Billing::UpdatePeriod
       end
 
       @period.get_active_options.each do |_p_option|
-        next if _p_option.to_s == 'pre_assignment_option' && !@subscription.is_pre_assignment_really_active
+        next if _p_option.to_s == 'pre_assignment_option' && !@period.is_pre_assignment_really_active
 
         option_infos = Subscription::Package.infos_of(_p_option)
 
@@ -134,7 +137,7 @@ class Billing::UpdatePeriod
 
     months_remaining = difference_in_months(@period.end_date, @subscription.end_date) - 1
 
-    if @subscription.user.inactive? && months_remaining > 0
+    if @subscription.user.inactive?(@time_end) && months_remaining > 0
       option       = ProductOptionOrder.new
       package_text = ""
 
@@ -164,7 +167,7 @@ class Billing::UpdatePeriod
     @mini_remaining_months_option = ''
     months_remaining = difference_in_months(@period.end_date, @subscription.end_date) - 1
 
-    if @subscription.user.inactive? && months_remaining > 0 && ['GAP%STAYHOME'].include?(@subscription.user.code)
+    if @subscription.user.inactive?(@time_end) && months_remaining > 0 && ['GAP%STAYHOME'].include?(@subscription.user.code)
       option = ProductOptionOrder.new
 
       option.title       = "iDo'Mini : engagement #{months_remaining} mois restant(s)"
@@ -204,7 +207,7 @@ class Billing::UpdatePeriod
   end
 
   def extra_options
-    @subscription.options.by_position.map do |extra_option|
+    @subscription.options.where('created_at <= ?', @time_end).by_position.map do |extra_option|
       option = ProductOptionOrder.new
 
       option.title       = extra_option.name
@@ -236,7 +239,7 @@ class Billing::UpdatePeriod
   def order_options
     is_manual_paper_set_order = CustomUtils.is_manual_paper_set_order?(@period.user.organization)
 
-    @period.orders.order(created_at: :asc).map do |order|
+    @period.orders.where('created_at <= ?', @time_end).order(created_at: :asc).map do |order|
       next if order.paper_set? && is_manual_paper_set_order
 
       option      = ProductOptionOrder.new
@@ -280,13 +283,13 @@ class Billing::UpdatePeriod
     month_count
   end
 
-
   def bank_accounts_options
     return nil if not @period.user
 
     bank_ids = @period.user.operations.where("DATE_FORMAT(created_at, '%Y%m') = #{@period.start_date.strftime("%Y%m")}").pluck(:bank_account_id).uniq
 
-    excess_bank_accounts = @period.user.bank_accounts.where(id: bank_ids).size - 2
+    excess_bank_accounts = @period.user.bank_accounts.where("created_at <= ?", @time_end).where(id: bank_ids).size - 2
+
     option_infos = Subscription::Package.infos_of(:retriever_option)
 
     if excess_bank_accounts > 0
@@ -318,13 +321,13 @@ class Billing::UpdatePeriod
     amount       = Subscription::Package.price_of(:retriever_option, reduced) * 100.0
 
     operations_dates = @period.user.operations.where.not(processed_at: nil).where("is_locked = false AND DATE_FORMAT(created_at, '%Y%m') = #{@period.start_date.strftime('%Y%m')}").map{|ope| ope.date.strftime('%Y%m')}.uniq
-    period_dates     = @period.user.periods.map{|_period| _period.start_date.strftime('%Y%m')}.uniq
+    period_dates     = @period.user.periods.where("start_date <= ?", @time_end).map{|_period| _period.start_date.strftime('%Y%m')}.uniq
 
     rest = operations_dates - period_dates
 
     rest.sort.each do |value_date|
       if value_date.to_s.match(/^[0-9]{6}$/) && value_date.to_i >= 202001 && value_date.to_i < @period.start_date.strftime("%Y%m").to_i
-        previous_orders = @period.user.periods.collect(&:product_option_orders).flatten.compact
+        previous_orders = @period.user.periods.where("start_date <= ?", @time_end).collect(&:product_option_orders).flatten.compact
         jump = false
         title = "Opérations bancaires mois de #{I18n.l(Date.new(value_date.to_s[0..3].to_i, value_date.to_s[4..-1].to_i), format: '%B')} #{value_date.to_s[0..3].to_i}"
 
@@ -363,7 +366,7 @@ class Billing::UpdatePeriod
     # is_manual_paper_set_order = CustomUtils.is_manual_paper_set_order?(@period.user.organization)
     digitize_option = []
 
-    if @period.subscription.is_package?('digitize_option')
+    if @period.is_package?('digitize_option')
       option_infos = Subscription::Package.infos_of(:digitize_option)
 
       scanned_sheets_size = @period.scanned_sheets

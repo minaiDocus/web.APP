@@ -112,7 +112,6 @@ class Subscription::Package
           }
       end
     end
-
     
     def discount_billing_of(package, special = false, gmba = false)
       if package == :ido_mini

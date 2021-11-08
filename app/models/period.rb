@@ -87,6 +87,12 @@ class Period < ApplicationRecord
     self.current_packages.present? && (get_active_packages.any? || get_active_options.any?)
   end
 
+  def is_package?(package_option)
+    return false if self.organization
+
+    self.user.organization.specific_mission.present? ? false : current_packages&.include?(package_option.to_s)
+  end
+
   def get_active_packages
     self.set_current_packages unless self.current_packages
     return [] unless self.current_packages
@@ -122,13 +128,17 @@ class Period < ApplicationRecord
     self.update({ current_packages: self.subscription.current_packages.presence })
   end
 
+  def is_pre_assignment_really_active
+    is_package?('pre_assignment_option') && (is_package?('ido_classique') || is_package?('ido_mini'))
+  end
+
   def is_active?(package)
     packages_and_options = get_active_packages + get_active_options
     packages_and_options.include? package.to_sym
   end
 
   def is_valid_for_quota_organization
-    !self.organization && self.duration == 1 && !self.subscription.is_package?('ido_micro') && !self.subscription.is_package?('ido_nano') && !self.subscription.is_package?('ido_mini')
+    !self.organization && self.duration == 1 && !self.is_package?('ido_micro') && !self.is_package?('ido_nano') && !self.is_package?('ido_mini')
   end
 
   def amount_in_cents_wo_vat
@@ -259,7 +269,7 @@ class Period < ApplicationRecord
 
 
   def excess_sheets
-    return 0 if ( (self.subscription.user && self.subscription.is_package?('digitize_option')) || (self.subscription.organization && CustomUtils.is_manual_paper_set_order?(self.subscription.organization)) )
+    return 0 if ( (self.user && self.is_package?('digitize_option')) || (self.organization && CustomUtils.is_manual_paper_set_order?(self.organization)) )
     excess_of(:scanned_sheets, :max_sheets_authorized)
   end
 
@@ -298,12 +308,17 @@ class Period < ApplicationRecord
   end
 
   def excesses_price
-    price_in_cents_of_excess_scan +
-    price_in_cents_of_excess_compta_pieces  +
-    price_in_cents_of_excess_uploaded_pages +
-    price_in_cents_of_excess_dematbox_scanned_pages +
-    price_in_cents_of_excess_paperclips
+    # From now excesses is calculated by preseizure and expenses only
+
+    price_in_cents_of_excess_compta_pieces
+
+    # price_in_cents_of_excess_scan +
+    # price_in_cents_of_excess_compta_pieces  +
+    # price_in_cents_of_excess_uploaded_pages +
+    # price_in_cents_of_excess_dematbox_scanned_pages +
+    # price_in_cents_of_excess_paperclips
   end
+
 
   def compta_pieces
     preseizure_pieces + expense_pieces
@@ -329,7 +344,8 @@ class Period < ApplicationRecord
   end
 
   def total_operations
-    self.user.operations.where('created_at >= ? AND created_at <= ?', self.start_date, self.end_date).count
+    owner = (self.user)? self.user : self.organization
+    owner.operations.where('created_at >= ? AND created_at <= ?', self.start_date, self.end_date).count
   end
 
   def organization_excesses_price
@@ -377,9 +393,9 @@ private
   def excess_duration
     return 1 if organization
 
-    if subscription.is_package?('ido_micro') || subscription.is_package?('ido_nano')
+    if is_package?('ido_micro') || is_package?('ido_nano')
       12
-    elsif subscription.is_package?('ido_mini')
+    elsif is_package?('ido_mini')
       3
     else
       1

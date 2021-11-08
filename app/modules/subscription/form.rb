@@ -62,14 +62,14 @@ class Subscription::Form
     @subscription.number_of_journals = get_param(:number_of_journals) if get_param(:number_of_journals).to_i > @subscription.user.account_book_types.count
 
     if @subscription.configured? && @subscription.save
+      set_prices_and_limits
+      set_special_excess_values
+
       @subscription.set_start_date_and_end_date
 
       Billing::UpdatePeriod.new(@subscription.current_period, { renew_packages: @to_apply_now }).execute
       Subscription::Evaluate.new(@subscription, @requester, @request).execute
       Billing::PeriodBilling.new(@subscription.current_period).fill_past_with_0 if is_new
-
-      set_prices_and_limits
-      set_special_excess_values
 
       destroy_pending_orders_if_needed
       true
@@ -94,7 +94,7 @@ class Subscription::Form
                 unit_price_of_excess_expense: excess_data[:preassignments][:price]
               }
 
-    @subscription.assign_attributes(values)
+    @subscription.update_attributes(values)
 
     # NOTE: this is not used now, pending dev ...
     # if @requester.is_admin
@@ -127,7 +127,7 @@ class Subscription::Form
         max_expense_pieces_authorized: 300
       }
 
-      @subscription.assign_attributes(values)
+      @subscription.update_attributes(values)
     end
   end
 

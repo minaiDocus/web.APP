@@ -1,8 +1,9 @@
 # -*- encoding : UTF-8 -*-
 # Update metrics for called period
 class Billing::UpdatePeriodData
-  def initialize(period)
+  def initialize(period, time=nil)
     @period = period
+    @time   = time
   end
 
   def execute
@@ -40,12 +41,18 @@ class Billing::UpdatePeriodData
 
 
   def preseizure_pieces_count
-    @preseizure_pieces_count ||= Pack::Report::Preseizure.unscoped.where(report_id: report_ids).where.not(piece_id: [nil]).count
+    @preseizure_pieces_count = Pack::Report::Preseizure.unscoped.where(report_id: report_ids).where('piece_id > 0')
+    @preseizure_pieces_count = @preseizure_pieces_count.where('created_at <= ?', @time.to_date.end_of_month) if @time
+
+    @preseizure_pieces_count.count
   end
 
 
   def expense_pieces_count
-    @expense_pieces_count ||= Pack::Report::Expense.where(report_id: report_ids).count
+    @expense_pieces_count = Pack::Report::Expense.where(report_id: report_ids)
+    @expense_pieces_count = @expense_pieces_count.where('created_at <= ?', @time.to_date.end_of_month) if @time
+
+    @expense_pieces_count.count
   end
 
 

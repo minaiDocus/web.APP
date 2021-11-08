@@ -3,8 +3,11 @@ module Interfaces::User::Customer
     !inactive?
   end
 
-  def inactive?
-    inactive_at.present?
+  def inactive?(time=nil)
+    return false if inactive_at.blank?
+
+    return true if inactive_at.present? && time.nil?
+    return inactive_at < time && time.present?
   end
 
   def still_active?
