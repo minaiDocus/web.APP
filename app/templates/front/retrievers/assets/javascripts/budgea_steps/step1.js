@@ -19,6 +19,7 @@ class ConfigurationStep1{
 
   init_form(retriever={}){
     this.retriever = retriever || {};
+
     let current_account = $('#account_id').val();
 
     if(this.retriever['id'] && this.retriever['id'] > 0){
@@ -37,11 +38,9 @@ class ConfigurationStep1{
       this.mainConfig.main_modal.modal('show');
 
       AppLoading('show');
-      this.mainConfig.budgeaApi.get_user_tokens()
-                                .then((e)=>{
-                                  this.fetch_connectors(0);
-                                  this.mainConfig.budgeaApi.check_cgu();
-                                });
+
+      this.fetch_connectors(0);
+      this.mainConfig.budgeaApi.check_cgu();
     }else{
       this.mainConfig.applicationJS.noticeErrorMessageFrom(null, 'Veuillez selectionnez un compte avant de poursuivre svp ...');
     }

@@ -84,6 +84,8 @@ class Notifications::PreAssignments < Notifications::Notifier
       collaborators = customer.prescribers
       if collaborators.any?
         collaborators.each do |collaborator|
+          next unless collaborator.try(:notify).try(:pre_assignment_export)
+
           message = if pre_assignment_export_count == 1
             "- 1 export d'écritures comptables est disponible pour le dossier : #{customer.code} \n"
           else

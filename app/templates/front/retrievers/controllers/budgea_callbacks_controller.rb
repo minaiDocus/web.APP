@@ -57,9 +57,11 @@ class Retrievers::BudgeaCallbacksController < ApiController
       target = "id_connection=#{params[:id]}"
       target = "id_connector=#{params[:id]}" if params[:is_new].to_s == 'true'
 
-      url = "curl '#{base_uri}/webauth?#{target}&redirect_uri=#{redirect_uri}&client_id=#{client_id}&state=#{params[:state]}' -H 'Authorization: Bearer #{budgea_account.access_token}'"
+      secure_token = params[:secure_token].present? ? "&token=#{params[:secure_token]}" : ''
 
-      html_dom = `curl '#{base_uri}/webauth?#{target}&redirect_uri=#{redirect_uri}&client_id=#{client_id}&state=#{params[:state]}' -H 'Authorization: Bearer #{budgea_account.access_token}'`
+      url = "'#{base_uri}/webauth?#{target}&redirect_uri=#{redirect_uri}&client_id=#{client_id}&state=#{params[:state]}#{secure_token.to_s}' -H 'Authorization: Bearer #{budgea_account.access_token}'"
+
+      html_dom = `curl #{url}`
 
       send_webauth_notification(params, url, html_dom)
 

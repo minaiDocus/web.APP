@@ -26,7 +26,9 @@ class BudgeaApi{
                       };
 
     this.applicationJS.sendRequest(ajax_params)
-                      .then((e)=>{
+                      .then(async (e)=>{
+                        await this.get_user_tokens();
+
                         let config = JSON.parse(atob(e.id));
 
                         if (config === void 0 || config === '' || config === null) {
@@ -615,12 +617,13 @@ class BudgeaApi{
   };
 
   webauth(user_id, id, is_new, params={}) {
-    var error, ido_capabilities, ido_custom_name, ido_connector_id, ido_connector_name, state, success;
+    var self, error, ido_capabilities, ido_custom_name, ido_connector_id, ido_connector_name, state, success;
 
-    ido_capabilities = params['ido_capabilities'].replace('"', '\'');
-    ido_connector_id = params['ido_connector_id'].replace('"', '\'');
-    ido_custom_name  = params['ido_custom_name'].replace('"', '\'');
-    ido_connector_name = params['ido_connector_name'].replace('"', '\'');
+    self = this;
+    ido_capabilities = params['ido_capabilities'].replace(/["]/g, '\'');
+    ido_connector_id = params['ido_connector_id'].replace(/["]/g, '\'');
+    ido_custom_name  = params['ido_custom_name'].replace(/["]/g, '\'');
+    ido_connector_name = params['ido_connector_name'].replace(/["]/g, '\'');
     state = btoa("{ \"user_id\": \"" + user_id + "\", \"ido_capabilities\": \"" + (ido_capabilities) + "\", \"ido_connector_id\": \"" + (ido_connector_id) + "\", \"ido_custom_name\": \"" + (ido_custom_name) + "\", \"ido_connector_name\": \"" + (ido_connector_name) + "\" }");
 
     error = function(response) {
@@ -639,24 +642,39 @@ class BudgeaApi{
         return window.location.href = redirect_url;
       } else {
         return error({
-          error: 'Erreur de paramètre'
+          error: `Erreur de paramètre: ${response.html_dom}`
         });
       }
     };
 
     $('#budgea_information_fields .actions').hide();
     $('#budgea_information_fields .actions').after('<p class="feedparagraph">Redirection en cours ... </p>');
-    this.local_fetch({
-      url: '/retriever/fetch_webauth_url',
-      type: 'POST',
-      data: {
-        id: id,
-        user_id: user_id,
-        is_new: is_new,
-        state: state
-      },
-      onSuccess: success,
-      onError: error
+
+    this.remote_fetch({
+      url: "/auth/token/code",
+      use_secrets: true,
+      type: 'GET',
+      success_only: true,
+      onSuccess: function(data) {
+        var secure_token = '';
+        try{
+          secure_token = data['collection']['code'];
+        }catch(e){ secure_token = '' }
+
+        self.local_fetch({
+          url: '/retriever/fetch_webauth_url',
+          type: 'POST',
+          data: {
+            id: id,
+            user_id: user_id,
+            is_new: is_new,
+            state: state,
+            secure_token: secure_token
+          },
+          onSuccess: success,
+          onError: error
+        });
+      }
     });
   };
 

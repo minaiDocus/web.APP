@@ -68,7 +68,7 @@ class RetrievedParametersMain{
 
                         if(type == 'banks-selection'){
                           this.bank_select_object.target_html = $('#banks-selection #bank_selection');
-                          this.budgeaApi.get_user_tokens().then((e)=>{ this.bank_select_object.init_form({ id: $('#retriever_selector').val() }); });
+                          this.bank_select_object.init_form({ id: $('#retriever_selector').val() });
                         }
 
                         this.action_locker = false;
