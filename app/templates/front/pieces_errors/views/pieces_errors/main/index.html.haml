@@ -2,8 +2,10 @@
 
 .container-fluid
   .row.derivationLeft
-    .col-md-11.text-start
+    .col-md-4.text-start
       %h3.bold Mes pièces
+    .col-md-7.p-2
+      = select_tag 'account_id', options_for_select(customers_active.unshift(['Tous', 'all'])), include_blank: false, class: 'chosen-list float-end w-25'
     .col-md-1.text-start.p-1.filter_button
       %button.btn.btn-light.semibold.piece-errors-filter.w-100{ disabled: false }
         %span.me-2 Filtrer
