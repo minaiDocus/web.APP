@@ -177,7 +177,7 @@ private
     if @retriever.is_selection_needed
       true
     else
-      Time.parse(@document['timestamp']) < 2.months.ago
+      Time.parse(@document['date']) < 2.months.ago
     end
   end
 end
