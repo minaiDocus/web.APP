@@ -8,7 +8,7 @@ class Retriever::FetchOperations
     message  = ""
 
     users.each do |user|
-      message = DataProcessor::RetrievedData.new(nil, '', user).execute_with('operation', user.bank_accounts.collect(&:api_id), min_date, max_date) if user.still_active? && user.try(:budgea_account).try(:access_token).present? && user.bank_accounts.collect(&:retriever).any?
+      message = DataProcessor::RetrievedData.new(nil, '', user).execute_with('operation', user.bank_accounts.used.budgea.collect(&:api_id), min_date, max_date) if user.still_active? && user.try(:budgea_account).try(:access_token).present? && user.bank_accounts.used.budgea.collect(&:retriever).any?
 
       if !message.match(/New operations: 0/) && !message.blank?
         results << message
