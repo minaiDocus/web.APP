@@ -155,6 +155,25 @@ class Subscription < ApplicationRecord
 
   def current_preceeding_periods(period, excess_duration=12)
     if excess_duration == 12
+      # package = 'ido_mini'  if period.is_package?('ido_mini')
+      # package = 'ido_micro' if period.is_package?('ido_micro')
+      # package = 'ido_nano'  if period.is_package?('ido_nano')
+
+      # result = []
+      # _periods = periods.where("duration = 1 AND start_date < ?", period.start_date).limit(11)
+
+      # is_break = false
+      # _periods.each do |pe|
+      #   next if is_break
+
+      #   if pe.is_package?(package)
+      #     result << pe
+      #   else
+      #     is_break = true
+      #   end
+      # end
+
+      # result
       periods.where("start_date >= ? AND start_date < ?", self.start_date, period.start_date)
     elsif excess_duration == 3
       quarter1 = periods.where("start_date >= ? AND start_date < ?", self.start_date, self.start_date + 3.months)
@@ -231,6 +250,8 @@ class Subscription < ApplicationRecord
   end
 
   def is_package?(package_option)
+    return false if self.organization
+
     self.user.organization.specific_mission.present? ? false : current_packages&.include?(package_option.to_s) # TODOOOO REMOVE & after
   end
 end
