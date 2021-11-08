@@ -87,6 +87,12 @@ class Period < ApplicationRecord
     self.current_packages.present? && (get_active_packages.any? || get_active_options.any?)
   end
 
+  def is_package?(package_option)
+    return false if self.organization
+
+    self.user.organization.specific_mission.present? ? false : current_packages&.include?(package_option.to_s) # TODOOOO REMOVE & after
+  end
+
   def get_active_packages
     self.set_current_packages unless self.current_packages
     return [] unless self.current_packages
@@ -298,6 +304,10 @@ class Period < ApplicationRecord
   end
 
   def excesses_price
+    # From now excesses is calculated by preseizure and expenses only
+
+    # price_in_cents_of_excess_compta_pieces
+
     price_in_cents_of_excess_scan +
     price_in_cents_of_excess_compta_pieces  +
     price_in_cents_of_excess_uploaded_pages +
@@ -329,7 +339,8 @@ class Period < ApplicationRecord
   end
 
   def total_operations
-    self.user.operations.where('created_at >= ? AND created_at <= ?', self.start_date, self.end_date).count
+    owner = (self.user)? self.user : self.organization
+    owner.operations.where('created_at >= ? AND created_at <= ?', self.start_date, self.end_date).count
   end
 
   def organization_excesses_price

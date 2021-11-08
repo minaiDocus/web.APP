@@ -231,6 +231,8 @@ class Subscription < ApplicationRecord
   end
 
   def is_package?(package_option)
+    return false if self.organization
+
     self.user.organization.specific_mission.present? ? false : current_packages&.include?(package_option.to_s) # TODOOOO REMOVE & after
   end
 end

@@ -53,6 +53,7 @@ class Organization < ApplicationRecord
   has_many :pre_assignment_deliveries
   has_many :pre_assignment_exports
   has_many :account_sharings
+  has_many :operations
 
   accepts_nested_attributes_for :ibiza
   accepts_nested_attributes_for :coala

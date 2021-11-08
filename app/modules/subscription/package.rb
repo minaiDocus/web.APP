@@ -82,8 +82,8 @@ class Subscription::Package
       case package
         when :ido_classique
           {
-            pieces:         { limit: 100, price: 25, per: :month },
-            preassignments: { limit: 100, price: 25, per: :month }
+            pieces:         { limit: 100, price: 6, per: :month },
+            preassignments: { limit: 100, price: 12, per: :month }
           }
         when :ido_x
           {
@@ -92,23 +92,23 @@ class Subscription::Package
           }
         when :ido_mini
           {
-            pieces:         { limit: 100, price: 25, per: :quarter },
-            preassignments: { limit: 100, price: 25, per: :quarter }
+            pieces:         { limit: 100, price: 6, per: :quarter },
+            preassignments: { limit: 100, price: 12, per: :quarter }
           }
         when :ido_micro
           {
-            pieces:         { limit: 100, price: 25, per: :year },
-            preassignments: { limit: 100, price: 25, per: :year }
+            pieces:         { limit: 100, price: 6, per: :year },
+            preassignments: { limit: 100, price: 12, per: :year }
           }
         when :ido_nano
           {
-            pieces:         { limit: 100, price: 25, per: :year },
-            preassignments: { limit: 100, price: 25, per: :year }
+            pieces:         { limit: 100, price: 6, per: :year },
+            preassignments: { limit: 100, price: 12, per: :year }
           }
         else
           {
-            pieces:         { limit: 100, price: 25, per: :month },
-            preassignments: { limit: 100, price: 25, per: :month }
+            pieces:         { limit: 100, price: 6, per: :month },
+            preassignments: { limit: 100, price: 12, per: :month }
           }
       end
     end

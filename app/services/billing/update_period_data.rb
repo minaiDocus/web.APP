@@ -40,7 +40,7 @@ class Billing::UpdatePeriodData
 
 
   def preseizure_pieces_count
-    @preseizure_pieces_count ||= Pack::Report::Preseizure.unscoped.where(report_id: report_ids).where.not(piece_id: [nil]).count
+    @preseizure_pieces_count ||= Pack::Report::Preseizure.unscoped.where(report_id: report_ids).where('piece_id > 0').count
   end
 
 
