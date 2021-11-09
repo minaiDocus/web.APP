@@ -82,23 +82,17 @@ class Pack < ApplicationRecord
     query = query.joins(:pieces).where(pack_pieces: { id: options[:piece_ids] }) unless options[:piece_ids].nil?
 
     query = query.joins(:pieces, :owner).where('packs.name LIKE ? OR packs.tags LIKE ? OR LOWER(users.company) LIKE ? OR pack_pieces.name LIKE ? OR pack_pieces.tags LIKE ? OR pack_pieces.content_text LIKE ?', "%#{text}%", "%#{text}%", "%#{text}%", "%#{text}%",  "%#{text}%", "%#{text}%") if text.present?
-
-    if options[:journal].present?
-      _query_journal = ""
-      _query_or = ""
-
-      options[:journal].each do |jl| 
-        _query_journal += _query_or + "packs.name LIKE '% #{jl} %'"
-        _query_or = " OR "
-      end
-
-      query = query.where(_query_journal)
-    end
+    query = query.where( options[:journal].map{ |jl| "packs.name LIKE '% #{jl} %'" }.join(' OR ') ) if options[:journal].present?
 
     query = query.joins(:pieces).where("packs.tags LIKE ? OR pack_pieces.tags LIKE ?", "%#{options[:tags]}%", "%#{options[:tags]}%") if options[:tags].present?
 
     query = query.joins(:pieces).where("DATE_FORMAT(pack_pieces.created_at, '%Y-%m-%d') #{options[:piece_created_at_operation].tr('012', ' ><')}= ?", options[:piece_created_at]) if options[:piece_created_at]
-    query = query.joins(:pieces).where("pack_pieces.position #{options[:position_operation].tr('012', ' ><')}= ?", options[:position]) if options[:position].present?
+
+    if options[:position_operation].present?
+      query = query.joins(:pieces).where("pack_pieces.position #{options[:position_operation].tr('012', ' ><')}= ?", options[:position]) if options[:position].present?
+    else
+      query = query.joins(:pieces).where("pack_pieces.position IN (#{options[:position].join(',')})" ) if options[:position].present?
+    end
 
     query = query.joins(:pieces).where(pack_pieces: { pre_assignment_state: options[:pre_assignment_state].try(:split, ',') }) if options[:pre_assignment_state].present?
 

@@ -45,6 +45,8 @@ class PiecesErrorsMain{
 
     if ($('#_ext').attr('data-params-account-id') != undefined)
       params.push(`account_id=${$('#_ext').attr('data-params-account-id')}`);
+    else if ($('#account_id').val() != 'all')
+      params.push(`account_id=${$('#account_id').val()}`);
 
     let ajax_params =   {
                           'url': `/pieces/${type.replace(/\-/g, '_')}?${params.join('&')}`,
@@ -72,6 +74,7 @@ jQuery(function() {
   main.load_all();
 
   AppListenTo('window.change-per-page.pieces_errors', (e)=>{ main.load_datas(e.detail.name, 1, e.detail.per_page); });
+  AppListenTo('account_filter', (e)=>{ main.load_all(); });
   AppListenTo('window.change-page.pieces_errors', (e)=>{ main.load_datas(e.detail.name, e.detail.page); });
 
   AppListenTo('pieces_errors_filter_page', (e)=>{ main.filter_page(e.detail.target, e.detail.action); });

@@ -429,7 +429,7 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
 
     @s_params = @s_params.with_indifferent_access
 
-    @s_params[:by_all]        = @s_params[:by_all].dup.reject{|k, v| k == "position_operation" } if @s_params[:by_all].present? && @s_params[:by_all].try(:[], :position).blank?
+    @s_params[:by_all]        = @s_params[:by_all].dup.reject{|k, v| k == "position_operation" } if @s_params[:by_all].present? && (@s_params[:by_all].try(:[], :position).blank? || @s_params[:by_all].try(:[], :position).split(',').size > 1)
     @s_params[:by_preseizure] = @s_params[:by_preseizure].dup.reject{|k, v| k == "amount_operation" } if @s_params[:by_preseizure].present? && @s_params[:by_preseizure].try(:[], :amount).blank?
     @s_params = deep_compact(@s_params).with_indifferent_access
 
@@ -472,7 +472,8 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
       @options[:piece_number]         = @s_params[:by_piece].try(:[], :piece_number)
     end
 
-    @options[:position]           = @s_params[:by_piece].try(:[], :position)
+    position = @s_params[:by_piece].try(:[], :position).try(:split, ',')
+    @options[:position]           = position.presence ? position.map{ |pos| pos.strip } : nil
     @options[:position_operation] = @s_params[:by_piece].try(:[], :position_operation)
 
     @options[:by_preseizure] = @s_params[:by_preseizure]

@@ -34,15 +34,17 @@
                   .form-check
                     %input.form-check-input.pointer.float-none.check-piece-ignored{ type: :checkbox, class: "checkbox checker_piece_#{ind}", data: { value: piece.id } }
                 %td= piece.created_at.strftime('%d-%m-%Y')
-                %td= piece.name
-                %td= piece.number                
-                %td= piece.pack.name            
+                %td
+                  = link_to piece.name, documents_details_path({ id: piece.pack.id, _ext: 1, k: Base64.encode64({ text: piece.name, reinit: true }.to_json) }), class: 'no-style bold black-label underlined-pointer'
+                %td= piece.number
+                %td
+                  = link_to piece.pack.name, documents_details_path({id: piece.pack.id }), class: 'no-style bold black-label underlined-pointer'
                 %td= piece.pre_assignment_comment         
-                %td.text-table-green
+                %td
                   - if piece.pre_assignment_ignored?
-                    %b Pré-affectation ignorée
+                    %span.badge.bg-warning Pré-affectation ignorée
                   - else
-                    %b En cours de renvoi à la pré-affectation
+                    %span.badge.bg-dark En cours de renvoi à la pré-affectation
                 %td.text-end.pointer
                   .action.sub-menu-piece-ignored
                     %span= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})

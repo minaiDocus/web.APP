@@ -23,6 +23,8 @@ function bind_all_events(){
     else{ target_selector.prop('checked', false); }
   });
 
+  $('#account_id').unbind('change').bind('change', function(e){ AppEmit('account_filter'); });
+
   $('.modal#filter-ignored-pre-assignment button.validate').unbind('click').bind('click', (e)=>{ AppEmit('pieces_errors_filter_page', { target: 'ignored-pre-assignment', action: 'validate'}); });
   $('.modal#filter-duplicated-pre-assignment button.validate').unbind('click').bind('click', (e)=>{ AppEmit('pieces_errors_filter_page', { target: 'duplicated-pre-assignment', action: 'validate'}); });
 
