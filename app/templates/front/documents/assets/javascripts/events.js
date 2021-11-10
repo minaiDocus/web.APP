@@ -174,12 +174,8 @@ function bind_all_events(){
 
   $('.edit_preseizures').unbind('click').bind('click', function(){ AppEmit('documents_edit_preseizures', {'obj': this}); });
   $('.edit_selected_preseizures').unbind('click').bind('click', function(){
-    let ids = []
-    $('.select-box-document.selected, .select-box-operation.selected').find('.preseizure-content-list').map(function(e){
-      ids.push($(this).attr("data-preseizure-id"));
-    });
-
-    AppEmit('documents_edit_multiple_preseizures', { 'ids': ids.join() });
+    let ids = get_all_selected($(this).data('type'), true);
+    AppEmit('documents_edit_multiple_preseizures', { 'ids': ids.join(',') });
   });
 
   $('.deliver_preseizures').unbind('click').bind('click', function(){ AppEmit('documents_deliver_preseizures', {'obj': this}); });

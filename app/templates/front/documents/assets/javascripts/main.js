@@ -1,13 +1,20 @@
 //= require './events'
 
-function get_all_selected(obj = 'piece'){
+function get_all_selected(obj = 'piece', get_preseizure_ids=false){
   let array_ids = [];
   let type      = (obj == 'operation')? 'operation' : 'document';
 
   $(`.form-check-input.select-${type}`).each(function(e){
     if($(this).is(':checked')){
-      let id = parseInt($(this).attr('data-id'));
-      if(id > 0){ array_ids.push(id); }
+      if(get_preseizure_ids && obj == 'piece'){
+        let ids = JSON.parse($(this).attr('data-preseizure-ids') || '[]');
+        ids.forEach((t)=>{
+          if( t && t > 0 ){ array_ids.push(t) }
+        });
+      }else{
+        let id = parseInt($(this).attr('data-id'));
+        if(id > 0){ array_ids.push(id); }
+      }
     }
   });
 
