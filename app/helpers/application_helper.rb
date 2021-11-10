@@ -68,6 +68,24 @@ module ApplicationHelper
     end
   end
 
+  def active_tab?(tabs=[])
+    current_tab = params[:tab]
+    result      = {}
+
+    #The first element in tabs is always the default active tab
+    tabs.each_with_index do |tab, index|
+      if tab.to_s == current_tab.to_s
+        result[tab.to_s] = true
+      elsif index == 0 && !tabs.include?(current_tab)
+        result[tab.to_s] = true
+      else
+        result[tab.to_s] = false
+      end
+    end
+
+    return result
+  end
+
   def logo_url
     image_path('logo/tiny_logo.png')
   end

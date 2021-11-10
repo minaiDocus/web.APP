@@ -64,11 +64,11 @@
             %span
               %img.hide{ id: "loading_#{retriever.budgea_id}", src: "/assets/application/bar_loading.gif", alt: "chargement..."}
 
-          / - if retriever.waiting_selection?
-          /   - if retriever.provider?
-          /     = link_to 'Sélectionnez vos documents', retrievers_historics_path(tab: 'documents'), class: 'btn btn-primary'
-          /   - else
-          /     = link_to 'Sélectionnez vos comptes', retrievers_historics_path, class: 'btn btn-primary'
+          - if retriever.waiting_selection?
+            - if retriever.provider?
+              = link_to 'Sélectionnez vos documents', retriever_parameters_path(tab: 'documents'), class: 'btn btn-primary'
+            - else
+              = link_to 'Sélectionnez vos comptes', retriever_parameters_path, class: 'btn btn-primary'
 
           //bridge actions
         - elsif retriever.bridge_id
