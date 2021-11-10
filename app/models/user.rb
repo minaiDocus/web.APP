@@ -185,7 +185,7 @@ class User < ApplicationRecord
     if contains[:collaborator_id].present?
       collaborator = User.unscoped.find(contains[:collaborator_id].to_i) rescue nil
       if collaborator
-        collaborator = Collaborator.new(collaborator)
+        collaborator = ::Collaborator.new(collaborator)
         groups = collaborator.groups
         customers = groups.map{ |g| g.customers.pluck(:id) }.compact.flatten || [0]
         users = users.where(id: customers)

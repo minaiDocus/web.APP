@@ -16,6 +16,7 @@ class Customers::MainController < CustomerController
         if params[:group_ids].present?
           params[:user_contains][:group_ids] = params[:group_ids]
         end
+
         @customers = customers.search(search_terms(params[:user_contains]))
                               .order(sort_column => sort_direction)
                               .page(params[:page])

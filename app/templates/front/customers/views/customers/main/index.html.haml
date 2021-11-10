@@ -74,7 +74,7 @@
                           - else
                             %li.reopen.text-success
                               = link_to glyphicon('folder', { size: '15', color: '#72AA42'}) + ' Réouvrir le dossier', account_reopen_confirm_organization_customer_path(@organization, customer), class: 'reopen_customer'
-            = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: organization_customers_path(@organization.id), target: '#table_customers', total_pages: @customers.total_pages }
+            = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: organization_customers_path(@organization.id), target: '#table_customers', total_pages: @customers.total_pages, filter: 'form-customer-filter' }
 
   .modal.fade.in#customers-filter
     .modal-dialog
@@ -82,10 +82,7 @@
         .modal-header
           %h5.modal-title.bold Filtrer les clients
           %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
-        = form_tag organization_customers_path(@organization), method: :get, class: 'form-filter' do
-          = hidden_field_tag :direction, sort_direction
-          = hidden_field_tag :sort, sort_column
-          = hidden_field_tag :per_page, per_page
+        = form_tag organization_customers_path(@organization), method: :get, class: 'form-filter', id: 'form-customer-filter' do
           = hidden_field_tag :with_details, params[:with_details] || true
           .modal-body
             .form-group
@@ -110,17 +107,14 @@
                 = text_field_tag 'user_contains[email]', (params[:user_contains][:email] rescue ''), class: 'form-control filter-field'
             .form-group
               = label_tag 'group_ids[]', 'Filtrer par groupe', class: 'semibold'
-              = select_tag 'group_ids[]', options_from_collection_for_select(@user.groups.order(name: :asc), :id, :name, (params[:group_ids] rescue '')), include_blank: true, class: 'searchable-option-list', id: 'group-filter', multiple: true
+              = select_tag 'group_ids[]', options_from_collection_for_select(@user.groups.order(name: :asc), :id, :name, (params[:group_ids] rescue '')), include_blank: false, class: 'searchable-option-list', id: 'group-filter', multiple: true
             .form-group
               = label_tag 'user_contains[collaborator_id]', 'Filtrer par collaborateur', class: 'semibold'
-              = select_tag 'user_contains[collaborator_id]', options_from_collection_for_select(@organization.collaborators.order(code: :asc), :id, :code, (params[:user_contains][:collaborator_id] rescue '')), include_blank: true, class: 'form-control form-select form-select-sm filter-field', id: 'collaborator-filter', multiple: false
+              = select_tag 'user_contains[collaborator_id]', options_from_collection_for_select(@organization.collaborators.order(code: :asc), :id, :my_code, (params[:user_contains][:collaborator_id] rescue '')), include_blank: true, class: 'form-control form-select form-select-sm filter-field', id: 'collaborator-filter', multiple: false
 
-            .form-group.row
-              .col-md-10
-                = label_tag 'user_contains[is_inactive]', t('activerecord.models.user.attributes.is_inactive'), class: 'semibold'
-              .col-md-2.form-check.form-switch
-                %label.semibold.form-check-label.label_check_field Non
-                = check_box_tag 'user_contains[is_inactive]', 0, (params[:user_contains][:is_inactive].present? && params[:user_contains][:is_inactive] == 1 rescue false), class: "form-check-input input_switch input_check_field filter-customer filter-field"
+            .form-group
+              = label_tag 'user_contains[is_inactive]', t('activerecord.models.user.attributes.is_inactive'), class: 'semibold'
+              = select_tag 'user_contains[is_inactive]', options_for_select([['Oui', 1], ['Non', 0]], (params[:user_contains][:is_inactive] rescue '')), include_blank: true, class: 'form-control form-select form-select-sm filter-field', multiple: false
 
           .modal-footer
             = link_to 'Annuler', organization_customers_path(@organization), class: 'btn btn-light cancel'
