@@ -52,11 +52,12 @@
                   - else
                     \-
                 %td
+                  - url = documents_details_path({ id: object.piece.try(:pack).try(:id).presence || -1, _ext: 1, k: Base64.encode64({  by_all: { position: "#{object.piece.try(:position).presence || -1 }, #{similar_preseizure.try(:piece).try(:position).presence || -1 }"}, reinit: true }.to_json) })
                   %label.semibold
-                    = link_to object.piece.try(:name).presence || "", documents_details_path({ id: object.piece.try(:pack).try(:id).presence || -1, _ext: 1, k: Base64.encode64({  by_all: { position: "#{object.piece.try(:position).presence || -1 }, #{object.try(:piece).try(:position).presence || -1 }"}, reinit: true }.to_json) }), class: 'no-style bold black-label underlined-pointer'
+                    = link_to object.piece.try(:name).presence || "", url, class: 'no-style bold black-label underlined-pointer', target: '_blank'
                   %p.no-margin
                     - if similar_preseizure.try(:piece).try(:name)
-                      = link_to similar_preseizure.try(:piece).try(:name), documents_details_path({ id: similar_preseizure.try(:piece).try(:pack).try(:id).presence || -1, _ext: 1, k: Base64.encode64({  by_all: { position: "#{similar_preseizure.try(:piece).try(:position).presence || -1 }, #{similar_preseizure.try(:piece).try(:position).presence || -1 }"}, reinit: true }.to_json) }), class: 'no-style bold black-label underlined-pointer', target: '_blank'
+                      = link_to similar_preseizure.try(:piece).try(:name), url, class: 'no-style bold black-label underlined-pointer', target: '_blank'
                     - else
                       Duplicated piece has been deleted
                 %td

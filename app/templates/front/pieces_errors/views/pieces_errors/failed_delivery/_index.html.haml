@@ -22,7 +22,7 @@
                   - else
                     \-
                 %td
-                  = link_to object.name.presence || "", documents_details_path({ id: object.id.presence || 0, _ext: 1, k: Base64.encode64({ by_preseizure: { state: "error", reinit: true } }.to_json) }), class: 'no-style bold black-label underlined-pointer'
+                  = link_to object.name.presence || "", documents_details_path({ id: object.id.presence || 0, _ext: 1, k: Base64.encode64({ by_preseizure: { state: "error", reinit: true } }.to_json) }), class: 'no-style bold black-label underlined-pointer', target: '_blank'
                 %td= object.document_count
                 %td= object.message == false ? '-' : sanitize(object.message, :tags => %w(br))
           - else

@@ -35,10 +35,10 @@
                     %input.form-check-input.pointer.float-none.check-piece-ignored{ type: :checkbox, class: "checkbox checker_piece_#{ind}", data: { value: piece.id } }
                 %td= piece.created_at.strftime('%d-%m-%Y')
                 %td
-                  = link_to piece.name, documents_details_path({ id: piece.pack.id, _ext: 1, k: Base64.encode64({ text: piece.name, reinit: true }.to_json) }), class: 'no-style bold black-label underlined-pointer'
+                  = link_to piece.name, documents_details_path({ id: piece.pack.id, _ext: 1, k: Base64.encode64({ text: piece.name, reinit: true }.to_json) }), class: 'no-style bold black-label underlined-pointer', target: '_blank'
                 %td= piece.number
                 %td
-                  = link_to piece.pack.name, documents_details_path({id: piece.pack.id }), class: 'no-style bold black-label underlined-pointer'
+                  = link_to piece.pack.name, documents_details_path({id: piece.pack.id, _ext: 1, k: Base64.encode64({ reinit: true }.to_json) }), class: 'no-style bold black-label underlined-pointer', target: '_blank'
                 %td= piece.pre_assignment_comment         
                 %td
                   - if piece.pre_assignment_ignored?
