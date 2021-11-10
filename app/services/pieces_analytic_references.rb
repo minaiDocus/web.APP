@@ -47,7 +47,7 @@ class PiecesAnalyticReferences
     results = []
 
     @errors.each do |error|
-      results << I18n.t("activerecord.errors.models.uploaded_document.attributes.#{error.first}", error.last)
+      results << I18n.t("activerecord.errors.models.uploaded_document.attributes.#{error.first}")
     end
 
     results.join(', ')
