@@ -39,7 +39,7 @@ class DocumentsPreseizures{
   }
 
   edit_preseizures(elem){
-    this.id  = elem.attr('data-id');
+    this.id = elem.attr('data-id');
 
     let params =  {
                     'url': `/preseizures/${this.id}`,
@@ -52,12 +52,26 @@ class DocumentsPreseizures{
     });
   }
 
+  edit_multiple_preseizures(ids){
+    let params =  {
+                    'url': `/preseizures/edit_multiple_preseizures/${ids}`,
+                    'dataType': 'html'
+                  }
+
+    this.applicationJS.sendRequest(params).then((e)=>{
+       this.edit_modal.find('.modal-body').html(e);
+       this.edit_modal.modal('show');
+    });
+  }
+
   update_preseizures(){
     let datas = this.edit_modal.find('#preseizure_edition_form').serialize();
     datas += `&id=${this.id}`;
 
+    let update = $('#preseizure_edition_form #preseizures_ids').val() != undefined ? 'update_multiple_preseizures' : 'update' 
+
     let params =  {
-                    'url': '/preseizures/update',
+                    'url': `/preseizures/${update}`,
                     'type': 'POST',
                     'data': datas,
                     'dataType': 'json'
@@ -66,7 +80,11 @@ class DocumentsPreseizures{
     this.applicationJS.sendRequest(params).then((e)=>{
       if(e.error.toString() == '')
       {
-        this.refresh_view(this.id);
+        if (update == 'update_multiple_preseizures' )
+          window.location.reload(true);
+        else
+          this.refresh_view(this.id);
+
         this.applicationJS.noticeSuccessMessageFrom(null, 'Modifié avec succès');
         this.edit_modal.modal('hide');
       }
@@ -232,6 +250,7 @@ jQuery(function() {
   let main = new DocumentsPreseizures();
 
   AppListenTo('documents_edit_preseizures', (e)=>{ main.edit_preseizures($(e.detail.obj)); });
+  AppListenTo('documents_edit_multiple_preseizures', (e)=>{ main.edit_multiple_preseizures( e.detail.ids ); });
   AppListenTo('documents_edit_entry_account', (e)=>{ main.edit_entry_account($(e.detail.obj)); });
   AppListenTo('documents_edit_entry_amount', (e)=>{ main.edit_entry_amount($(e.detail.obj)); });
   AppListenTo('documents_change_entry_type', (e)=>{ main.change_entry_type($(e.detail.obj)); });

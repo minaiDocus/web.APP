@@ -18,7 +18,7 @@
       .preseizures_box
         - preseizures = piece.preseizures  
         - expense     = piece.expense
-        .box.list.animatedChild.toLeft{ class: params[:grid_or_list_view] != 'grid' ? '' : 'hide' }
+        .box.list.animatedChild.toLeft.select-box-document{ class: params[:grid_or_list_view] != 'grid' ? '' : 'hide' }
           .row.list-content
             .w-25.piece-background
               .stamp-content.pagethumb.text-center.h-100
@@ -27,7 +27,7 @@
                     = glyphicon('magnifying-glass', { size: '20', color: 'background: rgba(26, 26, 26, 0.7)'})
                   = image_tag document_thumb_url(piece), class: 'p-3 me-5'
             - if preseizures.size == 1
-              .w-75.dynamic_box{ id: "document_#{piece.id}", data: { preseizure_id: preseizures.first.id, type: 'piece' } }
+              .w-75.dynamic_box.preseizure-content-list{ id: "document_#{piece.id}", data: { preseizure_id: preseizures.first.id, type: 'piece' } }
                 %span.form-check.float-end           
                   %input.form-check-input.pointer.float-none.select-document{ data: { id: piece.id }, type: :checkbox, value: "" }
                 = render_async preseizures_infos_path, { id: preseizures.first.id }   
@@ -43,7 +43,7 @@
                 .tab-content
                   - preseizures.each_with_index do |preseizure, index|
                     .tab-pane.box.no-margin{ class: "#{(index == 0) ? 'active' : ''}", "id" => "preseizure-#{preseizure.id}", "role" => "tabpanel", "aria-labelledby" => "preseizure-#{preseizure.id}-tab" }
-                      .dynamic_box{ id: "document_#{index}_#{piece.id}", data: { preseizure_id: preseizure.id, type: 'piece' } }
+                      .dynamic_box.preseizure-content-list{ id: "document_#{index}_#{piece.id}", data: { preseizure_id: preseizure.id, type: 'piece' } }
                         = render_async preseizures_infos_path, { id: preseizure.id }
             - elsif expense
               .w-75{ id: "document_#{piece.id}" }

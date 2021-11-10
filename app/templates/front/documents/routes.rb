@@ -30,6 +30,8 @@ Rails.application.routes.draw do
     post 'preseizures/account/:id/update', to: 'preseizures#update_account', as: 'preseizures_update_account'
     get 'preseizures/accounts_list/:account_id', to: 'preseizures#accounts_list', as: 'preseizures_accounts_list'
     get 'preseizures/:id', to: 'preseizures#show', as: 'preseizures_details'
+    get 'preseizures/edit_multiple_preseizures/:ids', to: 'preseizures#edit_multiple_preseizures', as: 'preseizures_edit_multiple_preseizures'
+    post 'preseizures/update_multiple_preseizures', to: 'preseizures#update_multiple_preseizures', as: 'preseizures_update_multiple_preseizures'
 
     post 'pieces/update_analytics', to: 'pieces#update_analytics', as: 'update_pieces_analytics'
     get 'account/documents/pieces/:id/download/(:style)', to: 'pieces#get_piece_file', as: 'get_piece_file'

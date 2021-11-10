@@ -2,7 +2,7 @@
 
 class Documents::PreseizuresController < Documents::AbaseController
   skip_before_action :verify_if_active, only: %w[index show]
-  before_action :load_preseizure, except: %w[accounts_list]
+  before_action :load_preseizure, except: %w[accounts_list update_multiple_preseizures edit_multiple_preseizures]
 
   prepend_view_path('app/templates/front/documents/views')
 
@@ -81,7 +81,41 @@ class Documents::PreseizuresController < Documents::AbaseController
     render partial: 'accounts_list'
   end
 
+  def edit_multiple_preseizures
+    @preseizure = Pack::Report::Preseizure.new
+
+    render partial: 'show'
+  end
+
+  def update_multiple_preseizures
+    if @user.has_collaborator_action?
+      preseizures = Pack::Report::Preseizure.where(id: params[:preseizures_ids].split(','))
+
+      real_params = update_multiple_preseizures_params
+      begin
+        error = ''
+        preseizures.update_all(real_params) if real_params.present?
+      rescue StandardError => e
+        error = 'Impossible de modifier la séléction'
+      end
+
+      render json: { error: error }, status: 200
+    else
+      render json: { error: '' }, status: 200
+    end
+  end
+
   private
+
+  def update_multiple_preseizures_params
+    {
+      date: params[:pack_report_preseizure][:date].presence,
+      deadline_date: params[:pack_report_preseizure][:deadline_date].presence,
+      third_party: params[:pack_report_preseizure][:third_party].presence,
+      conversion_rate: params[:pack_report_preseizure][:conversion_rate].presence,
+      observation: params[:pack_report_preseizure][:observation].presence
+    }.compact
+  end
 
   def load_preseizure
     @preseizure = Pack::Report::Preseizure.find params[:id]
