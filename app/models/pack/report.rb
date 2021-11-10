@@ -167,6 +167,6 @@ class Pack::Report < ApplicationRecord
 
 
   def has_not_delivered_preseizures?
-    self.preseizures.where('pack_report_preseizures.delivery_message <> "{}" AND pack_report_preseizures.delivery_message <> null AND pack_report_preseizures.delivery_message <> ""').size > 0
+    self.preseizures.not_delivered('ibiza').count > 0 #JUST IBIZA FOR NOW
   end
 end
