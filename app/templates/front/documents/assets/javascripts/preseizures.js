@@ -8,11 +8,12 @@ class DocumentsPreseizures{
     this.id = 0;
   }
 
-  refresh_view(preseizure_id){
-    if(this.action_locker)
+  refresh_view(preseizure_id, lock=true){
+    if(lock && this.action_locker)
       return false;
 
     this.action_locker = true;
+
     let params =  {
                     'url': `/preseizures/${preseizure_id}`,
                     'data': { view: 'by_type' },
@@ -65,10 +66,14 @@ class DocumentsPreseizures{
   }
 
   update_preseizures(){
-    let datas = this.edit_modal.find('#preseizure_edition_form').serialize();
-    datas += `&id=${this.id}`;
+    let self = this
 
-    let update = $('#preseizure_edition_form #preseizures_ids').val() != undefined ? 'update_multiple_preseizures' : 'update' 
+    let datas = self.edit_modal.find('#preseizure_edition_form').serialize();
+    datas += `&id=${self.id}`;
+
+    let ids = $('#preseizure_edition_form #preseizures_ids').val();
+
+    let update = ids != undefined ? 'update_multiple_preseizures' : 'update'
 
     let params =  {
                     'url': `/preseizures/${update}`,
@@ -77,20 +82,26 @@ class DocumentsPreseizures{
                     'dataType': 'json'
                   }
 
-    this.applicationJS.sendRequest(params).then((e)=>{
+    self.applicationJS.sendRequest(params).then((e)=>{
       if(e.error.toString() == '')
       {
-        if (update == 'update_multiple_preseizures' )
-          window.location.reload(true);
+        if (update == 'update_multiple_preseizures' ){
+          $.each(ids.split(','), function( index, id ) {
+            self.refresh_view(id, false);
+          });
+        }
         else
-          this.refresh_view(this.id);
+          self.refresh_view(this.id);
 
-        this.applicationJS.noticeSuccessMessageFrom(null, 'Modifié avec succès');
-        this.edit_modal.modal('hide');
+        $('.select-box-document, .select-box-operation').removeClass('selected');
+        $('.select-document, .select-operation').prop('checked', false);
+
+        self.applicationJS.noticeSuccessMessageFrom(null, 'Modifié avec succès');
+        self.edit_modal.modal('hide');
       }
       else
       {
-        this.applicationJS.noticeErrorMessageFrom(null, e.error);
+        self.applicationJS.noticeErrorMessageFrom(null, e.error);
       }
     });
   }

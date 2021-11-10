@@ -47,22 +47,22 @@ function bind_all_events(){
   $('.select-all').unbind('click').bind('click',function(e) {
     e.stopPropagation();
     if($(this).is(':checked')){
-      $('.select-document').prop('checked', true);
-      $('.select-document').closest('.box').addClass('selected');
+      $('.select-document, .select-operation').prop('checked', true);
+      $('.select-document, .select-operation').closest('.box').addClass('selected');
       $('.action-selected-hide').addClass('hide');
       $('.action-selected').removeClass('hide');
       $('.grid .stamp-content').addClass('selected');      
     }
     else{
-      $('.select-document').prop('checked', false);
-      $('.select-document').closest('.box').removeClass('selected');
+      $('.select-document, .select-operation').prop('checked', false);
+      $('.select-document, .select-operation').closest('.box').removeClass('selected');
       $('.action-selected-hide').removeClass('hide');
       $('.action-selected').addClass('hide');
       $('.grid .stamp-content').removeClass('selected');
     }    
   });
 
-  $('.select-document').unbind('click').bind('click',function(e) {
+  $('.select-document, .select-operation').unbind('click').bind('click',function(e) {
     e.stopPropagation();
     var piece_id = $(this).attr('data-id');
 
@@ -75,6 +75,9 @@ function bind_all_events(){
       $(this).closest('.box').removeClass('selected');
       $('.grid .stamp-content#document_grid_' + piece_id).removeClass('selected');
     }
+
+    if ($('.box.list.selected').length == $('.box.list').length)
+      $('.select-all').prop('checked', true);
 
     if ($('.box.list.selected').length < 1) {
       $('.action-selected-hide').removeClass('hide');
@@ -172,7 +175,7 @@ function bind_all_events(){
   $('.edit_preseizures').unbind('click').bind('click', function(){ AppEmit('documents_edit_preseizures', {'obj': this}); });
   $('.edit_selected_preseizures').unbind('click').bind('click', function(){
     let ids = []
-    $('.select-box-document.selected').find('.preseizure-content-list').map(function(e){
+    $('.select-box-document.selected, .select-box-operation.selected').find('.preseizure-content-list').map(function(e){
       ids.push($(this).attr("data-preseizure-id"));
     });
 
