@@ -6,7 +6,7 @@ class PiecesErrors::IgnoredPreAssignmentController < FrontController
 
   def index
     @ignored_list = Pack::Piece.pre_assignment_ignored
-                               .where(user_id: account_ids)
+                               .where(user_id: params[:account_id].presence || account_ids)
                                .search(nil, search_terms(params[:filter_contains]))
                                .order("#{sort_column} #{sort_direction}")
                                .page(params[:page])

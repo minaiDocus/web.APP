@@ -95,6 +95,9 @@ class DocumentsPreseizures{
 
         $('.select-box-document, .select-box-operation').removeClass('selected');
         $('.select-document, .select-operation').prop('checked', false);
+        $('.select-all').prop('checked', false);
+        $('.action-selected-hide').removeClass('hide');
+        $('.action-selected').addClass('hide');
 
         self.applicationJS.noticeSuccessMessageFrom(null, 'Modifié avec succès');
         self.edit_modal.modal('hide');
