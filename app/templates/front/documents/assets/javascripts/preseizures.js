@@ -89,15 +89,15 @@ class DocumentsPreseizures{
           $.each(ids.split(','), function( index, id ) {
             self.refresh_view(id, false);
           });
-        }
-        else
+
+          $('.select-all').prop('checked', false);
+          $('.action-selected').addClass('hide');
+        }else{
           self.refresh_view(this.id);
+        }
 
         $('.select-box-document, .select-box-operation').removeClass('selected');
         $('.select-document, .select-operation').prop('checked', false);
-        $('.select-all').prop('checked', false);
-        $('.action-selected-hide').removeClass('hide');
-        $('.action-selected').addClass('hide');
 
         self.applicationJS.noticeSuccessMessageFrom(null, 'Modifié avec succès');
         self.edit_modal.modal('hide');

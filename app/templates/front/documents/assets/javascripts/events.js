@@ -49,14 +49,12 @@ function bind_all_events(){
     if($(this).is(':checked')){
       $('.select-document, .select-operation').prop('checked', true);
       $('.select-document, .select-operation').closest('.box').addClass('selected');
-      $('.action-selected-hide').addClass('hide');
       $('.action-selected').removeClass('hide');
       $('.grid .stamp-content').addClass('selected');      
     }
     else{
       $('.select-document, .select-operation').prop('checked', false);
       $('.select-document, .select-operation').closest('.box').removeClass('selected');
-      $('.action-selected-hide').removeClass('hide');
       $('.action-selected').addClass('hide');
       $('.grid .stamp-content').removeClass('selected');
     }    
@@ -80,10 +78,8 @@ function bind_all_events(){
       $('.select-all').prop('checked', true);
 
     if ($('.box.list.selected').length < 1) {
-      $('.action-selected-hide').removeClass('hide');
       $('.action-selected').addClass('hide');
     }else{
-      $('.action-selected-hide').addClass('hide');
       $('.action-selected').removeClass('hide');
     }
   });
@@ -123,7 +119,6 @@ function bind_all_events(){
       if ($('.select-all').is(':checked')) {$('.select-all').prop('checked', false);}
 
       if ($('.grid .stamp-content.selected').length == 0) {
-        $('.action-selected-hide').removeClass('hide');
         $('.action-selected').addClass('hide');
       }
     }
@@ -134,7 +129,6 @@ function bind_all_events(){
       $('.list-content #document_'+ piece_id + ' input.select-document').prop('checked', true);
 
       if ($('.grid .stamp-content.selected').length > 0) {
-        $('.action-selected-hide').addClass('hide');
         $('.action-selected').removeClass('hide');
       }
     }
