@@ -47,7 +47,7 @@ class Ftp::FetcherWorker
           }
         }
 
-        ErrorScriptMailer.error_notification(log_document).deliver
+        ErrorScriptMailer.error_notification(log_document, { unlimited: true }).deliver
       else
         p "============ No new documents=================="
       end
