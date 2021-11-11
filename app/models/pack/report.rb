@@ -98,7 +98,7 @@ class Pack::Report < ApplicationRecord
               full_message = message_ibiza.presence || message_exact_online.presence || message_my_unisoft.presence
             end
 
-            result << OpenStruct.new({date: max_date, document_count: preseizures_count, name: preseizures.first.try(:name), message: full_message})
+            result << OpenStruct.new({id: report_id, pack_id: Pack::Report.where(id: report_id).pluck(:pack_id).first , date: max_date, document_count: preseizures_count, name: preseizures.first.try(:name), message: full_message})
           end
         end
       end
