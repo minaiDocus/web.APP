@@ -149,8 +149,11 @@ class CustomUtils
       ["IDOC", "MCN", "CEN"].include?(organization.code)
     end
 
-    def can_create_budgea_documents(organization)
-      ["IDOC", "AFH"].include?(organization.try(:code).to_s)
+    def can_create_budgea_documents(customer)
+      return true if ["ACC%0336"].include?(customer.try(:my_code).to_s)
+      return true if ["IDOC", "AFH"].include?(customer.try(:organization).try(:code).to_s)
+
+      return false
     end
   end
 end
