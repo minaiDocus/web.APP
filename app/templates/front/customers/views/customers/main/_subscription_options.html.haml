@@ -8,7 +8,7 @@
 
   - organization = @subscription.try(:user).try(:organization).presence || FakeObject.new
 
-  - reduced_retriever_option = (@subscription.try(:retriever_price_option) == :retriever)? false : true
+  - reduced_retriever_option = @subscription.try(:retriever_price_option).to_s == 'reduced_retriever'
 
   .ido_x_content.derivationLeft
     .row.box
