@@ -335,6 +335,14 @@ img{
   height: 44px !important;
 }
 
+.show-head-body{
+  width: auto;
+}
+
+.show-head-body span{
+  padding-right: 1px;
+}
+
 @media (max-width: 1280px) {
   .sol-inner-container {
     height: 42px;

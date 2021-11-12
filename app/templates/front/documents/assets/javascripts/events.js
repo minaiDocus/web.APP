@@ -111,6 +111,11 @@ function bind_all_events(){
     }
   });
 
+  $('.show-head-body').unbind('click').bind('click',function(e) {
+    $(this).closest('.box').find('.box-body').toggle('')
+  });
+
+
   $('.grid .stamp-content').unbind('click').bind('click',function(e) {
     e.stopPropagation();
     var piece_id = $(this).attr('id').split('_')[2];
