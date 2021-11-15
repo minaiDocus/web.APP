@@ -13,6 +13,10 @@
       %input.idocus_field{ type: "hidden", name: "ido_capabilities", id: "ido_capabilities", value: @connector[:capabilities].join('_') }
 
       .form-group
+        %label.semibold Connecteur :
+        %span.connector-type.text-table-green.ms-3= @connector[:name]
+
+      .form-group
         %label.semibold Type de connecteur :
         - connector_type = 'Autres'
         - connector_type = 'Opérations bancaires'        if @connector[:capabilities].include?('bank')

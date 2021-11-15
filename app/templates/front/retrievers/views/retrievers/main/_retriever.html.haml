@@ -42,16 +42,16 @@
           // budgea actions
         - elsif retriever.budgea_id
           - if (retriever.ready? || retriever.waiting_additionnal_info?) || (retriever.error? && !retriever.budgea_error_message.in?(['SCARequired', 'decoupled', 'webauthRequired']))
-            %span.action-group.ms-1.pointer.trigger_connection{ title: 'Synchronisation', data: { id: retriever.id }}= glyphicon('loop-circular', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
-            %span.action-group.ms-1.pointer.edit_connection{ title: 'Édition', data: { retriever: retriever.to_json, banking_provider: 'budgea' } }= glyphicon('pencil', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
+            %span.action-group.ms-1.pointer.trigger_connection{ title: 'Synchronisation', data: { id: retriever.id, user_id: retriever.user_id }}= glyphicon('loop-circular', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
+            %span.action-group.ms-1.pointer.edit_connection{ title: 'Édition', data: { retriever: retriever.to_json, user_id: retriever.user_id, banking_provider: 'budgea' } }= glyphicon('pencil', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
           - if retriever.ready? || retriever.error? || retriever.unavailable? || retriever.waiting_additionnal_info? || retriever.destroying?
-            %span.action-group.ms-1.pointer.delete_connection{ title: 'Suppression', data: { id: retriever.id }}= glyphicon('trash', { size: '14', color:'red'})
+            %span.action-group.ms-1.pointer.delete_connection{ title: 'Suppression', data: { id: retriever.id, user_id: retriever.user_id }}= glyphicon('trash', { size: '14', color:'red'})
           - case retriever.budgea_error_message
           - when 'SCARequired'
-            %button#SCARequired.btn.btn-primary.scarequire_decoupled_button{ data: { id: retriever.id } }
+            %button#SCARequired.btn.btn-primary.scarequire_decoupled_button{ data: { id: retriever.id, user_id: retriever.user_id } }
               Lancer la procédure d'authentification
           - when 'decoupled'
-            %button#decoupled.btn.btn-success.scarequire_decoupled_button{ data: { id: retriever.id } }
+            %button#decoupled.btn.btn-success.scarequire_decoupled_button{ data: { id: retriever.id, user_id: retriever.user_id } }
               Valider la reprise de la synchronisation
           - when 'webauthRequired'
             %input{ id: "ido_connector_id_#{retriever.budgea_id}", type: :hidden, value: "#{retriever.budgea_id}"}

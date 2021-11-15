@@ -67,8 +67,10 @@ class RetrievedParametersMain{
                         $(`span#total-${type}`).text( $(`input#${type}-size`).val() );
 
                         if(type == 'banks-selection'){
-                          this.bank_select_object.target_html = $('#banks-selection #bank_selection');
-                          this.bank_select_object.init_form({ id: $('#retriever_selector').val() });
+                          window.setTimeout(()=>{
+                            this.bank_select_object.target_html = $('#banks-selection #bank_selection');
+                            this.bank_select_object.init_form({ id: $('#retriever_selector').val() });
+                          }, 1000)
                         }
 
                         this.action_locker = false;

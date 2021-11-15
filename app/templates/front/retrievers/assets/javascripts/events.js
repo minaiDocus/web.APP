@@ -1,18 +1,24 @@
 function bind_all_events(){
   $('.retriever_actions .delete_connection').unbind('click');
   $('.retriever_actions .delete_connection').bind('click', function(e){
-    AppEmit('retriever_delete_connection', { id: $(this).data('id') });
+    AppEmit('budgeaApi.user_changed', { user_id: $(this).attr('data-user-id') }).then((e)=>{
+      setTimeout((f)=>{ AppEmit('retriever_delete_connection', { id: $(this).data('id') }); }, 2000);
+    });
   });
 
   $('.retriever_actions .trigger_connection').unbind('click');
   $('.retriever_actions .trigger_connection').bind('click', function(e){
-    AppEmit('retriever_trigger_connection', { id: $(this).data('id') });
+    AppEmit('budgeaApi.user_changed', { user_id: $(this).attr('data-user-id') }).then((e)=>{
+      setTimeout((f)=>{ AppEmit('retriever_trigger_connection', { id: $(this).data('id') }); }, 2000);
+    });
   });
 
   $('.retriever_actions .edit_connection').unbind('click');
-  $('.retriever_actions .edit_connection').bind('click', function(e){
+  $('.retriever_actions .edit_connection').bind('click', function(e){    
     if($(this).data('banking-provider') == 'budgea'){
-      AppEmit('retriever_edit_connection', { retriever: $(this).data('retriever') });
+      AppEmit('budgeaApi.user_changed', { user_id: $(this).attr('data-user-id') }).then((e)=>{
+        setTimeout((f)=>{ AppEmit('retriever_edit_connection', { retriever: $(this).data('retriever') }); }, 2000);
+      });
     }
     else{
       AppEmit('retriever_specific_setup', { banking_provider: 'internal', retriever_id: $(this).data('retriever')['id'] });
@@ -118,7 +124,7 @@ function bind_all_events(){
   });
 
   $('select#account_id').unbind('change');
-  $('select#account_id').bind('change', function(e){ AppEmit('retriever_reload_all') });
+  $('select#account_id').bind('change', function(e){ AppEmit('budgeaApi.user_changed', { user_id: $(this).val() }); AppEmit('retriever_reload_all'); });
 
   $('#filter-retriever #filter_button').unbind('click');
   $('#filter-retriever #filter_button').bind('click', function(e){ $('#filter-retriever').modal('hide'); AppEmit('retriever_reload_all') });

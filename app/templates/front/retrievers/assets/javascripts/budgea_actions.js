@@ -21,10 +21,14 @@ function load_all_actions(budgeaApi, applicationJS){
         };
       }
       
-      budgeaApi.refresh_connection(id, data).then(function() {
-        finalize();
-      }, function() {
-        finalize();
+      AppEmit('budgeaApi.user_changed', { user_id: self.attr('data-user-id') }).then((e)=>{
+        setTimeout((f)=>{
+          budgeaApi.refresh_connection(id, data).then(function() {
+            finalize();
+          }, function() {
+            finalize();
+          });
+        }, 2000)
       });
     }
   });
@@ -47,7 +51,10 @@ function load_all_actions(budgeaApi, applicationJS){
                     'ido_custom_name': $(`#ido_custom_name_${id}`).val(),
                     'ido_connector_name': $(`#ido_connector_name_${id}`).val(),
                   }
-        budgeaApi.webauth(user_id, id_connection, false, options);
+
+        AppEmit('budgeaApi.user_changed', { user_id: user_id }).then((e)=>{
+          setTimeout((f)=>{ budgeaApi.webauth(user_id, id_connection, false, options); }, 2000);
+        });
       }
     }
   });

@@ -1,6 +1,6 @@
 function bind_all_events(){
   $('select#account_id').unbind('change');
-  $('select#account_id').bind('change', function(e){ AppEmit('retriever_parameters_reload_all') });
+  $('select#account_id').bind('change', function(e){ AppEmit('budgeaApi.user_changed', { user_id: $(this).val() }); AppEmit('retriever_parameters_reload_all') });
 
   $('.action.sub-menu-bank-param').unbind('click');
   $(".action.sub-menu-bank-param").bind('click',function(e) {

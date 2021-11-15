@@ -7,7 +7,7 @@ function bind_all_events(){
   });
 
   $('select#account_id').unbind('change');
-  $('select#account_id').bind('change', function(e){ AppEmit('retrieved_datas_reload_all') });
+  $('select#account_id').bind('change', function(e){ AppEmit('budgeaApi.user_changed', { user_id: $(this).val() }); AppEmit('retrieved_datas_reload_all') });
 
   $('.modal button.validate-filter').unbind('click');
   $('.modal button.validate-filter').bind('click', function(e){ AppEmit('retrieved_datas_filter', { type: $(this).attr('data-target') }) });

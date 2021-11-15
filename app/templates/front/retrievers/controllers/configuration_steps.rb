@@ -22,16 +22,18 @@ class Retrievers::ConfigurationStepsController < RetrieverController
     if params[:q] != 'conf'
       render json: { message: nil }, status: 200
     else
-      user_token = @account.get_authentication_token
-      bi_token = @account.try(:budgea_account).try(:access_token)
+      user = (params[:user_id].present?)? User.find(params[:user_id]) : @account
 
-      journals = @account.account_book_types.map do |journal|
+      user_token = user.get_authentication_token
+      bi_token = user.try(:budgea_account).try(:access_token)
+
+      journals = user.account_book_types.map do |journal|
         "#{journal.id}: #{journal.name}"
       end.join('_')
 
-      contact_company = @account.company
-      contact_name = @account.last_name
-      contact_first_name = @account.first_name
+      contact_company = user.company
+      contact_name = user.last_name
+      contact_first_name = user.first_name
     end
 
     render json: { user_token: user_token.to_s, bi_token: bi_token.to_s, journals: journals.to_s, contact_company: contact_company.to_s, contact_name: contact_name.to_s, contact_first_name: contact_first_name.to_s }, status: 200

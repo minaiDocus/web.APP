@@ -15,6 +15,8 @@ class BudgeaApi{
     this.request_source = '';
 
     this.init_api_configuration();
+
+    this.listen_to_user_change();
   }
 
   init_api_configuration(){
@@ -48,11 +50,19 @@ class BudgeaApi{
                       });
   };
 
-  get_user_tokens() {
+  listen_to_user_change(){
+    let self = this;
+    AppListenTo('budgeaApi.user_changed', (e)=>{
+      let user_id = e.detail.user_id;
+      self.get_user_tokens((user_id != 'all')? user_id : '');
+    });
+  }
+
+  get_user_tokens(user_id='') {
     return new Promise(async(resolve, reject)=>{
       let ajax_params = {
                         url: '/retriever/account_infos',
-                        data: { q: 'conf' },
+                        data: { q: 'conf', user_id: user_id },
                         type: 'POST',
                         dataType: 'json'
                       };
@@ -226,9 +236,13 @@ class BudgeaApi{
           }
         },
         onSuccess: function(remote_response, local_response) {
-
           /* Respond to remote response */
-          remote_accounts = remote_response;
+          remote_accounts = [];
+          remote_response.forEach((account)=>{
+            if(account['deleted'] == '' || account['deleted'] == null || account['deleted'] == undefined){
+              remote_accounts.push(account);
+            }
+          });
 
           /* Respond to local response */
           my_accounts = local_response.accounts;
