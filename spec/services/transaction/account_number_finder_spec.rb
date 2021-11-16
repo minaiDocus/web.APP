@@ -129,6 +129,51 @@ describe Transaction::AccountNumberFinder do
 
         expect(result).to eq('0ORA')
       end
+
+      it 'returns prior matched rule', :priority do
+        allow_any_instance_of(Transaction::AccountNumberFinder).to receive(:accounting_plan).and_return([])
+
+        rule1 = AccountNumberRule.new
+        rule1.organization = @organization
+        rule1.name = 'Priority 1'
+        rule1.affect = 'organization'
+        rule1.rule_type = 'match'
+        rule1.rule_target = 'both'
+        rule1.content = "*RUEM DISTRIBU*"
+        rule1.priority = 1
+        rule1.third_party_account = 'distribu'
+        rule1.save
+
+
+        rule2 = AccountNumberRule.new
+        rule2.organization = @organization
+        rule2.name = 'Priority 2'
+        rule2.affect = 'organization'
+        rule2.rule_type = 'match'
+        rule2.rule_target = 'both'
+        rule2.content = "*CARTE X*"
+        rule2.priority = 2
+        rule2.third_party_account = 'carteX'
+        rule2.save
+
+        @operation.label = 'CARTE X2978 04/11 RUEM DISTRIBU'
+        @operation.amount = -200
+        @operation.save
+        allow(@operation).to receive('credit?').and_return(true)
+
+        result = Transaction::AccountNumberFinder.new(@user, '0TEMP').execute(@operation)
+
+        rule1.priority = 2
+        rule1.save
+
+        rule2.priority = 1
+        rule2.save
+
+        result2 = Transaction::AccountNumberFinder.new(@user.reload, '0TEMP').execute(@operation)
+
+        expect(result).to eq('distribu')
+        expect(result2).to eq('carteX')
+      end
     end
 
     context 'with truncate rules' do

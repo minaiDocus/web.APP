@@ -79,7 +79,8 @@ class Transaction::AccountNumberFinder
 
     @rules = @user.account_number_rules
     @rules += @user.organization.account_number_rules.global
-    @rules.sort_by!(&:priority)
+
+    @rules = @rules.sort{|a, b| b.priority <=> a.priority }
   end
 
 
