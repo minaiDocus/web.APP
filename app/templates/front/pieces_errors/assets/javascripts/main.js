@@ -43,9 +43,7 @@ class PiecesErrorsMain{
       params.push($(`.modal form#filter-${type}-form`).serialize().toString());
     }catch(e){}
 
-    if ($('#_ext').attr('data-params-account-id') != undefined)
-      params.push(`account_id=${$('#_ext').attr('data-params-account-id')}`);
-    else if ($('#account_id').val() != 'all')
+    if ($('#account_id').val() != 'all')
       params.push(`account_id=${$('#account_id').val()}`);
 
     let ajax_params =   {

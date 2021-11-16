@@ -5,7 +5,7 @@
     .col-md-4.text-start
       %h3.bold Mes pièces
     .col-md-7.p-2
-      = select_tag 'account_id', options_for_select(customers_active.unshift(['Tous', 'all'])), include_blank: false, class: 'chosen-list float-end w-25'
+      = select_tag 'account_id', options_for_select(customers_active.unshift(['Tous', 'all']), params[:account_id]), include_blank: false, class: 'chosen-list float-end w-25'
     .col-md-1.text-start.p-1.filter_button
       %button.btn.btn-light.semibold.piece-errors-filter.w-100{ disabled: false }
         %span.me-2 Filtrer
@@ -13,8 +13,7 @@
 
   .mb-4
 
-  .derivationRight
-    %input#_ext{ type: :hidden, "data-params" => params}
+  .derivationRight    
     %ul.nav.nav-tabs.ms-3{ "role" => "tablist" }
       %li.nav-item.no-margin{ "role" => "presentation" }
         %button.semibold.nav-link#ignored-pre-assignment-tab{ class: ((params[:tab] == 'ignored-pre-assignment' || params[:tab].nil?) ? 'active' : ''), "data-bs-toggle" => "tab", "data-bs-target" => "#ignored-pre-assignment", type: :button, "role" => "tab", "aria-controls" => "ignored-pre-assignment", "aria-selected" => "true" } 
