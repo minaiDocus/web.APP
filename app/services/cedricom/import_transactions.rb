@@ -231,7 +231,7 @@ module Cedricom
     end
 
     def save_operation(bank_account, cedricom_operation)
-      duplicate_ope = check_duplicated bank_account, cedricom_operation
+      duplicate_ope = check_duplicated bank_account, cedricom_operation if bank_account
 
       return duplicate_ope if duplicate_ope
 
