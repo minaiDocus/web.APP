@@ -1,6 +1,10 @@
 class Notifications::DematboxUploaded < Notifications::Notifier
   include Concurrent::Async
 
+  def self.notify_dematbox_document_uploaded(arguments={})
+    new(arguments).notify_dematbox_document_uploaded
+  end
+
   def initialize(arguments={})
     super
   end
@@ -10,7 +14,7 @@ class Notifications::DematboxUploaded < Notifications::Notifier
 
     temp_document = TempDocument.find(@arguments[:temp_document_id])
 
-    if temp_document.dematbox_box_id && temp_document.dematbox_doc_id
+    if temp_document.dematbox_box_id && temp_document.dematbox_doc_id && !temp_document.dematbox_is_notified
       pages_number = DocumentTools.pages_number(temp_document.cloud_content_object.path)
       message = 'Envoi OK : %02d p.' % pages_number
 
@@ -56,5 +60,23 @@ class Notifications::DematboxUploaded < Notifications::Notifier
         # end
       end
     end
+
+    log_document = {
+      subject: "[Dematbox] - Document notification",
+      name: "document_notification_dematbox",
+      error_group: "[Dematbox] - Document notification",
+      erreur_type: "Dematbox - Document notification",
+      date_erreur: Time.now.strftime('%Y-%m-%d %H:%M:%S'),
+      more_information: {
+        from: @arguments[:from],
+        td: temp_document.try(:id),
+        dematbox_box_id: temp_document.try(:dematbox_box_id),
+        dematbox_doc_id: temp_document.try(:dematbox_doc_id),
+        Notified_at: temp_document.dematbox_notified_at,
+        result: result.to_s
+      }
+    }
+
+    ErrorScriptMailer.error_notification(log_document).deliver
   end
 end

@@ -61,7 +61,8 @@ class Dematbox::CreateDocument
           @temp_document = AddTempDocumentToTempPack.execute(pack, file, options)
         end
 
-        Notifications::DematboxUploaded.new({ temp_document_id: @temp_document.id, remaining_tries: 3 }).async.notify_dematbox_document_uploaded if Rails.env == 'production'
+        Notifications::DematboxUploaded.new({ temp_document_id: @temp_document.id, remaining_tries: 3, from: 'async' }).async.notify_dematbox_document_uploaded if Rails.env == 'production'
+        Notifications::DematboxUploaded.delay_for(1.minutes).notify_dematbox_document_uploaded({ temp_document_id: @temp_document.id, remaining_tries: 3, from: 'delay' }) if Rails.env == 'production' ### WORKARROUND: if the first way (async) failed
       end
     end
   end
