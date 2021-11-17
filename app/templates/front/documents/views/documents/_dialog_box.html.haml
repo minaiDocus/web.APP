@@ -14,7 +14,7 @@
                 = select_tag 'by_all[position_operation]', options_for_select([['=', 0], ['>=', 1], ['<=', 2]], (@options[:position_operation] rescue 0)), include_blank: false, class: 'form-select operator'
               .w-75.select-container.no-padding
                 %input{ name: 'by_all[position]', value: (@options[:position].join(',') rescue '' ) }
-                %i Vous pouvez concaténer les numéros par virgule (1,2,3...)
+                %i Séparer par virgule (ex: 1,2,3), si plusieurs.
           - if !@is_operations
             .form-group
               %label Etat pièce
