@@ -61,7 +61,7 @@ class Dematbox::CreateDocument
           @temp_document = AddTempDocumentToTempPack.execute(pack, file, options)
         end
 
-        Notifications::DematboxUploaded.new({ temp_document_id: @temp_document.id, remaining_tries: 3 }).async.notify_dematbox_document_uploaded if Rails.env != 'test'
+        Notifications::DematboxUploaded.new({ temp_document_id: @temp_document.id, remaining_tries: 3 }).async.notify_dematbox_document_uploaded if Rails.env == 'production'
       end
     end
   end
