@@ -23,7 +23,6 @@ gem 'oauth'
 
 # Error handling
 gem 'sentry-raven'
-gem 'appsignal'
 
 # Image / File processing
 gem 'activestorage-openstack'
@@ -40,10 +39,9 @@ gem 'nested_form'
 gem 'simple_form'
 
 # System libraries binding
-gem 'gio2', '3.4.9'
-gem 'gobject-introspection', '3.4.9'
-gem 'cairo-gobject', '3.4.9'
-gem 'poppler', '3.4.9'
+gem 'gio2'
+gem 'gobject-introspection'
+gem 'poppler'
 
 # Object renderer
 gem 'rabl'
