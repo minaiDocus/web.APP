@@ -109,6 +109,14 @@ class Pack::Report < ApplicationRecord
     _result.take(limit)
   end
 
+  def self.search_failed_delivery(user_ids)
+    report = Pack::Report.where(user_id: user_ids)
+
+    report = report.joins(:preseizures).where('pack_report_preseizures.delivery_message IS NOT NULL AND pack_report_preseizures.delivery_message <> "{}" AND pack_report_preseizures.delivery_message <> ""').group(:delivery_message).select('pack_reports.id as report_id', 'pack_reports.name as name', 'pack_report_preseizures.delivery_message as message', 'count(pack_report_preseizures.id) as preseizures_count', 'pack_report_preseizures.updated_at as max_date', 'pack_report_preseizures.id as preseizure_id', 'pack_reports.pack_id as pack_id')
+
+    report.order('max_date DESC')
+  end
+
   def delivered_to(software)
     return true if is_delivered_to?(software)
 

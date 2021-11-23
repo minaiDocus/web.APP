@@ -6,7 +6,7 @@ class PiecesErrors::FailedDeliveryController < FrontController
 
   # GET /account/pre_assignment_blocked_duplicates
   def index
-    @errors = Pack::Report.failed_delivery(params[:account_id].presence || account_ids, 20)
+    @errors = Pack::Report.search_failed_delivery(params[:account_id].presence || account_ids).page(params[:page]).per(params[:per_page].presence || 20)
 
     render partial: 'index'
   end
