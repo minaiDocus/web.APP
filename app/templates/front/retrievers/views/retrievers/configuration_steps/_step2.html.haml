@@ -44,6 +44,8 @@
             %label.semibold= field[:label]
             .select-container.no-padding.w-100
               - required_field = field[:required].to_s == 'true' && !@retriever.try(:id)
+              - if @connector[:name] == 'Amazon' && field[:name].match(/website/)
+                - required_field = true
               - case field[:type]
               - when 'list'
                 - class_plus = field[:name].match(/website/) ? 'field_website' : ''
