@@ -26,7 +26,8 @@ class SortableDom{
 
   init_form(){
     if(this.default && JSON.stringify(this.default) != '{}'){
-      let parsed_node = JSON.parse(JSON.stringify( this.nodes.sort((a, b)=>{ return a.position > b.position }) ));
+      let parsed_node = JSON.parse(JSON.stringify( this.nodes.sort((a, b)=>{ return a.position - b.position }) ));
+
       parsed_node.forEach((p)=>{
         let node   = p.name;
         let c_node = null;
@@ -39,7 +40,9 @@ class SortableDom{
       });
 
       let html = '';
-      this.nodes.sort((a, b)=>{ return a.position > b.position }).forEach((el)=>{
+      let c_nodes = this.nodes.sort((a, b)=>{ return a.position - b.position })
+
+      c_nodes.forEach((el)=>{
         html += $(`.${this.name}_sortable_child.${el.name}`)[0].outerHTML;
       });
 

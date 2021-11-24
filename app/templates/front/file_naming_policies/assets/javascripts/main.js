@@ -33,7 +33,7 @@ class NamingPolicy{
       $('#scope').val( policy.scope ).change();
       $('#element-separator').val( policy.separator ).change();
 
-      let parsed_node = JSON.parse(JSON.stringify( this.nodes.sort((a, b)=>{ return a.position > b.position }) ));
+      let parsed_node = JSON.parse(JSON.stringify( this.nodes.sort((a, b)=>{ return a.position - b.position }) ));
       parsed_node.forEach((p)=>{
         let node   = p.name;
         let c_node = null;
@@ -56,7 +56,7 @@ class NamingPolicy{
       });
 
       let html = '';
-      this.nodes.sort((a, b)=>{ return a.position > b.position }).forEach((el)=>{
+      this.nodes.sort((a, b)=>{ return a.position - b.position }).forEach((el)=>{
         html += $(`.sortable_child.${el.name}`)[0].outerHTML;
       });
 

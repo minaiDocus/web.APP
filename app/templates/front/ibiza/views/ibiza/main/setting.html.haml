@@ -97,7 +97,7 @@
           .control-section
             -list_options = @organization.customers.active.order(:code).filter_by_software('ibiza').compact
             -list_selected = list_options.select{ |c| c.uses?(:ibiza) }
-            = select_tag 'software_account_list', options_for_select(list_options, list_selected), include_blank: false, multiple: true, class: 'searchable-option-list'
+            = select_tag 'software_account_list', options_for_select(list_options, list_selected), include_blank: false, multiple: true, class: 'searchable-option-list', id: nil
 
 %hr
 

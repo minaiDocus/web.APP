@@ -14,7 +14,7 @@
             = sf.hint "Cette option permet de selectionner/utiliser #{software_name} dans le paramétrage dossier client"
           .col-md-1
             .form-check.form-switch.idocus-custom-form-check
-              = sf.input :is_used, as: :boolean, label: false, label_html: { class: 'form-check-label' }, input_html: { checked: @organization.send(software.to_sym).try(:used?), id: 'is_used_software', class: 'form-check-input input_switch input_check_field'}
+              = sf.input :is_used, as: :boolean, label: false, label_html: { class: 'form-check-label' }, input_html: { checked: @organization.send(software.to_sym).try(:used?), id: nil, class: 'form-check-input input_switch input_check_field'}
               %label.semibold{class: 'form-check-label label_check_field', for: 'is_used_software'} Non
       .form-group{ class: (['exact_online', 'my_unisoft'].include? software)? '' : 'hide' }
         .row
@@ -24,7 +24,7 @@
             = sf.hint 'Cette option peut être écrasée dans le paramétrage dossier client'
           .col-md-1
             .form-check.form-switch.idocus-custom-form-check
-              = sf.input :auto_deliver, as: :boolean, label: false, label_html: { class: 'form-check-label' }, input_html: { checked: @organization.send(software.to_sym).try(:auto_deliver?), id: 'auto_deliver_software', class: 'form-check-input input_switch input_check_field check-software'}
+              = sf.input :auto_deliver, as: :boolean, label: false, label_html: { class: 'form-check-label'}, input_html: { checked: @organization.send(software.to_sym).try(:auto_deliver?), id: nil, class: 'form-check-input input_switch input_check_field check-software'}
               %label.semibold{class: 'form-check-label label_check_field', for: 'auto_deliver_software'} Non
     %hr
     .row.box.no-margin.derivationLeft
@@ -37,7 +37,7 @@
           .control-section
             -list_options = @organization.customers.active.order(:code).filter_by_software(software).compact
             -list_selected = list_options.select{ |c| c.uses?(software.to_sym) }
-            = select_tag 'software_account_list', options_for_select(list_options, list_selected), include_blank: false, multiple: true, class: 'searchable-option-list'
+            = select_tag 'software_account_list', options_for_select(list_options, list_selected), include_blank: false, multiple: true, class: 'searchable-option-list', id: nil
 
     - if @user.leader?
       %hr

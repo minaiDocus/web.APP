@@ -39,6 +39,9 @@ describe Billing::CreateInvoicePdf do
       users.each do |_user|
         user = User.new(_user)
         user.organization = organization
+
+        user.build_options if user.options.nil?
+
         user.save
 
         user.account_book_types.create(name: "AC", description: "AC (Achats)", position: 1, entry_type: 2, currency: "EUR", domain: "AC - Achats", account_number: "0ACC", charge_account: "471000", vat_accounts: {'20':'445660', '8.5':'153141', '13':'754213'}.to_json, anomaly_account: "471000", is_default: true, is_expense_categories_editable: true, organization_id: organization.id)
@@ -209,17 +212,60 @@ describe Billing::CreateInvoicePdf do
     expect(period.product_option_orders.third.price_in_cents_wo_vat).to eq 1 * 100.0
   end
 
-  it 'create normal output for test mode', :test_mode do
-    Invoice.destroy_all
+  context 'Test Mode', :test_mode do
+    before :each do
+      ProductOptionOrder.destroy_all
+      Billing::CreateInvoicePdf.for_all
 
-    test_dir = Billing::CreateInvoicePdf.for_test
+      Invoice.destroy_all
+    end
 
-    csv_file     = test_dir + "/invoices_resume.csv"
-    invoice_pdf  = test_dir + "/#{Organization.last.code}_#{Organization.last.id}.pdf"
+    it 'create normal output for test mode', :test_1 do
+      test_dir = Billing::CreateInvoicePdf.for_test
 
-    expect(Invoice.all.size).to eq 0
-    expect(File.exist?(csv_file)).to be true
-    expect(File.exist?(invoice_pdf)).to be true
-    expect(File.size(csv_file)).to be > 0
+      csv_file     = test_dir + "/invoices_resume.csv"
+      invoice_pdf  = test_dir + "/#{Organization.last.code}_#{Organization.last.id}.pdf"
+
+      expect(Invoice.all.size).to eq 0
+      expect(File.exist?(csv_file)).to be true
+      expect(File.exist?(invoice_pdf)).to be true
+      expect(File.size(csv_file)).to be > 0
+    end
+
+    it "doesn't update any period datas and prices", :test_2 do
+      time     = 1.month.ago
+
+      organization = Organization.last
+      org_period   = organization.periods.where('start_date <= ? && end_date >= ?', time.to_date, time.to_date)
+      cust_period  = organization.customers.active.last.periods.where('start_date <= ? && end_date >= ?', time.to_date, time.to_date)
+
+      o_options_ids  = org_period.first.product_option_orders.collect(&:id)
+      c_options_ids  = cust_period.first.product_option_orders.collect(&:id)
+
+      test_dir = Billing::CreateInvoicePdf.for_test(time)
+
+      expect(Invoice.all.size).to eq 0
+      expect(org_period.reload.first.product_option_orders.collect(&:id)).to eq o_options_ids
+      expect(cust_period.reload.first.product_option_orders.collect(&:id)).to eq c_options_ids
+    end
+
+    it "updates period datas and prices, if on the same date", :test_3 do
+      Timecop.freeze(Time.local(2020,03,15)) # GO BACK IN TIME
+      time = Time.now
+
+      organization = Organization.last
+      org_period   = organization.periods.where('start_date <= ? && end_date >= ?', time.to_date, time.to_date)
+      cust_period  = organization.customers.active.last.periods.where('start_date <= ? && end_date >= ?', time.to_date, time.to_date)
+
+      o_options_ids  = org_period.first.product_option_orders.collect(&:id)
+      c_options_ids  = cust_period.first.product_option_orders.collect(&:id)
+
+      test_dir = Billing::CreateInvoicePdf.for_test(time)
+
+      expect(Invoice.all.size).to eq 0
+
+      expect(org_period.reload.first.product_option_orders.collect(&:id)).to eq o_options_ids
+      expect(cust_period.reload.first.product_option_orders.collect(&:id)).not_to eq c_options_ids
+    end
   end
 end
