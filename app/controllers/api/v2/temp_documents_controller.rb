@@ -6,32 +6,36 @@ class Api::V2::TempDocumentsController < ActionController::Base
     customer = User.find(temp_document_params[:user_id])
     journal  = customer.account_book_types.where(entry_type: params[:accounting_type]).first
 
-    dir = CustomUtils.mktmpdir('temp_document_controller', nil, false)
-
-    filename = File.join(dir, "#{customer.code}_#{temp_document_params[:content_file_name]}")
-
-    File.open(filename, 'wb') do |f|
-      f.write(Base64.decode64(params[:file_base64]))
-    end
-
-    if customer.still_active? && (customer.try(:options).try(:is_upload_authorized) || customer.try(:subscription).try(:current_period).try(:is_active?, :ido_x))
-      uploaded_document = UploadedDocument.new(File.open(filename),
-                                            temp_document_params[:content_file_name],
-                                            customer,
-                                            journal.name,
-                                            0,
-                                            customer,
-                                            temp_document_params[:api_name],
-                                            nil,
-                                            temp_document_params[:api_id])
-
-      if uploaded_document
-        render json: uploaded_document.to_json
-      else
-        render json: uploaded_document.try(:errors), status: :unprocessable_entity
-      end
+    if not journal
+      render json: { message: "Unknwown entry type: #{params[:accounting_type]} - No AccountBookType found" }, status: 404
     else
-      render json: { message: 'Upload unauthorized - or - Inactive customer' }, status: 401
+      dir = CustomUtils.mktmpdir('temp_document_controller', nil, false)
+
+      filename = File.join(dir, "#{customer.code}_#{temp_document_params[:content_file_name]}")
+
+      File.open(filename, 'wb') do |f|
+        f.write(Base64.decode64(params[:file_base64]))
+      end
+
+      if customer.still_active? && (customer.try(:options).try(:is_upload_authorized) || customer.try(:subscription).try(:current_period).try(:is_active?, :ido_x))
+        uploaded_document = UploadedDocument.new(File.open(filename),
+                                              temp_document_params[:content_file_name],
+                                              customer,
+                                              journal.name,
+                                              0,
+                                              customer,
+                                              temp_document_params[:api_name],
+                                              nil,
+                                              temp_document_params[:api_id])
+
+        if uploaded_document
+          render json: uploaded_document.to_json
+        else
+          render json: uploaded_document.try(:errors), status: :unprocessable_entity
+        end
+      else
+        render json: { message: 'Upload unauthorized - or - Inactive customer' }, status: 401
+      end
     end
   end
 

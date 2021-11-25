@@ -71,7 +71,7 @@ describe 'Excesses Billing' do
     subscription.current_packages = []
     subscription.save
 
-    Subscription::Form.new(subscription).submit({ is_to_apply_now: 'true', is_pre_assignment_active: 'true', subscription_option: 'ido_classique' })
+    Subscription::Form.new(subscription).submit({ is_to_apply_now: 'true', is_pre_assignment_active: 'true', subscription_option: 'retriever_option' })
 
     organization_period = user.organization.subscription.periods.last
     Billing::UpdateOrganizationPeriod.new(organization_period).fetch_all
@@ -79,7 +79,7 @@ describe 'Excesses Billing' do
 
     period = subscription.reload.periods.last
 
-    expect(period.is_active?(:ido_classique)).to be true
+    expect(period.is_active?(:retriever_option)).to be true
     expect(period.unit_price_of_excess_upload).to eq 25
     expect(period.unit_price_of_excess_preseizure).to eq 25
     expect(period.unit_price_of_excess_expense).to eq 25
@@ -155,6 +155,37 @@ describe 'Excesses Billing' do
 
     expect(order).not_to be nil
     expect(order.price_in_cents_wo_vat).to eq 100 * (103 * 0.25)
+  end
+
+  it 'creates valid excess price for iDoMicro', :last do
+    allow_any_instance_of(Billing::UpdatePeriodData).to receive(:execute).and_return(true)
+
+    create_subscriptions
+
+    user = User.last
+    subscription = user.subscription
+    subscription.current_packages = []
+    subscription.save
+
+    Subscription::Form.new(subscription).submit({ is_to_apply_now: 'true', is_pre_assignment_active: 'true', subscription_option: 'ido_micro' })
+
+    organization = Organization.first
+    Billing::CreateInvoicePdf.for(organization.id, nil, Time.now, {notify: false, auto_upload: false})
+
+    organization_period = organization.periods.last
+    invoice             = organization.invoices.first
+    order               = organization_period.product_option_orders.where(name: 'excess_documents').first
+
+    c_period            = user.reload.periods.last
+
+    expect(organization_period.uploaded_pages).to eq 80
+    expect(organization_period.preseizure_pieces).to eq 80
+
+    expect(c_period.unit_price_of_excess_preseizure).to eq 25
+    expect(c_period.unit_price_of_excess_expense).to eq 25
+
+    expect(c_period.preseizure_pieces).to eq 203
+    expect(c_period.excesses_price_in_cents_wo_vat).to eq (0.25 * 103) * 100
   end
 
 end
