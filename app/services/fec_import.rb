@@ -55,6 +55,7 @@ class FecImport
     txt_file.each_line do |line|
       column      =  make_column_with line
 
+      next if !column.present?
       next if @params[:journal].nil?
       next if !@params[:journal].select{|j| j[column[0]].present? }.present?
 
