@@ -5,7 +5,7 @@ RefreshDashboardStatisticsWorker:
   cron: '*/5 * * * *'
 Billing::CreateInvoicePdfWorker:
   queue: high
-  cron: '0 3 1 * *'
+  cron: '15 0 1 * *'
 InitializePeriodsWorker:
   queue: high
   cron: '0 3 1 * *'
