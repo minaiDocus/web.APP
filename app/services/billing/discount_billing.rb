@@ -115,7 +115,7 @@ class Billing::DiscountBilling
   end
 
   def customers
-    @organization.customers.active_at(@time)
+    @organization.customers.active_at(@time.to_date)
   end
 
   def concerned_subscriptions
@@ -168,7 +168,7 @@ class Billing::DiscountBilling
   end
 
   def extentis_customers
-    User.customers.active_at(@time).where(organization_id: Organization.billed.where(code: extentis_group).collect(&:id))
+    User.customers.active_at(@time.to_date).where(organization_id: Organization.billed.where(code: extentis_group).collect(&:id))
   end
 
   def extentis_subscriptions

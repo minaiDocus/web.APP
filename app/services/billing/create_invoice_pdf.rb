@@ -52,7 +52,7 @@ class Billing::CreateInvoicePdf
       organization = Organization.where(id: organization_id).billed.first
       return false unless organization
 
-      generate_invoice_of organization, invoice_number, _time
+      generate_invoice_of organization, invoice_number, _time, _options
     end
 
     #_options : [notify: send notification to admin,
