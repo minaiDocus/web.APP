@@ -5,7 +5,7 @@ class Transaction::AccountNumberFinder
         [clean_txt(name), 0]
       end
 
-      words = clean_txt(label).split(/\s+/)
+      words = clean_txt(label, true).split(/\s+/)
 
       words.each do |word|
         scores.each_with_index do |(name, _), index|
@@ -15,6 +15,9 @@ class Transaction::AccountNumberFinder
           patterns.each{ |pt| scores[index][1] += 1 if word =~ /#{Regexp.quote(pt)}/i }
         end
       end
+
+      p "================ Highest mattch ========= "
+      p scores.select { |s| s[1] > 0 }.sort_by(&:last)
 
       scores.select { |s| s[1] > 0 }.sort_by(&:last).last.try(:first)
     end
@@ -29,12 +32,19 @@ class Transaction::AccountNumberFinder
         patterns = search_pattern.split('*')
         patterns << '' if rule.content.match(/.*[*]$/) #add a last empty string if there is a * at the end of the content
         pattern  = '\\b' + patterns.map{|pt| Regexp.quote(pt.strip) }.join('.*') + '\\b'
-        clean_txt(label).match /#{pattern}/i
+        clean_txt(label, true).match /#{pattern}/i
       end
+
+      p "==================== First matched ========="
+      p match_rules.collect(&:content)
+
 
       name = get_the_highest_match(label, match_rules.map(&:content))
 
       result = match_rules.select { |match| clean_txt(match.content) == clean_txt(name) }.first
+
+      p "================ Result =============="
+      p result.third_party_account if result
 
       number = result.third_party_account if result
       number
@@ -49,25 +59,37 @@ class Transaction::AccountNumberFinder
       matches = truncate_rules.flat_map do |rule|
         accounting_plan.select do |account|
           clean_name = clean_txt(account[0]).gsub(/ ?#{Regexp.quote(clean_txt(rule.content))}/i, '')
-          clean_txt(label).match /#{'\\b'+Regexp.quote(clean_name)+'\\b'}/i
+          clean_txt(label, true).match /#{'\\b'+Regexp.quote(clean_name)+'\\b'}/i
         end
       end
 
-      matches += accounting_plan.select { |account| clean_txt(label).match /#{'\\b'+Regexp.quote(clean_txt(account[0]))+'\\b'}/i }
+      p "==================== Second matched ========="
+      p matches.collect(&:content)
+
+      matches += accounting_plan.select { |account| clean_txt(label, true).match /#{'\\b'+Regexp.quote(clean_txt(account[0]))+'\\b'}/i }
 
       matches.uniq!
+
+      p "==================== Third matched ========="
+      p matches.collect(&:content)
 
       name = get_the_highest_match(label, matches.map(&:first))
 
       result = matches.select { |match| clean_txt(match[0]) == clean_txt(name) }.first
 
+      p "==================== Result ========="
+      p result[1] if result
+
       number = result[1] if result
       number
     end
 
-    def clean_txt(string=nil)
+    def clean_txt(string=nil, strict=false)
       string = string.to_s.strip.gsub(/[,:='"&#|;_)}\-\]\/\\]/, ' ')
       string = string.gsub(/[!?%€$£({\[]/, '')
+      
+      string = string.gsub(/[*.+]/, ' ') if strict
+
       string = string.gsub(/( )+/, ' ')
       string.strip
     end
@@ -93,9 +115,14 @@ class Transaction::AccountNumberFinder
     target = @operation.credit? ? 'credit' : 'debit'
 
     number =  self.class.find_with_rules(@rules, label, target) if @rules.any?
+
+    p "=========Skip accountin plan: #{@user.options.try(:skip_accounting_plan_finder)}"
+
     number ||= self.class.find_with_accounting_plan(accounting_plan, label, target, @rules) unless accounting_plan.empty? || @user.options.try(:skip_accounting_plan_finder)
+
     number ||= @temporary_account
 
+    p "=========Validate account: #{@user.options.try(:keep_account_validation)}"
 
     number = validate_account(number) if @user.options.try(:keep_account_validation) && number != @temporary_account && accounting_plan.any? && !@user.options.try(:skip_accounting_plan_finder)
 
