@@ -64,14 +64,14 @@ class Transaction::AccountNumberFinder
       end
 
       p "==================== Second matched ========="
-      p matches.collect(&:content)
+      p matches
 
       matches += accounting_plan.select { |account| clean_txt(label, true).match /#{'\\b'+Regexp.quote(clean_txt(account[0]))+'\\b'}/i }
 
       matches.uniq!
 
       p "==================== Third matched ========="
-      p matches.collect(&:content)
+      p matches
 
       name = get_the_highest_match(label, matches.map(&:first))
 
