@@ -282,6 +282,11 @@ class Journal{
     }
     else if( ['0', '1', '4'].find((e)=>{ return parseInt(e) === parseInt( $("#account_book_type_entry_type").val() ) }) ){
       $('.pre-assignment-attributes').addClass('hide');
+      if( parseInt( $("#account_book_type_entry_type").val() ) > 0 ){
+        let label = $("#account_book_type_entry_type option:selected").text()
+        $('.no_entry_selected').text(`Type de pré-saisie << ${label} >>`);
+      }
+
       $('.no_entry_selected').removeClass('hide');
     }
     else{

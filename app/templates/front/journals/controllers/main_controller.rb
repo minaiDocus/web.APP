@@ -221,7 +221,7 @@ class Journals::MainController < OrganizationController
       attrs << :name
     end
 
-    if is_preassignment_authorized? || @customer.subscription.is_package?('ido_x')
+    if is_preassignment_authorized? || @customer.subscription.is_package?('ido_x') || @customer.options.is_retriever_authorized
       attrs += %i[
         domain
         entry_type
@@ -264,7 +264,7 @@ class Journals::MainController < OrganizationController
   helper_method :is_max_number_reached?
 
   def is_preassignment_authorized?
-    @customer.nil? || @customer.options.is_preassignment_authorized || @organization.specific_mission || @customer.subscription.is_package?('ido_x')
+    @customer.nil? || @customer.options.is_preassignment_authorized || @organization.specific_mission || @customer.subscription.is_package?('ido_x') || @customer.options.is_retriever_authorized
   end
   helper_method :is_preassignment_authorized?
 
