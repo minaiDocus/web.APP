@@ -22,7 +22,7 @@ class FecImport
       count += 1
     end
 
-    { head_list_fec: head_list_fec, journal_on_fec: journal_on_fec.uniq!.flatten[1..-1] }
+    { head_list_fec: head_list_fec, journal_on_fec: journal_on_fec.uniq.flatten[1..-1] }
   end
 
   def execute(user,params)
@@ -75,7 +75,7 @@ class FecImport
       @for_pieces     << { compauxnum: compauxnum, pieceref: pieceref, comptenum: comptenum, debit: debit, credit: credit, journal: journal }
     end
 
-    @third_parties = @third_parties.uniq!.flatten[0..-1] if @third_parties.present?
+    @third_parties = @third_parties.uniq.flatten[0..-1] if @third_parties.present?
 
     import_processing
   end
