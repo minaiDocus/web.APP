@@ -3,18 +3,28 @@ class Bridge::GetTransactions
     @user = user
   end
 
-  def execute
+  def execute(time=nil, _banks_ids=[])
+    begin
+      _fetch_time = time.present? ? time.to_date.beginning_of_day : nil
+    rescue
+      return "Paramètre invalide: Time: #{time}"
+    end
+
     if @user.bridge_account
       access_token = Bridge::Authenticate.new(@user).execute
 
       bank_accounts = @user.bank_accounts.configured
 
       bank_accounts.each do |bank_account|
+        next if _banks_ids.any? && !_banks_ids.include?(bank_account.id)
+
         if bank_account.operations.any?
           start_time = bank_account.operations.last.created_at.to_time
         else
           start_time = bank_account.created_at.beginning_of_day
         end
+
+        start_time = _fetch_time if _fetch_time.present?
 
         begin
           transactions = BridgeBankin::Transaction.list_by_account(account_id: bank_account.api_id, access_token: access_token, since: start_time)
@@ -24,9 +34,9 @@ class Bridge::GetTransactions
 
         transactions.each do |transaction|
           if transaction.date >= bank_account.start_date
-            @operation = Operation.new(bank_account: bank_account, user: @user, organization: @user.organization)
+            @operation = bank_account.operations.where(api_id: transaction.id, api_name: 'bridge').first || Operation.new(bank_account: bank_account, user: @user, organization: @user.organization)
 
-            save_operation(transaction) unless transaction.is_future || transaction.raw_description == 'Virement'
+            save_operation(transaction) unless @operation.persisted? || transaction.is_future || transaction.raw_description == 'Virement'
           end
         end
       end
