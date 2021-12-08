@@ -4,7 +4,7 @@ module Account::AccountBookTypesHelper
       [
         [t('simple_form.labels.account_book_type.entry_type_5'),5]
       ]
-    elsif !customer || (customer && customer.options.is_preassignment_authorized)
+    elsif !customer || (customer && (customer.options.is_preassignment_authorized || customer.subscription.is_package?('ido_x')))
       [
         [t('simple_form.labels.account_book_type.entry_type_0'),0],
         [t('simple_form.labels.account_book_type.entry_type_2'),2],
