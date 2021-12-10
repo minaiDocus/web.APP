@@ -105,6 +105,25 @@ class Documents::PreseizuresController < Documents::AbaseController
     end
   end
 
+  def edit_third_party
+    value = params[:value]
+
+    @preseizure.third_party = value if params[:type] == 'name'
+    
+    if params[:type] == 'date'
+      tmp_date = value.split('/')
+
+      date_value = "#{tmp_date[2]}-#{tmp_date[1]}-#{tmp_date[0]} 23:00:00"
+      @preseizure.date = date_value
+    end
+
+    if @preseizure.save
+      render json: { error: "" }, status: 200
+    else
+      render json: { error: @preseizure.errors.messages }, status: 200
+    end   
+  end
+
   private
 
   def update_multiple_preseizures_params

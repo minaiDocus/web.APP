@@ -258,6 +258,29 @@ class DocumentsPreseizures{
       html_autocomplete.addClass('hide');
     }
   }
+
+  edit_third_party(details){
+    let type  = details[0].type;
+    let value = details[0].value;
+    let id    = details[0].id;
+
+
+    let params =  {
+                  'url': `/preseizures/edit_third_party`,
+                  'type' : 'POST',
+                  'data' : { id: id, type: type, value: value },
+                  'dataType': 'json'
+                }
+
+    this.applicationJS.sendRequest(params).then((e)=>{
+      if(e.error != '')
+        this.applicationJS.noticeErrorMessageFrom(null, e.error);
+      else
+        this.applicationJS.noticeSuccessMessageFrom(null, 'Modifié avec succès');
+
+      this.refresh_view(id); 
+    });
+  }
 }
 
 jQuery(function() {
@@ -268,6 +291,7 @@ jQuery(function() {
   AppListenTo('documents_edit_entry_account', (e)=>{ main.edit_entry_account($(e.detail.obj)); });
   AppListenTo('documents_edit_entry_amount', (e)=>{ main.edit_entry_amount($(e.detail.obj)); });
   AppListenTo('documents_change_entry_type', (e)=>{ main.change_entry_type($(e.detail.obj)); });
+  AppListenTo('edit_third_party', (e)=>{ main.edit_third_party($(e.detail)); });
 
   $('#edit_preseizures.modal').on('shown.bs.modal', function(e){   
     $('#date-preseizure, #deadline-date-preseizure').asDateRange({ defaultBlank: true, singleDatePicker: true, locale: { format: 'YYYY-MM-DD' }});

@@ -5,6 +5,8 @@
       - pieces.each do |piece|
         .col-md-3
           .stamp-content{ id: "document_grid_#{piece.id}", data: { preseizure_id: piece.preseizures.first.try(:id) } }
+            - if !@user.pre_assignement_displayed?
+              %input.form-check-input.select-document.hide{ data: { id: piece.id, preseizure_ids: piece.preseizures.collect(&:id) }, type: :checkbox, value: "" }
             .image_piece.text-center.animated-pointer
               %span.zoom.pdf-viewer.pointer.float-start{title: 'Visualiser la pièce', "data-content-url" => piece.get_access_url}
                 = glyphicon('magnifying-glass', { size: '20', color: 'background: rgba(26, 26, 26, 0.7)'})

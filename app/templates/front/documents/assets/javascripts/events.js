@@ -1,6 +1,8 @@
 function bind_all_events(){
   $('#delivery-date.daterange, #invoice-date.daterange').val('');
 
+  $('.date-edit-third-party').asDateRange({ defaultBlank: true, singleDatePicker: true, locale: { format: 'DD/MM/YYYY' }});
+
   $('#customer_document_filter').asMultiSelect({
     "texts" : { "searchplaceholder": "Choix dossiers", "noItemsAvailable": 'Aucun dossier trouvé'},
     "resultsContainer": '.result-sol',
@@ -60,6 +62,7 @@ function bind_all_events(){
     }    
   });
 
+
   $('.select-document, .select-operation').unbind('click').bind('click',function(e) {
     e.stopPropagation();
     var piece_id = $(this).attr('data-id');
@@ -109,13 +112,15 @@ function bind_all_events(){
 
   $('.grid .stamp-content').unbind('click').bind('click',function(e) {
     e.stopPropagation();
-    var piece_id = $(this).attr('id').split('_')[2];
-
+    var piece_id = $(this).attr('id').split('_')[2];    
 
     if ($(this).hasClass('selected')){
       $(this).removeClass('selected');
       $('.list-content #document_'+ piece_id).closest('.box').removeClass('selected');
       $('.list-content #document_'+ piece_id + ' input.select-document').prop('checked', false);
+
+      $('#document_grid_'+ piece_id + ' input.select-document').prop('checked', false);
+
       if ($('.select-all').is(':checked')) {$('.select-all').prop('checked', false);}
 
       if ($('.grid .stamp-content.selected').length == 0) {
@@ -127,6 +132,8 @@ function bind_all_events(){
       $(this).addClass('selected');
       $('.list-content #document_'+ piece_id).closest('.box').addClass('selected');
       $('.list-content #document_'+ piece_id + ' input.select-document').prop('checked', true);
+
+      $('#document_grid_'+ piece_id + ' input.select-document').prop('checked', true);
 
       if ($('.grid .stamp-content.selected').length > 0) {
         $('.action-selected').removeClass('hide');
@@ -147,6 +154,60 @@ function bind_all_events(){
     e.stopPropagation();
     $('#add-document').modal("show");    
   });
+
+  $('span.edit-third-party').unbind('click').bind('click',function(e) {
+    e.stopPropagation();
+
+    $('.content-tp').hide();
+    
+    if ($(this).hasClass('name'))
+      $(this).closest('label.third').find('.third-party-name').show('');
+    else if ($(this).hasClass('date'))
+      $(this).closest('label.third').find('.third-party-date').show('');
+  });
+
+  $('.valid-third-party').unbind('click').bind('click',function(e) {
+    e.stopPropagation();
+    e.preventDefault();
+
+    let type  = $(this).data('type');
+    let value = $(this).closest('.third-party-'+type).find('input').val();
+    let id    = $(this).data('preseizure-id');
+
+    if (type != "" && value != ""){
+      AppEmit('edit_third_party', { 'type': type, 'value': value, 'id': id });
+    }
+    else{
+      $('.content-tp').hide();
+    }
+  });
+
+  $('.content-tp input').unbind('change keyup').bind('change keyup',function(e) {
+    e.preventDefault();
+
+    let self = $(this);
+
+    if (self.val() != ''){
+      self.closest('.content-tp').find('.valid-third-party').removeClass('hide');
+      self.closest('.content-tp').find('.cancel-third-party').addClass('hide');
+    }
+    else{      
+      $('.date-edit-third-party').data('daterangepicker').hide();
+      $('.date-edit-third-party').val('');
+
+      self.closest('.content-tp').find('.cancel-third-party').removeClass('hide');
+      self.closest('.content-tp').find('.valid-third-party').addClass('hide');
+    }
+  });
+
+  $('.cancel-third-party').unbind('click.cancel-third-party').bind('click.cancel-third-party',function(e) {
+    e.stopPropagation();
+    e.preventDefault();    
+
+    $('.content-tp input').val('');
+    $('.content-tp').hide();
+  });
+
 
   $('#more-filter .modal-footer .btn-add').unbind('click').bind('click', function(){ AppEmit('documents_load_datas'); });
   $('.btn-reinit').unbind('click').bind('click', function(){ AppEmit('documents_reinit_datas'); });
@@ -285,7 +346,7 @@ jQuery(function() {
       if ($('.verif-fixed-action').offset().top <= 100){
         $('.action-fixed').addClass('fixed-to-top');
       }else{
-        $('.action-fixed').removeClass('fixed-to-top');
+        $('.action-fixed').removeClass('fixed-to-top');        
       }
     }
   });

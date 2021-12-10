@@ -10,8 +10,18 @@
 
 .row.ms-1
   .col-md-5
-    %label
-      %span= preseizure.date.strftime('%d/%m/%Y')
+    %label.third
+      %span.badge.bg-light.text-dark.edit-third-party.date{ title: 'Editer la date'}
+        %label.pointer= preseizure.date.strftime('%d/%m/%Y')
+        %span.ms-1= glyphicon('pencil', size: 8, color: '#000')
+      .third-party-date.hide.content-tp
+        .row
+          .col-md-10
+            .select-container.w-100
+              %input.date-edit-third-party{ type: :text, placeholder: preseizure.date.strftime('%d/%m/%Y')}
+          .col-md-2.text-start.no-padding.mt-1
+            %span.badge.bg-danger.cancel-third-party= glyphicon('x', size: 10, color: 'white')
+            %span.badge.badge-success.hide.valid-third-party{ data: { type: 'date', preseizure_id: preseizure.id }}= glyphicon('check', size: 10, color: 'white')
       %span -         
       %span Devise :
       %span= preseizure.unit
@@ -20,9 +30,19 @@
   .mb-2
   .row
     .col-md-5
-      %label
+      %label.third
         %span Nom de tiers :
-        %span.semibold= preseizure.try(:third_party)
+        %span.semibold.edit-third-party.name{ title: 'Editer le nom de tiers', data: { preseizure_id: preseizure.id }}
+          %label.pointer= preseizure.try(:third_party)
+          %span.ms-1= glyphicon('pencil', size: 8, color: '#000')
+        .third-party-name.hide.content-tp
+          .row
+            .col-md-10
+              .select-container.w-100
+                %input{ type: :text, placeholder: preseizure.try(:third_party)}
+            .col-md-2.text-center.pt-1
+              %span.badge.bg-danger.float-end.cancel-third-party= glyphicon('x', size: 10, color: 'white')
+              %span.badge.badge-success.float-end.hide.valid-third-party{ data: { type: 'name', preseizure_id: preseizure.id }}= glyphicon('check', size: 10, color: 'white')
 .row
   .col-md-12
     - delivery = preseizure.pre_assignment_deliveries.where(state: 'sent').first
