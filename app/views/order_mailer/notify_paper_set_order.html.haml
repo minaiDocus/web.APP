@@ -35,7 +35,7 @@
     %br
     %br
     - organization = @order.user.organization
-    - link =  (CustomUtils.is_manual_paper_set_order?(organization) && @order.user.is_prescriber) ? select_organization_file_sending_kit_path(organization) : organization_file_sending_kit_path(organization)
+    - link =  (CustomUtils.is_manual_paper_set_order?(organization) && @order.user.is_prescriber) ? select_organization_file_sending_kit_url(organization) : organization_file_sending_kit_url(organization)
     Pour créer le kit, merci de suivre ce lien : #{link_to link, link}
     %br
     %br
