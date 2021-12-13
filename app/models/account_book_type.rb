@@ -61,7 +61,8 @@ class AccountBookType < ApplicationRecord
   end
 
   scope :default,                    -> { where(is_default: true) }
-  scope :by_position,                -> { order(position: :asc) }
+  # scope :by_position,                -> { order(position: :asc) }
+  scope :by_position,                -> { order(name: :asc) } ## IS ACTUALLY ORDERED BY NAME
   scope :compta_processable,         -> { where(entry_type: [1,2,3,4]) }
   scope :not_compta_processable,     -> { where(entry_type: 0) }
   scope :pre_assignment_processable, -> { where(entry_type: [1,2,3,4]) }

@@ -19,7 +19,8 @@ class Pack::Report::Preseizure < ApplicationRecord
   belongs_to :similar_preseizure, class_name: 'Pack::Report::Preseizure', optional: true
 
   scope :locked,                        -> { where(is_locked: true) }
-  scope :failed_delivery,               -> { where(is_delivered_to: [nil, '']).where.not(delivery_message: [nil, '', '{}']).where.not(delivery_tried_at: nil) }
+  scope :failed_delivery,               -> { where(is_delivered_to: [nil, '']).where.not(delivery_message: [nil, '', '{}']).where.not(delivery_tried_at: nil).where('pack_report_preseizures.delivery_message NOT LIKE "%already sent%"') }
+  scope :recent,                        -> (time = 6.months.ago) { where('pack_report_preseizures.updated_at >= ?', time.try(:to_date)) }
   scope :not_locked,                    -> { where(is_locked: false) }
   scope :by_position,                   -> { order(position: :asc) }
   scope :not_deleted,                   -> { joins('LEFT JOIN pack_pieces ON pack_report_preseizures.piece_id = pack_pieces.id').where('pack_pieces.id IS NULL OR pack_pieces.delete_at is NULL') }

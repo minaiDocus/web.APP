@@ -28,7 +28,7 @@ class FavoriteCustomer < ApplicationRecord
       result.all_preseizures_size        = Pack::Report::Preseizure.unscoped.where(user_id: customer.id).count
       result.duplicated_preseizures_size = Pack::Report::Preseizure.unscoped.blocked_duplicates.joins(:organization, :piece, :user).where(user_id: customer.id, is_blocked_for_duplication: true).count
 
-      result.failed_delivery = Pack::Report::Preseizure.not_deleted.failed_delivery.where(user_id: customer.id).count
+      result.failed_delivery = Pack::Report::Preseizure.not_deleted.failed_delivery.recent.where(user_id: customer.id).count
 
       all_anomaly_percent     = result.all_temp_docs_size + result.all_retrievers_size + result.all_preseizures_size
       current_anomaly_percent = result.temp_docs_error_size + result.retriever_error_size + result.duplicated_preseizures_size
