@@ -125,11 +125,11 @@
                         .select-container.no-padding.w-100
                           %input.book-code-software.p-2{ type: 'text', name: 'account_book_type[vat_accounts_label]', value: "Compte de TVA par défaut (TVA 20%)", disabled: 'disabled', :class => 'form-control string optional vat_accounts_label', id: 'account_book_type_default_label_vat_accounts' }
                           %i.help-block Compte de TVA par défaut appliqué à tous les documents dans le journal comptable iDocus (TVA 20%)
-                      .col-md-3
+                      .col-md-6
                         .select-container.no-padding.w-100
                           %input.book-code-software.mb-2.p-2{ type: 'text', name: 'account_book_type[vat_accounts_rate]', :class => 'form-control string optional vat_accounts', id: 'account_book_type_default_vat_accounts', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => 'Compte de TVA relative au taux' }
                           %i.help-block= "Compte de TVA relative au taux : #{hint}"
-                      .col-md-3
+                      .col-md-3.hide
                         .select-container.no-padding.w-100
                           %input.book-code-software.mb-2.p-2{ type: 'text', name: 'account_book_type[vat_accounts_conterpart]', :class => 'form-control string optional vat_accounts_conterpart', id: 'account_book_type_default_conterpart_accounts', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => 'Compte contre partie relative au taux' }
                           %i.help-block Compte contre partie relative au taux
@@ -198,13 +198,14 @@
     .row
       .col-md-3
         %select.form-select.vat_accounts_label.p-2{ name: 'account_book_type[vat_accounts_label]', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => 'Taux de TVA' }
+          %option{ value: -1 } 0
           %option{ value: 10 } 10
           %option{ value: 8.5 } 8.5
           %option{ value: 5.5 } 5.5
           %option{ value: 2.1 } 2.1
         %i.help-block.vat_accounts_label_error
       .col-md-4
-        .select-container.no-padding.w-100
+        .select-container.no-padding.w-100.tva_rate
           %input.book-code-software.mb-2.p-2{ name: 'account_book_type[vat_accounts_rate]', :class => 'form-control string optional vat_accounts', type: 'text', 'data-toggle' => 'tooltip', 'data-placement' => 'top', 'title' => 'Compte de TVA relative au taux' }
           %i.help-block Compte de TVA relative au taux
       .col-md-4

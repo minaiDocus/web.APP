@@ -134,7 +134,7 @@ class Journal{
     cloned_field_child.find('input[name="account_book_type[vat_accounts_rate]"]').val(vat_account);
     cloned_field_child.find('input[name="account_book_type[vat_accounts_conterpart]"]').val(conterpart_account);    
 
-    if( ![10, 8.5, 5.5, 2.1].find((e)=>{ return e == rate })){
+    if( ![-1, 10, 8.5, 5.5, 2.1].find((e)=>{ return e == rate })){
       cloned_field_child.addClass('hide');
       cloned_field_child.find('select[name="account_book_type[vat_accounts_label]"]').replaceWith(`<input type="text" value="${rate}" name="account_book_type[vat_accounts_label]" class="vat_accounts_label">`);
     }
@@ -146,7 +146,7 @@ class Journal{
       let current_target       = $(this).closest('.account_book_type_vat_accounts').find(error_message_target);
 
       if (e.which !== 8 && e.which !== 0 && (e.which < 48 || e.which > 57) && !(e.keyCode === 46 || e.charCode === 46 || e.keyCode === 44 || e.charCode === 44) && !(e.which === 13 || e.keyCode === 13 || e.key === "Enter")){
-        current_target.html('Chiffre uniquement ou avec un point ou une virgule').show().delay(5000).fadeOut('slow');
+        current_target.html('Chiffre uniquement, avec un point ou une virgule').show().delay(5000).fadeOut('slow');
         return false;
       }
 
@@ -165,6 +165,10 @@ class Journal{
       current_target.css('color', '#FF4848');
 
     });
+
+    bind_vat_accounts_events();
+
+    cloned_field_child.find('select.vat_accounts_label').change();
   }
 
   remove_vat_account_field(){
@@ -188,10 +192,6 @@ class Journal{
       let conterpart_vat_accounts_field = vat_account.find('input[type="text"].vat_accounts_conterpart').val();
       let vat_account_exonorated_field = vat_account.find('input[type="text"].vat_account_exonorated').val();
 
-      if (!(vat_account_exonorated_field === null || vat_account_exonorated_field === '' || vat_account_exonorated_field === undefined)){
-        vat_accounts['-1'] = [vat_account_exonorated_field];
-      }
-
       if ((label === self.default_vat_accounts_label) || label === 'Compte de TVA par défaut (TVA 20%)' ){
         label = '0';
       }
@@ -199,6 +199,11 @@ class Journal{
       if (!(/undefined/.test(vat_accounts_field) || /undefined/.test(label) || label === null || label === undefined || label === '' || vat_accounts_field === null || vat_accounts_field === '' || vat_accounts_field === undefined)){
         vat_accounts[label] = [vat_accounts_field, conterpart_vat_accounts_field];
       }
+
+      if(label == -1){
+        vat_accounts['-1'] = ['', conterpart_vat_accounts_field];
+      }
+
     });
 
     vat_accounts = JSON.stringify(vat_accounts);
@@ -226,7 +231,6 @@ class Journal{
           let vat_account = raw_vat_account[0];
           let conterpart_vat_account = raw_vat_account[1]
 
-
           if ((rate.indexOf(self.default_vat_accounts_label) >= 0) || (rate === 'Compte de TVA par défaut (TVA 20%)') || (rate === '0')){
             $('input[type="text"]#account_book_type_default_vat_accounts').attr('value', vat_account);
             $('input[type="text"]#account_book_type_default_conterpart_accounts').attr('value', conterpart_vat_account);
@@ -238,11 +242,8 @@ class Journal{
               $('input[type="text"]#account_book_type_default_conterpart_accounts').attr('value', '');
             }
           }
-          else if (rate === '-1'){
-            $('input[type="text"]#account_book_type_vat_account_exonorated').attr('value', vat_account);
-          }
-          else if (!($.inArray(rate, rate_vat_accounts_values) > -1 || $.inArray(vat_account, vat_accounts_values) > -1) || $.inArray(conterpart_vat_account, vat_accounts_values) > -1 ){
-            if (!(rate === '' || rate === 'undefined' || rate === null || rate === undefined || vat_account === '' || vat_account === 'undefined' || vat_account === null || vat_account === undefined || (rate.indexOf(self.default_vat_accounts_label) >= 0) || rate === '0')){
+          else if (!($.inArray(rate, rate_vat_accounts_values) >= 0 || $.inArray(vat_account, vat_accounts_values) >= 0) || $.inArray(conterpart_vat_account, vat_accounts_values) >= 0 ){
+            if (rate === '-1' || !(rate === '' || rate === 'undefined' || rate === null || rate === undefined || vat_account === '' || vat_account === 'undefined' || vat_account === null || vat_account === undefined || (rate.indexOf(self.default_vat_accounts_label) >= 0) || rate === '0')){
               self.add_vat_account_field(rate, vat_account, conterpart_vat_account);
             }
           }

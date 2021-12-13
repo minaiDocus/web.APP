@@ -1,5 +1,17 @@
 //= require './journal'
 
+function bind_vat_accounts_events(){
+  $('select.vat_accounts_label').on('change', function(e){
+    let parent = $(this).parents('div.form-group.account_book_type_vat_accounts')
+    let value  = $(this).val()
+
+    if(value == -1)
+      parent.find('div.tva_rate > input').attr('disabled', 'disabled')
+    else
+      parent.find('div.tva_rate > input').removeAttr('disabled')
+  });
+}
+
 function searchable_option_copy_journals_list() {
   let checked_count = 0;
 
@@ -21,7 +33,10 @@ jQuery(function () {
   let journal = new Journal();
   journal.main();
 
-  AppListenTo('window.application_auto_rebind', (e)=>{ searchable_option_copy_journals_list(); });
+  AppListenTo('window.application_auto_rebind', (e)=>{
+    bind_vat_accounts_events();
+    searchable_option_copy_journals_list();
+  });
 
   AppListenTo('compta_analytic.edit_journal_compta', (e)=>{
     let elem = e.detail.obj;
