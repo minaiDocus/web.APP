@@ -126,14 +126,17 @@ module JournalHelper
         description = 'JC' + description if journal_name =~ /\A\d/ && !@customer.try(:my_unisoft).try(:used?)
         values << ["#{description} (inaccessible depuis la ged)", journal_name]
         values.sort_by(&:first)
+      end
+
+      if values.any?
+        values.unshift(["Aucun", ''])
       else
         values
       end
-      
     elsif journal_name.present?
       description = journal_name
       description = 'JC' + description if journal_name =~ /\A\d/ && !@customer.try(:my_unisoft).try(:used?)
-      [["#{description} (inaccessible depuis la ged)", journal_name]]
+      [["Aucun", ''], ["#{description} (inaccessible depuis la ged)", journal_name]]
     else
       []
     end
