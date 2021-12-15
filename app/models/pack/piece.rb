@@ -446,6 +446,10 @@ class Pack::Piece < ApplicationRecord
     elsif self.pre_assignment_ignored? || self.pre_assignment_truly_ignored?
       text    = 'piece_ignored'
       img_url = 'application/preaff_ignored.png'
+    elsif self.preseizures.empty? && self.pre_assignment_not_processed?
+      text   = 'not_processed'
+    elsif self.preseizures.empty? && self.pre_assignment_processed?
+      text   = 'processed'
     end
 
     return text if type.to_s == 'text'

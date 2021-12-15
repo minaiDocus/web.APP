@@ -29,6 +29,8 @@
           %span.badge.bg-dark.semibold Notes de frais
         - if not pack.is_fully_processed
           %span.badge.bg-dark.semibold En cours ...
+        - if pack.pieces.select{ |pi| pi.preseizures.empty? && pi.pre_assignment_not_processed? }.any?
+          %span.badge.badge-danger.semibold Rejetée
 
         - pack.get_tags.split(' - ').each_slice(3).first.try(:each) do |tag|
           - if tag != '-'

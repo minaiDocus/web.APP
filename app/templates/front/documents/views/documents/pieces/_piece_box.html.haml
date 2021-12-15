@@ -102,7 +102,7 @@
                   .row.ml-1.mb-1.mr-0
                     .col-md-9.text-start
                       - delivery_state = piece.get_state_to('text')
-                      - if ['delivery_failed', 'duplication', 'piece_ignored'].include?(delivery_state)
+                      - if ['delivery_failed', 'duplication', 'piece_ignored', 'not_processed'].include?(delivery_state)
                         %span.badge.badge-danger.semibold= t("pieces.delivery_state.#{delivery_state}")
                       - elsif ['awaiting_analytics', 'awaiting_pre_assignment', 'delivery_pending'].include?(delivery_state)
                         %span.badge.badge-warning.semibold= t("pieces.delivery_state.#{delivery_state}")
