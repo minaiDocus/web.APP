@@ -1,5 +1,11 @@
 class ReportingCharts{
+  clear_chart(name){
+    $(`#${name}`).replaceWith(`<canvas id="${name}"></canvas>`);
+  }
+
   flow_chart(data = {}){
+    this.clear_chart('chart_flux_document')
+
     let chart_flux_document = $('#chart_flux_document')[0].getContext('2d');
 
     let mychart_2 = new Chart(chart_flux_document,
@@ -28,6 +34,8 @@ class ReportingCharts{
   }
 
   delivery_account_chart(data = {}){
+    this.clear_chart('chart_sending')
+
     let chart_sending = $('#chart_sending')[0].getContext('2d');
 
     let mychart = new Chart(chart_sending,
@@ -62,6 +70,9 @@ class ReportingCharts{
   }
 
   retrievers_chart(data = {}){
+    this.clear_chart('chart_retriever_active')
+    this.clear_chart('chart_retriever_inactive')
+
     let retrievers_data = (labelName, valueData, backgroundColorValue, hoverBackgroundColorValue) => {
       return  {
                 labels: labelName,
