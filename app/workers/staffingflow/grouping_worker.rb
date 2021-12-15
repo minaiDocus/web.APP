@@ -5,7 +5,6 @@ class Staffingflow::GroupingWorker
   def perform
     UniqueJobs.for 'staffing_flow_grouping' do
       StaffingFlow.ready_grouping.each do |sf|
-        sleep(3)
         next if StaffingFlow.processing_grouping.count > 3 #MAXIMUM THREAD (Concurent job)
 
         Staffingflow::GroupingWorker::Launcher.delay.process(sf.id)

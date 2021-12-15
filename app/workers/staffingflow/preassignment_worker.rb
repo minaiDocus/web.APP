@@ -5,7 +5,6 @@ class Staffingflow::PreassignmentWorker
   def perform
     UniqueJobs.for 'staffing_flow_preassignment' do
       StaffingFlow.ready_preassignment.each do |sf|
-        sleep(3)
         next if StaffingFlow.processing_preassignment.count > 3 #MAXIMUM THREAD (Concurent job)
 
         Staffingflow::PreassignmentWorker::Launcher.delay.process(sf.id)

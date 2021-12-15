@@ -5,7 +5,6 @@ class Staffingflow::JefactureWorker
   def perform
     UniqueJobs.for 'staffing_flow_jefacture' do
       StaffingFlow.ready_jefacture.each do |sf|
-        sleep(3)
         next if StaffingFlow.processing_jefacture.count > 3 #MAXIMUM THREAD (Concurent job)
 
         Staffingflow::JefactureWorker::Launcher.delay.process(sf.id)
