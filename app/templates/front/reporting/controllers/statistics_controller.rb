@@ -37,7 +37,9 @@ class Reporting::StatisticsController < Reporting::ABaseController
       end
       format.json do
         journals         = AccountBookType.where(user_id: @customers_ids).select(:anomaly_account, :account_number, :default_account_number)
-        anomaly_accounts = waiting_accounts = default_accounts = []
+        anomaly_accounts = []
+        waiting_accounts = []
+        default_accounts = []
         journals.each do |journal|
           anomaly_accounts << journal.anomaly_account        if journal.anomaly_account.present?
           waiting_accounts << journal.account_number         if journal.account_number.present?
@@ -46,7 +48,9 @@ class Reporting::StatisticsController < Reporting::ABaseController
 
         preseizures_ids  = Pack::Report::Preseizure.where("created_at BETWEEN '#{@date_range.join("' AND '")}'").where(user_id: @customers_ids).select(:id)
 
-        anomaly_accounts_size = waiting_accounts_size = default_accounts_size = 0
+        anomaly_accounts_size = 0
+        waiting_accounts_size = 0
+        default_accounts_size = 0
         all_accounts    = Pack::Report::Preseizure::Account.where(preseizure_id: preseizures_ids).select(:number)
 
         all_accounts.each do |account|

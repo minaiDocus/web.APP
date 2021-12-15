@@ -7,18 +7,24 @@ module ReportingHelper
     end
   end
 
-  def accounts_repartition_stat(user)
+  def accounts_repartition_stat(report)
+    user = report.user
+
     journals         = AccountBookType.where(user_id: user.id).select(:anomaly_account, :account_number, :default_account_number)
-    anomaly_accounts = waiting_accounts = default_accounts = []
+    anomaly_accounts = []
+    waiting_accounts = []
+    default_accounts = []
     journals.each do |journal|
       anomaly_accounts << journal.anomaly_account  if journal.anomaly_account.present?
       waiting_accounts << journal.account_number   if journal.account_number.present?
       default_accounts << journal.default_account_number if journal.default_account_number.present?
     end
 
-    preseizures_ids  = Pack::Report::Preseizure.where("created_at BETWEEN '#{@date_range.join("' AND '")}'").where(user_id: user.id).select(:id)
+    preseizures_ids  = Pack::Report::Preseizure.where("created_at BETWEEN '#{@date_range.join("' AND '")}'").where(user_id: user.id, report_id: report.id).select(:id)
 
-    anomaly_accounts_size = waiting_accounts_size = default_accounts_size = 0
+    anomaly_accounts_size = 0
+    waiting_accounts_size = 0
+    default_accounts_size = 0
     all_accounts    = Pack::Report::Preseizure::Account.where(preseizure_id: preseizures_ids).select(:number)
 
     all_accounts.each do |account|
