@@ -11,7 +11,7 @@
                 = f.label :company, :class => "required semibold"
                 .select-container.no-padding.w-100
                   = f.input :company, label: false, input_html: { class: 'company_field required_field', placeholder: "ex : iDocus", :required => true }
-                - unless @organization.specific_mission
+                - if !@organization.specific_mission && action_name != 'new' && @customer.subscription.current_period.try(:is_package?, 'ido_x')
                   = f.label :jefacture_account_id, :class => "semibold"
                   .select-container.no-padding.w-100
                     = f.input :jefacture_account_id, label: false, input_html: { class: 'jefacture_account_id_field', placeholder: "ex : T4534638846" }
@@ -145,7 +145,7 @@
 
         .carousel-item
           .subscription-base-form
-            - unless @organization.specific_mission
+            - if !@organization.specific_mission && action_name == 'new'
               = render 'subscription_options'
     %hr
     .form-group.row.w-100.normal-form-action

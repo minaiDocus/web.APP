@@ -60,8 +60,9 @@
                         %td{colspan: 6}
                           .form-group.no-margin
                             .w-100.text-end
-                              - validation_param = param_encode({ url: retake_mcf_errors_organization_customer_path(@organization, @customer), method: 'post', form: {id: 'retake_mcf_errors'}, html: { target: '#my_company_files_content' } })
+                              - validation_param = param_encode({ url: retake_mcf_errors_organization_customer_path(@organization, @customer, {retake_mcf_documents: 1}), method: 'post', form: {id: 'retake_mcf_errors'}, html: { target: '#my_company_files_content' } })
                               = button_tag 'Relancer la récupération', name: 'retake_mcf_documents', class: 'btn btn-primary margin1right as_idocus_ajax', data: {confirm: 'Etes-vous sûr?'}, idocus: validation_param
+                              - validation_param = param_encode({ url: retake_mcf_errors_organization_customer_path(@organization, @customer, {confirm_unprocessable_mcf: 1}), method: 'post', form: {id: 'retake_mcf_errors'}, html: { target: '#my_company_files_content' } })
                               = button_tag 'Marquer la séléction comme vu', name: 'confirm_unprocessable_mcf', class: 'btn btn-primary margin1right as_idocus_ajax', data: {confirm: 'Etes-vous sûr?'}, idocus: validation_param
                     = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: organization_customer_my_company_files_path(@organization, @customer), name: 'mcf_errors', target: '.table_mcf_errors', total_pages: mcf_documents_error.total_pages }
 
