@@ -1,5 +1,5 @@
 = simple_form_for @group, url: (action_name.in?(%w(new create)) ? organization_groups_path(@organization) : organization_group_path(@organization, @group)), html: { id: 'groups_edition_form', class: ' form-horizontal create_update_form' } do |f|
-  - if @user.leader?    
+  - if @user.leader? || @user.manage_collaborators || @user.manage_groups
     = f.label :name, label: t('activerecord.models.group.attributes.name'), :class => "semibold"
     .select-container.no-padding.w-100
       = f.input :name, label: false
@@ -20,11 +20,11 @@
           = f.input :is_dropbox_authorized, as: :boolean, label: false, input_html: { class: 'form-check-input input_switch input_check_field', id: 'is_dropbox_authorized_field' }
           %label.semibold{class: 'form-check-label label_check_field', for: 'is_dropbox_authorized_field'} Non
   - content_for :assignation do
-    - if @user.leader?
+    - if @user.leader? || @user.manage_collaborators || @user.manage_groups
       = f.association :members, collection: @organization.members.order(:code), label_method: :info, input_html: { class: 'searchable-option-list show-selection-below-list show-select-all', id: 'select-collaborators-list'}, include_blank: false, multiple: true
     = f.association :customers, collection: @organization.customers.order(:code), label_method: :info, input_html: { class: 'searchable-option-list', id: 'select-customers-collaborators-list' }, include_blank: false, multiple: true
 
-  - if @user.leader?
+  - if @user.leader? || @user.manage_collaborators || @user.manage_groups
     = content_for :assignation
   - else
     = content_for :assignation

@@ -64,11 +64,11 @@ class Groups::MainController < OrganizationController
   private
 
   def verify_rights
-    unless @user.leader? && @organization.is_active
+    unless (@user.leader? || @user.manage_collaborators || @user.manage_groups) && @organization.is_active
       if action_name.in?(%w[new create destroy]) || (action_name.in?(%w[edit update]) && !@user.manage_groups) || !@organization.is_active
-        flash[:error] = t('authorization.unessessary_rights')
+        json_flash[:error] = t('authorization.unessessary_rights')
 
-        redirect_to organization_path(@organization)
+        render json: { json_flash: json_flash }, status: 200
       end
     end
   end
@@ -83,7 +83,7 @@ class Groups::MainController < OrganizationController
         member_ids: [],
         customer_ids: []
       )
-    elsif @user.leader?
+    elsif @user.leader? || @user.manage_collaborators || @user.manage_groups
       params.require(:group).permit(
         :name,
         :description,
