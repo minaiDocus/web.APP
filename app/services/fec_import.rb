@@ -84,18 +84,18 @@ class FecImport
     col    = line.split(/\t/)
     column = col.map { |c| c.strip }
 
-    _account_provider = @account_provider.to_s + '00000'
-    _account_customer = @account_customer.to_s + '00000'
+    _account_provider = (@account_provider.length <= 3)? @account_provider.to_s + '00000' : @account_provider
+    _account_customer = (@account_customer.length <= 3)? @account_customer.to_s + '00000' : @account_customer
 
     compaux_is_empty        = column[6].blank? && column[7].blank?
-    is_provider_or_customer = [@account_provider.to_s, @account_customer.to_s].include?(column[4].to_s[0..2])
-    is_general_account      = column[4].to_s.in?([_account_provider, _account_customer])
+    is_provider_or_customer = column[4].to_s.match(/^(#{@account_provider.to_s}|#{@account_customer.to_s})/)
+    is_general_account      = column[4].to_s.in?([_account_provider, _account_customer]) || column[4].to_s.in?([@account_provider, @account_customer])
 
     if compaux_is_empty && is_provider_or_customer && !is_general_account
       column[6] = column[4]
       column[7] = column[5]
-      column[4] = (@account_provider.to_s == column[4].to_s[0..2]) ?  _account_provider : _account_customer
-      column[5] = (@account_provider.to_s == column[4].to_s[0..2]) ? 'FOURNISSEUR' : 'CLIENT'
+      column[4] = ( column[4].to_s.match(/^(#{@account_provider.to_s})/) ) ?  _account_provider : _account_customer
+      column[5] = ( column[4].to_s.match(/^(#{@account_provider.to_s})/) ) ? 'FOURNISSEUR' : 'CLIENT'
     end
 
     column
@@ -133,9 +133,9 @@ class FecImport
     item.accounting_plan_itemable_id   = @user.accounting_plan.id
     item.accounting_plan_itemable_type = "AccountingPlan"
 
-    if @account_provider.to_i == row[:general_account].to_s[0..2].to_i
+    if row[:general_account].to_s.match(/^(#{@account_provider.to_s})/)
       item.kind = 'provider'
-    elsif @account_customer.to_i == row[:general_account].to_s[0..2].to_i
+    elsif row[:general_account].to_s.match(/^(#{@account_customer.to_s})/)
       item.kind = 'customer'
     else
       return false

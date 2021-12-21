@@ -41,13 +41,13 @@
               - indexation += 1
         %hr
         .form-group
-          %label Votre compte client générale ( 411 par défaut )
+          %label Votre compte client générale débutent par : ( 411 par défaut )
           .select-container.no-padding.w-100
-            %input.mask_verif_account{ class: "account_customer", name: "account_customer", value: "411", maxlength: 3 }
+            %input.mask_verif_account{ class: "account_customer", name: "account_customer", value: "411" }
         .form-group
-          %label Votre compte fournisseur générale ( 401 par défaut )
+          %label Votre compte fournisseur générale débutent par ( 401 par défaut )
           .select-container.no-padding.w-100
-            %input.mask_verif_account{ class: "account_provider", name: "account_provider", value: "401", maxlength: 3 }
+            %input.mask_verif_account{ class: "account_provider", name: "account_provider", value: "401" }
         %hr
         .form-group
           %label Vos comptes de contreparties débutent par : ( 6 et 7 par défaut )
