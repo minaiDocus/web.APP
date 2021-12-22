@@ -35,8 +35,9 @@
             - if @customer.active? && !@organization.specific_mission
               %li.nav-item.no-margin
                 %a.head_customer_link.semibold.nav-link#customer_subscription{ class: ('active' if (controller_path == 'subscriptions/main' && action_name == 'edit')), href: edit_organization_customer_subscription_path(@organization, @customer) } Forfait
-              %li.nav-item.no-margin
-                %a.head_customer_link.semibold.nav-link#orders-tab{ class: ('active' if (controller_path == 'orders/main' && action_name == 'index')), href: organization_customer_orders_path(@organization, @customer) } Commandes Kits/Scan
+              - if !@customer.subscription.current_period.is_package?('ido_x')
+                %li.nav-item.no-margin
+                  %a.head_customer_link.semibold.nav-link#orders-tab{ class: ('active' if (controller_path == 'orders/main' && action_name == 'index')), href: organization_customer_orders_path(@organization, @customer) } Commandes Kits/Scan
               %li.nav-item.no-margin
                 %a.head_customer_link.semibold.nav-link#adresses-tab{ class: ('active' if (controller_path == 'addresses/user' && action_name == 'index')), href: organization_user_addresses_path(@organization, @customer) } Adresses
             - if @organization.specific_mission
@@ -45,8 +46,9 @@
             - else
               %li.nav-item.no-margin
                 %a.head_customer_link.semibold.nav-link#journals-tab{ class: ('active' if (controller_path == 'journals/user' && action_name == 'index')), href: organization_user_journals_path(@organization, @customer) } Journaux comptables
-              %li.nav-item.no-margin
-                %a.head_customer_link.semibold.nav-link#compta-tab{ class: ('active' if (controller_path == 'customers/main' && action_name == 'edit_setting_options')), href: edit_setting_options_organization_customer_path(@organization, @customer) } Paramètres
+              - if !@customer.subscription.current_period.is_package?('ido_x')
+                %li.nav-item.no-margin
+                  %a.head_customer_link.semibold.nav-link#compta-tab{ class: ('active' if (controller_path == 'customers/main' && action_name == 'edit_setting_options')), href: edit_setting_options_organization_customer_path(@organization, @customer) } Paramètres
               - if @customer.uses?(:ibiza)
                 %li.nav-item.no-margin
                   %a.head_customer_link.semibold.nav-link#ibizabox_tab{ class: ('active' if (controller_path == 'ibiza/box_documents' && action_name == 'index')), href: organization_customer_ibizabox_documents_path(@organization, @customer) } iBiza Box
