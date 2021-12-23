@@ -37,7 +37,7 @@ set :linked_files, fetch(:linked_files, []).push(
   'config/my_unisoft.yml',
   'config/cedricom.yml',
   'config/symmetric-encryption.yml',
-  'config/sage-gec-private.yml'
+  'config/sage_gec_private.yml'
 )
 
 set :slack_url, 'https://hooks.slack.com/services/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'
