@@ -20,71 +20,77 @@ class DataProcessor::Operation
 
           operations.each do |operation|
             counter += 1
-            preseizure = Pack::Report::Preseizure.new
-            preseizure.organization    = user.organization
-            preseizure.user            = user
-            preseizure.report          = pack_report
-            preseizure.operation       = operation
-            preseizure.type            = 'FLUX'
-            preseizure.date            = user.options.get_preseizure_date_option == 'operation_date' ? operation.date : operation.value_date
-            preseizure.position        = counter
-            if user.options.operation_value_date_needed? && operation.retrieved? && operation.date != operation.value_date
-              preseizure.operation_label = "#{operation.label} - #{operation.value_date}"
-            else
-              preseizure.operation_label = operation.label
+
+            found = Pack::Report::Preseizure.where(operation_id: operation.id).first
+
+            if not found
+              preseizure = Pack::Report::Preseizure.new
+              preseizure.organization    = user.organization
+              preseizure.user            = user
+              preseizure.report          = pack_report
+              preseizure.operation       = operation
+              preseizure.type            = 'FLUX'
+              preseizure.date            = user.options.get_preseizure_date_option == 'operation_date' ? operation.date : operation.value_date
+              preseizure.position        = counter
+              if user.options.operation_value_date_needed? && operation.retrieved? && operation.date != operation.value_date
+                preseizure.operation_label = "#{operation.label} - #{operation.value_date}"
+              else
+                preseizure.operation_label = operation.label
+              end
+              preseizure.category_id     = operation.category_id
+
+              if operation.need_conversion?
+                preseizure.amount           = operation.amount.abs
+                preseizure.currency         = operation.currency['id']
+                preseizure.unit             = operation.bank_account.currency
+                preseizure.conversion_rate  = CurrencyRate.get_operation_exchange_rate operation
+              end
+              preseizure.save
+
+              ### 1 ###
+              account = Pack::Report::Preseizure::Account.new
+              account.preseizure = preseizure
+              account.type       = Pack::Report::Preseizure::Account.get_type('TTC') # TTC / HT / TVA
+              account.number     = bank_account.try(:accounting_number) || 512_000
+              account.save
+
+              entry = Pack::Report::Preseizure::Entry.new
+              entry.account    = account
+              entry.preseizure = preseizure
+              if operation.amount < 0
+                entry.type     = Pack::Report::Preseizure::Entry::CREDIT
+              else
+                entry.type     = Pack::Report::Preseizure::Entry::DEBIT
+              end
+              entry.number     = 1
+              entry.amount     = System::CurrencyRate.convert_operation_amount operation
+              entry.save
+
+              ### 2 ###
+              account = Pack::Report::Preseizure::Account.new
+              account.preseizure = preseizure
+              account.type       = Pack::Report::Preseizure::Account.get_type('TTC') # TTC / HT / TVA
+              account.number     = account_number_finder.execute(operation)
+              account.save
+
+              entry = Pack::Report::Preseizure::Entry.new
+              entry.account    = account
+              entry.preseizure = preseizure
+              if operation.amount < 0
+                entry.type     = Pack::Report::Preseizure::Entry::DEBIT
+              else
+                entry.type     = Pack::Report::Preseizure::Entry::CREDIT
+              end
+              entry.number     = 1
+              entry.amount     = System::CurrencyRate.convert_operation_amount operation
+              entry.save
+
+              preseizure.update(cached_amount: preseizure.entries.map(&:amount).max)
+
+              preseizures << preseizure
+              to_deliver_preseizures << preseizure
             end
-            preseizure.category_id     = operation.category_id
 
-            if operation.need_conversion?
-              preseizure.amount           = operation.amount.abs
-              preseizure.currency         = operation.currency['id']
-              preseizure.unit             = operation.bank_account.currency
-              preseizure.conversion_rate  = CurrencyRate.get_operation_exchange_rate operation
-            end
-            preseizure.save
-
-            ### 1 ###
-            account = Pack::Report::Preseizure::Account.new
-            account.preseizure = preseizure
-            account.type       = Pack::Report::Preseizure::Account.get_type('TTC') # TTC / HT / TVA
-            account.number     = bank_account.try(:accounting_number) || 512_000
-            account.save
-
-            entry = Pack::Report::Preseizure::Entry.new
-            entry.account    = account
-            entry.preseizure = preseizure
-            if operation.amount < 0
-              entry.type     = Pack::Report::Preseizure::Entry::CREDIT
-            else
-              entry.type     = Pack::Report::Preseizure::Entry::DEBIT
-            end
-            entry.number     = 1
-            entry.amount     = System::CurrencyRate.convert_operation_amount operation
-            entry.save
-
-            ### 2 ###
-            account = Pack::Report::Preseizure::Account.new
-            account.preseizure = preseizure
-            account.type       = Pack::Report::Preseizure::Account.get_type('TTC') # TTC / HT / TVA
-            account.number     = account_number_finder.execute(operation)
-            account.save
-
-            entry = Pack::Report::Preseizure::Entry.new
-            entry.account    = account
-            entry.preseizure = preseizure
-            if operation.amount < 0
-              entry.type     = Pack::Report::Preseizure::Entry::DEBIT
-            else
-              entry.type     = Pack::Report::Preseizure::Entry::CREDIT
-            end
-            entry.number     = 1
-            entry.amount     = System::CurrencyRate.convert_operation_amount operation
-            entry.save
-
-            preseizure.update(cached_amount: preseizure.entries.map(&:amount).max)
-
-            preseizures << preseizure
-            to_deliver_preseizures << preseizure
             operation.update({ processed_at: Time.now, is_locked: false })
           end
           if pack_report.preseizures.not_locked.not_delivered.size > 0
