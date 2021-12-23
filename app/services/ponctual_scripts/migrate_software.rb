@@ -40,7 +40,7 @@ class PonctualScripts::MigrateSoftware < PonctualScripts::PonctualScript
     Interfaces::Software::Configuration::SOFTWARES.each do |software_name|
       software  = organization.send(software_name.to_sym) || Interfaces::Software::Configuration.softwares[software_name.to_sym].new
 
-      next if software.persisted? || software_name == 'my_unisoft'
+      next if software.persisted? || software_name == 'my_unisoft' || software_name == 'sage_gec'
 
       if software_name == 'ibiza'
         ibiza = Ibiza.where(organization_id: organization.id)
@@ -89,7 +89,7 @@ class PonctualScripts::MigrateSoftware < PonctualScripts::PonctualScript
       software     = user.send(software_name) || Interfaces::Software::Configuration.softwares[software_name.to_sym].new
       org_software = user.organization.send(software_name)
 
-      next if software.persisted? || software_name == 'my_unisoft' || !softwares_setting.present? || !org_software
+      next if software.persisted? || software_name == 'my_unisoft' || !softwares_setting.present? || !org_software || software_name == 'sage_gec'
 
       if software_name == 'ibiza'
         # Defaut values to avoid exception validation on (state, state_2, and voucher_ref_target)

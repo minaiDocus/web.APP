@@ -7,7 +7,7 @@ class SoftwareSetting::MainController < OrganizationController
   def update
     software = params[:software]
     soft_params = software_params["#{software}_attributes"]
-    result = update_software(software, soft_params[:is_used] == "1", soft_params[:auto_deliver] == "1")
+    result = update_software(software, soft_params[:is_used], soft_params[:auto_deliver], soft_params[:sage_private_api_uuid])
     
     software_users = params[:software_account_list] || ''
     @organization.customers.active.each do |customer|
@@ -57,9 +57,11 @@ class SoftwareSetting::MainController < OrganizationController
 
   private
 
-  def update_software(soft, is_used, auto_deliver=false)
+  def update_software(soft, is_used, auto_deliver=false, sage_private_api_uuid=nil)
     if soft == 'my_unisoft'
-      result = MyUnisoftLib::Setup.new({organization: @organization, columns: {is_used: is_used, auto_deliver: auto_deliver}}).execute 
+      result = MyUnisoftLib::Setup.new({organization: @organization, columns: {is_used: is_used, auto_deliver: auto_deliver}}).execute
+    elsif soft == 'sage_gec'
+      result = SageGecLib::Setup.new({organization: @organization, columns: {is_used: is_used, auto_deliver: auto_deliver, sage_private_api_uuid: sage_private_api_uuid}}).execute
     else
       result = Software::UpdateOrCreate.assign_or_new({owner: @organization, columns: {is_used: is_used, auto_deliver: auto_deliver}, software: soft})
     end
@@ -77,6 +79,7 @@ class SoftwareSetting::MainController < OrganizationController
       { :csv_descriptor_attributes => %i[id is_used auto_deliver] },
       { :exact_online_attributes => %i[id is_used auto_deliver] },
       { :my_unisoft_attributes => %i[id is_used auto_deliver] },
+      { :sage_gec_attributes => %i[id is_used auto_deliver sage_private_api_uuid] },
       { :ibiza_attributes => %i[id is_used auto_deliver] }
     )
   end

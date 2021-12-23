@@ -71,6 +71,12 @@
                         %span.float-start My Unisoft
                         - if @customer.uses?(:my_unisoft)
                           = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'float-end' })
+                  - if software_uses('sage_gec')
+                    %li.clearfix
+                      %a.head_customer_link.semibold.nav-link.dropdown-item#sage-gec-tab{ href: organization_customer_softwares_path(@organization, @customer, software_name: 'sage_gec') }
+                        %span.float-start Sage GEC
+                        - if @customer.uses?(:sage_gec)
+                          = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'float-end' })
                   - if @organization.try(:coala).try(:used?)  
                     %li.clearfix
                       %a.head_customer_link.semibold.nav-link.dropdown-item#coala-tab{ href: organization_customer_softwares_path(@organization, @customer, software_name: 'coala') }

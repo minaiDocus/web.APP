@@ -57,7 +57,8 @@ class Pack::Report < ApplicationRecord
   def is_delivered?
     self.preseizures.not_deleted.delivered('ibiza').first.present? ||
     self.preseizures.not_deleted.delivered('exact_online').first.present? ||
-    self.preseizures.not_deleted.delivered('my_unisoft').first.present?
+    self.preseizures.not_deleted.delivered('my_unisoft').first.present? ||
+    self.preseizures.not_deleted.delivered('sage_gec').first.present?
     # ( self.user.try(:uses?, :ibiza) && is_delivered_to?('ibiza') ) ||
     # ( self.user.try(:uses?, :exact_online) && is_delivered_to?('exact_online') )
   end
@@ -66,6 +67,7 @@ class Pack::Report < ApplicationRecord
     self.preseizures.not_deleted.not_delivered('ibiza').first.present? ||
     self.preseizures.not_deleted.not_delivered('exact_online').first.present? ||
     self.preseizures.not_deleted.not_delivered('my_unisoft').first.present?
+    self.preseizures.not_deleted.not_delivered('sage_gec').first.present?
     # ( self.user.try(:uses?, :ibiza) && !is_delivered_to?('ibiza') ) ||
     # ( self.user.try(:uses?, :exact_online) && !is_delivered_to?('exact_online') )
   end
@@ -91,11 +93,12 @@ class Pack::Report < ApplicationRecord
             message_ibiza         = preseizures.first.get_delivery_message_of('ibiza')
             message_exact_online  = preseizures.first.get_delivery_message_of('exact_online')
             message_my_unisoft    = preseizures.first.get_delivery_message_of('my_unisoft')
+            message_sage_gec      = preseizures.first.get_delivery_message_of('sage_gec')
 
             if message_ibiza.present? && message_exact_online.present? && message_my_unisoft.present?
-              full_message = "-iBiza : #{message_ibiza} <br> -ExactOnline : #{message_exact_online} <br> -MyUnisoft : #{message_my_unisoft}"
+              full_message = "-iBiza : #{message_ibiza} <br> -ExactOnline : #{message_exact_online} <br> -MyUnisoft : #{message_my_unisoft} <br> -Sage GEC : #{message_sage_gec}"
             else
-              full_message = message_ibiza.presence || message_exact_online.presence || message_my_unisoft.presence
+              full_message = message_ibiza.presence || message_exact_online.presence || message_my_unisoft.presence || message_sage_gec.presence
             end
 
             result << OpenStruct.new({id: report_id, pack_id: Pack::Report.where(id: report_id).pluck(:pack_id).first , date: max_date, document_count: preseizures_count, name: preseizures.first.try(:name), message: full_message})
@@ -132,6 +135,7 @@ class Pack::Report < ApplicationRecord
     temp_delivered_to = temp_delivered_to.gsub('ibiza', '') if self.user.uses?(:ibiza)
     temp_delivered_to = temp_delivered_to.gsub('exact_online', '') if self.user.uses?(:exact_online)
     temp_delivered_to = temp_delivered_to.gsub('my_unisoft', '') if self.user.uses?(:my_unisoft)
+    temp_delivered_to = temp_delivered_to.gsub('sage_gec', '') if self.user.uses?(:sage_gec)
     temp_delivered_to = temp_delivered_to.gsub(/^[,]+/, '')
     temp_delivered_to = temp_delivered_to.gsub(/[,]+$/, '')
     temp_delivered_to = temp_delivered_to.gsub(/(,)+/, ',')

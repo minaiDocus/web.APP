@@ -33,6 +33,12 @@
                       %td
                         = hidden_field_tag :part, 'my_unisoft'
                         = f.check_box :is_used, class: 'softwares_setting', style: "position:unset"
+                  -if software.to_s == 'sage_gec' && @organization.try(:sage_gec).try(:used?)
+                    %tr
+                      %td Ce dossier utilise Sage GEC ?
+                      %td
+                        = hidden_field_tag :part, 'sage_gec'
+                        = f.check_box :is_used, class: 'softwares_setting', style: "position:unset"
                   -if software.to_s == 'coala' && @organization.try(:coala).try(:used?)
                     %tr
                       %td Ce dossier utilise Coala ?

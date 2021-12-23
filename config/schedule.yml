@@ -121,6 +121,10 @@ PreAssignment::Builder::MyUnisoftWorker:
   queue: high
   cron: '*/10 * * * * *'
 
+PreAssignment::Builder::SageGecWorker:
+  queue: high
+  cron: '*/10 * * * * *'
+
 PreAssignment::Delivery::IbizaWorker:
   queue: high
   cron: '*/10 * * * * *'
@@ -130,6 +134,10 @@ PreAssignment::Delivery::ExactOnlineWorker:
   cron: '*/10 * * * * *'
 
 PreAssignment::Delivery::MyUnisoftWorker:
+  queue: high
+  cron: '*/10 * * * * *'
+
+PreAssignment::Delivery::SageGecWorker:
   queue: high
   cron: '*/10 * * * * *'
 

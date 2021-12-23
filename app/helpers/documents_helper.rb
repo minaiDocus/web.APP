@@ -228,6 +228,7 @@ module DocumentsHelper
                                                                                                     :exact_online,
                                                                                                     :my_unisoft,
                                                                                                     :coala,
+                                                                                                    :sage_gec,
                                                                                                     :quadratus,
                                                                                                     :cegid,
                                                                                                     :csv_descriptor,

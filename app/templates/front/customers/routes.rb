@@ -11,6 +11,8 @@ Rails.application.routes.draw do
           patch 'update_exact_online'
           get   'edit_my_unisoft'
           patch 'update_my_unisoft'
+          get   'edit_sage_gec'
+          patch 'update_sage_gec'
           patch 'close_account'
           patch 'reopen_account'
           get   'edit_setting_options'

@@ -117,6 +117,7 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :cegid
   accepts_nested_attributes_for :exact_online
   accepts_nested_attributes_for :my_unisoft
+  accepts_nested_attributes_for :sage_gec
   accepts_nested_attributes_for :addresses, allow_destroy: true
   accepts_nested_attributes_for :csv_descriptor
   accepts_nested_attributes_for :external_file_storage
@@ -146,11 +147,13 @@ class User < ApplicationRecord
 
       case software
         when 'ibiza'
-          skip_user = user.uses?(:exact_online) || user.uses?(:my_unisoft)
+          skip_user = user.uses?(:exact_online) || user.uses?(:my_unisoft) || user.uses?(:sage_gec)
         when 'exact_online'
-          skip_user = user.uses?(:ibiza) || user.uses?(:my_unisoft)
+          skip_user = user.uses?(:ibiza) || user.uses?(:my_unisoft) || user.uses?(:sage_gec)
         when 'my_unisoft'
-          skip_user = user.uses?(:ibiza) || user.uses?(:exact_online)
+          skip_user = user.uses?(:ibiza) || user.uses?(:exact_online) || user.uses?(:sage_gec)
+        when 'sage_gec'
+          skip_user = user.uses?(:ibiza) || user.uses?(:exact_online) || user.uses?(:my_unisoft)
         else
           skip_user = false
       end

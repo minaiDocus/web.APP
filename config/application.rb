@@ -28,6 +28,8 @@ module Idocus
     Dir.glob("#{Rails.root}/lib/ibiza_lib/*.{rb}").each { |file| require file }
     Dir.glob("#{Rails.root}/lib/my_unisoft_lib/*.{rb}").each { |file| require file }
     Dir.glob("#{Rails.root}/lib/my_unisoft_lib/api/*.{rb}").each { |file| require file }
+    Dir.glob("#{Rails.root}/lib/sage_gec_lib/*.{rb}").each { |file| require file }
+    Dir.glob("#{Rails.root}/lib/sage_gec_lib/api/*.{rb}").each { |file| require file }
     Dir.glob("#{Rails.root}/lib/exact_online_lib/api/*.{rb}").each { |file| require file }
     Dir.glob("#{Rails.root}/lib/exact_online_lib/*.{rb}").each { |file| require file }
     Dir.glob("#{Rails.root}/lib/mcf_lib/api/*.{rb}").each { |file| require file }

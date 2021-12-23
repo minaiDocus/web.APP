@@ -186,6 +186,51 @@
                 - modal_params = param_encode({ url: edit_my_unisoft_organization_customer_path(@organization, @customer), title: modal_title, after_show: 'bind_api_user_events', target: '#customer.edit.my_unisoft' , style: 'min-width: 1024px;'})
                 %button.btn.btn-light.w-25.semibold.as_idocus_modal.semibold{ idocus: modal_params  } Éditer
 
+  - if @customer.organization.try(:sage_gec).try(:used?) && params[:software_name] == 'sage_gec'
+    #my-unisoft{ class: ('active' if params[:tab] == 'sage_gec'), "role" => "tabpanel", "aria-labelledby" => "sage-gec-tab" }
+      .derivationLeft.box.no-margin
+        %h5.semibold Activation Sage GEC
+        = simple_form_for @customer, url: customer_form_url(@organization, @customer), html: { id: 'form_sage_gec', class: 'form form-horizontal label-auto' } do |c|
+          = hidden_field_tag :part, 'sage_gec'
+          = c.simple_fields_for :sage_gec do |f|
+            .form-group
+              .row
+                .col-md-11
+                  = label_tag 'user[sage_gec_attributes][is_used]', "Ce dossier utilise Sage GEC ?", class: 'control-label semibold'
+                .col-md-1.form-check.form-switch
+                  = f.input :is_used, as: :boolean, label: false, input_html: { class: 'form-check-input input_switch input_check_field check-software', id: 'user_sage_gec_attributes_is_used' }
+                  %label.semibold{class: 'form-check-label label_check_field', for: 'user_sage_gec_attributes_is_used'} Non
+          
+            - if @user.leader?
+              %hr
+              .form-group.no-margin
+                .w-100.text-end
+                  = f.submit t('actions.submit'), class: 'btn btn-primary w-25'
+      - if @customer.uses?(:sage_gec)
+        %hr
+        .derivationRight.box.no-margin.my_unisoft_configuration  
+          %h5.semibold Configuration Sage GEC          
+          - if @customer.sage_gec&.sage_private_api_uuid.present?
+            %table.table.table-striped.table-condensed
+              %tbody
+                %tr
+                  %th Etat
+                  %td{colspan: 2, width: '17%'}
+                    .badge.badge-success.fs-origin Connecté                
+                %tr
+                  %th Identifiant Dossier
+                  %td{colspan: 2}= @customer.sage_gec.sage_private_api_uuid
+          - else
+            %label.badge.bg-warning.bold.mt-3 Ce dossier n'est pas lié à celui de Sage GEC
+
+          %hr
+          .form-group.no-margin
+            .w-100.text-end
+              - if @organization.sage_gec.try(:configured?)
+                - modal_title = @customer.configured? ? "Édition des options Sage GEC du client : #{@customer}" : "Configuration de Sage GEC pour le dossier : #{@customer}"
+                - modal_params = param_encode({ url: edit_sage_gec_organization_customer_path(@organization, @customer), title: modal_title, after_show: 'bind_api_user_events', target: '#customer.edit.sage_gec' , style: 'min-width: 1024px;'})
+                %button.btn.btn-light.w-25.semibold.as_idocus_modal.semibold{ idocus: modal_params  } Éditer
+
   - if @organization.try(:coala).try(:used?) && params[:software_name] == 'coala'
     .box.no-margin#coala{ class: ('active' if params[:tab] == 'coala'), "role" => "tabpanel", "aria-labelledby" => "coala-tab" }
       .derivationLeft

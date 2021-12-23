@@ -11,5 +11,6 @@ module OwnedSoftwares
     has_one :cegid, as: :owner, dependent: :destroy, class_name: 'Software::Cegid'
     has_one :csv_descriptor, as: :owner, autosave: true, dependent: :destroy, class_name: 'Software::CsvDescriptor'
     has_one :my_unisoft, as: :owner, dependent: :destroy, class_name: 'Software::MyUnisoft'
+    has_one :sage_gec, as: :owner, dependent: :destroy, class_name: 'Software::SageGec'
   end
 end

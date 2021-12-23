@@ -60,7 +60,7 @@ class SgiApiServices::AutoPreAssignedJefacturePieces
           preseizure.update(cached_amount: preseizure.entries.map(&:amount).max)
 
           unless PreAssignment::DetectDuplicate.new(preseizure).execute
-            PreAssignment::CreateDelivery.new(preseizure, ['ibiza', 'exact_online', 'my_unisoft'], is_auto: true).execute
+            PreAssignment::CreateDelivery.new(preseizure, ['ibiza', 'exact_online', 'my_unisoft', 'sage_gec'], is_auto: true).execute
             PreseizureExport::GeneratePreAssignment.new(preseizure).execute
 
             Notifications::PreAssignments.new({pre_assignment: preseizure}).notify_new_pre_assignment_available

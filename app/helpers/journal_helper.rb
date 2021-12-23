@@ -40,6 +40,34 @@ module JournalHelper
     end
   end
 
+  def sage_gec_journals
+    if @customer.sage_gec.try(:used?)
+      Rails.cache.fetch [:sage_gec, :user, @customer.sage_gec.id, :journals], expires_in: 1.minutes do
+        client   = SageGecLib::Api::Client.new
+        periods  = client.get_periods_list(@customer.organization.sage_gec.sage_private_api_uuid, @customer.sage_gec.sage_private_api_uuid)
+
+        period = periods[:body].select { |p| Date.parse(p["startDate"]) <= Date.today && Date.parse(p["endDate"]) >= Date.today }.first
+
+        journals = client.get_ledgers_list(@customer.organization.sage_gec.sage_private_api_uuid, @customer.sage_gec.sage_private_api_uuid, period["$uuid"])
+
+        if journals[:status] == "success"
+          journals[:body].map do |j|
+            {
+              closed:      0,
+              name:        j['shortName'],
+              description: j['name'],
+              type:        j['originalJournalType']
+            }
+          end
+        else
+          []
+        end
+      end
+    else
+      []
+    end
+  end
+
   def exact_online_journals
     if @customer.exact_online.try(:fully_configured?) && @customer.uses?(:exact_online)
       Rails.cache.fetch [:exact_online, :user, @customer.exact_online.id, :journals], expires_in: 5.minutes do
@@ -100,6 +128,8 @@ module JournalHelper
                 exact_online_journals
               elsif @customer.my_unisoft.try(:used?)
                 my_unisoft_journals
+              elsif @customer.sage_gec.try(:used?)
+                sage_gec_journals
               else
                 ibiza_journals
               end
@@ -147,6 +177,8 @@ module JournalHelper
       'Journaux Exact Online :'
     elsif @customer.uses?(:my_unisoft)
       'Journaux My Unisoft :'
+    elsif @customer.uses?(:sage_gec)
+      'Journaux Sage GEC :'
     else
       'Journaux Ibiza :'
     end

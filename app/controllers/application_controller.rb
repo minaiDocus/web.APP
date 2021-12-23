@@ -67,7 +67,7 @@ class ApplicationController < ActionController::Base
       end
 
       if params[:user_code].present? || session[:user_code].present?
-        user = User.includes(:options, :ibiza, :exact_online, :my_unisoft, :coala, :cegid, :fec_agiris, :quadratus, :csv_descriptor, :organization).get_by_code(params[:user_code].presence || session[:user_code].presence)
+        user = User.includes(:options, :ibiza, :exact_online, :my_unisoft, :coala, :sage_gec, :cegid, :fec_agiris, :quadratus, :csv_descriptor, :organization).get_by_code(params[:user_code].presence || session[:user_code].presence)
         user ||= current_user
         prev_user_code = session[:user_code]
         session[:user_code] = if user == current_user
@@ -101,11 +101,11 @@ class ApplicationController < ActionController::Base
 
     @accounts = if @user
                   if @user.collaborator?
-                    @user.customers.order(code: :asc)
+                    @user.customers.includes(:options).order(code: :asc)
                   elsif @user.is_guest
-                    @user.accounts.order(code: :asc)
+                    @user.accounts.includes(:options).order(code: :asc)
                   else
-                    User.where(id: ([@user.id] + @user.accounts.map(&:id))).order(code: :asc)
+                    User.includes(:options).where(id: ([@user.id] + @user.accounts.map(&:id))).order(code: :asc)
                   end
                 else
                   []
@@ -202,7 +202,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    @current_user ||= super && User.includes(:options, :ibiza, :exact_online, :my_unisoft, :coala, :cegid, :fec_agiris, :quadratus, :csv_descriptor, :organization).find(@current_user.id)
+    @current_user ||= super && User.includes(:options, :ibiza, :exact_online, :my_unisoft, :coala, :sage_gec, :cegid, :fec_agiris, :quadratus, :csv_descriptor, :organization).find(@current_user.id)
   end
 
   protected

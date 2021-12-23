@@ -1,0 +1,22 @@
+class PreAssignment::Builder::SageGecWorker
+  include Sidekiq::Worker
+  sidekiq_options unique: :until_and_while_executing
+
+  def perform
+    UniqueJobs.for 'PreAssignmentBuilderSageGecWorker' do
+      PreAssignmentDelivery.my_unisoft.pending.order(id: :asc).each do |delivery|
+        PreAssignment::Builder::MyUnisoftWorker::Launcher.delay.process(delivery.id)
+        sleep(5)
+       end
+    end
+  end
+
+  class Launcher
+    def self.process(delivery_id)
+      UniqueJobs.for "PreAssignmentBuilderSageGecWorker-#{delivery_id}" do
+        delivery = PreAssignmentDelivery.find(delivery_id)
+        PreAssignment::Builder::SageGec.new(delivery).run if delivery.pending?
+      end
+    end
+  end
+end

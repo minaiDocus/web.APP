@@ -39,10 +39,22 @@ class PreAssignment::CreateDelivery
     ) && !@preseizures.select(&:is_locked).first
   end
 
+  def valid_sage_gec?
+    @preseizures.any? && @report.try(:organization).try(:sage_gec).try(:used?) &&
+    (
+      !@is_auto ||
+      (@report.user.sage_gec.try(:auto_deliver?) ||
+        (@report.user.sage_gec.try(:auto_deliver) == -1 && @report.user.organization.sage_gec.try(:auto_deliver?)
+        )
+      )
+    ) && !@preseizures.select(&:is_locked).first
+  end
+
   def execute
     ibiza_deliveries        = @deliver_to.include?('ibiza') ? deliver_to_ibiza : []
     exact_online_deliveries = @deliver_to.include?('exact_online') ? deliver_to_exact_online : []
     my_unisoft_deliveries   = @deliver_to.include?('my_unisoft') ? deliver_to_my_unisoft : []
+    sage_gec_deliveries   = @deliver_to.include?('sage_gec') ? deliver_to_sage_gec : []
 
     @deliveries = ibiza_deliveries + exact_online_deliveries + my_unisoft_deliveries
     @report.update_attribute(:is_locked, (@report.preseizures.reload.not_deleted.not_locked.count == 0)) if @preseizures.any?
@@ -172,6 +184,48 @@ class PreAssignment::CreateDelivery
           preseizures.first.save if preseizures.size == 1
 
           deliveries << delivery
+        end
+      end
+
+      deliveries
+    else
+      []
+    end
+  end
+
+  def deliver_to_sage_gec
+    if valid_sage_gec?      
+      deliveries = []
+
+      @to_deliver_preseizures = @preseizures
+
+      return [] if @to_deliver_preseizures.empty?
+
+      ids                   = @to_deliver_preseizures.map(&:id)
+      already_delivered_ids = @preseizures.map(&:id) - ids
+
+      Pack::Report::Preseizure.where(id: ids).update_all(is_locked: true)
+      Pack::Report::Preseizure.where(id: already_delivered_ids).each { |p| p.delivered_to('sage_gec') } if already_delivered_ids.any?
+
+      group_preseizures.each do |(date, channel), preseizures|
+        preseizures.each do |preseizure|
+          delivery              = PreAssignmentDelivery.new
+          delivery.report       = @report
+          delivery.deliver_to   = 'sage_gec'
+          delivery.user         = @report.user
+          delivery.organization = @report.organization
+          delivery.pack_name    = @report.name
+          delivery.software_id  = @report.user.sage_gec.sage_private_api_uuid
+          delivery.is_auto      = @is_auto
+          delivery.grouped_date = date
+          delivery.total_item   = 1
+          delivery.preseizures  = [preseizure]
+
+          if delivery.save
+            preseizure.save
+
+            deliveries << delivery
+          end
         end
       end
 

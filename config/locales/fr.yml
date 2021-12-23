@@ -1291,6 +1291,11 @@ fr:
         attributes: 
           is_used: Utilise My Unisoft ?
           auto_deliver: Livrer automatiquement les écritures ?
+      software_sage_gec:
+        attributes: 
+          is_used: Utilise Sage GEC ?
+          auto_deliver: Livrer automatiquement les écritures ?
+          sage_private_api_uuid: Clé API privée Sage GEC
       software_coala:
         attributes:
           is_used: Activer l'option d'export des écritures comptables et pièces pour Coala (.zip)?

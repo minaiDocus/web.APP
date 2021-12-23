@@ -129,11 +129,11 @@
                             %label.ms-2.semibold{class: 'form-check-label', for: 'check-cegid'} Cegid
                     .row
                       .col-md-6
-                        = f.simple_fields_for :sage do |software|
+                        = f.simple_fields_for :sage_gec do |software|
                           = software.hidden_field :id
                           .form-check.idocus-custom-form-check
-                            = software.input :is_used, as: :boolean, label: false, input_html: { disabled: !@organization.try(:sage).try(:used?), class: 'form-check-input pointer float-none softwares_setting check-sage m-1', id: 'check-sage' }
-                            %label.ms-2.semibold{class: 'form-check-label', for: 'check-sage'} Sage 
+                            = software.input :is_used, as: :boolean, label: false, input_html: { disabled: !@organization.try(:sage_gec).try(:used?), class: 'form-check-input pointer float-none softwares_setting check-sage-gec m-1', id: 'check-sage-gec' }
+                            %label.ms-2.semibold{class: 'form-check-label', for: 'check-sage-gec'} Sage GEC
 
                 - if !@organization.specific_mission && params[:action].in?(%w(show edit update))
                   %hr

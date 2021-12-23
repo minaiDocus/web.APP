@@ -49,7 +49,12 @@ class Organizations::MainController < OrganizationController
         is_used         = organization_params['my_unisoft_attributes']['is_used'] == "1"
         auto_deliver    = organization_params['my_unisoft_attributes']['auto_deliver']
 
-        result = MyUnisoftLib::Setup.new({organization: @organization, columns: {is_used: is_used, auto_deliver: auto_deliver}}).execute 
+        result = MyUnisoftLib::Setup.new({organization: @organization, columns: {is_used: is_used, auto_deliver: auto_deliver}}).execute
+      when 'sage_gec'
+        is_used         = organization_params['sage_gec_attributes']['is_used'] == "1"
+        auto_deliver    = organization_params['sage_gec_attributes']['auto_deliver']
+
+        result = SageGecLib::Setup.new({organization: @organization, columns: {is_used: is_used, auto_deliver: auto_deliver}}).execute
       else
         is_used         = organization_params["#{params[:part]}_attributes"]['is_used'] == "1"
         auto_deliver    = organization_params["#{params[:part]}_attributes"]['auto_deliver']
@@ -139,7 +144,8 @@ class Organizations::MainController < OrganizationController
         { :fec_agiris_attributes => %i[id is_used auto_deliver] },
         { :csv_descriptor_attributes => %i[id is_used auto_deliver] },
         { :exact_online_attributes => %i[id is_used auto_deliver] },
-        { :my_unisoft_attributes => %i[id is_used auto_deliver] }
+        { :my_unisoft_attributes => %i[id is_used auto_deliver] },
+        { :sage_gec_attributes => %i[id is_used auto_deliver] }
       )
     else
       params.require(:organization).permit(
@@ -159,7 +165,8 @@ class Organizations::MainController < OrganizationController
         { :fec_agiris_attributes => %i[id is_used auto_deliver] },
         { :csv_descriptor_attributes => %i[id is_used auto_deliver] },
         { :exact_online_attributes => %i[id is_used auto_deliver] },
-        { :my_unisoft_attributes => %i[id is_used auto_deliver] }
+        { :my_unisoft_attributes => %i[id is_used auto_deliver] },
+        { :sage_gec_attributes => %i[id is_used auto_deliver] }
       )
     end
   end

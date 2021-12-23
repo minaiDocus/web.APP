@@ -11,7 +11,7 @@ class Documents::PiecesController < Documents::AbaseController
 
   # GET /documents
   def index
-    @packs = Pack.includes(pieces: [:expense], owner: [:organization, :ibiza, :exact_online, :my_unisoft]).search(@options[:text], @options.reject{ |k,v| k == :ids}).distinct.order(updated_at: :desc).page(@options[:page]).per(@options[:per_page])
+    @packs = Pack.includes(pieces: [:expense], owner: [:organization, :ibiza, :exact_online, :my_unisoft, :sage_gec]).search(@options[:text], @options.reject{ |k,v| k == :ids}).distinct.order(updated_at: :desc).page(@options[:page]).per(@options[:per_page])
     @packs_with_failed_delivery_ids = packs_with_failed_delivery
 
     @period_service = Billing::Period.new user: @user

@@ -1,8 +1,8 @@
 module Interfaces::Software::Configuration
-  SOFTWARES = ['ibiza', 'exact_online', 'my_unisoft', 'coala', 'quadratus', 'cegid', 'fec_agiris', 'fec_acd', 'csv_descriptor']
-  SOFTWARES_HUMAN_NAME = { ibiza: 'iBiza', exact_online: 'Exact Online', my_unisoft: 'My Unisoft', coala: 'Coala', quadratus: 'Quadratus', cegid: 'Cegid', fec_agiris: 'Agiris', fec_acd: 'FEC ACD', csv_descriptor: 'CSV' }
-  TABLE_NAME_WITH_SOFTWARES_USING_API = ['software_ibizas', 'software_exact_online', 'software_my_unisofts']
-  SOFTWARES_OBJECTS = [::Software::Ibiza, ::Software::ExactOnline, ::Software::Cegid, ::Software::Coala, ::Software::FecAgiris, ::Software::FecAcd, ::Software::Quadratus, ::Software::CsvDescriptor, ::Software::MyUnisoft]
+  SOFTWARES = ['ibiza', 'exact_online', 'my_unisoft', 'coala', 'sage_gec', 'quadratus', 'cegid', 'fec_agiris', 'fec_acd', 'csv_descriptor']
+  SOFTWARES_HUMAN_NAME = { ibiza: 'iBiza', exact_online: 'Exact Online', my_unisoft: 'My Unisoft', coala: 'Coala', sage_gec: 'Sage GEC - Privé', quadratus: 'Quadratus', cegid: 'Cegid', fec_agiris: 'Agiris', fec_acd: 'FEC ACD', csv_descriptor: 'CSV' }
+  TABLE_NAME_WITH_SOFTWARES_USING_API = ['software_ibizas', 'software_exact_online', 'software_my_unisofts', 'software_sage_gec']
+  SOFTWARES_OBJECTS = [::Software::Ibiza, ::Software::ExactOnline, ::Software::Cegid, ::Software::Coala, ::Software::SageGec, ::Software::FecAgiris, ::Software::FecAcd, ::Software::Quadratus, ::Software::CsvDescriptor, ::Software::MyUnisoft]
 
   def self.softwares
     {
@@ -10,6 +10,7 @@ module Interfaces::Software::Configuration
       exact_online:   Software::ExactOnline,
       cegid:          Software::Cegid,
       coala:          Software::Coala,
+      sage_gec:       Software::SageGec,
       fec_agiris:     Software::FecAgiris,
       fec_acd:        Software::FecAcd,
       quadratus:      Software::Quadratus,
@@ -24,6 +25,7 @@ module Interfaces::Software::Configuration
       exact_online:   'exact_online',
       my_unisoft:     'my_unisoft',
       coala:          'coala',
+      sage_gec:       'sage_gec',
       quadratus:      'quadratus',
       cegid:          'cegid',
       fec_agiris:     'fec_agiris',
@@ -38,6 +40,7 @@ module Interfaces::Software::Configuration
       exact_online:   "Exact Online",
       my_unisoft:     "My Unisoft",
       coala:          "Coala",
+      sage_gec:       "Sage GEC - Privé",
       quadratus:      "Quadratus",
       cegid:          "Cegid",
       fec_agiris:     "Fec Agiris",
@@ -52,6 +55,7 @@ module Interfaces::Software::Configuration
       exact_online:   'software_exact_online',
       my_unisoft:     'software_my_unisofts',
       coala:          'software_coalas',
+      sage_gec:       'software_sage_gec',
       quadratus:      'software_quadratus',
       cegid:          'software_cegids',
       fec_agiris:     'software_fec_agiris',
@@ -66,6 +70,7 @@ module Interfaces::Software::Configuration
       'Software::ExactOnline'   => 'exact_online',
       'Software::Cegid'         => 'cegid',
       'Software::Coala'         => 'coala',
+      'Software::SageGec'       => 'sage_gec',
       'Software::FecAgiris'     => 'fec_agiris',
       'Software::FecAcd'        => 'fec_acd',
       'Software::Quadratus'     => 'quadratus',

@@ -11,6 +11,8 @@ class Admin::PreAssignmentDeliveries::MainController < BackController
       exact_online_deliveries
     when 'my_unisoft'
       my_unisoft_deliveries
+    when 'sage_gec'
+      sage_gec_deliveries
     else
       ibiza_deliveries
     end
@@ -40,6 +42,11 @@ class Admin::PreAssignmentDeliveries::MainController < BackController
   def my_unisoft_deliveries
     @pre_assignment_deliveries_software = 'My Unisoft'
     @pre_assignment_deliveries = PreAssignmentDelivery.search(search_terms(params[:pre_assignment_delivery_contains])).my_unisoft.order(sort_column => sort_direction)
+  end
+
+  def sage_gec_deliveries
+    @pre_assignment_deliveries_software = 'Sage GEC'
+    @pre_assignment_deliveries = PreAssignmentDelivery.search(search_terms(params[:pre_assignment_delivery_contains])).sage_gec.order(sort_column => sort_direction)
   end
 
   def sort_column

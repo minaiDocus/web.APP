@@ -35,8 +35,9 @@
                     - message_ibiza         = preseizure.get_delivery_message_of('ibiza')
                     - message_exact_online  = preseizure.get_delivery_message_of('exact_online')
                     - message_my_unisoft    = preseizure.get_delivery_message_of('my_unisoft')
+                    - message_sage_gec   = preseizure.get_delivery_message_of('sage_gec')
 
-                    - full_message = message_ibiza.presence || message_exact_online.presence || message_my_unisoft.presence
+                    - full_message = message_ibiza.presence || message_exact_online.presence || message_my_unisoft.presence || message_sage_gec.presence
                     = sanitize(full_message, :tags => %w(br))
                   - else
                     \-

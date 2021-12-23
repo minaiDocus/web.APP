@@ -16,7 +16,7 @@
             .form-check.form-switch.idocus-custom-form-check
               = sf.input :is_used, as: :boolean, label: false, label_html: { class: 'form-check-label' }, input_html: { checked: @organization.send(software.to_sym).try(:used?), id: nil, class: 'form-check-input input_switch input_check_field'}
               %label.semibold{class: 'form-check-label label_check_field', for: 'is_used_software'} Non
-      .form-group{ class: (['exact_online', 'my_unisoft'].include? software)? '' : 'hide' }
+      .form-group{ class: (['exact_online', 'my_unisoft', 'sage_gec'].include? software)? '' : 'hide' }
         .row
           .col-md-11
             = sf.label :auto_deliver, t("activerecord.models.software_#{software}.attributes.auto_deliver"), class: 'semibold'
@@ -26,6 +26,13 @@
             .form-check.form-switch.idocus-custom-form-check
               = sf.input :auto_deliver, as: :boolean, label: false, label_html: { class: 'form-check-label'}, input_html: { checked: @organization.send(software.to_sym).try(:auto_deliver?), id: nil, class: 'form-check-input input_switch input_check_field check-software'}
               %label.semibold{class: 'form-check-label label_check_field', for: 'auto_deliver_software'} Non
+      - if software == 'sage_gec'
+        .form-group{ class: (['sage_gec'].include? software)? '' : 'hide' }
+          .to_change_box
+            .select-container.no-padding.w-100
+              = sf.input :sage_private_api_uuid, input_html: { value: @organization.sage_gec&.sage_private_api_uuid }, label_html: { class: 'semibold' }, hint: "Pour connecter Sage GEC à iDocus, veuillez indiquer votre identifiant API."
+
+
     %hr
     .row.box.no-margin.derivationLeft
       .col-md-12        
@@ -35,7 +42,7 @@
           .label-section
             = label_tag 'software_account_list', "Liste des clients assignés à l'option:", class: 'select control-label'
           .control-section
-            -list_options = @organization.customers.active.order(:code).filter_by_software(software).compact
+            -list_options = @organization.customers.includes(software.to_sym).active.order(:code).filter_by_software(software).compact
             -list_selected = list_options.select{ |c| c.uses?(software.to_sym) }
             = select_tag 'software_account_list', options_for_select(list_options, list_selected), include_blank: false, multiple: true, class: 'searchable-option-list', id: nil
 

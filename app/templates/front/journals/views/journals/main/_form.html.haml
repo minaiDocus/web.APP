@@ -48,11 +48,13 @@
                     %select.select.disabled{ disabled: 'disabled', class: 'form-control select form-select form-select-sm optional' }
                     %p
                       = render 'shared/ibiza_not_configured_warning'
-            - elsif @customer && (@customer.uses?(:exact_online) || @customer&.my_unisoft.try(:used?))
+            - elsif @customer && (@customer.uses?(:exact_online) || @customer&.my_unisoft.try(:used?) || @customer&.sage_gec.try(:used?))
               - if @customer.exact_online.try(:fully_configured?)
                 - text_journal = "Journaux Exact Online :"
               - elsif @customer&.my_unisoft.try(:used?)
                 - text_journal = "Journaux My Unisoft :"
+              - elsif @customer&.sage_gec.try(:used?)
+                - text_journal = "Journaux Sage GEC :"
 
               .block_input.clearfix
                 .row

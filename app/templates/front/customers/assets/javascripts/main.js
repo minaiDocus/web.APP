@@ -21,6 +21,7 @@ class Customer{
     this.show_ibiza_customer();
     this.show_exact_online_customer();
     this.show_my_unisoft_customer();
+    this.show_sage_gec_customer();
     this.check_commitment_pending();
 
 
@@ -388,6 +389,19 @@ class Customer{
         }
         else{
           $('button[type=button].my_unisoft_validation').attr('disabled', true);
+        }
+      });
+    }
+  }
+
+  show_sage_gec_customer(){
+    if ($('#sage-gec-form').length > 0 ) {
+      $('.key-sage-gec').change(function() {        
+        if ($(this).val() != ''){
+          $('button[type=button].sage_gec_validation').removeAttr('disabled');
+        }
+        else{
+          $('button[type=button].sage_gec_validation').attr('disabled', true);
         }
       });
     }

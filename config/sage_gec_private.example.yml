@@ -1,0 +1,7 @@
+development:
+  base_url: 'https://cloudconnector.linkup-sage.com'
+  auth_base_url: 'https://id.sage.com'
+  audience: 'SGEP/CloudConnectorApiProd'
+  client_id: 'xxx'
+  client_secret: 'xxx'
+  application_id: 'xxx'

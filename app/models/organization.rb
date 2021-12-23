@@ -64,6 +64,7 @@ class Organization < ApplicationRecord
   accepts_nested_attributes_for :exact_online
   accepts_nested_attributes_for :my_unisoft
   accepts_nested_attributes_for :csv_descriptor
+  accepts_nested_attributes_for :sage_gec
 
   scope :admin,       -> { where(is_for_admin: true) }
   scope :active,      -> { where(is_active: true) }
@@ -181,7 +182,7 @@ class Organization < ApplicationRecord
   end
 
   def uses_api_softwares?
-    exact_online.try(:used?) || ibiza.try(:configured?) || my_unisoft.try(:used?)
+    exact_online.try(:used?) || ibiza.try(:configured?) || my_unisoft.try(:used?) || sage_gec.try(:used?)
   end
 
   def uses_non_api_softwares?
