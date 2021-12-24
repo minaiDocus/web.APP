@@ -19,7 +19,10 @@ class CustomerController < OrganizationController
     if action_name.in?(%w[account_close_confirm close_account]) && params[:close_now] == '1' && !@user.is_admin
       authorized = false
     end
-    if action_name.in?(%w[info new create destroy]) && !(@organization.is_active || @user.leader? || @user.groups.any?)
+    if action_name.in?(%w[info new create destroy]) && !@organization.is_active
+      authorized = false
+    end
+    if action_name.in?(%w[info new create destroy]) && !(@user.leader? || @user.groups.any?)
       authorized = false
     end
     if action_name.in?(%w[edit_setting_options update_setting_options]) && !@customer.authorized_upload?
