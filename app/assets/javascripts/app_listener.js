@@ -27,6 +27,7 @@ class AppListener{
   }
 }
 
+var LISTENERS_NAME = []
 var LISTENERS = {}
 
 AppListenTo = (event_name, callback={}) => {
@@ -39,7 +40,15 @@ AppListenTo = (event_name, callback={}) => {
     }
   }
 
-  document.addEventListener(event_name, listener_fnc, false);
+  let found = LISTENERS_NAME.find( event => { return event == event_name });
+
+  if(!found){
+    LISTENERS_NAME.push(event_name);
+    document.addEventListener(event_name, listener_fnc, false);
+  }
+  else{
+    console.log('Already assigned => ' + event_name)
+  }
 }
 
 AppEmit = (event_name, params=null) => {
