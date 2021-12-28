@@ -1,10 +1,10 @@
 %h4.bold= t('reporting.top_delivery_waiting_account')
 %table.table.table-striped
   %thead.w-100
-    %th.text-left= t('reporting.pack_name')
-    %th.text-right= t('reporting.share_anomaly_account')
-    %th.text-right= t('reporting.share_waiting_account')
-    %th.text-right= t('reporting.share_default_account')
+    %th= t('reporting.pack_name')
+    %th= t('reporting.share_anomaly_account')
+    %th= t('reporting.share_waiting_account')
+    %th= t('reporting.share_default_account')
   %tbody
     - @reports.each do |report|
       - result = accounts_repartition_stat(report)
@@ -13,8 +13,14 @@
       - waiting_accounts_size = result[:waiting_accounts_size]
       - default_accounts_size = result[:default_accounts_size]
 
+      - if report.try(:pack_id).to_i == 0
+        - url = operations_details_path({ id: report.id.presence || 0, _ext: 1, k: Base64.encode64({ reinit: true }.to_json) })
+      - else
+        - url = documents_details_path({ id: report.try(:pack_id).presence || 0, _ext: 1, k: Base64.encode64({ reinit: true }.to_json) }) 
+
       %tr
-        %td.text-left= report.name
-        %td.text-right= ((all_accounts_size > 0)? (anomaly_accounts_size * 100) / all_accounts_size : 0).to_s + '%'
-        %td.text-right= ((all_accounts_size > 0)? (waiting_accounts_size * 100) / all_accounts_size : 0).to_s + '%'
-        %td.text-right= ((all_accounts_size > 0)? (default_accounts_size * 100) / all_accounts_size : 0).to_s + '%'
+        %td
+          = link_to report.name.presence || "", url, class: 'no-style bold black-label underlined-pointer', target: '_blank'
+        %td= ((all_accounts_size > 0)? (anomaly_accounts_size * 100) / all_accounts_size : 0).to_s + '%'
+        %td= ((all_accounts_size > 0)? (waiting_accounts_size * 100) / all_accounts_size : 0).to_s + '%'
+        %td= ((all_accounts_size > 0)? (default_accounts_size * 100) / all_accounts_size : 0).to_s + '%'

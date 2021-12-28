@@ -8,8 +8,8 @@
   %tbody
     - @retrievers.each do |retriever|
       %tr
-        %td.text-start.w-25= retriever.user.info
+        %td.text-start.w-25
+          = link_to retriever.user.info, retrievers_path({ _ext: 1, k: Base64.encode64({ account_id: retriever.user_id, state: 'error' }.to_json) }), class: 'no-style bold black-label underlined-pointer', target: '_blank'
         %td.text-center.w-25= retriever.updated_at.strftime("%d/%m/%Y")
         %td.text-center.w-25= retriever.service_name
-        %td.text-end.w-25
-          = retriever.error_message
+        %td.text-end.w-25= retriever.error_message

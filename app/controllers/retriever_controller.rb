@@ -14,7 +14,11 @@ class RetrieverController < FrontController
   end
 
   def load_account
-    if accounts.count == 1
+    if params[:_ext]
+      s_params = JSON.parse(Base64.decode64(params[:k]))
+      session[:retrievers_account_id] = s_params['account_id']
+      @account = accounts.where(id: s_params['account_id']).first
+    elsif accounts.count == 1
       @account = accounts.first
       session[:retrievers_account_id] = @account.id
     else
