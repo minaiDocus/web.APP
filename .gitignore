@@ -37,6 +37,7 @@ config/pdftk.yml
 config/jefacture.yml
 config/secrets.yml
 config/slimpay.yml
+config/sage_gec_private.yml
 config/slimpay_checkout.yml
 config/smtp.yml
 config/storage.yml
