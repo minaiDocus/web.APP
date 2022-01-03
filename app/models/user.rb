@@ -98,7 +98,7 @@ class User < ApplicationRecord
 
   scope :active,                      -> { where(inactive_at: nil) }
   scope :closed,                      -> { where.not(inactive_at: [nil]) }
-  scope :active_at,                   -> (time) { where('users.inactive_at IS NULL OR users.inactive_at > ?', time.to_date.end_of_month.to_s + ' 23:59:59').where('users.created_at <= ?', time.to_date.end_of_month.to_s + ' 23:59:59') }
+  scope :active_at,                   -> (time) { where('users.inactive_at IS NULL OR DATE_FORMAT(users.inactive_at, "%Y%m%d") >= ?', time.to_date.end_of_month.strftime('%Y%m%d')).where('DATE_FORMAT(users.created_at, "%Y%m%d") <= ?', time.to_date.end_of_month.strftime('%Y%m%d')) }
   scope :operators,                   -> { where(is_operator: true) }
   scope :customers,                   -> { where(is_prescriber: false, is_operator: [false, nil], is_guest: false) }
   scope :prescribers,                 -> { where(is_prescriber: true) }

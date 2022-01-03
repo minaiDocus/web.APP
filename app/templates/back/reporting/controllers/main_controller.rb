@@ -21,19 +21,19 @@ class Admin::Reporting::MainController < BackController
             filename = "reporting_simplifié_iDocus_#{@year}.xls"
             send_data Report::GlobalToXls.new(@year).execute, type: 'application/vnd.ms-excel', filename: filename
           else
+            end_date = params[:month].present? ? date.end_of_month : date.end_of_year
+
             if params[:organization_id].present? && (organization = Organization.find(params[:organization_id]))
               organization_ids = [organization.id]
-              customer_ids = organization.customers.pluck(:id)
+              customer_ids = organization.customers.active_at(end_date).pluck(:id)
               filename = "reporting_#{organization.name.downcase.underscore}_#{@year}.xls"
               with_organization_info = false
             else
               organization_ids = @organizations.pluck(:id)
-              customer_ids = @organizations.map { |o| o.customers.pluck(:id) }.flatten
+              customer_ids = @organizations.map { |o| o.customers.active_at(end_date).pluck(:id) }.flatten
               filename = params[:month].present? ? "reporting_iDocus_#{'%02d' % params[:month].to_i}_#{@year}.xls" : "reporting_iDocus_#{@year}.xls"
               with_organization_info = true
             end
-
-            end_date = params[:month].present? ? date.end_of_month : date.end_of_year
 
             periods  = Period.includes(:billings).where('user_id IN (?) OR organization_id IN (?)', customer_ids, organization_ids)
                             .where('start_date >= ? AND end_date <= ?', date, end_date)

@@ -64,6 +64,7 @@ class Billing::CreateInvoicePdf
       options[:auto_upload] = (_options[:auto_upload] === false)? false : true
       options[:test]        = (_options[:test] === true)? true : false
       options[:test_dir]    = _options[:test_dir].presence
+      options[:fetch_periods] = (_options[:fetch_periods] === false)? false : true
 
       begin
         time = _time.to_date.beginning_of_month + 15.days
@@ -102,7 +103,7 @@ class Billing::CreateInvoicePdf
 
       # NOTE update all period before generating invoices (IF NOT TEST)
       c_time = Time.now.to_date.beginning_of_month + 15.days
-      if !options[:test] || (options[:test] && c_time == time)
+      if options[:fetch_periods] && (!options[:test] || (options[:test] && c_time == time))
         p "=================== Fetching periods and datas ==============="
 
         customers_periods.each do |period|
@@ -129,17 +130,19 @@ class Billing::CreateInvoicePdf
       if not options[:test]
         #WORKAROUND: deactivate invoice mailer and notification if needed
 
-        #organization.admins.each do |admin|
-        #  Notifications::Notifier.new.create_notification({
-        #    url: Rails.application.routes.url_helpers.organization_invoices_url(ActionMailer::Base.default_url_options),
-        #    user: admin,
-        #    notice_type: 'invoice',
-        #    title: "Nouvelle facture disponible",
-        #    message: "Votre facture pour le mois de #{I18n.l(invoice.period.start_date, format: '%B')} est maintenant disponible."
-        #  }, false)
-        #end
+        if options[:notify]
+          organization.admins.each do |admin|
+           Notifications::Notifier.new.create_notification({
+             url: Rails.application.routes.url_helpers.organization_invoices_url({organization_id: organization.id}.merge(ActionMailer::Base.default_url_options)),
+             user: admin,
+             notice_type: 'invoice',
+             title: "Nouvelle facture disponible",
+             message: "Votre facture pour le mois de #{I18n.l(invoice.period.start_date, format: '%B')} est maintenant disponible."
+           }, false)
+          end
 
-        #InvoiceMailer.delay(queue: :high).notify(invoice) if options[:notify]
+          InvoiceMailer.delay(queue: :high).notify(invoice)
+        end
       end
     end
 
@@ -232,7 +235,7 @@ class Billing::CreateInvoicePdf
       @invoice.cloud_content_object.attach(File.open(invoice_path), "#{@invoice.number}.pdf") if @invoice.save
     end
 
-    #auto_upload_last_invoice if @auto_upload && @invoice.present? && @invoice.persisted? && !@is_test #WORKAROUND : deactivate auto upload invoices if needed
+    auto_upload_last_invoice if @auto_upload && @invoice.present? && @invoice.persisted? && !@is_test #WORKAROUND : deactivate auto upload invoices if needed
   end
 
   def initialize_data_utilities
