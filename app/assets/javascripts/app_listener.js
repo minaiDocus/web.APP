@@ -27,10 +27,12 @@ class AppListener{
   }
 }
 
-var LISTENERS_NAME = []
+var LISTENERS_KEYS = []
 var LISTENERS = {}
 
 AppListenTo = (event_name, callback={}) => {
+  let listener_key = `${event_name}_${btoa(callback)}`
+
   const listener_fnc = (e)=>{
     try{
       LISTENERS[`${event_name}.object`].run(e, callback);
@@ -40,14 +42,19 @@ AppListenTo = (event_name, callback={}) => {
     }
   }
 
-  let found = LISTENERS_NAME.find( event => { return event == event_name });
+  let authorized_multi = []
+  // let authorized_multi = ['window.application_auto_rebind']
+
+  let found = LISTENERS_KEYS.find( key => { return key == listener_key });
 
   if(!found){
-    LISTENERS_NAME.push(event_name);
+    if(!authorized_multi.find(ky => { return ky == event_name })){
+      LISTENERS_KEYS.push(listener_key);
+    }
     document.addEventListener(event_name, listener_fnc, false);
   }
   else{
-    console.log('Already assigned => ' + event_name)
+    console.log('Already assigned => ' + listener_key)
   }
 }
 
