@@ -19,12 +19,12 @@
                 %span.me-2= glyphicon('plus', { size: '15', color: '#FFFF'})
                 %span Ajouter
           - elsif @is_bridge
-            .col-md-12.text-center.derivationRight
+            .col-md-6.text-center.derivationRight
               %button.btn.btn-primary.add-bridge-retriever.semibold.w-100
                 %span.me-2= glyphicon('plus', { size: '15', color: '#FFFF'})
                 %span Ajouter un automate bancaire
-          - elsif @is_specific_mission
-            .col-md-12.text-center.derivationRight
+          - if @is_specific_mission
+            .col-md-6.text-center.derivationRight.mt-1
               %button.btn.btn-primary.add-internal-retriever.semibold.w-100
                 %span.me-2= glyphicon('plus', { size: '15', color: '#FFFF'})
                 %span Ajouter un automate spécifique
