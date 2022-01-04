@@ -201,11 +201,10 @@
                   = f.input :is_used, as: :boolean, label: false, input_html: { class: 'form-check-input input_switch input_check_field check-software', id: 'user_sage_gec_attributes_is_used' }
                   %label.semibold{class: 'form-check-label label_check_field', for: 'user_sage_gec_attributes_is_used'} Non
           
-            - if @user.leader?
-              %hr
-              .form-group.no-margin
-                .w-100.text-end
-                  = f.submit t('actions.submit'), class: 'btn btn-primary w-25'
+            %hr
+            .form-group.no-margin
+              .w-100.text-end
+                = f.submit t('actions.submit'), class: 'btn btn-primary w-25'
       - if @customer.uses?(:sage_gec)
         %hr
         .derivationRight.box.no-margin.my_unisoft_configuration  
