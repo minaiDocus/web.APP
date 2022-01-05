@@ -4,8 +4,8 @@ class PreAssignment::Builder::SageGecWorker
 
   def perform
     UniqueJobs.for 'PreAssignmentBuilderSageGecWorker' do
-      PreAssignmentDelivery.my_unisoft.pending.order(id: :asc).each do |delivery|
-        PreAssignment::Builder::MyUnisoftWorker::Launcher.delay.process(delivery.id)
+      PreAssignmentDelivery.sage_gec.pending.order(id: :asc).each do |delivery|
+        PreAssignment::Builder::SageGec::Launcher.delay.process(delivery.id)
         sleep(5)
        end
     end
