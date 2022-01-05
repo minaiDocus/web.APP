@@ -126,6 +126,8 @@ class Organizations::MainController < OrganizationController
       params.require(:organization).permit(
         :name,
         :code,
+        :authd_prev_period,
+        :auth_prev_period_until_day,
         :is_detail_authorized,
         :is_test,
         :is_pre_assignment_date_computed,

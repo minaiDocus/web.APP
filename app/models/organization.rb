@@ -1,7 +1,7 @@
 class Organization < ApplicationRecord
   attr_encrypted :cedricom_password, random_iv: true
 
-  validates :authd_prev_period, numericality: { greater_than_or_equal_to: 0 }
+  validates :authd_prev_period,            inclusion: { in: 0..36 }
   validates :auth_prev_period_until_day,   inclusion: { in: 0..28 }
   validates :auth_prev_period_until_month, inclusion: { in: 0..2 }
   validates_length_of     :code, in: 1..4

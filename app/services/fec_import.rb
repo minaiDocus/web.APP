@@ -84,8 +84,8 @@ class FecImport
     col    = line.split(/\t/)
     column = col.map { |c| c.strip }
 
-    _account_provider = (@account_provider.length <= 3)? @account_provider.to_s + '00000' : @account_provider
-    _account_customer = (@account_customer.length <= 3)? @account_customer.to_s + '00000' : @account_customer
+    _account_provider = (@account_provider.to_s.length <= 3)? @account_provider.to_s + '00000' : @account_provider
+    _account_customer = (@account_customer.to_s.length <= 3)? @account_customer.to_s + '00000' : @account_customer
 
     compaux_is_empty        = column[6].blank? && column[7].blank?
     is_provider_or_customer = column[4].to_s.match(/^(#{@account_provider.to_s}|#{@account_customer.to_s})/)
