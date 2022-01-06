@@ -247,20 +247,15 @@ class PreseizureExport::PreseizureToTxt
             if preseizure.piece_id.present?
               accounting = user.accounting_plan.providers.where(third_party_account: auxiliary_account).limit(1)
               is_provider = accounting.size > 0
+              general_account = user.accounting_plan.general_account_providers.present? ? user.accounting_plan.general_account_providers : 40_100_001
 
               unless is_provider
                 accounting = user.accounting_plan.customers.where(third_party_account: auxiliary_account).limit(1)
                 is_customer = accounting.size > 0
+                general_account = user.accounting_plan.general_account_customers.present? ? user.accounting_plan.general_account_customers : 41_100_001
               end
 
-              general_account = if is_provider
-                                  40_100_001
-                                elsif is_customer
-                                  41_100_001
-                                else
-                                  auxiliary_account
-                                end
-
+              general_account = auxiliary_account if general_account.blank?
 
               auxiliary_account = ''                                unless is_provider || is_customer
               auxiliary_lib     = accounting.first.third_party_name if is_provider || is_customer

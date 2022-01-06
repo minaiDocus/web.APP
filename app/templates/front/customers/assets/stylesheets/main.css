@@ -66,6 +66,10 @@
   padding: 1% 2% !important;
 }
 
+.tab-pane .select-container input.account{
+  padding: 6px !important;
+}
+
 .notif-booktype{
   color: rgba(26, 26, 26, 0.7);
   font-size: 13px;
