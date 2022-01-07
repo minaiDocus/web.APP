@@ -8,8 +8,7 @@ class RetrieverParameters::BanksParamsController < RetrieverController
     @bank_accounts = []
 
     if params[:bank_account_contains].present?
-      # @bank_accounts = @account.bank_accounts.used
-      @bank_accounts = @account.bank_accounts ###FOR TEST
+      @bank_accounts = @account.bank_accounts.used
       @bank_accounts = @bank_accounts.where('bank_name LIKE ?', "%#{search_by('bank_name')}%") if search_by('bank_name').present?
       @bank_accounts = @bank_accounts.where('name LIKE ?', "%#{search_by('name')}%") if search_by('name').present?
       @bank_accounts = @bank_accounts.where('number LIKE ?', "%#{search_by('number')}%") if search_by('number').present?
