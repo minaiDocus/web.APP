@@ -54,7 +54,9 @@ class Api::V2::PiecesController < ActionController::Base
   private
 
   def piece_params
-    params.require(:piece).permit(:detected_third_party_id)
+    params.require(:piece).permit(:detected_third_party_id, :detected_third_party_name, :detected_invoice_number,
+                                  :detected_invoice_date, :detected_invoice_due_date, :detected_invoice_amount_without_taxes,
+                                  :detected_invoice_taxes_amount, :detected_invoice_amount_with_taxes)
   end
 
   def serializer

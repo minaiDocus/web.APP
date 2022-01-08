@@ -1,0 +1,2 @@
+invoice_recognition_url: http://localhost:3000/v1/documents
+invoice_recognition_token: toto1234

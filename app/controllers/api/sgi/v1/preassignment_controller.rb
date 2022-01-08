@@ -99,7 +99,19 @@ class Api::Sgi::V1::PreassignmentController < SgiApiController
     else
       detected_third_party_id = piece.detected_third_party_id.presence || 6930
 
-      @lists_pieces << { id: piece.id, piece_name: piece.name, url_piece: Domains::BASE_URL + piece.try(:get_access_url), compta_type: compta_type, detected_third_party_id: detected_third_party_id, recycle: piece.pre_assignment_force_processing? }
+      @lists_pieces << { id: piece.id, 
+                         piece_name: piece.name, 
+                         url_piece: Domains::BASE_URL + piece.try(:get_access_url), 
+                         compta_type: compta_type, 
+                         detected_third_party_id: detected_third_party_id,
+                         detected_third_party_name: piece.detected_third_party_name,
+                         detected_invoice_number: piece.detected_invoice_number,
+                         detected_invoice_date: piece.detected_invoice_date,
+                         detected_invoice_due_date: piece.detected_invoice_due_date,
+                         detected_invoice_amount_without_taxes: piece.detected_invoice_amount_without_taxes,
+                         detected_invoice_taxes_amount: piece.detected_invoice_taxes_amount,
+                         detected_invoice_amount_with_taxes: piece.detected_invoice_amount_with_taxes,
+                         recycle: piece.pre_assignment_force_processing? }
     end
   end
 end

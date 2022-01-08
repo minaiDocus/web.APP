@@ -31,6 +31,7 @@ set :linked_files, fetch(:linked_files, []).push(
   'config/ftp_delivery.yml',
   'config/storage.yml',
   'config/supplier_recognition.yml',
+  'config/invoice_recognition.yml',
   'config/api_authentication.yml',
   'config/jefacture.yml',
   'config/bridge.yml',
