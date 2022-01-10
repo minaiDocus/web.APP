@@ -91,6 +91,8 @@ class PreseizureExport::PreseizureToTxt
     data << line
 
     @preseizures.each do |preseizure|
+      user = preseizure.user
+
       if preseizure.operation
         label = preseizure.operation_label[0..29]
       else
@@ -120,25 +122,25 @@ class PreseizureExport::PreseizureToTxt
           account = case nature
                     when 'AF'
                       if entry.account.type == Pack::Report::Preseizure::Account::TTC
-                        '401000'
+                        user.accounting_plan.general_account_providers.to_s.presence || '401000'
                       else
                         entry.account.try(:number)
                       end
                     when 'FF'
                       if entry.account.type == Pack::Report::Preseizure::Account::TTC
-                        '401000'
+                        user.accounting_plan.general_account_providers.to_s.presence || '401000'
                       else
                         entry.account.try(:number)
                       end
                     when 'AC'
                       if entry.account.type == Pack::Report::Preseizure::Account::TTC
-                        '411000'
+                        user.accounting_plan.general_account_customers.to_s.presence || '411000'
                       else
                         entry.account.try(:number)
                       end
                     when 'FC'
                       if entry.account.type == Pack::Report::Preseizure::Account::TTC
-                        '411000'
+                        user.accounting_plan.general_account_customers.to_s.presence || '411000'
                       else
                         entry.account.try(:number)
                       end
@@ -184,9 +186,9 @@ class PreseizureExport::PreseizureToTxt
               line[11] = nature
               line[13] = case journal.compta_type
                          when 'AC'
-                          '401000'
+                          user.accounting_plan.general_account_providers.to_s.presence || '401000'
                          when 'VT'
-                          '411000'
+                          user.accounting_plan.general_account_customers.to_s.presence || '411000'
                          when 'NDF'
                           '471000'
                          end
@@ -247,12 +249,12 @@ class PreseizureExport::PreseizureToTxt
             if preseizure.piece_id.present?
               accounting = user.accounting_plan.providers.where(third_party_account: auxiliary_account).limit(1)
               is_provider = accounting.size > 0
-              general_account = user.accounting_plan.general_account_providers.present? ? user.accounting_plan.general_account_providers : 40_100_001
+              general_account = user.accounting_plan.general_account_providers.presence || 40_100_001
 
               unless is_provider
                 accounting = user.accounting_plan.customers.where(third_party_account: auxiliary_account).limit(1)
                 is_customer = accounting.size > 0
-                general_account = user.accounting_plan.general_account_customers.present? ? user.accounting_plan.general_account_customers : 41_100_001
+                general_account = user.accounting_plan.general_account_customers.presence || 41_100_001
               end
 
               general_account = auxiliary_account if general_account.blank?
@@ -262,9 +264,9 @@ class PreseizureExport::PreseizureToTxt
             else
               if general_account != bank_account.try(:accounting_number) && general_account != 512_000
                 general_account = if entry.debit?
-                                    40_100_001
+                                    user.accounting_plan.general_account_providers.presence || 40_100_001
                                   else
-                                    41_100_001
+                                    user.accounting_plan.general_account_customers.presence || 41_100_001
                                   end
               end
             end
@@ -356,9 +358,9 @@ class PreseizureExport::PreseizureToTxt
               end
 
               general_account = if is_provider
-                                  40_100_001
+                                  user.accounting_plan.general_account_providers.presence || 40_100_001
                                 elsif is_customer
-                                  41_100_001
+                                  user.accounting_plan.general_account_customers.presence || 41_100_001
                                 else
                                   auxiliary_account
                                 end
@@ -369,9 +371,9 @@ class PreseizureExport::PreseizureToTxt
             else
               if general_account != bank_account.try(:accounting_number) && general_account != 512_000
                 general_account = if entry.debit?
-                                    40_100_001
+                                    user.accounting_plan.general_account_providers.presence || 40_100_001
                                   else
-                                    41_100_001
+                                    user.accounting_plan.general_account_customers.presence || 41_100_001
                                   end
               end
             end
