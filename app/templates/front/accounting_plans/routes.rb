@@ -7,6 +7,7 @@ Rails.application.routes.draw do
             patch  :import
             post   :auto_update
             post   :ibiza_synchronize
+            post   :insert_general_account
             patch  :import_fec
             get    :import_model
             get    :import_fec_processing

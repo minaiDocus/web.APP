@@ -201,6 +201,7 @@ class AccountingPlans::MainController < CustomerController
   def destroy_providers
     @accounting_plan.providers.clear
 
+    @accounting_plan.general_account_providers = ""
     @accounting_plan.save
 
     flash[:success] = 'Fournisseurs supprimés avec succès.'
@@ -212,11 +213,28 @@ class AccountingPlans::MainController < CustomerController
   def destroy_customers
     @accounting_plan.customers.clear
 
+    @accounting_plan.general_account_customers = ""
     @accounting_plan.save
 
     flash[:success] = 'Clients supprimés avec succès.'
     
     redirect_to organization_customer_accounting_plan_path(@organization, @customer)
+  end
+
+  def insert_general_account
+    if params[:kind] == 'provider'
+      @accounting_plan.general_account_providers = params[:general_account]
+    else
+      @accounting_plan.general_account_customers = params[:general_account]
+    end
+
+    if @accounting_plan.save
+      json_flash[:success] = 'Modifié avec succès.'
+    else
+      json_flash[:error] = errors_to_list @accounting_plan
+    end
+
+    render json: { json_flash: json_flash, url: organization_customer_accounting_plan_path(@organization, @customer, { tab: params[:kind]}) }, status: 200
   end
 
   private

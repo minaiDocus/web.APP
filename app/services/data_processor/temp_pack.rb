@@ -374,13 +374,13 @@ class DataProcessor::TempPack
         if uses_analytics?
           if @inserted_piece.from_web? || @inserted_piece.from_mobile?
             AccountingWorkflow::SendPieceToSupplierRecognition.execute([@inserted_piece])
-            AccountingWorkflow::SendPieceToInvoiceRecognition.execute([@inserted_piece])
+            # AccountingWorkflow::SendPieceToInvoiceRecognition.execute([@inserted_piece])
           else
             @inserted_piece.waiting_analytics_pre_assignment
           end
         else
           AccountingWorkflow::SendPieceToSupplierRecognition.execute([@inserted_piece])
-          AccountingWorkflow::SendPieceToInvoiceRecognition.execute([@inserted_piece])
+          # AccountingWorkflow::SendPieceToInvoiceRecognition.execute([@inserted_piece])
         end
       end
     end

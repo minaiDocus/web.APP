@@ -112,6 +112,7 @@ class AccountingPlan {
     this.get_vat_accounts_view();
 
     this.edit_provider_customer();
+    this.edit_general_account();
     this.handle_edit_delete_sub_menu();    
     ApplicationJS.set_checkbox_radio();
   }
@@ -130,6 +131,36 @@ class AccountingPlan {
       if (type === 'customer') { self.edit_provider_modal.find('.modal-title').text('Éditer un client'); }      
     });
   }
+
+  edit_general_account(){
+    let self = this;
+
+    $('.add-general-account-provider, .add-general-account-customer').unbind('click').bind('click',function(e) {
+      let kind = "provider";
+      let general_account = $(".general-account-provider").val();
+
+      if ($(this).hasClass("add-general-account-customer")){
+        kind = "customer";
+        general_account = $(".general-account-customer").val();
+      }
+
+      if (general_account == "" || general_account === undefined){
+        return false;
+      }
+
+      let params = {
+        "url" : '/organizations/' + self.organization_id + '/customers/' + self.customer_id + '/accounting_plan/insert_general_account',
+        "data" : { general_account : general_account, kind: kind },
+        "type" : "POST",
+        "dataType" : "json"
+      }
+
+      self.applicationJS.sendRequest(params).then((element)=>{
+        if (element.json_flash.success) { window.location.href = element.url }
+      });
+    });
+  }
+
 
   handle_edit_delete_sub_menu(){
     $('.action.edit-delete-menu').unbind('click').bind('click',function(e) {

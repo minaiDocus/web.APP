@@ -80,13 +80,21 @@
     .tab-content
       .tab-pane.box.no-margin#provider{ "role" => "tabpanel", "aria-labelledby" => "provider-tab", class: ((params[:tab] == 'provider' || !params[:tab].present?) ? 'active': '') }
         .row.derivationLeft
-          .col-md-1
-          .col-md-5.text-end.no-padding
+          .col-md-3
+            .form-group
+              .select-container.row.w-100
+                .col-md-8
+                  %label.semibold Compte général
+                  %input.account.general-account-provider.p-1{ type: :text, id: "general_account_#{@customer.id}", placeholder: "ex: 401xxxx", value: "#{@accounting_plan.try(:general_account_providers)}"}
+                .col-md-4.pt-4
+                  %button.btn.btn-primary.add-general-account-provider{ type: :button } Valider
+
+          .col-md-3.text-end.pt-4
             = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer tout', destroy_providers_organization_customer_accounting_plan_path(@organization, @customer), class: 'btn btn-danger', data: { method: :delete, confirm: 'Vous êtes sur le point de supprimer tous les fournisseurs, êtes-vous sûr ?' }
             %button.edit-accounting-plan.btn.btn-light.provider{ type: :button, "data-account-id" => "" }
               %span.me-2= glyphicon('plus', { size: '15', color: '#72AA42'})
-              %span Ajouter un fournisseur
-          .col-md-6
+              %span Ajouter
+          .col-md-6.pt-4
             = form_tag import_organization_customer_accounting_plan_path(@organization, @customer), method: 'patch', multipart: true do
               .row
                 .col-md-7
@@ -131,13 +139,20 @@
 
       .tab-pane.box.no-margin#customer{ "role" => "tabpanel", "aria-labelledby" => "customer-tab", class: (params[:tab] == 'customer' ? 'active': '') }
         .row.derivationRight
-          .col-md-1       
-          .col-md-5.text-end.no-padding
+          .col-md-3
+            .form-group
+              .select-container.row.w-100
+                .col-md-8
+                  %label.semibold Compte général
+                  %input.account.general-account-customer.p-1{ type: :text, id: "general_account_#{@customer.id}", placeholder: "ex: 411xxxx", value: "#{@accounting_plan.try(:general_account_customers)}"}
+                .col-md-4.pt-4
+                  %button.btn.btn-primary.add-general-account-customer{ type: :button } Valider
+          .col-md-3.text-end.pt-4
             = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer tout', destroy_customers_organization_customer_accounting_plan_path(@organization, @customer), class: 'btn btn-danger', data: { method: :delete, confirm: 'Vous êtes sur le point de supprimer tous les clients, êtes-vous sûr ?' }
             %button.edit-accounting-plan.btn.btn-light.customer{ type: :button, "data-account-id" => "" }
               %span.me-2= glyphicon('plus', { size: '15', color: '#72AA42'})
-              %span Ajouter un client
-          .col-md-6
+              %span Ajouter
+          .col-md-6.pt-4
             = form_tag import_organization_customer_accounting_plan_path(@organization, @customer), method: 'patch', multipart: true do
               .row
                 .col-md-7

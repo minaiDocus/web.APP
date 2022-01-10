@@ -134,12 +134,16 @@ class FecImport
     item.accounting_plan_itemable_type = "AccountingPlan"
 
     if row[:general_account].to_s.match(/^(#{@account_provider.to_s})/)
+      @user.accounting_plan.general_account_providers = row[:general_account] if @user.accounting_plan.general_account_providers.blank? || @user.accounting_plan.general_account_providers != row[:general_account]
       item.kind = 'provider'
     elsif row[:general_account].to_s.match(/^(#{@account_customer.to_s})/)
+      @user.accounting_plan.general_account_customers = row[:general_account] if @user.accounting_plan.general_account_customers.blank? || @user.accounting_plan.general_account_customers != row[:general_account]
       item.kind = 'customer'
     else
       return false
     end
+
+    @user.accounting_plan.save
 
     item.is_updated = true
     item.save
