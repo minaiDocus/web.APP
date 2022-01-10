@@ -24,14 +24,17 @@
           - unless @organization.specific_mission
             - if @customer && @customer.uses?(:ibiza)
               - if @organization.ibiza.configured?
-                .form-group.clearfix{ style: 'margin-bottom: 18px' }
+                = f.label :pseudonym, :class => "semibold"
+                .select-container.p-1.w-100
+                  = f.input :pseudonym, label: false, hint: 'Si différent de "Code journal iDocus"'
+                .form-group.clearfix{ style: 'margin-bottom: 18px; padding: 0 25px' }
                   .label-section
                     %label
                   .control-section
                     .block_selection_journals.w-100.p-1
                       .help-block.mt-1.semibold Journaux Ibiza :
-                      = select_tag 'account_book_type[pseudonym]', options_for_select(journals_for_select(@journal.try(:pseudonym)), @journal.try(:pseudonym)), size: 8, style: "height: auto", class: 'form-control select form-select form-select-sm optional'
-                    %i.help-block si différent de "Code journal" ci-dessus
+                      - ajax_emit = param_encode({ name: 'journal.select_external_journal' , events: 'change'})
+                      = select_tag 'select_external_journal', options_for_select(journals_for_select(@journal.try(:pseudonym)), @journal.try(:pseudonym)), size: 8, style: "height: auto", class: 'form-control select form-select form-select-sm optional as_idocus_emit', idocus: ajax_emit
                 .form-group.row
                   .col-md-11
                     = f.label :use_pseudonym_for_import, :class => "semibold"
@@ -75,9 +78,9 @@
                     = select_tag 'select_external_journal', options_for_select(journals_for_select(@journal.try(:pseudonym)), @journal.try(:pseudonym)), size: 8, style: "height: auto", class: 'form-control select form-select form-select-sm optional'
                   %i.help-block si différent de "Code journal" ci-dessus
             - else
-              = f.label :pseudonym, hint: 'Si différent de "Code journal iDocus"', :class => "semibold"
+              = f.label :pseudonym, :class => "semibold"
               .select-container.p-1.w-100
-                = f.input :pseudonym, label: false
+                = f.input :pseudonym, label: false, hint: 'Si différent de "Code journal iDocus"'
 
           - if authorize_preassignment
             = f.input :entry_type, collection: account_book_type_entry_type_for_select(@organization, @customer), include_blank: false, label_html: { class: 'semibold' }, input_html: { class: 'form-control select form-select form-select-sm optional'}

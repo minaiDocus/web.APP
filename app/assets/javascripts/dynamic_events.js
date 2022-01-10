@@ -90,17 +90,18 @@ function iDocus_event_emiter(){
 
     let current_event = e.type;
     let authorized_events = [];
-    try { authorized_events = $(this).idocus('events').split(' ') || [] }catch(r){} ;
+ 
+    let emit_params = null;
+    try{
+      emit_params = JSON.parse( AppDecode64($(this).attr('idocus')) );
+    }catch(e){
+      if(VARIABLES.get('rails_env') != 'production')
+        emit_params = JSON.parse( $(this).attr('idocus') );
+    }
+
+    try { authorized_events = emit_params.events.split(' ') || [] }catch(r){} ;
 
     if( authorized_events.find((t)=>{ return t == current_event }) || authorized_events.length == 0 ){
-      let emit_params = null;
-      try{
-        emit_params = JSON.parse( AppDecode64($(this).attr('idocus')) );
-      }catch(e){
-        if(VARIABLES.get('rails_env') != 'production')
-          emit_params = JSON.parse( $(this).attr('idocus') );
-      }
-
       if(emit_params.datas)
         AppEmit(emit_params.name, { obj: $(this), datas: emit_params.datas });
       else
@@ -119,17 +120,18 @@ function iDocus_ajax_links(){
 
     let current_event = e.type;
     let authorized_events = [];
-    try { authorized_events = $(this).idocus('events').split(' ') || [] }catch(r){} ;
+
+    let idocus_params = null;
+    try{
+      idocus_params = JSON.parse( AppDecode64($(this).attr('idocus')) );
+    }catch(e){
+      if(VARIABLES.get('rails_env') != 'production')
+        idocus_params = JSON.parse( $(this).attr('idocus') );
+    }
+
+    try { authorized_events = idocus_params.events.split(' ') || [] }catch(r){} ;
 
     if( authorized_events.find((t)=>{ return t == current_event }) || authorized_events.length == 0 ){
-      let idocus_params = null;
-      try{
-        idocus_params = JSON.parse( AppDecode64($(this).attr('idocus')) );
-      }catch(e){
-        if(VARIABLES.get('rails_env') != 'production')
-          idocus_params = JSON.parse( $(this).attr('idocus') );
-      }
-
       let confirm_message = idocus_params['confirm'];
       let can_continue    = true;
       if( confirm_message && !confirm(confirm_message) )

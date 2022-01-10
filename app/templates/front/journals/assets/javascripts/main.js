@@ -49,6 +49,13 @@ jQuery(function () {
 
   AppListenTo('compta_analytics.validate_analysis', (e)=>{ journal.update_analytics(e.detail.data) });
 
+  AppListenTo('journal.select_external_journal', (e)=>{
+    let elem = e.detail.obj;
+    let c_value = elem.val();
+
+    $('input#account_book_type_pseudonym').val(c_value);
+  });
+
   AppListenTo('window.change-per-page.journales', (e)=>{ journal.load_journals(e.detail.name, 1, e.detail.per_page); });
   AppListenTo('window.change-page.journales', (e)=>{ journal.load_journals(e.detail.name, e.detail.page); });
 });
