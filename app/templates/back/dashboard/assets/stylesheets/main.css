@@ -1,0 +1,7 @@
+label.count{
+  font-size: 18px;
+}
+
+.label_more_info label, .foot-box{
+  cursor: pointer;
+}

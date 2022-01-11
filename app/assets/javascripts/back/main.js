@@ -1,10 +1,5 @@
-//= require '../common.js'
-
-// GLOBAL.BaseBack = class BaseBack extends ApplicationJS {
-//   constructor(){
-//     super();
-//   }
-// }
+//= require '../application'
+//= require '../dynamic_events'
 
 jQuery(function () {
 

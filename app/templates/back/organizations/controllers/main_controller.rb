@@ -23,17 +23,21 @@ class Admin::Organizations::MainController < OrganizationController
   # GET /admin/organizations/new
   def new
     @organization = Organization.new
+
+    render partial: 'new'
   end
 
   # POST /admin/organizations/create
   def create
     @organization = Organization::Create.new(organization_params).execute
+
     if @organization.persisted?
-      flash[:success] = 'Créé avec succès.'
-      redirect_to admin_organizations_path
+      json_flash[:success] = 'Créé avec succès.'      
     else
-      render 'new'
+      flash[:error] = errors_to_list @organization
     end
+
+    render json: { json_flash: json_flash, url: admin_organizations_path }, status: 200
   end
 
   # PUT /account/organizations/:id/suspend

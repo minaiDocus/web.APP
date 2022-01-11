@@ -1,0 +1,132 @@
+.lefter-content.derivationLeft
+  .d-flex.flex-column.vh-100.flex-shrink-0.p-3.text-white.bg-dark
+    .w-100.bg-white.head-logo.row
+      .w-50
+        = link_to image_tag('logo/tiny_logo_2.png', alt: 'logo iDocus', class: "w-100 ps-2"), '/', class: 'navbar-brand no-margin text-white text-decoration-none', data:{ href: '/' }
+      .w-50
+        %label.admin-label.bold ADMIN
+
+    %hr
+    %ul.nav.nav-pills.flex-column.mb-auto
+      %li.animated-pointer.nav-item.active{ class: ('active' if controller_name == 'admin') }
+        = link_to(admin_dashboard_root_path) do
+          %span.me-2= glyphicon('home', size: 12, color: "white")
+          %span Tableau de bord
+      %li.animated-pointer.nav-item.dropdown
+        = link_to '#', class: 'dropdown-toggle', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-bs-toggle' => "dropdown", 'role' => "button" do
+          %span.me-2= glyphicon('graph', size: 12, color: "white")
+          %span Finance
+          %span.float-end= glyphicon('chevron-right', size: 12, color: "white")
+        .dropdown-menu          
+          = link_to '/admin/reporting', class: 'dropdown-item' do
+            %span.me-2= glyphicon('calendar', size: 12, color: "rgba(26, 26, 26, 0.7)")
+            %span.text-dark Reporting          
+          = link_to '/admin/process_reporting', class: 'dropdown-item' do
+            %span.me-2= glyphicon('grid-three-up', size: 12, color: "rgba(26, 26, 26, 0.7)")
+            %span.text-dark Reporting de traitement          
+          = link_to admin_invoices_index_path, class: 'dropdown-item' do
+            %span.me-2= glyphicon('document', size: 12, color: "rgba(26, 26, 26, 0.7)")
+            %span.text-dark Factures
+      %li.animated-pointer.nav-item{ class: ('active' if controller_name == 'organizations') }
+        = link_to(admin_organizations_path) do
+          %span.me-2= glyphicon('people', size: 12, color: "white")
+          %span Organisations
+      %li.animated-pointer.nav-item{ class: ('active' if controller_name == 'users') }
+        = link_to(admin_users_path) do
+          %span.me-2= glyphicon('person', size: 12, color: "white")
+          %span Utilisateurs
+      %li.animated-pointer.nav-item{ class: ('active' if controller_name == 'subscription_options') }
+        = link_to(admin_subscription_options_path) do
+          %span.me-2= glyphicon('paperclip', size: 12, color: "white")
+          %span Forfaits
+      %li.animated-pointer.nav-item{ class: ('active' if controller_name == 'subscriptions mobile_reporting') }
+        = link_to(admin_subscriptions_index_path) do
+          %span.me-2= glyphicon('pie-chart', size: 12, color: "white")
+          %span Statistiques
+      %li.animated-pointer.nav-item{ class: ('active' if controller_name == 'orders') }
+        = link_to(admin_subscriptions_index_path) do
+          %span.me-2= glyphicon('aperture', size: 12, color: "white")
+          %span Commandes
+      %li.animated-pointer.nav-item{ class: ('active' if controller_name == 'events') }
+        = link_to(admin_events_path) do
+          %span.me-2= glyphicon('target', size: 12, color: "white")
+          %span Visites
+      %li.animated-pointer.nav-item{ class: ('active' if controller_name == 'retrievers new_provider_requests') }
+        = link_to(admin_retrievers_path) do
+          %span.me-2= glyphicon('audio-spectrum', size: 12, color: "white")
+          %span Automates
+      %li.animated-pointer.nav-item.dropdown
+        = link_to '#', class: 'dropdown-toggle', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-bs-toggle' => "dropdown", 'role' => "button" do
+          %span.me-2= glyphicon('globe', size: 12, color: "white")
+          %span Livraison pré-aff
+          %span.float-end= glyphicon('chevron-right', size: 12, color: "white")
+        .dropdown-menu          
+          = link_to admin_pre_assignment_deliveries_path(software: 'ibiza'), class: 'dropdown-item' do
+            %span.me-2= glyphicon('share', size: 12, color: "rgba(26, 26, 26, 0.7)")
+            %span.text-dark Vers Ibiza          
+          = link_to admin_pre_assignment_deliveries_path(software: 'exact_online'), class: 'dropdown-item' do
+            %span.me-2= glyphicon('share', size: 12, color: "rgba(26, 26, 26, 0.7)")
+            %span.text-dark Vers Exact Online          
+          = link_to admin_pre_assignment_deliveries_path(software: 'my_unisoft'), class: 'dropdown-item' do
+            %span.me-2= glyphicon('share', size: 12, color: "rgba(26, 26, 26, 0.7)")
+            %span.text-dark Vers My Unisoft
+          = link_to admin_pre_assignment_deliveries_path(software: 'sage_gec'), class: 'dropdown-item' do
+            %span.me-2= glyphicon('share', size: 12, color: "rgba(26, 26, 26, 0.7)")
+            %span.text-dark Vers Sage GEC
+      %li.animated-pointer.nav-item{ class: ('active' if controller_name == 'dematboxes dematbox_services dematbox_files') }
+        = link_to(admin_dematboxes_path) do
+          %span.me-2= glyphicon('box', size: 12, color: "white")
+          %span iDocus'Box
+    %hr
+      %li.animated-pointer.nav-item.dropdown
+        = link_to '#', class: 'dropdown-toggle', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-bs-toggle' => "dropdown", 'role' => "button" do
+          %span.me-2= glyphicon('signal', size: 12, color: "white")
+          %span Autres
+          %span.float-end= glyphicon('chevron-right', size: 12, color: "white")
+        .dropdown-menu          
+          = link_to admin_news_index_path, class: 'dropdown-item' do
+            %span.me-2= glyphicon('share', size: 12, color: "rgba(26, 26, 26, 0.7)")
+            %span.text-dark News
+          = link_to admin_emailed_documents_path, class: 'dropdown-item' do
+            %span.me-2= glyphicon('share', size: 12, color: "rgba(26, 26, 26, 0.7)")
+            %span.text-dark Récéptions Mail
+          = link_to admin_cms_images_path, class: 'dropdown-item' do
+            %span.me-2= glyphicon('share', size: 12, color: "rgba(26, 26, 26, 0.7)")
+            %span.text-dark Images
+          = link_to admin_scanning_providers_path, class: 'dropdown-item' do
+            %span.me-2= glyphicon('share', size: 12, color: "rgba(26, 26, 26, 0.7)")
+            %span.text-dark Ateliers
+          = link_to admin_account_sharings_path, class: 'dropdown-item' do
+            %span.me-2= glyphicon('share', size: 12, color: "rgba(26, 26, 26, 0.7)")
+            %span.text-dark Partages de compte
+          = link_to admin_notifications_path, class: 'dropdown-item' do
+            %span.me-2= glyphicon('share', size: 12, color: "rgba(26, 26, 26, 0.7)")
+            %span.text-dark Notifications utilisateurs
+          = link_to admin_pre_assignment_blocked_duplicates_path, class: 'dropdown-item' do
+            %span.me-2= glyphicon('share', size: 12, color: "rgba(26, 26, 26, 0.7)")
+            %span.text-dark Doublons pré-aff
+          = link_to admin_notification_settings_path, class: 'dropdown-item' do
+            %span.me-2= glyphicon('share', size: 12, color: "rgba(26, 26, 26, 0.7)")
+            %span.text-dark Paramétrage notifications
+          = link_to admin_zoho_crms_path, class: 'dropdown-item' do
+            %span.me-2= glyphicon('share', size: 12, color: "rgba(26, 26, 26, 0.7)")
+            %span.text-dark Synchronization Zoho Crm
+      %li.animated-pointer.nav-item.dropdown
+        = link_to '#', class: 'dropdown-toggle', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-bs-toggle' => "dropdown", 'role' => "button" do
+          %span.me-2= glyphicon('code', size: 12, color: "white")
+          %span Outils DEV
+          %span.float-end= glyphicon('chevron-right', size: 12, color: "white")
+        .dropdown-menu
+          - if current_user.is_developer     
+            = link_to admin_job_processing_index_path, class: 'dropdown-item' do
+              %span.me-2= glyphicon('share', size: 12, color: "rgba(26, 26, 26, 0.7)")
+              %span.text-dark Suivi Job Process
+            = link_to admin_budgea_retriever_index_path, class: 'dropdown-item' do
+              %span.me-2= glyphicon('share', size: 12, color: "rgba(26, 26, 26, 0.7)")
+              %span.text-dark Suivi Retriever Budgea
+            = link_to admin_counter_error_script_mailer_index_path, class: 'dropdown-item' do
+              %span.me-2= glyphicon('share', size: 12, color: "rgba(26, 26, 26, 0.7)")
+              %span.text-dark Suivi Error Script Mailer
+          = link_to fetcher_admin_retrievers_path, class: 'dropdown-item' do
+            %span.me-2= glyphicon('share', size: 12, color: "rgba(26, 26, 26, 0.7)")
+            %span.text-dark Récup. transactions
