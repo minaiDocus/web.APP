@@ -19,10 +19,11 @@
       %button.btn.btn-light.more-filter.w-100.semibold
         %span.me-2 Filtrer
         %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
-    .col-md-2.derivationRight
-      %button.btn.btn-primary.add-document.w-100.semibold
-        %span.me-2= glyphicon('plus', { size: '16', color: '#FFFF'})
-        %span Ajouter des documents
+    - if @user.still_active?
+      .col-md-2.derivationRight
+        %button.btn.btn-primary.add-document.w-100.semibold
+          %span.me-2= glyphicon('plus', { size: '16', color: '#FFFF'})
+          %span Ajouter des documents
   .mb-4
 
   %input#badge-filter{ type: :hidden }

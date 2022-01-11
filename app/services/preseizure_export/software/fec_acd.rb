@@ -19,7 +19,9 @@ class PreseizureExport::Software::FecAcd
       # Copy pieces to temp directory
       @preseizures.each do |preseizure|
         piece = preseizure.piece
-        FileUtils.cp piece.cloud_content_object.path, File.join(dir, preseizure.piece.name.tr(' ', '_').tr('%', '_') + '.pdf') if piece
+        final_name  = preseizure.piece.name.to_s.last(10).tr(' ', '_').tr('%', '_')
+
+        FileUtils.cp piece.cloud_content_object.path, File.join(dir, final_name + '.pdf') if piece
       end
 
       file_path = File.join(dir, base_name + '.zip')
