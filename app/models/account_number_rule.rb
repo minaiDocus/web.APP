@@ -17,6 +17,11 @@ class AccountNumberRule < ApplicationRecord
   scope :customers, -> { where(affect: 'user') }
 
 
+  def target_to_human
+    return 'Tous' if self.rule_target.to_s == 'both'
+    return self.rule_target.to_s.capitalize
+  end
+
   def name_pattern
     name.gsub(/\s+\(\d+\)\z/, '')
   end

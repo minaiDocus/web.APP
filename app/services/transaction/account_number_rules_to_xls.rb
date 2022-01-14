@@ -16,6 +16,7 @@ class Transaction::AccountNumberRulesToXls
       'PRIORITE',
       'NOM',
       'TYPE',
+      'CIBLE',
       'CATEGORISATION',
       'CONTENU_RECHERCHE',
       'NUMERO_COMPTE'
@@ -32,6 +33,7 @@ class Transaction::AccountNumberRulesToXls
           rule.priority,
           rule.name,
           rule.rule_type_short_name.to_s.upcase,
+          rule.target_to_human,
           rule.categorization,
           rule.content,
           rule.third_party_account
