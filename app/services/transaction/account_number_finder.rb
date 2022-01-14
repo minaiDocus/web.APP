@@ -87,6 +87,8 @@ class Transaction::AccountNumberFinder
     def clean_txt(string=nil, strict=false)
       string = string.to_s.strip.gsub(/[,:='"&#|;_)}\-\]\/\\]/, ' ')
       string = string.gsub(/[!?%€$£({\[]/, '')
+
+      string = string.gsub(/[.+]/, ' ')
       
       string = string.gsub(/[*.+]/, ' ') if strict
 
