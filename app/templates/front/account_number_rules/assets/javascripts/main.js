@@ -34,7 +34,7 @@ class AccountNumberRule{
 
     this.applicationJS.sendRequest(ajax_params)
                       .then((html)=>{
-                        if (search_pattern && search_text != '') {
+                        if (search_pattern) {
                           $('.bank-affectation').html($(html).find('.bank-affectation').html());
                           $('.search-content #search_input').val(search_text);
                         }
@@ -111,5 +111,5 @@ jQuery(function() {
   AppListenTo('account_number_rule_contains_search_text', (e)=>{ account_number_rule.load_data(true); });
 
   AppListenTo('window.change-per-page.account_number_rules', (e)=>{ account_number_rule.load_data(true, e.detail.name, 1, e.detail.per_page); });
-  AppListenTo('window.change-page.account_number_rules', (e)=>{ account_number_rule.load_data(true, e.detail.name, e.detail.page); });
+  AppListenTo('window.change-page.account_number_rules', (e)=>{ account_number_rule.load_data(true, e.detail.name, e.detail.page, e.detail.per_page); });
 });
