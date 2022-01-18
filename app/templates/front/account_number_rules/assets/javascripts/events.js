@@ -120,14 +120,12 @@ function bind_all_events_account_number_rules(){
     $('form.account-number-rule-form')[0].submit();
   });
 
-  
   show_affect_to($('select#affect-to').val());
   $('select#affect-to, select#affect-rule-to').unbind('change').bind('change',function(e) {
     e.stopPropagation();
 
     show_affect_to($(this).val());
   });
-
 
   $('.sub_rule_menu li.download')
   .unbind('click').bind('click',function(e) {
@@ -136,6 +134,28 @@ function bind_all_events_account_number_rules(){
     show_affect_to($('select#affect-rule-to').val());
 
     $('#import-rule').modal('show');
+  });
+
+  $('#export-rule').unbind('click').bind('click',function(e) {
+    if ($('.check-all-bank-rule').is(':checked')){
+      e.preventDefault();
+
+      $('#confirm-export.modal').modal('show');
+    }
+  });
+
+  $('#confirm-export.modal .validate-export-rule').unbind('click').bind('click',function(e) {
+    e.preventDefault();
+
+    $('#export_type_submit').val($('input[name="export_type"]:checked').val());
+
+    $('form#form_export_or_destroy').submit();
+
+    $('#confirm-export.modal').modal('hide');
+
+    $('.check-all-bank-rule, .check-bank-rule').prop('checked', false);
+
+    $('.btn-action-rule').prop('disabled', true);
   });
 
   

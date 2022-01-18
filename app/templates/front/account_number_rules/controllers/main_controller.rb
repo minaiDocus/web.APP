@@ -80,7 +80,7 @@ class AccountNumberRules::MainController < OrganizationController
 
   # POST /account/organizations/:organization_id/account_number_rules/export_or_destroy
   def export_or_destroy
-    @account_number_rules = AccountNumberRule.where(id: params[:rules].try(:[], :rule_ids) || [])
+    @account_number_rules = params[:export_type_submit] == 'all' ? AccountNumberRule.where(organization: @organization) : AccountNumberRule.where(id: params[:rules].try(:[], :rule_ids) || [])
 
     if @account_number_rules.any?
       case params[:export_or_destroy]

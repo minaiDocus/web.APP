@@ -33,15 +33,17 @@
               %span.semibold Importer une règle      
 
   .box.derivationLeft
-    = form_tag(export_or_destroy_organization_account_number_rules_path(@organization), method: :post) do
+    = form_tag(export_or_destroy_organization_account_number_rules_path(@organization), id: 'form_export_or_destroy',  method: :post) do
+      = hidden_field_tag :export_type_submit
+      = hidden_field_tag :export_or_destroy, 'export'
       .row
         .col-md-6
           %label.mt-3
             Les règles ci-dessous s'appliquent aux opérations récupérées dans les automates.
             %br Vous pouvez exporter les règles sélectionnées ou les supprimer.
         .col-md-3.text-end
-          %button.btn.btn-light-secondary.semibold.add-document#export-rule{type: 'submit', name: 'export_or_destroy', value: 'export', disabled: 'disabled'} Exporter sur Excel
-          %button.btn.btn-light-secondary.semibold.add-document.no-margin#delete-rule{type: 'submit', name: 'export_or_destroy', value: 'destroy', 'data-confirm' => 'Etes-vous sûr de vouloir supprimer les règles sélectionnées ?', disabled: 'disabled'} Supprimer
+          %button.btn.btn-light-secondary.semibold.btn-action-rule#export-rule{ type: 'submit', name: 'export_or_destroy', value: 'export', disabled: 'disabled'} Exporter sur Excel
+          %button.btn.btn-light-secondary.semibold.btn-action-rule.no-margin#delete-rule{type: 'submit', name: 'export_or_destroy', value: 'destroy', 'data-confirm' => 'Etes-vous sûr de vouloir supprimer les règles sélectionnées ?', disabled: 'disabled'} Supprimer
         .col-md-3.text-end
           %button.btn.btn-default.skip_accounting_plan.semibold
             %span.me-2= glyphicon('cog', { size: '12', color: '#72AA42'})

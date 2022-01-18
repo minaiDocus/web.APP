@@ -118,3 +118,21 @@
         .modal-footer
           %button.btn.btn-light.semibold.cancel{ type: :button, 'aria-label' => 'Close', 'data-bs-dismiss' => 'modal' } Annuler
           = submit_tag t('filters.action'), name: nil, class: 'btn btn-primary filter semibold'
+
+.modal#confirm-export
+  .modal-dialog{style: 'min-width: 500px'}
+    .modal-content
+      .modal-header
+        %h5.modal-title.bold Que voulez-vous exporter ?
+        %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+      .modal-body
+        .w-100.row.form-group
+          .w-50.form-check.form-check-inline.no-margin.ps-5
+            %label.semibold.form-check-label Tous
+            = radio_button_tag 'export_type','all', true, class: 'form-check-input'
+          .w-50.form-check.form-check-inline.no-margin
+            %label.semibold Ceux séléctionnées
+            = radio_button_tag 'export_type','selected', false,  class: 'form-check-input'
+      .modal-footer
+        %button.btn.btn-light.cancel{ type: :button, 'aria-label' => 'Close', 'data-bs-dismiss' => 'modal' } Annuler
+        %button.btn.btn-primary.validate-export-rule{ type: :button } Valider
