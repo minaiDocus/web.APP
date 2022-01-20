@@ -2,12 +2,14 @@
 
 class Organization {
   constructor(){
-    this.applicationJS             = new ApplicationJS;    
-    this.create_organization_modal = $('#create-new-organizations.modal');
+    this.applicationJS                   = new ApplicationJS;    
+    this.create_organization_modal       = $('#create-new-organizations.modal');
+    this.create_group_organization_modal = $('#create-new-group.modal');
   }
 
-  create_organization(){
+  create_or_edit_organization(id=0){
     let self = this;
+
     let ajax_params = {
                       url: `/admin/organizations/new`,
                       type: 'GET',
@@ -22,9 +24,30 @@ class Organization {
     });
   }
 
+  create_group_organization(id=-1){
+    let self = this;
+
+    let url = '/admin/organizations/groups/new';
+
+    if (id != -1){
+      url = '/admin/organizations/groups/'+id+'/edit';
+    }
+    let ajax_params = {
+                      url: url,
+                      type: 'GET',
+                      dataType: 'html',
+                    }
+
+    this.applicationJS.sendRequest(ajax_params).then((e)=>{ 
+      self.create_group_organization_modal.find('.modal-body').html(e);
+
+      self.create_group_organization_modal.modal('show');
+      ApplicationJS.set_checkbox_radio(this);
+    });
+  }
+
   main() {
-    let self = this;   
-    
+    let self = this;
 
     bind_globals_events();
     ApplicationJS.set_checkbox_radio(this);
@@ -56,6 +79,11 @@ jQuery(function() {
   let organization = new Organization();
   organization.main();
 
+  bind_globals_events();
+
   AppListenTo('show_organization', (e)=>{ if (e.detail.response.json_flash.success) { window.location.href = e.detail.response.url } });
-  AppListenTo('create_organization', (e)=>{ organization.create_organization(); });
+  AppListenTo('create_organization', (e)=>{ organization.create_or_edit_organization(); });
+  AppListenTo('edit_group_organization', (e)=>{ organization.create_or_edit_organization(); });
+  AppListenTo('create_group_organization', (e)=>{ organization.create_group_organization(); });
+  AppListenTo('edit_group_organization', (e)=>{ organization.create_group_organization(e.detail.id); });
 });
