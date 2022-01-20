@@ -7,7 +7,7 @@ class AdminOrganization {
     this.create_group_organization_modal = $('#create-new-group.modal');
   }
 
-  create_or_edit_organization(id=0){
+  create_or_edit_organization(){
     let self = this;
 
     let ajax_params = {

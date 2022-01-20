@@ -12,6 +12,8 @@ class Admin::SubscriptionOptions::MainController < BackController
   # GET /admin/subscription_options/new
   def new
     @subscription_option = SubscriptionOption.new
+
+    render partial: 'form'
   end
 
   # POST /admin/subscription_options
@@ -19,27 +21,29 @@ class Admin::SubscriptionOptions::MainController < BackController
     @subscription_option = SubscriptionOption.new(subscription_option_params)
 
     if @subscription_option.save
-      flash[:notice] = 'Créé avec succès.'
-
-      redirect_to admin_subscription_options_path
+      json_flash[:success] = 'Créé avec succès.'      
     else
-      render :new
+      json_flash[:error] = errors_to_list @subscription_option
     end
+
+    render json: { json_flash: json_flash, url: admin_subscription_options_path }, status: 200
   end
 
   # GET /admin/subscription_options/:id/edit
-  def edit; end
+  def edit
+    render partial: 'form'
+  end
 
   # PUT /admin/subscription_options/:id
   def update
     if Subscription::UpdateOption.execute(@subscription_option, subscription_option_params)
 
-      flash[:notice] = 'Modifié avec succès.'
-
-      redirect_to admin_subscription_options_path
+      json_flash[:success] = 'Modifié avec succès.'      
     else
-      render :edit
+      json_flash[:error] = errors_to_list @subscription_option
     end
+
+    render json: { json_flash: json_flash, url: admin_subscription_options_path }, status: 200
   end
 
   # DELETE /admin/subscription_options/:id
@@ -49,6 +53,7 @@ class Admin::SubscriptionOptions::MainController < BackController
     else
       flash[:error] = "Impossible de supprimer l'option d'abonnement : #{@subscription_option.name}"
     end
+
     redirect_to admin_subscription_options_path
   end
 
