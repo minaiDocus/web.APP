@@ -26,5 +26,4 @@ function bind_globals_events() {
 
     AppEmit('edit_group_organization', { id: $(this).attr('id')});
   });
-
 }

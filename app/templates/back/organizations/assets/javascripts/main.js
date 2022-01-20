@@ -1,6 +1,6 @@
 //= require './events'
 
-class Organization {
+class AdminOrganization {
   constructor(){
     this.applicationJS                   = new ApplicationJS;    
     this.create_organization_modal       = $('#create-new-organizations.modal');
@@ -76,7 +76,7 @@ class Organization {
 // });
 // =======
 jQuery(function() {
-  let organization = new Organization();
+  let organization = new AdminOrganization();
   organization.main();
 
   bind_globals_events();
