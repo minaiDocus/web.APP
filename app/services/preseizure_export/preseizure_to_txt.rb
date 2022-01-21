@@ -249,17 +249,17 @@ class PreseizureExport::PreseizureToTxt
             if preseizure.piece_id.present?
               accounting = user.accounting_plan.providers.where(third_party_account: auxiliary_account).limit(1)
               is_provider = accounting.size > 0
-              general_account = user.accounting_plan.general_account_providers.presence || 40_100_001
+              general_account = user.accounting_plan.general_account_providers.presence || 40_100_001 if is_provider
 
               unless is_provider
                 accounting = user.accounting_plan.customers.where(third_party_account: auxiliary_account).limit(1)
                 is_customer = accounting.size > 0
-                general_account = user.accounting_plan.general_account_customers.presence || 41_100_001
+                general_account = user.accounting_plan.general_account_customers.presence || 41_100_001 if is_customer
               end
 
-              general_account = auxiliary_account if general_account.blank?
+              general_account = auxiliary_account if general_account.blank? || (!is_provider && !is_customer)
 
-              auxiliary_account = ''                                unless is_provider || is_customer
+              auxiliary_account = ''                                if general_account == auxiliary_account
               auxiliary_lib     = accounting.first.third_party_name if is_provider || is_customer
             else
               if general_account != bank_account.try(:accounting_number) && general_account != 512_000

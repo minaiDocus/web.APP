@@ -88,7 +88,6 @@ class Transaction::AccountNumberFinder
       string = string.to_s.strip.gsub('^', '')
       string = string.to_s.strip.gsub(/[,:='"&#|;_)}\-\]\/\\]/, ' ')
       string = string.gsub(/[!?%€$£({\[]/, '')
-
       string = string.gsub(/[.+]/, ' ')
       
       string = string.gsub(/[*.+]/, ' ') if strict
