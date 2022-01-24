@@ -59,7 +59,7 @@ class Subscription::Form
 
     @subscription.period_duration = 1
 
-    @subscription.number_of_journals = get_param(:number_of_journals) if get_param(:number_of_journals).to_i > @subscription.user.account_book_types.count
+    @subscription.number_of_journals = get_param(:number_of_journals) if get_param(:number_of_journals).to_i >= @subscription.user.account_book_types.count
 
     if @subscription.configured? && @subscription.save
       set_prices_and_limits
@@ -68,8 +68,13 @@ class Subscription::Form
       @subscription.set_start_date_and_end_date
 
       Billing::UpdatePeriod.new(@subscription.current_period, { renew_packages: @to_apply_now }).execute
-      Subscription::Evaluate.new(@subscription, @requester, @request).execute
-      Billing::PeriodBilling.new(@subscription.current_period).fill_past_with_0 if is_new
+
+      if is_new
+        Subscription::Evaluate.new(@subscription, @requester, @request).execute
+        Billing::PeriodBilling.new(@subscription.current_period).fill_past_with_0
+      else
+        Subscription::Evaluate.new(@subscription, nil, nil).execute
+      end
 
       destroy_pending_orders_if_needed
       true
