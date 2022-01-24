@@ -9,6 +9,8 @@ class DataVerificator::DataVerificator
   end
 
   def execute
+    @mail_infos << DataVerificator::JefactureCheckPackId.new().execute
+
     @mail_infos << DataVerificator::IbizaErrors.new().execute
 
     @mail_infos << DataVerificator::TempDocumentUnreadable.new().execute
