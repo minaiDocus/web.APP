@@ -8,54 +8,43 @@ class Subscription::Form
   end
 
   def submit(params)
-    current_packages  = []
-    futur_packages    = []
-
     @params = params
     is_new  = !@subscription.configured?
 
+    current_packages_next = []
+    futur_packages        = []
+    new_packages          = []
+
+    new_packages << @params[:subscription_option]
+
+    new_packages << 'mail_option'             if @params[:mail_option]
+    new_packages << 'retriever_option'        if @params[:retriever_option] && @params[:subscription_option] != 'retriever_option'
+    new_packages << 'digitize_option'         if @params[:digitize_option] && @params[:subscription_option] != 'digitize_option'
+    new_packages << 'pre_assignment_option'   if @params[:is_pre_assignment_active] == 'true' && @params[:subscription_option] != 'retriever_option' && (@params[:subscription_option] == 'ido_mini' || @params[:subscription_option] == 'ido_classique')
+
     @to_apply_now = @subscription.user.recently_created? || (@requester.is_admin && get_param(:is_to_apply_now).to_i == 1)
 
-    current_package_data = @subscription.current_packages.nil? ? [] : @subscription.current_packages.tr('["\]','   ').tr('"', '').split(',').map { |pack| pack.strip }
+    current_packages = @subscription.current_packages.nil? ? [] : @subscription.current_packages.tr('["\]','   ').tr('"', '').split(',').map { |pack| pack.strip }
 
-    if current_package_data.include?(@params[:subscription_option]) || @to_apply_now
-      current_packages << @params[:subscription_option]
+    current_packages_next = current_packages
 
-      current_packages << 'mail_option'             if params[:mail_option] && !current_package_data.include?(params[:mail_option])
-      current_packages << 'digitize_option'         if params[:digitize_option] && !current_package_data.include?(params[:digitize_option])
-      current_packages << 'retriever_option'        if params[:retriever_option] && !current_package_data.include?(params[:retriever_option])
-      current_packages << 'pre_assignment_option'   if params[:is_pre_assignment_active] == 'true' && !current_package_data.include?(params[:is_pre_assignment_active]) && (@params[:subscription_option] == 'ido_mini' || @params[:subscription_option] == 'ido_classique')
+    if @to_apply_now
+      current_packages_next = new_packages
+    elsif current_packages.include?(@params[:subscription_option]) 
+      if (subs_packages = current_packages - new_packages).any?
 
-      if @params[:subscription_option] == 'retriever_option' && params[:digitize_option] && @to_apply_now
-        current_packages << 'digitize_option'
-        current_package_data = current_packages
-      elsif (@params[:subscription_option] == 'retriever_option' || @params[:subscription_option] == 'digitize_option') && @to_apply_now
-        current_package_data = [@params[:subscription_option]]
-      elsif current_package_data.uniq.size > current_packages.uniq.size
-        futur_packages = current_packages
-      elsif (current_package_data.size == 1 && !current_package_data.include?(@params[:subscription_option])) || @params[:subscription_option] == 'retriever_option' || @params[:subscription_option] == 'digitize_option'
-        current_package_data = current_packages
-      else
-        current_package_data = current_package_data + current_packages
+        futur_packages = current_packages - subs_packages
+      elsif (subs_packages = new_packages - current_packages).any?
+
+        current_packages_next = current_packages + subs_packages
+        @to_apply_now         = true
       end
-
-      @to_apply_now = true
     else
-      futur_packages << @params[:subscription_option]
-
-      futur_packages << 'mail_option'             if params[:mail_option]
-      futur_packages << 'retriever_option'        if params[:retriever_option] && @params[:subscription_option] != 'retriever_option'
-      futur_packages << 'digitize_option'         if params[:digitize_option] && @params[:subscription_option] != 'digitize_option'
-      futur_packages << 'pre_assignment_option'   if params[:is_pre_assignment_active] == 'true' && @params[:subscription_option] != 'retriever_option' && (@params[:subscription_option] == 'ido_mini' || @params[:subscription_option] == 'ido_classique')
+      futur_packages = new_packages
     end
 
-    @subscription.current_packages = current_package_data.uniq
+    @subscription.current_packages = current_packages_next.uniq
     @subscription.futur_packages   = futur_packages.any? ? futur_packages.uniq : nil
-
-    if @to_apply_now && !@subscription.current_packages.include?(@params[:subscription_option])
-      @subscription.current_packages = futur_packages.uniq
-      @subscription.futur_packages   = nil
-    end
 
     @subscription.period_duration = 1
 

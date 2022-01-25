@@ -145,7 +145,7 @@
       .row
         .col-md-6
           - if CustomUtils.is_manual_paper_set_order?(organization)
-            .row.digitization-option.pt-4         
+            .row.digitization-option{data: {active: "#{(current_package.include?('retriever_option') && current_package.include?('digitize_option') && !current_package.include?('ido_classique') && !current_package.include?('ido_nano') && !current_package.include?('ido_micro') && !current_package.include?('ido_x'))}"}}
         .col-md-6.journal-numbers
 
   - if CustomUtils.is_manual_paper_set_order?(organization)
