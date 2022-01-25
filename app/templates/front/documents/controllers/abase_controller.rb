@@ -69,17 +69,17 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
         pack = Pack.where(id: export_ids).first
         reports = pack.present? ? assign_report_with(pack) : []
         if @options[:by_preseizure].present?
-          preseizures = Pack::Report::Preseizure.not_deleted.not_exported.where(report_id: reports.collect(&:id)).where(id: @options[:preseizure_ids])
+          preseizures = Pack::Report::Preseizure.not_deleted.where(report_id: reports.collect(&:id)).where(id: @options[:preseizure_ids])
         else
-          preseizures = Pack::Report::Preseizure.not_deleted.not_exported.where(report_id: reports.collect(&:id))
+          preseizures = Pack::Report::Preseizure.not_deleted.where(report_id: reports.collect(&:id))
         end
       elsif export_type == 'report'
         @report = Pack::Report.where(id: export_ids).first
         update_report
         if @options[:by_preseizure].present?
-          preseizures = Pack::Report.where(id: export_ids).first.preseizures.not_exported.where(id: @options[:preseizure_ids])
+          preseizures = Pack::Report.where(id: export_ids).first.preseizures.where(id: @options[:preseizure_ids])
         else
-          preseizures = Pack::Report.where(id: export_ids).first.preseizures.not_exported
+          preseizures = Pack::Report.where(id: export_ids).first.preseizures
         end
       end
     end

@@ -120,7 +120,7 @@ class DocumentsMain{
         if(params['ids'].length == 0){
           params['ids']  = tmp_params['ids'];
           params['type'] = 'pack';
-          information    = `Vous êtes sur le point d'exporter toutes les écritures comptables non téléchargées du lot`;
+          information    = `Vous êtes sur le point d'exporter toutes les écritures comptables du lot`;
           if($('span.filter-info').length > 0)
             information += ' <span class="badge bg-info bold">liées au filtre</span>';
         }
@@ -134,7 +134,7 @@ class DocumentsMain{
         if(params['ids'].length == 0){
           params['ids'] = tmp_params['ids'];
           params['type'] = 'report';
-          information    = `Vous êtes sur le point d'exporter toutes les écritures comptables non téléchargées du lot`;
+          information    = `Vous êtes sur le point d'exporter toutes les écritures comptables du lot`;
           if($('span.filter-info').length > 0)
             information += ' <span class="badge bg-info bold">liées au filtre</span>';
         }
