@@ -225,14 +225,14 @@ class Customers::MainController < CustomerController
   # PUT /organizations/:organization_id/customers/:id/update_setting_options
   def update_setting_options
     if params[:pairing_code].present?
-      @dematbox = @user.dematbox || Dematbox.create(user_id: @user.id)
+      @dematbox = @customer.dematbox || Dematbox.create(user_id: @customer.id)
       @dematbox.subscribe(params[:pairing_code])
       flash[:success] = "Configuration de iDocus'Box en cours..."
     end
 
     if @customer.update(period_options_params) && @customer.update(compta_options_params)
       if @customer.configured?
-        flash[:success] = 'Modifié avec succès.'
+        flash[:success] ||= 'Modifié avec succès.'
       end
     else
       flash[:error] = "impossible de modifier : #{@customer.errors.messages.to_s}"
