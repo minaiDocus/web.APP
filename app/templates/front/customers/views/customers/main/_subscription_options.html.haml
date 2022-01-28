@@ -46,6 +46,15 @@
       .col-md-6
         .semibold.description= Subscription::Package.infos_of(:ido_nano)[:tooltip]
         %p= Subscription::Package.infos_of(:ido_nano)[:mark]
+        - if current_package.include?('ido_nano') && @subscription.commitment_counter == 1
+          %hr
+            %label.semibold Information :
+            %label
+              votre engagement de 12 mois se termine le
+              - if @subscription.end_date.strftime('%Y%m') == Date.today.strftime('%Y%m')
+                %span.badge.bg-danger.semibold= l @subscription.end_date
+              - else
+                %label= l @subscription.end_date
       .col-md-3
         .row
           .col-md-8.text-end                  
@@ -70,6 +79,15 @@
       .col-md-6
         .semibold.description= Subscription::Package.infos_of(:ido_micro)[:tooltip]
         %p= Subscription::Package.infos_of(:ido_micro)[:mark]
+        - if current_package.include?('ido_micro') && @subscription.commitment_counter == 1
+          %hr
+            %label.semibold Information :
+            %label
+              votre engagement de 12 mois se termine le
+              - if @subscription.end_date.strftime('%Y%m') == Date.today.strftime('%Y%m')
+                %span.badge.bg-danger.semibold= l @subscription.end_date
+              - else
+                = l @subscription.end_date
       .col-md-3
         .row
           .col-md-8.text-end                  

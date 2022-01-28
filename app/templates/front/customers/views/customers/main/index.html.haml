@@ -32,7 +32,8 @@
               %thead
                 %th Nom
                 %th= sortable :code, 'Identifiant'
-                %th= sortable :created_at, 'Date'
+                %th= sortable :created_at, 'Date de création'
+                %th Date fin d'engagement
                 %th Forfait
                 %th Pré-affectation
                 %th Automates
@@ -46,7 +47,13 @@
                     %td.align-middle
                       %span.info
                         = link_to customer, organization_customer_path(@organization, customer)
-                    %td.align-middle= customer.created_at.strftime('%d/%m/%Y')                  
+                    %td.align-middle= customer.created_at.strftime('%d/%m/%Y')
+                    %td.align-middle
+                      - if customer.subscription.commitment_counter == 1 && (customer.subscription.current_packages.include?('ido_nano') || customer.subscription.current_packages.include?('ido_micro'))
+                        - if customer.subscription.end_date.strftime('%Y%m') == Date.today.strftime('%Y%m')
+                          %span.badge.bg-danger.semibold= customer.subscription.end_date.strftime('%d/%m/%Y')
+                        - else
+                          = customer.subscription.end_date.strftime('%d/%m/%Y')
                     %td.align-middle.pointer
                       .td-popover
                         - period = @periods.select { |e| e.user == customer }.first

@@ -214,7 +214,7 @@ class Subscription < ApplicationRecord
 
     return true if commitment_period.to_i <= 0 || (!check_micro_package && is_package?('ido_micro')) || (!check_micro_package && is_package?('ido_nano'))
 
-    return true if (is_package?('ido_micro') || is_package?('ido_nano')) && self.commitment_counter > 1
+    return true if (is_package?('ido_micro') || is_package?('ido_nano')) && (self.end_date.strftime('%Y%m') == Date.today.strftime('%Y%m') || self.commitment_counter > 1 )
 
     if is_package?('ido_mini') && self.commitment_counter > 1
       quarter1_end = (self.start_date + 3.months).strftime("%Y%m")
