@@ -27,9 +27,10 @@
             .half-delivery_state.right.received
           \: Documents papier reçus et document téléversés reçus        
         .col-md-2
-          %button.btn.btn-primary.semibold.w-100
-            %span.me-4= glyphicon('share-boxed', { size: '15', color: 'white'}) 
-            %span= link_to 'Export xls', reporting_invoices_index_path(format: :xls, year: @year, organization_id: @report_organization.id), class: 'no-style text-white'            
+          %a{ href: reporting_invoices_index_path(format: :xls, year: @year, organization_id: @report_organization.id), class: 'no-style' }
+            %button.btn.btn-primary.semibold.w-100
+              %span.me-4= glyphicon('share-boxed', { size: '15', color: 'white'})
+              %span.text-white Export xls
 
   - annual_summary = []
   - 12.times do
