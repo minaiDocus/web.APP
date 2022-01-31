@@ -108,7 +108,17 @@ class Billing::UpdatePeriod
         option.quantity = 1
         option.group_title = option_infos[:group]
         option.is_to_be_disabled = @subscription.is_to_be_disabled_option?(_p_option)
-        option.price_in_cents_wo_vat = Subscription::Package.price_of(_p_option, reduced) * 100.0
+
+        amount = Subscription::Package.price_of(_p_option, reduced) * 100.0
+
+        ##### SPECIAL BILLING #####
+        if !reduced && ['202112', '202201'].include?(@period.user.created_at.strftime("%Y%m").to_s) && _p_option.to_s == 'retriever_option'
+          concerned_ops = @period.user.operations.where("DATE_FORMAT(date, '%Y%m') = '#{@period.start_date.strftime('%Y%m')}' AND api_name = 'capidocus'").where.not(processed_at: nil).size
+          amount = (Subscription::Package.price_of(:retriever_option, reduced) - 1) * 100.0 if concerned_ops > 0
+        end
+        ##########################
+
+        option.price_in_cents_wo_vat = amount
 
         selected_options << option
       end
@@ -353,6 +363,14 @@ class Billing::UpdatePeriod
 
         option.duration = 0
         option.quantity = 1
+
+        ##### SPECIAL BILLING #####
+        if !reduced && ['202112', '202201'].include?(@period.user.created_at.strftime("%Y%m").to_s)
+          concerned_ops = @period.user.operations.where("DATE_FORMAT(date, '%Y%m') = '#{value_date.to_i}' AND api_name = 'capidocus'").where.not(processed_at: nil).size
+          amount = (Subscription::Package.price_of(:retriever_option, reduced) - 1) * 100.0 if concerned_ops > 0
+        end
+        ##########################
+
         option.price_in_cents_wo_vat = amount
 
         billing_options << option
