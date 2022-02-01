@@ -12,7 +12,7 @@ class DataVerificator::JefactureCheckPackId < DataVerificator::DataVerificator
         report.pack_id = pack.id
         report.save
 
-        message << "Report Maj: #{report.name} - Pack: #{pack.name}"
+        message << "Report Maj: #{report.name}, Pack: #{pack.name}"
       end
     end
 
