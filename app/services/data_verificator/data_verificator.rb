@@ -13,6 +13,8 @@ class DataVerificator::DataVerificator
 
     @mail_infos << DataVerificator::IbizaErrors.new().execute
 
+    @mail_infos << DataVerificator::UnlockedTable.new().execute
+
     @mail_infos << DataVerificator::TempDocumentUnreadable.new().execute
 
     @mail_infos << DataVerificator::PieceWithoutTempDocument.new().execute

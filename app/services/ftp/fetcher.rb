@@ -54,6 +54,7 @@ class Ftp::Fetcher
             if !document || (document && document.unreadable?)
               get_file ftp, file_name, clean_file_name(file_name) do |file|
                 pack_name = CustomUtils.replace_code_of(pack_name)
+                pack_name = CustomUtils.replace_period_of(pack_name)
 
                 document = document_delivery.add_or_replace(file, original_file_name: file_name,
                                                                   delivery_type: 'scan',

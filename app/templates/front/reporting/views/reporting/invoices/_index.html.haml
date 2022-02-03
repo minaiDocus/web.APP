@@ -437,30 +437,6 @@
           </thead>
           <tbody>
           <tr>
-            <td class='semibold' >Téléversement</td>
-            <td class="center">-</td>
-            <td class="center">-</td>
-            <td class="center">{%= o.documents.excess.uploaded_pages %}</td>
-            <td class="center">-</td>
-            <td class="center">-</td>
-          </tr>
-          <tr>
-            <td class='semibold' >Numérisation</td>
-            <td class="center">-</td>
-            <td class="center">{%= o.documents.excess.sheets %}</td>
-            <td class="center">-</td>
-            <td class="center">{%= o.documents.excess.paperclips %}</td>
-            <td class="center">{%= o.documents.excess.oversized %}</td>
-          </tr>
-          <tr>
-            <td class='semibold' >iDocus'Box</td>
-            <td class="center">-</td>
-            <td class="center">-</td>
-            <td class="center">{%= o.documents.excess.dematbox_scanned_pages %}</td>
-            <td class="center">-</td>
-            <td class="center">-</td>
-          </tr>
-          <tr>
             <td class='semibold' >Pré-affectation</td>
             <td class="center">{%= o.documents.excess.compta_pieces %}</td>
             <td class="center">-</td>
@@ -494,29 +470,9 @@
           {% if (!o.documents.is_valid_for_quota_organization)
             { %}
             <tr>
-              <td class='semibold' >Dépassement téléversement</td>
-              <td></td>
-              <td style="text-align:right;">{%= o.options.excess_uploaded_pages%} €</td>
-            </tr>
-            <tr>
-              <td class='semibold' >Dépassement numérisation</td>
-              <td></td>
-              <td style="text-align:right;">{%= o.options.excess_scan%} €</td>
-            </tr>
-            <tr>
-              <td class='semibold' >Dépassement iDocus'Box</td>
-              <td></td>
-              <td style="text-align:right;">{%= o.options.excess_dematbox_scanned_pages%} €</td>
-            </tr>
-            <tr>
               <td class='semibold' >Dépassement pré-affectation</td>
               <td></td>
               <td style="text-align:right;">{%= o.options.excess_compta_pieces%} €</td>
-            </tr>
-            <tr>
-              <td class='semibold' >Dépassement attaches</td>
-              <td></td>
-              <td style="text-align:right;">{%= o.options.excess_paperclips%} €</td>
             </tr>
           {% } %}
           <tr>

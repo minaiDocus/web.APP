@@ -31,6 +31,19 @@ class CustomUtils
       end
     end
 
+    def replace_period_of(pack_name)
+      ['CMPZ%ABOURILLON', 'CMPZ%AZEPA', 'CMPZ%EUSKAL', 'CMPZ%PHARMACIE', 'CMPZ%MORVAN', 'CMPZ%ERMITECH'].each do |code|
+        if pack_name.match(/^#{code}/)
+          spl = pack_name.strip.split(' ')
+          spl[spl.size - 1] = spl.last.gsub('2022', '2021')
+
+          pack_name = spl.join(' ')
+        end
+      end
+
+      pack_name
+    end
+
     def arrStr_to_array(data)
       return [] if data.blank?
 
