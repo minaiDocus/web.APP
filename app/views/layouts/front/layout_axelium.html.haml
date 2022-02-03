@@ -5,13 +5,14 @@
       - if content_for?(:title)
         = yield(:title)
       - else
-        = t('layouts.title')
+        Axelium | Archivage numérique
     %meta{ :content => "text/html; charset=UTF-8", "http-equiv" => "Content-type" }
     %meta{ :charset => "UTF-8" }
     %meta{ name: "viewport", content: "width=device-width, initial-scale=1" }
     = yield(:head)
 
-    %link{ :rel => 'shortcut icon', :type => "image/ico", :href => image_path('favicon.ico') }
+    -#
+      %link{ :rel => 'shortcut icon', :type => "image/ico", :href => image_path('favicon_axelium.ico') }
     = csrf_meta_tag
     = stylesheet_link_tag 'front/main_axelium'
     = javascript_include_tag 'front/main', charset: 'utf-8'
