@@ -87,6 +87,9 @@ class Customer{
     if ($('#subscription_subscription_option_ido_micro').is(':checked')) {
       options.push('ido_micro');
     }
+    if ($('#subscription_subscription_option_ido_micro_plus').is(':checked')) {
+      options.push('ido_micro_plus');
+    }
     if ($('#subscription_subscription_option_ido_mini').is(':checked')) {
       options.push('ido_mini', 'signing_piece', 'pre_assignment_option');
     }
@@ -194,12 +197,16 @@ class Customer{
       digitization_option.find('.option_checkbox').addClass('ido_micro_option');
     }
 
+    if (class_list.indexOf("ido_micro_plus") > -1) {
+      email_option.find('.option_checkbox').addClass('ido_micro_plus_option');
+      digitization_option.find('.option_checkbox').addClass('ido_micro_plus_option');
+    }
+
     if (class_list.indexOf("ido_classique") > -1) {
       email_option.find('.option_checkbox').addClass('ido_classique_option');
       retriever_option.find('.option_checkbox').addClass('ido_classique_option');
       digitization_option.find('.option_checkbox').addClass('ido_classique_option');
     }
-
 
     ApplicationJS.set_checkbox_radio(this);
     this.check_input_number();

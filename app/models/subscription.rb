@@ -63,7 +63,7 @@ class Subscription < ApplicationRecord
   end
 
   def heavy_package?
-    is_package?('ido_annual') || is_package?('ido_micro') || is_package?('ido_mini') || is_package?('ido_nano')
+    is_package?('ido_annual') || is_package?('ido_micro') || is_package?('ido_micro_plus') || is_package?('ido_mini') || is_package?('ido_nano')
   end
 
   def owner
@@ -126,6 +126,7 @@ class Subscription < ApplicationRecord
   def set_start_date_and_end_date
     commitment_period = Subscription::Package.commitment_of(:ido_mini)  if is_package?('ido_mini')
     commitment_period = Subscription::Package.commitment_of(:ido_micro) if is_package?('ido_micro')
+    commitment_period = Subscription::Package.commitment_of(:ido_micro_plus) if is_package?('ido_micro_plus')
     commitment_period = Subscription::Package.commitment_of(:ido_nano)  if is_package?('ido_nano')
 
     if commitment_period.to_i > 0
@@ -208,13 +209,14 @@ class Subscription < ApplicationRecord
   end
 
   def commitment_end?(check_micro_package = true)
-    commitment_period = Subscription::Package.commitment_of(:ido_mini)  if is_package?('ido_mini')
-    commitment_period = Subscription::Package.commitment_of(:ido_micro) if is_package?('ido_micro')
-    commitment_period = Subscription::Package.commitment_of(:ido_nano)  if is_package?('ido_nano')
+    commitment_period = Subscription::Package.commitment_of(:ido_mini)       if is_package?('ido_mini')
+    commitment_period = Subscription::Package.commitment_of(:ido_micro)      if is_package?('ido_micro')
+    commitment_period = Subscription::Package.commitment_of(:ido_micro_plus) if is_package?('ido_micro_plus')
+    commitment_period = Subscription::Package.commitment_of(:ido_nano)       if is_package?('ido_nano')
 
-    return true if commitment_period.to_i <= 0 || (!check_micro_package && is_package?('ido_micro')) || (!check_micro_package && is_package?('ido_nano'))
+    return true if commitment_period.to_i <= 0 || (!check_micro_package && (is_package?('ido_micro_plus') || is_package?('ido_micro') || is_package?('ido_nano')))
 
-    return true if (is_package?('ido_micro') || is_package?('ido_nano')) && (self.end_date.strftime('%Y%m') == Date.today.strftime('%Y%m') || self.commitment_counter > 1 )
+    return true if (is_package?('ido_micro_plus') || is_package?('ido_micro') || is_package?('ido_nano')) && (self.end_date.strftime('%Y%m') == Date.today.strftime('%Y%m') || self.commitment_counter > 1 )
 
     if is_package?('ido_mini') && self.commitment_counter > 1
       quarter1_end = (self.start_date + 3.months).strftime("%Y%m")
@@ -233,7 +235,7 @@ class Subscription < ApplicationRecord
 
     actual_package = 'ido_x'                   if is_package?('ido_x')
     actual_package = 'ido_nano'                if is_package?('ido_nano')
-    actual_package = 'ido_micro'               if is_package?('ido_micro')
+    actual_package = 'ido_micro'               if is_package?('ido_micro') || is_package?('ido_micro_plus')
     actual_package = 'ido_mini'                if is_package?('ido_mini')
     actual_package = 'ido_classique'           if is_package?('ido_classique')
 

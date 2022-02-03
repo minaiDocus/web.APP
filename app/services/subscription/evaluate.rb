@@ -15,13 +15,13 @@ class Subscription::Evaluate
 
     period.is_active?(:ido_x) ? unauthorize_dematbox : authorize_dematbox
 
-    if period.is_active?(:ido_classique) || period.is_active?(:ido_micro) || period.is_active?(:ido_mini) || period.is_active?(:ido_nano)
+    if period.is_active?(:ido_classique) || period.is_active?(:ido_micro) || period.is_active?(:ido_micro_plus) || period.is_active?(:ido_mini) || period.is_active?(:ido_nano)
       authorize_upload
     else
       unauthorize_upload
     end
 
-    if period.is_active?(:retriever_option) || period.is_active?(:ido_micro)
+    if period.is_active?(:retriever_option) || period.is_active?(:ido_micro) || period.is_active?(:ido_micro_plus)
       authorize_retriever
     else
       unauthorize_retriever
@@ -29,12 +29,11 @@ class Subscription::Evaluate
 
     if period.is_active?(:pre_assignment_option) && ( period.is_active?(:ido_classique) || period.is_active?(:ido_mini) )
       authorize_pre_assignment
-    elsif period.is_active?(:ido_micro) || period.is_active?(:ido_nano) || ( (period.is_active?(:retriever_option) || period.is_active?(:digitize_option)) && !( period.is_active?(:ido_classique) || period.is_active?(:ido_mini) ))
+    elsif period.is_active?(:ido_micro) || period.is_active?(:ido_micro_plus) || period.is_active?(:ido_nano) || ( (period.is_active?(:retriever_option) || period.is_active?(:digitize_option)) && !( period.is_active?(:ido_classique) || period.is_active?(:ido_mini) ))
       authorize_pre_assignment
     else
       unauthorize_pre_assignment
-    end
-    
+    end    
 
     Journal::AssignDefault.new(@customer, @requester, @request).execute if @requester
   end

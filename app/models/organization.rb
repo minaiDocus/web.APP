@@ -221,6 +221,10 @@ class Organization < ApplicationRecord
     organization_groups.map {|organization_group| organization_group.multi_organizations?}.uniq.include?(true)
   end
 
+  def uses_micro_plus?
+    self.created_at.strftime('%Y%m%d') >= '20220201'
+  end
+
   private
 
   def software
