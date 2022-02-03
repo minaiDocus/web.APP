@@ -89,7 +89,7 @@ class Billing::UpdatePeriod
 
         selected_options << option
 
-        selected_options << remaining_months_option(package) if (package == :ido_micro || package == :ido_nano) && remaining_months_option(package).present?
+        selected_options << remaining_months_option(package) if (package == :ido_micro_plus || package == :ido_micro || package == :ido_nano) && remaining_months_option(package).present?
         #selected_options << mini_remaining_months_option  if package == :ido_mini && mini_remaining_months_option.present?
       end
 
@@ -152,7 +152,7 @@ class Billing::UpdatePeriod
       package_text = ""
 
       case package
-        when :ido_micro
+        when :ido_micro || :ido_micro_plus
           package_text = "iDo'Micro"
         when :ido_nano
           package_text = "iDo'Nano"
