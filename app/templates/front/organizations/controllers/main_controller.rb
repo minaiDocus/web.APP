@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Organizations::MainController < OrganizationController
-  layout :layout_by_action
-
   before_action :verify_suspension, only: %w[show edit update]
   before_action :load_organization, except: %w[index edit_options update_options new create]
   before_action :apply_membership
@@ -110,14 +108,6 @@ class Organizations::MainController < OrganizationController
         flash[:error] = t('authorization.unessessary_rights')
         redirect_to root_path
       end
-    end
-  end
-
-  def layout_by_action
-    if action_name.in?(%w[index edit_options update_options new create])
-      'front/layout'
-    else
-      'front/layout' # TODO ....
     end
   end
 

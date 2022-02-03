@@ -1,4 +1,7 @@
-= stylesheet_link_tag 'front/reporting/assets/stylesheets/main'
+- if request.env["SERVER_NAME"].include?("axelium")
+  = stylesheet_link_tag 'front/reporting/assets/stylesheets/main_axelium'
+- else
+  = stylesheet_link_tag 'front/reporting/assets/stylesheets/main'
 
 %input#organization_id{ type: 'hidden', name: 'organization_id', value: @report_organization.id }
 

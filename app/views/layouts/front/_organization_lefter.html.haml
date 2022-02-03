@@ -1,4 +1,7 @@
-= stylesheet_link_tag 'front/organization_lefter'
+- if request.env["SERVER_NAME"].include?("axelium")
+  = stylesheet_link_tag 'front/organization_lefter_axelium'
+- else
+  = stylesheet_link_tag 'front/organization_lefter'
 
 - organization_edit             = controller_path == 'organizations/main' && action_name == 'edit'
 - file_naming_policy_edit       = controller_path == 'file_naming_policies/main' && action_name == 'edit'

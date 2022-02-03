@@ -1,10 +1,13 @@
-= stylesheet_link_tag 'front/dashboard/assets/stylesheets/main'
+- if request.env["SERVER_NAME"].include?("axelium")
+  = stylesheet_link_tag 'front/dashboard/assets/stylesheets/main_axelium'
+- else
+  = stylesheet_link_tag 'front/dashboard/assets/stylesheets/main'
 
 .container-fluid
   .row.derivationLeft
     %h1
       = t('dashboard.welcome_to')
-      %span.label_idocus iDocus
+      %span.label_idocus=brand_name_from_request(request)
       %span.label_user= current_user.name
       %span.ms-1 !
   .row.direct_access.derivationLeft
@@ -21,7 +24,10 @@
           %span.badge.badge-secondary.regular#my-favorite-customers-count= @favorites.size
       .col-md-6.text-end.semibold
         %button.btn.btn-default.add-to-favorite.float-end{'data-bs-target' => '#add-to-favorite', 'data-bs-toggle' => 'modal', 'data-bs-original-value' => '455', :type => 'button'}
-          %span.me-2= glyphicon('plus', {size: '12', color: '#72AA42'})
+          - if request.env["SERVER_NAME"].include?("axelium")
+            %span.me-2= glyphicon('plus', {size: '12', color: '#fa8e2e'})
+          - else
+            %span.me-2= glyphicon('plus', {size: '12', color: '#72AA42'})
           %span= t('dashboard.add_folder_to_favorite')
 
     .row.my-favorite-customers

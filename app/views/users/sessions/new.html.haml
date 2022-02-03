@@ -7,14 +7,20 @@
     %meta{ name: "viewport", content: "width=device-width, initial-scale=1" }
 
     %link{ :rel => 'shortcut icon', :type => "image/ico", :href => image_path('favicon.ico') }
-    = stylesheet_link_tag 'front/main'
+    - if request.env["SERVER_NAME"].include?("axelium")
+      = stylesheet_link_tag 'front/main_axelium'
+    - else
+      = stylesheet_link_tag 'front/main'
 
   .body_content
     .container-fluid.text-center.login
       .box.text-center.showLogin
         %h4.regular.m-3.p-4.semibold
           Bienvenue sur
-          %span.semibold.label_idocus iDocus
+          - if request.env["SERVER_NAME"].include?("axelium")
+            %span.semibold.label_idocus Axelium
+          - else
+            %span.semibold.label_idocus iDocus
 
 
         - if flash[:alert].present?

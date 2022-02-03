@@ -10,9 +10,17 @@ class OrganizationController < ApplicationController
   before_action :apply_membership
   before_action :load_recent_notifications
 
-  layout('front/layout') # TODO ..
+  layout :define_layout
 
   protected
+
+  def define_layout
+    if request.env["SERVER_NAME"].include?("axelium")
+      'front/layout_axelium'
+    else
+      'front/layout'
+    end
+  end
 
   def is_organization_layout
     @is_organization_layout = true

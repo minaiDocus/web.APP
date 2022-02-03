@@ -4,6 +4,7 @@
 //= link dynamic_events.js
 
 //= link logo/tiny_logo.png
+//= link logo/tiny_logo_axelium.png
 //= link logo/tiny_logo_2.png
 //= link icons/icon-facebook.png
 //= link logo/logo.png

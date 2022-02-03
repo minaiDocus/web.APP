@@ -6,7 +6,8 @@ class FrontController < ApplicationController
   before_action :verify_if_active
   # before_action :check_xhr_token
 
-  layout('front/layout')
+
+  layout :define_layout
 
   def check_xhr_token
     xhr_token = params[:xhr_token].to_s
@@ -26,6 +27,14 @@ class FrontController < ApplicationController
         organization = collaborator.organizations.find(params[:organization_id])
         collaborator.with_organization_scope(organization)
       end
+    end
+  end
+
+  def define_layout
+    if request.env["SERVER_NAME"].include?("axelium")
+      'front/layout_axelium'
+    else
+      'front/layout'
     end
   end
 end
