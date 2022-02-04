@@ -4,20 +4,32 @@ class WelcomeMailer < BaseMailer
     @user   = user
     @token = token
 
-    mail(to: @user.email, subject: '[iDocus] Création de compte iDocus')
+    if @user.organization&.code == "ALM"
+      mail(to: @user.email, subject: '[Axelium] Création de compte Axelium')
+    else
+      mail(to: @user.email, subject: '[iDocus] Création de compte iDocus')
+    end
   end
 
   def welcome_collaborator(collaborator, token)
     @token = token
     @collaborator = collaborator
 
-    mail(to: @collaborator.email, subject: '[iDocus] Création de compte iDocus')
+    if @collaborator.organizations.pluck(:code).in?(%w(ALM))
+      mail(to: @collaborator.email, subject: '[Axelium] Création de compte Axelium')
+    else
+      mail(to: @collaborator.email, subject: '[iDocus] Création de compte iDocus')
+    end
   end
 
   def welcome_guest_collaborator(guest, token)
     @token = token
     @guest = guest
 
-    mail(to: @guest.email, subject: '[iDocus] Création de compte iDocus')
+    if @guest.organization&.code == "ALM"
+      mail(to: @guest.email, subject: '[Axelium] Création de compte Axelium')
+    else
+      mail(to: @guest.email, subject: '[iDocus] Création de compte iDocus')
+    end
   end
 end
