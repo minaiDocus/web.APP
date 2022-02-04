@@ -15,7 +15,7 @@ class WelcomeMailer < BaseMailer
     @token = token
     @collaborator = collaborator
 
-    if @collaborator.organizations.pluck(:code).in?(%w(ALM))
+    if "ALM".in?(@collaborator.organizations.pluck(:code))
       mail(to: @collaborator.email, subject: '[Axelium] Création de compte Axelium')
     else
       mail(to: @collaborator.email, subject: '[iDocus] Création de compte iDocus')

@@ -1,4 +1,4 @@
-- if @collaborator.organizations.pluck(:code).in?(%w(ALM))
+- if "ALM".in?(@collaborator.organizations.pluck(:code))
   !!!
   %html
     %head
