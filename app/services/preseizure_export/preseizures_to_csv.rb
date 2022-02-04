@@ -63,6 +63,7 @@ class PreseizureExport::PreseizuresToCsv
 
   def cegid_format(entry)
     label = entry.preseizure.operation_name
+    user  = entry.preseizure.user
 
     if entry.preseizure.piece_id.present?
       journal = entry.preseizure.report.journal({name_only: false})
@@ -102,13 +103,13 @@ class PreseizureExport::PreseizuresToCsv
 
     if auxiliary_account.present?
       if(entry.preseizure.piece_id.present?)
-        is_provider = entry.preseizure.user.accounting_plan.providers.where(third_party_account: auxiliary_account).limit(1).size > 0
-        is_customer = entry.preseizure.user.accounting_plan.customers.where(third_party_account: auxiliary_account).limit(1).size > 0 unless is_provider
+        is_provider = user.accounting_plan.providers.where(third_party_account: auxiliary_account).limit(1).size > 0
+        is_customer = user.accounting_plan.customers.where(third_party_account: auxiliary_account).limit(1).size > 0 unless is_provider
 
         general_account = if is_provider
-                            4_010_000_000
+                            user.accounting_plan.general_account_providers.presence || 4_010_000_000
                           elsif is_customer
-                            4_110_000_000
+                            user.accounting_plan.general_account_customers.presence || 4_110_000_000
                           else
                             auxiliary_account
                           end
@@ -117,9 +118,9 @@ class PreseizureExport::PreseizuresToCsv
       else
         if general_account != bank_account.try(:accounting_number) && general_account != 512_000
           general_account = if entry.debit?
-                              4_010_000_000
+                              user.accounting_plan.general_account_providers.presence || 4_010_000_000
                             else
-                              4_110_000_000
+                              user.accounting_plan.general_account_customers.presence || 4_110_000_000
                             end
         end
       end
