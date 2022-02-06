@@ -368,18 +368,20 @@ class DataProcessor::TempPack
       elsif @inserted_piece.temp_document.api_name == 'jefacture'
         SgiApiServices::AutoPreAssignedJefacturePiecesValidation.execute([@inserted_piece])
         # AccountingWorkflow::SendPieceToSupplierRecognition.execute([@inserted_piece]) if not success
+      elsif !@inserted_piece.pack.journal.entry_type.in?([2,3])
+        @inserted_piece.waiting_pre_assignment
       else
         Pack::Piece.extract_content(@inserted_piece)
 
         if uses_analytics?
           if @inserted_piece.from_web? || @inserted_piece.from_mobile?
-            AccountingWorkflow::SendPieceToSupplierRecognition.execute([@inserted_piece])
+            #AccountingWorkflow::SendPieceToSupplierRecognition.execute([@inserted_piece])
             AccountingWorkflow::SendPieceToInvoiceRecognition.execute([@inserted_piece])
           else
             @inserted_piece.waiting_analytics_pre_assignment
           end
         else
-          AccountingWorkflow::SendPieceToSupplierRecognition.execute([@inserted_piece])
+          #AccountingWorkflow::SendPieceToSupplierRecognition.execute([@inserted_piece])
           AccountingWorkflow::SendPieceToInvoiceRecognition.execute([@inserted_piece])
         end
       end

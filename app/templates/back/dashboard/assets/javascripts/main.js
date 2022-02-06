@@ -27,6 +27,7 @@ $(document).ready(function() {
     'reports_delivery',
     'failed_reports_delivery',
     'awaiting_supplier_recognition',
+    'awaiting_adr',
     'cedricom_orphans'
   ];
 

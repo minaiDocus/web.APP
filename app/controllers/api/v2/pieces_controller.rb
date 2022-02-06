@@ -10,7 +10,8 @@ class Api::V2::PiecesController < ActionController::Base
 
     if piece.update(piece_params)
       piece.reload
-      piece.waiting_pre_assignment if piece.pre_assignment_state == 'supplier_recognition' && piece.detected_third_party_id
+      #piece.waiting_pre_assignment if piece.pre_assignment_state == 'supplier_recognition' && piece.detected_third_party_id
+      piece.waiting_pre_assignment if piece.pre_assignment_state == 'adr' && params["piece"]["state_change"] == 'release'
 
       piece.reload
       if !piece.pre_assignment_waiting?
@@ -56,7 +57,7 @@ class Api::V2::PiecesController < ActionController::Base
   def piece_params
     params.require(:piece).permit(:detected_third_party_id, :detected_third_party_name, :detected_invoice_number,
                                   :detected_invoice_date, :detected_invoice_due_date, :detected_invoice_amount_without_taxes,
-                                  :detected_invoice_taxes_amount, :detected_invoice_amount_with_taxes)
+                                  :detected_invoice_taxes_amount, :detected_invoice_amount_with_taxes, :state_change)
   end
 
   def serializer

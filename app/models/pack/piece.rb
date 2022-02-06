@@ -2,6 +2,8 @@
 class Pack::Piece < ApplicationRecord
   ATTACHMENTS_URLS={'cloud_content' => '/account/documents/pieces/:id/download/:style'}
 
+  attr_accessor :state_change
+
   serialize :tags
 
   validates_inclusion_of :origin, within: %w(scan upload dematbox_scan retriever)
@@ -63,6 +65,7 @@ class Pack::Piece < ApplicationRecord
   scope :awaiting_preassignment, -> { where('pre_assignment_state = "waiting" OR pre_assignment_state = "force_processing"') }
 
   scope :pre_assignment_supplier_recognition, -> { where(pre_assignment_state: ['supplier_recognition']) }
+  scope :pre_assignment_adr, -> { where(pre_assignment_state: ['adr']) }
 
   default_scope { where(delete_at: [nil, '']) }
 
@@ -85,6 +88,7 @@ class Pack::Piece < ApplicationRecord
     state :ready
     state :waiting
     state :supplier_recognition
+    state :adr
     state :waiting_analytics
     state :force_processing
     state :processed
@@ -97,11 +101,15 @@ class Pack::Piece < ApplicationRecord
     end
 
     event :waiting do
-      transition [:supplier_recognition, :ready, :waiting_analytics] => :waiting
+      transition [:supplier_recognition, :ready, :waiting_analytics, :adr] => :waiting
     end
 
     event :recognize_supplier do
       transition :ready => :supplier_recognition
+    end
+
+    event :sent_to_adr do
+      transition :ready => :adr
     end
 
     event :waiting_analytics do

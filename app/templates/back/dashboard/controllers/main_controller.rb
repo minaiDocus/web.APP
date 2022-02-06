@@ -126,6 +126,19 @@ class Admin::Dashboard::MainController < BackController
     render partial: 'awaiting_supplier_recognition', locals: { collection: @awaiting_supplier_recognition }
   end
 
+  # GET /admin/awaiting_adr
+  def awaiting_adr
+    @awaiting_supplier_recognition = Pack::Piece.pre_assignment_adr.group(:pack_id).group(:pre_assignment_comment).order(created_at: :desc).includes(:pack).map do |e|
+        object = OpenStruct.new
+        object.date           = e.created_at.try(:localtime)
+        object.name           = e.pack.name.sub(/\s\d+\z/, '').sub(' all', '') if e.pack
+        object.document_count = Pack::Piece.pre_assignment_adr.where(pack_id: e.pack_id).count
+        object
+    end
+
+    render partial: 'awaiting_adr', locals: { collection: @awaiting_adr}
+  end
+
   # GET /admin/reports_delivery
   def reports_delivery
     @reports_delivery = Pack::Report.locked.order(updated_at: :desc).map do |report|

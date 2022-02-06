@@ -15,7 +15,7 @@ class AccountingWorkflow::SendPieceToInvoiceRecognition
         source: 'main',
         name: @piece.name,
         file_base64: Base64.encode64(@piece.cloud_content.download),
-        external_identifier: @piece.id
+        source_identifier: @piece.id
       }
     }.to_json
 
@@ -29,5 +29,15 @@ class AccountingWorkflow::SendPieceToInvoiceRecognition
     end
 
     request = connection.post('', payload)
+
+    begin
+      if request.status == 201
+        @piece.sent_to_adr_pre_assignment
+      else
+        @piece.waiting_pre_assignment
+      end
+    rescue
+      @piece.waiting_pre_assignment
+    end
   end
 end

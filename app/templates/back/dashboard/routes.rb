@@ -14,6 +14,7 @@ Rails.application.routes.draw do
       get '/reports_delivery', to: "main#reports_delivery", as: "reports_delivery"
       get '/failed_reports_delivery', to: "main#failed_reports_delivery", as: "failed_reports_delivery"
       get '/awaiting_supplier_recognition', to: "main#awaiting_supplier_recognition", as: "awaiting_supplier_recognition"
+      get '/awaiting_adr', to: "main#awaiting_adr", as: "awaiting_adr"
       get '/cedricom_orphans', to: "main#cedricom_orphans", as: "cedricom_orphans"
     end
   end

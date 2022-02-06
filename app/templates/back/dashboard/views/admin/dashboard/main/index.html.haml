@@ -28,6 +28,9 @@
                 %a#v-awaiting_pre_assignments.nav-link{"aria-controls": "v-awaiting_supplier_recognition", "aria-selected": "false", "data-bs-toggle": "tab", "data-bs-target" => "#awaiting_supplier_recognition", role: "tab"}
                   %span.badge-tags.badge-pill.bg-success.semibold.p-1 Reconaissance Fournisseur
                   %span.float-end.badge.badge-tags.badge-pill.bg-success.semibold.p-1 -
+                %a#v-awaiting_pre_assignments.nav-link{"aria-controls": "v-awaiting_adr", "aria-selected": "false", "data-bs-toggle": "tab", "data-bs-target" => "#adr", role: "tab"}
+                  %span.badge-tags.badge-pill.bg-success.semibold.p-1 LAD
+                  %span.float-end.badge.badge-tags.badge-pill.bg-success.semibold.p-1 -
                 %a#v-blocked_pre_assignments.nav-link{"aria-controls": "v-blocked_pre_assignments", "aria-selected": "false", "data-bs-toggle": "tab", "data-bs-target" => "#blocked_pre_assignments", role: "tab"}
                   %span.badge-tags.badge-pill.bg-secondary.semibold.p-1 Pré-affectation - En attente
                   %span.float-end.badge.badge-tags.badge-pill.bg-secondary.semibold.p-1 -
@@ -51,6 +54,7 @@
               #currently_being_delivered_packs.tab-pane
               #failed_packs_delivery.tab-pane
               #awaiting_supplier_recognition.tab-pane
+              #awaiting_adr.tab-pane
               #blocked_pre_assignments.tab-pane
               #awaiting_pre_assignments.tab-pane
               #reports_delivery.tab-pane
