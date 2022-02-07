@@ -222,7 +222,7 @@ class Organization < ApplicationRecord
   end
 
   def uses_micro_plus?
-    self.created_at.strftime('%Y%m%d') >= '20220201'
+    self.created_at.strftime('%Y%m%d') >= '20220201' || ['IDOC'].include?(self.code)
   end
 
   private

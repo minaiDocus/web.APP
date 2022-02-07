@@ -13,7 +13,7 @@ class Admin::Subscriptions::MainController < BackController
     @retriever_package_count = Rails.cache.fetch('admin_report_retriever_package_count', expires_in: 10.minutes) { Subscription.where(user_id: @accounts_ids).where("current_packages LIKE '%retriever_option%'").count }
     @digitize_package_count  = Rails.cache.fetch('admin_report_digitize_package_count', expires_in: 10.minutes) { Subscription.where(user_id: @accounts_ids).where("current_packages LIKE '%digitize_option%'").count }
     @mini_package_count      = Rails.cache.fetch('admin_report_mini_package_count', expires_in: 10.minutes) { Subscription.where(user_id: @accounts_ids).where("current_packages LIKE '%ido_mini%'").count }
-    @micro_package_count     = Rails.cache.fetch('admin_report_micro_package_count', expires_in: 10.minutes) { Subscription.where(user_id: @accounts_ids).where("current_packages LIKE '%ido_micro%' OR current_packages LIKE '%ido_micro_plus'").count }
+    @micro_package_count     = Rails.cache.fetch('admin_report_micro_package_count', expires_in: 10.minutes) { Subscription.where(user_id: @accounts_ids).where("current_packages LIKE '%ido_micro%' OR current_packages LIKE '%ido_plus_micro'").count }
     @nano_package_count      = Rails.cache.fetch('admin_report_nano_package_count', expires_in: 10.minutes) { Subscription.where(user_id: @accounts_ids).where("current_packages LIKE '%ido_nano%'").count }
     @idox_package_count      = Rails.cache.fetch('admin_report_idox_package_count', expires_in: 10.minutes) { Subscription.where(user_id: @accounts_ids).where("current_packages LIKE '%ido_x%'").count }
     @retriever_only_package_count = Rails.cache.fetch('admin_report_retriever_only_package_count', expires_in: 10.minutes) { Subscription.where(user_id: @accounts_ids).where("current_packages = '[\"retriever_option\"]' OR current_packages = '[\"retriever_option\", \"digitize_option\"]' OR current_packages = '[\"digitize_option\", \"retriever_option\"]'").count }
@@ -56,7 +56,7 @@ class Admin::Subscriptions::MainController < BackController
     when 'mini_package'
       data_accounts = Rails.cache.fetch('admin_report_mini_package_accounts', expires_in: 10.minutes) { accounts.merge(Subscription.where("current_packages LIKE '%ido_mini%'")) }
     when 'micro_package'
-      data_accounts = Rails.cache.fetch('admin_report_micro_package_accounts', expires_in: 10.minutes) { accounts.merge(Subscription.where("current_packages LIKE '%ido_micro%' OR current_packages LIKE '%ido_micro_plus'")) }
+      data_accounts = Rails.cache.fetch('admin_report_micro_package_accounts', expires_in: 10.minutes) { accounts.merge(Subscription.where("current_packages LIKE '%ido_micro%' OR current_packages LIKE '%ido_plus_micro'")) }
     when 'nano_package'
       data_accounts = Rails.cache.fetch('admin_report_nano_package_accounts', expires_in: 10.minutes) { accounts.merge(Subscription.where("current_packages LIKE '%ido_nano%'")) }
     when 'idox_package'

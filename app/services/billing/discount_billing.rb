@@ -119,7 +119,7 @@ class Billing::DiscountBilling
   end
 
   def concerned_subscriptions
-    @concerned_subscriptions ||= customers.joins(:periods).where("start_date <= ? AND end_date >= ?", @time.to_date, @time.to_date).where("periods.duration" => 1).where.not("periods.current_packages LIKE '%ido_micro%'").where.not("periods.current_packages LIKE '%ido_nano%'").where.not("periods.current_packages LIKE '%ido_micro_plus%'")
+    @concerned_subscriptions ||= customers.joins(:periods).where("start_date <= ? AND end_date >= ?", @time.to_date, @time.to_date).where("periods.duration" => 1).where.not("periods.current_packages LIKE '%ido_micro%'").where.not("periods.current_packages LIKE '%ido_nano%'").where.not("periods.current_packages LIKE '%ido_plus_micro%'")
   end
 
   def get_amount_policy(package_sym)
@@ -172,7 +172,7 @@ class Billing::DiscountBilling
   end
 
   def extentis_subscriptions
-    @extentis_subscriptions ||= extentis_customers.joins(:periods).where("start_date <= ? AND end_date >= ?", @time.to_date, @time.to_date).where("periods.duration" => 1).where.not("periods.current_packages LIKE '%ido_micro'").where.not("periods.current_packages LIKE '%ido_nano%'").where.not("periods.current_packages LIKE '%ido_micro_plus%'")
+    @extentis_subscriptions ||= extentis_customers.joins(:periods).where("start_date <= ? AND end_date >= ?", @time.to_date, @time.to_date).where("periods.duration" => 1).where.not("periods.current_packages LIKE '%ido_micro'").where.not("periods.current_packages LIKE '%ido_nano%'").where.not("periods.current_packages LIKE '%ido_plus_micro%'")
   end
 
 end

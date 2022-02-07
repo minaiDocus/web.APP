@@ -51,6 +51,8 @@ class Subscription::Form
     @subscription.number_of_journals = get_param(:number_of_journals) if get_param(:number_of_journals).to_i >= @subscription.user.account_book_types.count
 
     if @subscription.configured? && @subscription.save
+      @subscription.reload
+
       set_prices_and_limits
       set_special_excess_values
 

@@ -1,7 +1,7 @@
 class Subscription::Package
-  PACKAGES_LIST = [:ido_classique, :ido_mini, :ido_micro, :ido_nano, :ido_x, :ido_micro_plus].freeze
+  PACKAGES_LIST = [:ido_classique, :ido_mini, :ido_micro, :ido_nano, :ido_x, :ido_plus_micro].freeze
   OPTIONS_LIST  = [:mail_option, :retriever_option, :pre_assignment_option, :digitize_option].freeze
-  PRICES_LIST   = { ido_classique: 10, ido_x: 5, ido_mini: 10, ido_micro: 10, ido_nano: 5, mail_option: 10, retriever_option: 5, retriever_option_reduced: 3, pre_assignment_option: 9, signing_piece: 1, digitize_option: 0, ido_micro_plus: 10}
+  PRICES_LIST   = { ido_classique: 10, ido_x: 5, ido_mini: 10, ido_micro: 10, ido_plus_micro: 10, ido_nano: 5, mail_option: 10, retriever_option: 5, retriever_option_reduced: 3, pre_assignment_option: 9, signing_piece: 1, digitize_option: 0}
 
   class << self
     def price_of(package_or_option, reduced=false)
@@ -26,7 +26,7 @@ class Subscription::Package
           { retriever: true, upload: true, email: true, scan: true }
         when :ido_micro
           { retriever: false, upload: true, email: true, scan: true }
-        when :ido_micro_plus
+        when :ido_plus_micro
           { retriever: false, upload: true, email: true, scan: true }
         when :ido_nano
           { retriever: false, upload: true, email: true, scan: true }
@@ -46,7 +46,7 @@ class Subscription::Package
           { label: 'Téléchargement + Pré-saisie comptable + Engagement 12 mois', name: 'mini_package_subscription', group: "iDo'Mini", tooltip: "vous permet de transférer jusqu'à 300 pièces/trimèstre, mutualisation des quotas au niveau du cabinet.", mark: "Au-delà du quota cabinet cumulé, calcul du dépassement simplifié : 0,25€ ht/facture" }
         when :ido_micro
           { label: 'Téléchargement + Pré-saisie comptable + Engagement 12 mois', name: 'micro_package_subscription', group: "iDo'Micro", tooltip: "vous permet de transférer jusqu'à 100 pièces/an et de bénéficier des automates de récupérations bancaires pour un engagement de 12 mois.", mark: "Au-delà de 100 factures, calcul du dépassement simplifié : 0,25€ ht/facture" }
-        when :ido_micro_plus
+        when :ido_plus_micro
           { label: 'Téléchargement + Pré-saisie comptable + Engagement 12 mois', name: 'micro_package_subscription', group: "iDo'Micro", tooltip: "vous permet de transférer jusqu'à 20 pièces/mois pour un engagement de 12 mois, mutualisation des quotas au niveau du cabinet.", mark: "Au-delà du quota cabinet cumulé, calcul du dépassement simplifié : 0,30€ ht/facture" }
         when :ido_nano
           { label: 'Téléchargement + Pré-saisie comptable + Engagement 12 mois', name: 'nano_package_subscription', group: "iDo'Nano", tooltip: "vous permet de transférer jusqu'à 100 pièces/an pour un engagement de 12 mois.", mark: "Au-delà de 100 factures, calcul du dépassement simplifié : 0,25€ ht/facture" }
@@ -75,7 +75,7 @@ class Subscription::Package
           12
         when :ido_micro
           12
-        when :ido_micro_plus
+        when :ido_plus_micro
           12
         when :ido_nano
           12
@@ -106,10 +106,10 @@ class Subscription::Package
             pieces:         { limit: 100, price: 25, per: :year },
             preassignments: { limit: 100, price: 25, per: :year }
           }
-        when :ido_micro_plus
+        when :ido_plus_micro
           {
-            pieces:         { limit: 100, price: 25, per: :year },
-            preassignments: { limit: 100, price: 25, per: :year }
+            pieces:         { limit: 20, price: 30, per: :month },
+            preassignments: { limit: 20, price: 30, per: :month }
           }
         when :ido_nano
           {

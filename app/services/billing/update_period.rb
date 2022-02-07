@@ -16,12 +16,12 @@ class Billing::UpdatePeriod
 
       @period.duration = @subscription.period_duration
 
-      if not @period.organization
+      if !@period.organization && @options.try(:[], :renew_packages)
         copyable_keys.each do |key|
           @period[key] = @subscription[key]
         end
 
-        @period.set_current_packages(@options.try(:[], :renew_packages))
+        @period.set_current_packages(true)
       end
 
       freezed_options = @period.product_option_orders.is_frozen.map{|opt| opt.dup}
@@ -89,7 +89,7 @@ class Billing::UpdatePeriod
 
         selected_options << option
 
-        selected_options << remaining_months_option(package) if (package == :ido_micro || package == :ido_nano) && remaining_months_option(package).present?
+        selected_options << remaining_months_option(package) if (package == :ido_micro || package == :ido_nano || package == :ido_plus_micro) && remaining_months_option(package).present?
         #selected_options << mini_remaining_months_option  if package == :ido_mini && mini_remaining_months_option.present?
       end
 
@@ -143,6 +143,8 @@ class Billing::UpdatePeriod
 
       case package
         when :ido_micro
+          package_text = "iDo'Micro"
+        when :ido_plus_micro
           package_text = "iDo'Micro"
         when :ido_nano
           package_text = "iDo'Nano"

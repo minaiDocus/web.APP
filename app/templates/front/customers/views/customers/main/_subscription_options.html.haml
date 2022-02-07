@@ -71,15 +71,15 @@
             .row.digitization-option{data: {active: "#{(current_package.include?('ido_nano') && current_package.include?('digitize_option'))}", disabled: "#{!current_package.include?('ido_nano')}", notify: "#{notify_warning(@subscription, 'ido_nano', 'digitize_option')}"}}
         .col-md-6.journal-numbers
   - if organization.uses_micro_plus?
-    .ido_micro_plus_content.derivationLeft
+    .ido_plus_micro_content.derivationLeft
       .row.box
         .col-md-3.text-center
-          .form-check.form-check-inline{class: "#{'notify-warning' if notify_warning(@subscription, 'ido_micro_plus')}"}
+          .form-check.form-check-inline{class: "#{'notify-warning' if notify_warning(@subscription, 'ido_plus_micro')}"}
             .label-package.label-ido-micro.bold iDo’Micro
         .col-md-6
-          .semibold.description= Subscription::Package.infos_of(:ido_micro_plus)[:tooltip]
-          %p= Subscription::Package.infos_of(:ido_micro_plus)[:mark]
-          - if current_package.include?('ido_micro_plus') && @subscription.commitment_counter == 1
+          .semibold.description= Subscription::Package.infos_of(:ido_plus_micro)[:tooltip]
+          %p= Subscription::Package.infos_of(:ido_plus_micro)[:mark]
+          - if current_package.include?('ido_plus_micro') && @subscription.commitment_counter == 1
             %hr
               %label.semibold Information :
               %label
@@ -92,16 +92,16 @@
           .row
             .col-md-8.text-end
               %label.price.bold
-                = Subscription::Package.price_of(:ido_micro_plus)
+                = Subscription::Package.price_of(:ido_plus_micro)
                 %span €/mois
             .W-2.col-md-4.text-center
-              = radio_button_tag 'subscription[subscription_option]', 'ido_micro_plus', current_package.include?('ido_micro_plus'), class: "form-check-input ido_micro_plus radio-button main-option #{'commitment_pending' if @customer.persisted? && !@customer.try(:subscription).try(:commitment_end?)}", data: { package: "ido_micro_plus" }
+              = radio_button_tag 'subscription[subscription_option]', 'ido_plus_micro', current_package.include?('ido_plus_micro'), class: "form-check-input ido_plus_micro radio-button main-option #{'commitment_pending' if @customer.persisted? && !@customer.try(:subscription).try(:commitment_end?)}", data: { package: "ido_plus_micro" }
       .ido-micro-plus-content.package-options.p-4.hide
         .row
           .col-md-6
-            .row.mail-option{data: {active: "#{(current_package.include?('ido_micro_plus') && current_package.include?('mail_option'))}", disabled: "#{!current_package.include?('ido_micro_plus')}", notify: "#{notify_warning(@subscription, 'ido_classique', 'mail_option')}"}}
+            .row.mail-option{data: {active: "#{(current_package.include?('ido_plus_micro') && current_package.include?('mail_option'))}", disabled: "#{!current_package.include?('ido_plus_micro')}", notify: "#{notify_warning(@subscription, 'ido_classique', 'mail_option')}"}}
             - if CustomUtils.is_manual_paper_set_order?(organization)
-              .row.digitization-option{data: {active: "#{(current_package.include?('ido_micro_plus') && current_package.include?('digitize_option'))}", disabled: "#{!current_package.include?('ido_micro_plus')}", notify: "#{notify_warning(@subscription, 'ido_micro_plus', 'digitize_option')}"}}
+              .row.digitization-option{data: {active: "#{(current_package.include?('ido_plus_micro') && current_package.include?('digitize_option'))}", disabled: "#{!current_package.include?('ido_plus_micro')}", notify: "#{notify_warning(@subscription, 'ido_plus_micro', 'digitize_option')}"}}
           .col-md-6.journal-numbers
   - else     
     .ido_micro_content.derivationLeft
