@@ -128,7 +128,7 @@ class Admin::Dashboard::MainController < BackController
 
   # GET /admin/awaiting_adr
   def awaiting_adr
-    @awaiting_supplier_recognition = Pack::Piece.pre_assignment_adr.group(:pack_id).group(:pre_assignment_comment).order(created_at: :desc).includes(:pack).map do |e|
+    @awaiting_adr = Pack::Piece.pre_assignment_adr.group(:pack_id).group(:pre_assignment_comment).order(created_at: :desc).includes(:pack).map do |e|
         object = OpenStruct.new
         object.date           = e.created_at.try(:localtime)
         object.name           = e.pack.name.sub(/\s\d+\z/, '').sub(' all', '') if e.pack

@@ -1,5 +1,5 @@
 function load_resources(resources) {
-  for(i=0;i<11;i++){
+  for(i=0;i<12;i++){
     (function(counter) {
       var resource = resources[counter];
       $.ajax({
