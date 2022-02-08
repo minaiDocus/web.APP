@@ -49,6 +49,7 @@ class Pack::Piece < ApplicationRecord
   end
 
   scope :covers,                 -> { where(is_a_cover: true) }
+  scope :not_covers,             -> { where(is_a_cover: false) }
   scope :scanned,                -> { where(origin: 'scan') }
   scope :retrieved,              -> { where(origin: 'retriever') }
   scope :of_month,               -> (time) { where('created_at > ? AND created_at < ?', time.beginning_of_month, time.end_of_month) }
