@@ -10,9 +10,7 @@ class Api::Sgi::V1::PreassignmentController < SgiApiController
 
       pieces = build_list(pieces_by_params)
 
-      #render json: { success: true, pieces: PackPiecesPreassignmentSerializer.new(pieces_by_params).serialize, errors: @errors }, status: 200
-
-      render json: PackPiecesPreassignmentSerializer.new(pieces_by_params).serialize, status: 200
+      render json: { success: true, pieces: pieces_by_params, errors: @errors }, status: 200
     else
 
       render json: { success: false, error_message: "Compta type non reconnu" }, status: 200
