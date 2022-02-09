@@ -179,6 +179,10 @@ Staffingflow::SendPreAssignmentNeededWorker:
   queue: default
   cron: '0 */5 * * * *'
 
+Staffingflow::SendBundleNeededWorker:
+  queue: default
+  cron: '0 */5 * * * *'
+
 ## Archive resend document corrupted
 
 Archive::ResendDocumentCorruptedWorker:
