@@ -19,16 +19,20 @@ module SageGecLib
 
       periods  = client.get_periods_list(accountancy_practice_uuid, company_uuid)
 
-      period = periods[:body].select { |p| Date.parse(p["startDate"]) <= date && Date.parse(p["endDate"]) >= date }.first
+      period = periods[:body].select { |p| Date.parse(p["startDate"]).to_date <= date.to_date && Date.parse(p["endDate"]).to_date >= date.to_date }.first
 
-      post_body = { "entry": JSON.dump(data["entry"]), "attachment" => data["attachment"] }
+      if period
+        post_body = { "entry": JSON.dump(data["entry"]), "attachment" => data["attachment"] }
 
-      response = client.send_pre_assignment(accountancy_practice_uuid, company_uuid, period["$uuid"], post_body)
+        response = client.send_pre_assignment(accountancy_practice_uuid, company_uuid, period["$uuid"], post_body)
 
-      if response["type"] == "O"
-        { success: true, response: response }
+        if response["type"] == "O"
+          { success: true, response: response }
+        else
+          { error: response['message'] }
+        end
       else
-        { error: response['message'] }
+        { error: "L'exercice correspondant n'est pas défini" }
       end
     end
   end
