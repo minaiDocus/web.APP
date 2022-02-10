@@ -26,6 +26,12 @@ class CustomUtils
         code.gsub('AC0162', 'MVN%GRHCONSULT')
       elsif code.match(/^MFA[%]ADAPTO/)
         code.gsub('MFA%ADAPTO', 'ACC%0455')
+      elsif code.match(/^ACC[%]0424/)
+        code.gsub('ACC%0424', 'SEL%0424')
+      elsif code.match(/^ACC[%]0419/)
+        code.gsub('ACC%0419', 'SEL%0419')
+      elsif code.match(/^ACC[%]0333/)
+        code.gsub('ACC%0333', 'SEL%0333')
       else
         code
       end
