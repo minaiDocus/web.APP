@@ -7,12 +7,12 @@ class PonctualScripts::ExportSubscriptionNano
 
   def execute
     data_each_customer = []
-    data_each_customer << ["Organisation", "Client", "Actif ?", "Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
+    data_each_customer << ["Organisation", "Client code", "Actif ?", "Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
     Organization.billed.each do |organization|
       organization.customers.each do |customer|
         subscription = customer.subscription
 
-        if subscription && subscription.is_package?('ido_nano') && subscription.start_date.strftime('%Y%m') >= '202101' && subscription.end_date.strftime('%Y%m') < '202203'
+        if subscription && subscription.is_package?('ido_nano')
           data = {}
 
           subscription.periods.where("periods.current_packages LIKE '%ido_nano%' AND DATE_FORMAT(periods.created_at, '%Y') = 2021 ").order(created_at: :asc).each do |period|
@@ -25,7 +25,7 @@ class PonctualScripts::ExportSubscriptionNano
             data[period_index] = "Montant : #{montant_facture} | Montant dépassement: #{montant_depassement} € | Pièce total : #{piece_total} | Pièce dépassement : #{piece_depassement}"
           end
 
-          data_each_customer << [ organization.name, customer.name, customer.still_active? ] + %w(01 02 03 04 05 06 07 08 09 10 11 12).map { |per| data[per].presence || '' }
+          data_each_customer << [ organization.name, customer.code, customer.still_active? ] + %w(01 02 03 04 05 06 07 08 09 10 11 12).map { |per| data[per].presence || '' }
         end
       end
     end
