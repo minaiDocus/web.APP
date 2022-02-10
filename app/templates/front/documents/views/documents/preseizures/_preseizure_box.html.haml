@@ -48,12 +48,17 @@
     - delivery = preseizure.pre_assignment_deliveries.where(state: 'sent').first
     - delivery = preseizure.pre_assignment_deliveries.where(state: 'error').last if not delivery
     - if delivery
-      %span Dernier envoi iBiza 
+      - label_delivery = delivery.deliver_to == "sage_gec" ? 'Sage' : 'iBiza'
+      %span Dernier envoi
+      %span= label_delivery
       %span.semibold= delivery.try(:updated_at).strftime("%d/%m/%Y")
       %span - 
       %span= delivery.try(:updated_at).strftime("%Hh%M")
       - if delivery.try(:state) != 'sent' && delivery.try(:error_message)
         %span.ms-3.badge.bg-danger= "Erreur : #{delivery.try(:error_message)}"
+      - else
+        %label.ms-3 Envoyé vers
+        %span.badge.bg-success= label_delivery
 
 - entries  = preseizure.entries
 - pre_tax_amount = entries.select { |entry| entry.account.type == 2 }.try(:first).try(:amount) || 0
