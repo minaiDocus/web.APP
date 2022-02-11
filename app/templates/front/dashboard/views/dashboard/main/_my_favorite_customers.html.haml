@@ -1,5 +1,6 @@
 - favorites.each do |user_id|
   - infos    = FavoriteCustomer.get_infos_of(user_id)
+  - next unless infos.any?
   - customer = User.find(user_id)
 
   .box.animatedChild.animated-pointer{ class: animation }
