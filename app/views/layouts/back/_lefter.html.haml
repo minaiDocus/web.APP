@@ -34,27 +34,11 @@
       %li.animated-pointer.nav-item{ class: ('active' if controller_name == 'users') }
         = link_to(admin_users_path) do
           %span.me-2= glyphicon('person', size: 12, color: "white")
-          %span Utilisateurs
+          %span Utilisateurs      
       %li.animated-pointer.nav-item{ class: ('active' if controller_name == 'subscription_options') }
         = link_to(admin_subscription_options_path) do
           %span.me-2= glyphicon('paperclip', size: 12, color: "white")
           %span Forfaits
-      %li.animated-pointer.nav-item{ class: ('active' if controller_name == 'subscriptions mobile_reporting') }
-        = link_to(admin_subscriptions_index_path) do
-          %span.me-2= glyphicon('pie-chart', size: 12, color: "white")
-          %span Statistiques
-      %li.animated-pointer.nav-item{ class: ('active' if controller_name == 'orders') }
-        = link_to(admin_orders_index_path) do
-          %span.me-2= glyphicon('aperture', size: 12, color: "white")
-          %span Commandes
-      %li.animated-pointer.nav-item{ class: ('active' if controller_name == 'events') }
-        = link_to(admin_events_path) do
-          %span.me-2= glyphicon('target', size: 12, color: "white")
-          %span Visites
-      %li.animated-pointer.nav-item{ class: ('active' if controller_name == 'retrievers new_provider_requests') }
-        = link_to(admin_retrievers_path) do
-          %span.me-2= glyphicon('audio-spectrum', size: 12, color: "white")
-          %span Automates
       %li.animated-pointer.nav-item.dropdown
         = link_to '#', class: 'dropdown-toggle', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-bs-toggle' => "dropdown", 'role' => "button" do
           %span.me-2= glyphicon('globe', size: 12, color: "white")
@@ -73,10 +57,54 @@
           = link_to admin_pre_assignment_deliveries_path(software: 'sage_gec'), class: 'dropdown-item' do
             %span.me-2= glyphicon('share', size: 12, color: "rgba(26, 26, 26, 0.7)")
             %span.text-dark Vers Sage GEC
-      %li.animated-pointer.nav-item{ class: ('active' if controller_name == 'dematboxes dematbox_services dematbox_files') }
-        = link_to(admin_dematboxes_path) do
-          %span.me-2= glyphicon('box', size: 12, color: "white")
+      %li.animated-pointer.nav-item.dropdown
+        = link_to '#', class: 'dropdown-toggle', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-bs-toggle' => "dropdown", 'role' => "button" do
+          %span.me-2= glyphicon('pie-chart', size: 12, color: "white")
+          %span Statistiques
+          %span.float-end= glyphicon('chevron-right', size: 12, color: "white")
+        .dropdown-menu
+          = link_to admin_subscriptions_index_path, class: 'dropdown-item' do
+            %span.me-2= glyphicon('calendar', size: 12, color: "rgba(26, 26, 26, 0.7)")
+            %span.text-dark Reporting          
+          = link_to admin_mobile_reporting_index_path, class: 'dropdown-item' do
+            %span.me-2= glyphicon('grid-three-up', size: 12, color: "rgba(26, 26, 26, 0.7)")
+            %span.text-dark Reporting Mobile
+      %li.animated-pointer.nav-item.dropdown
+        = link_to '#', class: 'dropdown-toggle', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-bs-toggle' => "dropdown", 'role' => "button" do
+          %span.me-2= glyphicon('pie-chart', size: 12, color: "white")
           %span iDocus'Box
+          %span.float-end= glyphicon('chevron-right', size: 12, color: "white")
+        .dropdown-menu
+          = link_to admin_dematboxes_path, class: 'dropdown-item' do
+            %span.me-2= glyphicon('calendar', size: 12, color: "rgba(26, 26, 26, 0.7)")
+            %span.text-dark Dematbox          
+          = link_to admin_dematbox_services_path, class: 'dropdown-item' do
+            %span.me-2= glyphicon('grid-three-up', size: 12, color: "rgba(26, 26, 26, 0.7)")
+            %span.text-dark Services & Groupes
+          = link_to admin_dematbox_files_path, class: 'dropdown-item' do
+            %span.me-2= glyphicon('grid-three-up', size: 12, color: "rgba(26, 26, 26, 0.7)")
+            %span.text-dark Fichiers
+      %li.animated-pointer.nav-item{ class: ('active' if controller_name == 'orders') }
+        = link_to(admin_orders_index_path) do
+          %span.me-2= glyphicon('aperture', size: 12, color: "white")
+          %span Commandes
+      %li.animated-pointer.nav-item{ class: ('active' if controller_name == 'events') }
+        = link_to(admin_events_path) do
+          %span.me-2= glyphicon('target', size: 12, color: "white")
+          %span Visites      
+      %li.animated-pointer.nav-item.dropdown
+        = link_to '#', class: 'dropdown-toggle', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-bs-toggle' => "dropdown", 'role' => "button" do
+          %span.me-2= glyphicon('audio-spectrum', size: 12, color: "white")
+          %span Automates
+          %span.float-end= glyphicon('chevron-right', size: 12, color: "white")
+        .dropdown-menu
+          = link_to admin_retrievers_path, class: 'dropdown-item' do
+            %span.me-2= glyphicon('calendar', size: 12, color: "rgba(26, 26, 26, 0.7)")
+            %span.text-dark Automates de récupération          
+          = link_to(archives_budgea_users_admin_retrievers_path(tab: 'budgea_users'), class: 'dropdown-item') do
+            %span.me-2= glyphicon('grid-three-up', size: 12, color: "rgba(26, 26, 26, 0.7)")
+            %span.text-dark Archives
+
     %hr
       %li.animated-pointer.nav-item.dropdown
         = link_to '#', class: 'dropdown-toggle', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-bs-toggle' => "dropdown", 'role' => "button" do

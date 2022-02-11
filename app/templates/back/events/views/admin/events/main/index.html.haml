@@ -4,43 +4,49 @@
       %h4.text-white Détails
       %p.margin0bottom
         Cliquer sur une ligne du tableau pour en afficher les détails ici.
-  .row
-    .col-md-12
-      .box.small-shadow.clearfix
-        .float-start
-          %h3 
-            Liste des événements
-            %span.badge.badge-info= @events.total_count
-  .row.retractable.with-filter
+
+  .row.box.clearfix.derivationLeft
+    .col-md-10      
+      .float-start
+        %h3 
+          Liste des événements
+          %span.badge.bg-info= @events.total_count
+    .col-md-2.text-end
+      %button.btn.btn-warning.events-filter.w-50
+        %span.me-2= glyphicon('transfer', { size: '10', color: '#000', style: 'transform: rotate(90deg)'})
+        %span Filtrer
+  .row.derivationRight
     .col-md-12.retractable-content
-      .box.clearfix
-        = render partial: 'shared/list_options', locals: { collection: @events }
+      .box.clearfix        
         .row
           .col-md-12
-            %table.table.table-condensed.table-striped.margin1top.margin0bottom.table-detachable-head.table-bordered-inner
+            %table.table.table-condensed.table-striped
               %thead
-                %tr.bg-brown.text-white
-                  %th.aligncenter=           sortable :id,          'ID'
-                  %th.aligncenter=           sortable :created_at,  'Date'
-                  %th.aligncenter=           sortable :user_id,     t('activerecord.models.event.attributes.user')
-                  %th.aligncenter=           sortable :action,      t('activerecord.models.event.attributes.action')
-                  %th.aligncenter=           sortable :target_type, t('activerecord.models.event.attributes.target_type')
-                  %th.aligncenter=           sortable :target_name, t('activerecord.models.event.attributes.target_name')
+                %tr
+                  %th.text-center= sortable :id,          'ID'
+                  %th.text-center= sortable :created_at,  'Date'
+                  %th.text-center= sortable :user_id,     t('activerecord.models.event.attributes.user')
+                  %th.text-center= sortable :action,      t('activerecord.models.event.attributes.action')
+                  %th.text-center= sortable :target_type, t('activerecord.models.event.attributes.target_type')
+                  %th.text-center= sortable :target_name, t('activerecord.models.event.attributes.target_name')
               %tbody
                 - @events.each do |event|
                   - event_presenter = EventPresenter.new(event, self)
                   %tr{ data: { id: event_presenter.id.to_s } }
-                    %td.do-show.number=      event_presenter.id
-                    %td.do-show.aligncenter=        event_presenter.created_at
-                    %td.aligncenter=                     event_presenter.user_code
-                    %td.do-show.aligncenter=             event_presenter.action
-                    %td.do-show.aligncenter=             event_presenter.target_type
-                    %td.do-show.target_name= event_presenter.target_name
-      %br
-      .row
-        .col.mb-2
-          = render partial: 'shared/list_options', locals: { collection: @events }
-    .card.retractable-filter
+                    %td.do-show.number
+                      = event_presenter.id
+                    %td.do-show.text-center
+                      = event_presenter.created_at
+                    %td.text-center
+                      = event_presenter.user_code
+                    %td.do-show.text-center
+                      = event_presenter.action
+                    %td.do-show.text-center
+                      = event_presenter.target_type
+                    %td.do-show.target_name
+                      = event_presenter.target_name
+      
+    .card.retractable-filter.hide
       = form_tag admin_events_path, method: :get, class: 'form-filter' do
         .card.retractable-filter
           .card-header.clearfix
