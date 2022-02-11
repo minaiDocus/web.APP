@@ -7,12 +7,12 @@ class PonctualScripts::ExportSubscriptionNano
 
   def execute
     data_each_customer = []
-    data_each_customer << ["Organisation", "Client code", "Actif ?", "Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
+    data_each_customer << ["Organisation", "Code client ", "Actif ?", "Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
     Organization.billed.each do |organization|
       organization.customers.each do |customer|
         subscription = customer.subscription
 
-        if subscription && subscription.is_package?('ido_nano')
+        if !subscription.try(:current_packages).nil? && subscription.current_packages.include?('ido_nano')
           data = {}
 
           subscription.periods.where("periods.current_packages LIKE '%ido_nano%' AND DATE_FORMAT(periods.created_at, '%Y') = 2021 ").order(created_at: :asc).each do |period|
