@@ -297,7 +297,7 @@
                           %a{ :href => organization_invoice_path(invoice.id, invoice.organization.id), :title => "#{invoice.number}.pdf", :class => "icon-eye-open do-showInvoice" }
             %tr.global_excess
               %td
-                Dépassement dossiers mensuels
+                Dépassement mutualisé
               - 12.times do |time|
                 %td.text-center{ id: "period_#{time}"}
                   - date = (Time.local(@year) + time.month).to_date
