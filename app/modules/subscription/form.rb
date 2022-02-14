@@ -48,7 +48,8 @@ class Subscription::Form
 
     @subscription.period_duration = 1
 
-    @subscription.number_of_journals = get_param(:number_of_journals) if get_param(:number_of_journals).to_i >= @subscription.user.account_book_types.count
+    @subscription.number_of_journals   = get_param(:number_of_journals) if get_param(:number_of_journals).to_i >= @subscription.user.account_book_types.count
+    @subscription.number_of_journals ||= 5
 
     if @subscription.configured? && @subscription.save
       @subscription.reload

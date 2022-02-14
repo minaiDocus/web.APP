@@ -349,10 +349,16 @@ class Period < ApplicationRecord
     owner.operations.where('created_at >= ? AND created_at <= ?', self.start_date, self.end_date).count
   end
 
-  def organization_excesses_price
+  def organization_basic_excesses_price
     return 0 unless organization
 
-    self.product_option_orders.where(name: 'excess_documents').first.try(:price_in_cents_wo_vat).to_f
+    self.product_option_orders.where(name: 'excess_documents_basic').first.try(:price_in_cents_wo_vat).to_f
+  end
+
+  def organization_plus_micro_excesses_price
+    return 0 unless organization
+
+    self.product_option_orders.where(name: 'excess_documents_micro').first.try(:price_in_cents_wo_vat).to_f
   end
 
 private

@@ -112,8 +112,11 @@ class Billing::CreateInvoicePdf
           print '.'
         end
 
-        Billing::UpdateOrganizationPeriod.new(organization_period).fetch_all
+        # Billing::UpdateOrganizationPeriod.new(organization_period).fetch_all
+        Billing::OrganizationExcess.new(organization_period).execute
+
         #Update discount only for organization and when generating invoice
+        Billing::UpdatePeriodPrice.new(organization_period).execute
         Billing::DiscountBilling.update_period(organization_period, time)
       end
 

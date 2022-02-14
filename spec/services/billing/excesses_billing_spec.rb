@@ -65,7 +65,7 @@ describe 'Excesses Billing' do
     Invoice.destroy_all
   end
 
-  it 'creates normal excess unit price' do
+  it 'creates normal excess unit price', :normal do
     user = User.last
     subscription = user.subscription
     subscription.current_packages = []
@@ -109,7 +109,7 @@ describe 'Excesses Billing' do
     expect(organization_period.preseizure_pieces).to eq 283
   end
 
-  it 'creates valid cumulative excess price', :cumulative_price do
+  it 'creates valid cumulative basic excess price', :cumulative_price do
     allow_any_instance_of(Billing::UpdatePeriodData).to receive(:execute).and_return(true)
 
     create_subscriptions
@@ -119,10 +119,10 @@ describe 'Excesses Billing' do
 
     organization_period = organization.periods.last
     invoice             = organization.invoices.first
-    order               = organization_period.product_option_orders.where(name: 'excess_documents').first
+    order               = organization_period.product_option_orders.where(name: 'excess_documents_basic').first
 
-    expect(organization_period.uploaded_pages).to eq 283
-    expect(organization_period.preseizure_pieces).to eq 283
+    expect(organization_period.basic_total_compta_piece).to eq 283
+    expect(organization_period.basic_excess).to eq 83
     expect(order).not_to be nil
     expect(order.price_in_cents_wo_vat).to eq 100 * (83 * 0.25)
   end
@@ -144,7 +144,7 @@ describe 'Excesses Billing' do
 
     organization_period = organization.periods.last
     invoice             = organization.invoices.first
-    order               = organization_period.product_option_orders.where(name: 'excess_documents').first
+    order               = organization_period.product_option_orders.where(name: 'excess_documents_basic').first
 
     expect(organization_period.uploaded_pages).to eq 203
     expect(organization_period.preseizure_pieces).to eq 203
@@ -174,7 +174,7 @@ describe 'Excesses Billing' do
 
     organization_period = organization.periods.last
     invoice             = organization.invoices.first
-    order               = organization_period.product_option_orders.where(name: 'excess_documents').first
+    order               = organization_period.product_option_orders.where(name: 'excess_documents_basic').first
 
     c_period            = user.reload.periods.last
 
@@ -186,6 +186,40 @@ describe 'Excesses Billing' do
 
     expect(c_period.preseizure_pieces).to eq 203
     expect(c_period.excesses_price_in_cents_wo_vat).to eq (0.25 * 103) * 100
+  end
+
+  it 'creates valid excess price for iDoPlusMicro', :ido_plus_micro do
+    allow_any_instance_of(Billing::UpdatePeriodData).to receive(:execute).and_return(true)
+
+    create_subscriptions
+
+    User.all.limit(2).each do |user|
+      subscription  = user.subscription
+      subscription.current_packages = []
+      subscription.save
+
+      Subscription::Form.new(subscription).submit({ is_to_apply_now: 'true', is_pre_assignment_active: 'true', subscription_option: 'ido_plus_micro' })
+    end
+
+    organization = Organization.first
+    Billing::CreateInvoicePdf.for(organization.id, nil, Time.now, {notify: false, auto_upload: false})
+
+    organization_period = organization.periods.last
+    invoice             = organization.invoices.first
+    order               = organization_period.product_option_orders.where(name: 'excess_documents_micro').first
+
+    c_period            = User.all.limit(2).last.reload.periods.last
+
+    expect(organization_period.plus_micro_excess).to eq (283 - 40)
+    expect(organization_period.plus_micro_total_compta_piece).to eq 283
+
+    expect(c_period.unit_price_of_excess_preseizure).to eq 30
+    expect(c_period.unit_price_of_excess_expense).to eq 30
+
+    expect(c_period.preseizure_pieces).to eq 203
+
+    expect(order).not_to be nil
+    expect(order.price_in_cents_wo_vat).to eq 243 * 30
   end
 
 end
