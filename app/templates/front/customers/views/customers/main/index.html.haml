@@ -49,7 +49,7 @@
                         = link_to customer, organization_customer_path(@organization, customer)
                     %td.align-middle= customer.created_at.strftime('%d/%m/%Y')
                     %td.align-middle
-                      - if customer.subscription.present?
+                      - if customer.subscription.present? && customer.subscription.current_packages.present?
                         - if customer.subscription.commitment_counter == 1 && (customer.subscription.current_packages.include?('ido_nano') || customer.subscription.current_packages.include?('ido_micro') || customer.subscription.current_packages.include?('ido_plus_micro'))
                           - if customer.subscription.end_date.strftime('%Y%m') == Date.today.strftime('%Y%m')
                             %span.badge.bg-danger.semibold= customer.subscription.end_date.strftime('%d/%m/%Y')
