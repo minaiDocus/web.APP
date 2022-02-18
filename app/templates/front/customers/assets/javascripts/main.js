@@ -199,6 +199,7 @@ class Customer{
 
     if (class_list.indexOf("ido_plus_micro") > -1) {
       email_option.find('.option_checkbox').addClass('ido_plus_micro_option');
+      retriever_option.find('.option_checkbox').addClass('ido_plus_micro_option');
       digitization_option.find('.option_checkbox').addClass('ido_plus_micro_option');
     }
 
