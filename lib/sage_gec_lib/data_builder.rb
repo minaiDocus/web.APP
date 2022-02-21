@@ -48,7 +48,7 @@ module SageGecLib
           __data << { "credit" => credit, 
                       "debit" => debit, 
                       "dueDate" => deadline,
-                      "date" => preseizure.date.to_s,
+                      "date" => preseizure.date.try(:to_date).to_s,
                       "accountReferenceForJournal" => account_number,
                       "originalDocumentReference" => preseizure.coala_piece_name,
                       "description" => "#{preseizure.third_party} - #{preseizure.piece_number}",

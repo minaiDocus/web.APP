@@ -168,7 +168,7 @@ class Documents::PiecesController < Documents::AbaseController
     reports = Pack::Report.where(pack_id: @packs.map(&:id))
     # preseizures = Pack::Report::Preseizure.failed_delivery.where(report_id: reports.pluck(:id))
     preseizures = Pack::Report::Preseizure.not_delivered('ibiza').where(report_id: reports.pluck(:id)) #JUST IBIZA FOR NOW
-    reports_with_failed_delivery = Pack::Report.where(id: preseizures.pluck(:report_id))
+    reports_with_failed_delivery = Pack::Report.where(id: preseizures.not_deleted.pluck(:report_id))
 
     Pack.where(id: reports_with_failed_delivery.pluck(:pack_id)).pluck(:id)
   end

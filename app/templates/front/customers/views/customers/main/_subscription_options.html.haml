@@ -10,6 +10,8 @@
 
   - reduced_retriever_option = @subscription.try(:retriever_price_option).to_s == 'reduced_retriever'
 
+  - to_disable = !current_user.try(:is_admin) && @customer.persisted? && !@customer.try(:subscription).try(:commitment_end?)
+
   .ido_x_content.derivationLeft
     .row.box
       .col-md-3.text-center
@@ -62,7 +64,7 @@
               = Subscription::Package.price_of(:ido_nano)
               %span €/mois
           .W-2.col-md-4.text-center
-            = radio_button_tag 'subscription[subscription_option]', 'ido_nano', current_package.include?('ido_nano'), class: "form-check-input ido_nano radio-button main-option #{'commitment_pending' if @customer.persisted? && !@customer.try(:subscription).try(:commitment_end?)}", data: { package: "ido_nano" }
+            = radio_button_tag 'subscription[subscription_option]', 'ido_nano', current_package.include?('ido_nano'), class: "form-check-input ido_nano radio-button main-option #{'commitment_pending' if to_disable}", data: { package: "ido_nano" }
     .ido-nano-content.package-options.p-4.hide
       .row
         .col-md-6
@@ -95,10 +97,11 @@
                 = Subscription::Package.price_of(:ido_plus_micro)
                 %span €/mois
             .W-2.col-md-4.text-center
-              = radio_button_tag 'subscription[subscription_option]', 'ido_plus_micro', current_package.include?('ido_plus_micro'), class: "form-check-input ido_plus_micro radio-button main-option #{'commitment_pending' if @customer.persisted? && !@customer.try(:subscription).try(:commitment_end?)}", data: { package: "ido_plus_micro" }
+              = radio_button_tag 'subscription[subscription_option]', 'ido_plus_micro', current_package.include?('ido_plus_micro'), class: "form-check-input ido_plus_micro radio-button main-option #{'commitment_pending' if to_disable}", data: { package: "ido_plus_micro" }
       .ido-micro-plus-content.package-options.p-4.hide
         .row
           .col-md-6
+            .row.retriever-option{data: {active: "#{(current_package.include?('ido_plus_micro') && current_package.include?('retriever_option'))}", disabled: "#{(!current_package.include?('ido_plus_micro') && @subscription)}", notify: "#{notify_warning(@subscription, 'ido_plus_micro', 'retriever_option')}"}}
             .row.mail-option{data: {active: "#{(current_package.include?('ido_plus_micro') && current_package.include?('mail_option'))}", disabled: "#{!current_package.include?('ido_plus_micro')}", notify: "#{notify_warning(@subscription, 'ido_classique', 'mail_option')}"}}
             - if CustomUtils.is_manual_paper_set_order?(organization)
               .row.digitization-option{data: {active: "#{(current_package.include?('ido_plus_micro') && current_package.include?('digitize_option'))}", disabled: "#{!current_package.include?('ido_plus_micro')}", notify: "#{notify_warning(@subscription, 'ido_plus_micro', 'digitize_option')}"}}
@@ -128,7 +131,7 @@
                 = Subscription::Package.price_of(:ido_micro)
                 %span €/mois
             .W-2.col-md-4.text-center
-              = radio_button_tag 'subscription[subscription_option]', 'ido_micro', current_package.include?('ido_micro'), class: "form-check-input ido_micro radio-button main-option #{'commitment_pending' if @customer.persisted? && !@customer.try(:subscription).try(:commitment_end?)}", data: { package: "ido_micro" }
+              = radio_button_tag 'subscription[subscription_option]', 'ido_micro', current_package.include?('ido_micro'), class: "form-check-input ido_micro radio-button main-option #{'commitment_pending' if to_disable}", data: { package: "ido_micro" }
       .ido-micro-content.package-options.p-4.hide
         .row
           .col-md-6
@@ -190,7 +193,7 @@
               = Subscription::Package.price_of(:retriever_option, reduced_retriever_option)
               %span €/mois
           .col-md-4.text-center
-            = radio_button_tag 'subscription[subscription_option]', 'retriever_option', (current_package.include?('retriever_option') && !current_package.include?('ido_classique') && !current_package.include?('ido_nano') && !current_package.include?('ido_micro') && !current_package.include?('ido_x')), class: 'form-check-input ido_retriever_only radio-button main-option', data: { retriever_price_option: @subscription.try(:retriever_price_option).to_s.presence || 'retriever' }
+            = radio_button_tag 'subscription[subscription_option]', 'retriever_option', (current_package.include?('retriever_option') && !current_package.include?('ido_classique') && !current_package.include?('ido_nano') && !current_package.include?('ido_micro') && !current_package.include?('ido_x') && !current_package.include?('ido_plus_micro')), class: 'form-check-input ido_retriever_only radio-button main-option', data: { retriever_price_option: @subscription.try(:retriever_price_option).to_s.presence || 'retriever' }
 
     .ido-retriever-only-content.package-options.p-4.hide
       .row

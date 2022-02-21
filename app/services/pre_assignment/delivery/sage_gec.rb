@@ -12,7 +12,7 @@ class PreAssignment::Delivery::SageGec < PreAssignment::Delivery::DataService
   def execute
     @delivery.sending
 
-    if @delivery.preseizures.select{|pres| pres.is_delivered? }.size > 0
+    if @delivery.preseizures.select{|pres| pres.pre_assignment_deliveries.where(state: 'sent').count > 0 }.size > 0
       handle_delivery_success
     else
       begin

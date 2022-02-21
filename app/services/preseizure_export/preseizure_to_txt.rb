@@ -24,7 +24,7 @@ class PreseizureExport::PreseizureToTxt
     data = []
     @preseizures.each do |preseizure|
       preseizure.entries.order(type: :desc).each do |entry|
-        next if entry.amount.to_i == 0
+        next if entry.amount.to_f == 0
 
         if preseizure.operation
           label = preseizure.operation_label[0..29]

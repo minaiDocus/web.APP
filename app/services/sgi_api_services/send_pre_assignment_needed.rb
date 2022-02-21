@@ -34,7 +34,7 @@ class SgiApiServices::SendPreAssignmentNeeded
 
     compta_type_verified = is_teeo ? true : journal.try(:compta_type) == @compta_type
 
-    add_to_list_and_update_state_of(piece, journal.compta_type) if journal && temp_pack && temp_pack.is_compta_processable? && !piece.is_a_cover && compta_type_verified
+    add_to_list_and_update_state_of(piece, (is_teeo ? 'TEEO' : journal.compta_type)) if journal && temp_pack && temp_pack.is_compta_processable? && !piece.is_a_cover && compta_type_verified
 
     if journal.nil?
       _error_mess = "Aucun journal correspondant : #{piece.journal}"

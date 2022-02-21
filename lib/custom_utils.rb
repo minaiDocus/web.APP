@@ -2,7 +2,20 @@ class CustomUtils
 
   class << self
     def parse_date_range_of(date='')
-      parsed_date = date.gsub(' ', '').split('-')
+      _date = date
+
+      if date.try(:[], '>=') || date.try(:[], '<=')
+        _t_date = []
+        _t_date[0] = date.try(:[], '>=').presence || 10.years.ago.strftime('%Y-%m-%d')
+        _t_date[1] = date.try(:[], '<=').presence || 1.days.after.strftime('%Y-%m-%d')
+
+        _t_date[0] = Date.parse(_t_date[0]).to_date.strftime("%d/%m/%Y")
+        _t_date[1] = Date.parse(_t_date[1]).to_date.strftime("%d/%m/%Y")
+
+        _date = _t_date.join('-')
+      end
+
+      parsed_date = _date.gsub(' ', '').split('-')
 
       begin
         date1 = parsed_date[0].split('/')[2].to_s + '-' + parsed_date[0].split('/')[1].to_s + '-' + parsed_date[0].split('/')[0].to_s

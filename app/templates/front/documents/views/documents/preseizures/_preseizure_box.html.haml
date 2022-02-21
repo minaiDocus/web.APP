@@ -153,7 +153,9 @@
 
     - if piece
       - delivery_state = piece.get_state_to('text')
-      - if ['delivery_failed', 'duplication', 'piece_ignored'].include?(delivery_state)
+      - if preseizure.pre_assignment_deliveries.where(state: ['pending', 'data_built']).size > 0
+        %span.badge.bg-warning.semibold Ecriture en cours de livraison
+      - elsif ['delivery_failed', 'duplication', 'piece_ignored'].include?(delivery_state)
         %span.badge.badge-danger.semibold= t("pieces.delivery_state.#{delivery_state}")
       - elsif ['awaiting_analytics', 'awaiting_pre_assignment', 'delivery_pending'].include?(delivery_state)
         %span.badge.badge-warning.semibold= t("pieces.delivery_state.#{delivery_state}")
@@ -166,7 +168,9 @@
 
     - elsif operation
       - delivery_state = preseizure.get_state_to('text')
-      - if ['delivery_failed', 'duplication', 'piece_ignored'].include?(delivery_state)
+      - if preseizure.pre_assignment_deliveries.where(state: ['pending', 'data_built']).size > 0
+        %span.badge.bg-warning.semibold Ecriture en cours de livraison
+      - elsif ['delivery_failed', 'duplication', 'piece_ignored'].include?(delivery_state)
         %span.badge.badge-danger.semibold= t("pieces.delivery_state.#{delivery_state}")
       - elsif ['awaiting_analytics', 'awaiting_pre_assignment', 'delivery_pending'].include?(delivery_state)
         %span.badge.badge-warning.semibold= t("pieces.delivery_state.#{delivery_state}")
