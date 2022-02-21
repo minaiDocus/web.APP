@@ -1,21 +1,16 @@
 #pre_assignment_deliveries
-  .row
-    .col-md-12
-      .box.small-shadow.clearfix
-        .float-left
-          %h3
-            Liste des livraisons de pré-affectation vers #{@pre_assignment_deliveries_software}
-            %span.badge.badge-info= @pre_assignment_deliveries_count
+  .row.derivationLeft.box.small-shadow.clearfix.header
+    .col-md-12   
+      %h3
+        Liste des livraisons de pré-affectation vers #{@pre_assignment_deliveries_software}
+        %span.badge.bg-dark= @pre_assignment_deliveries_count
 
-  .row.retractable.with-filter
+  .row.derivationRight
     .col-md-12
-      .box
-        .row
-          .col.mt-4
-            = render partial: 'shared/list_options', locals: { collection: @pre_assignment_deliveries }
-        %table.table.table-condensed.table-striped.margin1top.margin0bottom.table-detachable-head.table-bordered-inner
+      .box#table_pre_assignment
+        %table.table.table-condensed.table-striped
           %thead
-            %tr.bg-brown.text-white
+            %tr
               %th= sortable :id,            'N°'
               %th= sortable :created_at,    t('activerecord.models.common.attributes.created_at')
               %th= sortable :updated_at,    t('activerecord.models.common.attributes.updated_at')
@@ -24,8 +19,8 @@
               %th= sortable :is_auto,       'Auto'
               %th= sortable :state,         t('activerecord.models.pre_assignment_delivery.attributes.state')
               %th= sortable :error_message, t('activerecord.models.pre_assignment_delivery.attributes.error_message')
-              %th Action
-          %tbody.retractable.slidedown
+              %th.text-end Action
+          %tbody
             - @pre_assignment_deliveries.each do |delivery|
               %tr
                 %td= delivery.id
@@ -36,9 +31,16 @@
                 %td= delivery.is_auto ? t('yes_value') : t('no_value')
                 %td= pre_assignment_delivery_state delivery
                 %td= delivery.error_message.to_s[0..55]
-                %td.text-center= link_to glyphicon('eye'), admin_pre_assignment_delivery_path(delivery), title: 'Afficher les détails'
-        %br
-        .row
-          .col.mb-4
-            = render partial: 'shared/list_options', locals: { collection: @pre_assignment_deliveries }
-    = render partial: 'sidebar'
+                %td.text-end.pointer                  
+                  .action.sub_edit_delete
+                    %span.glyph= glyphicon('ellipses', { size: '12', style: 'transform: rotate(90deg)'})
+                  .sub_menu.text-start.hide
+                    %ul.no-margin.no-padding.regular
+                      %li.edit                                
+                        = link_to admin_pre_assignment_delivery_path(delivery) do
+                          %span.me-2= glyphicon('eye', size: 12)
+                          %span Afficher les détails
+
+        = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: admin_pre_assignment_deliveries_path(software: params[:software]), target: '#table_pre_assignment', total_pages: @pre_assignment_deliveries.total_pages, filter: 'form-filter' }
+
+    / = render partial: 'sidebar'

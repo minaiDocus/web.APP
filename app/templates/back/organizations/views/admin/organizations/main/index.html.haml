@@ -48,7 +48,7 @@
                     %td
                       - if (admin_member = organization.admin_members.first)
                         = link_to admin_member.info, organization_collaborator_path(organization, admin_member)                    
-                    %td.text-end.pointer.align-middle
+                    %td.text-end.pointer
                       - if organization.active?
                         .action.sub_edit_delete
                           %span.glyph= glyphicon('ellipses', { size: '12', style: 'transform: rotate(90deg)'})
