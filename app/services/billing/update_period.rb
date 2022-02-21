@@ -10,7 +10,7 @@ class Billing::UpdatePeriod
   def execute
     @period.with_lock(timeout: 3, retries: 30, retry_sleep: 0.1) do
       time = @options[:time] || Time.now
-      @time_end = time.to_date.end_of_month
+      @time_end = time.to_date.end_of_month + 1.day
 
       @subscription.reload
 
@@ -209,7 +209,7 @@ class Billing::UpdatePeriod
   end
 
   def extra_options
-    @subscription.options.where('created_at <= ?', @time_end).by_position.map do |extra_option|
+    @subscription.options.where('created_at < ?', @time_end).by_position.map do |extra_option|
       option = ProductOptionOrder.new
 
       option.title       = extra_option.name
@@ -241,7 +241,7 @@ class Billing::UpdatePeriod
   def order_options
     is_manual_paper_set_order = CustomUtils.is_manual_paper_set_order?(@period.user.organization)
 
-    @period.orders.where('created_at <= ?', @time_end).order(created_at: :asc).map do |order|
+    @period.orders.where('created_at < ?', @time_end).order(created_at: :asc).map do |order|
       next if order.paper_set? && is_manual_paper_set_order
 
       option      = ProductOptionOrder.new
@@ -290,7 +290,7 @@ class Billing::UpdatePeriod
 
     bank_ids = @period.user.operations.where("DATE_FORMAT(created_at, '%Y%m') = #{@period.start_date.strftime("%Y%m")}").pluck(:bank_account_id).uniq
 
-    excess_bank_accounts = @period.user.bank_accounts.where("created_at <= ?", @time_end).where(id: bank_ids).size - 2
+    excess_bank_accounts = @period.user.bank_accounts.where("created_at < ?", @time_end).where(id: bank_ids).size - 2
 
     option_infos = Subscription::Package.infos_of(:retriever_option)
 
@@ -323,13 +323,13 @@ class Billing::UpdatePeriod
     amount       = Subscription::Package.price_of(:retriever_option, reduced) * 100.0
 
     operations_dates = @period.user.operations.where.not(processed_at: nil).where("is_locked = false AND DATE_FORMAT(created_at, '%Y%m') = #{@period.start_date.strftime('%Y%m')}").map{|ope| ope.date.strftime('%Y%m')}.uniq
-    period_dates     = @period.user.periods.where("start_date <= ?", @time_end).map{|_period| _period.start_date.strftime('%Y%m')}.uniq
+    period_dates     = @period.user.periods.where("start_date < ?", @time_end).map{|_period| _period.start_date.strftime('%Y%m')}.uniq
 
     rest = operations_dates - period_dates
 
     rest.sort.each do |value_date|
       if value_date.to_s.match(/^[0-9]{6}$/) && value_date.to_i >= 202001 && value_date.to_i < @period.start_date.strftime("%Y%m").to_i
-        previous_orders = @period.user.periods.where("start_date <= ?", @time_end).collect(&:product_option_orders).flatten.compact
+        previous_orders = @period.user.periods.where("start_date < ?", @time_end).collect(&:product_option_orders).flatten.compact
         jump = false
         title = "Opérations bancaires mois de #{I18n.l(Date.new(value_date.to_s[0..3].to_i, value_date.to_s[4..-1].to_i), format: '%B')} #{value_date.to_s[0..3].to_i}"
 
