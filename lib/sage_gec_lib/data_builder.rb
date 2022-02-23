@@ -27,7 +27,7 @@ module SageGecLib
     def data_content
       __data = []
 
-      ledger_code = @preseizures.first.user.account_book_types.where(name: @preseizures.first.journal_name).first.try(:pseudonym)
+      ledger_code = @preseizures.first.user.account_book_types.where(name: @preseizures.first.journal_name).first.try(:pseudonym).presence || @preseizures.first.journal_name
 
       @preseizures.each do |preseizure|
         @data_count    += 1
