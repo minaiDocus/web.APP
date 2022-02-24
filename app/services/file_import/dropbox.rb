@@ -267,7 +267,7 @@ class FileImport::Dropbox
 
                 corrupted_document_state = PdfIntegrator.verify_corruption(file.path)
 
-                uploaded_document = UploadedDocument.new(file, file_name, customer, journal_name, period_offset, uploader, 'dropbox') if corrupted_document_state.to_s == 'continu'
+                uploaded_document = UploadedDocument.new(file, file_name, customer, journal_name, period_offset, uploader, 'dropbox', '', file_path) if corrupted_document_state.to_s == 'continu'
                 if corrupted_document_state.to_s == 'uploaded' || uploaded_document.try(:valid?)
                   System::Log.info('processing', "[Dropbox Import][#{uploader.code}][SUCCESS]#{file_detail(uploaded_document)} #{file_path}")
                   client.delete file_path
