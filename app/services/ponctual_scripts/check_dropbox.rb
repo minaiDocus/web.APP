@@ -1,4 +1,4 @@
-class FileImport::Dropbox
+class PonctualScripts::CheckDropbox < PonctualScripts::PonctualScript
   ROOT_FOLDER = '/exportation vers iDocus'.freeze
   ERROR_LISTS = {
                   already_exist: 'fichier déjà importé sur iDocus',
@@ -7,67 +7,19 @@ class FileImport::Dropbox
                   invalid_file_extension: 'extension invalide',
                   file_size_is_too_big: 'fichier trop volumineux',
                   pages_number_is_too_high: 'nombre de page trop important',
-                  file_is_corrupted_or_protected: 'Votre document est en-cours de traitement',
-                  real_corrupted_document: 'fichier corrompu ou protégé par mdp',
+                  # file_is_corrupted_or_protected: 'Votre document est en-cours de traitement',
+                  # real_corrupted_document: 'fichier corrompu ou protégé par mdp',
                   unprocessable: 'erreur fichier non valide pour iDocus'
                 }.freeze
-
-  class << self
-    def check
-      DropboxBasic.all.each do |dropbox|
-        begin
-          dropbox.reload
-        rescue ActiveRecord::RecordNotFound
-          next
-        end
-
-        next unless dropbox.is_used? && dropbox.is_configured?
-        next unless dropbox.user.try(:collaborator?) || ([dropbox.user] + dropbox.user.try(:accounts).to_a).compact.detect { |e| e.options.try(:upload_authorized?) }
-        next unless dropbox.changed_at && (dropbox.checked_at.nil? || dropbox.changed_at > dropbox.checked_at)
-
-        begin
-          new(dropbox).check
-        rescue DropboxApi::Errors::HttpError => e
-          if e.message.match(/invalid_access_token/)
-            dropbox.reset_access_token
-            Notifications::Dropbox.new({ user: dropbox.user }).notify_dropbox_invalid_access_token
-          else
-            raise
-          end
-        end
-
-        print '.'
-      end
-      true
-    end
-
-    def changed(object)
-      if object.is_a? User
-        users = []
-        users << object
-        users += object.organization.admins
-        users += object.groups.flat_map(&:collaborators)
-        users += object.collaborators
-        users.uniq!
-        users.compact!
-      else
-        users = object
-      end
-
-      users.each do |user|
-        dropbox = user.external_file_storage.try(:dropbox_basic)
-
-        if dropbox && dropbox.is_used? && dropbox.is_configured?
-          if dropbox.user.is_prescriber || ([dropbox.user]+ dropbox.user.accounts).detect { |e| e.options.try(:upload_authorized?) }
-            dropbox.update_attribute(:changed_at, Time.now)
-          end
-        end
-      end
-    end
+  def self.execute
+    new().execute
   end
 
-  def initialize(object)
-    @dropbox = object.is_a?(String) ? DropboxBasic.find(object) : object
+  def initialize
+    collab = User.find_by_code('AZC%AZC')
+    # collab = User.find_by_code('IDOC%MNA') if Rails.env != 'production'
+
+    @dropbox = collab.external_file_storage.dropbox_basic
 
     @current_cursor      = @dropbox.delta_cursor
     @current_path_prefix = @dropbox.delta_path_prefix
@@ -78,50 +30,52 @@ class FileImport::Dropbox
     end
 
     @initial_cursor = @current_cursor.try(:dup)
-  end
+  end 
 
-  def check(for_all=false)
+  def execute(for_all=true)
     if @dropbox.is_used? && @dropbox.is_configured? && customers.any?
-      if (for_all || @dropbox.need_to_check_for_all?) && @dropbox.import_folder_paths.present? && @dropbox.import_folder_paths.any?
-        check_for_all
-      else
-        checked_at = Time.now
-        has_more = true
+      check_for_all
+      # if (for_all || @dropbox.need_to_check_for_all?) && @dropbox.import_folder_paths.present? && @dropbox.import_folder_paths.any?
+        # check_for_all
+      # else
 
-        initialize_folders if @current_cursor.nil?
+        # checked_at = Time.now
+        # has_more = true
 
-        while has_more && @current_cursor
-          retryable = true
-          begin
-            result = client.list_folder_continue(@current_cursor)
-          rescue DropboxApi::Errors::WriteError => e
-            if e.message.match(/path\/not_found\//) && retryable
-              initialize_folders
-              retryable = false
-              retry
-            else
-              raise
-            end
-          end
+        # initialize_folders if @current_cursor.nil?
 
-          result.entries.each do |entry|
-            process_entry entry
-          end
+        # while has_more && @current_cursor
+        #   retryable = true
+        #   begin
+        #     result = client.list_folder_continue(@current_cursor)
+        #   rescue DropboxApi::Errors::WriteError => e
+        #     if e.message.match(/path\/not_found\//) && retryable
+        #       initialize_folders
+        #       retryable = false
+        #       retry
+        #     else
+        #       raise
+        #     end
+        #   end
 
-          has_more = result.has_more?
-          @current_cursor = result.cursor
-        end
+        #   result.entries.each do |entry|
+        #     process_entry entry
+        #   end
 
-        update_folders
+        #   has_more = result.has_more?
+        #   @current_cursor = result.cursor
+        # end
 
-        @dropbox.update(
-          delta_cursor:        @current_cursor,
-          delta_path_prefix:   @current_path_prefix,
-          import_folder_paths: needed_folders,
-          checked_at:          checked_at
-        )
-      end
-    end
+        # update_folders
+
+        # @dropbox.update(
+        #   delta_cursor:        @current_cursor,
+        #   delta_path_prefix:   @current_path_prefix,
+        #   import_folder_paths: needed_folders,
+        #   checked_at:          checked_at
+        # )
+      # end
+    end    
   end
 
   def client
@@ -255,77 +209,43 @@ class FileImport::Dropbox
         if UploadedDocument.valid_extensions.include?(File.extname(file_path).downcase)
           customer, journal_name, period_offset, collaborator_code = get_info_from_path path
 
-          begin
-            CustomUtils.mktmpdir('dropbox_import') do |dir|
-              File.open File.join(dir, file_name), 'wb' do |file|
-                client.download file_path do |content|
-                  file.puts content.force_encoding('UTF-8')
-                  file.flush
-                end
+          if customer.code == "AZC%DE"
+            p "=================================== #{customer.code} ========================"
+            begin
+              CustomUtils.mktmpdir('dropbox_import') do |dir|
+                File.open File.join(dir, file_name), 'wb' do |file|
+                  client.download file_path do |content|
+                    file.puts content.force_encoding('UTF-8')
+                    file.flush
+                  end
 
-                uploader = collaborator_code.present? ? user.memberships.find_by_code(collaborator_code) : user
+                  uploader = collaborator_code.present? ? user.memberships.find_by_code(collaborator_code) : user
 
-                corrupted_document_state = PdfIntegrator.verify_corruption(file.path)
+                  corrupted_document_state = PdfIntegrator.verify_corruption(file.path)
 
-                uploaded_document = UploadedDocument.new(file, file_name, customer, journal_name, period_offset, uploader, 'dropbox') if corrupted_document_state.to_s == 'continu'
-                if corrupted_document_state.to_s == 'uploaded' || uploaded_document.try(:valid?)
-                  System::Log.info('processing', "[Dropbox Import][#{uploader.code}][SUCCESS]#{file_detail(uploaded_document)} #{file_path}")
-                  client.delete file_path
-                else
-                  System::Log.info('processing', "[Dropbox Import][#{uploader.code}][#{uploaded_document.try(:errors).try(:last).try(:[], 0).to_s}] #{file_path}")
-                  error = (corrupted_document_state.to_s == 'rejected') ? [[:real_corrupted_document]] : uploaded_document.errors
-                  mark_file_error(path, file_name, error)
+                  p "=================================== #{file.path.to_s} ========================"
+                  p "=================================== Fingerprint : #{DocumentTools.checksum(file.path)} ========================"
+
+                  uploaded_document = UploadedDocument.new(file, file_name, customer, journal_name, period_offset, uploader, 'dropbox') if corrupted_document_state.to_s == 'continu'
+                  if corrupted_document_state.to_s == 'uploaded' || uploaded_document.try(:valid?)
+                    p "=================================== UPLOADED #{file_path}========================"
+
+                    System::Log.info('processing', "[Dropbox Import][#{uploader.code}][SUCCESS]#{file_detail(uploaded_document)} #{file_path}")
+                    client.delete file_path
+                  else
+                    p "=================================== ERROR #{file_name} ========================"
+
+                    System::Log.info('processing', "[Dropbox Import][#{uploader.code}][#{uploaded_document.try(:errors).try(:last).try(:[], 0).to_s}] #{file_path}")
+                    error = (corrupted_document_state.to_s == 'rejected') ? [[:real_corrupted_document]] : uploaded_document.errors
+                    mark_file_error(path, file_name, error)
+                  end
                 end
               end
+            rescue DropboxApi::Errors::NotFoundError
             end
-          rescue DropboxApi::Errors::NotFoundError
           end
         else
           mark_file_error(path, file_name)
-        end
-      end
-    else
-      if UploadedDocument.valid_extensions.include?(File.extname(file_path).downcase)
-        customer, journal_name, period_offset, collaborator_code = get_info_from_path path
-
-        begin
-          CustomUtils.mktmpdir('dropbox_import') do |dir|
-            File.open File.join(dir, file_name), 'wb' do |file|
-              client.download file_path do |content|
-                file.puts content.force_encoding('UTF-8')
-                file.flush
-              end
-
-              fingerprint   = DocumentTools.checksum(file.path)
-              temp_document = customer.temp_documents.where(original_fingerprint: fingerprint).first
-
-              if temp_document
-                System::Log.info('processing', "[Dropbox Import][#{temp_document.id}][SUCCESS] - Delete : #{file_path}")
-                client.delete file_path
-              else
-                log_document = {
-                  subject: "[DropBox] Document can not be deleted",
-                  name: "UndeletedDropboxDocument",
-                  error_group: "[DropBox] Document can not be deleted",
-                  erreur_type: "[DropBox] - Document can not be deleted",
-                  date_erreur: Time.now.strftime('%Y-%m-%d %H:%M:%S'),
-                  more_information: {
-                    user: customer.code,
-                    file_name: file_name,
-                    fingerprint: fingerprint
-                  }
-                }
-
-                begin
-                  ErrorScriptMailer.error_notification(log_document, { unlimited: true, attachements: [{ name: file_name, file: File.read(file.path) }] }).deliver
-                rescue
-                  ErrorScriptMailer.error_notification(log_document, { unlimited: true }).deliver
-                end
-              end
-            end
-          end
-        rescue => e
-          System::Log.info('processing', "[Dropbox Import][#{customer.code}][DELETE] - error : #{e.to_s}")
         end
       end
     end
@@ -336,7 +256,6 @@ class FileImport::Dropbox
     errors.each do |err|
       error_message = ERROR_LISTS[err[0].to_sym] if ERROR_LISTS[err[0].to_sym].present?
     end
-
 
     basename = File.basename(file_name, '.*').gsub(/\(#{ERROR_LISTS[:file_is_corrupted_or_protected]}\)/, '').strip
 
@@ -404,12 +323,13 @@ class FileImport::Dropbox
     ERROR_LISTS.each do |pattern|
       return false if file_name =~ /#{pattern.last}/i
     end
-
     return true
   end
 
   def check_for_all
     @dropbox.import_folder_paths.each do |path|
+      next if not path.match(/AZC%DE/i)
+
       begin
         with_error = false
         result = client.list_folder(path)
@@ -424,6 +344,6 @@ class FileImport::Dropbox
       end
     end
 
-    @dropbox.update(checked_at_for_all: Time.now)
+    # @dropbox.update(checked_at_for_all: Time.now)
   end
 end

@@ -46,9 +46,9 @@ module JournalHelper
         client   = SageGecLib::Api::Client.new
         periods  = client.get_periods_list(@customer.organization.sage_gec.sage_private_api_uuid, @customer.sage_gec.sage_private_api_uuid)
 
-        period = periods[:body].select { |p| Date.parse(p["startDate"]) <= Date.today && Date.parse(p["endDate"]) >= Date.today }.first
+        period = periods[:body].select { |p| Date.parse(p["startDate"]).to_date <= Date.today.to_date && Date.parse(p["endDate"]).to_date >= Date.today.to_date }.first
 
-        journals = client.get_ledgers_list(@customer.organization.sage_gec.sage_private_api_uuid, @customer.sage_gec.sage_private_api_uuid, period["$uuid"])
+        journals = client.get_ledgers_list(@customer.organization.sage_gec.sage_private_api_uuid, @customer.sage_gec.sage_private_api_uuid, period.try(:[], "$uuid"))
 
         if journals[:status] == "success"
           journals[:body].map do |j|

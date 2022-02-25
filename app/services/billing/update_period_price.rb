@@ -70,24 +70,42 @@ private
 
   def create_excess_order
     return false unless @period.organization || @period.user&.code == 'NEAT%ARAPL'
+    @period.reload.product_option_orders.where(name: 'excess_documents').destroy_all
 
-    option = @period.reload.product_option_orders.where(name: 'excess_documents').first
+    #BASIC EXCESS
+      option       = @period.reload.product_option_orders.where(name: 'excess_documents_basic').first
+      excess_price = @period.basic_excess * Subscription::Package.excess_of(:ido_classique)[:preassignments][:price]
+      if excess_price > 0
+        option           ||=  @period.product_option_orders.new
+        option.title       = "Documents et écritures comptables en excès pour les dossiers mensuels"
+        option.name        = 'excess_documents_basic'
+        option.duration    = 1
+        option.group_title = 'Autres'
+        option.is_an_extra = true
+        option.price_in_cents_wo_vat = excess_price
 
-    excesses_price = @period.excesses_price
+        option.save
+        @period.save
+      elsif option.present? && option.persisted?
+        option.destroy
+      end
 
-    if excesses_price > 0
-      option           ||=  @period.product_option_orders.new
-      option.title       = "Documents et écritures comptables en excès pour les dossiers mensuels"
-      option.name        = 'excess_documents'
-      option.duration    = 1
-      option.group_title = 'Autres'
-      option.is_an_extra = true
-      option.price_in_cents_wo_vat = excesses_price
+    #MICRO PLUS EXCESS
+      option       = @period.reload.product_option_orders.where(name: 'excess_documents_micro').first
+      excess_price = @period.plus_micro_excess * Subscription::Package.excess_of(:ido_plus_micro)[:preassignments][:price]
+      if excess_price > 0
+        option           ||=  @period.product_option_orders.new
+        option.title       = "Documents et écritures comptables en excès pour les dossiers iDo'Micro"
+        option.name        = 'excess_documents_micro'
+        option.duration    = 1
+        option.group_title = 'Autres'
+        option.is_an_extra = true
+        option.price_in_cents_wo_vat = excess_price
 
-      option.save
-      @period.save
-    elsif option.present? && option.persisted?
-      option.destroy
-    end
+        option.save
+        @period.save
+      elsif option.present? && option.persisted?
+        option.destroy
+      end
   end
 end

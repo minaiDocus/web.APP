@@ -6,7 +6,7 @@ class Billing::CreateInvoicePdf
       test_dir = CustomUtils.mktmpdir('create_invoices', Rails.root.join("files/invoices_pdf"), false);
 
       file = File.open(test_dir + "/invoices_resume.csv", 'w+');
-      file.write("Code;Organisation;Montant facture HT;Montant facture TTC;Dossiers Actifs;iDo'Classique;iDo'Micro;iDo'Nano;iDo'X;Automates;Courrier;Numérisation;Prix forfaits/Options;Remises;Montant remises;Total pièces (Quota organisation);Total opérations (Quota organisation);Total Préaff. (Quota organisation);Préaff. en excès (Quota organisation);Prix excès (Quota organisation)\n");
+      file.write("Code;Organisation;Montant facture HT;Montant facture TTC;Dossiers Actifs;iDo'Classique;iDo'Micro;iDo'Nano;iDo'X;Automates;Courrier;Numérisation;Prix forfaits/Options;Remises;Montant remises;Total pièces (Quota organisation);Total opérations (Quota organisation);Total Préaff. (Quota organisation);Préaff. Basic en excès (Quota organisation);Prix Basic excès (Quota organisation);Préaff. Micro en excès (Quota organisation);Prix Micro excès (Quota organisation)\n");
       file.close
 
       begin
@@ -112,8 +112,11 @@ class Billing::CreateInvoicePdf
           print '.'
         end
 
-        Billing::UpdateOrganizationPeriod.new(organization_period).fetch_all
+        # Billing::UpdateOrganizationPeriod.new(organization_period).fetch_all
+        Billing::OrganizationExcess.new(organization_period).execute
+
         #Update discount only for organization and when generating invoice
+        Billing::UpdatePeriodPrice.new(organization_period).execute
         Billing::DiscountBilling.update_period(organization_period, time)
       end
 
@@ -198,7 +201,8 @@ class Billing::CreateInvoicePdf
       subscription_amount = ''
       discount            = ''
       discount_amount     = ''
-      excess              = ''
+      excess_basic        = ''
+      excess_micro        = ''
 
       next_data = @data.flatten
 
@@ -212,8 +216,10 @@ class Billing::CreateInvoicePdf
         elsif( line.match(/Autres - Remise/) )
           discount        = line.to_s
           discount_amount = next_data[index + 1].to_s
-        elsif( line.match(/Autres - Documents/) )
-          excess = next_data[index + 1]
+        elsif( line.match(/dossiers mensuels/) )
+          excess_basic = next_data[index + 1]
+        elsif( line.match(/dossiers iDo'Micro/) )
+          excess_micro = next_data[index + 1]
         end
       end
 
@@ -228,7 +234,7 @@ class Billing::CreateInvoicePdf
         ttc_amount = "#{ttc_amount} € - (#{amt}) - [#{diff}]"
       end
 
-      file.write("#{organization.code};#{organization.name};#{ht_amount} €;#{ttc_amount} €;#{customers};#{@basic_package_count};#{@micro_package_count};#{@nano_package_count};#{@idox_package_count};#{@retriever_package_count};#{@mail_package_count};#{@digitize_package_count};#{subscription_amount};#{discount};#{discount_amount};#{org_period.total_pieces};#{org_period.total_operations};#{org_period.compta_pieces};#{org_period.excess_compta_pieces};#{excess}\n");
+      file.write("#{organization.code};#{organization.name};#{ht_amount} €;#{ttc_amount} €;#{customers};#{@basic_package_count};#{@micro_package_count};#{@nano_package_count};#{@idox_package_count};#{@retriever_package_count};#{@mail_package_count};#{@digitize_package_count};#{subscription_amount};#{discount};#{discount_amount};#{org_period.total_pieces};#{org_period.total_operations};#{org_period.compta_pieces};#{org_period.basic_excess};#{excess_basic};#{org_period.plus_micro_excess};#{excess_micro}\n");
 
       file.close
     else
@@ -389,8 +395,12 @@ class Billing::CreateInvoicePdf
   def make_invoice_pdf
     @pdf.destroy if @pdf
 
-    Prawn::Document.generate "#{Rails.root}/tmp/#{@invoice.number}.pdf" do |pdf|
+    Prawn::Document.generate("#{Rails.root}/tmp/#{@invoice.number}.pdf", :bottom_margin => 150) do |pdf|
       @pdf = pdf
+
+      @pdf.repeat [1] do
+        @pdf.image "#{Rails.root}/app/assets/images/application/bandeau_facture_parrainage.jpg", width: 472, height: 151, align: :center, :at => [35, 10], :align => :right
+      end
 
       make_header
 
@@ -408,6 +418,7 @@ class Billing::CreateInvoicePdf
 
     @pdf.font_size 8
     @pdf.default_leading 4
+
     header_data = [
       [
         "IDOCUS\n17, rue Galilée\n75116 Paris.",
@@ -423,7 +434,7 @@ class Billing::CreateInvoicePdf
     end
 
     @pdf.move_down 10
-    @pdf.image "#{Rails.root}/app/assets/images/logo/small_logo.png", width: 85, height: 40, at: [4, @pdf.cursor]
+    @pdf.image "#{Rails.root}/app/assets/images/logo/big_logo.png", width: 90, height: 30, at: [4, @pdf.cursor]
 
     @pdf.stroke_color '49442A'
     @pdf.font_size 10
@@ -433,8 +444,7 @@ class Billing::CreateInvoicePdf
                         .reject { |a| a.nil? || a.empty? }
                         .join("\n")
 
-    @pdf.move_down 33
-    @pdf.bounding_box([252, @pdf.cursor], width: 240) do
+    @pdf.bounding_box([262, @pdf.cursor], width: 270) do
       @pdf.text formatted_address, align: :right, style: :bold
 
       if @invoice.organization.vat_identifier
@@ -446,7 +456,7 @@ class Billing::CreateInvoicePdf
 
     @pdf.font_size(14) do
       @pdf.move_down 30
-      @pdf.text "Facture n°" + @invoice.number.to_s + ' du ' + (@invoice.created_at - 1.month).end_of_month.day.to_s + ' ' + @previous_month + ' ' + (@invoice.created_at - 1.month).year.to_s, align: :left, style: :bold
+      @pdf.text "Facture n° " + @invoice.number.to_s + ' du ' + (@invoice.created_at - 1.month).end_of_month.day.to_s + ' ' + @previous_month + ' ' + (@invoice.created_at - 1.month).year.to_s, align: :left, style: :bold
     end
 
     @pdf.move_down 14

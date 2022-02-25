@@ -119,7 +119,7 @@ class Groups::MainController < OrganizationController
     @groups = @user.groups.search(search_terms(params[:group_contains]))
                    .order(sort_column => sort_direction)
                    .page(params[:page])
-                   .per(params[:per_page])
+                   .per(21)
   end
 
   def sort_column

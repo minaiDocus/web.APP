@@ -46,7 +46,8 @@ module Reporting
       time += period.duration.month
     end
 
-    Billing::UpdateOrganizationPeriod.new(pack.organization.subscription.current_period).fetch_all(true)
+    # Billing::UpdateOrganizationPeriod.new(pack.organization.subscription.current_period).fetch_all(true)
+    Billing::OrganizationExcess.new(pack.organization.subscription.current_period).execute(true)
   end
 
   def self.find_period_document(pack, start_date, end_date)

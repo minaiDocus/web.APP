@@ -41,10 +41,10 @@ module SageGecLib
 
         response = client.send_pre_assignment(accountancy_practice_uuid, company_uuid, period["$uuid"], post_body)
 
-        if response["type"] == "O"
-          { success: true, response: response }
+        if response[:status] == "error"
+          { success: false, error: response[:body].try(:[], 'message') || 'Unknown error ...' }
         else
-          { error: response['message'] }
+          { success: true, response: response }
         end
       else
         { error: "L'exercice correspondant n'est pas défini" }

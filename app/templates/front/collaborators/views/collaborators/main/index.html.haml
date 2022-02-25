@@ -9,7 +9,7 @@
         .col-md-5
           %h3.bold
             Liste des collaborateurs
-            %span.badge.badge-secondary.badge-sm.regular= @members.count
+            %span.badge.badge-secondary.badge-sm.regular= @members.try(:total_count).to_i
         .col-md-2.no-padding
           .input-group.mb-3.search-content
             %span.input-group-text.member-search#basic-addon_collaborator= glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })

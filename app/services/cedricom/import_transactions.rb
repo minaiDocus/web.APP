@@ -170,7 +170,16 @@ module Cedricom
     end
 
     def customer_bank_account(bank_account)
-      BankAccount.ebics_enabled.where("number LIKE ?", "%#{bank_account}%").first
+      banks = BankAccount.ebics_enabled.used.joins(:user).where('users.organization_id = ?', @reception.organization_id).where("bank_accounts.number LIKE ?", "%#{bank_account}%")
+
+      if banks.size == 1
+        return banks.first
+      else
+        __banks = banks.select{ |ba| ba.number.upcase == bank_account.upcase }
+        return __banks.first
+      end
+
+      return nil
     end
 
     def read_cfonb(cfonb_by_line)
@@ -245,7 +254,7 @@ module Cedricom
       operation.value_date   = cedricom_operation[:value_date]
       operation.organization = bank_account&.user&.organization ? bank_account&.user&.organization : @reception.organization
       operation.bank_account = bank_account
-      operation.unrecognized_iban = bank_account ? nil : cedricom_operation[:bank_account]
+      operation.unrecognized_iban  = bank_account ? nil : cedricom_operation[:bank_account]
       operation.cedricom_reception = @reception
       operation.currency = case cedricom_operation[:currency_code]
                             when 'EUR'

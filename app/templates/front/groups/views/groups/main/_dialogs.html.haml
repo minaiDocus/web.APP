@@ -30,7 +30,7 @@
         %h5.modal-title.bold Filtrer les groupes
         %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
       .modal-body
-        = form_tag organization_groups_path(@organization), method: :get, class: 'form-filter group_f search_contains_filter' do
+        = form_tag organization_groups_path(@organization), method: :get, class: 'form-filter group_f search_contains_filter', id: 'form-groups-filter' do
           .form-group
             .label-section
               = label_tag 'group_contains[name]', t('activerecord.models.group.attributes.name')
