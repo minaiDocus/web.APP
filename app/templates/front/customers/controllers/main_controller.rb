@@ -80,6 +80,10 @@ class Customers::MainController < CustomerController
         result = MyUnisoftLib::Setup.new({organization: @organization, customer: @customer, columns: {is_used: user_params[softwares_attributes.to_sym]['is_used'] == "1", action: params[:action]}}).execute
       elsif params[:part] == 'sage_gec'
         result = SageGecLib::Setup.new({organization: @organization, customer: @customer, columns: {is_used: user_params[softwares_attributes.to_sym]['is_used'] == "1", action: params[:action]}}).execute
+        
+        if result
+          AccountingPlan::SageGecUpdate.new(@customer).run
+        end
       else
         software = @customer.create_or_update_software({columns: user_params[softwares_attributes.to_sym], software: params[:part]})
         result   = software&.persisted?

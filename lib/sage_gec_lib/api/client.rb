@@ -56,6 +56,26 @@ module SageGecLib
         json_parse
       end
 
+      def get_entries_list(accountancy_practice_uuid, company_uuid, period_uuid)
+        path = "#{base_path}/accountancypractices/#{accountancy_practice_uuid}/companies/#{company_uuid}/accounting/periods/#{period_uuid}/entries"
+
+        @response = connection_bearer.get do |request|
+          request.url path
+        end
+
+        json_parse
+      end
+
+      def get_trading_accounts_list(accountancy_practice_uuid, company_uuid, period_uuid)
+        path = "#{base_path}/accountancypractices/#{accountancy_practice_uuid}/companies/#{company_uuid}/accounting/periods/#{period_uuid}/accounts/trading"
+
+        @response = connection_bearer.get do |request|
+          request.url path
+        end
+
+        json_parse
+      end
+
       def send_pre_assignment(accountancy_practice_uuid, company_uuid, period_uuid, data)
         path = "#{base_path}/accountancypractices/#{accountancy_practice_uuid}/companies/#{company_uuid}/accounting/periods/#{period_uuid}/entries"
 
