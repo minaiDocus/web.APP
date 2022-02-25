@@ -49,17 +49,6 @@ class Archive::ResendCorruptedDocument
       end
     else
       document.uploaded
-
-      if params[:api_name] == 'dropbox'
-        dropbox = params[:uploader].external_file_storage.dropbox_basic
-
-        client = FileImport::Dropbox::Client.new(DropboxApi::Client.new(dropbox.access_token))
-
-        begin
-          client.delete(params[:api_id])
-        rescue DropboxApi::Errors::NotFoundError
-        end
-      end
     end
   end
 end

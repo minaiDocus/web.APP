@@ -267,7 +267,7 @@ class FileImport::Dropbox
 
                 corrupted_document_state = PdfIntegrator.verify_corruption(file.path)
 
-                uploaded_document = UploadedDocument.new(file, file_name, customer, journal_name, period_offset, uploader, 'dropbox', '', file_path) if corrupted_document_state.to_s == 'continu'
+                uploaded_document = UploadedDocument.new(file, file_name, customer, journal_name, period_offset, uploader, 'dropbox') if corrupted_document_state.to_s == 'continu'
                 if corrupted_document_state.to_s == 'uploaded' || uploaded_document.try(:valid?)
                   System::Log.info('processing', "[Dropbox Import][#{uploader.code}][SUCCESS]#{file_detail(uploaded_document)} #{file_path}")
                   client.delete file_path
@@ -282,6 +282,50 @@ class FileImport::Dropbox
           end
         else
           mark_file_error(path, file_name)
+        end
+      end
+    else
+      if UploadedDocument.valid_extensions.include?(File.extname(file_path).downcase)
+        customer, journal_name, period_offset, collaborator_code = get_info_from_path path
+
+        begin
+          CustomUtils.mktmpdir('dropbox_import') do |dir|
+            File.open File.join(dir, file_name), 'wb' do |file|
+              client.download file_path do |content|
+                file.puts content.force_encoding('UTF-8')
+                file.flush
+              end
+
+              fingerprint   = DocumentTools.checksum(file.path)
+              temp_document = customer.temp_documents.where(original_fingerprint: fingerprint).first
+
+              if temp_document
+                System::Log.info('processing', "[Dropbox Import][#{temp_document.id}][SUCCESS] - Delete : #{file_path}")
+                client.delete file_path
+              else
+                log_document = {
+                  subject: "[DropBox] Document can not be deleted",
+                  name: "UndeletedDropboxDocument",
+                  error_group: "[DropBox] Document can not be deleted",
+                  erreur_type: "[DropBox] - Document can not be deleted",
+                  date_erreur: Time.now.strftime('%Y-%m-%d %H:%M:%S'),
+                  more_information: {
+                    user: customer.code,
+                    file_name: file_name,
+                    fingerprint: fingerprint
+                  }
+                }
+
+                begin
+                  ErrorScriptMailer.error_notification(log_document, { unlimited: true, attachements: [{ name: file_name, file: File.read(file.path) }] }).deliver
+                rescue
+                  ErrorScriptMailer.error_notification(log_document, { unlimited: true }).deliver
+                end
+              end
+            end
+          end
+        rescue => e
+          System::Log.info('processing', "[Dropbox Import][#{customer.code}][DELETE] - error : #{e.to_s}")
         end
       end
     end
@@ -358,10 +402,9 @@ class FileImport::Dropbox
 
   def valid_file_name(file_name)
     ERROR_LISTS.each do |pattern|
-      next if pattern.last =~ /#{ERROR_LISTS[:file_is_corrupted_or_protected]}/i
-
       return false if file_name =~ /#{pattern.last}/i
     end
+
     return true
   end
 
