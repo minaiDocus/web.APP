@@ -5,9 +5,9 @@ class Billing::OrganizationExcess
     @organization    = period.organization
   end
 
-  def execute
-    get_basic_excess
-    get_plus_micro_excess
+  def execute(hard_process = false)
+    get_basic_excess(hard_process)
+    get_plus_micro_excess(hard_process)
   end
 
   private
