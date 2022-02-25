@@ -81,7 +81,7 @@
             %tr{ class: (index % 2 == 0)? '' : 'striped' }
               %td.account
                 .content_account{title: "#{@user.has_collaborator_action? ? 'Cliquez pour modifier' : ''}"}
-                  = entry.account.number
+                  = entry.account.number.presence || '---'
                 - if @user.has_collaborator_action?
                   .edit_account.hide
                     %input.edit_account_number.margin0{type: :text, placeholder: entry.account.number , value: entry.account.number}
