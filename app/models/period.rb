@@ -305,7 +305,11 @@ class Period < ApplicationRecord
   end
 
   def excess_compta_pieces
-    excess_preseizure_pieces + excess_expense_pieces
+    if self.user
+      excess_preseizure_pieces + excess_expense_pieces
+    else
+      self.basic_excess + self.plus_micro_excess
+    end
   end
 
   def excesses_price

@@ -6,7 +6,7 @@ class Billing::CreateInvoicePdf
       test_dir = CustomUtils.mktmpdir('create_invoices', Rails.root.join("files/invoices_pdf"), false);
 
       file = File.open(test_dir + "/invoices_resume.csv", 'w+');
-      file.write("Code;Organisation;Montant facture HT;Montant facture TTC;Dossiers Actifs;iDo'Classique;iDo'Micro;iDo'Nano;iDo'X;Automates;Courrier;Numérisation;Prix forfaits/Options;Remises;Montant remises;Total pièces (Quota organisation);Total opérations (Quota organisation);Total Préaff. (Quota organisation);Préaff. en excès (Quota organisation);Prix excès (Quota organisation)\n");
+      file.write("Code;Organisation;Montant facture HT;Montant facture TTC;Dossiers Actifs;iDo'Classique;iDo'Micro;iDo'Nano;iDo'X;Automates;Courrier;Numérisation;Prix forfaits/Options;Remises;Montant remises;Total pièces (Quota organisation);Total opérations (Quota organisation);Total Préaff. (Quota organisation);Préaff. Basic en excès (Quota organisation);Prix Basic excès (Quota organisation);Préaff. Micro en excès (Quota organisation);Prix Micro excès (Quota organisation)\n");
       file.close
 
       begin
@@ -201,7 +201,8 @@ class Billing::CreateInvoicePdf
       subscription_amount = ''
       discount            = ''
       discount_amount     = ''
-      excess              = ''
+      excess_basic        = ''
+      excess_micro        = ''
 
       next_data = @data.flatten
 
@@ -215,8 +216,10 @@ class Billing::CreateInvoicePdf
         elsif( line.match(/Autres - Remise/) )
           discount        = line.to_s
           discount_amount = next_data[index + 1].to_s
-        elsif( line.match(/Autres - Documents/) )
-          excess = next_data[index + 1]
+        elsif( line.match(/dossiers mensuels/) )
+          excess_basic = next_data[index + 1]
+        elsif( line.match(/dossiers iDo'Micro/) )
+          excess_micro = next_data[index + 1]
         end
       end
 
@@ -231,7 +234,7 @@ class Billing::CreateInvoicePdf
         ttc_amount = "#{ttc_amount} € - (#{amt}) - [#{diff}]"
       end
 
-      file.write("#{organization.code};#{organization.name};#{ht_amount} €;#{ttc_amount} €;#{customers};#{@basic_package_count};#{@micro_package_count};#{@nano_package_count};#{@idox_package_count};#{@retriever_package_count};#{@mail_package_count};#{@digitize_package_count};#{subscription_amount};#{discount};#{discount_amount};#{org_period.total_pieces};#{org_period.total_operations};#{org_period.compta_pieces};#{org_period.excess_compta_pieces};#{excess}\n");
+      file.write("#{organization.code};#{organization.name};#{ht_amount} €;#{ttc_amount} €;#{customers};#{@basic_package_count};#{@micro_package_count};#{@nano_package_count};#{@idox_package_count};#{@retriever_package_count};#{@mail_package_count};#{@digitize_package_count};#{subscription_amount};#{discount};#{discount_amount};#{org_period.total_pieces};#{org_period.total_operations};#{org_period.compta_pieces};#{org_period.basic_excess};#{excess_basic};#{org_period.plus_micro_excess};#{excess_micro}\n");
 
       file.close
     else

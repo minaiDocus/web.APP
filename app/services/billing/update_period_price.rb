@@ -70,6 +70,7 @@ private
 
   def create_excess_order
     return false unless @period.organization || @period.user&.code == 'NEAT%ARAPL'
+    @period.reload.product_option_orders.where(name: 'excess_documents').destroy_all
 
     #BASIC EXCESS
       option       = @period.reload.product_option_orders.where(name: 'excess_documents_basic').first
