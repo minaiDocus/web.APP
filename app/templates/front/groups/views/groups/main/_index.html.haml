@@ -4,7 +4,7 @@
       .col-md-6
         %h3.bold
           Gérer les groupes
-          %span.badge.badge-secondary.badge-sm.regular= @groups.size
+          %span.badge.badge-secondary.badge-sm.regular= @groups.try(:total_count).to_i
       .col-md-2.no-padding
         .input-group.mb-3.search-content
           %span.input-group-text.group-search#basic-addon_group= glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })
@@ -58,3 +58,5 @@
                     .w-75.text-start.semibold Nombre de clients :
                     .w-25.text-end.no-padding
                       %span.badge.badge-secondary.badge-sm.semibold= group.customers.count
+    .mt-5
+      = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: organization_groups_path(@organization.id), target: '.box-group-content', total_pages: @groups.total_pages, filter: 'form-groups-filter', no_per_page: true }
