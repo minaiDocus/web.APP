@@ -7,8 +7,8 @@ class PonctualScripts::CheckDropbox < PonctualScripts::PonctualScript
                   invalid_file_extension: 'extension invalide',
                   file_size_is_too_big: 'fichier trop volumineux',
                   pages_number_is_too_high: 'nombre de page trop important',
-                  file_is_corrupted_or_protected: 'Votre document est en-cours de traitement',
-                  real_corrupted_document: 'fichier corrompu ou protégé par mdp',
+                  # file_is_corrupted_or_protected: 'Votre document est en-cours de traitement',
+                  # real_corrupted_document: 'fichier corrompu ou protégé par mdp',
                   unprocessable: 'erreur fichier non valide pour iDocus'
                 }.freeze
   def self.execute
@@ -32,47 +32,49 @@ class PonctualScripts::CheckDropbox < PonctualScripts::PonctualScript
     @initial_cursor = @current_cursor.try(:dup)
   end 
 
-  def execute(for_all=false)
+  def execute(for_all=true)
     if @dropbox.is_used? && @dropbox.is_configured? && customers.any?
-      if (for_all || @dropbox.need_to_check_for_all?) && @dropbox.import_folder_paths.present? && @dropbox.import_folder_paths.any?
-        check_for_all
-      else
-        checked_at = Time.now
-        has_more = true
+      check_for_all
+      # if (for_all || @dropbox.need_to_check_for_all?) && @dropbox.import_folder_paths.present? && @dropbox.import_folder_paths.any?
+        # check_for_all
+      # else
 
-        initialize_folders if @current_cursor.nil?
+        # checked_at = Time.now
+        # has_more = true
 
-        while has_more && @current_cursor
-          retryable = true
-          begin
-            result = client.list_folder_continue(@current_cursor)
-          rescue DropboxApi::Errors::WriteError => e
-            if e.message.match(/path\/not_found\//) && retryable
-              initialize_folders
-              retryable = false
-              retry
-            else
-              raise
-            end
-          end
+        # initialize_folders if @current_cursor.nil?
 
-          result.entries.each do |entry|
-            process_entry entry
-          end
+        # while has_more && @current_cursor
+        #   retryable = true
+        #   begin
+        #     result = client.list_folder_continue(@current_cursor)
+        #   rescue DropboxApi::Errors::WriteError => e
+        #     if e.message.match(/path\/not_found\//) && retryable
+        #       initialize_folders
+        #       retryable = false
+        #       retry
+        #     else
+        #       raise
+        #     end
+        #   end
 
-          has_more = result.has_more?
-          @current_cursor = result.cursor
-        end
+        #   result.entries.each do |entry|
+        #     process_entry entry
+        #   end
 
-        update_folders
+        #   has_more = result.has_more?
+        #   @current_cursor = result.cursor
+        # end
 
-        @dropbox.update(
-          delta_cursor:        @current_cursor,
-          delta_path_prefix:   @current_path_prefix,
-          import_folder_paths: needed_folders,
-          checked_at:          checked_at
-        )
-      end
+        # update_folders
+
+        # @dropbox.update(
+        #   delta_cursor:        @current_cursor,
+        #   delta_path_prefix:   @current_path_prefix,
+        #   import_folder_paths: needed_folders,
+        #   checked_at:          checked_at
+        # )
+      # end
     end    
   end
 
@@ -319,8 +321,6 @@ class PonctualScripts::CheckDropbox < PonctualScripts::PonctualScript
 
   def valid_file_name(file_name)
     ERROR_LISTS.each do |pattern|
-      next if pattern.last =~ /#{ERROR_LISTS[:file_is_corrupted_or_protected]}/i
-
       return false if file_name =~ /#{pattern.last}/i
     end
     return true
@@ -328,6 +328,8 @@ class PonctualScripts::CheckDropbox < PonctualScripts::PonctualScript
 
   def check_for_all
     @dropbox.import_folder_paths.each do |path|
+      next if not path.match(/AZC%DE/i)
+
       begin
         with_error = false
         result = client.list_folder(path)
@@ -342,6 +344,6 @@ class PonctualScripts::CheckDropbox < PonctualScripts::PonctualScript
       end
     end
 
-    @dropbox.update(checked_at_for_all: Time.now)
+    # @dropbox.update(checked_at_for_all: Time.now)
   end
 end
