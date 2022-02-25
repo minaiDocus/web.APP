@@ -187,7 +187,7 @@ Staffingflow::SendBundleNeededWorker:
 
 Archive::ResendDocumentCorruptedWorker:
   queue: default
-  cron: '0 */5 * * * *'
+  cron: '0 0 */1 * * *'
 
 ## Delivery workers
 
