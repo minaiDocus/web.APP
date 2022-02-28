@@ -252,7 +252,11 @@ class BudgeaApi{
           });
         },
         onError: function(error) {
-          return reject('Impossible de récupérer les comptes bancaires');
+          if (parseInt(connector_id) > 0){
+            return reject('Impossible de récupérer les comptes bancaires');
+          }else{
+            return resolve({ remote_accounts: [], my_accounts: [] });
+          }
         }
       });
     });
