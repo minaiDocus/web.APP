@@ -4,7 +4,7 @@ class FecImport
     @file_path = file_path
   end
 
-  def parse_metadata
+  def parse_metadata(separator)
     journal_on_fec = []
     head_list_fec  = ''
 
@@ -13,7 +13,11 @@ class FecImport
     count = 0
 
     txt_file.each_line do |line|
-      column      = line.split(/\t/)
+      column      = line.split(separator)
+
+      if column.size < 4
+        return { error_message: "Vérifier votre séparateur avant d'importer un fichier FEC" }
+      end
 
       head_list_fec = column if count == 0
 
@@ -81,7 +85,7 @@ class FecImport
   end
 
   def make_column_with(line)
-    col    = line.split(/\t/)
+    col    = line.split(@params[:separator])
     column = col.map { |c| c.strip }
 
     _account_provider = (@account_provider.to_s.length <= 3)? @account_provider.to_s + '00000' : @account_provider

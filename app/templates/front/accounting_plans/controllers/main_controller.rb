@@ -13,7 +13,7 @@ class AccountingPlans::MainController < CustomerController
     if params[:dir].present?
       FileUtils.rm_rf params[:dir] if params[:dir]
 
-      redirect_to organization_customer_path(@organization, @customer, tab: 'accounting_plan')
+      redirect_to organization_customer_accounting_plan_path(@organization, @customer)
     end
   end
 
@@ -134,7 +134,7 @@ class AccountingPlans::MainController < CustomerController
   def import_fec
     if params[:fec_file].present?
       unless DocumentTools.is_utf8(params[:fec_file].path)
-        flash[:error] = '<b>Format de fichier non supporté. (UTF-8 sans bom recommandé)</b>'
+        flash[:error] = 'Format de fichier non supporté. (UTF-8 sans bom recommandé)'
       else
         return false if params[:fec_file].content_type != "text/plain"
 
@@ -163,11 +163,18 @@ class AccountingPlans::MainController < CustomerController
 
         File.write @file, txt_file
 
-        @params_fec = FecImport.new(@file).parse_metadata
+        @params_fec = FecImport.new(@file).parse_metadata(params[:separator])
 
-        @customer.account_book_types.each { |jl| journal << jl.name }
+        if @params_fec[:error_message].present?
+          flash[:error] = @params_fec[:error_message]
 
-        @params_fec = @params_fec.merge(dir: @dir, file: @file, journal_ido: journal)
+          redirect_to organization_customer_accounting_plan_path(@organization, @customer)
+          return false
+        else
+          @customer.account_book_types.each { |jl| journal << jl.name }
+
+          @params_fec = @params_fec.merge(dir: @dir, file: @file, journal_ido: journal, separator: params[:separator])
+        end
       end
     else
       flash[:error] = 'Aucun fichier choisi.'

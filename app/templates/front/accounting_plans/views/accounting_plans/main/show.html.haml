@@ -7,19 +7,40 @@
   %input#customer_id{type: :hidden, value: @customer.id, name: 'customer_id'}
   = stylesheet_link_tag 'front/customers/assets/stylesheets/main'
   .box.no-margin.derivationRight.pb-1
-    .row.form-group      
-      .col-md-6
-        - if @customer.try(:ibiza).try(:ibiza_id?) && @customer.uses?(:ibiza)
-          - to_show        = true
-          - software       = "iBiza"
-          - software_value = @customer.ibiza.try(:auto_update_accounting_plan?)
-          - software_id    = @customer.ibiza.ibiza_id
-        - elsif @customer.uses?(:my_unisoft)
-          - to_show        = true
-          - software       = "My Unisoft"
-          - software_value = @customer.my_unisoft.try(:auto_update_accounting_plan?)
-          - software_id    = @customer.my_unisoft.society_id
+    .row.form-group.mb-1
+      - if @customer.try(:ibiza).try(:ibiza_id?) && @customer.uses?(:ibiza)
+        - to_show        = true
+        - software       = "iBiza"
+        - software_value = @customer.ibiza.try(:auto_update_accounting_plan?)
+        - software_id    = @customer.ibiza.ibiza_id
+      - elsif @customer.uses?(:my_unisoft)
+        - to_show        = true
+        - software       = "My Unisoft"
+        - software_value = @customer.my_unisoft.try(:auto_update_accounting_plan?)
+        - software_id    = @customer.my_unisoft.society_id
 
+      .col-md-12
+        = form_tag import_fec_organization_customer_accounting_plan_path(@organization, @customer), method: 'patch', multipart: true, class: 'form-horizontal clearfix label-auto' do
+          .w-100.text-end
+            .row
+              .col-md-4
+                .form-group.clearfix.text-start
+                  .control-section
+                    = file_field_tag :fec_file, class: 'filestyle form-control', data: { classButton: 'btn btn-secondary', input: true, buttonText: glyphicon('file') + '' }, accept: "text/plain"
+                  %i.help-block Encodage accepté : UTF-8
+              .col-md-2
+                %select.separate_verif.form-select{name: "separator", title: 'Séparateur', "data-bs-toggle" => "tooltip", "data-bs-placement" => "top"}
+                  %option{ value: "\t"} Séparateur Tab
+                  %option{ value: "|" }= "Séparateur Tube |"
+              .col-md-6.text-start
+                .form-actions
+                  = submit_tag 'Importer FEC', class: 'btn btn-dark semibold'
+                  %span.badge.bg-info.semibold .txt
+                  %button.btn.btn-default.ms-5
+                    %span.me-2= glyphicon('data-transfer-download', size: '13', color: '#72AA42')
+                    %span= link_to "Télécharger le modèle d'import .csv", import_model_organization_customer_accounting_plan_path(@organization, @customer), class: 'no-style'
+    .row.form-group.no-margin
+      .col-md-12
         - if to_show
           = form_tag "#", class: 'form-horizontal clearfix label-auto', id: 'auto_update_accounting_plan' do
             = hidden_field_tag 'user[software_id]', software_id
@@ -31,26 +52,6 @@
               .col-md-2.form-check.form-switch
                 %label.form-check-label Non
                 = check_box_tag 'user[software]', true, software_value, info: "#{@organization.id}-#{@customer.id}-#{software}", class: 'form-check-input input_switch auto-update-accounting-plan', id: 'auto-update-accounting-plan'
-      .col-md-6
-        .w-100.text-end
-          = form_tag import_fec_organization_customer_accounting_plan_path(@organization, @customer), method: 'patch', multipart: true, class: 'form-horizontal clearfix label-auto' do
-            .row
-              .col-md-8
-                .form-group.clearfix.text-start
-                  .control-section
-                    = file_field_tag :fec_file, class: 'filestyle form-control', data: { classButton: 'btn btn-secondary', input: true, buttonText: glyphicon('file') + '' }, accept: "text/plain"
-
-                  %i.help-block Encodage du fichier accepté :
-                  %b UTF-8
-              .col-md-4.text-start
-                .form-actions                  
-                  = submit_tag 'Importer FEC', class: 'btn btn-dark semibold'                 
-                  %span.badge.bg-info.semibold .txt
-        .w-100.text-end
-          %button.btn.btn-default
-            %span.me-2= glyphicon('data-transfer-download', size: '13', color: '#72AA42')
-            %span= link_to "Télécharger le modèle d'import .csv", import_model_organization_customer_accounting_plan_path(@organization, @customer), class: 'no-style'
-    
     
   - # autoliquidation_exist = @accounting_plan.active_providers.select{ |prov| prov.vat_autoliquidation }.size > 0
   - autoliquidation_exist = false

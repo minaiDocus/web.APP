@@ -3,6 +3,7 @@
   %input.file{ type: :hidden, value: "#{params_fec[:journal_ido]}", name: "journal_ido"}
   %input.file{ type: :hidden, value: "#{params_fec[:file]}", name: "file_path"}
   %input.file{ type: :hidden, value: "#{params_fec[:dir]}", name: "dir_tmp"}
+  %input.file{ type: :hidden, value: "#{params_fec[:separator]}", name: "separator"}
   %input.count_books{ type: :hidden, value: "#{params_fec[:journal_on_fec].size}"}
   %input.new_create_book_type{ type: :hidden, value: "#{params_fec[:new_create_book_type]}", name: "new_create_book_type"}
   .modal-body
