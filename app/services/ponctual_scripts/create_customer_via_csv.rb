@@ -1,10 +1,12 @@
 class PonctualScripts::CreateCustomerViaCsv
-  def initialize(file_path, requester_code)
-    @file_path      = file_path
-    @requester_code = requester_code
+  def initialize(file_path=nil, requester_code=nil)
+    @file_path      = file_path || Rails.root.join('spec/support/files/ponctual_scripts/new_customer_test.csv')
+    @requester_code = requester_code || 'ALM%ZG'
   end
 
   def execute
+    return false if not File.exist?(@file_path)
+
     data_errors = []
     data_bank   = []
     data_file   = File.read(@file_path)
@@ -17,11 +19,18 @@ class PonctualScripts::CreateCustomerViaCsv
       data = line.split(",")
 
       organization = Organization.find_by_code(data[1].split('%')[0]).presence
+      user         = User.find_by_code(data[1].strip)
+
+      if user
+        p "======== Exist: #{user.try(:code)}==="
+        next
+      end
+
       user_params  = { company: data[2], code: data[1], first_name: data[4], last_name: data[3], phone_number: data[9], email: data[10] }
 
       customer = Subscription::CreateCustomer.new(organization, requester, user_params, nil, nil).execute if organization && requester
 
-      params_subscription = {subscription_option: "ido_plus_micro", number_of_journals: 5, is_pre_assignment_active: 'true', retriever_option: 'true' }
+      params_subscription = { subscription_option: "ido_plus_micro", number_of_journals: 5, is_pre_assignment_active: 'true', retriever_option: 'true' }
 
       if organization && customer.persisted?
         Subscription::Form.new(customer.subscription, requester, nil).submit(params_subscription)
@@ -29,7 +38,7 @@ class PonctualScripts::CreateCustomerViaCsv
         bank_account = BankAccount.new
 
         bank_name = ''
-        match_bank_name.each{ |_name| bank_name = _name if bank_name.blank? && data[13].downcase.include?(_name.tr('éèếÉ', 'eee').downcase) }
+        match_bank_name.each{ |_name| bank_name = _name if bank_name.blank? && data[13].downcase.include?(_name.tr('éèếÉ', 'eeee').downcase) }
 
         bank_account.user              = customer
         bank_account.api_name          = 'idocus'
@@ -38,6 +47,7 @@ class PonctualScripts::CreateCustomerViaCsv
         bank_account.number            = data[11]
         bank_account.journal           = data[15]
         bank_account.currency          = data[12]
+        bank_account.original_currency = {"id"=>"EUR", "symbol"=>"€", "prefix"=>false, "precision"=>2, "marketcap"=>nil, "datetime"=>nil, "name"=>"Euro"}
         bank_account.accounting_number = data[14]
         bank_account.temporary_account = "471000"
         bank_account.start_date        = data[16].gsub(/\n/, '')
