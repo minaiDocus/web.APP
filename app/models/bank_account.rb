@@ -30,6 +30,10 @@ class BankAccount < ApplicationRecord
   scope :manual_created, -> { where(api_name: 'idocus') }
   scope :should_be_disabled, -> { manual_created.where(is_to_be_disabled: true) }
 
+  before_validation do |bank|
+    bank.name = bank.name.presence || bank.bank_name
+  end
+
   def self.type_name_list
     ["unknown", "checking", "savings", "lifeinsurance", "market", "loan", "card", "deposit", "pea", "capitalisation", "madelin", "perp"]
   end

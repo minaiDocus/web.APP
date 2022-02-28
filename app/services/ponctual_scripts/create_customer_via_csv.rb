@@ -9,6 +9,7 @@ class PonctualScripts::CreateCustomerViaCsv
 
     data_errors = []
     data_bank   = []
+    data_not_created   = []
     data_file   = File.read(@file_path)
 
     user      = User.get_by_code(@requester_code)
@@ -36,6 +37,10 @@ class PonctualScripts::CreateCustomerViaCsv
         bank_name = ''
         match_bank_name.each{ |_name| bank_name = _name if bank_name.blank? && data[13].downcase.include?(_name.tr('éèếÉ', 'eeee').downcase) }
 
+        if bank_name.blank?
+          data_not_created << { user: customer.code, bank_name: data[13] }
+        end
+
         bank_account                   = customer.bank_accounts.where(api_name: 'idocus', name: bank_name, number: data[11].strip).first || BankAccount.new
         bank_account.user              = customer
         bank_account.api_name          = 'idocus'
@@ -60,13 +65,13 @@ class PonctualScripts::CreateCustomerViaCsv
       end
     end
 
-    send_mail_for(data_bank, data_errors )
+    send_mail_for(data_bank, data_errors, data_not_created)
     p data_errors
   end 
 
   private
 
-  def send_mail_for(data_bank, data_errors)
+  def send_mail_for(data_bank, data_errors, data_not_created)
     # lines = []
     # data_bank.each do |data|
     #   lines << data.join(';')
@@ -85,7 +90,8 @@ class PonctualScripts::CreateCustomerViaCsv
         date_erreur: Time.now.strftime('%Y-%m-%d %H:%M:%S'),
         more_information: {
           data_banks: data_bank.to_json,
-          data_errors: data_errors.to_json
+          data_errors: data_errors.to_json,
+          data_not_created: data_not_created.to_json,
         }
       }
 

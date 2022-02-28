@@ -48,6 +48,7 @@ fr:
         message: Message
       bank_account:
         number: Numéro de compte
+        name: Nom
         journal: Code journal
         foreign_journal: Journal comptable de l’outil comptable
         currency: Devise
