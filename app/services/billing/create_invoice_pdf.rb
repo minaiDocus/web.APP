@@ -77,6 +77,7 @@ class Billing::CreateInvoicePdf
       return false if organization.addresses.select{ |a| a.is_for_billing }.empty?
       return false if organization_period.nil?
       return false if organization_period.invoices.present? && invoice_number.nil? && !options[:test]
+      return false if organization.code == 'TEEO'
 
 
       p "=================== Next step =================="

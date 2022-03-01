@@ -242,8 +242,6 @@ module Cedricom
     def save_operation(bank_account, cedricom_operation)
       duplicate_ope = check_duplicated bank_account, cedricom_operation if bank_account
 
-      return duplicate_ope if duplicate_ope
-
       operation = Operation.new
 
       operation.user         = bank_account&.user
@@ -273,6 +271,8 @@ module Cedricom
       
       if operation.persisted? && operation.bank_account
         operation.update(api_id: operation.id)
+
+        operation.update(is_locked: true) if duplicate_ope
       end
 
       operation
