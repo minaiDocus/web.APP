@@ -2,7 +2,7 @@
 
 Configurer l’accès à vos services de stockage externe de documents vous permet de recevoir tous les documents numérisés par iDocus sur un autre support que notre plateforme (Export de documents). Nous pouvons également aller chercher les documents directement sur ces supports externes (Import de documents)
 %br
-- if external_file_storage.authorized > 0
+- if external_file_storage.try(:authorized).to_i > 0
   %br
   - if external_file_storage.is_dropbox_basic_authorized?
     - service_number = ExternalFileStorage::F_DROPBOX
