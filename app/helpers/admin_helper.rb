@@ -40,7 +40,8 @@ module AdminHelper
 
 
   def pre_assignment_delivery_state(delivery)
-    klass = 'badge fs-origin'
+    klass = 'badge'
+    klass += ' bg-dark'   if delivery.state == 'pending'
     klass += ' bg-success'   if delivery.state == 'sent'
     klass += ' bg-danger'    if delivery.state == 'error'
 

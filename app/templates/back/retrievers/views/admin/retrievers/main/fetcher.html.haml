@@ -1,14 +1,11 @@
 #retrievers
-  .row
+  .row.derivationLeft.box.small-shadow.clearfix.header
+    .col-md-6      
+      %h3
+        Récupération de transactions utilisateur Budgea
+
+  .row.box.derivationRight
     .col-md-12
-      .box.small-shadow.clearfix
-        = render file: Rails.root.join('app/templates/back/retrievers/views/admin/retrievers/_navigation.html.haml')
-
-  .card
-    .card-header
-      %h3 Récupération de transactions utilisateur Budgea
-
-    .card-body
       = form_tag fetcher_admin_retrievers_path, method: :post, class: 'form form-vertical margin0bottom' do
         = hidden_field_tag :post_action_budgea_fetcher, true
 
@@ -33,15 +30,15 @@
               %td.field.date_field
                 .input-group
                   .input-group-prepend
-                    %span.input-group-text= glyphicon('calendar')
+                    %span.input-group-text= glyphicon('calendar', size: 20)
                   = text_field_tag 'budgea_fetcher_contains[min_date]', (params[:budgea_fetcher_contains][:min_date] rescue ''), class: 'form-control date datepicker'
               %td.field.date_field
                 .input-group
                   .input-group-prepend
-                    %span.input-group-text= glyphicon('calendar')
+                    %span.input-group-text= glyphicon('calendar', size: 20)
                   = text_field_tag 'budgea_fetcher_contains[max_date]', (params[:budgea_fetcher_contains][:max_date] rescue ''), class: 'form-control date datepicker'
               %td
-                = submit_tag 'Lancer la récupération', name: nil, class: 'btn btn-primary'
+                = submit_tag 'Lancer la récupération', name: nil, class: 'btn btn-dark'
 
     - if @message
       .row

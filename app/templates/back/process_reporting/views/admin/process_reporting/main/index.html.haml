@@ -2,7 +2,9 @@
   .box.derivationLeft
     .row
       .col-md-10
-        %h3.semibold Reporting des traitements de #{l(@time, format: '%B %Y')}
+        %h3 
+          Reporting des traitements de
+          %span.badge.bg-dark= l(@time, format: '%B %Y')
   .mb-4
 
   .row.derivationRight

@@ -1,6 +1,6 @@
-%table.table.table-condensed.table-striped.margin1top.margin0bottom.table-detachable-head.table-bordered-inner
+%table.table.table-condensed.table-striped
   %thead
-    %tr.bg-brown.text-white
+    %tr
       %th N°
       %th.text-center=sortable :name,"Nom de l'unique Job"
       %th.text-center=sortable :started_at, "Date début"
@@ -12,7 +12,7 @@
         %th.text-center Action
   %tbody
     - @jobs.each do |job|
-      %tr{id:"tr_#{job.id}"}
+      %tr.text-center{id:"tr_#{job.id}"}
         %td= job.id
         %td= job.name
         %td= job.started_at.try(:to_formatted_s, :db)
