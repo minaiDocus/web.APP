@@ -1,6 +1,7 @@
 = simple_form_for @bank_account, url: retriever_bank_update_path, html: { id: 'form-bank-params', class: 'form-horizontal label-medium' } do |f|
   = f.input :name
   = f.input :number
+  = f.input :bic
   = f.input :journal
   - if @account.uses?(:ibiza)
     - if @account.organization.ibiza.configured?
@@ -26,7 +27,7 @@
           = hidden_field_tag 'bank_account[start_date]', @bank_account.start_date
       - if @bank_account.operations.count >= 1
         %p.help-block L'opération bancaire la plus ancienne remontée par l'automate date du #{@bank_account.operations.order(date: :asc).first.date.strftime("%d/%m/%Y")}
-  - if @customer.organization.cedricom_configured?
+  - if @customer.organization.cedricom_configured? && @customer.cedricom_configured?
     .form-group.clearfix{ class: ('error' if @bank_account.errors.keys.include?(:ebics_enabled_starting)) }
       .label-section
         = label_tag 'bank_account[ebics_enabled_starting]'," Activer la récuparation EBICS à compter du"
@@ -39,3 +40,6 @@
           %p.help-block L'opération bancaire la plus ancienne remontée par l'automate date du #{@bank_account.operations.order(date: :asc).first.date.strftime("%d/%m/%Y")}
   = f.input :lock_old_operation, required: true, hint: "Ne s'applique qu'après un mois depuis la création de ce compte bancaire dans iDocus", input_html: { class: 'form-check-input m-2' }, wrapper: :inline_checkbox
   = f.input :permitted_late_days, required: true
+  
+  - if @bank_account.cedricom_mandate_state == "TELECHARGE"
+    = f.input :cedricom_signed_mandate

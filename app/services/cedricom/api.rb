@@ -55,6 +55,74 @@ module Cedricom
       end
     end
 
+    def create_customer(payload)
+      path = "/sycomore/releves/api/v1/abonnements/STR0834600/entites/#{@organization.cedricom_name}/dossiersclients"
+
+      @connection.headers['Content-Type'] = "application/json"
+
+      result = @connection.post do |request|
+        request.url path
+        request.body = payload
+      end
+
+      if result.status == 200
+        result.body
+      else
+        nil
+      end
+    end
+
+    def update_customer(customer_code, payload)
+      path = "/sycomore/releves/api/v1/abonnements/STR0834600/entites/#{@organization.cedricom_name}/dossiersclients/#{customer_code}"
+
+      @connection.headers['Content-Type'] = "application/json"
+
+      result = @connection.patch do |request|
+        request.url path
+        request.body = payload
+      end
+
+      if result.status == 200
+        result.body
+      else
+        nil
+      end
+    end
+
+    def fetch_mandate(customer_code, payload)
+      path = "/sycomore/releves/api/v1/abonnements/STR0834600/entites/#{@organization.cedricom_name}/dossiersclients/#{customer_code}/mandats/pdfNonSigne"
+
+      @connection.headers['Content-Type'] = "application/json"
+
+      result = @connection.post do |request|
+        request.url path
+        request.body = payload
+      end
+
+      if result.status == 200
+        result.body
+      else
+        nil
+      end
+    end
+
+    def update_mandate(customer_code, payload)
+      path = "/sycomore/releves/api/v1/abonnements/STR0834600/entites/#{@organization.cedricom_name}/dossiersclients/#{customer_code}/mandats/pdfSigne"
+
+      @connection.headers['Content-Type'] = "application/json"
+
+      result = @connection.post do |request|
+        request.url path
+        request.body = payload
+      end
+
+      if result.status == 200
+        result.body
+      else
+        nil
+      end
+    end
+
     private
 
     def get_jwt

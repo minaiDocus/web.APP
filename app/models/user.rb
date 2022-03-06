@@ -373,6 +373,13 @@ class User < ApplicationRecord
     code.gsub("%", "")
   end
 
+  def cedricom_configured?
+    self.address_street.present? && self.address_zip_code.present? &&
+    self.address_city.present? && self.registration_number.present? &&
+    self.legal_registration_city.present? && self.last_name.present? && 
+    self.phone_number.present? && self.email.present? && self.first_name.present?
+  end
+
   private
 
   def belonging_of_manager

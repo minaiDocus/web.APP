@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
     get '/retriever/bank/:id', to: 'banks_params#edit', as: 'retriever_bank_edit'
     get '/retriever/new/bank', to: 'banks_params#new', as: 'retriever_new_bank'
+    get '/retriever/bank/:id/download_cedricom_mandate', to: 'banks_params#download_cedricom_mandate', as: 'retriever_download_cedricom_mandate'
     patch '/retriever/bank/:id', to: 'banks_params#update', as: 'retriever_bank_update'
     patch '/retriever/new/bank', to: 'banks_params#create', as: 'retriever_create_bank'
 

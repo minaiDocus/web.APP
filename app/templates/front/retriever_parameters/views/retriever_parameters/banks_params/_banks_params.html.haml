@@ -47,6 +47,9 @@
                         - if not bank_account.is_to_be_disabled?           
                           %li.edit{ data: { id: bank_account.id } }
                             = link_to glyphicon('pencil', { size: '15', color: "rgba(26, 26, 26, 0.7)" }) + ' Éditer', '#'
+                          - if bank_account.cedricom_mandate_state != "ACTIF" && bank_account.cedricom_mandate_identifier.present?
+                            %li
+                              = link_to glyphicon('check', { size: '15', color: "#72AA42" }) + ' Télécharger le mandat', retriever_download_cedricom_mandate_path(bank_account.id), class: 'green-label-dark'
                         - if bank_account.can_be_deleted?
                           %li.activation{ data: { id: bank_account.id, type: 'disable' } }
                             = link_to glyphicon('trash', { size: '15', color: "#FF4848" }) + ' Supprimer', '#', class: 'red-label'

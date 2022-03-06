@@ -226,7 +226,7 @@ class Organization < ApplicationRecord
   end
 
   def cedricom_configured?
-    self.cedricom_user.present? && self.encrypted_cedricom_password.present?
+    self.cedricom_user.present? && self.encrypted_cedricom_password.present? && self.cedricom_name.present?
   end
 
   private

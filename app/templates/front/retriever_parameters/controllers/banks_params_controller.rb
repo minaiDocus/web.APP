@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class RetrieverParameters::BanksParamsController < RetrieverController
   before_action :verif_account
-  before_action :load_bank_account, only: %w[edit update bank_activation]
+  before_action :load_bank_account, only: %w[edit update bank_activation download_cedricom_mandate]
   prepend_view_path('app/templates/front/retriever_parameters/views')
 
   def index
@@ -28,6 +28,10 @@ class RetrieverParameters::BanksParamsController < RetrieverController
     @bank_account = BankAccount.create(bank_account_params)
 
     if @bank_account.persisted?
+      if @bank_account.ebics_enabled_starting
+        Cedricom::CreateMandate.new(@bank_account).execute
+      end
+
       success = true
       message = 'Créé avec succès.'
     else
@@ -52,6 +56,10 @@ class RetrieverParameters::BanksParamsController < RetrieverController
     if @bank_account.save
       if start_date_changed && @bank_account.start_date.present?
         @bank_account.operations.not_duplicated.where('is_locked = ? and is_coming = ? and date >= ?', true, false, @bank_account.start_date).update_all(is_locked: false)
+      end
+
+      if @bank_account.ebics_enabled_starting && !@bank_account.cedricom_mandate_identifier
+        Cedricom::CreateMandate.new(@bank_account).execute
       end
 
       PreAssignment::UpdateAccountNumbers.delay.execute(@bank_account.id.to_s, changes)
@@ -81,6 +89,12 @@ class RetrieverParameters::BanksParamsController < RetrieverController
     end
   end
 
+  def download_cedricom_mandate
+    if @bank_account.cedricom_original_mandate.attached?
+      send_data @bank_account.cedricom_original_mandate.download, filename: @bank_account.cedricom_original_mandate.filename.to_s, content_type: @bank_account.cedricom_original_mandate.content_type
+    end
+  end
+
   private
 
   def bank_setting_params
@@ -95,6 +109,7 @@ class RetrieverParameters::BanksParamsController < RetrieverController
       :name,
       :type_name,
       :number,
+      :bic,
       :journal,
       :currency,
       :foreign_journal,
@@ -105,6 +120,7 @@ class RetrieverParameters::BanksParamsController < RetrieverController
       :permitted_late_days,
       :api_name,
       :ebics_enabled_starting,
+      :cedricom_signed_mandate,
       :original_currency => [:id, :symbol, :prefix, :crypto, :precision, :marketcap, :datetime, :name])
   end
 
