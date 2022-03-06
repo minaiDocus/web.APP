@@ -123,6 +123,20 @@
                   %label.semibold{class: 'form-check-label label_check_field', for: 'specific_mission'} Non
           
           = f.input :default_banking_provider, as: :select, label_html: { class: 'semibold custom-label-field' }, collection: default_banking_provider_options_for_select, input_html: { class: '  custom-input-field form-select' }
+
+          .form-group
+            .select-container.no-padding.w-100
+              = f.input :cedricom_name, input_html: { class: '', placeholder: "ex : NOMCABINET" }
+
+          .form-group
+            .select-container.no-padding.w-100
+              = f.input :cedricom_user, input_html: { class: '', placeholder: "ex : cabinet@cabinet.com" }
+
+          .form-group
+            .select-container.no-padding.w-100
+              = f.input :cedricom_password, input_html: { class: '', placeholder: "" }
+
+
       - elsif !@organization.specific_mission
         - ['quadratus', 'coala', 'csv_descriptor'].each do |software|
           = f.simple_fields_for software.to_sym do |sf|

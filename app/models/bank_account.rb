@@ -4,6 +4,9 @@ class BankAccount < ApplicationRecord
 
   serialize :original_currency, Hash
 
+  has_one_attached :cedricom_original_mandate
+  has_one_attached :cedricom_signed_mandate
+
   belongs_to :user
   belongs_to :retriever, optional: true
   has_many :operations, dependent: :nullify

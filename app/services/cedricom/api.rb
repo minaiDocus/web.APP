@@ -41,6 +41,20 @@ module Cedricom
       end
     end
 
+    def get_customer(customer_code)
+      path = "/sycomore/releves/api/v1/abonnements/STR0834600/entites/#{@organization.cedricom_name}/dossiersclients/#{customer_code}"
+
+      result = @connection.get do |request|
+        request.url path
+      end
+
+      if result.status == 200
+        result.body
+      else
+        nil
+      end
+    end
+
     private
 
     def get_jwt

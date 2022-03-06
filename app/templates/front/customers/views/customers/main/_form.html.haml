@@ -10,7 +10,25 @@
                 %hr
                 = f.label :company, :class => "required semibold"
                 .select-container.no-padding.w-100
-                  = f.input :company, label: false, input_html: { class: 'company_field required_field', placeholder: "ex : iDocus", :required => true }
+                  = f.input :company, label: false, input_html: { class: 'company_field', placeholder: "ex : iDocus", :required => true }
+                = f.label :type_of_entity, :class => "semibold"
+                .select-container.no-padding.w-100
+                  = f.input :type_of_entity, label: false, input_html: { class: 'type_of_entity_field', placeholder: "ex : SARL", :required => true }
+                = f.label :legal_registration_city, :class => "semibold"
+                .select-container.no-padding.w-100
+                  = f.input :legal_registration_city, label: false, input_html: { class: 'legal_registration_city_field', placeholder: "ex : Paris", :required => true }
+                = f.label :registration_number, :class => "semibold"
+                .select-container.no-padding.w-100
+                  = f.input :registration_number, label: false, input_html: { class: 'address_street_field', placeholder: "ex : 123456789", :required => true }
+                = f.label :address_street, :class => "semibold"
+                .select-container.no-padding.w-100
+                  = f.input :address_street, label: false, input_html: { class: 'address_street_field', placeholder: "ex : 1 rue demonstration", :required => true }
+                = f.label :address_zip_code, :class => "semibold"
+                .select-container.no-padding.w-100
+                  = f.input :address_zip_code, label: false, input_html: { class: 'address_zip_code_field', placeholder: "ex : 75000", :required => true }
+                = f.label :address_city, :class => "semibold"
+                .select-container.no-padding.w-100
+                  = f.input :address_city, label: false, input_html: { class: 'address_city_field', placeholder: "ex : Paris", :required => true }
                 - if !@organization.specific_mission && action_name != 'new' && @customer.subscription.current_period.try(:is_package?, 'ido_x')
                   = f.label :jefacture_account_id, :class => "semibold"
                   .select-container.no-padding.w-100

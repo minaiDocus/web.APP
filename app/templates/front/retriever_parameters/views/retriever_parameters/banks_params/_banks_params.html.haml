@@ -17,6 +17,7 @@
           %th Numéro de compte
           %th Code journal
           %th Compte de trésorerie
+          %th État Mandat EBICS
           %th Date historique
           %th.text-end Action
         %tbody
@@ -28,7 +29,16 @@
                 %td= bank_account.number
                 %td= bank_account.journal
                 %td= bank_account.accounting_number
-                %td= bank_account.start_date
+                %td
+                  - if bank_account.cedricom_mandate_identifier
+                    = bank_account.cedricom_mandate_state
+                  - else
+                    = "Non créé"
+                %td
+                  - if bank_account.cedricom_mandate_identifier
+                    = bank_account.ebics_enabled_starting
+                  - else
+                    = bank_account.start_date
                 %td.text-end.pointer
                   .action.sub-menu-bank-param
                     %span= glyphicon('ellipses', { size: '15', color: 'rgba(26, 26, 26, 0.7);', style: 'transform: rotate(90deg)'})

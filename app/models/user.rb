@@ -369,6 +369,10 @@ class User < ApplicationRecord
     created_at > 24.hours.ago
   end
 
+  def sanitized_code
+    code.gsub("%", "")
+  end
+
   private
 
   def belonging_of_manager

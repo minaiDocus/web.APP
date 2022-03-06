@@ -225,6 +225,10 @@ class Organization < ApplicationRecord
     self.created_at.strftime('%Y%m%d') >= '20220201' || ['IDOC'].include?(self.code)
   end
 
+  def cedricom_configured?
+    self.cedricom_user.present? && self.encrypted_cedricom_password.present?
+  end
+
   private
 
   def software
