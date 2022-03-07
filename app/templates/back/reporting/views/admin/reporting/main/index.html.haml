@@ -5,8 +5,8 @@
         Reporting de l'année
         %span.badge.bg-dark= @year
     .col-md-6.text-end
-      = link_to image_tag('application/icon-xls.png', alt: 'Export xls', class: 'generate-export-xls', style: 'position:relative;top:-2px;') + ' Export XLS', "/admin/reporting/#{@year}.xls", class: "btn btn-dark download-export_xls"
-      = link_to image_tag('application/icon-xls.png', alt: 'Export xls simplifié', class: 'generate-export-xls', style: 'position:relative;top:-2px;') + ' Export XLS simplifié', "/admin/reporting/#{@year}.xls?simplified=1", class: "btn btn-primary download-export_xls simplified_xls"
+      = link_to image_tag('application/icon-xls-admin.png', alt: 'Export xls', class: 'generate-export-xls', style: 'position:relative;top:-2px;') + ' Export XLS', "/admin/reporting/#{@year}.xls", class: "btn btn-primary download-export_xls"
+      = link_to image_tag('application/icon-xls-admin.png', alt: 'Export xls simplifié', class: 'generate-export-xls', style: 'position:relative;top:-2px;') + ' Export XLS simplifié', "/admin/reporting/#{@year}.xls?simplified=1", class: "btn btn-dark download-export_xls simplified_xls"
 
   .row.box.derivationRight
     .col-md-12      
@@ -23,11 +23,12 @@
               %th
                 %span.float-left
                   = month_name.capitalize
-                = link_to image_tag('application/icon-xls.png', alt: "Export XLS #{month_name.capitalize}", style: 'position:relative;top:-2px;'), "#", title: "Export XLS #{month_name.capitalize}", class: 'float-right monthly-export', data: { hrf: "/admin/reporting/#{@year}.xls?month=#{'%02d' % index}", month: "#{'%02d' % index}", year: @year }
+                = link_to image_tag('application/icon-xls-admin.png', alt: "Export XLS #{month_name.capitalize}", style: 'position:relative;top:-2px;'), "#", title: "Export XLS #{month_name.capitalize}", class: 'float-right monthly-export', data: { hrf: "/admin/reporting/#{@year}.xls?month=#{'%02d' % index}", month: "#{'%02d' % index}", year: @year }
         = render partial: 'reporting_table', locals: { collection: @organizations }
   #loadingPage
-    %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}
-    %label.mt-2.semibold Chargement
+    .box.text-center
+      %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}
+      %label.mt-2.semibold Chargement
   #showInvoice.modal.hide.fade.in
     .modal-dialog
       .modal-content

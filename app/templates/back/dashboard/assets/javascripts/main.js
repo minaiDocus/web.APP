@@ -5,7 +5,14 @@ function event(){
     
     $('.modal#see-more-info .modal-body').html($(this).find(".more-info").html());
     $('.modal#see-more-info').modal('show'); 
-  })
+  });
+
+  
+  $('.flux').unbind('click').bind('click', function(e){
+    $('.indicator').addClass('hide');
+    $('.result-flux').html($('#'+$(this).data('ref')).clone().removeClass('hide'));
+    $('.'+$(this).data('ref')).find('.indicator').removeClass('hide');
+  });
 }
 
 function load_resources(resources) {
@@ -16,9 +23,11 @@ function load_resources(resources) {
         url: '/admin/dashboard/' + resource,
         dataType: 'html',
         type: 'GET',
-        success: function (data) {          
+        success: function (data) {
           $('.content#'+resource).html(data)
-          $('.box.'+ resource + ' label.count.'+ resource).html($('.content#' + resource + ' table').data('total'))
+          $('.box .'+ resource + ' label.count.'+ resource).html($('.content#' + resource + ' table').data('total'))
+          console.log(resource); 
+          console.log($('.content#' + resource + ' table').data('total')); 
         }
       });
     })(i);
@@ -92,7 +101,9 @@ $(document).ready(function() {
 
   load_graph_statistic(list_graph_bar, 'bar');
   load_graph_statistic(list_graph_line, 'line');
-  load_graph_bank_operation()
+  load_graph_bank_operation();
+
+  event();
 
   load_resources(resources);
 

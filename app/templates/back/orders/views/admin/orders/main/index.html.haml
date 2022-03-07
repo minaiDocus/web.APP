@@ -9,9 +9,9 @@
         %span.me-2= glyphicon('transfer', { size: '10', style: 'transform: rotate(90deg)'})
         %span Filtrer
 
-  .row.derivationRight
+  .row.derivationRight#table_orders
     .col.md-12
-      .box 
+      .box
         %table.table.table-condensed.table-striped
           %thead
             %tr
@@ -44,3 +44,5 @@
                   %td.text-end= format_price_00(order.price_in_cents_wo_vat) + ' €'
                 %td= order.address.try(:long_info)
                 %td= Order.state_machine.states[order.state].human_name
+
+        = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: admin_orders_index_path, target: '#table_orders', total_pages: @orders.total_pages, filter: 'form-organizations-filter' }

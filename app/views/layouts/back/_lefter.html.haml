@@ -104,6 +104,10 @@
           = link_to(archives_budgea_users_admin_retrievers_path(tab: 'budgea_users'), class: 'dropdown-item') do
             %span.me-2= glyphicon('grid-three-up', size: 12, color: "rgba(26, 26, 26, 0.7)")
             %span.text-dark Archives
+      %li.nav-item{ class: ('active' if controller_name == 'events') }
+        = link_to '' do
+          %span.me-2= glyphicon('print', size: 12, color: "white")
+          %span Tickets Informatique
 
     %hr
       %li.nav-item.dropdown

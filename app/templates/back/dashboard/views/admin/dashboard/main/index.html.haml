@@ -1,163 +1,173 @@
 = stylesheet_link_tag 'back/dashboard/assets/stylesheets/main'
 
-#dashboard.derivationRight
-  %h3.semibold Flux de traitement
-  %hr
-  .mb-4
-  .row
-    .col-md-2
-      .box.heightGroups.groups_1.ocr_needed_temp_packs
-        .head-box.p-3.pt-2
+#dashboard
+  .row.derivationLeft.box.small-shadow.clearfix.header
+    .col-md-12      
+      %h3 Flux de traitement        
+
+  .row.box.derivationRight
+    .col-md-6     
+      .row.mb-2.ocr_needed_temp_packs.flux{ data: { ref: 'ocr_needed_temp_packs' }}
+        .col-md-1.text-center
           .badge-content.back-grey.for-badge= glyphicon('magnifying-glass', size: 18, color: "white")
-          .text-end
-            %h5.bold.no-margin.no-padding OCR
-            %label.count.ocr_needed_temp_packs
-              %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}
-        .mb-1
-        %hr.no-margin.no-padding
-        .foot-box.p-2
-          .text-end.label_more_info
-            %label.semibold Voir détails >>
-            .hide.more-info
-              .content#ocr_needed_temp_packs
-    .col-md-3
-      .box.heightGroups.groups_1.bundle_needed_temp_packs
-        .head-box.p-3.pt-2
+        .col-md-9.text-start.pt-1.bottom-grey
+          %label.semibold.no-margin.no-padding OCR
+        .col-md-1.text-end.bottom-grey          
+          %label.count.ocr_needed_temp_packs
+            %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}
+        .col-md-1
+          %span.float-end.hide.indicator= glyphicon('caret-right', size: 18)
+        .hide.content#ocr_needed_temp_packs      
+
+      .row.mb-2.bundle_needed_temp_packs.flux{ data: { ref: 'bundle_needed_temp_packs' }}
+        .col-md-1
           .badge-content.back-magenta.for-badge= glyphicon('justify-center', size: 18, color: "white")
-          .text-end
-            %h5.bold.no-margin.no-padding Regroupement en cours
-            %label.count.bundle_needed_temp_packs
-              %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}
-        .mb-1
-        %hr.no-margin.no-padding
-        .foot-box.p-2
-          .text-end.label_more_info
-            %label.semibold Voir détails >>
-            .hide.more-info
-              .content#bundle_needed_temp_packs
-    .col-md-3
-      .box.heightGroups.groups_1.processing_temp_packs
-        .head-box.p-3.pt-2
+        .col-md-9.text-start.pt-1.bottom-magenta
+          %label.semibold.no-margin.no-padding Regroupement en cours
+        .col-md-1.text-end.bottom-magenta
+          %label.count.bundle_needed_temp_packs
+            %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}
+        .col-md-1
+          %span.float-end.hide.indicator= glyphicon('caret-right', size: 18)
+        .hide.content#bundle_needed_temp_packs
+
+      .row.mb-2.processing_temp_packs.flux{ data: { ref: 'processing_temp_packs' }}
+        .col-md-1
           .badge-content.back-yellow.for-badge= glyphicon('transfer', size: 18, color: "white")
-          .text-end
-            %h5.bold.no-margin.no-padding Conversion en pièces
-            %label.count.processing_temp_packs
-              %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}
-        .mb-1
-        %hr.no-margin.no-padding
-        .foot-box.p-2
-          .text-end.label_more_info
-            %label.semibold Voir détails >>
-            .hide.more-info
-              .content#processing_temp_packs
-    .col-md-2
-      .box.heightGroups.groups_1.awaiting_supplier_recognition
-        .head-box.p-3.pt-2
+        .col-md-9.text-start.pt-1.bottom-yellow
+          %label.semibold.no-margin.no-padding Conversion en pièces
+        .col-md-1.text-end.bottom-yellow
+          %label.count.processing_temp_packs
+            %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}
+        .col-md-1
+          %span.float-end.hide.indicator= glyphicon('caret-right', size: 18)
+        .hide.content#processing_temp_packs
+
+      .row.mb-2.awaiting_supplier_recognition.flux{ data: { ref: 'awaiting_supplier_recognition' }}
+        .col-md-1
           .badge-content.back-blue-sky.for-badge= glyphicon('list-rich', size: 18, color: "white")
-          .text-end
-            %h5.bold.no-margin.no-padding Recon. Fou.
-            %label.count.awaiting_supplier_recognition
-              %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}              
-        .mb-1
-        %hr.no-margin.no-padding
-        .foot-box.p-2
-          .text-end.label_more_info
-            %label.semibold Voir détails >>
-            .hide.more-info
-              .content#awaiting_supplier_recognition
-    .col-md-2
-      .box.heightGroups.groups_1.cedricom_orphans
-        .head-box.p-3.pt-2
-          .badge-content.back-blue.for-badge= glyphicon('script', size: 18, color: "white")
-          .text-end
-            %h5.bold.no-margin.no-padding Cédricom
-            %label.count.cedricom_orphans
-              %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}
-        .mb-1
-        %hr.no-margin.no-padding
-        .foot-box.p-2
-          .text-end.label_more_info
-            %label.semibold Voir détails >>
-            .hide.more-info
-              .content#cedricom_orphans
-  .mb-4
-  .row
-    .col-md-4
-      .box.awaiting_pre_assignments.blocked_pre_assignments
-        .head-box.p-3.pt-2
-          .badge-content.back-green.for-badge= glyphicon('random', size: 18, color: "white")
-          .text-end
-            %h5.bold.no-margin.no-padding Pré-afféctation
-            %label En cours :
-            %label.count.blocked_pre_assignments
-              %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}
-            %br
-            %label En attente :
-            %label.count.awaiting_pre_assignments
-              %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}
-        .mb-1
-        %hr.no-margin.no-padding
-        .foot-box.p-2
-          .text-end.label_more_info
-            %label.semibold Voir détails >>
-            .hide.more-info
-              .content#blocked_pre_assignments
-              %hr
-              .content#awaiting_pre_assignments
+        .col-md-9.text-start.pt-1.bottom-blue-sky
+          %label.semibold.no-margin.no-padding Reconaissance Fournisseur
+        .col-md-1.text-end.bottom-blue-sky
+          %label.count.awaiting_supplier_recognition
+            %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}
+        .col-md-1
+          %span.float-end.hide.indicator= glyphicon('caret-right', size: 18)
+        .hide.content#awaiting_supplier_recognition
 
-    .col-md-4
-      .box.reports_delivery.failed_reports_delivery
-        .head-box.p-3.pt-2
-          .badge-content.back-blue-sky.for-badge= glyphicon('share', size: 18, color: "white")
-          .text-end
-            %h5.bold.no-margin.no-padding Livraison Pré-afféctation
-            %label En cours :
-            %label.count.reports_delivery
-              %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}
-            %br
-            %label En attente :
-            %label.count.failed_reports_delivery
-              %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}
+      .row.mb-2.lad_result.flux{ data: { ref: 'lad_result' }}
+        .col-md-1
+          .badge-content.back-blue.for-badge= glyphicon('paperclip', size: 18, color: "white")
+        .col-md-9.text-start.pt-1.bottom-blue
+          %label.semibold.no-margin.no-padding LAD
+        .col-md-1.text-end.bottom-blue
+          %label.count.lad_result
+            %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}
+        .col-md-1
+          %span.float-end.hide.indicator= glyphicon('caret-right', size: 18)
+        .hide.content#lad_result
 
-        .mb-1
-        %hr.no-margin.no-padding
-        .foot-box.p-2
-          .text-end.label_more_info
-            %label.semibold Voir détails >>
-            .hide.more-info
-              .content#reports_delivery
-              %hr
-              .content#failed_reports_delivery
-    .col-md-4
-      .box.failed_packs_delivery.currently_being_delivered_packs
-        .head-box.p-3.pt-2
-          .badge-content.back-grey.for-badge= glyphicon('project', size: 18, color: "white")
-          .text-end
-            %h5.bold.no-margin.no-padding Livraison GED client
-            %label En cours :
-            %label.count.currently_being_delivered_packs
-              %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}
-            %br
-            %label En attente :
-            %label.count.failed_packs_delivery
-              %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}
+      .row.mb-2.blocked_pre_assignments.flux{ data: { ref: 'blocked_pre_assignments' }}
+        .col-md-1
+          .badge-content.back-green.for-badge= glyphicon('media-play', size: 18, color: "white")
+        .col-md-9.text-start.pt-1.bottom-green
+          %label.semibold.no-margin.no-padding Pré-afféctation - En cours
+        .col-md-1.text-end.bottom-green
+          %label.count.blocked_pre_assignments
+            %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}
+        .col-md-1
+          %span.float-end.hide.indicator= glyphicon('caret-right', size: 18)
+        .hide.content#blocked_pre_assignments
 
-        .mb-1
-        %hr.no-margin.no-padding
-        .foot-box.p-2
-          .text-end.label_more_info
-            %label.semibold Voir détails >>
-            .hide.more-info
-              .content#currently_being_delivered_packs
-              %hr
-              .content#failed_packs_delivery
-  
+      .row.mb-2.awaiting_pre_assignments.flux{ data: { ref: 'awaiting_pre_assignments' }}
+        .col-md-1
+          .badge-content.back-green.for-badge= glyphicon('media-pause', size: 18, color: "white")
+        .col-md-9.text-start.pt-1.bottom-green
+          %label.semibold.no-margin.no-padding Pré-afféctation - En attente
+        .col-md-1.text-end.bottom-green
+          %label.count.awaiting_pre_assignments
+            %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}
+        .col-md-1
+          %span.float-end.hide.indicator= glyphicon('caret-right', size: 18)
+        .hide.content#awaiting_pre_assignments
+
+      .row.mb-2.reports_delivery.flux{ data: { ref: 'reports_delivery' }}
+        .col-md-1
+          .badge-content.back-blue-sky.for-badge= glyphicon('media-play', size: 18, color: "white")
+        .col-md-9.text-start.pt-1.bottom-blue-sky
+          %label.semibold.no-margin.no-padding Livraison Pré-afféctation - En cours
+        .col-md-1.text-end.bottom-blue-sky
+          %label.count.reports_delivery
+            %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}
+        .col-md-1
+          %span.float-end.hide.indicator= glyphicon('caret-right', size: 18)
+        .hide.content#reports_delivery
+
+      .row.mb-2.failed_reports_delivery.flux{ data: { ref: 'failed_reports_delivery' }}
+        .col-md-1
+          .badge-content.back-blue-sky.for-badge= glyphicon('media-pause', size: 18, color: "white")
+        .col-md-9.text-start.pt-1.bottom-blue-sky
+          %label.semibold.no-margin.no-padding Livraison Pré-afféctation - En attente
+        .col-md-1.text-end.bottom-blue-sky
+          %label.count.failed_reports_delivery
+            %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}
+        .col-md-1
+          %span.float-end.hide.indicator= glyphicon('caret-right', size: 18)
+        .hide.content#failed_reports_delivery
+
+      .row.mb-2.currently_being_delivered_packs.flux{ data: { ref: 'currently_being_delivered_packs' }}
+        .col-md-1
+          .badge-content.back-grey.for-badge= glyphicon('media-play', size: 18, color: "white")
+        .col-md-9.text-start.pt-1.bottom-grey
+          %label.semibold.no-margin.no-padding Livraison GED client - En cours
+        .col-md-1.text-end.bottom-grey
+          %label.count.currently_being_delivered_packs
+            %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}
+        .col-md-1
+          %span.float-end.hide.indicator= glyphicon('caret-right', size: 18)
+        .hide.content#currently_being_delivered_packs
+
+      .row.mb-2.currently_being_delivered_packs.flux{ data: { ref: 'currently_being_delivered_packs' }}
+        .col-md-1
+          .badge-content.back-grey.for-badge= glyphicon('media-pause', size: 18, color: "white")
+        .col-md-9.text-start.pt-1.bottom-grey
+          %label.semibold.no-margin.no-padding Livraison GED client - En attente
+        .col-md-1.text-end.bottom-grey
+          %label.count.currently_being_delivered_packs
+            %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}
+        .col-md-1
+          %span.float-end.hide.indicator= glyphicon('caret-right', size: 18)
+        .hide.content#currently_being_delivered_packs
+
+      .row.mb-2.cedricom_orphans.flux{ data: { ref: 'cedricom_orphans' }}
+        .col-md-1
+          .badge-content.back-yellow.for-badge= glyphicon('script', size: 18, color: "white")
+        .col-md-9.text-start.pt-1.bottom-yellow
+          %label.semibold.no-margin.no-padding Cédricom - Orphelina
+        .col-md-1.text-end.bottom-yellow
+          %label.count.cedricom_orphans
+            %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}
+        .col-md-1
+          %span.float-end.hide.indicator= glyphicon('caret-right', size: 18)
+        .hide.content#cedricom_orphans
+
+    .col-md-6.result-flux
+      .box.back-grey
+        %table.table.table-condensed.table-striped
+          %thead.text-white
+            %tr
+              %th.text-center Date
+              %th.text-center Lots
+              %th.text-center Compte
+              %th.text-center Message
+          %tbody.text-white
   .mb-5
-  %h3.semibold
-    Information dépuis
-    %strong= I18n.l(30.days.ago)
-    jusqu'à Aujourd'hui
-  %hr
+  .row.derivationLeft.box.small-shadow.clearfix.header
+    .col-md-12      
+      %h3
+        Information dépuis
+        %span.badge.bg-dark= I18n.l(30.days.ago)
+        jusqu'à Aujourd'hui
 
   .row
     .col-md-6

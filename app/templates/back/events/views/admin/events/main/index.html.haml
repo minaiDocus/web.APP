@@ -15,9 +15,9 @@
       %button.btn.btn-warning.events-filter.w-50
         %span.me-2= glyphicon('transfer', { size: '10', color: '#000', style: 'transform: rotate(90deg)'})
         %span Filtrer
-  .row.derivationRight
-    .col-md-12.retractable-content
-      .box.clearfix        
+  .row.derivationRight.mb-5
+    .col-md-12
+      .box.clearfix#table_events      
         .row
           .col-md-12
             %table.table.table-condensed.table-striped
@@ -45,6 +45,7 @@
                       = event_presenter.target_type
                     %td.do-show.target_name
                       = event_presenter.target_name
+            = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: admin_events_path, target: '#table_events', total_pages: @events.total_pages, filter: 'form-filter' }
       
     .card.retractable-filter.hide
       = form_tag admin_events_path, method: :get, class: 'form-filter' do

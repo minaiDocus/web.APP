@@ -1,0 +1,31 @@
+#tickets
+  .row.box.clearfix.derivationLeft
+    .col-md-10      
+      .float-start
+        %h3 
+          Liste des tickets
+          %span.badge.bg-dark= @tickets.total_count
+    .col-md-2.text-end
+      %button.btn.btn-warning.events-filter.w-50
+        %span.me-2= glyphicon('transfer', { size: '10', color: '#000', style: 'transform: rotate(90deg)'})
+        %span Filtrer
+  .row.derivationRight.mb-5
+    .col-md-12
+      .box.clearfix#table_events      
+        .row
+          .col-md-12
+            %table.table.table-condensed.table-striped
+              %thead
+                %tr
+                  %th.text-center
+                  %th.text-center
+                  %th.text-center
+                  %th.text-center
+                  %th.text-center
+                  %th.text-center
+              %tbody
+                
+            / = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: admin_events_path, target: '#table_events', total_pages: @events.total_pages, filter: 'form-filter' }
+      
+    
+= javascript_include_tag 'admin/tickets'

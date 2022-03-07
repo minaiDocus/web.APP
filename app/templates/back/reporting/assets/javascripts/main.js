@@ -65,7 +65,7 @@ $(document).ready(function() {
     });
 
     $(this).text(ch_text)
-    $(this).append('<img alt="Export xls" style="position:relative;top:-2px;" src="/assets/application/icon-xls.png">')
+    $(this).append('<img alt="Export xls" style="position:relative;top:-2px;" src="/assets/application/icon-xls-admin.png">')
     $('#reporting .download-export_xls').hide()
     $('#reporting #show-export-xls-link .download-link, #reporting #show-export-xls-link .show-content').remove()
 
@@ -164,7 +164,7 @@ $(document).ready(function() {
           blob = this.response
           download_link = document.createElement('a')
           download_link.href = window.URL.createObjectURL(new Blob([ blob ], {type: 'application/vnd.ms-excel; charset=utf-8'}))
-          download_link.download = "reporting_iDocus_#{month}_#{year}.xls"
+          download_link.download = "reporting_iDocus_"+ month +"_"+ year +".xls"
           download_link.click()
       }
     }

@@ -39,8 +39,8 @@
               %td= link_to @pre_assignment_count, "#", class: 'do-showAccounts', title: "Pré-saisie", type: "pre_assignment_active"
   .row
     .col-md-12
-      .box.clearfix
-        %table#statistic_table.table.table-condensed.table-striped
+      .box.clearfix#statistic_table
+        %table.table.table-condensed.table-striped
           %thead
             %tr.text-center
               %th(colspan='3') Information
@@ -142,6 +142,7 @@
                 %span{ class: ("positive" if @statistics_total[:new_customers] > 0) }= @statistics_total[:new_customers]
               %td.total_footer
                 %span{ class: ("negative" if @statistics_total[:closed_customers] > 0) }= @statistics_total[:closed_customers]
+        = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: admin_subscriptions_index_path, target: '#statistic_table', total_pages: @statistics.total_pages, filter: 'form-filter' }
 
     .card.retractable-filter.hide
       = form_tag admin_subscriptions_index_path, method: :get, class: 'form-filter' do
