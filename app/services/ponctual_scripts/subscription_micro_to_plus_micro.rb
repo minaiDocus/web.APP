@@ -12,7 +12,8 @@ class PonctualScripts::SubscriptionMicroToPlusMicro < PonctualScripts::PonctualS
 
   def execute
     time = Time.now.beginning_of_month + 15.days
-    organizations = Organization.where('DATE_FORMAT(created_at, "%Y%m%d") >= 20220201')
+    organizations = Organization.where(code: 'JC')
+    # organizations = Organization.where('DATE_FORMAT(created_at, "%Y%m%d") >= 20220201')
 
     params = { subscription_option: 'ido_plus_micro', is_to_apply_now: 1 }
 
