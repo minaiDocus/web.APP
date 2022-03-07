@@ -272,7 +272,7 @@ module Cedricom
       if operation.persisted? && operation.bank_account
         operation.update(api_id: operation.id)
 
-        operation.update(is_locked: true) if duplicate_ope
+        operation.update(is_locked: true) if duplicate_ope && !['ACC%0343', 'ACC%0438'].include?(operation.user.code)
       end
 
       operation
