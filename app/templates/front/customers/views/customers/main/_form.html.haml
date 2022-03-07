@@ -10,7 +10,7 @@
                 %hr
                 = f.label :company, :class => "required semibold"
                 .select-container.no-padding.w-100
-                  = f.input :company, label: false, input_html: { class: 'company_field', placeholder: "ex : iDocus", :required => true }
+                  = f.input :company, label: false, input_html: { class: 'company_field required_field', placeholder: "ex : iDocus", :required => true }
                 = f.label :type_of_entity, :class => "semibold"
                 .select-container.no-padding.w-100
                   = f.input :type_of_entity, label: false, input_html: { class: 'type_of_entity_field', placeholder: "ex : SARL", :required => true }
