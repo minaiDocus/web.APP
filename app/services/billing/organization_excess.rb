@@ -14,8 +14,8 @@ class Billing::OrganizationExcess
     @period.basic_excess             = basic_res[:excess_compta_pieces]
     @period.basic_total_compta_piece = basic_res[:total_compta_pieces]
 
-    @period.plus_micro_excess        = micro_res[:excess_compta_pieces]
-    @period.basic_total_compta_piece = micro_res[:total_compta_pieces]
+    @period.plus_micro_excess             = micro_res[:excess_compta_pieces]
+    @period.plus_micro_total_compta_piece = micro_res[:total_compta_pieces]
 
     @period.save
   end
