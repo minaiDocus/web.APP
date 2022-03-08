@@ -6,6 +6,8 @@ class Billing::OrganizationExcess
   end
 
   def execute(hard_process = false)
+    return false if not @organization
+
     reset_quota
 
     basic_res = get_basic_excess(hard_process)
@@ -31,8 +33,6 @@ class Billing::OrganizationExcess
   end
 
   def get_excess_of(package, hard_process=false)
-    return false if not @organization
-
     result = { excess_limit: 0, total_compta_pieces: 0 }
 
     customers_periods.each do |c_period|
