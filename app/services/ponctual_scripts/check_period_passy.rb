@@ -12,13 +12,15 @@ class PonctualScripts::CheckPeriodPassy
     data_each << ["PERIOD", "ETAT", "CONTENT", "CODE USER", "ADRESS IP", "DATE MAJ"]
 
     periods.each do |period|
-      on_create = period.audits.where(action: 'create').first
+      # on_create = period.audits.where(action: 'create').first
 
-      data_each << [ period.start_date.strftime('%Y%m'), on_create.action, on_create.audited_changes, on_create.try(:user_id), on_create.remote_address, on_create.created_at.strftime('%Y-%m-%d %H:%M:%S') ]
+      # data_each << [ period.start_date.strftime('%Y%m'), on_create.action, on_create.audited_changes, on_create.try(:user_id), on_create.remote_address, on_create.created_at.strftime('%Y-%m-%d %H:%M:%S') ]
 
       on_change = period.audits.where(action: 'update')
 
       on_change.each do |change|
+        next if change.created_at.strftime('%Y%m%d') <= period.end_date.strftime('%Y%m%d')
+
         data_each << [ period.start_date.strftime('%Y%m'), change.action, change.audited_changes, change.try(:user_id), change.remote_address, change.created_at.strftime('%Y-%m-%d %H:%M:%S') ]
       end
 
