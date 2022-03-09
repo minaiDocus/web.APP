@@ -12,10 +12,10 @@ class PonctualScripts::InvoiceSimulation < PonctualScripts::PonctualScript
   def execute
     dir = CustomUtils.mktmpdir('ponctual', nil, false)
 
-    year = 2021
-    organization = Organization.find_by_code('GMBA')
+    year = 2022
+    organization = Organization.find_by_code('ACDA')
 
-    (1..12).to_a.each do |month|
+    (1..2).to_a.each do |month|
       time = Date.parse("#{year}-#{month}-1")
 
       logger_infos "[INVOICE SIMULATION] - generating invoice #{month}"

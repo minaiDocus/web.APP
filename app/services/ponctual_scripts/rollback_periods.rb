@@ -10,14 +10,14 @@ class PonctualScripts::RollbackPeriods < PonctualScripts::PonctualScript
   private
 
   def execute
-    periods   = Period.where(organization_id: nil).where("DATE_FORMAT(start_date, '%Y%m') >= '202201' AND DATE_FORMAT(start_date, '%Y%m') <= '202202'")
+    periods   = Period.where(organization_id: nil).where("DATE_FORMAT(start_date, '%Y%m') >= '202011' AND DATE_FORMAT(start_date, '%Y%m') <= '202011'")
 
     data_each = []
-    data_each << ["id", "key", "curr_value", "new_value", "period_date", "date_audit"]
+    data_each << ["user_code", "id", "key", "curr_value", "new_value", "period_date", "date_audit"]
 
     periods.each do |period|
       next if not period.user
-      next if period.user.organization.try(:code) != 'ACDA'
+      next if period.user.organization.try(:code) != 'EXT'
       next if period.user.code.to_s.match /IDOC%/i
 
       period_audit = period.audits.where(action: 'update').where('audited_changes LIKE "%price_in_cents_wo_vat%"').except(:order).order(version: :desc)
@@ -42,12 +42,12 @@ class PonctualScripts::RollbackPeriods < PonctualScripts::PonctualScript
 
             if prev_value != new_value
               period[k.to_sym] = new_value
-              data_each << [ period.id, key, prev_value, new_value, period.start_date, prim_audit.created_at.strftime("%Y-%m-%d %H:%M:%S") ]
+              data_each << [ period.user.code, period.id, key, prev_value, new_value, period.start_date, prim_audit.created_at.strftime("%Y-%m-%d %H:%M:%S") ]
             end
           end
 
           _break = true
-          # period.save
+          period.save
         end
       end
     end
