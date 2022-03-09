@@ -1,18 +1,21 @@
 class PonctualScripts::CheckAllPeriod
   def execute    
-    periods   = Period.where(organization_id: nil).where("DATE_FORMAT(created_at, '%Y') >= '2021'")
+    periods   = Period.where(organization_id: nil).where("DATE_FORMAT(created_at, '%Y') >= '2022'")
 
     data_each = []
-    data_each << ["PERIOD ID", "PERIOD", "USER CODE", "DATE DEBUT", "DATE FIN", "ETAT", "CONTENT", "ADRESS IP", "DATE MAJ"]
+    data_each << ["PERIOD ID", "PERIOD", "USER CODE", "DATE DEBUT", "DATE FIN", "DATE MAJ", "CONTENT", "ADRESS IP"]
 
     periods.each do |period|
+      next if not period.user
       next if period.user.code.to_s.match /IDOC%/i
 
       period_audit = period.audits.where(action: 'update')
 
       period_audit.each do |audit|
-        if audit.audited_changes.to_s.match /_price_/i
-          data_each << [ period.id, period.start_date.strftime('%Y%m'), period.user.code, period.start_date, period.end_date, 'update', audit.audited_changes, audit.remote_address, audit.created_at.strftime('%Y-%m-%d %H:%M:%S')]
+        if audit.audited_changes.to_s.match /price_in_cents_wo_vat/i
+          next if audit.created_at.strftime('%Y%m%d') <= period.end_date.strftime('%Y%m%d')
+
+          data_each << [ period.id, period.start_date.strftime('%Y%m'), period.user.code, period.start_date, period.end_date, audit.created_at.strftime('%Y-%m-%d %H:%M:%S'), audit.audited_changes, audit.remote_address]
 
           data_each << ["","","",""]
         end

@@ -11,6 +11,7 @@ class PonctualScripts::InvoiceSimulation < PonctualScripts::PonctualScript
 
   def execute
     dir = CustomUtils.mktmpdir('ponctual', nil, false)
+
     year = 2021
     organization = Organization.find_by_code('GMBA')
 
@@ -23,8 +24,12 @@ class PonctualScripts::InvoiceSimulation < PonctualScripts::PonctualScript
       file_name   = "#{organization.code}_#{organization.id}.pdf"
       dest_file_name   = "#{organization.code}_#{organization.id}_#{month}.pdf"
 
-      FileUtils.cp "#{invoice_dir}/#{file_name}", "#{dir}/#{dest_file_name}"
-      FileUtils.remove_entry(invoice_dir, true)
+      begin
+        FileUtils.cp "#{invoice_dir}/#{file_name}", "#{dir}/#{dest_file_name}"
+        FileUtils.remove_entry(invoice_dir, true)
+      rescue => e
+        logger_infos "[INVOICE SIMULATION] - #{e}"
+      end
     end
 
 
