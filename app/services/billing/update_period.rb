@@ -8,6 +8,8 @@ class Billing::UpdatePeriod
   end
 
   def execute
+    return false if @period.cannot_be_changed?
+
     @period.with_lock(timeout: 3, retries: 30, retry_sleep: 0.1) do
       time = @options[:time] || Time.now
       @time_end = time.to_date.end_of_month + 1.day

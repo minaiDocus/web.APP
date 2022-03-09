@@ -7,6 +7,8 @@ class Billing::UpdatePeriodPrice
   end
 
   def execute
+    return false if @period.cannot_be_changed?
+
     if @period.try(:organization)
       @period.tva_ratio = @period.organization.subject_to_vat ? 1.2 : 1
     end

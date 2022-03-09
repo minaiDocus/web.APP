@@ -7,6 +7,7 @@ class Billing::UpdatePeriodData
   end
 
   def execute
+    return false if @period.cannot_be_changed?
     return false if @period.organization
 
     @period.pages  = @period.documents.sum(:pages)      || 0

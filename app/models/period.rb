@@ -31,7 +31,6 @@ class Period < ApplicationRecord
   before_create :add_one_delivery
   before_create :set_start_date_and_end_date
 
-
   def self.period_name(duration, offset=0, current_time=Time.now)
     time = current_time
     time -= (duration * offset).month
@@ -363,6 +362,14 @@ class Period < ApplicationRecord
     return 0 unless organization
 
     self.product_option_orders.where(name: 'excess_documents_micro').first.try(:price_in_cents_wo_vat).to_f
+  end
+
+  def cannot_be_changed?
+    begin
+      self.end_date.to_date < Time.now.to_date && Time.now.strftime('%d%H').to_i > 108 #Current time is over the first and 08 hours
+    rescue
+      false
+    end
   end
 
 private
