@@ -23,7 +23,7 @@ module IbizaLib
                 nil
               end
             elsif (k == 'amount' || k == 'currency')
-              if preseizure[k].present? && (preseizure.currency.to_s.downcase.strip.presence || preseizure.unit.to_s.downcase.strip.presence || 'eur') != (preseizure.report.journal({ name_only: false }).try(:currency).to_s.downcase.strip || 'eur')
+              if preseizure[k].present? && (preseizure.currency.to_s.downcase.strip.presence || preseizure.unit.to_s.downcase.strip.presence || 'eur') != (preseizure.report.journal({ name_only: false }).try(:currency).to_s.downcase.strip.presence || 'eur')
                 preseizure[k].presence
               else
                 nil
