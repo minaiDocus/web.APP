@@ -13,6 +13,35 @@
   .row.direct_access.derivationLeft
     %p= t('dashboard.folder_text_info')
 
+  - if @user.is_developer
+    .box.derivationRight
+      %h3 Mes tickets
+      %hr
+      .row
+        .col-md-2       
+          %label.semibold 
+            En cours :
+        .col-md-1.text-start
+          %span.ms-5.badge.bg-info= @user.tickets.where(state: 'processing').size
+        .col-md-9.text-wrap
+          = @user.tickets.where(state: 'processing').collect(&:title).join(', ')
+      .row
+        .col-md-2       
+          %label.semibold 
+            En attente :
+        .col-md-1.text-start
+          %span.ms-5.badge.bg-warning= @user.tickets.where(state: 'waiting').size
+        .col-md-9.text-wrap
+          = @user.tickets.where(state: 'waiting').collect(&:title).join(', ')
+      .row
+        .col-md-2       
+          %label.semibold 
+            Assigné :
+        .col-md-1.text-start
+          %span.ms-5.badge.bg-primary= @user.tickets.where(state: 'ready').size
+        .col-md-9.text-wrap
+          = @user.tickets.where(state: 'ready').collect(&:title).join(', ')          
+  %br
   .row.derivationLeft
     .col-md-4.view-documents.no-padding.semibold
       %a.btn.btn-primary.view-documents-btn{href: documents_path}= t('dashboard.view_my_documents')
@@ -28,8 +57,8 @@
             %span.me-2= glyphicon('plus', {size: '12', color: '#fa8e2e'})
           - else
             %span.me-2= glyphicon('plus', {size: '12', color: '#72AA42'})
-          %span= t('dashboard.add_folder_to_favorite')
-
+          %span= t('dashboard.add_folder_to_favorite')    
+    
     .row.my-favorite-customers
       - if @favorites.size > 0
         - count       = @favorites.size

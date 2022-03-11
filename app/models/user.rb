@@ -69,6 +69,7 @@ class User < ApplicationRecord
   has_many :notifications, dependent: :destroy
   has_many :ibizabox_folders, dependent: :destroy
   has_many :archive_document_corrupted, class_name: 'Archive::DocumentCorrupted'
+  has_many :tickets
 
   belongs_to :manager, class_name: 'Member', inverse_of: :managed_users, optional: true
 
@@ -107,6 +108,7 @@ class User < ApplicationRecord
   scope :not_fake_prescribers,        -> { where(is_prescriber: true, is_fake_prescriber:  [false, nil]) }
   scope :dropbox_extended_authorized, -> { where(is_dropbox_extended_authorized: true) }
   scope :guest_collaborators,         -> { where(is_prescriber: false, is_guest: true) }
+  scope :developer,                   -> { where(is_developer: true, inactive_at: nil) }
 
   accepts_nested_attributes_for :options
   accepts_nested_attributes_for :ibiza
