@@ -55,8 +55,8 @@
 
             texts: {
                 noItemsAvailable: 'No entries found',
-                selectAll: 'Select all',
-                selectNone: 'Select none',
+                selectAll: 'Sélectionner tout',
+                selectNone: 'Désélectionner tout',
                 quickDelete: '<svg viewBox="0 0 8 8" class="oi-icon  colored" style="width: 12px; height: 12px;fill: #000;"><use xlink:href="/assets/open-iconic.min.svg#circle-x" class="icon icon-circle-x"></use></svg>',
                 searchplaceholder: 'Selectionner',
                 loadingData: 'Still loading data...',
@@ -825,7 +825,7 @@
                     });
 
                 this.$actionButtons = $('<div class="sol-action-buttons"/>').append($selectAllButton).append($deselectAllButton).append('<div class="sol-clearfix"/>');
-                // this.$selectionContainer.prepend(this.$actionButtons);
+                this.$selectionContainer.prepend(this.$actionButtons);
             }
         },
 

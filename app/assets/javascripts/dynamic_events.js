@@ -1,5 +1,5 @@
 function elements_initializer(){
-  $('.searchable-option-list').asMultiSelect({ maxHeight: '300px' });
+  $('.searchable-option-list').asMultiSelect({ maxHeight: '300px', showSelectAll: true });
 
   $('.chosen-list').asChosenList({
     search_contains: true,
