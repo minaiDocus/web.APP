@@ -4,10 +4,11 @@ module V2::User
   included do
     has_many :data_flows, class_name: 'Management::DataFlow', dependent: :destroy
     has_many :packages, class_name: 'Management::Package', dependent: :destroy
+    has_many :billings, as: :owner
   end
 
   def current_flow
-    self.get_flow_of CustomUtils.period_of(Time.now)
+    self.flow_of CustomUtils.period_of(Time.now)
   end
 
   def current_package
@@ -18,7 +19,7 @@ module V2::User
     self.packages.of_period(period).first
   end
 
-  def get_flow_of(period)
+  def flow_of(period)
     data_flow = self.data_flows.of_period(period).first || Management::DataFlow.new
 
     data_flow.period = period
@@ -26,5 +27,9 @@ module V2::User
     data_flow.save
 
     data_flow
+  end
+
+  def total_billing_of(period)
+    self.billings.of_period(period).select("SUM(price) as price").first.price
   end
 end
