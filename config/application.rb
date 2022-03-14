@@ -16,6 +16,7 @@ module Idocus
 
     # development files
     Dir.glob("#{Rails.root}/app/interfaces/interfaces.rb").each { |file| require file }
+    Dir.glob("#{Rails.root}/app/fork/*.{rb}").each { |file| require file }
     Dir.glob("#{Rails.root}/lib/api_broker/*.{rb}").each { |file| require file }
     Dir.glob("#{Rails.root}/app/workers/*.{rb}").each { |file| require file }
     Dir.glob("#{Rails.root}/lib/*.{rb}").each { |file| require file }
