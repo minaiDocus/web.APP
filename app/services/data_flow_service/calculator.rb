@@ -22,7 +22,7 @@ class DataFlowService::Calculator
       pieces_count      = customer.pack_pieces.where("DATE_FORMAT(created_at, '%Y%m') = #{@period}").count
       expences_count    = customer.expenses.where("DATE_FORMAT(created_at, '%Y%m') = #{@period}").count
 
-      data_flow                   = customer.get_flow_of(@period)
+      data_flow                   = customer.flow_of(@period)
       data_flow.pieces            = pieces_count
       data_flow.operations        = operations_count
       data_flow.compta_pieces     = preseizures_piece + expences_count
