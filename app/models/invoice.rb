@@ -29,7 +29,8 @@ class Invoice < ApplicationRecord
 
 
   scope :invoice_at, -> (time) { where(created_at: time.end_of_month..(time.end_of_month + 12.month)) }
-
+  scope :of_period, -> (period){ where(period: period) }
+ 
   before_destroy do |invoice|
     invoice.cloud_content.purge
   end
