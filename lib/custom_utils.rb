@@ -1,6 +1,10 @@
 class CustomUtils
 
   class << self
+    def period_of(date=Time.now)
+      "#{date.to_date.year}#{(sprintf '%02d', date.to_date.month)}".to_i
+    end
+
     def parse_date_range_of(date='')
       _date = date
 
