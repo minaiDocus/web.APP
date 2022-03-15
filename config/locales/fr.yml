@@ -579,6 +579,12 @@ fr:
           name: Nom complet
           formatted_identifier: Identifiant
           company: Nom de la société
+          type_of_entity: Type d'entité
+          legal_registration_city: Ville d'enregistrement
+          registration_number: Numéro d'enregistrement
+          address_street: Rue
+          address_zip_code: Code postal
+          address_city: Ville
           code: Code du dossier
           knowings_code: Code Knowings
           knowings_visibility: Visibilité Knowings
