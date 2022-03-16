@@ -38,7 +38,7 @@
             = hidden_field_tag 'bank_account[ebics_enabled_starting]', @bank_account.ebics_enabled_starting
         - if @bank_account.operations.count >= 1
           %p.help-block L'opération bancaire la plus ancienne remontée par l'automate date du #{@bank_account.operations.order(date: :asc).first.date.strftime("%d/%m/%Y")}
-  = f.input :lock_old_operation, required: true, hint: "Ne s'applique qu'après un mois depuis la création de ce compte bancaire dans iDocus", input_html: { class: 'form-check-input m-2' }, wrapper: :inline_checkbox
+  = f.input :lock_old_operation, hint: "Ne s'applique qu'après un mois depuis la création de ce compte bancaire dans iDocus", input_html: { class: 'form-check-input m-2' }, wrapper: :inline_checkbox
   = f.input :permitted_late_days, required: true
   
   - if @bank_account.cedricom_mandate_state == "TELECHARGE"
