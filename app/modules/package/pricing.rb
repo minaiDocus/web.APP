@@ -99,7 +99,7 @@ class Package::Pricing
       Package::Pricing::LISTS[package.to_sym][:commitment]
     end
 
-    def discount_prices(package, count, version=1)
+    def discount_price(package, count, version=1)
       prices = {
                   '1' =>  [
                               { limit: (0..75), package_price: 0, retriever_price: 0 },
@@ -139,6 +139,8 @@ class Package::Pricing
 
         _found = true if _price < 0
       end
+
+      _price
     end
   end
 end

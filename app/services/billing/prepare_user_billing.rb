@@ -26,15 +26,7 @@ class Billing::PrepareUserBilling
   private
 
   def create_package_billing
-    billing = Finance::Billing.new
-
-    billing.owner = @user
-    billing.period = @period
-    billing.name  = @package.name
-    billing.title = @package.human_name
-    billing.price = @package.base_price * 100
-
-    billing.save
+    create_billing({ name: @package.name, title: @package.human_name, price: @package.base_price })
   end
 
   def create_options_billing
@@ -42,72 +34,28 @@ class Billing::PrepareUserBilling
       next if val != 'optional'
 
       if opt.to_s == 'bank' && @package.bank_active
-        billing = Finance::Billing.new
-
-        billing.owner = @user
-        billing.period = @period
-        billing.name  = 'bank_option'
-        billing.title = 'Option automate'
-        billing.price = Package::Pricing.price_of(:ido_retriever) * 100
-
-        billing.save
+        create_billing({ name: 'bank_option', title: 'Option automate', price: Package::Pricing.price_of(:ido_retriever) })
       elsif opt.to_s == 'mail' && @package.mail_active
-        billing = Finance::Billing.new
-
-        billing.owner = @user
-        billing.period = @period
-        billing.name  = 'mail_option'
-        billing.title = 'Option courrier'
-        billing.price = Package::Pricing.price_of(:mail) * 100
-
-        billing.save
+        create_billing({ name: 'mail_option', title: 'Option courrier', price: Package::Pricing.price_of(:mail) })
       elsif opt.to_s == 'preassignment' && !@package.is_preassignment_active
-        billing = Finance::Billing.new
-
-        billing.owner = @user
-        billing.period = @period
-        billing.name  = 'preassignment_option'
-        billing.kind  = 'discount'
-        billing.title = 'Remise sur Pré-affectation'
-        billing.price = (Package::Pricing.price_of(:preassignment) * 100) * -1
-
-        billing.save
+        create_billing({ name: 'preassignment_option', title: 'Remise sur pré-affectation', kind: 'discount', price: (Package::Pricing.price_of(:preassignment) * -1) })
       end
     end
   end
 
   def create_excess_billing
-    billing = Finance::Billing.new
-
-    billing.owner = @user
-    billing.period = @period
-    billing.name  = 'excess_billing'
-    billing.title = 'Pré-affectation en excès'
-    billing.kind  = 'excess'
-    billing.associated_hash = { excess: calculated_excess[:count], price: @package.excess_price  }
-    billing.price = calculated_excess[:price] * 100
-
-    billing.save
+    create_billing({ name: 'excess_billing', title: 'Pré-affectation en excès', kind: 'excess', price: calculated_excess[:price], associated_hash: { excess: calculated_excess[:count], price: @package.excess_price } })
   end
 
   def create_orders_billing
     is_manual_paper_set_order = CustomUtils.is_manual_paper_set_order?(@user.organization)
+    #TO DO: orders billing
   end
 
   def create_bank_excess_billing
     if @data_flow.bank_excess > 0
       price   = Package::Pricing.price_of(:bank_excess)
-
-      billing       = Finance::Billing.new
-      billing.owner = @user
-      billing.period = @period
-      billing.name  = 'bank_excess'
-      billing.kind  = 'excess'
-      billing.title = "#{@data_flow.bank_excess} compte(s) bancaire(s) supplémentaire(s)"
-      billing.associated_hash = { excess: @data_flow.bank_excess, price: price  }
-      billing.price = price * @data_flow.bank_excess * 100
-
-      billing.save
+      create_billing({ name: 'bank_excess', title: "#{@data_flow.bank_excess} compte(s) bancaire(s) supplémentaire(s)", kind: 'excess', price: (price * @data_flow.bank_excess), associated_hash: { excess: @data_flow.bank_excess, price: price } })
     end
   end
 
@@ -115,16 +63,7 @@ class Billing::PrepareUserBilling
     if @data_flow.journals_excess > 0
       price   = Package::Pricing.price_of(:journal_excess)
 
-      billing       = Finance::Billing.new
-      billing.owner = @user
-      billing.period = @period
-      billing.name  = 'journal_excess'
-      billing.kind  = 'excess'
-      billing.title = "#{@data_flow.journals_excess} journal(aux) comptable(s) supplémentaire(s)"
-      billing.associated_hash = { excess: @data_flow.journals_excess, price: price  }
-      billing.price =  price * @data_flow.journals_excess * 100
-
-      billing.save
+      create_billing({ name: 'journal_excess', title: "#{@data_flow.journals_excess} journal(aux) comptable(s) supplémentaire(s)", kind: 'excess', price: (price * @data_flow.journals_excess), associated_hash: { excess: @data_flow.journals_excess, price: price } })
     end
   end
 
@@ -139,15 +78,7 @@ class Billing::PrepareUserBilling
       billing ||= @user.billings.of_period(_period).where(name: 'operations_billing', kind: 're-sit', title: title).first
 
       if not billing
-        billing       = Finance::Billing.new
-        billing.owner = @user
-        billing.period = @period
-        billing.name  = 'operations_billing'
-        billing.kind  = 're-sit'
-        billing.title = title
-        billing.price = Package::Pricing.price_of(:ido_retriever) * 100
-
-        billing.save
+        create_billing({ name: 'operations_billing', title: title, kind: 're-sit', price: Package::Pricing.price_of(:ido_retriever) })
       end
     end
   end
@@ -156,33 +87,32 @@ class Billing::PrepareUserBilling
     if @package.name == 'ido_digitize'
       if @data_flow.scanned_sheets > 0
         #### ------- Scanned sheet Option -------- ####
-        billing       = Finance::Billing.new
-        billing.owner = @user
-        billing.period = @period
-        billing.name  = 'scanned_sheets'
-        billing.title = "#{@data_flow.scanned_sheets} feuille(s) numérisée(s)"
-        billing.associated_hash = { excess: @data_flow.scanned_sheets, price: 0.1  }
-        billing.price = @data_flow.scanned_sheets * 0.1 * 100
-
-        billing.save
+        price = 0.1
+        create_billing({ name: 'scanned_sheets', title: "#{@data_flow.scanned_sheets} feuille(s) numérisée(s)", price: (@data_flow.scanned_sheets * price), associated_hash: { excess: @data_flow.scanned_sheets, price: price } })
 
         #### --------- Pack size Option -------- ####
         pack_names = @user.paper_processes.where('DATE_FORMAT(created_at, "%Y%m") = ?', @period).where(type: 'scan').select(:pack_name).distinct
         pack_size  = pack_names.collect(&:pack_name).size
 
         if pack_size > 0
-          billing       = Finance::Billing.new
-          billing.owner = @user
-          billing.period = @period
-          billing.name  = 'scanned_sheets'
-          billing.title = "#{pack_size} pochette(s) scannée(s)"
-          billing.associated_hash = { excess: pack_size, price: 1  }
-          billing.price = pack_size * 100
-
-          billing.save
+          price = 1
+          create_billing({ name: 'scanned_sheets', title: "#{pack_size} pochette(s) scannée(s)", price: (pack_size * price), associated_hash: { excess: pack_size, price: price } })
         end
       end
     end
+  end
+
+  def create_billing(params)
+    billing = Finance::Billing.new
+    billing.owner  = @user
+    billing.period = @period
+    billing.name   = params[:name]
+    billing.title  = params[:title]
+    billing.kind   = params[:kind] if params[:kind].present?
+    billing.associated_hash = params[:associated_hash] if params[:associated_hash].present?
+    billing.price  = params[:price] * 100
+
+    billing.save
   end
 
   def calculated_excess
