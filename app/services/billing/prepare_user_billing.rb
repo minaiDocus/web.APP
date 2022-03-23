@@ -5,11 +5,11 @@ class Billing::PrepareUserBilling
   end
 
   def execute
-    DataFlowService::Calculator.execute(@user)
+    DataProcessor::DataFlow.execute(@user)
 
     @user.billings.of_period(@period).not_frozen.destroy_all
-    @package   = @user.packages.of_period(@period)
-    @data_flow = @user.data_flows.of_period(@period) 
+    @package   = @user.packages.of_period(@period).first
+    @data_flow = @user.data_flows.of_period(@period).first
 
     create_package_billing
     create_options_billing
@@ -37,13 +37,15 @@ class Billing::PrepareUserBilling
         create_billing({ name: 'bank_option', title: 'Option automate', price: Package::Pricing.price_of(:ido_retriever) })
       elsif opt.to_s == 'mail' && @package.mail_active
         create_billing({ name: 'mail_option', title: 'Option courrier', price: Package::Pricing.price_of(:mail) })
-      elsif opt.to_s == 'preassignment' && !@package.is_preassignment_active
+      elsif opt.to_s == 'preassignment' && !@package.preassignment_active
         create_billing({ name: 'preassignment_option', title: 'Remise sur pré-affectation', kind: 'discount', price: (Package::Pricing.price_of(:preassignment) * -1) })
       end
     end
   end
 
   def create_excess_billing
+    return false if calculated_excess[:price] <= 0 && calculated_excess[:count] <= 0
+
     create_billing({ name: 'excess_billing', title: 'Pré-affectation en excès', kind: 'excess', price: calculated_excess[:price], associated_hash: { excess: calculated_excess[:count], price: @package.excess_price } })
   end
 
@@ -60,15 +62,15 @@ class Billing::PrepareUserBilling
   end
 
   def create_journals_excess_billing
-    if @data_flow.journals_excess > 0
+    if @data_flow.journal_excess > 0
       price   = Package::Pricing.price_of(:journal_excess)
 
-      create_billing({ name: 'journal_excess', title: "#{@data_flow.journals_excess} journal(aux) comptable(s) supplémentaire(s)", kind: 'excess', price: (price * @data_flow.journals_excess), associated_hash: { excess: @data_flow.journals_excess, price: price } })
+      create_billing({ name: 'journal_excess', title: "#{@data_flow.journal_excess} journal(aux) comptable(s) supplémentaire(s)", kind: 'excess', price: (price * @data_flow.journal_excess), associated_hash: { excess: @data_flow.journal_excess, price: price } })
     end
   end
 
   def create_resit_operations_billing
-    operations_periods = @user.operations.where.not(processed_at: nil).where("is_locked = false AND DATE_FORMAT(created_at, '%Y%m') = #{@period}").map{|ope| ope.date.strftime('%Y%m')}.uniq
+    operations_periods = @user.operations.where.not(processed_at: nil).where("is_locked = false AND DATE_FORMAT(created_at, '%Y%m') = #{@period}").map{ |ope| ope.date.strftime('%Y%m').to_i }.uniq
 
     operations_periods.each do |_period|
       next if @period <= _period
@@ -96,7 +98,7 @@ class Billing::PrepareUserBilling
 
         if pack_size > 0
           price = 1
-          create_billing({ name: 'scanned_sheets', title: "#{pack_size} pochette(s) scannée(s)", price: (pack_size * price), associated_hash: { excess: pack_size, price: price } })
+          create_billing({ name: 'paper_processes', title: "#{pack_size} pochette(s) scannée(s)", price: (pack_size * price), associated_hash: { excess: pack_size, price: price } })
         end
       end
     end
@@ -123,12 +125,12 @@ class Billing::PrepareUserBilling
     if @package.excess_duration == 'month'
       data_flow = @user.data_flows.where(period: @package.period).select("compta_pieces as t_compta_pieces, compta_operations as t_compta_operations").first
     else
-      periods   = @user.packages.where(name: @package.name, version: @package.version).pluck(:period)
+      periods   = @user.packages.where(name: @package.name, version: @package.version).pluck(:period) - @user.billings.where(name: 'excess_billing').pluck(:period)
       data_flow = @user.data_flows.where(period: periods).select("SUM(compta_pieces) as t_compta_pieces, SUM(compta_operations) as t_compta_operations").first
     end
 
-    @excess_data[:count] = data_flow.try(:t_compta_pieces).to_i + data_flow.try(:t_compta_operations).to_i
-    @excess_data[:price] = @package.excess_price * (@excess_data[:count] - @package.flow_limit) if @package.flow_limit > 0 && @excess_data[:count] > @package.flow_limit
+    @excess_data[:count] = (data_flow.try(:t_compta_pieces).to_i + data_flow.try(:t_compta_operations).to_i) - @package.flow_limit
+    @excess_data[:price] = @package.excess_price * @excess_data[:count] if @package.flow_limit > 0 && @excess_data[:count] > 0
 
     @excess_data
   end
