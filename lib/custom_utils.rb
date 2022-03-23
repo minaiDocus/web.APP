@@ -1,5 +1,4 @@
 class CustomUtils
-
   class << self
     def period_of(date=Time.now)
       "#{date.to_date.year}#{(sprintf '%02d', date.to_date.month)}".to_i
@@ -36,7 +35,6 @@ class CustomUtils
 
       ["#{date1.to_s} 00:00:00", "#{date2.to_s} 23:59:59"]
     end
-
 
     def replace_code_of(code) #replace old code 'AC0162' with 'MVN%GRHCONSULT'
       if code.match(/^AC0162/)
@@ -184,6 +182,10 @@ class CustomUtils
       ### EXAMPLE: ["IDOC", 'ORGCODE1', "ORGCODE2"].include?(organization.code)
 
       ["MCN", "CEN"].include?(organization.code)
+    end
+
+    def reduced_retriever_price?(organization_code)
+      ['ADV', 'ALM'].include?(organization_code)
     end
 
     def can_create_budgea_documents(customer)

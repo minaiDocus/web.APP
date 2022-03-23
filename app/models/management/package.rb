@@ -17,30 +17,30 @@ class Management::Package < ApplicationRecord
   end
 
   def human_name
-    Package::Pricing.human_name_of(self.name)
+    ::Package::Pricing.human_name_of(self.name)
   end
 
   def options
-    Package::Pricing.options_of(self.name)
+    ::Package::Pricing.options_of(self.name)
   end
 
   def base_price
-    Package::Pricing.price_of(self.name)
+    ::Package::Pricing.price_of(self.name, self.user.organization.try(:code))
   end
 
   def flow_limit
-    Package::Pricing.flow_limit_of(self.name)
+    ::Package::Pricing.flow_limit_of(self.name)
   end
 
   def excess_price
-    Package::Pricing.flow_limit_of(self.name)
+    ::Package::Pricing.excess_price_of(self.name)
   end
 
   def excess_duration
-    Package::Pricing.excess_duration_of(self.name)
+    ::Package::Pricing.excess_duration_of(self.name)
   end
 
   def commitment_duration
-    Package::Pricing.excess_duration_of(self.name)
+    ::Package::Pricing.excess_duration_of(self.name)
   end
 end
