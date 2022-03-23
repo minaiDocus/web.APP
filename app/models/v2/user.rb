@@ -4,7 +4,7 @@ module V2::User
   included do
     has_many :data_flows, class_name: 'Management::DataFlow', dependent: :destroy
     has_many :packages, class_name: 'Management::Package', dependent: :destroy
-    has_many :billings, as: :owner
+    has_many :billings, class_name: 'Finance::Billing', as: :owner
   end
 
   def current_flow
@@ -30,6 +30,6 @@ module V2::User
   end
 
   def total_billing_of(period)
-    self.billings.of_period(period).select("SUM(price) as price").first.price
+    self.billings.of_period(period).select("SUM(price) as price").first.price.to_i
   end
 end

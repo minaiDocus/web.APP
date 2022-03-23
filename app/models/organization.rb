@@ -1,4 +1,6 @@
 class Organization < ApplicationRecord
+  include ::V2::Organization
+
   attr_encrypted :cedricom_password, random_iv: true
 
   validates :authd_prev_period,            inclusion: { in: 0..36 }

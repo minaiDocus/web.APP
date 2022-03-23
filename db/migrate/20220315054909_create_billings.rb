@@ -8,7 +8,7 @@ class CreateBillings < ActiveRecord::Migration[5.2]
 
       t.string  :kind, default: 'normal'
       t.string  :title, default: ''
-      t.text    :associated_hash, default: :nil, limit: 510000
+      t.text    :associated_hash, limit: 510000
       t.boolean :is_frozen, default: false
       t.float   :price, default: 0
 

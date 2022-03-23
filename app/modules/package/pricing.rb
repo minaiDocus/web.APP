@@ -74,11 +74,13 @@ class Package::Pricing
       Package::Pricing::LISTS[package.to_sym][:options]
     end
 
-    def price_of(package)
+    def price_of(package, organization_code='')
       return 9   if package.to_s == 'preassignment' #pre_assignment option coast 9€
       return 10  if package.to_s == 'mail' #mail option coast 10€
-      return 2   if package.to_s == 'bank_excess' #Each excessed bank coast 5€
+      return 2   if package.to_s == 'bank_excess' #Each excessed bank coast 2€
       return 1   if package.to_s == 'journal_excess' #Each excessed journal coast 1€
+
+      return 3   if package.to_s == 'ido_retriever' && reduced_retriever_price?(organization_code) #We have an exception of ido_retriever price
 
       Package::Pricing::LISTS[package.to_sym][:price]
     end
@@ -129,9 +131,9 @@ class Package::Pricing
       _found = false
 
       prices[version.to_s].each do |node|
-        next if found
+        next if _found
 
-        if ['ido_retriever', 'bank_option'].include?(package)
+        if ['ido_retriever', 'bank_option'].include?(package.to_s)
           _price = node[:retriever_price]  if node[:limit].include?(count)
         else
           _price = node[:package_price] if node[:limit].include?(count)
