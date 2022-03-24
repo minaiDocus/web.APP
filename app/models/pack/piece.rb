@@ -295,6 +295,8 @@ class Pack::Piece < ApplicationRecord
   end
 
   def sign_piece
+    return true if self.temp_document.api_name == 'jefacture'
+
     begin
       content_file_path = self.cloud_content_object.path
       to_sign_file = File.dirname(content_file_path) + '/signed.pdf'
