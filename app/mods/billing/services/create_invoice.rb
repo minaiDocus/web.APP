@@ -70,7 +70,6 @@ module BillingMod
       else
         @invoice              = @organization.invoices.of_period(@period).first || BillingMod::Invoice.new
       end
-
       @invoice.vat_ratio      = @organization.subject_to_vat ? 1.2 : 1
       @invoice.period_v2      = @period
       @invoice.organization   = @organization
@@ -84,6 +83,8 @@ module BillingMod
     def generate_pdf
       #TO DO: generating invoice pdf
       #classGenerator : return file_path
+
+      invoice_path = Billing::PdfGenerator.new(@organization, @packages_count, @invoice, @total_customers_price, @time).generate
 
       if not @is_test
         #@invoice.cloud_content_object.attach
@@ -148,6 +149,180 @@ module BillingMod
   end
 
   class PdfGenerator
+    def initialize(organization, packages_count, invoice, total_customers_price, time)
+      @organization          = organization
+      @packages_count        = packages_count
+      @invoice               = invoice
+      @total_customers_price = total_customers_price
+      @time                  = time
+      @period                = CustomUtils.period_of(@time)
 
+      @months                = I18n.t('date.month_names').map { |e| e.capitalize if e }
+      @period_month          = @months[time.month]
+      @year                  = time.year
+    end
+
+    def generate
+      @pdf.destroy if @pdf
+
+      invoice_path = "#{Rails.root}/tmp/#{@invoice.number}.pdf"
+
+      Prawn::Document.generate(invoice_path, :bottom_margin => 150) do |pdf|
+        @pdf = pdf
+
+        @pdf.repeat [1] do
+          @pdf.image "#{Rails.root}/app/assets/images/application/bandeau_facture_parrainage.jpg", width: 472, height: 151, align: :center, :at => [35, 10], :align => :right
+        end
+
+        make_header
+
+        make_body
+
+        make_footer
+
+        @pdf
+      end
+
+      invoice_path
+    end
+
+    private
+
+    def make_header
+      address = @organization.addresses.for_billing.first
+
+      @pdf.font 'Helvetica'
+      @pdf.fill_color '49442A'
+
+      @pdf.font_size 8
+      @pdf.default_leading 4
+
+      header_data = [
+        [
+          "IDOCUS\n17, rue Galilée\n75116 Paris.",
+          "SAS au capital de 50 000 €\nRCS PARIS: 804 067 726\nTVA FR12804067726",
+          "contact@idocus.com\nwww.idocus.com\nTél : 01 84 250 251"
+        ]
+      ]
+
+      @pdf.table(header_data, width: 540) do
+        style(row(0), borders: [:top, :bottom], border_color: 'AFA6A6', text_color: 'AFA6A6')
+        style(columns(1), align: :center)
+        style(columns(2), align: :right)
+      end
+
+      @pdf.move_down 10
+      @pdf.image "#{Rails.root}/app/assets/images/logo/big_logo.png", width: 90, height: 30, at: [4, @pdf.cursor]
+
+      @pdf.stroke_color '49442A'
+      @pdf.font_size 10
+      @pdf.default_leading 5
+
+      formatted_address = [address.company, address.first_name + ' ' + address.last_name, address.address_1, address.address_2, address.zip.to_s + ' ' + address.city, address.country]
+                          .reject { |a| a.nil? || a.empty? }
+                          .join("\n")
+
+      @pdf.bounding_box([262, @pdf.cursor], width: 270) do
+        @pdf.text formatted_address, align: :right, style: :bold
+
+        if @organization.vat_identifier
+          @pdf.move_down 7
+
+          @pdf.text "TVA : #{@organization.vat_identifier}", align: :right, style: :bold
+        end
+      end
+
+      @pdf.font_size(14) do
+        @pdf.move_down 30
+        @pdf.text "Facture n° " + @invoice.number.to_s + ' du ' + (@invoice.created_at - 1.month).end_of_month.day.to_s + ' ' + @period_month + ' ' + (@invoice.created_at - 1.month).year.to_s, align: :left, style: :bold
+      end
+
+      @pdf.move_down 14
+      @pdf.text "<b>Période concernée :</b> " + @period_month + ' ' + @year.to_s, align: :left, inline_format: true
+    end
+
+    def make_body
+      @pdf.move_down 30
+      data = [['<b>Forfaits & Prestations</b>', '<b>Prix HT</b>']]
+
+      data << ["Nombre de dossiers actifs : #{@organization.customers.active_at(@time)}", '']
+      data << ['Forfaits et options iDocus pour ' + @period_month.downcase + ' ' + @year.to_s + ' :', CustomUtils.format_price(@total_customers_price) + " €"]
+      
+
+      @packages_count.each do |package|
+        if %w(iDoClassique iDoNano iDoX iDoMicro).include?(package)
+          data << ["- #{package[1]} forfait#{'s' if package[1] > 1} #{package[0]}", ""]
+        else
+          data << ["- #{package[1]} option#{'s' if package[1] > 1} #{package[0]}", ""]
+        end
+      end
+
+      # @organization.billing.where(period: @period).each do |data_organization|
+      #   data << ["#{data_organization.title}", "#{CustomUtils.format_price(data_organization.price)}"]
+      # end
+
+      data << ['', '']
+
+      @pdf.table(data, width: 540, cell_style: { inline_format: true }) do
+        style(row(0..-1), borders: [], text_color: '49442A')
+        style(row(0), borders: [:bottom])
+        style(row(-1), borders: [:bottom])
+        style(columns(2), align: :right)
+        style(columns(1), align: :right)
+      end
+    end
+
+    def make_footer
+      total = @total_customers_price # + @organization.total_billing_of(@period)
+
+      @pdf.move_down 7
+      @pdf.float do
+        @pdf.text_box 'Total HT', at: [400, @pdf.cursor], width: 60, align: :right, style: :bold
+      end
+      @pdf.text_box CustomUtils.format_price(total) + " €", at: [470, @pdf.cursor], width: 66, align: :right
+      @pdf.move_down 10
+      @pdf.stroke_horizontal_line 470, 540, at: @pdf.cursor
+
+      @pdf.move_down 7
+      @pdf.float do
+        if @invoice.organization.subject_to_vat
+          @pdf.text_box 'TVA (20%)', at: [400, @pdf.cursor], width: 60, align: :right, style: :bold
+        else
+          @pdf.text_box 'TVA (0%)', at: [400, @pdf.cursor], width: 60, align: :right, style: :bold
+        end
+      end
+      if @invoice.organization.subject_to_vat
+        @pdf.text_box CustomUtils.format_price(total * @invoice.vat_ratio - total) + " €", at: [470, @pdf.cursor], width: 66, align: :right
+      else
+        @pdf.text_box "0 €", at: [470, @pdf.cursor], width: 66, align: :right
+      end
+      @pdf.move_down 10
+      @pdf.stroke_horizontal_line 470, 540, at: @pdf.cursor
+
+      @pdf.move_down 7
+      @pdf.float do
+        @pdf.text_box 'Total TTC', at: [400, @pdf.cursor], width: 60, align: :right, style: :bold
+      end
+      if @invoice.organization.subject_to_vat
+        @pdf.text_box CustomUtils.format_price(total * @invoice.vat_ratio) + " €", at: [470, @pdf.cursor], width: 66, align: :right
+      else
+        @pdf.text_box CustomUtils.format_price(total) + " €", at: [470, @pdf.cursor], width: 66, align: :right
+      end
+      @pdf.move_down 10
+      @pdf.stroke_color '000000'
+      @pdf.stroke_horizontal_line 470, 540, at: @pdf.cursor
+
+      # Other information
+      @pdf.move_down 13
+      @pdf.text "Cette somme sera prélevée sur votre compte le 4 #{@months[@invoice.created_at.month].downcase} #{@invoice.created_at.year}"
+
+      if @invoice.organization.vat_identifier && !@invoice.organization.subject_to_vat
+        @pdf.move_down 7
+        @pdf.text 'Auto-liquidation par le preneur - Art 283-2 du CGI'
+      end
+
+      @pdf.move_down 7
+      @pdf.text "<b>Retrouvez le détails de vos consommations dans votre espace client dans le menu \"Mon Reporting\".</b>", align: :center, inline_format: true
+    end
   end
 end
