@@ -191,5 +191,10 @@ class CustomUtils
 
       return false
     end
+
+    def format_price(price_in_cents)
+      price_in_euros = price_in_cents.blank? ? "" : price_in_cents.round/100.0
+      ("%0.2f" % price_in_euros).gsub(".", ",")
+    end
   end
 end
