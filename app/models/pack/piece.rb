@@ -259,19 +259,26 @@ class Pack::Piece < ApplicationRecord
 
     piece_file_path = ''
 
+
     CustomUtils.mktmpdir('piece', temp_dir, !temp_dir.present?) do |dir|
       piece_file_name = DocumentTools.file_name self.name
       piece_file_path = File.join(dir, piece_file_name)
 
       original_file_path = File.join(dir, 'original.pdf')
 
-      FileUtils.cp temp_document.cloud_content_object.path, original_file_path
-      DocumentTools.correct_pdf_if_needed original_file_path
+      FileUtils.cp temp_document.cloud_content_object.path, original_file_path     
 
-      DocumentTools.create_stamped_file original_file_path, piece_file_path, user.stamp_name, self.name, {origin: temp_document.delivery_type, is_stamp_background_filled: user.is_stamp_background_filled, dir: dir}
-      self.cloud_content_object.attach(File.open(piece_file_path), piece_file_name)
+      if temp_document.api_name == 'jefacture'
+        self.cloud_content_object.attach(File.open(original_file_path), piece_file_name)
+      else
+        DocumentTools.correct_pdf_if_needed original_file_path
 
-      self.try(:sign_piece)
+        DocumentTools.create_stamped_file original_file_path, piece_file_path, user.stamp_name, self.name, {origin: temp_document.delivery_type, is_stamp_background_filled: user.is_stamp_background_filled, dir: dir}
+
+        self.cloud_content_object.attach(File.open(piece_file_path), piece_file_name)
+
+        self.try(:sign_piece)
+      end
 
       self.get_pages_number
     end
