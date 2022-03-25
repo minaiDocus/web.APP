@@ -34,7 +34,7 @@ class Billing::PrepareUserBilling
       next if val != 'optional'
 
       if opt.to_s == 'bank' && @package.bank_active
-        create_billing({ name: 'bank_option', title: 'Option automate', price: Package::Pricing.price_of(:ido_retriever) })
+        create_billing({ name: 'bank_option', title: 'Option automate', price: Package::Pricing.price_of(:ido_retriever, @user) })
       elsif opt.to_s == 'mail' && @package.mail_active
         create_billing({ name: 'mail_option', title: 'Option courrier', price: Package::Pricing.price_of(:mail) })
       elsif opt.to_s == 'preassignment' && !@package.preassignment_active
@@ -80,7 +80,7 @@ class Billing::PrepareUserBilling
       billing ||= @user.billings.of_period(_period).where(name: 'operations_billing', kind: 're-sit', title: title).first
 
       if not billing
-        create_billing({ name: 'operations_billing', title: title, kind: 're-sit', price: Package::Pricing.price_of(:ido_retriever) })
+        create_billing({ name: 'operations_billing', title: title, kind: 're-sit', price: Package::Pricing.price_of(:ido_retriever, @user) })
       end
     end
   end
