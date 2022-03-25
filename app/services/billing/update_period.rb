@@ -292,7 +292,10 @@ class Billing::UpdatePeriod
 
     bank_ids = @period.user.operations.where("DATE_FORMAT(created_at, '%Y%m') = #{@period.start_date.strftime("%Y%m")}").pluck(:bank_account_id).uniq
 
-    excess_bank_accounts = @period.user.bank_accounts.where("created_at < ?", @time_end).where(id: bank_ids).size - 2
+    bank_authorized = 2
+    bank_authorized = 1 if @period.user.organization.code == 'ALM'
+
+    excess_bank_accounts = @period.user.bank_accounts.where("created_at < ?", @time_end).where(id: bank_ids).size - bank_authorized
 
     option_infos = Subscription::Package.infos_of(:retriever_option)
 

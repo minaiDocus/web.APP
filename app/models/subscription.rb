@@ -128,7 +128,7 @@ class Subscription < ApplicationRecord
 
   def retriever_price_option
     organization_code = organization.try(:code) || user.organization.code
-    %w(ADV).include?(organization_code) ? 'reduced_retriever'.to_sym : 'retriever'.to_sym
+    ['ADV', 'ALM'].include?(organization_code) ? 'reduced_retriever'.to_sym : 'retriever'.to_sym
   end
 
   def set_start_date_and_end_date
