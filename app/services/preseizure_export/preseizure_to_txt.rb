@@ -23,7 +23,9 @@ class PreseizureExport::PreseizureToTxt
   def export_zip_quadratus
     data = []
     @preseizures.each do |preseizure|
-      preseizure.entries.order(type: :desc).each do |entry|
+      preseizure.accounts.order(type: :asc).each do |account|
+        entry = account.entries.first
+
         next if entry.amount.to_f == 0
 
         if preseizure.operation
