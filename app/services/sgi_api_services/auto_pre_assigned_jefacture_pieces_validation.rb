@@ -9,7 +9,7 @@ class SgiApiServices::AutoPreAssignedJefacturePiecesValidation
   def initialize(piece)
     @piece = piece
     @temp_document = @piece.temp_document
-    @raw_preseizure = Jefacture::Document.get(@temp_document.id)
+    @raw_preseizure = Jefacture::Document.get(@temp_document.api_id)
   end
 
   def execute
