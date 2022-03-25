@@ -63,6 +63,11 @@ class Package::Pricing
               data_flows: { max: 0, duration: 'month', excess_price: 0.25 },
               options: { upload: 'none', bank: 'none', scan: 'strict', preassignment: 'strict', mail: 'none'}
             },
+            preassignment: { price: 9 },
+            mail: { price: 10 },
+            bank_excess: { price: 2 },
+            journal_excess: { price: 1 },
+            reduced_retriever: { price: 3 },
           }.freeze
 
   class << self
@@ -74,13 +79,8 @@ class Package::Pricing
       Package::Pricing::LISTS[package.to_sym][:options]
     end
 
-    def price_of(package, organization_code='')
-      return 9   if package.to_s == 'preassignment' #pre_assignment option coast 9€
-      return 10  if package.to_s == 'mail' #mail option coast 10€
-      return 2   if package.to_s == 'bank_excess' #Each excessed bank coast 2€
-      return 1   if package.to_s == 'journal_excess' #Each excessed journal coast 1€
-
-      return 3   if package.to_s == 'ido_retriever' && reduced_retriever_price?(organization_code) #We have an exception of ido_retriever price
+    def price_of(package, user=nil)
+      package = :reduced_retriever if package.to_s == 'ido_retriever' && CustomUtils.reduced_retriever_price?(user.try(:organization).try(:code)) #We have an exception of ido_retriever price
 
       Package::Pricing::LISTS[package.to_sym][:price]
     end
