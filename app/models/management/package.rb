@@ -25,7 +25,7 @@ class Management::Package < ApplicationRecord
   end
 
   def base_price
-    ::Package::Pricing.price_of(self.name, self.user.organization.try(:code))
+    ::Package::Pricing.price_of(self.name, self.user)
   end
 
   def flow_limit

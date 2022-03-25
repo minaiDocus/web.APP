@@ -40,8 +40,11 @@ class DataProcessor::DataFlow
   private
 
   def bank_excess_of(customer)
+    bank_authorized = 2
+    bank_authorized = 1 if customer.try(:organization).try(:code) == 'ALM'
+
     bank_ids             = customer.operations.where("DATE_FORMAT(created_at, '%Y%m') = #{@period}").pluck(:bank_account_id).uniq
-    excess_bank_accounts = customer.bank_accounts.where("DATE_FORMAT(created_at, '%Y%m') <= #{@period}").where(id: bank_ids).size - 2
+    excess_bank_accounts = customer.bank_accounts.where("DATE_FORMAT(created_at, '%Y%m') <= #{@period}").where(id: bank_ids).size - bank_authorized
 
     return (excess_bank_accounts > 0)? excess_bank_accounts : 0
   end

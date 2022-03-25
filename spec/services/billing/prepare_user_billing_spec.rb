@@ -86,6 +86,22 @@ describe Billing::PrepareUserBilling do
     expect(data_flow.all_compta_transactions).to eq 0
   end
 
+  it 'get valid exception price', :reduced_price do
+    organization = Organization.first
+
+    organization.code = 'ALM'
+    organization.save
+
+    user = organization.customers.first
+
+    reduced_retriever_price = Package::Pricing.price_of('ido_retriever', user)
+
+    expect(reduced_retriever_price).to eq 3
+
+    organization.code = 'TS1'
+    organization.save
+  end
+
   context 'Basic and normal billing', :basic_billing do
     it 'creates classic billing' do
       user = User.last
