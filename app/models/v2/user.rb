@@ -5,6 +5,7 @@ module V2::User
     has_many :data_flows, class_name: 'Management::DataFlow', dependent: :destroy
     has_many :packages, class_name: 'Management::Package', dependent: :destroy
     has_many :billings, class_name: 'Finance::Billing', as: :owner
+    has_many :extra_options, class_name: 'SubscriptionOption', as: :owner
   end
 
   def current_flow
@@ -20,10 +21,23 @@ module V2::User
   end
 
   def flow_of(period)
+    package   = self.package_of(period)
+
+    return nil if not package
+
     data_flow = self.data_flows.of_period(period).first || Management::DataFlow.new
 
     data_flow.period = period
     data_flow.user   = self
+
+    if package.excess_duration == 'annual' && !data_flow.persisted?
+      max_version  = self.data_flows.select('MAX(period_version) as max_version').first.max_version.to_i
+      data_flows   = self.data_flows.version(max_version).order(period: :desc)
+      prev_package = self.packages.of_period(data_flows.first.try(:period)).first
+
+      data_flow.period_version = (max_version > 0 && prev_package.try(:name) == package.name && data_flows.count < 12) ? max_version : (max_version + 1)
+    end
+
     data_flow.save
 
     data_flow

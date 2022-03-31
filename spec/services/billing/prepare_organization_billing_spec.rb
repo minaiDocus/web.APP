@@ -26,6 +26,13 @@ describe Billing::PrepareOrganizationBilling do
     end
   end
 
+  def create_extra_option(organization)
+    SubscriptionOption.create(
+      created_at: "2020-03-01 21:00:00", updated_at: "2020-03-01 21:00:00",
+      name: 'Test extra opition', owner: organization, price_in_cents_wo_vat: -30000, period: CustomUtils.period_of(Time.now)
+    )
+  end
+
   before(:all) do
     Timecop.freeze(Time.local(2020,03,15))
     DatabaseCleaner.start
@@ -48,6 +55,24 @@ describe Billing::PrepareOrganizationBilling do
 
   #   customers.size = 
   # end
+
+  it 'creates normal extra option billings', :extra_option do
+    period        = CustomUtils.period_of(Time.now)
+    organization  = Organization.first
+
+    create_extra_option(organization)
+
+    Billing::PrepareOrganizationBilling.new(organization, period).execute
+
+    billings = organization.reload.billings
+
+    expect(billings.collect(&:name)).to include('extra_option')
+
+    extra = billings.where(kind: 'extra')
+
+    expect(extra.size).to eq 1
+    expect(extra.first.price).to eq -30000
+  end
 
   context 'discount billings', :discount do
     it 'creates no billing with default params ' do
