@@ -41,6 +41,7 @@ class Order < ApplicationRecord
   scope :billed,     -> { where(state: ['confirmed','processed']) }
   scope :dematboxes, -> { where(type: 'dematbox') }
   scope :paper_sets, -> { where(type: 'paper_set') }
+  scope :of_period,  -> (period){ where(period_v2: period.to_i) }
 
 
 

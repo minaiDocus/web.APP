@@ -21,7 +21,10 @@ class Order::Confirm
 
     @order.with_lock do
       if @order.pending?
-        is_confirmed =  @order.confirm
+        is_confirmed     =  @order.confirm
+        @order.period_v2 = CustomUtils.period_of(Time.now)
+
+        @order.save
       end
     end
 

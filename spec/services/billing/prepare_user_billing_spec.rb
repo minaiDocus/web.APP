@@ -14,9 +14,32 @@ describe Billing::PrepareUserBilling do
   end
 
   def create_paper_processes(user)
-    operation = PaperProcess.create(
+    pp = PaperProcess.create(
       created_at: "2020-03-01 21:00:00", updated_at: "2020-03-01 21:00:00",
       type: 'scan', tracking_number: '001', customer_code: user.code, pack_name: "#{user.code} AC 202003", user_id: user.id
+    )
+  end
+
+  def create_orders(user)
+    Order.create(
+      created_at: "2020-03-01 21:00:00", updated_at: "2020-03-01 21:00:00",
+      paper_set_start_date: "2020-01-01 00:00:00", paper_set_end_date: "2020-12-01 00:00:00",
+      type: 'paper_set', user_id: user.id, organization_id: user.organization.id, price_in_cents_wo_vat: 30000, state: 'confirmed', period_v2: CustomUtils.period_of(Time.now),
+      dematbox_count: 1
+    )
+
+    Order.create(
+      created_at: "2020-03-01 21:00:00", updated_at: "2020-03-01 21:00:00",
+      paper_set_start_date: "2020-01-01 00:00:00", paper_set_end_date: "2020-12-01 00:00:00",
+      type: 'dematbox', user_id: user.id, organization_id: user.organization.id, price_in_cents_wo_vat: 30000, state: 'confirmed', period_v2: CustomUtils.period_of(Time.now),
+      dematbox_count: 1
+    )
+  end
+
+  def create_extra_option(user)
+    SubscriptionOption.create(
+      created_at: "2020-03-01 21:00:00", updated_at: "2020-03-01 21:00:00",
+      name: 'Test extra opition', owner: user, price_in_cents_wo_vat: -30000, period: CustomUtils.period_of(Time.now)
     )
   end
 
@@ -103,6 +126,12 @@ describe Billing::PrepareUserBilling do
   end
 
   context 'Basic and normal billing', :basic_billing do
+    before(:each) do
+      Finance::Billing.destroy_all
+      Invoice.destroy_all
+      Operation.destroy_all
+    end
+
     it 'creates classic billing' do
       user = User.last
 
@@ -137,9 +166,51 @@ describe Billing::PrepareUserBilling do
 
       expect(user.total_billing_of(period)).to eq (35 - 9) * 100
     end
+
+    it 'creates normal paper set and dematbox order billings', :order do
+      period = CustomUtils.period_of(Time.now)
+      user   = User.last
+
+      create_orders(user)
+
+      Billing::PrepareUserBilling.new(user, period).execute
+
+      billings = user.reload.billings
+
+      expect(billings.collect(&:name)).to include('paper_set_order', 'dematbox_order')
+
+      orders = billings.where(kind: 'order')
+
+      expect(orders.size).to eq 2
+      expect(orders.first.price).to eq 30000
+    end
+
+    it 'creates normal extra option billings', :extra_option do
+      period = CustomUtils.period_of(Time.now)
+      user   = User.last
+
+      create_extra_option(user)
+
+      Billing::PrepareUserBilling.new(user, period).execute
+
+      billings = user.reload.billings
+
+      expect(billings.collect(&:name)).to include('extra_option')
+
+      extra = billings.where(kind: 'extra')
+
+      expect(extra.size).to eq 1
+      expect(extra.first.price).to eq -30000
+    end
   end
 
   context 'Flow excess billing', :flow_excess_billing do
+    before(:each) do
+      Finance::Billing.destroy_all
+      Invoice.destroy_all
+      Operation.destroy_all
+    end
+
     it 'creates compta piece excess billing - month excess' do
       allow(DataProcessor::DataFlow).to receive(:execute).and_return(true)
 
@@ -197,11 +268,12 @@ describe Billing::PrepareUserBilling do
       excess_bill = billings.where(kind: 'excess').first
 
       excess_price = 120 * 0.25
+      expect(excess_bill.associated_hash[:excess]).to eq 120
       expect(excess_bill.price).to eq excess_price * 100
       expect(user.total_billing_of(period)).to eq (10 + excess_price) * 100
     end
 
-    it '[PENDING] - creates compta piece excess billing - annual excess - (a previous excess_billing exist)' do
+    it 'creates compta piece excess billing - micro annual excess - (a previous excess_billing exist)', :annual_excess do
       allow(DataProcessor::DataFlow).to receive(:execute).and_return(true)
 
       period      = CustomUtils.period_of(Time.now)
@@ -209,7 +281,7 @@ describe Billing::PrepareUserBilling do
 
       user = User.last
 
-      package      = user.current_package
+      package     = user.current_package
       package.update(name: 'ido_micro', upload_active: true, preassignment_active: true, bank_active: true, mail_active: false, scan_active: true)
 
       prev_package        = package.dup
@@ -232,15 +304,30 @@ describe Billing::PrepareUserBilling do
       expect(billings.size).to eq 4
       expect(billings.collect(&:name)).to include('ido_micro', 'excess_billing')
 
-      excess_bill = billings.of_period(period).where(kind: 'excess').last
+      previous_excess_bill = billings.of_period(period - 1).where(kind: 'excess').last
+      excess_bill          = billings.of_period(period).where(kind: 'excess').last
 
-      excess_price = 100 * 0.25
+      previous_excess_price = 100 * 0.25
+      excess_price          = 200 * 0.25
+
+      expect(data_flow.period_version).to eq prev_flow.period_version
+
+      expect(previous_excess_bill.associated_hash[:excess]).to eq 100
+      expect(previous_excess_bill.price).to eq previous_excess_price * 100
+
+      expect(excess_bill.associated_hash[:excess]).to eq 200
       expect(excess_bill.price).to eq excess_price * 100
       expect(user.total_billing_of(period)).to eq (10 + excess_price) * 100
     end
   end
 
   context 'Service excess billing', :service_excess_billing do
+    before(:each) do
+      Finance::Billing.destroy_all
+      Invoice.destroy_all
+      Operation.destroy_all
+    end
+
     it 'creates valid bank and journal excess' do
       allow(DataProcessor::DataFlow).to receive(:execute).and_return(true)
 
