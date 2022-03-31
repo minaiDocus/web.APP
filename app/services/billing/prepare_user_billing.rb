@@ -14,6 +14,7 @@ class Billing::PrepareUserBilling
     create_package_billing
     create_options_billing
     create_orders_billing
+    create_extra_options_billing
     create_excess_billing
 
     create_bank_excess_billing
@@ -51,7 +52,27 @@ class Billing::PrepareUserBilling
 
   def create_orders_billing
     is_manual_paper_set_order = CustomUtils.is_manual_paper_set_order?(@user.organization)
-    #TO DO: orders billing
+
+    @user.orders.of_period(@period).confirmed.each do |order|
+      next if order.paper_set? && is_manual_paper_set_order
+
+      if order.dematbox?
+        title  = "Commande de #{order.dematbox_count} scanner#{'s' if order.dematbox_count > 1} iDocus'Box"
+        name   = "dematbox_order"
+      else
+        title  = 'Commande de Kit envoi courrier'
+        name   = "paper_set_order"
+      end
+
+      price = order.price_in_cents_wo_vat / 100
+      create_billing({ name: name, title: title, kind: 'order', price: price })
+    end
+  end
+
+  def create_extra_options_billing
+    @user.extra_options.of_period(@period).by_position.map do |extra_option|
+      create_billing({ name: 'extra_option', title: extra_option.name, kind: 'extra', price: (extra_option.price_in_cents_wo_vat / 100) })
+    end
   end
 
   def create_bank_excess_billing
@@ -125,8 +146,20 @@ class Billing::PrepareUserBilling
     if @package.excess_duration == 'month'
       data_flow = @user.data_flows.where(period: @package.period).select("compta_pieces as t_compta_pieces, compta_operations as t_compta_operations").first
     else
-      periods   = @user.packages.where(name: @package.name, version: @package.version).pluck(:period) - @user.billings.where(name: 'excess_billing').pluck(:period)
-      data_flow = @user.data_flows.where(period: periods).select("SUM(compta_pieces) as t_compta_pieces, SUM(compta_operations) as t_compta_operations").first
+      current_flow = @user.flow_of(@package.period)
+      data_flows   = @user.data_flows.where(period_version: current_flow.period_version).where('period <= ?', @package.period)
+
+      billings     = @user.billings.where(period: data_flows.pluck(:period), name: 'excess_billing')
+      total_billed = 0
+      billings.each do |billing|
+        total_billed += billing.associated_hash[:excess]
+      end
+
+      __flow = data_flows.select("SUM(compta_pieces) as t_compta_pieces, SUM(compta_operations) as t_compta_operations").first
+      to_billed = __flow.try(:t_compta_pieces).to_i + __flow.try(:t_compta_operations).to_i
+      to_billed -= total_billed
+
+      data_flow  = OpenStruct.new(t_compta_pieces: to_billed, t_compta_operations: 0)
     end
 
     @excess_data[:count] = (data_flow.try(:t_compta_pieces).to_i + data_flow.try(:t_compta_operations).to_i) - @package.flow_limit

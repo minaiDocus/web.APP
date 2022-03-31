@@ -13,7 +13,7 @@ class Billing::PrepareOrganizationBilling
     create_retriever_discount_billing
     create_classic_excess_billing
     create_micro_plus_excess_billing
-    create_orders_billing
+    create_extra_options_billing
   end
 
   private
@@ -71,8 +71,10 @@ class Billing::PrepareOrganizationBilling
     create_billing({ name: 'ido_micro_plus_excess', title: 'Documents micro en excès', kind: 'excess', price: ( price * excess ), associated_hash: { excess: excess, price: price, limit: all_excess_limit } }) if excess > 0
   end
 
-  def create_orders_billing
-    #TO DO: orders billings
+  def create_extra_options_billing
+    @organization.extra_options.of_period(@period).by_position.map do |extra_option|
+      create_billing({ name: 'extra_option', title: extra_option.name, kind: 'extra', price: (extra_option.price_in_cents_wo_vat / 100) })
+    end
   end
 
   def create_billing(params)

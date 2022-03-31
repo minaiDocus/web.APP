@@ -6,7 +6,7 @@ class Finance::Billing < ApplicationRecord
   belongs_to :owner, polymorphic: true
 
   validates_presence_of :period, :name
-  validates_inclusion_of :kind, in: ['normal', 'discount', 'excess', 're-sit']
+  validates_inclusion_of :kind, in: ['normal', 'discount', 'excess', 're-sit', 'order', 'extra']
 
   scope :of_period, ->(period){ where(period: period.to_i) }
   scope :not_frozen, ->{ where(is_frozen: false) }
