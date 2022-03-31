@@ -27,7 +27,7 @@
           = hidden_field_tag 'bank_account[start_date]', @bank_account.start_date
       - if @bank_account.operations.count >= 1
         %p.help-block L'opération bancaire la plus ancienne remontée par l'automate date du #{@bank_account.operations.order(date: :asc).first.date.strftime("%d/%m/%Y")}
-  - if @customer.organization.cedricom_configured? && @customer.cedricom_configured?
+  - if @customer.organization.cedricom_configured?
     .form-group.clearfix{ class: ('error' if @bank_account.errors.keys.include?(:ebics_enabled_starting)) }
       .label-section
         = label_tag 'bank_account[ebics_enabled_starting]'," Activer la récuparation EBICS à compter du"
