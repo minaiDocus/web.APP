@@ -48,6 +48,7 @@ class RPBanksParams{
       this.connectors.push({ name: 'UBS', capabilities: ['bank'] })
       this.connectors.push({ name: 'EFG', capabilities: ['bank'] })
       this.connectors.push({ name: 'CAIXA', capabilities: ['bank'] })
+      this.connectors.push({ name: 'OuiTrust', capabilities: ['bank'] })
     // MANUAL BANKS
 
     this.connectors = this.connectors.sort((a,b)=>{
