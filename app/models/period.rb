@@ -138,7 +138,7 @@ class Period < ApplicationRecord
   end
 
   def is_valid_for_quota_organization
-    !self.organization && self.duration == 1 && !self.is_package?('ido_plus_micro') && !self.is_package?('ido_micro') && !self.is_package?('ido_nano') && !self.is_package?('ido_mini')
+    !self.organization && self.duration == 1 && !self.is_package?('ido_micro') && !self.is_package?('ido_nano') && !self.is_package?('ido_mini')
   end
 
   def amount_in_cents_wo_vat
