@@ -9,10 +9,14 @@ class Transaction::AccountNumberFinder
 
       words.each do |word|
         scores.each_with_index do |(name, _), index|
-          pattern = name.gsub('*', ' ').strip
-          patterns = pattern.split(/\s+/)
+          if name == '*.*'
+            scores[index][1] += 1
+          else
+            pattern = name.gsub('*', ' ').strip
+            patterns = pattern.split(/\s+/)
 
-          patterns.each{ |pt| scores[index][1] += 1 if word =~ /#{Regexp.quote(pt)}/i }
+            patterns.each{ |pt| scores[index][1] += 1 if word =~ /#{Regexp.quote(pt)}/i }
+          end
         end
       end
 
@@ -28,16 +32,19 @@ class Transaction::AccountNumberFinder
       match_rules = rules.select { |rule| rule.rule_target == 'both' || rule.rule_target == target }
       match_rules = match_rules.select { |rule| rule.rule_type == 'match' }
       match_rules = match_rules.select do |rule|
-        search_pattern = clean_txt(rule.content)
-        patterns = search_pattern.split('*')
-        patterns << '' if rule.content.match(/.*[*]$/) #add a last empty string if there is a * at the end of the content
-        pattern  = '\\b' + patterns.map{|pt| Regexp.quote(pt.strip) }.join('.*') + '\\b'
-        clean_txt(label, true).match /#{pattern}/i
+        if rule.content == '*.*'
+          rule.content
+        else
+          search_pattern = clean_txt(rule.content)
+          patterns = search_pattern.split('*')
+          patterns << '' if rule.content.match(/.*[*]$/) #add a last empty string if there is a * at the end of the content
+          pattern  = '\\b' + patterns.map{|pt| Regexp.quote(pt.strip) }.join('.*') + '\\b'
+          clean_txt(label, true).match /#{pattern}/i
+        end
       end
 
       p "==================== First matched ========="
       p match_rules.collect(&:content)
-
 
       name = get_the_highest_match(label, match_rules.map(&:content))
 
@@ -85,6 +92,8 @@ class Transaction::AccountNumberFinder
     end
 
     def clean_txt(string=nil, strict=false)
+      return string if string == '*.*'
+
       string = string.to_s.strip.gsub('^', '')
       string = string.to_s.strip.gsub(/[,:='"&#|;_)}\-\]\/\\]/, ' ')
       string = string.gsub(/[!?%€$£({\[]/, '')
@@ -106,7 +115,6 @@ class Transaction::AccountNumberFinder
 
     @rules = @rules.sort{|a, b| b.priority <=> a.priority }
   end
-
 
   def execute(operation)
     number = nil
