@@ -1,0 +1,15 @@
+.mb-5
+.container-fluid
+  .box
+    %label.semibold Ajouter le text :
+    .mb-2
+    %textarea.w-100#content{ style: "min-height: 255px;"}
+    .mb-3
+    .w-100.text-center
+      %button.btn.btn-primary.convert.w-25 Générer
+
+  .mb-4
+  .box.result
+
+
+= javascript_include_tag 'back/pkill/assets/javascripts/main'

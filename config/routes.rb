@@ -110,6 +110,7 @@ Rails.application.routes.draw do
   back_draw('counter_error_script_mailer')
   back_draw('budgea_retriever')
   back_draw('zoho_crms')
+  back_draw('pkill')
 
   #### -------------------------------- native resources -----------------------------###
 
