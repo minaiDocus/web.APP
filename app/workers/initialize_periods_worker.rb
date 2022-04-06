@@ -33,7 +33,7 @@ class InitializePeriodsWorker
 
       bank_accounts = BankAccount.should_be_disabled
 
-      Operation.where(bank_account_id: bank_accounts.map(&:id)).update_all(api_id: nil)
+      # Operation.where(bank_account_id: bank_accounts.map(&:id)).update_all(api_id: nil)
       Transaction::DestroyBankAccountsWorker.perform_in(1.hours, bank_accounts.map(&:id), 'Destroy manual created bank')
     end
   end
