@@ -14,11 +14,11 @@ class AccountingPlan::UpdateService
   def execute; end
 
   def create_item(data)
-  	item = AccountingPlanItem.find_by_name_and_account(@accounting_plan.id, data[:name], data[:number]) || AccountingPlanItem.new
-    item.third_party_name    = data[:name]
-    item.third_party_account = data[:number]
-    item.conterpart_account  = data[:associate]
-    item.code                = data[:code]
+    item                     = AccountingPlanItem.find_by_name_and_account(@accounting_plan.id, data[:name], data[:number]) || AccountingPlanItem.new
+    item.third_party_name    = data[:name]       if data[:name].present?
+    item.third_party_account = data[:number]     if data[:number].present?
+    item.conterpart_account  = data[:associate]  if data[:associate].present?
+    item.code                = data[:code]       if data[:code].present?
     item.is_updated          = true
 
     item.kind 				       = data[:kind]
