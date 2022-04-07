@@ -26,10 +26,10 @@ describe Billing::PrepareOrganizationBilling do
     end
   end
 
-  def create_extra_option(organization)
-    SubscriptionOption.create(
+  def create_extra_order(organization)
+    Finance::ExtraOrder.create(
       created_at: "2020-03-01 21:00:00", updated_at: "2020-03-01 21:00:00",
-      name: 'Test extra opition', owner: organization, price_in_cents_wo_vat: -30000, period: CustomUtils.period_of(Time.now)
+      name: 'Test extra order', owner: organization, price: -300, period: CustomUtils.period_of(Time.now)
     )
   end
 
@@ -56,17 +56,17 @@ describe Billing::PrepareOrganizationBilling do
   #   customers.size = 
   # end
 
-  it 'creates normal extra option billings', :extra_option do
+  it 'creates normal extra order billings', :extra_order do
     period        = CustomUtils.period_of(Time.now)
     organization  = Organization.first
 
-    create_extra_option(organization)
+    create_extra_order(organization)
 
     Billing::PrepareOrganizationBilling.new(organization, period).execute
 
     billings = organization.reload.billings
 
-    expect(billings.collect(&:name)).to include('extra_option')
+    expect(billings.collect(&:name)).to include('extra_order')
 
     extra = billings.where(kind: 'extra')
 

@@ -1,9 +1,6 @@
 # -*- encoding : UTF-8 -*-
 class SubscriptionOption < ApplicationRecord
-  include V2::SubscriptionOption
-
-  # has_and_belongs_to_many :subscribers, class_name: 'Subscription', inverse_of: :extra_options
-
+  has_and_belongs_to_many :subscribers, class_name: 'Subscription', inverse_of: :extra_options
 
   validates_presence_of  :name, :price_in_cents_wo_vat, :position, :period_duration
   validates_inclusion_of :period_duration, in: [0, 1]
