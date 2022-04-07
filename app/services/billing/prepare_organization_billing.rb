@@ -6,14 +6,14 @@ class Billing::PrepareOrganizationBilling
   end
 
   def execute
-    @organization.billings.of_period(@period).not_frozen.destroy_all
+    @organization.billings.of_period(@period).destroy_all
     @customers_ids = @organization.customers.active_at(@time_end).pluck(:id)
 
     create_classic_discount_billing
     create_retriever_discount_billing
     create_classic_excess_billing
     create_micro_plus_excess_billing
-    create_extra_options_billing
+    create_extra_order_billing
   end
 
   private
@@ -71,14 +71,14 @@ class Billing::PrepareOrganizationBilling
     create_billing({ name: 'ido_micro_plus_excess', title: 'Documents micro en excès', kind: 'excess', price: ( price * excess ), associated_hash: { excess: excess, price: price, limit: all_excess_limit } }) if excess > 0
   end
 
-  def create_extra_options_billing
-    @organization.extra_options.of_period(@period).by_position.map do |extra_option|
-      create_billing({ name: 'extra_option', title: extra_option.name, kind: 'extra', price: (extra_option.price_in_cents_wo_vat / 100) })
+  def create_extra_order_billing
+    @organization.extra_orders.of_period(@period).map do |extra_order|
+      create_billing({ name: 'extra_order', title: extra_order.name, kind: 'extra', price: extra_order.price })
     end
   end
 
   def create_billing(params)
-    billing = Finance::Billing.new
+    billing        = Finance::Billing.new
     billing.owner  = @organization
     billing.period = @period
     billing.name   = params[:name]
