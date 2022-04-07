@@ -1,4 +1,4 @@
-module V2::Invoice
+module BillingMod::V1::Invoice
   extend ActiveSupport::Concern
 
   included do

@@ -1,4 +1,4 @@
-class Management::Package < ApplicationRecord
+class BillingMod::V1::Package < ApplicationRecord
   self.table_name = 'user_packages'
 
   belongs_to :user
@@ -17,30 +17,30 @@ class Management::Package < ApplicationRecord
   end
 
   def human_name
-    ::Package::Pricing.human_name_of(self.name)
+    BillingMod::V1::Configuration.human_name_of(self.name)
   end
 
   def options
-    ::Package::Pricing.options_of(self.name)
+    BillingMod::V1::Configuration.options_of(self.name)
   end
 
   def base_price
-    ::Package::Pricing.price_of(self.name, self.user)
+    BillingMod::V1::Configuration.price_of(self.name, self.user)
   end
 
   def flow_limit
-    ::Package::Pricing.flow_limit_of(self.name)
+    BillingMod::V1::Configuration.flow_limit_of(self.name)
   end
 
   def excess_price
-    ::Package::Pricing.excess_price_of(self.name)
+    BillingMod::V1::Configuration.excess_price_of(self.name)
   end
 
   def excess_duration
-    ::Package::Pricing.excess_duration_of(self.name)
+    BillingMod::V1::Configuration.excess_duration_of(self.name)
   end
 
   def commitment_duration
-    ::Package::Pricing.excess_duration_of(self.name)
+    BillingMod::V1::Configuration.excess_duration_of(self.name)
   end
 end

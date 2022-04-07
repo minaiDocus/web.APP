@@ -5,7 +5,6 @@ require 'rails/all'
 
 Bundler.require(:default, Rails.env)
 
-
 require 'prawn/measurement_extensions'
 
 module Idocus
@@ -13,6 +12,9 @@ module Idocus
     # load all files in lib directory
 
     config.load_defaults 5.2
+
+    #first preload
+    Dir.glob("#{Rails.root}/app/mods/*/config.rb").each { |file| require file }
 
     # development files
     Dir.glob("#{Rails.root}/app/interfaces/interfaces.rb").each { |file| require file }

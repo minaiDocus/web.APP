@@ -1,4 +1,4 @@
-module Billing
+module BillingMod::V1
   class CreateInvoice
     def initialize(_time=nil, options={})
       @time              = _time.presence || 1.month.ago
@@ -38,8 +38,8 @@ module Billing
         next if not package
 
         if @is_update || @period == CustomUtils.period_of(Time.now) || !@invoice
-          Billing::PrepareUserBilling.new(customer, @period)
-          Billing::PrepareOrganizationBilling.new(customer, @period)
+          BillingMod::V1::PrepareUserBilling.new(customer, @period)
+          BillingMod::V1::PrepareOrganizationBilling.new(customer, @period)
         end
 
         increm_package_count('iDoClassique')  if package.name == 'ido_classic'

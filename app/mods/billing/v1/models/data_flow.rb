@@ -1,4 +1,4 @@
-class Management::DataFlow < ApplicationRecord
+class BillingMod::V1::DataFlow < ApplicationRecord
   self.table_name = 'data_flows'
 
   belongs_to :user

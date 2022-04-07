@@ -1,7 +1,7 @@
 # -*- encoding : UTF-8 -*-
 require 'spec_helper'
 
-describe Billing::PrepareOrganizationBilling do
+describe BillingMod::V1::PrepareOrganizationBilling do
   def create_users(number=1, _package='ido_classic')
     organization = Organization.first
 
@@ -14,9 +14,9 @@ describe Billing::PrepareOrganizationBilling do
       user.build_options if user.options.nil?
 
       if _package == 'ido_classic'
-        package = Management::Package.create(period: CustomUtils.period_of(Time.now), user: user, name: 'ido_classic', upload_active: true, bank_active: true, scan_active: true, mail_active: true, preassignment_active: false)
+        package = BillingMod::V1::Package.create(period: CustomUtils.period_of(Time.now), user: user, name: 'ido_classic', upload_active: true, bank_active: true, scan_active: true, mail_active: true, preassignment_active: false)
       else
-        package = Management::Package.create(period: CustomUtils.period_of(Time.now), user: user, name: 'ido_micro_plus', upload_active: true, bank_active: false, scan_active: true, mail_active: true, preassignment_active: true)
+        package = BillingMod::V1::Package.create(period: CustomUtils.period_of(Time.now), user: user, name: 'ido_micro_plus', upload_active: true, bank_active: false, scan_active: true, mail_active: true, preassignment_active: true)
       end
 
       package.save
@@ -27,7 +27,7 @@ describe Billing::PrepareOrganizationBilling do
   end
 
   def create_extra_order(organization)
-    Finance::ExtraOrder.create(
+    BillingMod::V1::ExtraOrder.create(
       created_at: "2020-03-01 21:00:00", updated_at: "2020-03-01 21:00:00",
       name: 'Test extra order', owner: organization, price: -300, period: CustomUtils.period_of(Time.now)
     )
@@ -47,7 +47,7 @@ describe Billing::PrepareOrganizationBilling do
 
   before(:each) do
     User.destroy_all
-    Finance::Billing.destroy_all
+    BillingMod::V1::Billing.destroy_all
   end
 
   # it 'has normal customers size from the current period' do
@@ -62,7 +62,7 @@ describe Billing::PrepareOrganizationBilling do
 
     create_extra_order(organization)
 
-    Billing::PrepareOrganizationBilling.new(organization, period).execute
+    BillingMod::V1::PrepareOrganizationBilling.new(organization, period).execute
 
     billings = organization.reload.billings
 
@@ -79,7 +79,7 @@ describe Billing::PrepareOrganizationBilling do
       period       = CustomUtils.period_of(Time.now)
       organization = Organization.first
 
-      Billing::PrepareOrganizationBilling.new(organization, period).execute
+      BillingMod::V1::PrepareOrganizationBilling.new(organization, period).execute
 
       billings = organization.billings.of_period(period)
 
@@ -93,7 +93,7 @@ describe Billing::PrepareOrganizationBilling do
 
       create_users(155)
 
-      Billing::PrepareOrganizationBilling.new(organization, period).execute
+      BillingMod::V1::PrepareOrganizationBilling.new(organization, period).execute
 
       billings = organization.billings.of_period(period)
 
@@ -125,7 +125,7 @@ describe Billing::PrepareOrganizationBilling do
         data_flow.save
       end
 
-      Billing::PrepareOrganizationBilling.new(organization, period).execute
+      BillingMod::V1::PrepareOrganizationBilling.new(organization, period).execute
 
       billings = organization.billings.of_period(period)
 
@@ -149,7 +149,7 @@ describe Billing::PrepareOrganizationBilling do
         data_flow.save
       end
 
-      Billing::PrepareOrganizationBilling.new(organization, period).execute
+      BillingMod::V1::PrepareOrganizationBilling.new(organization, period).execute
 
       billings = organization.billings.of_period(period)
 

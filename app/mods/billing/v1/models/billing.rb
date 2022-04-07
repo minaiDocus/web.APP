@@ -1,4 +1,4 @@
-class Finance::Billing < ApplicationRecord
+class BillingMod::V1::Billing < ApplicationRecord
   self.table_name = 'billings'
 
   serialize :associated_hash, Hash

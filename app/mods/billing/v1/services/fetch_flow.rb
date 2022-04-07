@@ -1,4 +1,4 @@
-class DataProcessor::DataFlow
+class BillingMod::V1::FetchFlow
   def self.execute(customers=nil)
     new.execute(customers)
   end
@@ -23,6 +23,9 @@ class DataProcessor::DataFlow
       expences_count    = customer.expenses.where("DATE_FORMAT(created_at, '%Y%m') = #{@period}").count
 
       data_flow                   = customer.flow_of(@period)
+
+      return false if data_flow.nil?
+
       data_flow.pieces            = pieces_count
       data_flow.operations        = operations_count
       data_flow.compta_pieces     = preseizures_piece + expences_count

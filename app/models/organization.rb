@@ -1,5 +1,5 @@
 class Organization < ApplicationRecord
-  include ::V2::Organization
+  include BillingMod::V1::Organization
 
   attr_encrypted :cedricom_password, random_iv: true
 
