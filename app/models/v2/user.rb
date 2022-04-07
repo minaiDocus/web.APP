@@ -5,7 +5,7 @@ module V2::User
     has_many :data_flows, class_name: 'Management::DataFlow', dependent: :destroy
     has_many :packages, class_name: 'Management::Package', dependent: :destroy
     has_many :billings, class_name: 'Finance::Billing', as: :owner
-    has_many :extra_options, class_name: 'SubscriptionOption', as: :owner
+    has_many :extra_orders, class_name: 'Finance::ExtraOrder', as: :owner
   end
 
   def current_flow

@@ -3,7 +3,7 @@ module V2::Organization
 
   included do
     has_many :billings, class_name: 'Finance::Billing', as: :owner
-    has_many :extra_options, class_name: 'SubscriptionOption', as: :owner
+    has_many :extra_orders, class_name: 'Finance::ExtraOrder', as: :owner
   end
 
   def total_billing_of(period)

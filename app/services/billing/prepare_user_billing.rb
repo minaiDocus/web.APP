@@ -7,14 +7,14 @@ class Billing::PrepareUserBilling
   def execute
     DataProcessor::DataFlow.execute(@user)
 
-    @user.billings.of_period(@period).not_frozen.destroy_all
+    @user.billings.of_period(@period).destroy_all
     @package   = @user.packages.of_period(@period).first
     @data_flow = @user.data_flows.of_period(@period).first
 
     create_package_billing
     create_options_billing
     create_orders_billing
-    create_extra_options_billing
+    create_extra_orders_billing
     create_excess_billing
 
     create_bank_excess_billing
@@ -69,9 +69,9 @@ class Billing::PrepareUserBilling
     end
   end
 
-  def create_extra_options_billing
-    @user.extra_options.of_period(@period).by_position.map do |extra_option|
-      create_billing({ name: 'extra_option', title: extra_option.name, kind: 'extra', price: (extra_option.price_in_cents_wo_vat / 100) })
+  def create_extra_orders_billing
+    @user.extra_orders.of_period(@period).map do |extra_order|
+      create_billing({ name: 'extra_order', title: extra_order.name, kind: 'extra', price: extra_order.price })
     end
   end
 
