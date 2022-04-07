@@ -1,6 +1,6 @@
 # -*- encoding : UTF-8 -*-
 class Invoice < ApplicationRecord
-  include V2::Invoice
+  include BillingMod::V1::Invoice
 
   ATTACHMENTS_URLS={'cloud_content' => '/account/invoices/:id/download/:style'}
 
