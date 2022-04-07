@@ -366,5 +366,84 @@ describe Transaction::AccountNumberFinder do
         expect(result).to eq('0TEMP')
       end
     end
+
+    context 'with *.* content rules', :star_star  do
+      before(:all) do
+        @rule = AccountNumberRule.new
+        @rule.organization = @organization
+        @rule.name = 'Star star'
+        @rule.affect = 'organization'
+        @rule.rule_type = 'match'
+        @rule.rule_target = 'both'
+        @rule.content = '*.*'
+        @rule.priority = 0
+        @rule.third_party_account = '0ORA'
+        @rule.save
+      end
+
+      after(:all) do
+        @rule.destroy
+      end
+
+      it '*.* match' do
+        @operation.label = 'Akamir bladenu'
+        @operation.amount = -10
+        allow(@operation).to receive('credit?').and_return(true)
+        allow_any_instance_of(Transaction::AccountNumberFinder).to receive(:accounting_plan).and_return([])
+
+        result = Transaction::AccountNumberFinder.new(@user).execute(@operation)
+
+        expect(result).to eq('0ORA')
+      end
+
+      it '*.* allow the highest scores' do
+        @rule_2 = AccountNumberRule.new
+        @rule_2.organization = @organization
+        @rule_2.name = 'Star star van'
+        @rule_2.affect = 'organization'
+        @rule_2.rule_type = 'match'
+        @rule_2.rule_target = 'both'
+        @rule_2.content = '*Test star*'
+        @rule_2.priority = 0
+        @rule_2.third_party_account = 'TR0E'
+        @rule_2.save
+
+        @operation.label = 'TEST STAR academi club zain'
+        @operation.amount = 10
+        allow(@operation).to receive('credit?').and_return(true)
+        allow_any_instance_of(Transaction::AccountNumberFinder).to receive(:accounting_plan).and_return([])
+
+        result = Transaction::AccountNumberFinder.new(@user).execute(@operation)
+
+        expect(result).to eq('TR0E')
+      end
+
+      it 'with the same scores, get the high priority' do
+        @user.organization.account_number_rules.global.last.destroy
+
+        @rule.priority = 2
+        @rule.save
+
+        @rule_2 = AccountNumberRule.new
+        @rule_2.organization = @organization
+        @rule_2.name = 'Star star van damme'
+        @rule_2.affect = 'organization'
+        @rule_2.rule_type = 'match'
+        @rule_2.rule_target = 'both'
+        @rule_2.content = '*Test*'
+        @rule_2.priority = 0
+        @rule_2.third_party_account = 'M0R3'
+        @rule_2.save
+
+        @operation.label = 'TEST STAR'
+        @operation.amount = 10
+        allow(@operation).to receive('credit?').and_return(true)
+        allow_any_instance_of(Transaction::AccountNumberFinder).to receive(:accounting_plan).and_return([])
+
+        result = Transaction::AccountNumberFinder.new(@user).execute(@operation)
+
+        expect(result).to eq('M0R3')
+      end
+    end
   end
 end

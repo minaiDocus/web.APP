@@ -10,7 +10,7 @@ class Transaction::AccountNumberFinder
       words.each do |word|
         scores.each_with_index do |(name, _), index|
           if name == '*.*'
-            scores[index][1] += 1
+            scores[index][1] = 1
           else
             pattern = name.gsub('*', ' ').strip
             patterns = pattern.split(/\s+/)
@@ -127,6 +127,7 @@ class Transaction::AccountNumberFinder
     number =  self.class.find_with_rules(@rules, label, target) if @rules.any?
 
     p "=========Skip accountin plan: #{@user.options.try(:skip_accounting_plan_finder)}"
+
 
     number ||= self.class.find_with_accounting_plan(accounting_plan, label, target, @rules) unless accounting_plan.empty? || @user.options.try(:skip_accounting_plan_finder)
 
