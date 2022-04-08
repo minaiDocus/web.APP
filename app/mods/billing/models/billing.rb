@@ -9,4 +9,6 @@ class BillingMod::Billing < ApplicationRecord
   validates_inclusion_of :kind, in: ['normal', 'discount', 'excess', 're-sit', 'order', 'extra']
 
   scope :of_period, ->(period){ where(period: period.to_i) }
+  scope :is_frozen, ->{ where(is_frozen: true) }
+  scope :is_not_frozen, ->{ where(is_frozen: false) }
 end

@@ -22,6 +22,8 @@ describe BillingMod::PrepareOrganizationBilling do
       package.save
       user.save
 
+      FactoryBot.create(:piece, user_id: user.reload.id)
+
       user.account_book_types.create(name: "AC", description: "AC (Achats)", position: 1, entry_type: 2, currency: "EUR", domain: "AC - Achats", account_number: "0ACC", charge_account: "471000", vat_accounts: {'20':'445660', '8.5':'153141', '13':'754213'}.to_json, anomaly_account: "471000", is_default: true, is_expense_categories_editable: true, organization_id: organization.id)
     end
   end
@@ -46,6 +48,8 @@ describe BillingMod::PrepareOrganizationBilling do
   end
 
   before(:each) do
+    allow_any_instance_of(User).to receive_message_chain('pieces.count').and_return(1)
+
     User.destroy_all
     BillingMod::Billing.destroy_all
   end

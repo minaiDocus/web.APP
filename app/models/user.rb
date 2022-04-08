@@ -240,6 +240,11 @@ class User < ApplicationRecord
     return User.find_by_code(code)
   end
 
+  #alias of pack_pieces
+  def pieces
+    self.pack_pieces
+  end
+
   #Overwrite User code method
   def my_code
     self.code.presence || self.memberships.first.try(:code)

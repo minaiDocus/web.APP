@@ -33,6 +33,8 @@ module BillingMod
       @total_customers_price = 0
 
       @customers.each do |customer|
+        next if customer.pieces.count == 0
+
         package = customer.package_of(@period)
 
         next if not package
