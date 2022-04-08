@@ -104,7 +104,7 @@ class Collaborator
   end
 
   def invoices
-    leader? ? Invoice.where(organization_id: organizations.map(&:id)) : Invoice.where(user_id: @user.id)
+    leader? ? BillingMod::Invoice.where(organization_id: organizations.map(&:id)) : BillingMod::Invoice.where(user_id: @user.id)
   end
 
   def method_missing(name, *args, &block)

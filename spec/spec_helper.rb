@@ -24,9 +24,9 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
 #first preload
 Dir.glob("#{Rails.root}/app/mods/*/config.rb").each { |file| require file }
-Dir["#{Rails.root}/app/mods/*/*/models/*.rb"].each { |file| require file }
-Dir["#{Rails.root}/app/mods/*/*/libs/*.rb"].each { |file| require file }
-Dir["#{Rails.root}/app/mods/*/*/services/*.rb"].each { |file| require file }
+Dir["#{Rails.root}/app/mods/*/models/*.rb"].each { |file| require file }
+Dir["#{Rails.root}/app/mods/*/libs/*.rb"].each { |file| require file }
+Dir["#{Rails.root}/app/mods/*/services/*.rb"].each { |file| require file }
 
 module Kernel
   def suppress_warnings

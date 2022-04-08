@@ -62,7 +62,7 @@ describe 'Excesses Billing' do
   end
 
   before(:each) do
-    Invoice.destroy_all
+    BillingMod::Invoice.destroy_all
   end
 
   it 'creates normal excess unit price', :normal do

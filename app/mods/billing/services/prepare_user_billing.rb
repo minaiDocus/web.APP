@@ -1,11 +1,11 @@
-class BillingMod::V1::PrepareUserBilling
+class BillingMod::PrepareUserBilling
   def initialize(user, period)
     @user   = user
     @period = period
   end
 
   def execute
-    BillingMod::V1::FetchFlow.execute(@user)
+    BillingMod::FetchFlow.execute(@user)
 
     @user.billings.of_period(@period).destroy_all
     @package   = @user.packages.of_period(@period).first
@@ -37,11 +37,11 @@ class BillingMod::V1::PrepareUserBilling
       next if val != 'optional'
 
       if opt.to_s == 'bank' && @package.bank_active
-        create_billing({ name: 'bank_option', title: 'Option automate', price: BillingMod::V1::Configuration.price_of(:ido_retriever, @user) })
+        create_billing({ name: 'bank_option', title: 'Option automate', price: BillingMod::Configuration.price_of(:ido_retriever, @user) })
       elsif opt.to_s == 'mail' && @package.mail_active
-        create_billing({ name: 'mail_option', title: 'Option courrier', price: BillingMod::V1::Configuration.price_of(:mail) })
+        create_billing({ name: 'mail_option', title: 'Option courrier', price: BillingMod::Configuration.price_of(:mail) })
       elsif opt.to_s == 'preassignment' && !@package.preassignment_active
-        create_billing({ name: 'preassignment_option', title: 'Remise sur pré-affectation', kind: 'discount', price: (BillingMod::V1::Configuration.price_of(:preassignment) * -1) })
+        create_billing({ name: 'preassignment_option', title: 'Remise sur pré-affectation', kind: 'discount', price: (BillingMod::Configuration.price_of(:preassignment) * -1) })
       end
     end
   end
@@ -79,14 +79,14 @@ class BillingMod::V1::PrepareUserBilling
 
   def create_bank_excess_billing
     if @data_flow.bank_excess > 0
-      price   = BillingMod::V1::Configuration.price_of(:bank_excess)
+      price   = BillingMod::Configuration.price_of(:bank_excess)
       create_billing({ name: 'bank_excess', title: "#{@data_flow.bank_excess} compte(s) bancaire(s) supplémentaire(s)", kind: 'excess', price: (price * @data_flow.bank_excess), associated_hash: { excess: @data_flow.bank_excess, price: price } })
     end
   end
 
   def create_journals_excess_billing
     if @data_flow.journal_excess > 0
-      price   = BillingMod::V1::Configuration.price_of(:journal_excess)
+      price   = BillingMod::Configuration.price_of(:journal_excess)
 
       create_billing({ name: 'journal_excess', title: "#{@data_flow.journal_excess} journal(aux) comptable(s) supplémentaire(s)", kind: 'excess', price: (price * @data_flow.journal_excess), associated_hash: { excess: @data_flow.journal_excess, price: price } })
     end
@@ -103,7 +103,7 @@ class BillingMod::V1::PrepareUserBilling
       billing ||= @user.billings.of_period(_period).where(name: 'operations_billing', kind: 're-sit', title: title).first
 
       if not billing
-        create_billing({ name: 'operations_billing', title: title, kind: 're-sit', price: BillingMod::V1::Configuration.price_of(:ido_retriever, @user) })
+        create_billing({ name: 'operations_billing', title: title, kind: 're-sit', price: BillingMod::Configuration.price_of(:ido_retriever, @user) })
       end
     end
   end
@@ -128,7 +128,7 @@ class BillingMod::V1::PrepareUserBilling
   end
 
   def create_billing(params)
-    billing = BillingMod::V1::Billing.new
+    billing = BillingMod::Billing.new
     billing.owner  = @user
     billing.period = @period
     billing.name   = params[:name]

@@ -1,6 +1,6 @@
 # -*- encoding : UTF-8 -*-
-class Invoice < ApplicationRecord
-  include BillingMod::V1::Invoice
+class BillingMod::Invoice < ApplicationRecord
+  self.table_name = 'invoices'
 
   ATTACHMENTS_URLS={'cloud_content' => '/account/invoices/:id/download/:style'}
 
@@ -17,7 +17,7 @@ class Invoice < ApplicationRecord
 
   validates_presence_of   :number
   validates_uniqueness_of :number
-
+  validates_presence_of :period_v2
 
   before_validation :set_number
 
@@ -38,7 +38,7 @@ class Invoice < ApplicationRecord
   end
 
   def self.search(contains)
-    invoices = Invoice.all.includes(:organization, :user)
+    invoices = BillingMod::Invoice.all.includes(:organization, :user)
 
     invoices = invoices.where("number LIKE ?", "%#{contains[:number]}%") unless contains[:number].blank?
 

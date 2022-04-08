@@ -1,10 +1,10 @@
-class BillingMod::V1::FetchFlow
+class BillingMod::FetchFlow
   def self.execute(customers=nil)
     new.execute(customers)
   end
 
   def initialize(date=Time.now)
-    @time = date
+    @time   = date
     @period = CustomUtils.period_of(@time)
   end
 

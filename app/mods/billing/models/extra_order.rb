@@ -1,5 +1,5 @@
 # -*- encoding : UTF-8 -*-
-class BillingMod::V1::ExtraOrder < ApplicationRecord
+class BillingMod::ExtraOrder < ApplicationRecord
   self.table_name = 'extra_orders'
 
   belongs_to :owner, polymorphic: true, optional: true

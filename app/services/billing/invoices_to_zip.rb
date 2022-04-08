@@ -13,7 +13,7 @@ class Billing::InvoicesToZip
       Billing::InvoicesToZip.delay_for(6.hours).remove_temp_dir(dir)
 
       @invoice_ids.each do |invoice_id|
-        invoice = Invoice.find invoice_id
+        invoice = BillingMod::Invoice.find invoice_id
         filepath = invoice.cloud_content_object.path
 
         next unless File.exist?(filepath)

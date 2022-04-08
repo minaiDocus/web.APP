@@ -84,9 +84,9 @@ class Billing::CreateInvoicePdf
 
       if not options[:test]
         invoice = if invoice_number.present?
-                    Invoice.find_by_number(invoice_number) || Invoice.new(organization_id: organization.id, number: invoice_number)
+                    BillingMod::Invoice.find_by_number(invoice_number) || BillingMod::Invoice.new(organization_id: organization.id, number: invoice_number)
                   else
-                    Invoice.new(organization_id: organization.id)
+                    BillingMod::Invoice.new(organization_id: organization.id)
                   end
 
         return false if invoice.try(:organization_id) != organization.id
@@ -151,7 +151,7 @@ class Billing::CreateInvoicePdf
     end
 
     def archive_invoice(time = Time.now)
-      invoices   = Invoice.where("created_at >= ? AND created_at <= ?", time.beginning_of_month, time.end_of_month)
+      invoices   = BillingMod::Invoice.where("created_at >= ? AND created_at <= ?", time.beginning_of_month, time.end_of_month)
       return false unless invoices.present?
 
       invoices_files_path = invoices.map { |e| e.cloud_content_object.path }
@@ -161,7 +161,7 @@ class Billing::CreateInvoicePdf
       CustomUtils.mktmpdir('create_invoice') do |dir|
         archive_path = DocumentTools.archive("#{dir}/#{archive_name}", invoices_files_path)
 
-        _archive_invoice      = ArchiveInvoice.new
+        _archive_invoice      = BillingMod::ArchiveInvoice..new
         _archive_invoice.name = archive_name
 
         _archive_invoice.cloud_content_object.attach(File.open(archive_path), archive_name) if _archive_invoice.save
