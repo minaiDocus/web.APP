@@ -35,7 +35,7 @@ describe InvoiceSetting do
 
       invoice_settings.map {|invoice_setting| InvoiceSetting.new(invoice_setting).save }
 
-      @invoice = Invoice.create(number: "2019090001", organization_id: @organization.id, user_id: @user.id)
+      @invoice = BillingMod::Invoice.create(number: "2019090001", organization_id: @organization.id, user_id: @user.id)
 
       @invoice.cloud_content_object.attach(File.open("#{Rails.root}/spec/support/files/2019090001.pdf"), '2019090001.pdf')
       @invoice.save

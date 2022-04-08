@@ -1,11 +1,8 @@
-module BillingMod
-  module V1; end
-end
+module BillingMod; end
 
 #require extended module
-  require "#{Rails.root}/app/mods/billing/v1/models/invoice.rb"
-  require "#{Rails.root}/app/mods/billing/v1/models/organization.rb"
-  require "#{Rails.root}/app/mods/billing/v1/models/user.rb"
+  require "#{Rails.root}/app/mods/billing/models/organization.rb"
+  require "#{Rails.root}/app/mods/billing/models/user.rb"
 
-Idocus::Application.config.autoload_paths += Dir["#{Rails.root}/app/mods/billing/v1/libs"]
-Idocus::Application.config.autoload_paths += Dir["#{Rails.root}/app/mods/billing/v1/services"]
+Idocus::Application.config.autoload_paths += Dir["#{Rails.root}/app/mods/billing/libs"]
+Idocus::Application.config.autoload_paths += Dir["#{Rails.root}/app/mods/billing/services"]

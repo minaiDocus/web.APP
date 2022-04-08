@@ -1,7 +1,7 @@
 # -*- encoding : UTF-8 -*-
 require 'spec_helper'
 
-describe "BillingMod::V1::PrepareUserBilling" do
+describe BillingMod::PrepareUserBilling do
   def create_operation(user)
     operation = Operation.create(
       created_at: "2020-03-01 21:00:00", updated_at: "2020-03-01 21:00:00",
@@ -37,7 +37,7 @@ describe "BillingMod::V1::PrepareUserBilling" do
   end
 
   def create_extra_order(user)
-    BillingMod::V1::ExtraOrder.create(
+    BillingMod::ExtraOrder.create(
       created_at: "2020-03-01 21:00:00", updated_at: "2020-03-01 21:00:00",
       name: 'Test extra order', owner: user, price: -300, period: CustomUtils.period_of(Time.now)
     )
@@ -61,7 +61,7 @@ describe "BillingMod::V1::PrepareUserBilling" do
         user.organization = organization
 
         user.build_options if user.options.nil?
-        package = BillingMod::V1::Package.create(period: CustomUtils.period_of(Time.now), user: user, name: 'ido_classic', upload_active: true, bank_active: true, scan_active: true, mail_active: true, preassignment_active: false)
+        package = BillingMod::Package.create(period: CustomUtils.period_of(Time.now), user: user, name: 'ido_classic', upload_active: true, bank_active: true, scan_active: true, mail_active: true, preassignment_active: false)
 
         package.save
         user.save
@@ -80,8 +80,8 @@ describe "BillingMod::V1::PrepareUserBilling" do
   end
 
   before(:each) do
-    BillingMod::V1::Billing.destroy_all
-    Invoice.destroy_all
+    BillingMod::Billing.destroy_all
+    BillingMod::Invoice.destroy_all
     Operation.destroy_all
   end
 
@@ -117,7 +117,7 @@ describe "BillingMod::V1::PrepareUserBilling" do
 
     user = organization.customers.first
 
-    reduced_retriever_price = BillingMod::V1::Configuration.price_of('ido_retriever', user)
+    reduced_retriever_price = BillingMod::Configuration.price_of('ido_retriever', user)
 
     expect(reduced_retriever_price).to eq 3
 
@@ -127,15 +127,15 @@ describe "BillingMod::V1::PrepareUserBilling" do
 
   context 'Basic and normal billing', :basic_billing do
     before(:each) do
-      BillingMod::V1::Billing.destroy_all
-      Invoice.destroy_all
+      BillingMod::Billing.destroy_all
+      BillingMod::Invoice.destroy_all
       Operation.destroy_all
     end
 
     it 'creates classic billing' do
       user = User.last
 
-      BillingMod::V1::PrepareUserBilling.new(user, CustomUtils.period_of(Time.now)).execute
+      BillingMod::PrepareUserBilling.new(user, CustomUtils.period_of(Time.now)).execute
 
       billings   = user.reload.billings
       first_bill = billings.first
@@ -153,7 +153,7 @@ describe "BillingMod::V1::PrepareUserBilling" do
       period = CustomUtils.period_of(Time.now)
       user   = User.last
 
-      BillingMod::V1::PrepareUserBilling.new(user, period).execute
+      BillingMod::PrepareUserBilling.new(user, period).execute
 
       billings = user.reload.billings
 
@@ -173,7 +173,7 @@ describe "BillingMod::V1::PrepareUserBilling" do
 
       create_orders(user)
 
-      BillingMod::V1::PrepareUserBilling.new(user, period).execute
+      BillingMod::PrepareUserBilling.new(user, period).execute
 
       billings = user.reload.billings
 
@@ -191,7 +191,7 @@ describe "BillingMod::V1::PrepareUserBilling" do
 
       create_extra_order(user)
 
-      BillingMod::V1::PrepareUserBilling.new(user, period).execute
+      BillingMod::PrepareUserBilling.new(user, period).execute
 
       billings = user.reload.billings
 
@@ -206,13 +206,13 @@ describe "BillingMod::V1::PrepareUserBilling" do
 
   context 'Flow excess billing', :flow_excess_billing do
     before(:each) do
-      BillingMod::V1::Billing.destroy_all
-      Invoice.destroy_all
+      BillingMod::Billing.destroy_all
+      BillingMod::Invoice.destroy_all
       Operation.destroy_all
     end
 
     it 'creates compta piece excess billing - month excess' do
-      allow(BillingMod::V1::FetchFlow).to receive(:execute).and_return(true)
+      allow(BillingMod::FetchFlow).to receive(:execute).and_return(true)
 
       period = CustomUtils.period_of(Time.now)
       user = User.last
@@ -221,7 +221,7 @@ describe "BillingMod::V1::PrepareUserBilling" do
       data_flow.compta_pieces = 200
       data_flow.save
 
-      BillingMod::V1::PrepareUserBilling.new(user, period).execute
+      BillingMod::PrepareUserBilling.new(user, period).execute
 
       billings = user.reload.billings
 
@@ -236,7 +236,7 @@ describe "BillingMod::V1::PrepareUserBilling" do
     end
 
     it 'creates compta piece excess billing - annual excess' do
-      allow(BillingMod::V1::FetchFlow).to receive(:execute).and_return(true)
+      allow(BillingMod::FetchFlow).to receive(:execute).and_return(true)
 
       period      = CustomUtils.period_of(Time.now)
       prev_period = CustomUtils.period_of(1.month.ago)
@@ -259,7 +259,7 @@ describe "BillingMod::V1::PrepareUserBilling" do
       data_flow.compta_pieces = 200
       data_flow.save
 
-      BillingMod::V1::PrepareUserBilling.new(user, period).execute
+      BillingMod::PrepareUserBilling.new(user, period).execute
 
       billings = user.reload.billings
 
@@ -275,7 +275,7 @@ describe "BillingMod::V1::PrepareUserBilling" do
     end
 
     it 'creates compta piece excess billing - micro annual excess - (a previous excess_billing exist)', :annual_excess do
-      allow(BillingMod::V1::FetchFlow).to receive(:execute).and_return(true)
+      allow(BillingMod::FetchFlow).to receive(:execute).and_return(true)
 
       period      = CustomUtils.period_of(Time.now)
       prev_period = CustomUtils.period_of(1.month.ago)
@@ -298,8 +298,8 @@ describe "BillingMod::V1::PrepareUserBilling" do
       data_flow.compta_pieces = 200
       data_flow.save
 
-      BillingMod::V1::PrepareUserBilling.new(user, prev_period).execute
-      BillingMod::V1::PrepareUserBilling.new(user, period).execute
+      BillingMod::PrepareUserBilling.new(user, prev_period).execute
+      BillingMod::PrepareUserBilling.new(user, period).execute
 
       billings = user.reload.billings
 
@@ -325,13 +325,13 @@ describe "BillingMod::V1::PrepareUserBilling" do
 
   context 'Service excess billing', :service_excess_billing do
     before(:each) do
-      BillingMod::V1::Billing.destroy_all
-      Invoice.destroy_all
+      BillingMod::Billing.destroy_all
+      BillingMod::Invoice.destroy_all
       Operation.destroy_all
     end
 
     it 'creates valid bank and journal excess' do
-      allow(BillingMod::V1::FetchFlow).to receive(:execute).and_return(true)
+      allow(BillingMod::FetchFlow).to receive(:execute).and_return(true)
 
       period = CustomUtils.period_of(Time.now)
 
@@ -342,7 +342,7 @@ describe "BillingMod::V1::PrepareUserBilling" do
       data_flow.journal_excess = 5
       data_flow.save
 
-      BillingMod::V1::PrepareUserBilling.new(user, period).execute
+      BillingMod::PrepareUserBilling.new(user, period).execute
 
       billings = user.reload.billings
 
@@ -365,7 +365,7 @@ describe "BillingMod::V1::PrepareUserBilling" do
 
       create_operation(user)
 
-      BillingMod::V1::PrepareUserBilling.new(user, period).execute
+      BillingMod::PrepareUserBilling.new(user, period).execute
 
       billings = user.reload.billings
 
@@ -379,7 +379,7 @@ describe "BillingMod::V1::PrepareUserBilling" do
     end
 
     it 'creates digitize package billing' do
-      allow(BillingMod::V1::FetchFlow).to receive(:execute).and_return(true)
+      allow(BillingMod::FetchFlow).to receive(:execute).and_return(true)
 
       period = CustomUtils.period_of(Time.now)
 
@@ -393,7 +393,7 @@ describe "BillingMod::V1::PrepareUserBilling" do
       data_flow.scanned_sheets = 5
       data_flow.save
 
-      BillingMod::V1::PrepareUserBilling.new(user, period).execute
+      BillingMod::PrepareUserBilling.new(user, period).execute
 
       billings = user.reload.billings
 

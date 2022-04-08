@@ -36,7 +36,7 @@ describe Billing::CreateInvoicePdf do
 
       invoice_settings.map {|invoice_setting| InvoiceSetting.new(invoice_setting).save }
 
-	  	@invoice = Invoice.create(number: "2019090001", organization_id: @organization.id, user_id: @user.id)
+	  	@invoice = BillingMod::Invoice.create(number: "2019090001", organization_id: @organization.id, user_id: @user.id)
 
       @invoice.cloud_content.attach(Rack::Test::UploadedFile.new("#{Rails.root}/spec/support/files/2019090001.pdf"))
       @invoice.save
@@ -83,7 +83,7 @@ describe Billing::CreateInvoicePdf do
 	    it 'archive invoice', :archive_invoice do
 		  	Billing::CreateInvoicePdf.archive_invoice
 
-		  	archive_invoice = ArchiveInvoice.last
+		  	archive_invoice = BillingMod::ArchiveInvoice..last
 
 		  	expect(archive_invoice.name).to eq 'invoices_202003.zip'
 		  	expect(archive_invoice.cloud_content).to be_attached

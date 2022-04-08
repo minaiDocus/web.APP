@@ -61,7 +61,7 @@ class Admin::Reporting::MainController < BackController
 
     @organization = Organization.find(params[:organization_id])
 
-    @invoices = Invoice.where(organization_id: params[:organization_id]).invoice_at(date)
+    @invoices = BillingMod::Invoice.where(organization_id: params[:organization_id]).invoice_at(date)
 
     render partial: 'row_organization'
   end

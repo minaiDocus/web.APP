@@ -1,4 +1,4 @@
-class BillingMod::V1::Configuration
+class BillingMod::Configuration
   LISTS = {
             ido_classic: {
               human_name: "iDo'Classique",
@@ -72,33 +72,33 @@ class BillingMod::V1::Configuration
 
   class << self
     def human_name_of(package)
-      BillingMod::V1::Configuration::LISTS[package.to_sym][:human_name]
+      BillingMod::Configuration::LISTS[package.to_sym][:human_name]
     end
 
     def options_of(package)
-      BillingMod::V1::Configuration::LISTS[package.to_sym][:options]
+      BillingMod::Configuration::LISTS[package.to_sym][:options]
     end
 
     def price_of(package, user=nil)
       package = :reduced_retriever if package.to_s == 'ido_retriever' && CustomUtils.reduced_retriever_price?(user.try(:organization).try(:code)) #We have an exception of ido_retriever price
 
-      BillingMod::V1::Configuration::LISTS[package.to_sym][:price]
+      BillingMod::Configuration::LISTS[package.to_sym][:price]
     end
 
     def flow_limit_of(package)
-      BillingMod::V1::Configuration::LISTS[package.to_sym][:data_flows][:max]
+      BillingMod::Configuration::LISTS[package.to_sym][:data_flows][:max]
     end
 
     def excess_price_of(package)
-      BillingMod::V1::Configuration::LISTS[package.to_sym][:data_flows][:excess_price]
+      BillingMod::Configuration::LISTS[package.to_sym][:data_flows][:excess_price]
     end
 
     def excess_duration_of(package)
-      BillingMod::V1::Configuration::LISTS[package.to_sym][:data_flows][:duration]
+      BillingMod::Configuration::LISTS[package.to_sym][:data_flows][:duration]
     end
 
     def commitment_duration_of(package)
-      BillingMod::V1::Configuration::LISTS[package.to_sym][:commitment]
+      BillingMod::Configuration::LISTS[package.to_sym][:commitment]
     end
 
     def discount_price(package, count, version=1)

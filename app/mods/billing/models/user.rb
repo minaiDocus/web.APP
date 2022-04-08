@@ -1,11 +1,11 @@
-module BillingMod::V1::User
+module BillingMod::User
   extend ActiveSupport::Concern
 
   included do
-    has_many :data_flows, class_name: 'BillingMod::V1::DataFlow', dependent: :destroy
-    has_many :packages, class_name: 'BillingMod::V1::Package', dependent: :destroy
-    has_many :billings, class_name: 'BillingMod::V1::Billing', as: :owner
-    has_many :extra_orders, class_name: 'BillingMod::V1::ExtraOrder', as: :owner
+    has_many :data_flows, class_name: 'BillingMod::DataFlow', dependent: :destroy
+    has_many :packages, class_name: 'BillingMod::Package', dependent: :destroy
+    has_many :billings, class_name: 'BillingMod::Billing', as: :owner
+    has_many :extra_orders, class_name: 'BillingMod::ExtraOrder', as: :owner
   end
 
   def current_flow
@@ -25,7 +25,7 @@ module BillingMod::V1::User
 
     return nil if not package
 
-    data_flow = self.data_flows.of_period(period).first || BillingMod::V1::DataFlow.new
+    data_flow = self.data_flows.of_period(period).first || BillingMod::DataFlow.new
 
     data_flow.period = period
     data_flow.user   = self
