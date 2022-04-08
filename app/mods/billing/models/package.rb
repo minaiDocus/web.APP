@@ -6,6 +6,7 @@ class BillingMod::Package < ApplicationRecord
   validates_presence_of :name, :period, :version
 
   scope :of_period, ->(period){ where(period: period.to_i) }
+  scope :by_period, ->{ order(period: :desc) }
 
   def is_with_commitment?
     self.commitment_start_period.to_i > 0 && self.commitment_end_period.to_i > 0

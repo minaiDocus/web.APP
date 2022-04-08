@@ -61,7 +61,7 @@ describe BillingMod::PrepareUserBilling do
         user.organization = organization
 
         user.build_options if user.options.nil?
-        package = BillingMod::Package.create(period: CustomUtils.period_of(Time.now), user: user, name: 'ido_classic', upload_active: true, bank_active: true, scan_active: true, mail_active: true, preassignment_active: false)
+        package = BillingMod::Package.create(period: CustomUtils.period_of(Time.now) - 1, user: user, name: 'ido_classic', upload_active: true, bank_active: true, scan_active: true, mail_active: true, preassignment_active: false)
 
         package.save
         user.save
@@ -80,6 +80,8 @@ describe BillingMod::PrepareUserBilling do
   end
 
   before(:each) do
+    allow_any_instance_of(User).to receive_message_chain('pieces.count').and_return(1)
+
     BillingMod::Billing.destroy_all
     BillingMod::Invoice.destroy_all
     Operation.destroy_all
@@ -88,7 +90,7 @@ describe BillingMod::PrepareUserBilling do
   it 'create basic package', :basic_package do
     user = User.last
     
-    package = user.current_package
+    package = user.my_package
 
     expect(package.name).to eq 'ido_classic'
     expect(package.period).to eq CustomUtils.period_of(Time.now)
@@ -140,7 +142,7 @@ describe BillingMod::PrepareUserBilling do
       billings   = user.reload.billings
       first_bill = billings.first
 
-      package    = user.current_package
+      package    = user.my_package
 
       expect(billings.size).to be > 0
       expect(first_bill.period).to eq CustomUtils.period_of(Time.now)
@@ -243,7 +245,7 @@ describe BillingMod::PrepareUserBilling do
 
       user = User.last
 
-      package      = user.current_package
+      package      = user.my_package
       package.update(name: 'ido_micro', upload_active: true, preassignment_active: true, bank_active: true, mail_active: false, scan_active: true)
 
       prev_package        = package.dup
@@ -282,7 +284,7 @@ describe BillingMod::PrepareUserBilling do
 
       user = User.last
 
-      package     = user.current_package
+      package     = user.my_package
       package.update(name: 'ido_micro', upload_active: true, preassignment_active: true, bank_active: true, mail_active: false, scan_active: true)
 
       prev_package        = package.dup
@@ -360,7 +362,7 @@ describe BillingMod::PrepareUserBilling do
 
       user = User.last
 
-      package      = user.current_package
+      package      = user.my_package
       package.update(name: 'ido_retriever', upload_active: false, preassignment_active: true, bank_active: true, mail_active: false, scan_active: false)
 
       create_operation(user)
@@ -386,7 +388,7 @@ describe BillingMod::PrepareUserBilling do
       user = User.last
 
       create_paper_processes(user)
-      package = user.current_package
+      package = user.my_package
       package.update(name: 'ido_digitize', upload_active: false, preassignment_active: true, bank_active: false, mail_active: false, scan_active: false)
 
       data_flow                = user.current_flow

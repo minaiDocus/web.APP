@@ -12,8 +12,8 @@ module BillingMod::User
     self.flow_of CustomUtils.period_of(Time.now)
   end
 
-  def current_package
-    self.package_of CustomUtils.period_of(Time.now)
+  def my_package
+    self.packages.where('period <= ?', CustomUtils.period_of(Time.now)).order(period: :desc).limit(1).first
   end
 
   def package_of(period)

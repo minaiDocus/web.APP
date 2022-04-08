@@ -6,14 +6,21 @@ class BillingMod::PrepareOrganizationBilling
   end
 
   def execute
-    @organization.billings.of_period(@period).destroy_all
-    @customers_ids = @organization.customers.active_at(@time_end).pluck(:id)
+    @organization.billings.of_period(@period).update_all(is_frozen: true)
+    @customers_ids = []
+    @organization.customers.active_at(@time_end).each do |customer|
+      next if customer.pieces.count == 0
+
+      customers_ids << customer.id
+    end
 
     create_classic_discount_billing
     create_retriever_discount_billing
     create_classic_excess_billing
     create_micro_plus_excess_billing
     create_extra_order_billing
+
+    @organization.billings.of_period(@period).is_frozen.destroy_all
   end
 
   private
@@ -78,7 +85,8 @@ class BillingMod::PrepareOrganizationBilling
   end
 
   def create_billing(params)
-    billing        = BillingMod::Billing.new
+    billing        = @organization.billings.where(period: @period, name: params[:name], title: params[:title], kind: (params[:kind] || 'normal' )).first || BillingMod::Billing.new
+
     billing.owner  = @organization
     billing.period = @period
     billing.name   = params[:name]
@@ -86,6 +94,8 @@ class BillingMod::PrepareOrganizationBilling
     billing.kind   = params[:kind] if params[:kind].present?
     billing.associated_hash = params[:associated_hash]
     billing.price  = params[:price] * 100
+
+    billing.is_frozen = false
 
     billing.save
   end
