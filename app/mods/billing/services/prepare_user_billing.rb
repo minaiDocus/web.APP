@@ -5,13 +5,20 @@ class BillingMod::PrepareUserBilling
   end
 
   def execute
-    BillingMod::FetchFlow.execute(@user)
+    return false if !@user.still_active? || @user.is_prescriber
 
-    @user.billings.of_period(@period).destroy_all
-    @package   = @user.packages.of_period(@period).first
+    @package = @user.package_of(@period)
+    @package = clone_existing_package if not @package
+
+    return false if not @package
+
+    BillingMod::FetchFlow.execute(@user)
     @data_flow = @user.data_flows.of_period(@period).first
 
-    return false if not @package && @data_flow
+    return false if not @data_flow
+    return false if @user.pieces.count == 0
+
+    @user.billings.of_period(@period).update_all(is_frozen: true)
 
     create_package_billing
     create_options_billing
@@ -24,6 +31,8 @@ class BillingMod::PrepareUserBilling
 
     create_resit_operations_billing
     create_digitize_billing
+
+    @user.billings.of_period(@period).is_frozen.destroy_all
   end
 
   private
@@ -128,7 +137,8 @@ class BillingMod::PrepareUserBilling
   end
 
   def create_billing(params)
-    billing = BillingMod::Billing.new
+    billing        = @user.billings.where(period: @period, name: params[:name], title: params[:title], kind: (params[:kind] || 'normal' )).first || BillingMod::Billing.new
+
     billing.owner  = @user
     billing.period = @period
     billing.name   = params[:name]
@@ -137,7 +147,24 @@ class BillingMod::PrepareUserBilling
     billing.associated_hash = params[:associated_hash] if params[:associated_hash].present?
     billing.price  = params[:price] * 100
 
+    billing.is_frozen = false
+
     billing.save
+  end
+
+  def clone_existing_package
+    my_package = @user.my_package
+    return nil if not my_package
+
+    next_package        = my_package.dup
+    next_package.user   = @user
+    next_package.period = @period
+
+    next_package.save
+
+    @user.reload
+
+    next_package
   end
 
   def calculated_excess
