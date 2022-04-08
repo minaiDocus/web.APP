@@ -1,4 +1,6 @@
-class InvoiceSetting < ApplicationRecord
+class BillingMod::InvoiceSetting < ApplicationRecord
+  self.table_name = 'invoice_settings'
+
   validates_presence_of   :user_code, :journal_code
 
   belongs_to :organization, optional: true
@@ -8,7 +10,7 @@ class InvoiceSetting < ApplicationRecord
   def self.invoice_synchronize(period, invoice_setting_id)
     invoice_setting = InvoiceSetting.find(invoice_setting_id)
 
-    invoices_to_synchronize = Invoice.where('created_at >= ? AND created_at <= ? AND organization_id = ?', period, Time.now, invoice_setting.organization.id)
+    invoices_to_synchronize = BillingMod::Invoice.where('created_at >= ? AND created_at <= ? AND organization_id = ?', period, Time.now, invoice_setting.organization.id)
 
     invoices_to_synchronize.each do |invoice_to_synchonize|
       @invoice = invoice_to_synchonize

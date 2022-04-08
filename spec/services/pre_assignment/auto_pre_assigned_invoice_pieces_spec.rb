@@ -49,7 +49,7 @@ describe PreAssignment::AutoPreAssignedInvoicePieces do
     @user.organization = @organization
     @user.save
 
-    @invoice           = Invoice.create(number: "2019090001", vat_ratio: 1.2, amount_in_cents_w_vat: 286277, content_file_name: "2019090001.pdf", organization_id: @organization.id, user_id: @user.id)
+    @invoice           = BillingMod::Invoice.create(number: "2019090001", vat_ratio: 1.2, amount_in_cents_w_vat: 286277, content_file_name: "2019090001.pdf", organization_id: @organization.id, user_id: @user.id)
     @invoice.cloud_content.attach(Rack::Test::UploadedFile.new("#{Rails.root}/spec/support/files/2019090001.pdf"))
     @invoice.save
   end

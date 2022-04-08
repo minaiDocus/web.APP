@@ -63,14 +63,14 @@ describe Billing::CreateInvoicePdf do
     allow_any_instance_of(Billing::UpdatePeriodData).to receive(:execute).and_return(true)
     allow_any_instance_of(Billing::UpdateOrganizationPeriod).to receive(:fetch_all).and_return(true)
     allow(Billing::DiscountBilling).to receive(:update_period).and_return(true)
-    Invoice.destroy_all
+    BillingMod::Invoice.destroy_all
     Operation.destroy_all
   end
 
   it 'generates pdf invoices - successfully', :generate do
     Billing::CreateInvoicePdf.for_all
 
-    invoices = Invoice.all
+    invoices = BillingMod::Invoice.all
 
     expect(invoices.size).to eq 2
     expect(File.exist?(invoices.first.cloud_content_object.reload.path)).to be true
@@ -81,7 +81,7 @@ describe Billing::CreateInvoicePdf do
   it 'creates a single invoice (for a specific organization)' do
     Billing::CreateInvoicePdf.for Organization.first.id
 
-    invoices = Invoice.all
+    invoices = BillingMod::Invoice.all
 
     expect(invoices.size).to eq 1
     expect(invoices.first.organization).to eq Organization.first
@@ -92,7 +92,7 @@ describe Billing::CreateInvoicePdf do
   it 'updates an existing invoice', :update_invoice do
     Billing::CreateInvoicePdf.for_all
 
-    invoice_1 = Invoice.first
+    invoice_1 = BillingMod::Invoice.first
     md5_1     = DocumentTools.checksum(invoice_1.cloud_content_object.reload.path)
 
     org = Organization.first
@@ -103,10 +103,10 @@ describe Billing::CreateInvoicePdf do
 
     Billing::CreateInvoicePdf.for org, invoice_1.number
 
-    invoice_2 = Invoice.first
+    invoice_2 = BillingMod::Invoice.first
     md5_2     = DocumentTools.checksum(invoice_2.cloud_content_object.reload.path)
 
-    expect(Invoice.all.size).to eq 2
+    expect(BillingMod::Invoice.all.size).to eq 2
     expect(invoice_1.number == invoice_2.number).to be true
     expect(invoice_1.organization == invoice_2.organization).to be true
     expect(md5_1 != md5_2).to be true
@@ -124,7 +124,7 @@ describe Billing::CreateInvoicePdf do
 
     Billing::CreateInvoicePdf.for_all
 
-    invoice = Invoice.last
+    invoice = BillingMod::Invoice.last
 
     expect(period.reload.get_active_packages).to eq [:ido_classique]
     expect(period.product_option_orders.size).to eq 2
@@ -145,7 +145,7 @@ describe Billing::CreateInvoicePdf do
 
     Billing::CreateInvoicePdf.for_all
 
-    invoice = Invoice.last
+    invoice = BillingMod::Invoice.last
 
     expect(period.reload.get_active_packages).to eq [:ido_classique]
     expect(period.product_option_orders.size).to eq 3
@@ -168,7 +168,7 @@ describe Billing::CreateInvoicePdf do
 
     Billing::CreateInvoicePdf.for_all
 
-    invoice = Invoice.last
+    invoice = BillingMod::Invoice.last
 
     expect(period.reload.get_active_packages).to eq [:ido_classique]
     expect(period.product_option_orders.size).to eq 3
@@ -217,7 +217,7 @@ describe Billing::CreateInvoicePdf do
       ProductOptionOrder.destroy_all
       Billing::CreateInvoicePdf.for_all
 
-      Invoice.destroy_all
+      BillingMod::Invoice.destroy_all
     end
 
     it 'create normal output for test mode', :test_1 do
@@ -226,7 +226,7 @@ describe Billing::CreateInvoicePdf do
       csv_file     = test_dir + "/invoices_resume.csv"
       invoice_pdf  = test_dir + "/#{Organization.last.code}_#{Organization.last.id}.pdf"
 
-      expect(Invoice.all.size).to eq 0
+      expect(BillingMod::Invoice.all.size).to eq 0
       expect(File.exist?(csv_file)).to be true
       expect(File.exist?(invoice_pdf)).to be true
       expect(File.size(csv_file)).to be > 0
@@ -244,7 +244,7 @@ describe Billing::CreateInvoicePdf do
 
       test_dir = Billing::CreateInvoicePdf.for_test(time)
 
-      expect(Invoice.all.size).to eq 0
+      expect(BillingMod::Invoice.all.size).to eq 0
       expect(org_period.reload.first.product_option_orders.collect(&:id)).to eq o_options_ids
       expect(cust_period.reload.first.product_option_orders.collect(&:id)).to eq c_options_ids
     end
@@ -262,7 +262,7 @@ describe Billing::CreateInvoicePdf do
 
       test_dir = Billing::CreateInvoicePdf.for_test(time)
 
-      expect(Invoice.all.size).to eq 0
+      expect(BillingMod::Invoice.all.size).to eq 0
 
       expect(org_period.reload.first.product_option_orders.collect(&:id)).to eq o_options_ids
       expect(cust_period.reload.first.product_option_orders.collect(&:id)).not_to eq c_options_ids

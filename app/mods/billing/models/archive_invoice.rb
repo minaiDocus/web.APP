@@ -1,4 +1,5 @@
-class ArchiveInvoice < ApplicationRecord
+class BillingMod::ArchiveInvoice < ApplicationRecord
+  self.table_name = 'archive_invoices'
   ATTACHMENTS_URLS={'cloud_content' => '/archives/invoices/'}
 
   has_one_attached :cloud_content
@@ -24,7 +25,7 @@ class ArchiveInvoice < ApplicationRecord
   end
 
   def self.archive_path(file_name)
-    archive_invoice = ArchiveInvoice.where(name: file_name).first
+    archive_invoice = BillingMod::ArchiveInvoice..where(name: file_name).first
     if archive_invoice.present? && File.exist?(archive_invoice.cloud_content_object.path.to_s)
       archive_invoice.cloud_content_object.try(:path)
     else

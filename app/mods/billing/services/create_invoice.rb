@@ -1,4 +1,4 @@
-module BillingMod::V1
+module BillingMod
   class CreateInvoice
     def initialize(_time=nil, options={})
       @time              = _time.presence || 1.month.ago
@@ -38,8 +38,8 @@ module BillingMod::V1
         next if not package
 
         if @is_update || @period == CustomUtils.period_of(Time.now) || !@invoice
-          BillingMod::V1::PrepareUserBilling.new(customer, @period)
-          BillingMod::V1::PrepareOrganizationBilling.new(customer, @period)
+          BillingMod::PrepareUserBilling.new(customer, @period).execute
+          BillingMod::PrepareOrganizationBilling.new(customer, @period).execute
         end
 
         increm_package_count('iDoClassique')  if package.name == 'ido_classic'
@@ -66,7 +66,7 @@ module BillingMod::V1
         @invoice.updated_at   = Time.now
         @invoice.number       = "#{@organization.code}_#{@organization.id}"
       else
-        @invoice              = @organization.invoices.of_period(@period).first || Invoice.new
+        @invoice              = @organization.invoices.of_period(@period).first || BillingMod::Invoice.new
       end
 
       @invoice.vat_ratio      = @organization.subject_to_vat ? 1.2 : 1

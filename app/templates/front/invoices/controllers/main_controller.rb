@@ -7,7 +7,7 @@ class Invoices::MainController < OrganizationController
   end
 
   def download
-    invoice    = Invoice.find params[:id] if params[:id].present?
+    invoice    = BillingMod::Invoice.find params[:id] if params[:id].present?
     authorized = @user.leader?
 
     if invoice && invoice.organization == @organization && File.exist?(invoice.cloud_content_object.path) && authorized

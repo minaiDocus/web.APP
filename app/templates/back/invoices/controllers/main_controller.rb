@@ -6,7 +6,7 @@ class Admin::Invoices::MainController < BackController
 
   # GET /admin/invoices
   def index
-    @invoices = Invoice.search(search_terms(params[:invoice_contains])).order(sort_column => sort_direction)
+    @invoices = BillingMod::Invoice.search(search_terms(params[:invoice_contains])).order(sort_column => sort_direction)
 
     @invoices_count = @invoices.count
 
@@ -15,7 +15,7 @@ class Admin::Invoices::MainController < BackController
 
   # GET /admin/invoices/archive
   def archive
-    file_path = ArchiveInvoice.archive_path(params[:file_name])
+    file_path = BillingMod::ArchiveInvoice..archive_path(params[:file_name])
 
     if File.exist? file_path
       send_file(file_path, type: 'application/zip', filename: params[:file_name], x_sendfile: true)
@@ -93,7 +93,7 @@ class Admin::Invoices::MainController < BackController
   private
 
   def load_invoice
-    @invoice = Invoice.find(params[:id])
+    @invoice = BillingMod::Invoice.find(params[:id])
   end
 
   def sort_column
