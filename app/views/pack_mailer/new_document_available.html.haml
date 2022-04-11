@@ -1,3 +1,10 @@
+- if @user.organization.try(:code) == 'ALM'
+  - url = 'https://www.idp-axeliumconseil.fr/'
+  - team = 'Axelium'
+- else
+  - url = @url
+  - team = 'iDocus'
+
 !!!
 %html
   %head
@@ -7,7 +14,7 @@
     Bonjour #{@user.name},
     %br
     %br
-    Le #{I18n.l(@start_at, format: '%d %B %Y')}, les documents ci-dessous ont été ajoutés ou mis à jour dans votre interface, à l'adresse #{link_to @url, @url} .
+    Le #{I18n.l(@start_at, format: '%d %B %Y')}, les documents ci-dessous ont été ajoutés ou mis à jour dans votre interface, à l'adresse #{link_to url, url} .
     %br
     %br
     %ul
@@ -28,6 +35,7 @@
     %br
     Cordialement,
     %br
-    L'équipe iDocus
-    %br
-    = link_to 'support@idocus.com', 'mailto:support@idocus.com'
+    = "L'équipe #{team}"
+    - if @user.organization.try(:code) != 'ALM'
+      %br
+      = link_to 'support@idocus.com', 'mailto:support@idocus.com'
