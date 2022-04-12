@@ -1,7 +1,7 @@
 class BillingMod::PrepareUserBilling
-  def initialize(user, period)
+  def initialize(user, period=nil)
     @user   = user
-    @period = period
+    @period = period || CustomUtils.period_of(Time.now)
   end
 
   def execute

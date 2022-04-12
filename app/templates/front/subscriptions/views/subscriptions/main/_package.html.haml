@@ -1,0 +1,65 @@
+- packages   = BillingMod::Configuration::LISTS
+- my_package =  @customer.my_package
+
+.packages_list
+  - packages.each do |package, infos|
+    - human_name = infos[:human_name].presence || nil
+    - next if human_name.blank?
+    - next if package.to_s == 'ido_micro'      && @customer.organization.uses_micro_plus?
+    - next if package.to_s == 'ido_micro_plus' && !@customer.organization.uses_micro_plus?
+
+    .package
+      .row.box
+        .col-sm-4
+          %span= human_name
+        .col-sm-4
+          %span= infos[:description]
+        .col-sm-2
+          %span= "#{infos[:price]} € / mois"
+        .col-sm-2
+          = radio_button_tag 'package[name]', package.to_s, package.to_s == my_package.try(:name), class: 'form-check-input radio-button main-option'
+      .options
+        .row
+          .col-sm-9
+            - options = infos[:options].presence || []
+            - options.each do |opt, value|
+              - next if value != 'optional'
+
+              - if opt.to_s == 'bank'
+                .row.retriever-option
+                  .col-sm-6
+                    Avec option automate
+                  .col-sm-6
+                    = check_box_tag "package[#{package.to_s}][bank]", opt.to_s, package.to_s == my_package.try(:name) && my_package.try(:bank_active), class: 'form-check-input checkbox main-option'
+              - if opt.to_s == 'mail'
+                .row.mail-option
+                  .col-sm-6
+                    Avec option courrier
+                  .col-sm-6
+                    = check_box_tag "package[#{package.to_s}][mail]", opt.to_s, package.to_s == my_package.try(:name) && my_package.try(:mail_active), class: 'form-check-input checkbox main-option'
+              - if opt.to_s == 'preassignment'
+                .row.preassignment-option
+                  .col-sm-6
+                    Pré-saisie comptable
+                  .col-sm-6
+                    = check_box_tag "package[#{package.to_s}][preassignment]", opt.to_s, package.to_s == my_package.try(:name) && my_package.try(:preassignment_active), class: 'form-check-input checkbox main-option'
+          .col-sm-3
+            .input-journal-numbers
+              .form-group
+                = label_tag "package[#{package.to_s}][number_of_journals]", "Nombre de journaux", class: 'col-form-label required semibold'
+                .select-container.no-padding.w-100.subscription_number_of_journals
+                  = number_field_tag "package[#{package.to_s}][number_of_journals]", 5, class: 'form-control special_input ', min: 5, max: 30, required: true, autofocus: true, pattern: '/^[0-9]+$/', placeholder: "5"
+                  - if @customer.account_book_types.count > 5
+                    &nbsp;
+                    %span{id: 'err-msg-input-number'}
+                    %div.clearfix
+                      %i Supprimez un journal comptable avant de baisser cette option.
+
+  Appliquer maintenant
+  = check_box_tag "package[apply_now]", 'apply_now', false, class: 'form-check-input checkbox main-option'
+
+  .future_package
+    - next_period  = CustomUtils.period_of(1.month.after)
+    - next_package = @customer.package_of(next_period)
+    - if next_package
+      %span= next_package.to_json

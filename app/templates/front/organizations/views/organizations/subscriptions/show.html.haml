@@ -12,25 +12,26 @@
       %tbody
         %tr
           %td Clients
-          %td= @organization.customers.active_at(Time.now).count
-          %td.price= format_price_00(@total - @subscription.current_period.products_price_in_cents_wo_vat) + ' €'
-          %td.price= format_price_00((@total * @subscription.tva_ratio) - @subscription.current_period.products_price_in_cents_w_vat) + ' €'
-        - @subscription_options.each do |option|
+          %td= @customers.count
+          %td.price= format_price_00(@customers_prices) + ' €'
+          %td.price= format_price_00(@customers_prices) + ' €'
+        - @extra_orders.each do |order|
           %tr
             %td Autres
-            %td= option.name
-            %td.price= format_price_00(option.price_in_cents_wo_vat) + ' €'
-            %td.price= format_price_00(option.price_in_cents_w_vat) + ' €'
+            %td= order.name
+            %td.price= format_price_00(order.price * 100) + ' €'
+            %td.price= format_price_00(order.price_w_vat * 100) + ' €'
         %tr
           %td
+          - total_price = @total + @customers_prices
           %th Total
-          %td.price= format_price_00(@total) + ' €'
-          %td.price= format_price_00(@total * @subscription.tva_ratio) + ' €'
+          %td.price= format_price_00(total_price) + ' €'
+          %td.price= format_price_00(total_price * @subscription.tva_ratio) + ' €'
         %tr
           %td
           %th TVA (20 %)
           %td
-          %td.price= format_price_00((@total * @subscription.tva_ratio) - @total) + ' €'
+          %td.price= format_price_00((total_price * @subscription.tva_ratio) - total_price) + ' €'
 
     %hr
     .text-end

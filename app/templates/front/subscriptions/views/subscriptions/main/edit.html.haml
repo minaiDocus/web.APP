@@ -2,10 +2,13 @@
 
 #subscriptions.edit
   = form_tag organization_customer_subscription_path(@organization, @customer), method: :patch, class: 'subscription_option_form simple_form form form-horizontal margin0', :data => {:"is_recently_created" => @customer.recently_created? }, id: 'subscription_package_form' do
-    = render file: Rails.root.join('app/templates/front/customers/views/customers/main/_subscription_options.html.haml')
+    / = render file: Rails.root.join('app/templates/front/customers/views/customers/main/_subscription_options.html.haml')
+    = render file: Rails.root.join('app/templates/front/subscriptions/views/subscriptions/main/_package.html.haml')
     %hr
     .form-group.no-margin
       .w-100.text-end
-        = button_tag "Valider les modifications", class: 'btn btn-primary bold valid_subscription_edit', type: 'button'
+        - idocus_params = param_encode({ url: '#url', method: 'post', form:{ id: 'subscription_package_form', dump_action: true }, redirect_to: { url: edit_organization_customer_subscription_path(@organization, @customer), html: { target: '#subscriptions' } } })
+        = button_tag "Valider les modifications", class: 'btn btn-primary bold as_idocus_ajax', type: 'button', idocus: idocus_params
 
-= javascript_include_tag 'front/customers/assets/javascripts/main'
+/ = javascript_include_tag 'front/customers/assets/javascripts/main'
+= javascript_include_tag 'front/subscriptions/assets/javascripts/main'

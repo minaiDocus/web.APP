@@ -3,7 +3,7 @@ class BillingMod::Package < ApplicationRecord
 
   belongs_to :user
 
-  validates_presence_of :name, :period, :version
+  validates_presence_of :name, :period
 
   scope :of_period, ->(period){ where(period: period.to_i) }
   scope :by_period, ->{ order(period: :desc) }

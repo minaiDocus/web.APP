@@ -12,22 +12,32 @@ class Subscriptions::MainController < CustomerController
 
   # PUT /organizations/:organization_id/organization_subscription
   def update
-    modif_params = params[:subscription][:subscription_option]
-    params[:subscription][modif_params] = true
+    package_name = params[:package].try(:[], :name)
+    options      = params[:package].try(:[], package_name.to_sym)
 
-    if Subscription::Form.new(@subscription, @user, request).submit(params[:subscription])
-      @customer.update(current_configuration_step: nil) unless @customer.configured?
+    BillingMod::CreatePackage.new(@customer, package_name, options, params[:package].try(:[], :apply_now).present?).execute
 
-      if params.try(:[], :user).try(:[], :jefacture_account_id).present?
-        @customer.update(jefacture_account_id: params[:user][:jefacture_account_id])
-      end
+    BillingMod::PrepareUserBilling.new(@customer.reload).execute
 
-      flash[:success] = 'Modifié avec succès.'
-    else
-      flash[:error] = 'Vous devez sélectionner un forfait.'
-    end
+    flash[:success] = 'Modifié avec succès.'
 
-    redirect_to edit_organization_customer_subscription_path(@organization, @customer)
+    # modif_params = params[:subscription][:subscription_option]
+    # params[:subscription][modif_params] = true
+
+    # if Subscription::Form.new(@subscription, @user, request).submit(params[:subscription])
+    #   @customer.update(current_configuration_step: nil) unless @customer.configured?
+
+    #   if params.try(:[], :user).try(:[], :jefacture_account_id).present?
+    #     @customer.update(jefacture_account_id: params[:user][:jefacture_account_id])
+    #   end
+
+    #   flash[:success] = 'Modifié avec succès.'
+    # else
+    #   flash[:error] = 'Vous devez sélectionner un forfait.'
+    # end
+
+    # redirect_to edit_organization_customer_subscription_path(@organization, @customer)
+    render json: { json_flash: flash }, status: 200
   end
 
   private
