@@ -7,8 +7,12 @@ class Organizations::SubscriptionsController < OrganizationController
   prepend_view_path('app/templates/front/organizations/views')
 
   def show
-    @subscription_options = @subscription.options.sort_by(&:position)
-    @total                = Billing::OrganizationBillingAmount.new(@organization).execute
+    period        = CustomUtils.period_of(Time.now)
+    @extra_orders = @organization.extra_orders
+    @total        = @organization.total_billing_of(period)
+
+    @customers        = @organization.customers.active_at(Time.now)
+    @customers_prices = customers.map{ |customer| customer.total_billing_of(period) }.sum
   end
 
   # GET /account/organizations/:organization_id/organization_subscription/edit
@@ -19,7 +23,25 @@ class Organizations::SubscriptionsController < OrganizationController
   # PUT /account/organizations/:organization_id/organization_subscription
   def update
     if @subscription.update( params[:subscription] ? subscription_params : { option_ids: [] } )
-      Billing::UpdatePeriod.new(@subscription.current_period).execute
+      # Billing::UpdatePeriod.new(@subscription.current_period).execute
+      #TODO : Remove subscriptionOption
+      organization = @subscription.reload.organization
+      period  = CustomUtils.period_of(Time.now)
+      options = @subscription.options
+
+      organization.extra_orders.destroy_all
+      options.each do |option|
+        extra_order        = BillingMod::ExtraOrder.new
+        extra_order.period = period
+        extra_order.owner  = organization
+        extra_order.name   = option.name
+        extra_order.price  = option.price_in_cents_wo_vat / 100
+
+        extra_order.save
+      end
+
+      BillingMod::PrepareOrganizationBilling.new(@organization).execute
+
       json_flash[:success] = 'Modifié avec succès.'
     else
       json_flash[:error] = "Impossible d'appliquer les modifications"

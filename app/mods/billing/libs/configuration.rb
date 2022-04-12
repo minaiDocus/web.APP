@@ -7,43 +7,43 @@ class BillingMod::Configuration
               price: 20,
               commitment: 0,
               data_flows: { max: 100, duration: 'month', excess_price: 0.25 },
-              options: { upload: 'strict', bank: 'optional', scan: 'strict', preassignment: 'optional', mail: 'optional'}
+              options: { upload: 'strict', bank: 'optional', scan: 'strict', mail: 'optional', preassignment: 'optional'}
             },
             ido_nano: {
               human_name: "iDo'Nano",
-              description: "vous permet de transférer jusqu'à 100 pièces/mois, mutualisation des quotas au niveau du cabinet.",
+              description: "Vous permet de transférer jusqu'à 100 pièces/mois, mutualisation des quotas au niveau du cabinet.",
               hint: "Au-delà du quota cabinet cumulé, calcul du dépassement simplifié : 0,25€ ht/facture",
               price: 5,
               commitment: 12,
               data_flows: { max: 100, duration: 'annual', excess_price: 0.25 },
-              options: { upload: 'strict', bank: 'none', scan: 'strict', preassignment: 'strict', mail: 'optional'}
+              options: { upload: 'strict', bank: 'none', scan: 'strict', mail: 'optional', preassignment: 'strict'}
             },
             ido_micro: {
               human_name: "iDo'Micro",
-              description: "vous permet de transférer jusqu'à 100 pièces/mois, mutualisation des quotas au niveau du cabinet.",
+              description: "Vous permet de transférer jusqu'à 100 pièces/mois, mutualisation des quotas au niveau du cabinet.",
               hint: "Au-delà du quota cabinet cumulé, calcul du dépassement simplifié : 0,25€ ht/facture",
               price: 10,
               commitment: 12,
               data_flows: { max: 100, duration: 'annual', excess_price: 0.25 },
-              options: { upload: 'strict', bank: 'strict', scan: 'strict', preassignment: 'strict', mail: 'optional'}
+              options: { upload: 'strict', bank: 'strict', scan: 'strict', mail: 'optional', preassignment: 'strict'}
             },
             ido_micro_plus: {
               human_name: "iDo'Micro",
-              description: "vous permet de transférer jusqu'à 100 pièces/mois, mutualisation des quotas au niveau du cabinet.",
+              description: "Vous permet de transférer jusqu'à 100 pièces/mois, mutualisation des quotas au niveau du cabinet.",
               hint: "Au-delà du quota cabinet cumulé, calcul du dépassement simplifié : 0,25€ ht/facture",
               price: 10,
               commitment: 12,
               data_flows: { max: 25, duration: 'month', excess_price: 0.3 },
-              options: { upload: 'strict', bank: 'optional', scan: 'strict', preassignment: 'strict', mail: 'optional'}
+              options: { upload: 'strict', bank: 'optional', scan: 'strict', mail: 'optional', preassignment: 'strict'}
             },
             ido_x: {
               human_name: "iDo'X",
-              description: "vous permet de transférer jusqu'à 100 pièces/mois, mutualisation des quotas au niveau du cabinet.",
+              description: "Vous permet de transférer jusqu'à 100 pièces/mois, mutualisation des quotas au niveau du cabinet.",
               hint: "Au-delà du quota cabinet cumulé, calcul du dépassement simplifié : 0,25€ ht/facture",
               price: 5,
               commitment: 0,
               data_flows: { max: 0, duration: 'month', excess_price: 0.25 },
-              options: { upload: 'none', bank: 'none', scan: 'none', preassignment: 'strict', mail: 'none'}
+              options: { upload: 'none', bank: 'none', scan: 'none', mail: 'none', preassignment: 'strict'}
             },
             ido_retriever: {
               human_name: "Automate",
@@ -52,16 +52,16 @@ class BillingMod::Configuration
               price: 5,
               commitment: 0,
               data_flows: { max: 0, duration: 'month', excess_price: 0.25 },
-              options: { upload: 'none', bank: 'strict', scan: 'none', preassignment: 'strict', mail: 'none'}
+              options: { upload: 'none', bank: 'strict', scan: 'none', mail: 'none', preassignment: 'strict'}
             },
             ido_digitize: {
               human_name: "Numérisation",
-              description: "vous permet de transférer jusqu'à 100 pièces/mois, mutualisation des quotas au niveau du cabinet.",
+              description: "Vous permet de transférer jusqu'à 100 pièces/mois, mutualisation des quotas au niveau du cabinet.",
               hint: "",
               price: 0,
               commitment: 0,
               data_flows: { max: 0, duration: 'month', excess_price: 0.25 },
-              options: { upload: 'none', bank: 'none', scan: 'strict', preassignment: 'strict', mail: 'none'}
+              options: { upload: 'none', bank: 'none', scan: 'strict', mail: 'none', preassignment: 'strict'}
             },
             preassignment: { price: 9 },
             mail: { price: 10 },
