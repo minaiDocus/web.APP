@@ -1,8 +1,8 @@
 class BillingMod::PrepareOrganizationBilling
-  def initialize(organization, period)
+  def initialize(organization, period=nil)
     @organization = organization
-    @period       = period
-    @time_end     = Date.parse("#{period.to_s[0..3]}-#{period.to_s[4..5]}-15").end_of_month + 1.day
+    @period       = period.presence || CustomUtils.period_of(Time.now)
+    @time_end     = Date.parse("#{@period.to_s[0..3]}-#{@period.to_s[4..5]}-15").end_of_month + 1.day
   end
 
   def execute
@@ -11,7 +11,7 @@ class BillingMod::PrepareOrganizationBilling
     @organization.customers.active_at(@time_end).each do |customer|
       next if customer.pieces.count == 0
 
-      customers_ids << customer.id
+      @customers_ids << customer.id
     end
 
     create_classic_discount_billing
@@ -79,7 +79,19 @@ class BillingMod::PrepareOrganizationBilling
   end
 
   def create_extra_order_billing
-    @organization.extra_orders.of_period(@period).map do |extra_order|
+    #TODO : Find a way to remove SubscriptionOption, instead use direclty ExtraOrder
+    options = @organization.subscription.options.where(period_duration: 0)
+    options.each do |option|
+      extra_order        = @organization.extra_orders.where(name: option.name).first || BillingMod::ExtraOrder.new
+      extra_order.period = @period
+      extra_order.owner  = @organization
+      extra_order.name   = option.name
+      extra_order.price  = option.price_in_cents_wo_vat / 100
+
+      extra_order.save
+    end
+
+    @organization.reload.extra_orders.of_period(@period).map do |extra_order|
       create_billing({ name: 'extra_order', title: extra_order.name, kind: 'extra', price: extra_order.price })
     end
   end
