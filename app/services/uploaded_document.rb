@@ -126,7 +126,7 @@ class UploadedDocument
         System::Log.info('document_upload', "[Pack - #{api_name}] #{temp_pack.name} - #{Pack.where(name: temp_pack.name).size} found - pack")
 
         options = {
-          delivered_by:          @uploader.code,
+          delivered_by:          @uploader.my_code,
           delivery_type:         'upload',
           api_id:                api_id,
           api_name:              api_name,
