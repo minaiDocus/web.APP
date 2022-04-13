@@ -65,6 +65,7 @@ class Organization < ApplicationRecord
   accepts_nested_attributes_for :my_unisoft
   accepts_nested_attributes_for :csv_descriptor
   accepts_nested_attributes_for :sage_gec
+  accepts_nested_attributes_for :cogilog
 
   scope :admin,       -> { where(is_for_admin: true) }
   scope :active,      -> { where(is_active: true) }

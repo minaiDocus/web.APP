@@ -72,6 +72,7 @@ class SoftwareSetting::MainController < OrganizationController
   def software_params
     params.require(:organization).permit(
       { :quadratus_attributes => %i[id is_used auto_deliver] },
+      { :cogilog_attributes => %i[id is_used auto_deliver] },
       { :coala_attributes => %i[id is_used auto_deliver] },
       { :cegid_attributes => %i[id is_used auto_deliver] },
       { :fec_agiris_attributes => %i[id is_used auto_deliver] },

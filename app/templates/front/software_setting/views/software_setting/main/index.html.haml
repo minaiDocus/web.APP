@@ -2,6 +2,8 @@
 - tab_present = @organization.send(params[:tab].to_s.to_sym).try(:used?) rescue nil
 = stylesheet_link_tag 'front/software_setting/assets/stylesheets/main'
 
+
+
 .general
   .row
     .col-md-8.derivationRight
@@ -35,7 +37,7 @@
 
       .tab-pane.box.no-margin#other-software{ "role" => "tabpanel", "aria-labelledby" => "other-software-tab", class: (!first_active)? 'active' : '' }
         %label.semibold.derivationLeft Activer l'option d'export des écritures comptables en cliquant sur le logo et pièces pour :
-        - img_list = { ibiza: '/assets/logo/ibiza-logo.png', quadratus: '/assets/logo/quadratus-logo.png', cegid: '/assets/logo/cegid-logo.png', sage_gec: '/assets/logo/sage-gec-logo.png', fec_agiris: '/assets/logo/agiris-logo.png', fec_acd: '/assets/logo/acd-logo.png', exact_online: '/assets/logo/exact-logo.png', my_unisoft: '/assets/logo/my-unisoft-logo.png', coala: '/assets/logo/coala-logo.png', csv_descriptor: '/assets/logo/csv-logo.png' }
+        - img_list = { ibiza: '/assets/logo/ibiza-logo.png', quadratus: '/assets/logo/quadratus-logo.png', cegid: '/assets/logo/cegid-logo.png', sage_gec: '/assets/logo/sage-gec-logo.png', fec_agiris: '/assets/logo/agiris-logo.png', fec_acd: '/assets/logo/acd-logo.png', exact_online: '/assets/logo/exact-logo.png', my_unisoft: '/assets/logo/my-unisoft-logo.png', coala: '/assets/logo/coala-logo.png', csv_descriptor: '/assets/logo/csv-logo.png', cogilog: '/assets/logo/cogilog-logo.png' }
         - softwares_list.each_slice(3) do |group|
           .row.derivationRight
             - group.each do |software|

@@ -33,6 +33,10 @@ class PreseizureExport::GeneratePreAssignment
     @report.user.uses?(:csv_descriptor) && @report.user.try(:csv_descriptor).try(:auto_deliver?)
   end
 
+  def valid_cogilog?
+    @report.user.uses?(:cogilog) && @report.user.try(:cogilog).try(:auto_deliver?)
+  end
+
   def execute
     group = @all_preseizures.group_by { |p| p.report }
     group.each do |g|
@@ -69,6 +73,11 @@ class PreseizureExport::GeneratePreAssignment
       if valid_quadratus?
         create_pre_assignment_export_for('quadratus')
         generate_quadratus_export(true)
+      end
+
+      if valid_cogilog?
+        create_pre_assignment_export_for('cogilog')
+        generate_cogilog_export
       end
 
       if valid_csv_descriptor?
@@ -124,6 +133,10 @@ class PreseizureExport::GeneratePreAssignment
       create_pre_assignment_export_for('cegid')
 
       generate_cegid_tra_export(false)
+    when 'txt_cogilog'
+      create_pre_assignment_export_for('cogilog')
+
+      generate_cogilog_export
     end
 
     @export
@@ -239,6 +252,19 @@ private
         rename_export 'quadratus'
         @export.got_success "#{file_real_name}.txt"
       end
+    rescue => e
+      @export.got_error e
+    end
+  end
+
+  def generate_cogilog_export
+    begin
+      file_txt = PreseizureExport::Software::Cogilog.new(@preseizures).execute
+
+      final_file_name = "#{file_real_name}.txt"
+      FileUtils.mv file_txt, "#{file_path}/#{final_file_name}"
+      @export.got_success "#{final_file_name}"
+
     rescue => e
       @export.got_error e
     end

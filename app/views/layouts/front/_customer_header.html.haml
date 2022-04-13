@@ -109,6 +109,12 @@
                         %span.float-start Fec ACD
                         - if @customer.uses?(:fec_acd)
                           = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'float-end' })
+                  - if @organization.try(:cogilog).try(:used?)
+                    %li.clearfix
+                      %a.head_customer_link.semibold.nav-link.dropdown-item#cogilog-tab{ href: organization_customer_softwares_path(@organization, @customer, software_name: 'cogilog') }
+                        %span.float-start Cogilog
+                        - if @customer.uses?(:cogilog)
+                          = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'float-end' })
                   - if @organization.try(:csv_descriptor).try(:used?)
                     %li.clearfix
                       %a.head_customer_link.semibold.nav-link.dropdown-item#csv-descriptor-tab{ href: organization_customer_softwares_path(@organization, @customer, software_name: 'csv_descriptor') }

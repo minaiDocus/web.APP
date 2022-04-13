@@ -357,6 +357,7 @@ class Customers::MainController < CustomerController
       { fec_acd_attributes: %i[id is_used auto_deliver] },
       { cegid_attributes: %i[id is_used auto_deliver] },
       { quadratus_attributes: %i[id is_used auto_deliver] },
+      { cogilog_attributes: %i[id is_used auto_deliver] },
       { csv_descriptor_attributes: %i[id is_used auto_deliver use_own_csv_descriptor_format] }
     ]
 

@@ -316,6 +316,8 @@ fr:
         auto_deliver: Souhaitez-vous générer automatiquement l'export (zip) des écritures et pièces ?
       software_fec_agiris:
         is_used: Activer l'option d'export des écritures comptables et pièces pour Fec Agiris?
+      software_cogilog:
+        is_used: Activer l'option d'export des écritures comptables et pièces pour Cogilog (.txt)?
 
       account_number_rule:
         rule_target: Appliqué à

@@ -1,8 +1,8 @@
 module Interfaces::Software::Configuration
-  SOFTWARES = ['ibiza', 'exact_online', 'my_unisoft', 'coala', 'sage_gec', 'quadratus', 'cegid', 'fec_agiris', 'fec_acd', 'csv_descriptor']
-  SOFTWARES_HUMAN_NAME = { ibiza: 'iBiza', exact_online: 'Exact Online', my_unisoft: 'My Unisoft', coala: 'Coala', sage_gec: 'Sage GEC - Privé', quadratus: 'Quadratus', cegid: 'Cegid', fec_agiris: 'Agiris', fec_acd: 'FEC ACD', csv_descriptor: 'CSV' }
+  SOFTWARES = ['ibiza', 'exact_online', 'my_unisoft', 'coala', 'sage_gec', 'quadratus', 'cegid', 'fec_agiris', 'fec_acd', 'csv_descriptor', 'cogilog']
+  SOFTWARES_HUMAN_NAME = { ibiza: 'iBiza', exact_online: 'Exact Online', my_unisoft: 'My Unisoft', coala: 'Coala', sage_gec: 'Sage GEC - Privé', quadratus: 'Quadratus', cegid: 'Cegid', fec_agiris: 'Agiris', fec_acd: 'FEC ACD', csv_descriptor: 'CSV', cogilog: 'Cogilog' }
   TABLE_NAME_WITH_SOFTWARES_USING_API = ['software_ibizas', 'software_exact_online', 'software_my_unisofts', 'software_sage_gec']
-  SOFTWARES_OBJECTS = [::Software::Ibiza, ::Software::ExactOnline, ::Software::Cegid, ::Software::Coala, ::Software::SageGec, ::Software::FecAgiris, ::Software::FecAcd, ::Software::Quadratus, ::Software::CsvDescriptor, ::Software::MyUnisoft]
+  SOFTWARES_OBJECTS = [::Software::Ibiza, ::Software::ExactOnline, ::Software::Cegid, ::Software::Coala, ::Software::SageGec, ::Software::FecAgiris, ::Software::FecAcd, ::Software::Quadratus, ::Software::CsvDescriptor, ::Software::MyUnisoft, ::Software::Cogilog]
 
   def self.softwares
     {
@@ -15,7 +15,8 @@ module Interfaces::Software::Configuration
       fec_acd:        Software::FecAcd,
       quadratus:      Software::Quadratus,
       csv_descriptor: Software::CsvDescriptor,
-      my_unisoft:     Software::MyUnisoft
+      my_unisoft:     Software::MyUnisoft,
+      cogilog:        Software::Cogilog
     }
   end
 
@@ -30,7 +31,8 @@ module Interfaces::Software::Configuration
       cegid:          'cegid',
       fec_agiris:     'fec_agiris',
       fec_acd:        'fec_acd',
-      csv_descriptor: 'csv_descriptor'
+      csv_descriptor: 'csv_descriptor',
+      cogilog:        'cogilog'
     }.with_indifferent_access
   end
 
@@ -45,7 +47,8 @@ module Interfaces::Software::Configuration
       cegid:          "Cegid",
       fec_agiris:     "Fec Agiris",
       fec_acd:        "Fec ACD",
-      csv_descriptor: "Autre(format d'export .csv)"
+      csv_descriptor: "Autre(format d'export .csv)",
+      cogilog:        "Cogilog"
     }.with_indifferent_access
   end
 
@@ -60,7 +63,8 @@ module Interfaces::Software::Configuration
       cegid:          'software_cegids',
       fec_agiris:     'software_fec_agiris',
       fec_acd:        'software_fec_acds',
-      csv_descriptor: 'software_csv_descriptors'
+      csv_descriptor: 'software_csv_descriptors',
+      cogilog:        'software_cogilog'
     }.with_indifferent_access
   end
 
@@ -75,7 +79,8 @@ module Interfaces::Software::Configuration
       'Software::FecAcd'        => 'fec_acd',
       'Software::Quadratus'     => 'quadratus',
       'Software::CsvDescriptor' => 'csv_descriptor',
-      'Software::MyUnisoft'     => 'my_unisoft'
+      'Software::MyUnisoft'     => 'my_unisoft',
+      'Software::Cogilog'       => 'cogilog'
     }
   end
 

@@ -1314,6 +1314,10 @@ fr:
         attributes:
           is_used: Activer l'option d'export des écritures comptables et pièces pour Quadratus (.zip)?
           auto_deliver: Activer la génération automatique de l'export (zip) des écritures comptables et pièces pour Quadratus?
+      software_cogilog:
+        attributes:
+          is_used: Activer l'option d'export des écritures comptables et pièces pour Cogilog (.txt)?
+          auto_deliver: Activer la génération automatique de l'export (txt) des écritures comptables et pièces pour Cogilog?
       software_fec_agiris:
         attributes:
           is_used: Activer l'option d'export des écritures comptables et pièces pour Fec Agiris?

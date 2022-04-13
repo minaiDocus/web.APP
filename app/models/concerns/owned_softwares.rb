@@ -12,5 +12,6 @@ module OwnedSoftwares
     has_one :csv_descriptor, as: :owner, autosave: true, dependent: :destroy, class_name: 'Software::CsvDescriptor'
     has_one :my_unisoft, as: :owner, dependent: :destroy, class_name: 'Software::MyUnisoft'
     has_one :sage_gec, as: :owner, dependent: :destroy, class_name: 'Software::SageGec'
+    has_one :cogilog, as: :owner, dependent: :destroy, class_name: 'Software::Cogilog'
   end
 end

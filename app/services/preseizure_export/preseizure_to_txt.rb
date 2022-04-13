@@ -7,14 +7,17 @@ class PreseizureExport::PreseizureToTxt
 
 
   def execute(type_of_export="zip_quadratus")
-    if type_of_export == "zip_quadratus"
-      export_zip_quadratus
-    elsif type_of_export == "cegid_tra"
-      export_cegid_tra
-    elsif type_of_export == "fec_acd"
-      export_fec_acd
-    else
-      export_fec_agiris
+    case type_of_export
+      when "zip_quadratus"
+        export_zip_quadratus
+      when "cegid_tra"
+        export_cegid_tra
+      when "fec_acd"
+        export_fec_acd
+      when "cogilog"
+        export_cogilog
+      else
+        export_fec_agiris
     end
   end
 
@@ -75,6 +78,108 @@ class PreseizureExport::PreseizureToTxt
 
         data << line
 
+      end
+    end
+
+    data.join("\n")
+  end
+
+  def export_cogilog
+    data = []
+
+    if @preseizures.any?
+      data << "Journal\tDate\tPièce\tCompte\tSection\tLibellé\tEchéance\tDebit\tCrédit\tIntitulé Journal\tIntitulé Compte\tIntitulé section\tLettrage\tPointage\tCode Fin\tRéférence\tInformations\tVierge\tVierge\tVierge\tVierge\tLien"
+
+      @preseizures.each do |preseizure|
+        user = preseizure.user
+        journal = preseizure.report.journal({name_only: false})
+
+        preseizure.accounts.each do |account|
+          entry = account.entries.first
+
+          if preseizure.piece_id.present?
+            general_account = if(account.type == Pack::Report::Preseizure::Account::TVA)
+                                journal.try(:get_vat_accounts_of, '0')
+                              elsif(account.type == Pack::Report::Preseizure::Account::TTC)
+                                journal.try(:account_number)
+                              else
+                                journal.try(:charge_account)
+                              end
+          else
+            bank_account = preseizure.operation.try(:bank_account)
+
+            general_account = if(
+                                  (preseizure.operation.try(:amount).to_i < 0 && entry.credit?) ||
+                                  (preseizure.operation.try(:amount).to_i >= 0 && entry.debit?)
+                                )
+                                bank_account.try(:accounting_number) || 512_000
+                              else
+                                bank_account.try(:temporary_account) || 471_000
+                              end
+          end
+
+          auxiliary_account = (general_account.to_s != account.number.to_s)? account.number : ''
+          auxiliary_lib     = ""
+
+          if auxiliary_account.present?
+            if preseizure.piece_id.present?
+              accounting = user.accounting_plan.providers.where(third_party_account: auxiliary_account).limit(1)
+              is_provider = accounting.size > 0
+              general_account = user.accounting_plan.general_account_providers.presence || 40_100_001 if is_provider
+
+              unless is_provider
+                accounting = user.accounting_plan.customers.where(third_party_account: auxiliary_account).limit(1)
+                is_customer = accounting.size > 0
+                general_account = user.accounting_plan.general_account_customers.presence || 41_100_001 if is_customer
+              end
+
+              general_account = auxiliary_account if general_account.blank? || (!is_provider && !is_customer)
+
+              auxiliary_account = ''                                if general_account == auxiliary_account
+              auxiliary_lib     = accounting.first.third_party_name if is_provider || is_customer
+            else
+              if general_account != bank_account.try(:accounting_number) && general_account != 512_000
+                general_account = if entry.debit?
+                                    user.accounting_plan.general_account_providers.presence || 40_100_001
+                                  else
+                                    user.accounting_plan.general_account_customers.presence || 41_100_001
+                                  end
+              end
+            end
+          else
+            accounting = user.accounting_plan.providers.where(third_party_account: general_account).limit(1)
+
+            if accounting.size == 0
+              accounting = user.accounting_plan.customers.where(third_party_account: general_account).limit(1)
+            end
+
+            general_lib = accounting.try(:first).try(:third_party_name).to_s
+          end
+
+          journal_code     = journal.name
+          ecriture_date    = preseizure.date.strftime('%d/%m/%Y') || ""
+          piece_ref        = preseizure.piece_number || ""
+          compte_num       = general_account || ""
+          section          = ""
+          compte_lib       = general_lib
+          echance_date     = preseizure.deadline_date
+          debit_credit     = entry.type == 1 ? entry.amount.to_f.to_s + "\t" : "\t" + entry.amount.to_f.to_s
+          intitule_journal = ""
+          intitule_compte  = ""
+          intitule_section = ""
+          ecriture_let     = account.lettering || ""
+          code_fin         = ""
+          reference        = ""
+          informations     = ""
+          vierge           = ""
+          vierge           = ""
+          vierge           = ""
+          vierge           = ""
+          lien             = ""
+
+          data << [[journal_code, ecriture_date, piece_ref, compte_num, section, compte_lib, echance_date, debit_credit, intitule_journal, intitule_compte, intitule_section, ecriture_let, code_fin, reference, informations, vierge, vierge , vierge, vierge, lien ].join("\t")]
+
+        end
       end
     end
 

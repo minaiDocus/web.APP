@@ -303,6 +303,38 @@
             .col-md-12
               = link_to t('actions.edit'), edit_software_organization_customer_path(@organization, @customer, software: 'quadratus'), class: 'btn btn-primary float-right'
 
+  - if @organization.try(:cogilog).try(:used?) && params[:software_name] == 'cogilog'
+    .box.no-margin#cogilog{ class: ('active' if params[:tab] == 'cogilog'), "role" => "tabpanel", "aria-labelledby" => "cogilog-tab" }
+      .derivationLeft
+        %h5.semibold Activation Cogilog
+        = simple_form_for @customer, url: customer_form_url(@organization, @customer), html: { id: 'form_cogilog', class: 'form form-horizontal label-auto' } do |c|
+          = hidden_field_tag :part, 'cogilog'
+          = c.simple_fields_for :cogilog do |f|
+            .form-group
+              .row
+                .col-md-11
+                  = label_tag 'user[cogilog_attributes][is_used]', "Ce dossier utilise Cogilog ?", class: 'control-label semibold'
+                .col-md-1.form-check.form-switch
+                  = f.input :is_used, as: :boolean, label: false, input_html: { class: 'form-check-input input_switch input_check_field check-software', id: 'user_cogilog_attributes_is_used' }
+                  %label.semibold{class: 'form-check-label label_check_field', for: 'user_cogilog_attributes_is_used'} Non
+            - if @user.leader? || @user.manage_customers
+              %hr
+              .form-group.no-margin
+                .w-100.text-end
+                  = f.submit t('actions.submit'), class: 'btn btn-primary w-25'
+      - if @customer.try(:cogilog).try(:used?)
+        .hide.derivationRight
+          %hr
+          %h4.margin2top.margin1bottom Configuration Cogilog
+          %table.table.table-striped.table-condensed
+            %tbody
+              %tr
+                %th Générer automatiquement l'export des écritures et pièces ?
+                %td= @customer.cogilog.try(:auto_deliver?) ? t('yes_value') : t('no_value')
+          .row
+            .col-md-12
+              = link_to t('actions.edit'), edit_software_organization_customer_path(@organization, @customer, software: 'cogilog'), class: 'btn btn-primary float-right'
+
   - if @organization.try(:cegid).try(:used?) && params[:software_name] == 'cegid'
     .box.no-margin#cegid{ class: ('active' if params[:tab] == 'cegid'), "role" => "tabpanel", "aria-labelledby" => "cegid-tab" }
       .derivationLeft
