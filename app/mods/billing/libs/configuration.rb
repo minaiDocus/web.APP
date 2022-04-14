@@ -18,6 +18,15 @@ class BillingMod::Configuration
               data_flows: { max: 100, duration: 'annual', excess_price: 0.25 },
               options: { upload: 'strict', bank: 'none', scan: 'strict', mail: 'optional', preassignment: 'strict'}
             },
+            ido_mini: {
+              human_name: "iDo'Mini",
+              description: "Vous permet de transférer jusqu'à 100 pièces/mois, mutualisation des quotas au niveau du cabinet.",
+              hint: "Au-delà du quota cabinet cumulé, calcul du dépassement simplifié : 0,25€ ht/facture",
+              price: 10,
+              commitment: 12,
+              data_flows: { max: 100, duration: 'month', excess_price: 0.25 },
+              options: { upload: 'strict', bank: 'none', scan: 'strict', mail: 'none', preassignment: 'optional'}
+            },
             ido_micro: {
               human_name: "iDo'Micro",
               description: "Vous permet de transférer jusqu'à 100 pièces/mois, mutualisation des quotas au niveau du cabinet.",
