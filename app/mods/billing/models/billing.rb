@@ -1,4 +1,5 @@
 class BillingMod::Billing < ApplicationRecord
+  #IMPORTANT : Billing price is in cent
   self.table_name = 'billings'
 
   serialize :associated_hash, Hash
