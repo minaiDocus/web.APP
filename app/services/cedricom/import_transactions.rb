@@ -267,6 +267,8 @@ module Cedricom
                               @operation.currency = { id: 'ZAR', symbol: 'R', prefix: false, crypto: false, precision: 2, marketcap: nil, datetime: nil, name: 'South African Rand'}
                             end
 
+      operation.forced_processing_at = Time.now
+
       operation.save!
       
       if operation.persisted? && operation.bank_account
