@@ -1,0 +1,10 @@
+.row
+  .col-md-6
+    %label.semibold Listes packs
+    .mb-4
+    %ul.ms-3
+      - @result[:pack_names].each do |p_names|
+        %li= p_names
+  .col-md-6
+    %label.semibold Staffing Flows MAJ
+    %p= @result[:staffings_size]

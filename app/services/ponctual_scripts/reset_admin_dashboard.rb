@@ -1,9 +1,18 @@
-class PonctualScripts::ResetGrouping
+class PonctualScripts::ResetAdminDashboard
   def initialize; end
+
+  def execute(reset_type)
+    case reset_type
+      when "grouping"
+        reset_grouping
+      when "lad"
+        reset_lad
+      end
+  end
 
   private
 
-  def execute
+  def reset_grouping
     pack_names = TempDocument.where(state: 'bundle_needed').collect(&:temp_pack).collect(&:name).uniq
 
     staffings = []
@@ -14,11 +23,16 @@ class PonctualScripts::ResetGrouping
       staffings << sf if sf
     end
 
-    p "Reset : #{ pack_names }"
-
     staffings.each{ |st| st.update(state: "ready")  if not st.processing? }
 
-    p "Done : #{ staffings.size }"
+    { pack_names: pack_names, staffings_size: staffings.size}
+  end
+
+  def reset_lad
+    pieces = Pack::Piece.where(pre_assignment_state: "adr")
+    pieces.update_all(pre_assignment_state: "waiting")
+
+    { count_pieces: pieces.size }
   end
 end
 
