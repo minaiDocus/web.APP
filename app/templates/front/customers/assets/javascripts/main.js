@@ -28,7 +28,7 @@ class Customer{
       // this.check_input_number();
       this.show_subscription_option();
 
-      this.update_price();
+      // this.update_price();
     }
 
     if ($('#journals select#copy-journals-into-customer').length > 0) { searchable_option_copy_journals_list(); }
