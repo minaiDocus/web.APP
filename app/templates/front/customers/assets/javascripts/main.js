@@ -24,9 +24,8 @@ class Customer{
     this.show_sage_gec_customer();
     this.check_commitment_pending();
 
-
-    if ($('#personalize_subscription_package_form').length > 0 ) {
-      this.check_input_number();
+    if ($('.packages_list').length > 0 ) {
+      // this.check_input_number();
       this.show_subscription_option();
 
       this.update_price();
@@ -88,7 +87,7 @@ class Customer{
       options.push('ido_micro');
     }
     if ($('#subscription_subscription_option_ido_plus_micro').is(':checked')) {
-      options.push('ido_plus_micro');
+      options.push('ido_micro_plus');
     }
     if ($('#subscription_subscription_option_ido_mini').is(':checked')) {
       options.push('ido_mini', 'signing_piece', 'pre_assignment_option');
@@ -221,25 +220,11 @@ class Customer{
     let retriever_option = null;
     let digitization_option = null;
 
-    $('#personalize_subscription_package_form .radio-button').unbind('click').bind('click', function(e){
+    $('.packages_list .main-option').unbind('click').bind('click', function(e){
       e.stopPropagation();
 
-      email_option = $(this).parents().eq(4).find('.mail-option');
-      retriever_option = $(this).parents().eq(4).find('.retriever-option');
-      digitization_option = $(this).parents().eq(4).find('.digitization-option');
-
-      $('#personalize_subscription_package_form .package-options .mail-option').html('');
-      $('#personalize_subscription_package_form .package-options .retriever-option').html('');
-      $('#personalize_subscription_package_form .package-options .digitization-option').html('');
-      $('#personalize_subscription_package_form .package-options .journal-numbers').html('');
-      $('#personalize_subscription_package_form .package-options').addClass('hide');
-
-      $(this).parents().eq(4).find('.package-options').removeClass('hide');
-      $(this).parents().eq(4).find('.journal-numbers').html($('.input-journal-numbers').html());
-
-      class_list = $(this).attr('class').split(/\s+/);
-
-      self.clone_subscription_option(class_list, email_option, retriever_option, digitization_option)
+      $('.options').addClass('hide').removeClass('active')
+      $(this).closest('.package').find('.options').removeClass('hide').addClass('active')
     });
 
     if ($('#personalize_subscription_package_form input[type="radio"].radio-button').is(':checked')) {
