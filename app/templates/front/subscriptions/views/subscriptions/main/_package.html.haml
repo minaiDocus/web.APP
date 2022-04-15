@@ -25,30 +25,36 @@
           = radio_button_tag 'package[name]', package.to_s, package.to_s == my_package.try(:name), class: "form-check-input radio-button main-option"
       .options.hide
         .row
-          .col-sm-9
+          .col-sm-6.m-3
             - options = infos[:options].presence || []
             - options.each do |opt, value|
               - next if value != 'optional'
-
               - if opt.to_s == 'bank'
                 .row.retriever-option
-                  .col-sm-6
-                    Avec option automate
-                  .col-sm-6
-                    = check_box_tag "package[#{package.to_s}][bank]", opt.to_s, package.to_s == my_package.try(:name) && my_package.try(:bank_active), class: 'form-check-input checkbox main-option'
+                  .col-md-10.form-group.no-margin
+                    .form-check.form-check-inline{ data: { toggle: 'tooltip', placement: 'right' }}
+                      %label.semibold Avec option  automate
+                  .col-md-2.form-check.form-switch
+                    %label.form-check-label Non
+                    = check_box_tag "package[#{package.to_s}][bank]", opt.to_s, package.to_s == my_package.try(:name) && my_package.try(:bank_active), class: "form-check-input input_switch option_checkbox"
               - if opt.to_s == 'mail'
                 .row.mail-option
-                  .col-sm-6
-                    Avec option courrier
-                  .col-sm-6
-                    = check_box_tag "package[#{package.to_s}][mail]", opt.to_s, package.to_s == my_package.try(:name) && my_package.try(:mail_active), class: 'form-check-input checkbox main-option'
+                  .col-md-10.form-group.no-margin
+                    .form-check.form-check-inline{ data: { toggle: 'tooltip', placement: 'right' }}
+                      %label.semibold Avec option courrier
+                  .col-md-2.form-check.form-switch
+                    %label.form-check-label Non
+                    = check_box_tag "package[#{package.to_s}][mail]", opt.to_s, package.to_s == my_package.try(:name) && my_package.try(:mail_active), class: "form-check-input option_checkbox input_switch"
+                  
               - if opt.to_s == 'preassignment'
-                .row.preassignment-option
-                  .col-sm-6
-                    Pré-saisie comptable
-                  .col-sm-6
-                    = check_box_tag "package[#{package.to_s}][preassignment]", opt.to_s, package.to_s == my_package.try(:name) && my_package.try(:preassignment_active), class: 'form-check-input checkbox main-option'
-          .col-sm-3
+                .row.preassignmentt-option
+                  .col-md-10.form-group.no-margin
+                    .form-check.form-check-inline.pre_assignment
+                      %label.semibold Pré-saisie comptable
+                  .col-md-2.form-check.form-switch
+                    %label.form-check-label.pre-assignment-state Oui
+                    = check_box_tag "package[#{package.to_s}][preassignment]", opt.to_s, package.to_s == my_package.try(:name) && my_package.try(:preassignment_active), class: "form-check-input option_checkbox input_switch", data: { package: "mail_option" }
+          .col-sm-5.m-3
             .input-journal-numbers
               .form-group
                 = label_tag "package[#{package.to_s}][number_of_journals]", "Nombre de journaux", class: 'col-form-label required semibold'
@@ -67,8 +73,8 @@
         .form-check.form-check-inline.me-5
           %label.form-check-label Appliquer tout de suite les options à la baisse ?
           = check_box_tag 'package[apply_now]', 'apply_now', false, class: 'form-check-input'
-    .col-md-6.text-start
-      %h5
+    .col-md-6.text-end
+      %h6
         Prix du forfait avec les options sélectionnées :
         %b.total_price.bold 0,00 €
 
