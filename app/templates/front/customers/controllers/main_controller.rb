@@ -84,6 +84,12 @@ class Customers::MainController < CustomerController
         if result
           AccountingPlan::SageGecUpdate.new(@customer).run
         end
+      elsif params[:part] == 'acd'
+        result = AcdLib::Setup.new({organization: @organization, customer: @customer, columns: {is_used: user_params[softwares_attributes.to_sym]['is_used'] == "1", action: params[:action]}}).execute
+        
+        if result
+          #AccountingPlan::AcdUpdate.new(@customer).run
+        end
       else
         software = @customer.create_or_update_software({columns: user_params[softwares_attributes.to_sym], software: params[:part]})
         result   = software&.persisted?
@@ -222,6 +228,30 @@ class Customers::MainController < CustomerController
     #redirect_to organization_customer_softwares_path(@organization, @customer, software_name: 'sage_gec')
   end
 
+  def update_acd
+    @customer.assign_attributes(acd_params)
+
+    if @customer.save
+      if @customer.configured?
+          code            = acd_params["acd_attributes"]["code"]
+          remove_customer = acd_params["acd_attributes"]['code'].blank?
+          auto_deliver    = acd_params["acd_attributes"]['auto_deliver']
+
+          SageGecLib::Setup.new({organization: @organization, customer: @customer, columns: {code: code, remove_customer: remove_customer, auto_deliver: auto_deliver}}).execute
+
+        flash[:success] = 'Modifié avec succès'
+
+      end
+    else
+      flash[:error] = 'Impossible de modifier'
+    end
+
+    render json: { json_flash: json_flash, url: organization_customer_softwares_path(@organization, @customer, software_name: 'acd') }, status: 200
+
+
+    #redirect_to organization_customer_softwares_path(@organization, @customer, software_name: 'sage_gec')
+  end
+
 
   # GET /organizations/:organization_id/customers/:id/edit_setting_options
   def edit_setting_options; end
@@ -352,6 +382,7 @@ class Customers::MainController < CustomerController
       { exact_online_attributes: %i[id is_used auto_deliver client_id client_secret] },
       { my_unisoft_attributes: %i[id is_used auto_deliver encrypted_api_token check_api_token] },
       { sage_gec_attributes: %i[id is_used auto_deliver sage_private_api_uuid] },
+      { acd_attributes: %i[id is_used auto_deliver code] },
       { coala_attributes: %i[id is_used auto_deliver internal_id] },
       { fec_agiris_attributes: %i[id is_used auto_deliver] },
       { fec_acd_attributes: %i[id is_used auto_deliver] },
@@ -384,6 +415,10 @@ class Customers::MainController < CustomerController
 
   def sage_gec_params
     params.require(:user).permit(sage_gec_attributes: %i[id is_used auto_deliver sage_private_api_uuid])
+  end
+
+  def acd_params
+    params.require(:user).permit(acd_attributes: %i[id is_used auto_deliver code])
   end
 
   def period_options_params

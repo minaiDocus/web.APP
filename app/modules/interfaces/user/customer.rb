@@ -29,7 +29,7 @@ module Interfaces::User::Customer
 
 
   def uses_api_softwares?
-    uses?(:ibiza) || uses?(:exact_online) || uses?(:my_unisoft) || uses?(:sage_gec)
+    uses?(:ibiza) || uses?(:exact_online) || uses?(:my_unisoft) || uses?(:sage_gec) || uses?(:acd)
   end
 
 
@@ -71,6 +71,8 @@ module Interfaces::User::Customer
       MyUnisoftLib::Setup.new({organization: @organization, customer: self, columns: {is_used: attributes[:columns][:is_used], action: "update"}}).execute
     elsif attributes[:software].to_s == "sage_gec"
       SageGecLib::Setup.new({organization: @organization, customer: self, columns: {is_used: attributes[:columns][:is_used], action: "update"}}).execute
+    elsif attributes[:software].to_s == "acd"
+      AcdLib::Setup.new({organization: @organization, customer: self, columns: {is_used: attributes[:columns][:is_used], action: "update"}}).execute
     else
       software = self.send(attributes[:software].to_sym) || Interfaces::Software::Configuration.softwares[attributes[:software].to_sym].new
       begin
@@ -83,6 +85,7 @@ module Interfaces::User::Customer
       counter += 1 if software.try(:ibiza).try(:used?)
       counter += 1 if software.try(:my_unisoft).try(:used?)
       counter += 1 if software.try(:sage_gec).try(:used?)
+      counter += 1 if software.try(:acd).try(:used?)
       counter += 1 if software.try(:exact_online).try(:used?)
 
       if counter <= 1

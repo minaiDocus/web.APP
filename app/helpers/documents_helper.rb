@@ -229,6 +229,7 @@ module DocumentsHelper
                                                                                                     :my_unisoft,
                                                                                                     :coala,
                                                                                                     :sage_gec,
+                                                                                                    :acd,
                                                                                                     :quadratus,
                                                                                                     :cegid,
                                                                                                     :csv_descriptor,

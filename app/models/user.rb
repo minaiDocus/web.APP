@@ -109,6 +109,7 @@ class User < ApplicationRecord
   scope :guest_collaborators,         -> { where(is_prescriber: false, is_guest: true) }
 
   accepts_nested_attributes_for :options
+  accepts_nested_attributes_for :acd
   accepts_nested_attributes_for :ibiza
   accepts_nested_attributes_for :coala
   accepts_nested_attributes_for :quadratus
@@ -148,13 +149,15 @@ class User < ApplicationRecord
 
       case software
         when 'ibiza'
-          skip_user = user.uses?(:exact_online) || user.uses?(:my_unisoft) || user.uses?(:sage_gec)
+          skip_user = user.uses?(:exact_online) || user.uses?(:my_unisoft) || user.uses?(:sage_gec) || user.uses?(:acd)
         when 'exact_online'
-          skip_user = user.uses?(:ibiza) || user.uses?(:my_unisoft) || user.uses?(:sage_gec)
+          skip_user = user.uses?(:ibiza) || user.uses?(:my_unisoft) || user.uses?(:sage_gec) || user.uses?(:acd)
         when 'my_unisoft'
-          skip_user = user.uses?(:ibiza) || user.uses?(:exact_online) || user.uses?(:sage_gec)
+          skip_user = user.uses?(:ibiza) || user.uses?(:exact_online) || user.uses?(:sage_gec) || user.uses?(:acd)
         when 'sage_gec'
-          skip_user = user.uses?(:ibiza) || user.uses?(:exact_online) || user.uses?(:my_unisoft)
+          skip_user = user.uses?(:ibiza) || user.uses?(:exact_online) || user.uses?(:my_unisoft) || user.uses?(:acd)
+        when 'acd'
+          skip_user = user.uses?(:ibiza) || user.uses?(:exact_online) || user.uses?(:my_unisoft) || user.uses?(:sage_gec)
         else
           skip_user = false
       end

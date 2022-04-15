@@ -2,6 +2,7 @@ module OwnedSoftwares
   extend ActiveSupport::Concern
 
   included do
+    has_one :acd, as: :owner, dependent: :destroy, class_name: 'Software::Acd'
     has_one :ibiza, as: :owner, dependent: :destroy, class_name: 'Software::Ibiza'
     has_one :coala, as: :owner, dependent: :destroy, class_name: 'Software::Coala'
     has_one :exact_online, as: :owner, dependent: :destroy, class_name: 'Software::ExactOnline'

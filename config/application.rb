@@ -22,6 +22,8 @@ module Idocus
     Dir.glob("#{Rails.root}/lib/patches/*.{rb}").each { |file| require file }
     Dir.glob("#{Rails.root}/lib/knowings_api/*.{rb}").each { |file| require file }
     Dir.glob("#{Rails.root}/lib/gdr/*.{rb}").each { |file| require file }
+    Dir.glob("#{Rails.root}/lib/acd_lib/*.{rb}").each { |file| require file }
+    Dir.glob("#{Rails.root}/lib/acd_lib/api/*.{rb}").each { |file| require file }
     Dir.glob("#{Rails.root}/lib/supplier_recognition/*.{rb}").each { |file| require file }
     Dir.glob("#{Rails.root}/lib/jefacture/*.{rb}").each { |file| require file }
     Dir.glob("#{Rails.root}/lib/ibiza_lib/api/*.{rb}").each { |file| require file }

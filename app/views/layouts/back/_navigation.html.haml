@@ -44,6 +44,7 @@
             = link_to 'Livraison vers Exact Online', admin_pre_assignment_deliveries_path(software: 'exact_online'), class: 'dropdown-item'
             = link_to 'Livraison vers My Unisoft', admin_pre_assignment_deliveries_path(software: 'my_unisoft'), class: 'dropdown-item'
             = link_to 'Livraison vers Sage GEC', admin_pre_assignment_deliveries_path(software: 'sage_gec'), class: 'dropdown-item'
+            = link_to 'Livraison vers ACD', admin_pre_assignment_deliveries_path(software: 'acd'), class: 'dropdown-item'
         %li.nav-item{ class: ('active' if controller_name.in?(%w(dematboxes dematbox_services dematbox_files))) }
           = link_to "iDocus'Box", admin_dematboxes_path, class: 'nav-link'
         %li.nav-item.dropdown

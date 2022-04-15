@@ -81,7 +81,7 @@ class Pack::Report::Preseizure < ApplicationRecord
     if software.nil?
       user_ids = []
 
-      ['ibiza', 'my_unisoft', 'exact_online', 'sage_gec'].each do |software_name|
+      ['ibiza', 'my_unisoft', 'exact_online', 'sage_gec', 'acd'].each do |software_name|
         model_software = Interfaces::Software::Configuration.softwares[software_name.to_sym]
         user_ids = user_ids + model_software.where(is_used: true, owner_type: 'User').pluck(:owner_id)
       end
@@ -279,13 +279,15 @@ class Pack::Report::Preseizure < ApplicationRecord
   def is_delivered?
     ( self.user.try(:uses?, :ibiza) && is_delivered_to?('ibiza') ) ||
     ( self.user.try(:uses?, :exact_online) && is_delivered_to?('exact_online') ) ||
-    ( self.user.try(:uses?, :sage_gec) && is_delivered_to?('sage_gec') )
+    ( self.user.try(:uses?, :sage_gec) && is_delivered_to?('sage_gec') ) ||
+    ( self.user.try(:uses?, :acd) && is_delivered_to?('acd') )
   end
 
   def is_not_delivered?
     ( self.user.try(:uses?, :ibiza) && !is_delivered_to?('ibiza') ) ||
     ( self.user.try(:uses?, :exact_online) && !is_delivered_to?('exact_online') ) ||
-    ( self.user.try(:uses?, :sage_gec) && !is_delivered_to?('sage_gec') )
+    ( self.user.try(:uses?, :sage_gec) && !is_delivered_to?('sage_gec') ) ||
+    ( self.user.try(:uses?, :acd) && !is_delivered_to?('acd') )
   end
 
   def is_exported?

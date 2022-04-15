@@ -27,7 +27,7 @@ class SgiApiServices::PushPreAsignmentService
 
       if not_blocked_pre_assignments.size > 0
         not_blocked_pre_assignments.each_slice(40) do |preseizures_group|
-          PreAssignment::CreateDelivery.new(preseizures_group, ['ibiza', 'exact_online', 'my_unisoft', 'sage_gec'], is_auto: true).execute
+          PreAssignment::CreateDelivery.new(preseizures_group, ['ibiza', 'exact_online', 'my_unisoft', 'sage_gec', 'acd'], is_auto: true).execute
           PreseizureExport::GeneratePreAssignment.new(preseizures_group).execute
         end
         FileDelivery.prepare(report)

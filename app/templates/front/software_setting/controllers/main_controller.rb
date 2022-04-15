@@ -7,7 +7,7 @@ class SoftwareSetting::MainController < OrganizationController
   def update
     software = params[:software]
     soft_params = software_params["#{software}_attributes"]
-    result = update_software(software, soft_params[:is_used], soft_params[:auto_deliver], soft_params[:sage_private_api_uuid])
+    result = update_software(software, soft_params[:is_used], soft_params[:auto_deliver], soft_params[:sage_private_api_uuid], soft_params[:code], soft_params[:username], soft_params[:password])
     
     software_users = params[:software_account_list] || ''
     @organization.customers.active.each do |customer|
@@ -57,11 +57,13 @@ class SoftwareSetting::MainController < OrganizationController
 
   private
 
-  def update_software(soft, is_used, auto_deliver=false, sage_private_api_uuid=nil)
+  def update_software(soft, is_used, auto_deliver=false, sage_private_api_uuid=nil, code = nil, username = nil, password = nil)
     if soft == 'my_unisoft'
       result = MyUnisoftLib::Setup.new({organization: @organization, columns: {is_used: is_used, auto_deliver: auto_deliver}}).execute
     elsif soft == 'sage_gec'
       result = SageGecLib::Setup.new({organization: @organization, columns: {is_used: is_used, auto_deliver: auto_deliver, sage_private_api_uuid: sage_private_api_uuid}}).execute
+    elsif soft == 'acd'
+      result = AcdLib::Setup.new({organization: @organization, columns: {username: username, password: password, is_used: is_used, auto_deliver: auto_deliver, code: code}}).execute
     else
       result = Software::UpdateOrCreate.assign_or_new({owner: @organization, columns: {is_used: is_used, auto_deliver: auto_deliver}, software: soft})
     end
@@ -81,7 +83,8 @@ class SoftwareSetting::MainController < OrganizationController
       { :exact_online_attributes => %i[id is_used auto_deliver] },
       { :my_unisoft_attributes => %i[id is_used auto_deliver] },
       { :sage_gec_attributes => %i[id is_used auto_deliver sage_private_api_uuid] },
-      { :ibiza_attributes => %i[id is_used auto_deliver] }
+      { :ibiza_attributes => %i[id is_used auto_deliver] },
+      { :acd_attributes => %i[id is_used auto_deliver username password code] }
     )
   end
 end

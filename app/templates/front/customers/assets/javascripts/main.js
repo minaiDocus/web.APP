@@ -415,6 +415,20 @@ class Customer{
     }
   }
 
+  show_acd_customer(){
+    if ($('#acd-form').length > 0 ) {
+      $('.key-acd').change(function() {        
+        if ($(this).val() != ''){
+          $('button[type=button].acd_validation').removeAttr('disabled');
+        }
+        else{
+          $('button[type=button].acd_validation').attr('disabled', true);
+        }
+      });
+    }
+  }
+
+
   get_customer_first_step_form(){
     this.applicationJS.sendRequest({ 'url': '/organizations/' + this.organization_id + '/customers/new' }).then((element)=>{
       this.create_customer_modal.find('.modal-body').html($(element).find('.customer-form-content').html());

@@ -39,7 +39,7 @@ class PackReports::MainController < OrganizationController
   # POST /organizations/:organization_id/pack_reports/deliver
   def deliver
     preseizures = @report.preseizures.by_position.not_locked.not_delivered
-    PreAssignment::CreateDelivery.new(preseizures, %w[ibiza exact_online my_unisoft sage_gec]).execute
+    PreAssignment::CreateDelivery.new(preseizures, %w[ibiza exact_online my_unisoft sage_gec acd]).execute
 
     respond_to do |format|
       format.json { render json: { status: :ok } }

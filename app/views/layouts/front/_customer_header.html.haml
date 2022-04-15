@@ -103,6 +103,12 @@
                         %span.float-start Fec Agiris
                         - if @customer.uses?(:fec_agiris)
                           = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'float-end' })
+                  - if software_uses('acd')
+                    %li.clearfix
+                      %a.head_customer_link.semibold.nav-link.dropdown-item#sage-gec-tab{ href: organization_customer_softwares_path(@organization, @customer, software_name: 'acd') }
+                        %span.float-start ACD
+                        - if @customer.uses?(:acd)
+                          = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'float-end' })
                   - if @organization.try(:fec_acd).try(:used?)
                     %li.clearfix
                       %a.head_customer_link.semibold.nav-link.dropdown-item#fec-acd-tab{ href: organization_customer_softwares_path(@organization, @customer, software_name: 'fec_acd') }

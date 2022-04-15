@@ -98,7 +98,7 @@ class DataProcessor::Operation
           end
           to_deliver_preseizures.group_by(&:report).each do |_, pres|
             pres.each_slice(40) do |preseizures_group|
-              PreAssignment::CreateDelivery.new(preseizures_group, ['ibiza', 'exact_online', 'my_unisoft', 'sage_gec'], is_auto: true).execute
+              PreAssignment::CreateDelivery.new(preseizures_group, ['ibiza', 'exact_online', 'my_unisoft', 'sage_gec', 'acd'], is_auto: true).execute
             end
           end
         else

@@ -39,6 +39,12 @@
                       %td
                         = hidden_field_tag :part, 'sage_gec'
                         = f.check_box :is_used, class: 'softwares_setting', style: "position:unset"
+                  -if software.to_s == 'acd' && @organization.try(:acd).try(:used?)
+                    %tr
+                      %td Ce dossier utilise ACD ?
+                      %td
+                        = hidden_field_tag :part, 'acd'
+                        = f.check_box :is_used, class: 'softwares_setting', style: "position:unset"
                   -if software.to_s == 'coala' && @organization.try(:coala).try(:used?)
                     %tr
                       %td Ce dossier utilise Coala ?
