@@ -168,6 +168,7 @@ class PreseizureExport::PreseizureToTxt
           intitule_compte  = ""
           intitule_section = ""
           ecriture_let     = account.lettering || ""
+          pointage         = ""
           code_fin         = ""
           reference        = ""
           informations     = ""
@@ -175,9 +176,9 @@ class PreseizureExport::PreseizureToTxt
           vierge           = ""
           vierge           = ""
           vierge           = ""
-          lien             = ""
+          lien             = preseizure.piece_id.present? ? Domains::BASE_URL + preseizure.piece.try(:get_access_url) : ""
 
-          data << [[journal_code, ecriture_date, piece_ref, compte_num, section, compte_lib, echance_date, debit_credit, intitule_journal, intitule_compte, intitule_section, ecriture_let, code_fin, reference, informations, vierge, vierge , vierge, vierge, lien ].join("\t")]
+          data << [[journal_code, ecriture_date, piece_ref, compte_num, section, compte_lib, echance_date, debit_credit, intitule_journal, intitule_compte, intitule_section, ecriture_let, pointage, code_fin, reference, informations, vierge, vierge , vierge, vierge, lien ].join("\t")]
 
         end
       end
