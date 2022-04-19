@@ -111,6 +111,7 @@ Rails.application.routes.draw do
   back_draw('budgea_retriever')
   back_draw('zoho_crms')
   back_draw('pkill')
+  back_draw('reset')
 
   #### -------------------------------- native resources -----------------------------###
 
