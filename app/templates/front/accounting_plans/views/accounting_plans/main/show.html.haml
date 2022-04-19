@@ -18,6 +18,11 @@
         - software       = "My Unisoft"
         - software_value = @customer.my_unisoft.try(:auto_update_accounting_plan?)
         - software_id    = @customer.my_unisoft.society_id
+      - elsif @customer.uses?(:sage_gec)
+        - to_show        = true
+        - software       = "Sage GEC"
+        - software_value = @customer.sage_gec.try(:auto_update_accounting_plan?)
+        - software_id    = @customer.sage_gec.sage_private_api_uuid
 
       .col-md-12
         = form_tag import_fec_organization_customer_accounting_plan_path(@organization, @customer), method: 'patch', multipart: true, class: 'form-horizontal clearfix label-auto' do
@@ -46,7 +51,7 @@
             = hidden_field_tag 'user[software_id]', software_id
             .row.form-group.alert.alert-warning
               .col-md-10.form-group.no-margin
-                %label.semibold Activer la mise à jour automatique du plan comptable avec celui d'#{software} ?
+                %label.semibold Activer la mise à jour automatique du plan comptable avec #{software} ?
                 %br
                 %i.help-block Attention: si cette option est activée, les modifications manuelles du plan comptable seront écrasées automatiquement par la mise à jour auto.
               .col-md-2.form-check.form-switch

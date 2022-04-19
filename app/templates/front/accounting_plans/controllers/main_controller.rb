@@ -86,6 +86,8 @@ class AccountingPlans::MainController < CustomerController
 
       if @customer.save
         if @customer.try(params[:software_table].to_sym).try(:auto_update_accounting_plan?)
+          AccountingPlan::SageGecUpdate.new(@customer).run if params[:software_table] == 'sage_gec'
+
           render json: { success: true, message: "La mis à jour automatique du plan comptable chez #{params[:software]} est activé" }, status: 200
         else
           render json: { success: true, message: "La mis à jour automatique du plan comptable chez #{params[:software]} est désactivé" }, status: 200

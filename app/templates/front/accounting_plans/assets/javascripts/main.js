@@ -47,6 +47,10 @@ class AccountingPlan {
       software_table = 'my_unisoft'
     }
 
+    if (software === 'Sage GEC'){
+      software_table = 'sage_gec'
+    }
+
     return JSON.stringify({
       auto_updating_accounting_plan: auto_updating_accounting_plan,
       software: software,
