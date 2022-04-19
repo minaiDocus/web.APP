@@ -12,7 +12,7 @@ class BillingMod::PrepareUserBilling
 
     return false if not @package
 
-    BillingMod::FetchFlow.execute(@user)
+    BillingMod::FetchFlow.new(@period).execute(@user)
     @data_flow = @user.data_flows.of_period(@period).first
 
     return false if not @data_flow
@@ -21,6 +21,7 @@ class BillingMod::PrepareUserBilling
     @user.billings.of_period(@period).update_all(is_frozen: true)
 
     create_package_billing
+    create_remaining_month_billing
     create_options_billing
     create_orders_billing
     create_extra_orders_billing
@@ -39,6 +40,31 @@ class BillingMod::PrepareUserBilling
 
   def create_package_billing
     create_billing({ name: @package.name, title: @package.human_name, price: @package.base_price })
+  end
+
+  def create_remaining_month_billing
+    prev_period  = CustomUtils.period_operation(@period, -1)
+    prev_package = @user.package_of( prev_period )
+
+    next_period  = CustomUtils.period_operation(@period, 1)
+    next_package = @user.package_of( next_period )
+
+    remaining_month = 0
+    base_price      = 0
+
+    if prev_package.try(:name) != @package.try(:name) && prev_package.try(:commitment_end_period).to_i >= @period.to_i
+      remaining_month = prev_package.try(:commitment_end_period).to_i != @period.to_i ? CustomUtils.period_diff(@period, prev_package.try(:commitment_end_period).to_i) : 1
+      base_price      = prev_package.try(:base_price).to_i
+      package_name    = prev_package.try(:human_name)
+    elsif next_package.try(:name) != @package.try(:name) && @package.try(:commitment_end_period).to_i > @period.to_i
+      remaining_month = CustomUtils.period_diff(@period, @package.try(:commitment_end_period).to_i)
+      base_price      = @package.try(:base_price).to_i
+      package_name    = @package.try(:human_name)
+    end
+
+    if remaining_month > 0 && base_price > 0
+      create_billing({ name: 'remaining_month', title: "#{package_name} : engagement #{remaining_month} mois restant(s)", kind: 'normal', price: base_price * remaining_month, associated_hash: { remaining_month: remaining_month, price: base_price } })
+    end
   end
 
   def create_options_billing

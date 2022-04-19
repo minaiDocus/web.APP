@@ -127,6 +127,39 @@ describe BillingMod::PrepareUserBilling do
     organization.save
   end
 
+  it 'creates remaining month price', :remaining_month do
+    user = User.last
+
+    period = CustomUtils.period_of(Time.now) - 1
+    prev_period = CustomUtils.period_operation(period, -1)
+
+    package      = user.package_of(period)
+    prev_package = package.dup
+    prev_package.user   = user
+    prev_package.period = prev_period
+    prev_package.name   = 'ido_nano'
+    prev_package.commitment_start_period = CustomUtils.period_operation(period, -6)
+    prev_package.commitment_end_period = CustomUtils.period_operation(period, +6)
+    prev_package.save
+
+    BillingMod::PrepareUserBilling.new(user, period).execute
+
+    billings = user.reload.billings
+
+    bill      = billings.where(name: 'ido_classic').first
+    remaining = billings.where(name: 'remaining_month').first
+
+    expect(billings.collect(&:name)).to include('ido_classic', 'remaining_month')
+
+    expect(prev_package.base_price).to eq 5
+    expect(package.base_price).to eq 20
+
+    expect(bill.price).to eq 20 * 100
+
+    expect(remaining.title).to eq "iDo'Nano : engagement 6 mois restant(s)"
+    expect(remaining.price).to eq 5 * 6 * 100
+  end
+
   context 'Basic and normal billing', :basic_billing do
     before(:each) do
       BillingMod::Billing.destroy_all
