@@ -3,9 +3,9 @@ class BillingMod::FetchFlow
     new.execute(customers)
   end
 
-  def initialize(date=Time.now)
-    @time   = date
-    @period = CustomUtils.period_of(@time)
+  def initialize(period)
+    @period = period || CustomUtils.period_of(Time.now)
+    @time   = Date.parse( "#{@period.to_s[0..3]}-#{@period.to_s[4..5]}-15" ).to_date
   end
 
   def execute(customers=nil)
@@ -22,7 +22,7 @@ class BillingMod::FetchFlow
       pieces_count      = customer.pack_pieces.where("DATE_FORMAT(created_at, '%Y%m') = #{@period}").count
       expences_count    = customer.expenses.where("DATE_FORMAT(created_at, '%Y%m') = #{@period}").count
 
-      data_flow                   = customer.flow_of(@period)
+      data_flow         = customer.flow_of(@period)
 
       return false if data_flow.nil?
 
