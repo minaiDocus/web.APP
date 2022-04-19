@@ -4,6 +4,43 @@ class CustomUtils
       "#{date.to_date.year}#{(sprintf '%02d', date.to_date.month)}".to_i
     end
 
+    def period_operation(period, step=1)
+      __period = period.to_i
+      __step   = step.to_i.abs
+
+      __step.times do |i|
+        if step > 0
+          __period += 1
+        else
+          __period -= 1
+        end
+
+        if __period.to_s[4..6].to_i == 0
+          __period -= 88
+        elsif __period.to_s[4..6].to_i == 13
+          __period += 88
+        end
+      end
+
+      __period
+    end
+
+    def period_diff(period1, period2)
+      _diff = 0
+      _tmp_period = period1
+      _step = 1
+      _step = -1 if period2.to_i < period1.to_i
+
+      while _tmp_period.to_i != period2.to_i && period2.to_i > 0 && _diff < 200
+        _tmp_period = CustomUtils.period_operation(_tmp_period, _step)
+        _diff += 1
+      end
+
+      p "WARNING : The difference is too dipper, abort infinite loopping risk" if _diff >= 150
+
+      _diff
+    end
+
     def parse_date_range_of(date='')
       _date = date
 
