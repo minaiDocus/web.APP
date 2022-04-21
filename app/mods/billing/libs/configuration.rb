@@ -16,7 +16,7 @@ class BillingMod::Configuration
               price: 5,
               commitment: 12,
               data_flows: { max: 100, duration: 'annual', excess_price: 0.25 },
-              options: { upload: 'strict', bank: 'none', scan: 'strict', mail: 'optional', preassignment: 'strict'}
+              options: { upload: 'strict', bank: 'optional', scan: 'strict', mail: 'optional', preassignment: 'strict'}
             },
             ido_mini: {
               human_name: "iDo'Mini",
@@ -52,7 +52,7 @@ class BillingMod::Configuration
               price: 5,
               commitment: 0,
               data_flows: { max: 0, duration: 'month', excess_price: 0.25 },
-              options: { upload: 'none', bank: 'none', scan: 'none', mail: 'none', preassignment: 'strict'}
+              options: { upload: 'none', bank: 'optional', scan: 'none', mail: 'none', preassignment: 'strict' }
             },
             ido_retriever: {
               human_name: "Automate",
@@ -61,7 +61,7 @@ class BillingMod::Configuration
               price: 5,
               commitment: 0,
               data_flows: { max: 0, duration: 'month', excess_price: 0.25 },
-              options: { upload: 'none', bank: 'strict', scan: 'none', mail: 'none', preassignment: 'strict'}
+              options: { upload: 'none', bank: 'strict', scan: 'optional', mail: 'none', preassignment: 'strict'}
             },
             ido_digitize: {
               human_name: "Numérisation",

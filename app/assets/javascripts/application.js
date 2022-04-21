@@ -577,13 +577,6 @@ class ApplicationJS {
 
         if (class_list.indexOf("option_checkbox") > -1) { $(this).removeClass('active_option'); }
       }
-
-      if (that !== null) {
-        if(class_list.indexOf("option_checkbox") > -1){
-          that.check_input_number();
-          that.update_price();
-        }
-      }
     });
 
     if ($('.input_switch:checked').length > 0) {
