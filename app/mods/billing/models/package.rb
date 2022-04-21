@@ -15,7 +15,7 @@ class BillingMod::Package < ApplicationRecord
 
   def is_commitment_end?
     period = CustomUtils.period_of(Time.now)
-    self.commitment_end_period.to_i = 0 || self.commitment_end_period <= period
+    self.commitment_end_period.to_i == 0 || self.commitment_end_period <= period
   end
 
   def human_name

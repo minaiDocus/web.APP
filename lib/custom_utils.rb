@@ -214,7 +214,7 @@ class CustomUtils
     end
 
     def is_manual_paper_set_order?(organization)
-      ["MCN", "CEN"].include?(organization.code)
+      ["MCN", "CEN", "IDOC"].include?(organization.code)
     end
 
     def reduced_retriever_price?(organization_code)
@@ -226,6 +226,12 @@ class CustomUtils
       return true if ["IDOC", "AFH"].include?(customer.try(:organization).try(:code).to_s)
 
       return false
+    end
+
+    def commitment_to_date(number)
+      _string = number.to_s
+
+      date = Date.new(_string[0..3].to_i, _string[4..5].to_i, 1)
     end
   end
 end

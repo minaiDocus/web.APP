@@ -56,10 +56,12 @@
                           - else
                             = customer.subscription.end_date.strftime('%d/%m/%Y')
                     %td.align-middle.pointer
-                      .td-popover
-                        - period = @periods.select { |e| e.user == customer }.first
-                        - if period                        
-                          %span.semibold= period.product_option_orders.first&.group_title
+                      .td-popover                                               
+                        - package = customer.my_package
+                        - debugger                
+                        
+                        - if package                        
+                          %span.semibold= = BillingMod::Configuration.human_name_of(package.name)
                           - if period.product_option_orders.first&.title.present?
                             %br
                             %i= period.product_option_orders.first.title
