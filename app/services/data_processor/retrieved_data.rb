@@ -420,7 +420,9 @@ class DataProcessor::RetrievedData
   end
 
   def is_duplicate?(bank_account, operation)
-    bank_account.operations.where.not(api_name: 'budgea').where(amount: operation.amount, date: operation.date).count > 0
+    #SKIP DUPLICATED TRANSACTION SEARCH
+    return false
+    # bank_account.operations.where.not(api_name: 'budgea').where(amount: operation.amount, date: operation.date, label: operation.label).count > 0
   end
 
   def set_transaction_value(bank_account, transaction)

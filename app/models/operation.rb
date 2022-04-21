@@ -16,7 +16,7 @@ class Operation < ApplicationRecord
 
   validates_presence_of :date, :label, :amount
 
-  validates_uniqueness_of :api_id, scope: :api_name, :if => :not_cap_idocus_and_not_ebics?
+  # validates_uniqueness_of :api_id, scope: :api_name, :if => :not_cap_idocus_and_not_ebics?
 
   scope :retrieved,     -> { where(api_name: ['budgea', 'fiduceo']) }
   scope :other,         -> { where.not(api_name: ['budgea', 'fiduceo']) }
