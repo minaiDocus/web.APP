@@ -1,6 +1,8 @@
 # -*- encoding : UTF-8 -*-
 class SgiApiServices::AutoPreAssignedJefacturePiecesValidation
   def self.execute(pieces)
+    return false
+
     pieces.each do |piece|
       SgiApiServices::AutoPreAssignedJefacturePiecesValidation.new(piece).execute
     end
@@ -13,6 +15,8 @@ class SgiApiServices::AutoPreAssignedJefacturePiecesValidation
   end
 
   def execute
+    return false
+
     if @raw_preseizure.try(:[], 'piece_number').blank?
       log_document = {
         subject: "[Auto preAssignment Jefacture] - auto jefacture",
