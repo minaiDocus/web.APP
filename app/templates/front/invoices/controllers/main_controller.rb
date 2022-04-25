@@ -22,7 +22,7 @@ class Invoices::MainController < OrganizationController
   end
 
   def insert
-    @invoice_setting = (params[:invoice_setting][:id].present?) ? InvoiceSetting.find(params[:invoice_setting][:id]) : InvoiceSetting.new()
+    @invoice_setting = (params[:invoice_setting][:id].present?) ? BillingMod::InvoiceSetting.find(params[:invoice_setting][:id]) : BillingMod::InvoiceSetting.new()
     @invoice_setting.update(invoice_setting_params)
     @invoice_setting.organization = @organization
     @invoice_setting.user         = User.find_by_code params[:invoice_setting][:user_code]
@@ -38,14 +38,14 @@ class Invoices::MainController < OrganizationController
 
   def synchronize
     if params[:invoice_setting_id].present?
-      invoice_setting = InvoiceSetting.find(params[:invoice_setting_id])
+      invoice_setting = BillingMod::InvoiceSetting.find(params[:invoice_setting_id])
 
       if params[:invoice_setting_synchronize_contains][:period].present?
         period = (params[:invoice_setting_synchronize_contains][:period]).to_date
 
         json_flash[:success] = 'Synchronisation des factures en cours ...'
 
-        InvoiceSetting.delay(queue: :high).invoice_synchronize(period, invoice_setting.id)
+        BillingMod::InvoiceSetting.delay(queue: :high).invoice_synchronize(period, invoice_setting.id)
       end
     else
       json_flash[:error] = 'Synchronisation échouée, veuillez verifier les informations.'
@@ -56,7 +56,7 @@ class Invoices::MainController < OrganizationController
 
 
   def remove
-    InvoiceSetting.find(params[:id]).destroy
+    BillingMod::InvoiceSetting.find(params[:id]).destroy
 
     json_flash[:success] = 'Suppression avec succès.'
 
@@ -68,7 +68,7 @@ class Invoices::MainController < OrganizationController
   def base_content
     @invoices = @organization.invoices.order(created_at: :desc).page(params[:page]).per(params[:per_page])
     @invoice_settings = @organization.invoice_settings.order(created_at: :desc).page(params[:page]).per(params[:per_page])
-    @invoice_setting = InvoiceSetting.new
+    @invoice_setting = BillingMod::InvoiceSetting.new
 
     @synchronize_date = Date.today
     @synchronize_months = []

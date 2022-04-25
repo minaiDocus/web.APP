@@ -3,6 +3,7 @@ class BillingMod::Package < ApplicationRecord
 
   belongs_to :user
 
+  validates :journal_size, numericality: { greater_than_or_equal_to: 5, less_than_or_equal_to: 30 }
   validates_presence_of :name, :period
 
   scope :of_period, ->(period){ where(period: period.to_i) }

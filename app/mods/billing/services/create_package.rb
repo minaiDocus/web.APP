@@ -40,9 +40,14 @@ class BillingMod::CreatePackage
     if @package_conf[:commitment].to_i > 0 && (package.commitment_start_period.to_i == 0 || package.name != @my_package.try(:name))
       package.commitment_start_period = @period
       package.commitment_end_period   = CustomUtils.period_of(@package_conf[:commitment].to_i.month.after)
+    elsif @package_conf[:commitment].to_i == 0
+      package.commitment_start_period = 0
+      package.commitment_end_period   = 0
     end
 
     package.save
+
+    update_journal_size
   end
 
   private
@@ -75,5 +80,24 @@ class BillingMod::CreatePackage
     end
 
     return (count == opts.size)? true : false
+  end
+
+  def update_journal_size
+    return false if @options['number_of_journals'].to_i < 5
+
+    current_package = @user.package_of(@period)
+    next_package    = @user.package_of(@next_period)
+    journal_size    = 5
+    user_journal_size = @user.account_book_types.size
+
+    if user_journal_size < @options['number_of_journals'].to_i
+      journal_size = @options['number_of_journals'].to_i
+    else
+      journal_size = user_journal_size
+    end
+    journal_size = 5 if journal_size < 5
+
+    current_package.update(journal_size: journal_size) if current_package
+    next_package.update(journal_size: journal_size)    if next_package
   end
 end
