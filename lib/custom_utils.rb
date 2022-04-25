@@ -98,6 +98,7 @@ class CustomUtils
       ['AC0162', 'MFA%ADAPTO']
     end
 
+
     def clear_string(str, replacement = '_')
       str = str.gsub(/[^a-z0-9_.éèàçôêîù:\/]/i, replacement.to_s)
       str = str.gsub(/#{replacement.to_s}+/, replacement.to_s) if replacement.present?
@@ -186,6 +187,10 @@ class CustomUtils
       return true if ["IDOC", "AFH"].include?(customer.try(:organization).try(:code).to_s)
 
       return false
+    end
+
+    def except_mail_for(organization)
+      ["ALM"].include?(organization.code)
     end
   end
 end

@@ -7,6 +7,6 @@ class PackMailer < BaseMailer
     @start_at = Time.at start_at
     @end_at   = Time.at end_at
 
-    mail(to: user.email, subject: '[iDocus] Mise à jour des documents')
+    mail(to: user.email, subject: '[iDocus] Mise à jour des documents') if !CustomUtils.except_mail_for(user.organization)
   end
 end

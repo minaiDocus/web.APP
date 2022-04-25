@@ -35,6 +35,6 @@ class PreAssignmentDeliveryMailer < BaseMailer
     to = addresses.first
     cc = addresses[1..-1] || []
 
-    mail(to: to, cc: cc, subject: "[iDocus][#{@deliver_to}] Import d'écriture")
+    mail(to: to, cc: cc, subject: "[iDocus][#{@deliver_to}] Import d'écriture") if !CustomUtils.except_mail_for(@deliveries.first.user.organization)
   end
 end
