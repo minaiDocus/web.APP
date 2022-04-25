@@ -10,7 +10,11 @@ class PonctualScripts::MigrateBillings < PonctualScripts::PonctualScript
   private 
 
   def execute
-    Period.where('DATE_FORMAT(created_at, "%Y%m") > 201901 AND duration = 1').all do |period|
+    # Truncate tables before insert
+    # ActiveRecord::Base.connection.execute("TRUNCATE #{BillingMod::Package.table_name}")
+    ActiveRecord::Base.connection.execute("TRUNCATE #{BillingMod::Billing.table_name}")
+
+    Period.where('DATE_FORMAT(created_at, "%Y%m") > 201901 AND duration = 1').each do |period|
       create_packages_from(period)
       create_billings_from(period)
     end
@@ -19,20 +23,19 @@ class PonctualScripts::MigrateBillings < PonctualScripts::PonctualScript
   def backup
   end
 
-  private
-
   def create_packages_from(period)
     user = period.user
     return false if not user
+    return false if user.organization.nil? || user.organization.code == 'TEEO'
 
-    period = CustomUtils.period_of(period.start_date.to_date)
+    __period = CustomUtils.period_of(period.start_date.to_date)
 
-    package = user.package_of(period).first
-    logger_infos("Existing Package ==========>: #{period} / #{user.code} / #{package.name}")
+    package = user.package_of(__period)
+    logger_infos("Existing Package ==========>: #{__period} / #{user.code} / #{package.try(:name)}")
     return false if package
 
     package         = BillingMod::Package.new
-    package.period  = period
+    package.period  = __period
     package.user    = user
 
     name = 'ido_classic'
@@ -56,15 +59,16 @@ class PonctualScripts::MigrateBillings < PonctualScripts::PonctualScript
       end
     end
 
-    logger_infos("Creating Package: #{period} / #{user.code} / #{name}")
+    logger_infos("Creating Package: #{__period} / #{user.code} / #{name}")
 
     package_infos   = BillingMod::Configuration::LISTS[name.to_sym]
     package.name    = name
     package.preassignment_active = period.is_active?(:pre_assignment_option) || package_infos[:options][:preassignment] == 'strict'
-    package.mail_ative           = period.is_active?(:mail_option) || package_infos[:options][:mail] == 'strict'
+    package.mail_active          = period.is_active?(:mail_option) || package_infos[:options][:mail] == 'strict'
     package.bank_active          = period.is_active?(:retriever_option) || package_infos[:options][:bank] == 'strict'
     package.upload_active        = period.is_active?(:ido_classique) || period.is_active?(:ido_micro) || period.is_active?(:ido_plus_micro) || period.is_active?(:ido_mini) || period.is_active?(:ido_nano)
     package.scan_active          = period.is_active?(:digitize_option) || package_infos[:options][:scan] == 'strict'
+    package.journal_size         = period.subscription.try(:number_of_journals) || 5
 
 
     if package_infos[:commitment].to_i > 0
@@ -74,8 +78,8 @@ class PonctualScripts::MigrateBillings < PonctualScripts::PonctualScript
         package.commitment_start_period = CustomUtils.period_of(subscription.start_date.to_date)
         package.commitment_end_period   = CustomUtils.period_of(subscription.end_date.to_date)
       else
-        package.commitment_start_period = period
-        package.commitment_end_period   = period
+        package.commitment_start_period = __period
+        package.commitment_end_period   = __period
       end
     end
 
@@ -83,16 +87,18 @@ class PonctualScripts::MigrateBillings < PonctualScripts::PonctualScript
   end
 
   def create_billings_from(period)
-    period = CustomUtils.period_of(period.start_date.to_date)
+    __period = CustomUtils.period_of(period.start_date.to_date)
     owner = period.user.presence || period.organization
 
-    owner.billings.of_period(period).destroy_all
+    return false if owner.try(:code) == 'TEEO' || owner.try(:organization).try(:code) == 'TEEO'
 
-    logger_infos("Creating Billing: #{period} / #{owner.code}")
+    owner.billings.of_period(__period).destroy_all
+
+    logger_infos("Creating Billing: #{__period} / #{owner.code}")
 
     period.product_option_orders.each do |order|
       billing        = BillingMod::Billing.new
-      billing.period = period
+      billing.period = __period
       billing.owner  = owner
 
       corr_name      = correspondence_name(order.name)

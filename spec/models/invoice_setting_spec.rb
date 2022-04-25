@@ -26,14 +26,14 @@ describe InvoiceSetting do
       @user.organization = @organization
       @user.save
 
-      #@invoice_setting = InvoiceSetting.create(organization_id: @organization.id, user_id: @user.id, user_code: "ACC%IDO", journal_code: "VT")
+      #@invoice_setting = BillingMod::InvoiceSetting.create(organization_id: @organization.id, user_id: @user.id, user_code: "ACC%IDO", journal_code: "VT")
 
       invoice_settings = [
         { organization_id: @organization.id, user_id: _users[0].id, user_code: "AC0077", journal_code: "AC" },
         { organization_id: @organization.id, user_id: _users[1].id, user_code: "ACC%0239", journal_code: "AC" }
       ]
 
-      invoice_settings.map {|invoice_setting| InvoiceSetting.new(invoice_setting).save }
+      invoice_settings.map {|invoice_setting| BillingMod::InvoiceSetting.new(invoice_setting).save }
 
       @invoice = BillingMod::Invoice.create(number: "2019090001", organization_id: @organization.id, user_id: @user.id)
 
@@ -54,10 +54,10 @@ describe InvoiceSetting do
     it 'returns a log state "uploaded"', :log_success do
       allow_any_instance_of(UploadedDocument).to receive(:valid?).and_return(true)
 
-      invoice_setting = InvoiceSetting.last
+      invoice_setting = BillingMod::InvoiceSetting.last
       period = 1.month.ago
 
-      InvoiceSetting.invoice_synchronize(period, invoice_setting.id)
+      BillingMod::InvoiceSetting.invoice_synchronize(period, invoice_setting.id)
 
       log_content = File.read(@log_file)
 
@@ -69,10 +69,10 @@ describe InvoiceSetting do
       allow_any_instance_of(UploadedDocument).to receive(:valid?).and_return(false)
       allow_any_instance_of(UploadedDocument).to receive(:full_error_messages).and_return('journal error')
 
-      invoice_setting = InvoiceSetting.last
+      invoice_setting = BillingMod::InvoiceSetting.last
       period = 1.month.ago
 
-      InvoiceSetting.invoice_synchronize(period, invoice_setting.id)
+      BillingMod::InvoiceSetting.invoice_synchronize(period, invoice_setting.id)
 
       log_content = File.read(@log_file)
 
@@ -81,11 +81,11 @@ describe InvoiceSetting do
     end
 
     it 'returns a log state "already exist"', :log_error_v2 do
-      invoice_setting = InvoiceSetting.last
+      invoice_setting = BillingMod::InvoiceSetting.last
       period = 1.month.ago
 
-      InvoiceSetting.invoice_synchronize(period, invoice_setting.id)
-      InvoiceSetting.invoice_synchronize(period, invoice_setting.id)
+      BillingMod::InvoiceSetting.invoice_synchronize(period, invoice_setting.id)
+      BillingMod::InvoiceSetting.invoice_synchronize(period, invoice_setting.id)
 
       log_content = File.read(@log_file)
 

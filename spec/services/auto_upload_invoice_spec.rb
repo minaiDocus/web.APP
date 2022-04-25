@@ -27,14 +27,14 @@ describe Billing::CreateInvoicePdf do
       @user.organization = @organization
       @user.save
 
-      #@invoice_setting = InvoiceSetting.create(organization_id: @organization.id, user_id: @user.id, user_code: "ACC%IDO", journal_code: "VT")
+      #@invoice_setting = BillingMod::InvoiceSetting.create(organization_id: @organization.id, user_id: @user.id, user_code: "ACC%IDO", journal_code: "VT")
 
       invoice_settings = [
         { organization_id: @organization.id, user_id: _users[0].id, user_code: "AC0077", journal_code: "AC" },
         { organization_id: @organization.id, user_id: _users[1].id, user_code: "ACC%0239", journal_code: "AC" }
       ]
 
-      invoice_settings.map {|invoice_setting| InvoiceSetting.new(invoice_setting).save }
+      invoice_settings.map {|invoice_setting| BillingMod::InvoiceSetting.new(invoice_setting).save }
 
 	  	@invoice = BillingMod::Invoice.create(number: "2019090001", organization_id: @organization.id, user_id: @user.id)
 
