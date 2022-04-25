@@ -48,7 +48,7 @@
               .form-group
                 = label_tag "package[#{package.to_s}][number_of_journals]", "Nombre de journaux", class: 'col-form-label required semibold'
                 .select-container.no-padding.w-100.subscription_number_of_journals
-                  = number_field_tag "package[#{package.to_s}][number_of_journals]", 5, class: 'form-control special_input ', min: 5, max: 30, required: true, autofocus: true, pattern: '/^[0-9]+$/', placeholder: "5"
+                  = number_field_tag "package[#{package.to_s}][number_of_journals]", my_package.try(:journal_size) || 5, class: 'form-control special_input ', min: 5, max: 30, required: true, autofocus: true, pattern: '/^[0-9]+$/', placeholder: "5"
                   - if @customer.account_book_types.count > 5
                     &nbsp;
                     %span{id: 'err-msg-input-number'}

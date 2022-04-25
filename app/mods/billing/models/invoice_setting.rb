@@ -8,7 +8,7 @@ class BillingMod::InvoiceSetting < ApplicationRecord
   belongs_to :invoice, optional: true
 
   def self.invoice_synchronize(period, invoice_setting_id)
-    invoice_setting = InvoiceSetting.find(invoice_setting_id)
+    invoice_setting = BillingMod::InvoiceSetting.find(invoice_setting_id)
 
     invoices_to_synchronize = BillingMod::Invoice.where('created_at >= ? AND created_at <= ? AND organization_id = ?', period, Time.now, invoice_setting.organization.id)
 
