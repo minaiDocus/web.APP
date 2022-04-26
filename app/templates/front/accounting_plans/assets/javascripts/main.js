@@ -1,3 +1,5 @@
+//=require './conterpart-account'
+
 class AccountingPlan {
   constructor(){
     this.applicationJS       = new ApplicationJS;

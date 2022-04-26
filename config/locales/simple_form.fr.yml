@@ -26,6 +26,8 @@ fr:
     hints:
       ftp:
         root_path: "C'est dans ce dossier qu'iDocus importera ou expotera des documents."
+      conterpart_account:
+        is_default: 'Si par défaut : ce compte de charge sera assigné automatiquement à tous les comptes de tièrs'
     labels:
       doc_group:
         leader: 'Prescripteur'
@@ -399,5 +401,9 @@ fr:
         vat_autoliquidation: Fournisseur auto-liquidé
         vat_autoliquidation_debit_account: Compte de TVA autoliquidée déductibe
         vat_autoliquidation_credit_account: Compte de TVA autoliquidée collectée
+      conterpart_account:
+        name: 'Libelé'
+        number: 'N° de compte'
+        is_default: 'Par défaut ?'
 
 

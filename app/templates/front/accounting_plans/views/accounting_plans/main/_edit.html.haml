@@ -3,8 +3,14 @@
   = f.input :type, as: :hidden, :input_html => { :value => params[:type] }
   = f.input :third_party_account, required: true
   = f.input :third_party_name
-  = f.input :conterpart_account
+  = f.input :conterpart_account, label: 'Compte de contrepartie par défaut'
   = f.input :code
+
+  .mb-3.form-group.string.required
+    = label_tag 'accounting_plan_item[conterpart_accounts][]', 'Compte de charges associés par catégorie'
+    .select-container.no-padding.w-100
+    = select_tag 'accounting_plan_item[conterpart_accounts][]', options_for_select(@conterpart_accounts, @accounting_plan_item.conterpart_accounts.map(&:id)), include_blank: false,  class: 'w-100 searchable-option-list', multiple: true
+
   - if params[:type] == 'provider'
     .hide
       = f.input :vat_autoliquidation_debit_account

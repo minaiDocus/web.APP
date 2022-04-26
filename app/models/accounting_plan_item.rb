@@ -2,6 +2,8 @@
 class AccountingPlanItem < ApplicationRecord
   attr_accessor :no_third_party_account
 
+  has_and_belongs_to_many :conterpart_accounts
+
   validates_presence_of :third_party_name
   validates_presence_of :third_party_account, unless: Proc.new { |item| item.no_third_party_account }
 

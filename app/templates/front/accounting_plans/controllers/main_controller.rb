@@ -19,7 +19,13 @@ class AccountingPlans::MainController < CustomerController
 
   # GET /organizations/:organization_id/customers/:customer_id/accounting_plan/edit
   def edit
-    @accounting_plan_item = params[:type] == 'provider' ? @accounting_plan.providers.find(params[:accounting_id]) : @accounting_plan.customers.find(params[:accounting_id])
+    if params[:type] == 'provider'
+      @accounting_plan_item = @accounting_plan.providers.find(params[:accounting_id])
+      @conterpart_accounts  = @accounting_plan.conterpart_accounts.provider.map{|account| ["#{account.name} - #{account.number}", account.id] }
+    else
+      @accounting_plan_item = @accounting_plan.customers.find(params[:accounting_id])
+      @conterpart_accounts  = @accounting_plan.conterpart_accounts.customer.map{|account| ["#{account.name} - #{account.number}", account.id] }
+    end
 
     render partial: 'edit'
   end
@@ -31,6 +37,8 @@ class AccountingPlans::MainController < CustomerController
     accounting_plan_item.assign_attributes params[:accounting_plan_item].except(:id, :type).permit(:third_party_account, :third_party_name, :conterpart_account, :code, :vat_autoliquidation_debit_account, :vat_autoliquidation_credit_account, :vat_autoliquidation)
 
     if accounting_plan_item.save
+      update_conterpart_accounts(accounting_plan_item)
+
       json_flash[:success] = 'Modifié avec succès.'
     else
       json_flash[:error] = errors_to_list accounting_plan_item
@@ -53,6 +61,8 @@ class AccountingPlans::MainController < CustomerController
     accounting_plan_item.is_updated = true
     
     if accounting_plan_item.save
+      update_conterpart_accounts(accounting_plan_item)
+
       json_flash[:success] = 'Ajouté avec succès.'
     else
       json_flash[:error] = errors_to_list accounting_plan_item
@@ -63,6 +73,12 @@ class AccountingPlans::MainController < CustomerController
 
   def new
     @accounting_plan_item = AccountingPlanItem.new
+
+    if params[:type] == 'provider'
+      @conterpart_accounts  = @accounting_plan.conterpart_accounts.provider.map{|account| ["#{account.name} - #{account.number}", account.id] }
+    else
+      @conterpart_accounts  = @accounting_plan.conterpart_accounts.customer.map{|account| ["#{account.name} - #{account.number}", account.id] }
+    end
     
     render partial: 'edit'
   end
@@ -289,5 +305,13 @@ class AccountingPlans::MainController < CustomerController
 
   def auto_update_accounting_plan_active?
     params[:auto_updating_accounting_plan] == 1
+  end
+
+  def update_conterpart_accounts(accounting_plan_item)
+    _kind = accounting_plan_item.kind == 'customer' ? 'customer' : 'provider'
+    ids   = params[:accounting_plan_item].try(:[], :conterpart_accounts) || []
+    ids   += @accounting_plan.conterpart_accounts.is_default.send(_kind.to_s).map(&:id)
+
+    accounting_plan_item.update( conterpart_accounts: ConterpartAccount.where(id: ids) )
   end
 end

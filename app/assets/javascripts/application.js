@@ -88,10 +88,13 @@
   }
 
   $.fn.asMultiSelect = function(options={}){
-    if( !this.hasClass('mixed-to-multi') ){
-      this.searchableOptionList(options);
-      this.addClass('mixed-to-multi');
-    }
+    $.each(this, function(e){
+      let el = $(this);
+      if( !el.hasClass('mixed-to-multi') ){
+        el.searchableOptionList(options);
+        el.addClass('mixed-to-multi');
+      }
+    });
   }
 
 

@@ -7,6 +7,7 @@ class AccountingPlan < ApplicationRecord
   has_many :providers, -> { where(kind: 'provider') }, class_name: 'AccountingPlanItem', as: :accounting_plan_itemable, dependent: :destroy
   has_many :customers, -> { where(kind: 'customer') }, class_name: 'AccountingPlanItem', as: :accounting_plan_itemable, dependent: :destroy
   has_many :vat_accounts, class_name: 'AccountingPlanVatAccount', inverse_of: :accounting_plan
+  has_many :conterpart_accounts
 
   belongs_to :user
 
@@ -96,6 +97,7 @@ class AccountingPlan < ApplicationRecord
             wsAccounts do
               category 1
               associate customer.conterpart_account
+              conterpart_accounts customer.conterpart_accounts.map{ |account| { name: account.name, number: account.number } }
               name customer.third_party_name
               number customer.third_party_account
               send(:'vat-account', vat_accounts.find_by_code(customer.code).try(:account_number))
@@ -106,6 +108,7 @@ class AccountingPlan < ApplicationRecord
             wsAccounts do
               category 2
               associate provider.conterpart_account
+              conterpart_accounts provider.conterpart_accounts.map{ |account| { name: account.name, number: account.number } }
               name provider.third_party_name
               number provider.third_party_account
               send(:'vat-account', vat_accounts.find_by_code(provider.code).try(:account_number))
@@ -120,7 +123,7 @@ class AccountingPlan < ApplicationRecord
 
   def to_csv(header = true)
     data = if header
-             [%w(category name number associate customer_code).join(',')]
+             [%w(category name number associate conterpart_accounts customer_code).join(',')]
            else
              []
            end
@@ -132,6 +135,7 @@ class AccountingPlan < ApplicationRecord
           account.third_party_name,
           account.third_party_account,
           account.conterpart_account,
+          account.conterpart_accounts.map{ |account| { name: account.name, number: account.number } },
           user.code
         ].join(',')
       end
@@ -169,6 +173,7 @@ class AccountingPlan < ApplicationRecord
       content = {
         'category':    category,
         'associate':   object.conterpart_account,
+        'conterpart_accounts': object.conterpart_accounts.map{ |account| { name: account.name, number: account.number } },
         'name':        object.third_party_name,
         'number':      object.third_party_account,
         'vat_account': vat_accounts.any? ? (vat_accounts.find_by_code(object.code).try(:account_number)).presence : object.code.presence

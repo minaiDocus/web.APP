@@ -15,6 +15,13 @@ Rails.application.routes.draw do
             delete :destroy_customers
           end
         end
+
+        resource :conterpart_account, controller: 'conterpart_account' do
+          member do
+            get 'accounts_list/:type', to: 'conterpart_account#accounts_list', as: 'accounts_list'
+            delete 'delete', to: 'conterpart_account#delete', as: 'delete'
+          end
+        end
       end
     end
   end
