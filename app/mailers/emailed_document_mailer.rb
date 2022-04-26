@@ -5,7 +5,7 @@ class EmailedDocumentMailer < BaseMailer
     @user             = emailed_document.user
     @period_service   = Billing::Period.new user: emailed_document.user, current_time: Time.now.beginning_of_month
 
-    mail(to: email.from, subject: "[iDocus] Envoi par mail (#{email.subject}) : succès", references: ["<#{email.message_id}>"]) if to_send_mail
+    mail(to: email.from, subject: "[iDocus] Envoi par mail (#{email.subject}) : succès", references: ["<#{email.message_id}>"]) if can_be_sent
   end
 
   def notify_finished_with_failure(email, emailed_document)
@@ -14,7 +14,7 @@ class EmailedDocumentMailer < BaseMailer
     @user             = emailed_document.user
     @period_service   = Billing::Period.new user: emailed_document.user, current_time: Time.now.beginning_of_month
 
-    mail(to: email.from, subject: "[iDocus] Envoi par mail (#{email.subject}) : terminé avec erreur", references: ["<#{email.message_id}>"]) if to_send_mail
+    mail(to: email.from, subject: "[iDocus] Envoi par mail (#{email.subject}) : terminé avec erreur", references: ["<#{email.message_id}>"]) if can_be_sent
   end
 
   def notify_failure(email, emailed_document)
@@ -23,7 +23,7 @@ class EmailedDocumentMailer < BaseMailer
     @user             = emailed_document.user
     @period_service   = Billing::Period.new user: emailed_document.user, current_time: Time.now.beginning_of_month
 
-    mail(to: email.from, subject: "[iDocus] Envoi par mail (#{email.subject}) : échec", references: ["<#{email.message_id}>"]) if to_send_mail
+    mail(to: email.from, subject: "[iDocus] Envoi par mail (#{email.subject}) : échec", references: ["<#{email.message_id}>"]) if can_be_sent
   end
 
   def notify_error(email, attachment_names)
@@ -32,12 +32,12 @@ class EmailedDocumentMailer < BaseMailer
     @journals         = @user.account_book_types
     @period_service   = Billing::Period.new user: @user, current_time: Time.now.beginning_of_month
 
-    mail(to: email.from, subject: "[iDocus] Envoi par mail (#{email.subject}) : erreur", references: ["<#{email.message_id}>"]) if to_send_mail
+    mail(to: email.from, subject: "[iDocus] Envoi par mail (#{email.subject}) : erreur", references: ["<#{email.message_id}>"]) if can_be_sent
   end
 
   private
 
-  def to_send_mail
-    !CustomUtils.except_mail_for(@user.organization)
+  def can_be_sent
+    CustomUtils.mailing_authorized_for?(@user.organization)
   end
 end

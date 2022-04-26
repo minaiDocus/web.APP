@@ -189,8 +189,8 @@ class CustomUtils
       return false
     end
 
-    def except_mail_for(organization)
-      ["ALM"].include?(organization.code)
+    def mailing_authorized_for?(organization)
+      !["ALM"].include?(organization.code)
     end
   end
 end
