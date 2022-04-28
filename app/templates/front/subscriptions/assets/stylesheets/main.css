@@ -20,7 +20,7 @@
 }
 
 .label-ido_premium {  
-  color: #6E8E4F;
+  color: #EAEEE6;
 }
 
 .label-ido_classic {  
@@ -47,6 +47,10 @@ p{
   font-size: 22px;
   font-weight: bold;
   color: rgba(26, 26, 26, 0.32);  
+}
+
+.back-golden .price{
+  color: rgb(232, 232, 232);
 }
 
 .no-price{

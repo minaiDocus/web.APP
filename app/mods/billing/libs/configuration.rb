@@ -4,6 +4,7 @@ class BillingMod::Configuration
               human_name: "iDo'Premium",
               description: "Vous permet de transférer vos pièces sans limite de quota.",
               hint: "Facture à 3.000 € pour les 150 premiers dossiers, au delà des 150 dossiers : 10€/dossiers",
+              label: 'Téléchargement + Pré-saisie comptable',
               price: 3000,
               commitment: 0,
               data_flows: { max: 0, duration: 'month', excess_price: 10 },
@@ -13,33 +14,17 @@ class BillingMod::Configuration
               human_name: "iDo'Classique",
               description: "Vous permet de transférer jusqu'à 100 pièces/mois, mutualisation des quotas au niveau du cabinet.",
               hint: "Au-delà du quota cabinet cumulé, calcul du dépassement simplifié : 0,25€ ht/facture",
+              label: 'Téléchargement + Pré-saisie comptable',
               price: 20,
               commitment: 0,
               data_flows: { max: 100, duration: 'month', excess_price: 0.25 },
               options: { upload: 'strict', bank: 'optional', scan: 'strict', mail: 'optional', preassignment: 'optional'}
             },
-            ido_nano: {
-              human_name: "iDo'Nano",
-              description: "Vous permet de transférer jusqu'à 100 pièces/mois, mutualisation des quotas au niveau du cabinet.",
-              hint: "Au-delà du quota cabinet cumulé, calcul du dépassement simplifié : 0,25€ ht/facture",
-              price: 5,
-              commitment: 12,
-              data_flows: { max: 100, duration: 'annual', excess_price: 0.25 },
-              options: { upload: 'strict', bank: 'optional', scan: 'strict', mail: 'optional', preassignment: 'strict'}
-            },
-            ido_mini: {
-              human_name: "iDo'Mini",
-              description: "Vous permet de transférer jusqu'à 100 pièces/mois, mutualisation des quotas au niveau du cabinet.",
-              hint: "Au-delà du quota cabinet cumulé, calcul du dépassement simplifié : 0,25€ ht/facture",
-              price: 10,
-              commitment: 12,
-              data_flows: { max: 100, duration: 'month', excess_price: 0.25 },
-              options: { upload: 'strict', bank: 'none', scan: 'strict', mail: 'none', preassignment: 'optional'}
-            },
             ido_micro: {
               human_name: "iDo'Micro",
               description: "Vous permet de transférer jusqu'à 100 pièces/mois, mutualisation des quotas au niveau du cabinet.",
               hint: "Au-delà du quota cabinet cumulé, calcul du dépassement simplifié : 0,25€ ht/facture",
+              label: 'Téléchargement + Pré-saisie comptable + Engagement 12 mois',
               price: 10,
               commitment: 12,
               data_flows: { max: 100, duration: 'annual', excess_price: 0.25 },
@@ -49,15 +34,37 @@ class BillingMod::Configuration
               human_name: "iDo'Micro",
               description: "Vous permet de transférer jusqu'à 100 pièces/mois, mutualisation des quotas au niveau du cabinet.",
               hint: "Au-delà du quota cabinet cumulé, calcul du dépassement simplifié : 0,25€ ht/facture",
+              label: 'Téléchargement + Pré-saisie comptable + Engagement 12 mois',
               price: 10,
               commitment: 12,
               data_flows: { max: 25, duration: 'month', excess_price: 0.3 },
               options: { upload: 'strict', bank: 'optional', scan: 'strict', mail: 'optional', preassignment: 'strict'}
             },
+            ido_nano: {
+              human_name: "iDo'Nano",
+              description: "Vous permet de transférer jusqu'à 100 pièces/mois, mutualisation des quotas au niveau du cabinet.",
+              hint: "Au-delà du quota cabinet cumulé, calcul du dépassement simplifié : 0,25€ ht/facture",
+              label: 'Téléchargement + Pré-saisie comptable + Engagement 12 mois',
+              price: 5,
+              commitment: 12,
+              data_flows: { max: 100, duration: 'annual', excess_price: 0.25 },
+              options: { upload: 'strict', bank: 'optional', scan: 'strict', mail: 'optional', preassignment: 'strict'}
+            },
+            ido_mini: {
+              human_name: "iDo'Mini",
+              description: "Vous permet de transférer jusqu'à 100 pièces/mois, mutualisation des quotas au niveau du cabinet.",
+              hint: "Au-delà du quota cabinet cumulé, calcul du dépassement simplifié : 0,25€ ht/facture",
+              label: 'Téléchargement + Pré-saisie comptable + Engagement 12 mois',
+              price: 10,
+              commitment: 12,
+              data_flows: { max: 100, duration: 'month', excess_price: 0.25 },
+              options: { upload: 'strict', bank: 'none', scan: 'strict', mail: 'none', preassignment: 'optional'}
+            },            
             ido_x: {
               human_name: "iDo'X",
               description: "Vous permet de transférer jusqu'à 100 pièces/mois, mutualisation des quotas au niveau du cabinet.",
               hint: "Au-delà du quota cabinet cumulé, calcul du dépassement simplifié : 0,25€ ht/facture",
+              label: 'Factur-X + Pré-saisie comptable',
               price: 5,
               commitment: 0,
               data_flows: { max: 0, duration: 'month', excess_price: 0.25 },
@@ -67,6 +74,7 @@ class BillingMod::Configuration
               human_name: "Automate",
               description: "Vous permet de bénéficier des automates de récupération bancaires",
               hint: "",
+              label: 'Récupération banque',
               price: 5,
               commitment: 0,
               data_flows: { max: 0, duration: 'month', excess_price: 0.25 },
@@ -81,8 +89,16 @@ class BillingMod::Configuration
               data_flows: { max: 0, duration: 'month', excess_price: 0.25 },
               options: { upload: 'none', bank: 'none', scan: 'strict', mail: 'none', preassignment: 'strict'}
             },
-            preassignment: { price: 9 },
-            mail: { price: 10 },
+            preassignment: {
+              human_name: "Pré-affectation",
+              price: 9, 
+              label: 'Pré-saisie comptable active', 
+            },
+            mail: {
+              human_name: "Courrier",
+              price: 10, 
+              label: 'Envoi par courrier A/R', 
+            },
             bank_excess: { price: 2 },
             journal_excess: { price: 1 },
             reduced_retriever: { price: 3 },
@@ -91,6 +107,10 @@ class BillingMod::Configuration
   class << self
     def human_name_of(package)
       BillingMod::Configuration::LISTS[package.to_sym][:human_name]
+    end
+
+    def label_of(package)
+      BillingMod::Configuration::LISTS[package.to_sym][:label]
     end
 
     def options_of(package)
