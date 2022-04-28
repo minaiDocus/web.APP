@@ -39,6 +39,8 @@ class BillingMod::PrepareUserBilling
   private
 
   def create_package_billing
+    return true if @package.name == 'ido_premium'
+
     create_billing({ name: @package.name, title: @package.human_name, price: @package.base_price })
   end
 
@@ -144,7 +146,9 @@ class BillingMod::PrepareUserBilling
   end
 
   def create_digitize_billing
-    if @package.name == 'ido_digitize'
+    is_manual_paper_set_order = CustomUtils.is_manual_paper_set_order?(@user.organization)
+
+    if @package.name == 'ido_digitize' || (is_manual_paper_set_order && @package.scan_active)
       if @data_flow.scanned_sheets > 0
         #### ------- Scanned sheet Option -------- ####
         price = 0.1
@@ -197,6 +201,8 @@ class BillingMod::PrepareUserBilling
     return @excess_data if @excess_data.present?
 
     @excess_data = { price: 0, count: 0 }
+
+    return @excess_data if @package.name == 'ido_premium'
 
     if @package.excess_duration == 'month'
       data_flow = @user.data_flows.where(period: @package.period).select("compta_pieces as t_compta_pieces, compta_operations as t_compta_operations").first

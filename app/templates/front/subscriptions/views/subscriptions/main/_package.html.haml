@@ -3,11 +3,12 @@
 - count      = 0
 
 .packages_list  
-  - packages.each do |package, infos|    
+  - packages.each do |package, infos|
+    - is_my_package    = package.to_s == my_package.try(:name)
     - class_derivation = ((count % 2) == 0) ? "derivationLeft" : "derivationRight"
     - count += 1
     - human_name = infos[:human_name].presence || nil    
-    - to_disable = !current_user.try(:is_admin) && (package.to_s == my_package.try(:name)) && @customer.persisted? && !my_package.try(:is_commitment_end?)
+    - to_disable = !current_user.try(:is_admin) && (is_my_package) && @customer.persisted? && !my_package.try(:is_commitment_end?)
 
     - next if human_name.blank? || %w(preassignment mail).include?(package.to_s)
     - next if package.to_s == 'ido_mini'
@@ -15,14 +16,14 @@
     - next if package.to_s == 'ido_micro_plus' && !@customer.organization.uses_micro_plus?
     - next if package.to_s == 'ido_digitize'   && !CustomUtils.is_manual_paper_set_order?(@customer.organization)
 
-    .package{ class: "#{class_derivation} #{'active' if package.to_s == my_package.try(:name)}", data: { name: package } }
+    .package{ class: "#{class_derivation} #{'active' if is_my_package}", data: { name: package } }
       .row.box{ class: "#{'back-golden' if package.to_s == 'ido_premium'}"}
         .col-sm-4.text-center
           .label-package.bold{ class: "label-#{package}" }= human_name
         .col-sm-4
           .semibold.description= infos[:description]
           %label.regular= infos[:hint]
-          - if package.to_s == my_package.try(:name) && my_package.try(:period) == my_package.try(:commitment_end_period)
+          - if package.to_s == my_package.try(:name) && my_package.commitment_end_period.to_i > 0 && my_package.commitment_end_period.to_i >= Date.today.strftime('%Y%m').to_i
             %hr
               %label.semibold Information :
               %label
@@ -36,8 +37,8 @@
             = infos[:price]
             %span €/mois
         .col-sm-2.text-center.pt-3
-          = radio_button_tag 'package[name]', package.to_s, package.to_s == my_package.try(:name), class: "form-check-input radio-button main-option #{'commitment_pending' if to_disable}", data: { price: BillingMod::Configuration.price_of(package, @customer)}
-      .options{class: "#{'hide' if package.to_s != my_package.try(:name)}"}
+          = radio_button_tag 'package[name]', package.to_s, is_my_package, class: "form-check-input radio-button main-option #{'commitment_pending' if to_disable}", data: { price: BillingMod::Configuration.price_of(package, @customer)}
+      .options{class: "#{'hide' if not is_my_package}"}
         .row
           .col-sm-6.m-3
             - if package.to_s == 'ido_x'
@@ -55,7 +56,7 @@
                       %label.semibold Avec option  automate
                   .col-md-2.form-check.form-switch
                     %label.form-check-label Non
-                    = check_box_tag "package[#{package.to_s}][bank]", opt.to_s, package.to_s == my_package.try(:name) && my_package.try(:bank_active), class: "form-check-input input_switch option_checkbox", data: { price: BillingMod::Configuration.price_of('ido_retriever', @customer) }
+                    = check_box_tag "package[#{package.to_s}][bank]", opt.to_s, is_my_package && my_package.try(:bank_active), class: "form-check-input input_switch option_checkbox", data: { price: BillingMod::Configuration.price_of('ido_retriever', @customer) }
               - if opt.to_s == 'mail'
                 .row.mail-option
                   .col-md-10.form-group.no-margin
@@ -63,7 +64,7 @@
                       %label.semibold Avec option courrier
                   .col-md-2.form-check.form-switch
                     %label.form-check-label Non
-                    = check_box_tag "package[#{package.to_s}][mail]", opt.to_s, package.to_s == my_package.try(:name) && my_package.try(:mail_active), class: "form-check-input option_checkbox input_switch", data: { price: BillingMod::Configuration.price_of('mail', @customer)}
+                    = check_box_tag "package[#{package.to_s}][mail]", opt.to_s, is_my_package && my_package.try(:mail_active), class: "form-check-input option_checkbox input_switch", data: { price: BillingMod::Configuration.price_of('mail', @customer)}
 
               - if opt.to_s == 'digitize' && CustomUtils.is_manual_paper_set_order?(@customer.organization)
                 .row.mail-option
@@ -72,7 +73,7 @@
                       %label.semibold Avec numérisation
                   .col-md-2.form-check.form-switch
                     %label.form-check-label Non
-                    = check_box_tag "package[#{package.to_s}][scan]", 'scan', package.to_s == my_package.try(:name) && my_package.try(:scan_active) && CustomUtils.is_manual_paper_set_order?(@customer.organization), class: "form-check-input option_checkbox input_switch", data: { price: 0 }
+                    = check_box_tag "package[#{package.to_s}][scan]", 'scan', is_my_package && my_package.try(:scan_active) && CustomUtils.is_manual_paper_set_order?(@customer.organization), class: "form-check-input option_checkbox input_switch", data: { price: 0 }
 
               - if opt.to_s == 'preassignment'
                 .row.preassignmentt-option
@@ -80,8 +81,8 @@
                     .form-check.form-check-inline.pre_assignment
                       %label.semibold Pré-saisie comptable
                   .col-md-2.form-check.form-switch                     
-                    - is_preassignment_active = package.to_s == my_package.try(:name) ? my_package.try(:preassignment_active) : true             
-                    %label.form-check-label.pre-assignment-state= (package.to_s == my_package.try(:name) && my_package.try(:preassignment_active)) ? 'Oui' : 'Non'
+                    - is_preassignment_active = is_my_package ? my_package.try(:preassignment_active) : true             
+                    %label.form-check-label.pre-assignment-state= (is_my_package && my_package.try(:preassignment_active)) ? 'Oui' : 'Non'
                     = check_box_tag "package[#{package.to_s}][preassignment]", opt.to_s, is_preassignment_active, class: "form-check-input option_checkbox input_switch", data: { price: BillingMod::Configuration.price_of('preassignment', @customer)}
           .col-sm-5.m-3
             .input-journal-numbers
