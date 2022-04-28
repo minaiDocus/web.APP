@@ -1,5 +1,14 @@
 class BillingMod::Configuration
   LISTS = {
+            ido_premium: {
+              human_name: "iDo'Premium",
+              description: "Vous permet de transférer vos pièces sans limite de quota.",
+              hint: "Facture à 3.000 € pour les 150 premiers dossiers, au delà des 150 dossiers : 10€/dossiers",
+              price: 3000,
+              commitment: 0,
+              data_flows: { max: 0, duration: 'month', excess_price: 10 },
+              options: { upload: 'strict', bank: 'optional', scan: 'strict', mail: 'optional', preassignment: 'strict'}
+            },
             ido_classic: {
               human_name: "iDo'Classique",
               description: "Vous permet de transférer jusqu'à 100 pièces/mois, mutualisation des quotas au niveau du cabinet.",
@@ -53,7 +62,7 @@ class BillingMod::Configuration
               commitment: 0,
               data_flows: { max: 0, duration: 'month', excess_price: 0.25 },
               options: { upload: 'none', bank: 'optional', scan: 'none', mail: 'none', preassignment: 'strict' }
-            },
+            },            
             ido_retriever: {
               human_name: "Automate",
               description: "Vous permet de bénéficier des automates de récupération bancaires",
