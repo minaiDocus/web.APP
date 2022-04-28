@@ -400,7 +400,7 @@ class Billing::CreateInvoicePdf
       @pdf = pdf
 
       @pdf.repeat [1] do
-        @pdf.image "#{Rails.root}/app/assets/images/application/bandeau_facture_parrainage.jpg", width: 472, height: 151, align: :center, :at => [35, 10], :align => :right
+        @pdf.image "#{Rails.root}/app/assets/images/application/bandeau_facture_parrainage.jpg", width: 472, height: 151, align: :center, :at => [35, 10]
       end
 
       make_header
