@@ -20,7 +20,8 @@
         .col-sm-4.text-center
           .label-package.bold{ class: "label-#{package}" }= human_name
         .col-sm-4
-          %span.semibold.description= infos[:description]
+          .semibold.description= infos[:description]
+          %label.regular= infos[:hint]
           - if package.to_s == my_package.try(:name) && my_package.try(:period) == my_package.try(:commitment_end_period)
             %hr
               %label.semibold Information :
@@ -54,7 +55,7 @@
                       %label.semibold Avec option  automate
                   .col-md-2.form-check.form-switch
                     %label.form-check-label Non
-                    = check_box_tag "package[#{package.to_s}][bank]", opt.to_s, package.to_s == my_package.try(:name) && my_package.try(:bank_active), class: "form-check-input input_switch option_checkbox", data: { price: 5 }
+                    = check_box_tag "package[#{package.to_s}][bank]", opt.to_s, package.to_s == my_package.try(:name) && my_package.try(:bank_active), class: "form-check-input input_switch option_checkbox", data: { price: BillingMod::Configuration.price_of('ido_retriever', @customer) }
               - if opt.to_s == 'mail'
                 .row.mail-option
                   .col-md-10.form-group.no-margin
@@ -88,7 +89,7 @@
                 = label_tag "package[#{package.to_s}][number_of_journals]", "Nombre de journaux", class: 'col-form-label required semibold'
                 .select-container.no-padding.w-100.subscription_number_of_journals
                   = number_field_tag "package[#{package.to_s}][number_of_journals]", my_package.try(:journal_size) || 5, class: 'form-control special_input number_of_journals', min: 5, max: 30, required: true, autofocus: true, pattern: '/^[0-9]+$/', placeholder: "5", data: { price: BillingMod::Configuration.price_of('journal_excess', @customer)}
-                  - if @customer.account_book_types.count > my_package.try(:journal_size)
+                  - if @customer.account_book_types.count > my_package.try(:journal_size).to_i
                     &nbsp;
                     %span{id: 'err-msg-input-number'}
                     %div.clearfix

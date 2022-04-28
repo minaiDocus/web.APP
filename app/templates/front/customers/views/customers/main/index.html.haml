@@ -49,25 +49,15 @@
                         = link_to customer, organization_customer_path(@organization, customer)
                     %td.align-middle= customer.created_at.strftime('%d/%m/%Y')
                     %td.align-middle
-                      - if customer.subscription.present? && customer.subscription.current_packages.present?
-                        - if customer.subscription.commitment_counter == 1 && (customer.subscription.current_packages.include?('ido_nano') || customer.subscription.current_packages.include?('ido_micro') || customer.subscription.current_packages.include?('ido_plus_micro'))
-                          - if customer.subscription.end_date.strftime('%Y%m') == Date.today.strftime('%Y%m')
-                            %span.badge.bg-danger.semibold= customer.subscription.end_date.strftime('%d/%m/%Y')
-                          - else
-                            = customer.subscription.end_date.strftime('%d/%m/%Y')
+                      
                     %td.align-middle.pointer
-                      .td-popover                                               
+                      .td-popover
                         - package = customer.my_package
-                        - debugger                
-                        
                         - if package                        
-                          %span.semibold= = BillingMod::Configuration.human_name_of(package.name)
-                          - if period.product_option_orders.first&.title.present?
-                            %br
-                            %i= period.product_option_orders.first.title
-                          - if period.product_option_orders.size > 0
-                            .popover_content_customer.alert.alert-warning.hide                       
-                              = popover_content(period.product_option_orders)                              
+                          %span.semibold= = BillingMod::Configuration.human_name_of(package.name)                          
+                          .popover_content_customer.alert.alert-warning.hide                       
+                            = popover_content(package) 
+                                                   
                     %td.text-center.align-middle= customer.options.is_preassignment_authorized ? 'Activé' : '-'
                     %td.text-center.align-middle= customer.options.is_retriever_authorized ? "Activé" : "-"
                     %td.align-middle= (customer.subscription.try(:number_of_journals).to_i > 5)? (customer.subscription.try(:number_of_journals).to_i - 5) : 0
