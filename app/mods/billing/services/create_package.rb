@@ -60,7 +60,9 @@ class BillingMod::CreatePackage
     @package_conf = BillingMod::Configuration::LISTS[@package_name.to_sym]
     options       = @package_conf[:options]
 
-    if options[option.to_sym] == 'strict'
+    if option == :scan && CustomUtils.is_manual_paper_set_order?(@user.organization)
+      return _params(option.to_sym)
+    elsif options[option.to_sym] == 'strict'
       return true
     elsif options[option.to_sym] == 'optional' && _params(option.to_sym)
       return true

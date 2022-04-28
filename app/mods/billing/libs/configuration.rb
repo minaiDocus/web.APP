@@ -18,7 +18,7 @@ class BillingMod::Configuration
               price: 20,
               commitment: 0,
               data_flows: { max: 100, duration: 'month', excess_price: 0.25 },
-              options: { upload: 'strict', bank: 'optional', scan: 'strict', mail: 'optional', preassignment: 'optional'}
+              options: { upload: 'strict', bank: 'optional', scan: 'strict', mail: 'optional', digitize: 'optional', preassignment: 'optional'}
             },
             ido_micro: {
               human_name: "iDo'Micro",
@@ -28,7 +28,7 @@ class BillingMod::Configuration
               price: 10,
               commitment: 12,
               data_flows: { max: 100, duration: 'annual', excess_price: 0.25 },
-              options: { upload: 'strict', bank: 'strict', scan: 'strict', mail: 'optional', preassignment: 'strict'}
+              options: { upload: 'strict', bank: 'strict', scan: 'strict', mail: 'optional', digitize: 'optional', preassignment: 'strict'}
             },
             ido_micro_plus: {
               human_name: "iDo'Micro",
@@ -38,7 +38,7 @@ class BillingMod::Configuration
               price: 10,
               commitment: 12,
               data_flows: { max: 25, duration: 'month', excess_price: 0.3 },
-              options: { upload: 'strict', bank: 'optional', scan: 'strict', mail: 'optional', preassignment: 'strict'}
+              options: { upload: 'strict', bank: 'optional', scan: 'strict', mail: 'optional', digitize: 'optional', preassignment: 'strict'}
             },
             ido_nano: {
               human_name: "iDo'Nano",
@@ -48,7 +48,7 @@ class BillingMod::Configuration
               price: 5,
               commitment: 12,
               data_flows: { max: 100, duration: 'annual', excess_price: 0.25 },
-              options: { upload: 'strict', bank: 'optional', scan: 'strict', mail: 'optional', preassignment: 'strict'}
+              options: { upload: 'strict', bank: 'optional', scan: 'strict', mail: 'optional', digitize: 'optional', preassignment: 'strict'}
             },
             ido_mini: {
               human_name: "iDo'Mini",
@@ -78,7 +78,7 @@ class BillingMod::Configuration
               price: 5,
               commitment: 0,
               data_flows: { max: 0, duration: 'month', excess_price: 0.25 },
-              options: { upload: 'none', bank: 'strict', scan: 'optional', mail: 'none', preassignment: 'strict'}
+              options: { upload: 'none', bank: 'strict', scan: 'optional', mail: 'none', digitize: 'optional', preassignment: 'strict'}
             },
             ido_digitize: {
               human_name: "Numérisation",

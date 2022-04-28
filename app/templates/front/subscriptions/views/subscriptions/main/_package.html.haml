@@ -65,14 +65,14 @@
                     %label.form-check-label Non
                     = check_box_tag "package[#{package.to_s}][mail]", opt.to_s, package.to_s == my_package.try(:name) && my_package.try(:mail_active), class: "form-check-input option_checkbox input_switch", data: { price: BillingMod::Configuration.price_of('mail', @customer)}
 
-              - if opt.to_s == 'scan' && CustomUtils.is_manual_paper_set_order?(@customer.organization)
+              - if opt.to_s == 'digitize' && CustomUtils.is_manual_paper_set_order?(@customer.organization)
                 .row.mail-option
                   .col-md-10.form-group.no-margin
                     .form-check.form-check-inline{ data: { toggle: 'tooltip', placement: 'right' }}
                       %label.semibold Avec numérisation
                   .col-md-2.form-check.form-switch
                     %label.form-check-label Non
-                    = check_box_tag "package[#{package.to_s}][scan]", opt.to_s, package.to_s == my_package.try(:name) && my_package.try(:scan_active), class: "form-check-input option_checkbox input_switch", data: { price: 0 }
+                    = check_box_tag "package[#{package.to_s}][scan]", 'scan', package.to_s == my_package.try(:name) && my_package.try(:scan_active) && CustomUtils.is_manual_paper_set_order?(@customer.organization), class: "form-check-input option_checkbox input_switch", data: { price: 0 }
 
               - if opt.to_s == 'preassignment'
                 .row.preassignmentt-option
@@ -131,7 +131,7 @@
                 - total_price += price
 
               - %w(preassignment mail bank scan).each do |column|
-                - next if BillingMod::Configuration.options_of(next_package.name)[column.to_sym] == 'strict'
+                - next if BillingMod::Configuration.options_of(next_package.name)[column.to_sym] == 'strict' || column == 'preassignment'
                 - if next_package.send("#{column}_active".to_sym)
                   - column = 'ido_retriever' if column == 'bank'
                   - column = 'ido_digitize'  if column == 'scan'
