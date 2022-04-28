@@ -14,6 +14,7 @@ class BillingMod::PrepareOrganizationBilling
       @customers_ids << customer.id
     end
 
+    create_premium_overcharge_billing
     create_classic_discount_billing
     create_retriever_discount_billing
     create_classic_excess_billing
@@ -24,6 +25,17 @@ class BillingMod::PrepareOrganizationBilling
   end
 
   private
+
+  def create_premium_overcharge_billing
+    customers_count = BillingMod::Package.of_period(@period).where(user_id: @customers_ids).where(name: 'ido_premium').count
+    customers_limit = BillingMod::Configuration::LISTS[:ido_premium][:customers_limit]
+    unit_price      = BillingMod::Configuration::LISTS[:ido_premium][:unit_price]
+
+    if customers_count > customers_limit
+      excess = customers_count - customers_limit
+      create_billing({ name: 'ido_premium_overcharge', title: 'Documents premium en sus', kind: 'excess', price: ( unit_price * excess ), associated_hash: { excess: excess, price: unit_price, limit: customers_limit } })
+    end
+  end
 
   def create_classic_discount_billing
     customers_count = BillingMod::Package.of_period(@period).where(user_id: @customers_ids).where(name: 'ido_classic').count

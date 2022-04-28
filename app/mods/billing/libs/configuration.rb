@@ -6,6 +6,8 @@ class BillingMod::Configuration
               hint: "Facture à 3.000 € pour les 150 premiers dossiers, au delà des 150 dossiers : 10€/dossiers",
               label: 'Téléchargement + Pré-saisie comptable',
               price: 3000,
+              customers_limit: 150,
+              unit_price: 10,
               commitment: 0,
               data_flows: { max: 0, duration: 'month', excess_price: 10 },
               options: { upload: 'strict', bank: 'optional', scan: 'strict', mail: 'optional', preassignment: 'strict'}
