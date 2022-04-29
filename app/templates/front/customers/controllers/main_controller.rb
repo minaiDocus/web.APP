@@ -53,13 +53,15 @@ class Customers::MainController < CustomerController
   def create
     @customer = Subscription::CreateCustomer.new(@organization, @user, user_params, current_user, request).execute
 
-    unless @organization.specific_mission
-      modif_params = params[:subscription][:subscription_option]
-      params[:subscription][modif_params] = true
-    end
+    if @customer.persisted? && !@organization.specific_mission
+      package_name = params[:package].try(:[], :name)
+      options      = params[:package].try(:[], package_name.to_sym)
 
-    if @customer.persisted?
-      Subscription::Form.new(@customer.subscription, @user, request).submit(params[:subscription]) if not @organization.specific_mission
+      create_package = BillingMod::CreatePackage.new(@customer, package_name, options, true).execute
+
+      @customer.update(jefacture_account_id: params[:user][:jefacture_account_id]) if create_package && params.try(:[], :user).try(:[], :jefacture_account_id).present?  
+
+      BillingMod::PrepareUserBilling.new(@customer.reload).execute
       
       json_flash[:success] = "Creér avec succès"
     else

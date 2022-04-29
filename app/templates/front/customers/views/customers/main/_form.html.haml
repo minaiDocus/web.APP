@@ -170,7 +170,7 @@
         .carousel-item
           .subscription-base-form
             - if !@organization.specific_mission && action_name == 'new'
-              = render 'subscription_options'
+              = render file: Rails.root.join('app/templates/front/subscriptions/views/subscriptions/main/_package.html.haml')
     %hr
     .form-group.row.w-100.normal-form-action
       .col-md-8                     
@@ -179,3 +179,5 @@
           = submit_tag t('actions.submit'), class: 'btn btn-primary semibold'
         - else
           = submit_tag 'Valider les modifications', class: 'btn btn-primary semibold'
+
+= javascript_include_tag 'front/customers/assets/javascripts/é&'
