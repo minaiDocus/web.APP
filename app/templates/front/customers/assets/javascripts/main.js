@@ -21,7 +21,7 @@ class Customer{
     this.show_ibiza_customer();
     this.show_exact_online_customer();
     this.show_my_unisoft_customer();
-    this.show_sage_gec_customer();    
+    this.show_sage_gec_customer();
 
     if ($('.packages_list').length > 0 ) { this.subscription_event(); }
     if ($('#journals select#copy-journals-into-customer').length > 0) { searchable_option_copy_journals_list(); }
@@ -283,6 +283,8 @@ class Customer{
       this.create_customer_modal.modal('show');
 
       this.set_customer_carousel_on_slide();
+
+      this.subscription_event();
     });
   }
 

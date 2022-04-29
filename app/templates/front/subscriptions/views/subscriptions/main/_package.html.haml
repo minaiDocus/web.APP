@@ -1,10 +1,15 @@
 - packages   = BillingMod::Configuration::LISTS
-- my_package =  @customer.my_package
+- my_package =  @customer.try(:my_package) || FakeObject.new
+- if !@customer.persisted?
+  - my_package.name = 'ido_classic'
+  - my_package.preassignment_active = true
 - count      = 0
+
+- is_manual_paper_set_order = @customer.persisted? ? CustomUtils.is_manual_paper_set_order?(@customer.try(:organization)) : false
 
 .packages_list  
   - packages.each do |package, infos|
-    - is_my_package    = package.to_s == my_package.try(:name)
+    - is_my_package    = package.to_s == my_package&.name
     - class_derivation = ((count % 2) == 0) ? "derivationLeft" : "derivationRight"
     - count += 1
     - human_name = infos[:human_name].presence || nil    
@@ -12,9 +17,9 @@
 
     - next if human_name.blank? || %w(preassignment mail).include?(package.to_s)
     - next if package.to_s == 'ido_mini'
-    - next if package.to_s == 'ido_micro'      && @customer.organization.uses_micro_plus?
-    - next if package.to_s == 'ido_micro_plus' && !@customer.organization.uses_micro_plus?
-    - next if package.to_s == 'ido_digitize'   && !CustomUtils.is_manual_paper_set_order?(@customer.organization)
+    - next if package.to_s == 'ido_micro'      && @customer.try(:organization).try(:uses_micro_plus?)
+    - next if package.to_s == 'ido_micro_plus' && !@customer.try(:organization).try(:uses_micro_plus?)
+    - next if package.to_s == 'ido_digitize'   && !is_manual_paper_set_order
 
     .package{ class: "#{class_derivation} #{'active' if is_my_package}", data: { name: package } }
       .row.box{ class: "#{'back-golden' if package.to_s == 'ido_premium'}"}
@@ -66,14 +71,14 @@
                     %label.form-check-label Non
                     = check_box_tag "package[#{package.to_s}][mail]", opt.to_s, is_my_package && my_package.try(:mail_active), class: "form-check-input option_checkbox input_switch", data: { price: BillingMod::Configuration.price_of('mail', @customer)}
 
-              - if opt.to_s == 'digitize' && CustomUtils.is_manual_paper_set_order?(@customer.organization)
+              - if opt.to_s == 'digitize' && is_manual_paper_set_order
                 .row.mail-option
                   .col-md-10.form-group.no-margin
                     .form-check.form-check-inline{ data: { toggle: 'tooltip', placement: 'right' }}
                       %label.semibold Avec numérisation
                   .col-md-2.form-check.form-switch
                     %label.form-check-label Non
-                    = check_box_tag "package[#{package.to_s}][scan]", 'scan', is_my_package && my_package.try(:scan_active) && CustomUtils.is_manual_paper_set_order?(@customer.organization), class: "form-check-input option_checkbox input_switch", data: { price: 0 }
+                    = check_box_tag "package[#{package.to_s}][scan]", 'scan', is_my_package && my_package.try(:scan_active) && is_manual_paper_set_order, class: "form-check-input option_checkbox input_switch", data: { price: 0 }
 
               - if opt.to_s == 'preassignment'
                 .row.preassignmentt-option
@@ -81,8 +86,8 @@
                     .form-check.form-check-inline.pre_assignment
                       %label.semibold Pré-saisie comptable
                   .col-md-2.form-check.form-switch                     
-                    - is_preassignment_active = is_my_package ? my_package.try(:preassignment_active) : true             
-                    %label.form-check-label.pre-assignment-state= (is_my_package && my_package.try(:preassignment_active)) ? 'Oui' : 'Non'
+                    - is_preassignment_active = is_my_package ? my_package&.preassignment_active : true
+                    %label.form-check-label.pre-assignment-state= (is_my_package && my_package&.preassignment_active) ? 'Oui' : 'Non'
                     = check_box_tag "package[#{package.to_s}][preassignment]", opt.to_s, is_preassignment_active, class: "form-check-input option_checkbox input_switch", data: { price: BillingMod::Configuration.price_of('preassignment', @customer)}
           .col-sm-5.m-3
             .input-journal-numbers
@@ -97,16 +102,17 @@
                       %i Supprimez un journal comptable avant de baisser cette option.
 
   %hr
-  .form-group.row.w-100
-    .col-md-6.text-start.ps-3
-      - if current_user.is_admin
-        .form-check.form-check-inline.me-5
-          %label.form-check-label Appliquer tout de suite les options à la baisse ?
-          = check_box_tag 'package[apply_now]', 'apply_now', false, class: 'form-check-input'
-    .col-md-6.text-end
-      %h6
-        Prix du forfait avec les options sélectionnées :
-        %b.total_price.bold 0,00 €
+  - if @customer.persisted?
+    .form-group.row.w-100
+      .col-md-6.text-start.ps-3
+        - if current_user.is_admin
+          .form-check.form-check-inline.me-5
+            %label.form-check-label Appliquer tout de suite les options à la baisse ?
+            = check_box_tag 'package[apply_now]', 'apply_now', false, class: 'form-check-input'
+      .col-md-6.text-end
+        %h6
+          Prix du forfait avec les options sélectionnées :
+          %b.total_price.bold 0,00 €
 
   .future_package
     - next_period  = CustomUtils.period_of(1.month.after)
