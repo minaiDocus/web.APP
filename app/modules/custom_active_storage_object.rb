@@ -108,8 +108,14 @@ class CustomActiveStorageObject
     @object.send(@attachment.to_s.gsub('cloud_', '').to_sym)
   end
 
+  def object_class_name
+    @object.class.name.to_s.gsub('::', '_').downcase
+  end
+
   def generate_file(style = '')
     retries = 0
+
+    p "========== First ============="
 
     begin
       if style.to_s == 'medium' || style.to_s == 'thumb'
@@ -120,13 +126,15 @@ class CustomActiveStorageObject
                      end
         #TODO: resize limit doesn't work
         blob = as_attached.preview(resize_to_limit: size_limit).processed.image
-        dir = "#{Rails.root}/tmp/#{@object.class.name}/#{Time.now.strftime('%Y%m%d')}/#{@object.id}/#{style.to_s}/"
+        dir = "#{Rails.root}/tmp/#{}/#{Time.now.strftime('%Y%m%d')}/#{@object.id}/#{style.to_s}/"
         tmp_file_path = File.join(dir, Time.now.strftime('%Y%m%d') + '.png')
       else
         blob = as_attached
-        dir = "#{Rails.root}/tmp/#{@object.class.name}/#{Time.now.strftime('%Y%m%d')}/#{@object.id}/"
+        dir = "#{Rails.root}/tmp/#{object_class_name}/#{Time.now.strftime('%Y%m%d')}/#{@object.id}/"
         tmp_file_path = File.join(dir, filename)
       end
+
+      p "=========== #{tmp_file_path} =============="
 
       unless File.exist? tmp_file_path
         FileUtils.makedirs(dir)
@@ -139,8 +147,10 @@ class CustomActiveStorageObject
         tmp_file.close
       end
 
+
+      p "=========== #{tmp_file_path.present?} =============="
       if !tmp_file_path.present?
-        System::Log.info('active_storage_logs', "[Generate File] #{@object.class.name} - #{@object.id} - Not generated")
+        System::Log.info('active_storage_logs', "[Generate File] #{object_class_name} - #{@object.id} - Not generated")
 
         log_document = {
           subject: "[CustomActiveStorageObject] not generated file",
@@ -160,7 +170,9 @@ class CustomActiveStorageObject
 
       @base_path = tmp_file_path
     rescue => e
-      System::Log.info('active_storage_logs', "[Generate File] #{@object.class.name} - #{@object.id} - #{e.to_s} - Retry: #{retries}")
+
+      p "=========== #{e.to_s} =============="
+      System::Log.info('active_storage_logs', "[Generate File] #{object_class_name} - #{@object.id} - #{e.to_s} - Retry: #{retries}")
 
       retries += 1
       if retries <= 2

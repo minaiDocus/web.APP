@@ -6,7 +6,7 @@ class Period < ApplicationRecord
 
   has_one  :delivery, class_name: 'PeriodDelivery'
   has_many :orders
-  has_many :invoices
+  has_many :invoices, class_name: 'BillingMod::Invoice'
   has_many :billings, class_name: 'PeriodBilling'
   has_many :documents, class_name: 'PeriodDocument'
   has_many :product_option_orders, as: :product_optionable

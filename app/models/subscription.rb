@@ -6,7 +6,7 @@ class Subscription < ApplicationRecord
 
   has_many :periods
   has_many :documents, class_name: 'PeriodDocument'
-  has_many :invoices
+  has_many :invoices, class_name: 'BillingMod::Invoice'
   has_and_belongs_to_many :options, class_name: 'SubscriptionOption', inverse_of: :subscribers
 
   attr_accessor :is_to_apply_now
