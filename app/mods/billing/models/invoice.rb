@@ -27,7 +27,7 @@ class BillingMod::Invoice < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :period, optional: true
   belongs_to :subscription, optional: true
-  has_many   :invoice_settings
+  has_many   :invoice_settings, class_name: 'BillingMod::InvoiceSetting'
 
 
   scope :invoice_at, -> (time) { where(created_at: time.end_of_month..(time.end_of_month + 12.month)) }

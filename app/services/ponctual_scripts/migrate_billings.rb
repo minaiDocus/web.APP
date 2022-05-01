@@ -11,7 +11,7 @@ class PonctualScripts::MigrateBillings < PonctualScripts::PonctualScript
 
   def execute
     # Truncate tables before insert
-    # ActiveRecord::Base.connection.execute("TRUNCATE #{BillingMod::Package.table_name}")
+    ActiveRecord::Base.connection.execute("TRUNCATE #{BillingMod::Package.table_name}")
     ActiveRecord::Base.connection.execute("TRUNCATE #{BillingMod::Billing.table_name}")
 
     Period.where('DATE_FORMAT(created_at, "%Y%m") > 201901 AND duration = 1').each do |period|
@@ -90,7 +90,7 @@ class PonctualScripts::MigrateBillings < PonctualScripts::PonctualScript
     __period = CustomUtils.period_of(period.start_date.to_date)
     owner = period.user.presence || period.organization
 
-    return false if owner.try(:code) == 'TEEO' || owner.try(:organization).try(:code) == 'TEEO'
+    return false if !owner || owner.try(:code) == 'TEEO' || owner.try(:organization).try(:code) == 'TEEO'
 
     owner.billings.of_period(__period).destroy_all
 

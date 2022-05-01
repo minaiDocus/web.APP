@@ -40,14 +40,14 @@ class User < ApplicationRecord
   has_one :accounting_plan
   has_one :external_file_storage, autosave: true, dependent: :destroy
   has_one :notify, dependent: :destroy
-  has_one :invoice_settings
+  has_one :invoice_settings, class_name: 'BillingMod::InvoiceSetting'
 
   has_many :packs, class_name: 'Pack', inverse_of: :owner, foreign_key: :owner_id
   has_many :orders
   has_many :events
   has_many :periods
   has_many :expenses, class_name: 'Pack::Report::Expense',    inverse_of: :user
-  has_many :invoices
+  has_many :invoices, class_name: 'BillingMod::Invoice'
   has_many :addresses, as: :locatable
   has_many :exercises
   has_many :temp_packs

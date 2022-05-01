@@ -5,7 +5,7 @@ class BillingMod::InvoiceSetting < ApplicationRecord
 
   belongs_to :organization, optional: true
   belongs_to :user, optional: true
-  belongs_to :invoice, optional: true
+  belongs_to :invoice, class_name: 'BillingMod::Invoice', optional: true
 
   def self.invoice_synchronize(period, invoice_setting_id)
     invoice_setting = BillingMod::InvoiceSetting.find(invoice_setting_id)
