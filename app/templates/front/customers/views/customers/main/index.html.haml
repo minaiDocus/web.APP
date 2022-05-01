@@ -52,9 +52,9 @@
                     %td.align-middle
                       - if package && BillingMod::Configuration::LISTS[package.name.to_sym][:commitment] > 0
                         - if package.commitment_end_period.to_i == Date.today.strftime('%Y%m').to_i                
-                          %span.badge.bg-danger.semibold= l CustomUtils.commitment_to_date(package.commitment_end_period).end_of_month
+                          %span.badge.bg-danger.semibold= l CustomUtils.period_to_date(package.commitment_end_period).end_of_month
                         - else
-                          %label= l CustomUtils.commitment_to_date(package.commitment_end_period).end_of_month
+                          %label= l CustomUtils.period_to_date(package.commitment_end_period).end_of_month
                     %td.align-middle.pointer
                       .td-popover                        
                         - if package                        
