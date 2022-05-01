@@ -4,6 +4,12 @@ class CustomUtils
       "#{date.to_date.year}#{(sprintf '%02d', date.to_date.month)}".to_i
     end
 
+    def period_to_date(period)
+      _period_s = period.to_s
+
+      date = Date.new(_period_s[0..3].to_i, _period_s[4..5].to_i, 1)
+    end
+
     def period_operation(period, step=1)
       __period = period.to_i
       __step   = step.to_i.abs
@@ -233,14 +239,8 @@ class CustomUtils
       !["ALM"].include?(organization.code)
     end
 
-    def commitment_to_date(number)
-      _string = number.to_s
-
-      date = Date.new(_string[0..3].to_i, _string[4..5].to_i, 1)
-    end
-
     def format_price(price_in_cents)
-      price_in_euros = price_in_cents.blank? ? "" : price_in_cents.round/100.0
+      price_in_euros = price_in_cents.blank? ? "" : price_in_cents.round / 100.0
       ("%0.2f" % price_in_euros).gsub(".", ",")
     end
   end
