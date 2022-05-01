@@ -2,7 +2,7 @@
 
 module CustomerHelper
   def popover_content(package)
-    contents = content_tag :h6, 'Abonnement actuel', class: 'popover-title text-center semibold p-2'    
+    contents  = content_tag :h6, 'Abonnement actuel', class: 'popover-title text-center semibold p-2'    
     contents += content_tag :hr, '', class: 'm-1'
 
     count_price = 0
@@ -21,7 +21,7 @@ module CustomerHelper
           content      = ''
           content_span = ''
 
-          price = BillingMod::Configuration.price_of(column.to_sym).to_i     
+          price  = BillingMod::Configuration.price_of(column.to_sym).to_i     
           price -= BillingMod::Configuration.price_of(:preassignment).to_i if column == 'ido_classic' && package.name == 'ido_classic' && !package.preassignment_active
 
           content_span  += content_tag :span, BillingMod::Configuration.human_name_of(column), class: 'semibold float-start'

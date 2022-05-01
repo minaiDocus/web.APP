@@ -50,7 +50,7 @@
                         = link_to customer, organization_customer_path(@organization, customer)
                     %td.align-middle= customer.created_at.strftime('%d/%m/%Y')
                     %td.align-middle
-                      - if package && %w(ido_nano ido_mini ido_micro ido_micro_plus).include?(package.name)
+                      - if package && BillingMod::Configuration::LISTS[package.name.to_sym][:commitment] > 0
                         - if package.commitment_end_period.to_i == Date.today.strftime('%Y%m').to_i                
                           %span.badge.bg-danger.semibold= l CustomUtils.commitment_to_date(package.commitment_end_period).end_of_month
                         - else
