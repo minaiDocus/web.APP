@@ -126,7 +126,7 @@ class CustomActiveStorageObject
                      end
         #TODO: resize limit doesn't work
         blob = as_attached.preview(resize_to_limit: size_limit).processed.image
-        dir = "#{Rails.root}/tmp/#{}/#{Time.now.strftime('%Y%m%d')}/#{@object.id}/#{style.to_s}/"
+        dir = "#{Rails.root}/tmp/#{object_class_name}/#{Time.now.strftime('%Y%m%d')}/#{@object.id}/#{style.to_s}/"
         tmp_file_path = File.join(dir, Time.now.strftime('%Y%m%d') + '.png')
       else
         blob = as_attached
