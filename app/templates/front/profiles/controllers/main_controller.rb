@@ -54,7 +54,7 @@ class Profiles::MainController < FrontController
   def regenerate_email_code
     if params[:customer].present?
       customer = User.find Base64.decode64(params[:customer])
-      if customer && customer.options.try(:is_upload_authorized) && customer.active? && customer.update_email_code
+      if customer && customer.my_package.try(:upload_active) && customer.active? && customer.update_email_code
         flash[:success] = 'Code régénéré avec succès.'
       else
         flash[:error] = "Impossible d'effectuer l'opération demandée"

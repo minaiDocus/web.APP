@@ -27,7 +27,7 @@ class PaperSetOrders::MainController < OrganizationController
 
     @order.period_duration        = @customer.subscription.period_duration
     @order.paper_set_casing_size  = template.paper_set_casing_size
-    @order.paper_set_folder_count = @customer.options.max_number_of_journals
+    @order.paper_set_folder_count = @customer.my_package.journal_size
     @order.address                = @customer.paper_set_shipping_address.try(:dup) || Address.new
     @order.paper_return_address   = @customer.paper_return_address.try(:dup) || Address.new
     @order.paper_set_annual_end_date
@@ -155,7 +155,7 @@ class PaperSetOrders::MainController < OrganizationController
   def verify_if_customer_can_order_paper_sets
     authorized = true
     authorized = false unless @customer.active?
-    unless @customer.subscription.is_package?('mail_option') || @customer.subscription.is_package?('ido_annual')
+    unless @customer.is_package?('mail_active')
       authorized = false
     end
     unless authorized

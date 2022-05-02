@@ -57,7 +57,7 @@ class PonctualScripts::SendManualInvoices < PonctualScripts::PonctualScript
     invoice_settings = organization.invoice_settings || []
 
     invoice_settings.each do |invoice_setting|
-      next unless invoice_setting.user.try(:options).try(:is_upload_authorized)
+      next unless invoice_setting.user.try(:my_package).try(:upload_active)
 
       uploaded_document = UploadedDocument.new( file, content_file_name, invoice_setting.user, invoice_setting.journal_code, 1, nil, 'invoice_setting', nil )
       logger_infos "[SendManualInvoices] - Customer: #{invoice_setting.user.code}-#{invoice_setting.journal_code} / state: #{uploaded_document.full_error_messages}"

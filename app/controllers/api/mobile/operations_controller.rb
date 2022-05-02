@@ -79,7 +79,7 @@ class Api::Mobile::OperationsController < MobileApiController
     options = []
     if @customers
       options = @customers.map do |customer|
-        next unless customer.subscription.is_package?('retriever_option')
+        next unless customer.is_package?('bank_active')
 
         {
           user_id: customer.id,

@@ -2,6 +2,10 @@ class BillingMod::Package < ApplicationRecord
   self.table_name = 'user_packages'
 
   belongs_to :user
+  # Workarround belongs to user doesn't work
+  # def user
+  #   User.where(id: self.user_id).first
+  # end
 
   validates :journal_size, numericality: { greater_than_or_equal_to: 5, less_than_or_equal_to: 30 }
   validates_presence_of :name, :period

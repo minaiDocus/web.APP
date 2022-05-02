@@ -49,7 +49,7 @@ module RetrieverHelper
 
   def retriever_customers
     accounts.active.select do |customer|
-      customer.options.is_retriever_authorized
+      customer.my_package.bank_active
     end.map{ |u| [u, u.id] } || []
   end
 

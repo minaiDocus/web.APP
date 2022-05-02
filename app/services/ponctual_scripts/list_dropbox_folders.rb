@@ -53,7 +53,7 @@ class PonctualScripts::ListDropboxFolders < PonctualScripts::PonctualScript
     file_name = File.basename file_path
 
     paths     = path.split('/')
-    user_code = path[3].split('-')[0].strip
+    user_code = paths[3].split('-')[0].strip
     customer  = User.where(code: user_code).first
 
     CustomUtils.mktmpdir('dropbox_import') do |dir|

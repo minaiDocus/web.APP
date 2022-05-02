@@ -20,7 +20,7 @@ class Orders::MainController < CustomerController
 
     if params[:order][:type] == 'paper_set'
       @order.type = 'paper_set'
-      @order.paper_set_folder_count = @customer.options.max_number_of_journals
+      @order.paper_set_folder_count = @customer.my_package.journal_size
 
       time = (Date.today.month < 12 ? Time.now.end_of_year : 1.month.from_now.end_of_year)
 
@@ -117,11 +117,10 @@ class Orders::MainController < CustomerController
 
   # REFACTOR
   def verify_rights
-    subscription = @customer.subscription
     authorized = true
     authorized = false unless @user.leader? || @user.manage_customers
     authorized = false unless @customer.active?
-    unless subscription.is_package?('mail_option') || @customer.is_dematbox_authorized || subscription.is_package?('ido_annual')
+    unless @customer.is_package?('mail_active') || @customer.is_dematbox_authorized
       authorized = false
     end
 
@@ -133,7 +132,7 @@ class Orders::MainController < CustomerController
           authorized = false
         end
 
-        if params[:order][:type] == 'paper_set' && !subscription.is_package?('mail_option') && !subscription.is_package?('ido_annual')
+        if params[:order][:type] == 'paper_set' && !@customer.is_package?('mail_active')
           authorized = false
         end
       end

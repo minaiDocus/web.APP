@@ -226,7 +226,7 @@ class Api::Mobile::DataLoaderController < MobileApiController
   private
 
   def verify_rights_stats
-    return false unless accounts.detect { |e| e.options.is_upload_authorized }
+    return false unless accounts.detect { |e| e.my_package.upload_active }
 
     true
   end

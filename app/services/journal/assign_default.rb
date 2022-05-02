@@ -55,6 +55,6 @@ class Journal::AssignDefault
   end
 
   def is_preassignment_authorized?
-    @user.options.is_preassignment_authorized || @user.subscription.is_package?('ido_x')
+    @user.my_package.preassignment_active
   end
 end

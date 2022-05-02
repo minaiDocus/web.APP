@@ -21,7 +21,7 @@ class Journals::UserController < CustomerController
   end
 
   def is_max_number_of_journals_reached?
-    @customer.account_book_types.count >= @customer.options.max_number_of_journals
+    @customer.account_book_types.count >= @customer.my_package.journal_size
   end
   helper_method :is_max_number_of_journals_reached?
 end

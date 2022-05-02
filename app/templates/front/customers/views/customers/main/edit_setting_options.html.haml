@@ -3,7 +3,7 @@
 .box.derivationRight
   #customer.edit
     = simple_form_for @customer, url: update_setting_options_organization_customer_path(@organization, @customer), html: { class: 'form-horizontal label-medium' } do |f|
-      - if @customer.active? && (@customer.options.is_upload_authorized || @customer.subscription.is_retriever_only? ) && !@organization.specific_mission
+      - if @customer.active? && (@customer.my_package.upload_active || @customer.my_package.name == 'ido_retriever') && !@organization.specific_mission
         .select-container.no-padding.w-100
           = f.input :authd_prev_period, as: :integer, input_html: { min: 0, placeholder: "1" }
         .select-container.no-padding.w-100

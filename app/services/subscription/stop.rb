@@ -29,11 +29,13 @@ class Subscription::Stop
       @user.inactive_at = Time.now
       @user.billings.destroy_all
     else
-      @user.inactive_at = Time.now.end_of_month
+      @user.inactive_at = 1.month.after.beginning_of_month
     end
 
-
     return false unless @user.inactive_at
+
+    my_package = @user.my_package
+    my_package.update(is_active: false)
 
     # Revoke authorization
     @user.email_code             = nil
@@ -47,7 +49,7 @@ class Subscription::Stop
     # @user.options.is_preassignment_authorized = false
     # @user.options.is_upload_authorized        = false
     # @user.options.save
-    @user.account_number_rules = []
+    # @user.account_number_rules = []
 
     # Disable external services
     Retriever::Remove.delay.execute(@user.id.to_s)

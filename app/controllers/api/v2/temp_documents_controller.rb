@@ -17,7 +17,7 @@ class Api::V2::TempDocumentsController < ActionController::Base
         f.write(Base64.decode64(params[:file_base64]))
       end
 
-      if customer.still_active? && (customer.try(:options).try(:is_upload_authorized) || customer.try(:subscription).try(:current_period).try(:is_active?, :ido_x))
+      if customer.still_active? && (customer.try(:my_package).try(:upload_active) || customer.try(:my_package).try(:name) == 'ido_x')
         uploaded_document = UploadedDocument.new(File.open(filename),
                                               temp_document_params[:content_file_name],
                                               customer,

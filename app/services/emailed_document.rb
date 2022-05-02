@@ -106,7 +106,7 @@ class EmailedDocument
       email
     else
       begin
-        if email.to_user.try(:options).try(:is_upload_authorized)
+        if email.to_user.try(:my_package).try(:upload_active)
           emailed_document = EmailedDocument.new mail
 
           email.attachment_names = emailed_document.attachments.map(&:name) unless email.attachment_names.present?

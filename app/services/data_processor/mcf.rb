@@ -79,7 +79,7 @@ class DataProcessor::Mcf
   private
 
   def process_file
-    if @mcf_document.user.try(:options).try(:is_upload_authorized)
+    if @mcf_document.user.try(:my_package).try(:upload_active)
       uploaded_document = UploadedDocument.new(File.open(@file_path, "r"),
                                                @mcf_document.original_file_name,
                                                @mcf_document.user,

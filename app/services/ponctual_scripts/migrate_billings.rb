@@ -11,7 +11,7 @@ class PonctualScripts::MigrateBillings < PonctualScripts::PonctualScript
 
   def execute
     # Truncate tables before insert
-    ActiveRecord::Base.connection.execute("TRUNCATE #{BillingMod::Package.table_name}")
+    # ActiveRecord::Base.connection.execute("TRUNCATE #{BillingMod::Package.table_name}")
     ActiveRecord::Base.connection.execute("TRUNCATE #{BillingMod::Billing.table_name}")
 
     Period.where('DATE_FORMAT(created_at, "%Y%m") > 201901 AND duration = 1').each do |period|
@@ -67,7 +67,7 @@ class PonctualScripts::MigrateBillings < PonctualScripts::PonctualScript
     package.mail_active          = period.is_active?(:mail_option) || package_infos[:options][:mail] == 'strict'
     package.bank_active          = period.is_active?(:retriever_option) || package_infos[:options][:bank] == 'strict'
     package.upload_active        = period.is_active?(:ido_classique) || period.is_active?(:ido_micro) || period.is_active?(:ido_plus_micro) || period.is_active?(:ido_mini) || period.is_active?(:ido_nano)
-    package.scan_active          = period.is_active?(:digitize_option) || package_infos[:options][:scan] == 'strict'
+    package.scan_active          = period.is_active?(:digitize_option) || (!CustomUtils.is_manual_paper_set_order?(user.organization) && package_infos[:options][:scan] == 'strict')
     package.journal_size         = period.subscription.try(:number_of_journals) || 5
 
 
