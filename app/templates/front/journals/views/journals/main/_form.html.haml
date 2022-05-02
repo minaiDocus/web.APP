@@ -1,6 +1,6 @@
 = simple_nested_form_for @journal, url: journal_form_url(@organization, @customer, @journal), html: { class: 'form-horizontal', id: 'edit-journal-form' } do |f|
   
-  - authorize_preassignment = !@customer || is_preassignment_authorized? || (@customer && @customer.subscription.is_package?('ido_x')) || (@customer && @customer.options.is_retriever_authorized)
+  - authorize_preassignment = !@customer || is_preassignment_authorized? || (@customer && @customer.my_package.bank_active)
 
   .carousel.slide#carousel-journal-form{ class: 'carousel slide', "data-bs-touch" => "false", "data-bs-interval" => "false" }
     .carousel-inner
@@ -182,7 +182,7 @@
 
       .carousel-item
         .carousel_item_last_slide
-          - if !@customer || (@customer && @customer.subscription.is_package?('mail_option'))
+          - if !@customer || (@customer && @customer.is_package?('mail_active'))
             .ido-instruction
               = f.label :instructions, :class => "semibold"
               .select-container.no-padding.w-100

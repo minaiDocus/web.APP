@@ -16,6 +16,18 @@ module BillingMod::User
     self.packages.where('period <= ?', CustomUtils.period_of(Time.now)).order(period: :desc).limit(1).first
   end
 
+  def is_package?(name)
+    if name.to_s == 'digitize_active'
+      CustomUtils.is_manual_paper_set_order?(self.organization) && self.my_package.try(:scan_active)
+    else
+      begin
+        self.my_package.try(:name).to_s == name.to_s || ( self.my_package.respond_to?(name.to_sym) && self.my_package.send(name.to_sym) )
+      rescue
+        false
+      end
+    end
+  end
+
   def package_of(period)
     self.packages.of_period(period).first
   end

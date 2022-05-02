@@ -10,7 +10,7 @@ class BillingMod::Configuration
               unit_price: 10,
               commitment: 0,
               data_flows: { max: 0, duration: 'month', excess_price: 10 },
-              options: { upload: 'strict', bank: 'optional', scan: 'strict', mail: 'optional', preassignment: 'strict'}
+              options: { upload: 'strict', bank: 'optional', scan: 'strict', mail: 'optional', digitize: 'optional', preassignment: 'strict'}
             },
             ido_classic: {
               human_name: "iDo'Classique",
@@ -70,7 +70,7 @@ class BillingMod::Configuration
               price: 5,
               commitment: 0,
               data_flows: { max: 0, duration: 'month', excess_price: 0.25 },
-              options: { upload: 'none', bank: 'optional', scan: 'none', mail: 'none', preassignment: 'strict' }
+              options: { upload: 'none', bank: 'optional', scan: 'none', mail: 'none', digitize: 'none', preassignment: 'strict' }
             },            
             ido_retriever: {
               human_name: "Automate",
@@ -80,7 +80,7 @@ class BillingMod::Configuration
               price: 5,
               commitment: 0,
               data_flows: { max: 0, duration: 'month', excess_price: 0.25 },
-              options: { upload: 'none', bank: 'strict', scan: 'optional', mail: 'none', digitize: 'optional', preassignment: 'strict'}
+              options: { upload: 'none', bank: 'strict', scan: 'none', mail: 'none', digitize: 'optional', preassignment: 'strict'}
             },
             ido_digitize: {
               human_name: "Numérisation",
@@ -89,7 +89,7 @@ class BillingMod::Configuration
               price: 0,
               commitment: 0,
               data_flows: { max: 0, duration: 'month', excess_price: 0.25 },
-              options: { upload: 'none', bank: 'none', scan: 'strict', mail: 'none', preassignment: 'strict'}
+              options: { upload: 'none', bank: 'none', scan: 'strict', mail: 'none', digitize: 'strict', preassignment: 'strict'}
             },
             preassignment: {
               human_name: "Pré-affectation",

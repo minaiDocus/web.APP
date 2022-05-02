@@ -29,7 +29,7 @@
                 = f.label :address_city, :class => "semibold"
                 .select-container.no-padding.w-100
                   = f.input :address_city, label: false, input_html: { class: 'address_city_field', placeholder: "ex : Paris", :required => true }
-                - if !@organization.specific_mission && action_name != 'new' && @customer.subscription.current_period.try(:is_package?, 'ido_x')
+                - if !@organization.specific_mission && action_name != 'new' && @customer.is_package?('ido_x')
                   = f.label :jefacture_account_id, :class => "semibold"
                   .select-container.no-padding.w-100
                     = f.input :jefacture_account_id, label: false, input_html: { class: 'jefacture_account_id_field', placeholder: "ex : T4534638846" }

@@ -30,7 +30,7 @@ class Setups::MainController < OrganizationController
       if step == 'softwares_selection'
         result = if @organization.uses_softwares?
                    'softwares_selection'
-                 elsif @customer.subscription.is_package?('pre_assignment_option')
+                 elsif @customer.is_package?('preassignment_active')
                    'compta_options'
                  elsif @customer.options.upload_authorized?
                    'period_options'
@@ -38,7 +38,7 @@ class Setups::MainController < OrganizationController
                    'journals'
                  end
       elsif step == 'compta_options'
-        result = if @customer.subscription.is_package?('pre_assignment_option')
+        result = if @customer.is_package?('preassignment_active')
                    'compta_options'
                  elsif @customer.options.upload_authorized?
                    'period_options'
@@ -48,7 +48,7 @@ class Setups::MainController < OrganizationController
       elsif step == 'period_options'
         result = if @customer.options.upload_authorized?
                    'period_options'
-                 elsif @customer.subscription.is_package?('pre_assignment_option')
+                 elsif @customer.is_package?('preassignment_active')
                    if @organization.ibiza.try(:configured?) && @customer.uses?(:ibiza)
                      'ibiza'
                    elsif @customer.uses?(:csv_descriptor)
@@ -60,7 +60,7 @@ class Setups::MainController < OrganizationController
                    'journals'
                  end
       elsif step.in?(%w[ibiza use_csv_descriptor])
-        result = if @customer.subscription.is_package?('pre_assignment_option')
+        result = if @customer.is_package?('preassignment_active')
                    if @organization.ibiza.try(:configured?) && @customer.uses?(:ibiza)
                      'ibiza'
                    elsif @customer.uses?(:csv_descriptor)
@@ -72,7 +72,7 @@ class Setups::MainController < OrganizationController
                    'journals'
                  end
       elsif step == 'csv_descriptor'
-        result = if @customer.subscription.is_package?('pre_assignment_option')
+        result = if @customer.is_package?('preassignment_active')
                    if @customer.try(:csv_descriptor).try(:use_own_format?)
                      'csv_descriptor'
                    else
@@ -82,7 +82,7 @@ class Setups::MainController < OrganizationController
                    'journals'
                  end
       elsif step.in?(%w[accounting_plans vat_accounts exercises])
-        result = if @customer.subscription.is_package?('pre_assignment_option')
+        result = if @customer.is_package?('preassignment_active')
                    if @organization.ibiza.try(:configured?) && @customer.uses?(:ibiza)
                      'ibiza'
                    else
@@ -94,11 +94,11 @@ class Setups::MainController < OrganizationController
       elsif step == 'journals'
         result = 'journals'
       elsif step == 'order_paper_set'
-        if @customer.subscription.is_package?('mail_option') && (@customer.orders.paper_sets.empty? || @customer.orders.paper_sets.pending.first)
+        if @customer.is_package?('mail_active') && (@customer.orders.paper_sets.empty? || @customer.orders.paper_sets.pending.first)
           result = 'order_paper_set'
         elsif @customer.is_dematbox_authorized && (@customer.orders.dematboxes.empty? || @customer.orders.dematboxes.pending.first)
           result = 'order_dematbox'
-        elsif @customer.subscription.is_package?('retriever_option')
+        elsif @customer.is_package?('bank_active')
           result = 'retrievers'
         else
           result = 'ged'
@@ -106,13 +106,13 @@ class Setups::MainController < OrganizationController
       elsif step == 'order_dematbox'
         if @customer.is_dematbox_authorized && (@customer.orders.dematboxes.empty? || @customer.orders.dematboxes.pending.first)
           result = 'order_dematbox'
-        elsif @customer.subscription.is_package?('retriever_option')
+        elsif @customer.is_package?('bank_active')
           result = 'retrievers'
         else
           result = 'ged'
         end
       elsif step == 'retrievers'
-        result = if @customer.subscription.is_package?('retriever_option')
+        result = if @customer.is_package?('bank_active')
                    'retrievers'
                  else
                    'ged'

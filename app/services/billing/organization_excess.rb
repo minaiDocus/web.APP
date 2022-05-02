@@ -36,14 +36,14 @@ class Billing::OrganizationExcess
     result = { excess_limit: 0, total_compta_pieces: 0 }
 
     customers_periods.each do |c_period|
-      option = c_period.user.options
+      my_package = c_period.user.my_package
       valid  = (package.to_s == 'ido_classique')? valid_for_basic_quota(c_period) : valid_for_plus_micro_quota(c_period)
 
       if valid
         Billing::UpdatePeriodData.new(c_period).execute if hard_process
 
         fill_datas_with c_period.reload
-        if option.is_preassignment_authorized
+        if my_package.preassignment_active
           result[:excess_limit]        += c_period.max_preseizure_pieces_authorized.to_i
           result[:total_compta_pieces] += c_period.preseizure_pieces.to_i
         end

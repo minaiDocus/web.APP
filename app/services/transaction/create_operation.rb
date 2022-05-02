@@ -34,7 +34,7 @@ class Transaction::CreateOperation
   end
 
   def perform
-    return nil if not @bank_account && @bank_account.try(:user).try(:options).try(:is_retriever_authorized)
+    return nil if not @bank_account && @bank_account.try(:user).try(:my_package).try(:bank_active)
 
     set_operation_currency
     set_operation_administrative_infos

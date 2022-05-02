@@ -10,11 +10,11 @@
         %span.text-info.fs-origin= @customer
 
     .card-body
-      - if @customer.subscription.is_package?('mail_option')
+      - if @customer.is_package?('mail_active')
         Rappel: il est nécessaire de créer vos journaux comptables afin de créer les chemises correspondantes lors de la commande de votre kit.
         %br
         %br
-      - if @customer.options.max_number_of_journals == @journals.size
+      - if @customer.my_package.journal_size == @journals.size
         Si vous souhaitez ajouter un journal comptable, merci de terminer la création par étape du dossier et d’ajouter un nouveau journal dans l’onglet forfait puis journaux comptables.
         %br
         %br

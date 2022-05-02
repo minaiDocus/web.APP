@@ -17,7 +17,7 @@ class PaperProcesses::MainController < FrontController
   private
 
   def verify_rights
-    unless accounts.detect { |e| e.options.is_upload_authorized }
+    unless accounts.detect { |e| e.my_package.upload_active }
       flash[:error] = t('authorization.unessessary_rights')
       redirect_to root_path
     end

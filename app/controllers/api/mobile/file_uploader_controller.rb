@@ -48,7 +48,7 @@ class Api::Mobile::FileUploaderController < MobileApiController
     @uploaded_files = params[:files]
     @errors = []
 
-    if customer.try(:options).try(:is_upload_authorized)
+    if customer.try(:my_package).try(:upload_active)
       CustomUtils.mktmpdir('file_uploader_controller', nil, false) do |dir|
         @dir = dir
 

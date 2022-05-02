@@ -43,7 +43,7 @@
             - idoc_params = param_encode({ url: '/profiles', method: 'put', form:{ id: 'subscription_options' } })
             %button.btn.btn-primary.semibold.w-25.as_idocus_ajax{ type: 'button', idocus: idoc_params } Mettre à jours
 
-        - if @user.options.try(:is_upload_authorized) && !(@user.is_admin || @user.is_prescriber || @user.inactive?)
+        - if @user.my_package.try(:upload_active) && !(@user.is_admin || @user.is_prescriber || @user.inactive?)
           - period_service = Billing::Period.new user: @user, current_time: Time.now.beginning_of_month
           #emailed_documents.row
             %h3 Adresse email d'envoi de documents

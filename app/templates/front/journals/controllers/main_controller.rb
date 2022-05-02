@@ -221,7 +221,7 @@ class Journals::MainController < OrganizationController
       attrs << :name
     end
 
-    if is_preassignment_authorized? || @customer.subscription.is_package?('ido_x') || @customer.options.is_retriever_authorized
+    if is_preassignment_authorized? || @customer.my_package.bank_active
       attrs += %i[
         domain
         entry_type
@@ -259,18 +259,18 @@ class Journals::MainController < OrganizationController
   end
 
   def is_max_number_reached?
-    @customer.account_book_types.count >= @customer.options.max_number_of_journals
+    @customer.account_book_types.count >= @customer.my_package.journal_size
   end
   helper_method :is_max_number_reached?
 
   def is_preassignment_authorized?
-    @customer.nil? || @customer.options.is_preassignment_authorized || @organization.specific_mission || @customer.subscription.is_package?('ido_x') || @customer.options.is_retriever_authorized
+    @customer.nil? || @customer.my_package.preassignment_active || @organization.specific_mission || @customer.my_package.bank_active
   end
   helper_method :is_preassignment_authorized?
 
   def verify_max_number
     if @customer && is_max_number_reached?
-      text = "Nombre maximum de journaux comptables atteint : #{@customer.account_book_types.count}/#{@customer.options.max_number_of_journals}."
+      text = "Nombre maximum de journaux comptables atteint : #{@customer.account_book_types.count}/#{@customer.my_package.journal_size}."
       if params[:new_create_book_type].present?
         render json: { success: true, response: text }, status: 200
       else

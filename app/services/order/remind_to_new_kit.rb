@@ -5,7 +5,7 @@ class Order::RemindToNewKit
       groups = {}
 
       organization.customers.active.order(:code).each do |customer|
-        next unless customer.subscription.is_package?('mail_option') || customer.subscription.is_package?('ido_annual')
+        next unless customer.is_package?('mail_active')
 
         customer.prescribers.each do |prescriber|
           groups[prescriber] ||= []

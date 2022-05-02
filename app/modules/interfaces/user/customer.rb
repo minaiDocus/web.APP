@@ -126,15 +126,20 @@ module Interfaces::User::Customer
   end
 
   def authorized_all_upload?
-    (self.try(:options).try(:upload_authorized?) && authorized_bank_upload?) || self.organization.try(:specific_mission)
+    # (self.try(:options).try(:upload_authorized?) && authorized_bank_upload?) || self.organization.try(:specific_mission)
+    ( self.my_package.is_active && (self.my_package.upload_active && self.my_package.bank_active) ) || self.organization.try(:specific_mission)
   end
 
   def authorized_upload?
-    self.try(:options).try(:upload_authorized?) || authorized_bank_upload? || self.organization.try(:specific_mission)
+    # self.try(:options).try(:upload_authorized?) || authorized_bank_upload? || self.organization.try(:specific_mission)
+    ( self.my_package.is_active && (self.my_package.upload_active || self.my_package.bank_active) ) || self.organization.try(:specific_mission)
   end
 
   def authorized_bank_upload?
-    self.try(:options).try(:retriever_authorized?)
+    # self.try(:options).try(:retriever_authorized?)
+
+    self.my_package.is_active && self.my_package.bank_active
+
     #period = self.try(:subscription).try(:current_period)
 
     #if period

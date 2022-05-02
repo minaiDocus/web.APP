@@ -62,8 +62,8 @@
                           %br
                           %i= BillingMod::Configuration.label_of(package.name).presence || ""                
                           .popover_content_customer.alert.alert-warning.hide= popover_content(package)                                                   
-                    %td.text-center.align-middle= customer.options.is_preassignment_authorized ? 'Activé' : '-'
-                    %td.text-center.align-middle= customer.options.is_retriever_authorized ? "Activé" : "-"
+                    %td.text-center.align-middle= package.try(:preassignment_active) ? 'Activé' : '-'
+                    %td.text-center.align-middle= package.try(:bank_active) ? "Activé" : "-"
                     %td.align-middle= (customer.subscription.try(:number_of_journals).to_i > 5)? (customer.subscription.try(:number_of_journals).to_i - 5) : 0
                     %td.text-end.pointer.align-middle
                       .action.sub_edit_delete.list-collaborators
