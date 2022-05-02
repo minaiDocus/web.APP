@@ -50,7 +50,8 @@ class Journal::AssignDefault
   end
 
   def available_slot
-    @user.options.max_number_of_journals - @user.account_book_types.size
+    # @user.options.max_number_of_journals - @user.account_book_types.size
+    (@user.my_package.try(:journal_size).to_i || 5) - @user.account_book_types.size
   end
 
   def is_preassignment_authorized?

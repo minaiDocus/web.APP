@@ -141,9 +141,11 @@ class Order::PaperSet
   end
 
   def auto_ajust_number_of_journals_authorized
-    if @order.paper_set_folder_count != @user.subscription.number_of_journals && @order.paper_set_folder_count >= @user.account_book_types.count
-      @user.subscription.number_of_journals = @order.paper_set_folder_count
-      Subscription::Evaluate.new(@user.subscription).execute if @user.subscription.save
+    my_package = @user.my_package
+
+    if @order.paper_set_folder_count != my_package.journal_size && @order.paper_set_folder_count >= @user.account_book_types.count
+      my_package.journal_size = @order.paper_set_folder_count
+      my_package.save
     end
   end
 end
