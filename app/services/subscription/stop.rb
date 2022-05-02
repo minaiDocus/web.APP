@@ -7,23 +7,31 @@ class Subscription::Stop
   end
 
   def execute
-    period = @user.subscription.find_period(Date.today)
+    # period = @user.subscription.find_period(Date.today)
 
     # Disable period and disable user
-    if period
-      if @close_now
-        is_billed = period.billings.map(&:amount_in_cents_wo_vat).select { |e| e > 0 }.present?
+    # if period
+    #   if @close_now
+    #     is_billed = period.billings.map(&:amount_in_cents_wo_vat).select { |e| e > 0 }.present?
 
-        unless is_billed
-          @user.inactive_at = period.start_date.to_time
-          period.destroy
-        end
-      else
-        @user.inactive_at = period.start_date.to_time + period.duration.month
-      end
-    else
+    #     unless is_billed
+    #       @user.inactive_at = period.start_date.to_time
+    #       period.destroy
+    #     end
+    #   else
+    #     @user.inactive_at = period.start_date.to_time + period.duration.month
+    #   end
+    # else
+    #   @user.inactive_at = Time.now
+    # end
+
+    if @close_now
       @user.inactive_at = Time.now
+      @user.billings.destroy_all
+    else
+      @user.inactive_at = Time.now.end_of_month
     end
+
 
     return false unless @user.inactive_at
 
@@ -34,11 +42,11 @@ class Subscription::Stop
     @user.save
 
     # Revoke authorizations stored in options
-    @user.options.is_retriever_authorized     = false
-    @user.options.max_number_of_journals      = 0
-    @user.options.is_preassignment_authorized = false
-    @user.options.is_upload_authorized        = false
-    @user.options.save
+    # @user.options.is_retriever_authorized     = false
+    # @user.options.max_number_of_journals      = 0
+    # @user.options.is_preassignment_authorized = false
+    # @user.options.is_upload_authorized        = false
+    # @user.options.save
     @user.account_number_rules = []
 
     # Disable external services
