@@ -72,7 +72,12 @@ class BillingMod::Invoice < ApplicationRecord
   end
 
   def cloud_content_object
-    CustomActiveStorageObject.new(self, :cloud_content)
+    # IMPORTANT : We fetch cloud_content_object from Invoice model instead of BillingMod::Invoice
+
+    invoice = ::Invoice.where(id: self.id).first
+    return nil if not invoice
+
+    invoice.cloud_content_object
   end
 
   private
