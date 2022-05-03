@@ -75,7 +75,7 @@ function bind_globals_events(){
       }
       else{
         if(url != '' && url != '#' && url != undefined && url != null)
-          app.sendRequest(ajax_params);
+          app.sendRequest(ajax_params,'', bind_all_events);
       }
     });
 
