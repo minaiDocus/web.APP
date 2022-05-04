@@ -1,8 +1,8 @@
 # -*- encoding : UTF-8 -*-
 
 module CustomerHelper
-  def popover_content(package)
-    contents  = content_tag :h6, 'Abonnement actuel', class: 'popover-title text-center semibold p-2'    
+  def popover_content(package, title="Abonnement actuel")
+    contents  = content_tag :h6, title, class: 'popover-title text-center semibold p-2'
     contents += content_tag :hr, '', class: 'm-1'
 
     count_price = 0
@@ -13,7 +13,7 @@ module CustomerHelper
 
         _column = column != 'name' ? column.to_s +  '_active' : column
 
-        if package.send("#{_column}".to_sym)
+        if package.send("#{_column}".to_sym) || column == 'preassignment'
           column = 'ido_retriever' if column == 'bank'
           column = 'ido_digitize'  if column == 'scan'
           column = package.name    if column == 'name'
@@ -21,27 +21,30 @@ module CustomerHelper
           content      = ''
           content_span = ''
 
-          price  = BillingMod::Configuration.price_of(column.to_sym).to_i     
-          price -= BillingMod::Configuration.price_of(:preassignment).to_i if column == 'ido_classic' && package.name == 'ido_classic' && !package.preassignment_active
+          price = BillingMod::Configuration.price_of(column.to_sym).to_i
 
           content_span  += content_tag :span, BillingMod::Configuration.human_name_of(column), class: 'semibold float-start'
           content_span  += content_tag :span, price.to_s + '€', class: 'semibold float-end'
           content       += content_tag :div, content_span.html_safe, class: 'clearfix'
 
           if BillingMod::Configuration.label_of(column).present?
-            content += content_tag :i, BillingMod::Configuration.label_of(column), class: 'clearfix'
+            label = BillingMod::Configuration.label_of(column)
+
+            label = 'Remise pré-affectation' if column == 'preassignment' && !package.preassignment_active
+
+            content += content_tag :i, label, class: 'clearfix float-start'
           end
-          content += content_tag :hr, '', class: 'm-1'
 
           contents += content_tag :div, content.html_safe, class: 'clearfix'
 
-          count_price += price.to_i
+          (column == 'preassignment' && !package.preassignment_active) ? count_price -= price.to_i : count_price += price.to_i
         end
       end
     end
 
-    contents += content_tag :hr, '', class: 'm-1'
-    contents += content_tag :span, count_price.to_s + '€', class: 'semibold float-end p-1'
+    contents  += content_tag :hr, '', class: 'm-1'
+    span_total = content_tag :span, count_price.to_s + '€', class: 'semibold p-1'
+    contents  += content_tag :div, span_total.html_safe, class: 'clearfix text-end'
 
     content_tag :div, contents.html_safe, class: 'w-100'  
   end

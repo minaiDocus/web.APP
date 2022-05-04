@@ -120,34 +120,5 @@
 
     - if next_package
       .text-center
-        .alert.alert-warning.mb-3
-          %h4.bold Votre abonnement du mois prochain :
-          %hr
-          %table.w-25.future_packages
-            %thead
-              %th.text-start Forfait
-              %th.text-end Prix
-            %tbody
-              - total_price = 0
-              %tr
-                - price = BillingMod::Configuration.price_of(next_package.name, @customer).to_i 
-                - if next_package.name == 'ido_classic' && !next_package.preassignment_active
-                  - price -= BillingMod::Configuration.price_of(:preassignment)
-                %td.text-start= BillingMod::Configuration.human_name_of(next_package.name)                
-                %td.text-end= price
-                - total_price += price
-
-              - %w(preassignment mail bank scan).each do |column|
-                - next if BillingMod::Configuration.options_of(next_package.name)[column.to_sym] == 'strict' || column == 'preassignment'
-                - if next_package.send("#{column}_active".to_sym)
-                  - column = 'ido_retriever' if column == 'bank'
-                  - column = 'ido_digitize'  if column == 'scan'
-                  %tr
-                    %td.text-start= BillingMod::Configuration.human_name_of(column)
-                    %td.text-end= BillingMod::Configuration.price_of(column, @customer)
-                    - total_price += BillingMod::Configuration.price_of(column, @customer).to_i
-
-              %hr
-              %tr.total                
-                %td
-                %td.text-end= total_price.to_s + " €"
+        .alert.alert-warning.mb-3.w-50
+          = popover_content(next_package, "Votre abonnement du mois prochain")
