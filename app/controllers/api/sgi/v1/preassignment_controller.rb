@@ -116,9 +116,9 @@ class Api::Sgi::V1::PreassignmentController < SgiApiController
 
   def pieces_by_params
     if params[:compta_type] == "TEEO"
-      Organization.find_by_code("TEEO").pack_pieces.need_preassignment.not_covers
+      Organization.find_by_code("TEEO").pack_pieces.joins(:temp_document).where('temp_documents.api_name != "jefacture"').need_preassignment.not_covers
     else
-      Pack::Piece.need_preassignment.where(organization: Organization.where.not(code: "TEEO")).not_covers
+      Pack::Piece.joins(:temp_document).where('temp_documents.api_name != "jefacture"').need_preassignment.where(organization: Organization.where.not(code: "TEEO")).not_covers
     end
   end
 
