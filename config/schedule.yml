@@ -58,6 +58,10 @@ AccountingPlan::MyUnisoftUpdateWorker:
   queue: default
   cron: '0 5 * * *'
 
+AccountingPlan::SageGecUpdateWorker:
+  queue: default
+  cron: '0 6 * * *'
+
 ## Budgea retrievers workers
 
 DataProcessor::OperationsWorker:
@@ -239,6 +243,10 @@ Cedricom::FetchReceptionstWorker:
 Cedricom::ImportTransactionsWorker:
   queue: cedricom
   cron: 0 14 * * *
+
+Cedricom::ReconciliateOrphansWorker:
+  queue: cedricom
+  cron: 0 15 * * *
 
  ## Budgea ##
 
