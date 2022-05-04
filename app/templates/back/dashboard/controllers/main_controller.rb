@@ -75,7 +75,7 @@ class Admin::Dashboard::MainController < BackController
 
   # GET /admin/failed_packs_delivery
   def failed_packs_delivery
-    pack_ids = RemoteFile.not_processed.not_retryable.where('created_at >= ?', 6.months.ago).pluck(:pack_id)
+    pack_ids = RemoteFile.not_processed.not_retryable.where('created_at >= ?', 1.months.ago).pluck(:pack_id)
 
     error_messages = []
 
