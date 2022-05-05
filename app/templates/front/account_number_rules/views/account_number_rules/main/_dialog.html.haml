@@ -34,7 +34,8 @@
         
       .modal-footer
         %button.btn.btn-light.cancel{ type: :button, 'aria-label' => 'Close', 'data-bs-dismiss' => 'modal' } Annuler
-        %button.btn.btn-primary.share.validate-account-number-rule{ type: :button, disabled: true } Ajouter
+        - idocus_params = param_encode({ url: '#url', form:{ id: 'account-number-rule-form', dump_action: true }, modal: { id: 'add-new-rule' }, after_send: 'reload_page' })
+        %button.btn.btn-primary.share.validate-account-number-rule.as_idocus_ajax{ type: :button, disabled: true, idocus: idocus_params} Ajouter
 
 .modal#import-rule
   .modal-dialog
@@ -116,8 +117,13 @@
               = text_field_tag 'account_number_rule_contains[third_party_account]', (params[:account_number_rule_contains][:third_party_account] rescue '')
           
         .modal-footer
-          %button.btn.btn-light.semibold.cancel{ type: :button, 'aria-label' => 'Close', 'data-bs-dismiss' => 'modal' } Annuler
-          = submit_tag t('filters.action'), name: nil, class: 'btn btn-primary filter semibold'
+          .row.w-100
+            .col-md-6.text-start
+              = link_to organization_account_number_rules_path(@organization), class: 'btn btn-default' do
+                %span.me-2 Réinitialiser
+            .col-md-6.text-end
+              %button.btn.btn-light.semibold.cancel{ type: :button, 'aria-label' => 'Close', 'data-bs-dismiss' => 'modal' } Annuler
+              = submit_tag t('filters.action'), name: nil, class: 'btn btn-primary filter semibold'
 
 .modal#confirm-export
   .modal-dialog{style: 'min-width: 500px'}

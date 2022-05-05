@@ -114,12 +114,6 @@ function bind_all_events_account_number_rules(){
     set_third_party_account($(this).val());
   });
 
-  $('.validate-account-number-rule').unbind('click').bind('click', function(e) {
-    e.preventDefault();
-    AppLoading('show');
-    $('form.account-number-rule-form')[0].submit();
-  });
-
   show_affect_to($('select#affect-to').val());
   $('select#affect-to, select#affect-rule-to').unbind('change').bind('change',function(e) {
     e.stopPropagation();

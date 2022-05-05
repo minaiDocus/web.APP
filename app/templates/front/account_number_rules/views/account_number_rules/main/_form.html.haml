@@ -1,4 +1,4 @@
-= simple_form_for [@organization, @account_number_rule], html: { class: 'form-horizontal account-number-rule-form' } do |f|
+= simple_form_for [@organization, @account_number_rule], html: { class: 'form-horizontal account-number-rule-form', id: 'account-number-rule-form' } do |f|
   = f.label :name, :class => "semibold"
   .select-container.no-padding.w-100
     = f.input :name, label: false, input_html: { class: 'rule-name required_field', placeholder: "ex: Amazon" }

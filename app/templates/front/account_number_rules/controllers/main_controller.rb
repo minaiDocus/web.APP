@@ -42,12 +42,12 @@ class AccountNumberRules::MainController < OrganizationController
     @account_number_rule.organization = @organization
 
     if @account_number_rule.save
-      flash[:success] = 'Créé avec succès.'
+      json_flash[:success] = 'Créé avec succès.'
     else
-      flash[:error] = errors_to_list @account_number_rule
+      json_flash[:error] = errors_to_list @account_number_rule
     end
 
-    redirect_to organization_account_number_rules_path(@organization)
+    render json: { json_flash: json_flash }, status: 200
   end
 
   # GET /account/organizations/:organization_id/account_number_rules/:id/edit
@@ -61,12 +61,12 @@ class AccountNumberRules::MainController < OrganizationController
     end
 
     if @account_number_rule.update(account_number_rule_params)
-      flash[:success] = 'Modifié avec succès.'
+      json_flash[:success] = 'Modifié avec succès.'
    else
-      flash[:error] = errors_to_list @account_number_rule
+      json_flash[:error] = errors_to_list @account_number_rule
     end
 
-    redirect_to organization_account_number_rules_path(@organization)
+    render json: { json_flash: json_flash }, status: 200
   end
 
   # DELETE /account/organizations/:organization_id/account_number_rules/:id
