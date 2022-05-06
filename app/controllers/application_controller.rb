@@ -67,7 +67,7 @@ class ApplicationController < ActionController::Base
       end
 
       if params[:user_code].present? || session[:user_code].present?
-        user = User.includes(:options, :acd, :ibiza, :exact_online, :my_unisoft, :coala, :sage_gec, :cegid, :fec_agiris, :quadratus, :csv_descriptor, :organization).get_by_code(params[:user_code].presence || session[:user_code].presence)
+        user = User.includes(:options, :acd, :ibiza, :exact_online, :my_unisoft, :coala, :sage_gec, :cegid, :cogilog, :fec_agiris, :quadratus, :csv_descriptor, :organization).get_by_code(params[:user_code].presence || session[:user_code].presence)
         user ||= current_user
         prev_user_code = session[:user_code]
         session[:user_code] = if user == current_user
