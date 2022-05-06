@@ -1,6 +1,5 @@
 .derivationLeft
-  %input#failed-delivery-size{ type: 'hidden', value: @errors.total_count }
-
+  - total_nb = 0
   .row
     .col-md-12
       %table.table.table-striped.table_integration
@@ -28,7 +27,10 @@
                     - url = documents_details_path({ id: object.try(:pack_id).presence || 0, _ext: 1, k: Base64.encode64({ by_preseizure: { is_delivered: "3" }, reinit: true }.to_json) })
 
                   = link_to object.name.presence || "", url, class: 'no-style bold black-label underlined-pointer', target: '_blank'
-                %td= object.preseizures_count.presence || 0
+                %td
+                  - nb = object.preseizures_count.presence || 0
+                  - total_nb += nb
+                  %span= nb
                 %td
                   - preseizure = Pack::Report::Preseizure.where(id: object.try(:preseizure_id)).try(:first)
                   - if preseizure
@@ -46,3 +48,5 @@
             %tr
               %td{ colspan: 4 }= t('global.no-data-found')
   = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { name: 'failed-delivery', filter: 'filter-duplicated-pre-assignment-form', mark: 'pieces_errors', total_pages: @errors.total_pages }
+
+  %input#failed-delivery-size{ type: 'hidden', value: total_nb }
