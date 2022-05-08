@@ -2,7 +2,7 @@ class User < ApplicationRecord
   include ::CodeFormatValidation
   include Interfaces::User::Customer
   include Interfaces::User::Collaborator
-  include BillingMod::User
+  include BillingMod::UserModule
 
   devise :database_authenticatable, :recoverable, :rememberable, :validatable, :trackable, :lockable
 

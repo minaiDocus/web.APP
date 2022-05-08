@@ -1,4 +1,4 @@
-module BillingMod::Organization
+module BillingMod::OrganizationModule
   extend ActiveSupport::Concern
 
   included do
