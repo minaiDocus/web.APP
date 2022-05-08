@@ -1,4 +1,4 @@
-module BillingMod::User
+module BillingMod::UserModule
   extend ActiveSupport::Concern
 
   included do

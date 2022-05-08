@@ -12,9 +12,9 @@ class PonctualScripts::MigrateBillings < PonctualScripts::PonctualScript
   def execute
     # Truncate tables before insert
     # ActiveRecord::Base.connection.execute("TRUNCATE #{BillingMod::Package.table_name}")
-    ActiveRecord::Base.connection.execute("TRUNCATE #{BillingMod::Billing.table_name}")
+    # ActiveRecord::Base.connection.execute("TRUNCATE #{BillingMod::Billing.table_name}")
 
-    Period.where('DATE_FORMAT(created_at, "%Y%m") > 201901 AND duration = 1').each do |period|
+    Period.where('DATE_FORMAT(created_at, "%Y%m") > 202203 AND duration = 1').each do |period|
       create_packages_from(period)
       create_billings_from(period)
     end
