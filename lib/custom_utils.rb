@@ -236,6 +236,8 @@ class CustomUtils
     end
 
     def mailing_authorized_for?(organization)
+      return false if not organization
+
       !["ALM"].include?(organization.code)
     end
 

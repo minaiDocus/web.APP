@@ -240,7 +240,7 @@ class User < ApplicationRecord
     return User.find_by_code(code)
   end
 
-  #alias of pack_pieces
+  #alias for pack_pieces
   def pieces
     self.pack_pieces
   end
