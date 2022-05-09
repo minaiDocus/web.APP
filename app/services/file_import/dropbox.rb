@@ -22,7 +22,7 @@ class FileImport::Dropbox
         end
 
         next unless dropbox.is_used? && dropbox.is_configured?
-        next unless dropbox.user.try(:collaborator?) || ([dropbox.user] + dropbox.user.try(:accounts).to_a).compact.detect { |e| e.options.try(:upload_authorized?) }
+        next unless dropbox.user.try(:collaborator?) || ([dropbox.user] + dropbox.user.try(:accounts).to_a).compact.detect { |e| e.authorized_upload? }
         next unless dropbox.changed_at && (dropbox.checked_at.nil? || dropbox.changed_at > dropbox.checked_at)
 
         begin
@@ -58,7 +58,7 @@ class FileImport::Dropbox
         dropbox = user.external_file_storage.try(:dropbox_basic)
 
         if dropbox && dropbox.is_used? && dropbox.is_configured?
-          if dropbox.user.is_prescriber || ([dropbox.user]+ dropbox.user.accounts).detect { |e| e.options.try(:upload_authorized?) }
+          if dropbox.user.is_prescriber || ([dropbox.user]+ dropbox.user.accounts).detect { |e| e.authorized_upload? }
             dropbox.update_attribute(:changed_at, Time.now)
           end
         end
@@ -141,7 +141,7 @@ class FileImport::Dropbox
       else
         User.where(id: ([user.id] + user.accounts.map(&:id))).order(code: :asc)
       end
-      @customers = @customers.select { |c| c.options.try(:upload_authorized?) }
+      @customers = @customers.select { |c| c.authorized_upload? }
     end
   end
 

@@ -106,7 +106,7 @@ class FileImport::Sftp
 
   def customers
     @customers ||= @sftp.organization.customers.active.order(code: :asc).
-      select { |c| c.options.try(:upload_authorized?) }
+      select { |c| c.authorized_upload? }
   end
 
   # Pattern : /INPUT/code - journal (company)

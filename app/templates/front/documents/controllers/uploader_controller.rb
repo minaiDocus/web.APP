@@ -69,9 +69,9 @@ class Documents::UploaderController < Documents::AbaseController
   def journals
     account_book_types = []
 
-    if @upload_user.try(:options).try(:upload_authorized?) || @upload_user.authorized_all_upload?
-      account_book_types = @upload_user.account_book_types.specific_mission.by_position if not @upload_user.try(:options).try(:upload_authorized?)
-      account_book_types = @upload_user.account_book_types.by_position if @upload_user.try(:options).try(:upload_authorized?)
+    if @upload_user.authorized_upload? || @upload_user.authorized_all_upload?
+      account_book_types = @upload_user.account_book_types.specific_mission.by_position if not @upload_user.authorized_upload?
+      account_book_types = @upload_user.account_book_types.by_position if @upload_user.authorized_upload?
     elsif @upload_user.authorized_bank_upload?
       account_book_types = @upload_user.account_book_types.bank_processable.by_position
     end

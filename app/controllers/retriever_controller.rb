@@ -36,7 +36,10 @@ class RetrieverController < FrontController
     if @user.organization.specific_mission
       super
     else
-      super.joins(:options).where('user_options.is_retriever_authorized = ?', true)
+      #### TO DO : Find a better way to get all active retriever users
+      # super.joins(:options).where('user_options.is_retriever_authorized = ?', true)
+      user_ids = [0] + super.select{ |ac| ac.my_package.try(:bank_active) }.map{ |ac| ac.id }
+      super.where(id: user_ids)
     end
   end
 

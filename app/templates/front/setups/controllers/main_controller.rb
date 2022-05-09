@@ -32,7 +32,7 @@ class Setups::MainController < OrganizationController
                    'softwares_selection'
                  elsif @customer.is_package?('preassignment_active')
                    'compta_options'
-                 elsif @customer.options.upload_authorized?
+                 elsif @customer.authorized_upload?
                    'period_options'
                  else
                    'journals'
@@ -40,13 +40,13 @@ class Setups::MainController < OrganizationController
       elsif step == 'compta_options'
         result = if @customer.is_package?('preassignment_active')
                    'compta_options'
-                 elsif @customer.options.upload_authorized?
+                 elsif @customer.authorized_upload?
                    'period_options'
                  else
                    'journals'
                  end
       elsif step == 'period_options'
-        result = if @customer.options.upload_authorized?
+        result = if @customer.authorized_upload?
                    'period_options'
                  elsif @customer.is_package?('preassignment_active')
                    if @organization.ibiza.try(:configured?) && @customer.uses?(:ibiza)
