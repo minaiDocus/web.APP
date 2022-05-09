@@ -68,15 +68,15 @@ module ApplicationHelper
     end
   end
 
-  def active_tab?(tabs=[])
+  def active_tab?(tabs=[], default_index=0)
     current_tab = params[:tab]
     result      = {}
 
-    #The first element in tabs is always the default active tab
+    #The default_index element in tabs is the default active tab
     tabs.each_with_index do |tab, index|
       if tab.to_s == current_tab.to_s
         result[tab.to_s] = true
-      elsif index == 0 && !tabs.include?(current_tab)
+      elsif index == default_index && !tabs.include?(current_tab)
         result[tab.to_s] = true
       else
         result[tab.to_s] = false

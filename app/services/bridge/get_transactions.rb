@@ -21,7 +21,7 @@ class Bridge::GetTransactions
         if bank_account.operations.any?
           start_time = bank_account.operations.last.created_at.to_time
         else
-          start_time = bank_account.created_at.beginning_of_day
+          start_time = bank_account.start_date.try(:to_time) || bank_account.created_at.beginning_of_day
         end
 
         start_time = _fetch_time if _fetch_time.present?
