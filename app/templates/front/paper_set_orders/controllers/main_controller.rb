@@ -27,7 +27,7 @@ class PaperSetOrders::MainController < OrganizationController
 
     @order.period_duration        = @customer.subscription.period_duration
     @order.paper_set_casing_size  = template.paper_set_casing_size
-    @order.paper_set_folder_count = @customer.my_package.journal_size
+    @order.paper_set_folder_count = @customer.my_package.try(:journal_size)
     @order.address                = @customer.paper_set_shipping_address.try(:dup) || Address.new
     @order.paper_return_address   = @customer.paper_return_address.try(:dup) || Address.new
     @order.paper_set_annual_end_date

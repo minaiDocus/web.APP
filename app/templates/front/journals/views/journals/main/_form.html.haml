@@ -1,6 +1,6 @@
 = simple_nested_form_for @journal, url: journal_form_url(@organization, @customer, @journal), html: { class: 'form-horizontal', id: 'edit-journal-form' } do |f|
   
-  - authorize_preassignment = !@customer || is_preassignment_authorized? || (@customer && @customer.my_package.bank_active)
+  - authorize_preassignment = !@customer || is_preassignment_authorized? || (@customer && @customer.my_package.try(:bank_active))
 
   .carousel.slide#carousel-journal-form{ class: 'carousel slide', "data-bs-touch" => "false", "data-bs-interval" => "false" }
     .carousel-inner

@@ -49,7 +49,7 @@ module RetrieverHelper
 
   def retriever_customers
     accounts.active.select do |customer|
-      customer.my_package.bank_active
+      customer.my_package.try(:bank_active)
     end.map{ |u| [u, u.id] } || []
   end
 

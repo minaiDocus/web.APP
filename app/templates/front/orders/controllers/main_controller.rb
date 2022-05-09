@@ -20,7 +20,7 @@ class Orders::MainController < CustomerController
 
     if params[:order][:type] == 'paper_set'
       @order.type = 'paper_set'
-      @order.paper_set_folder_count = @customer.my_package.journal_size
+      @order.paper_set_folder_count = @customer.my_package.try(:journal_size)
 
       time = (Date.today.month < 12 ? Time.now.end_of_year : 1.month.from_now.end_of_year)
 

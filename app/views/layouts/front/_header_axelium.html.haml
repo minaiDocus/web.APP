@@ -48,7 +48,7 @@
                       %i (Suspendu)
                   - else
                     = link_to organization.name, reporting_statistics_index_path(organization_id: organization.id), class: (organization.id == @organization.try(:id))? 'dropdown-item active' : 'dropdown-item'
-        - if accounts.detect { |e| e.my_package.bank_active } || @user.organization.specific_mission
+        - if accounts.detect { |e| e.my_package.try(:bank_active) } || @user.organization.specific_mission
           - is_retriever_active = controller_path == 'retrievers/main' || controller_path == 'retrieved_datas/main' || controller_path == 'retriever_parameters/main'
           %li.nav-item.dropdown{ class: (is_retriever_active)? 'active' : '' }
             =link_to t('layouts.my_retrievers'), '', class: 'nav-link dropdown-toggle bold', id: 'navbardropdownmenuretriever', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-bs-toggle' => "dropdown", 'role' => "button"

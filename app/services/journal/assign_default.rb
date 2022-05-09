@@ -55,6 +55,6 @@ class Journal::AssignDefault
   end
 
   def is_preassignment_authorized?
-    @user.my_package.preassignment_active
+    @user.my_package.try(:preassignment_active)
   end
 end
