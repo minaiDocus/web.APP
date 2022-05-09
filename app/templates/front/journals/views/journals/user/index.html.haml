@@ -101,14 +101,14 @@
         .col-md-6.text-start.notif-booktype
           - if not @customer.is_package?('ido_x')
             %span Pré-saisie comptable activée pour le dossier :
-            %span.badge.semibold{ class: 'bg-' + (@customer.my_package.preassignment_active ? 'success fs-origin' : 'danger fs-origin') }
-              = @customer.my_package.preassignment_active ? t('yes_value') : t('no_value')
-            - unless @customer.my_package.preassignment_active
+            %span.badge.semibold{ class: 'bg-' + (@customer.my_package.try(:preassignment_active) ? 'success fs-origin' : 'danger fs-origin') }
+              = @customer.my_package.try(:preassignment_active) ? t('yes_value') : t('no_value')
+            - unless @customer.my_package.try(:preassignment_active)
               %i.margin1left
                 = link_to '(Activer la pré-saisie comptable)', edit_organization_customer_subscription_path(@organization, @customer), class: 'no-style'
         .col-md-6.text-end.notif-booktype
-          %span= "#{@customer.account_book_types.count}/#{@customer.my_package.journal_size} journaux comptables utilisés"
-          - if @customer.my_package.journal_size < 10
+          %span= "#{@customer.account_book_types.count}/#{@customer.my_package.try(:journal_size).to_i} journaux comptables utilisés"
+          - if @customer.my_package.try(:journal_size).to_i < 10
             %i.text-muted
               = link_to '(Augmenter le total autorisé de journaux comptables)', edit_organization_customer_subscription_path(@organization, @customer), class: 'no-style'
 
@@ -122,7 +122,7 @@
           .modal-body
             - journal_names = @journals.map{|journal| journal.name}
             - journals = @organization.account_book_types.where.not(name: journal_names).order(is_default: :desc, name: :asc)
-            - if @customer.account_book_types.count < @customer.my_package.journal_size && journals.any?
+            - if @customer.account_book_types.count < @customer.my_package.try(:journal_size).to_i && journals.any?
               = form_tag copy_organization_customer_journals_path(@organization, @customer), method: 'POST', class: 'form-horizontal', id: 'copy_account_book_type_form' do
                 .form-group
                   %label.regular Copier les journaux comptables depuis la base existante
