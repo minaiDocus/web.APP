@@ -343,6 +343,7 @@ class BudgeaApi{
         }
       });
     };
+
     return promise = new Promise(function(resolve, reject) {
       return get_banks(get_providers(function() {
         return resolve(connectors_list);

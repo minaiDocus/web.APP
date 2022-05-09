@@ -47,7 +47,7 @@ class ConfigurationStep1{
   }
 
   fetch_connectors(retry_count=0){
-    let normal_size = 400;
+    let normal_size = 290;
 
     if(this.connectors.length >= normal_size || retry_count > 3 )
     {
