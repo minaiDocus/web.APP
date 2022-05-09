@@ -315,6 +315,9 @@ class BudgeaApi{
         url: "/banks?expand=fields",
         collection: 'banks',
         onSuccess: function(data) {
+          console.log('banks size :');
+          console.log(data.length);
+
           connectors_list = connectors_list.concat(data);
           return setTimeout(resolve, 2000);
         },
@@ -329,6 +332,9 @@ class BudgeaApi{
         url: "/providers?expand=fields",
         collection: 'banks',
         onSuccess: function(data) {
+          console.log('providers size :');
+          console.log(data.length);
+
           connectors_list = connectors_list.concat(data);
           return setTimeout(resolve, 2000);
         },
