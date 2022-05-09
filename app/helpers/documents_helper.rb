@@ -255,7 +255,7 @@ module DocumentsHelper
       journals                    = []
       journals_compta_processable = []
 
-      if user.authorized_all_upload? || user.try(:options).try(:upload_authorized?)
+      if user.authorized_all_upload? || user.authorized_upload?
         journals = user_account_book_types.map do |j|
           j.name + ' ' + j.description
         end

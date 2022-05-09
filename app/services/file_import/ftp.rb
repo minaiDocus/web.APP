@@ -111,7 +111,7 @@ class FileImport::Ftp
 
   def customers
     @customers ||= @ftp.organization.customers.active.order(code: :asc).
-      select { |c| c.options.try(:upload_authorized?) }
+      select { |c| c.authorized_upload? }
   end
 
   # Pattern : /INPUT/code - journal (company)

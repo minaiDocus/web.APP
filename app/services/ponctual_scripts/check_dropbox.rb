@@ -95,7 +95,7 @@ class PonctualScripts::CheckDropbox < PonctualScripts::PonctualScript
       else
         User.where(id: ([user.id] + user.accounts.map(&:id))).order(code: :asc)
       end
-      @customers = @customers.select { |c| c.options.try(:upload_authorized?) }
+      @customers = @customers.select { |c| c.authorized_upload? }
     end
   end
 
