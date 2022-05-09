@@ -1,6 +1,8 @@
-- if period
+- if billings
+  - classic_excess    = billings.where(name: 'ido_classic_excess').first
+  - micro_plus_excess = billings.where(name: 'ido_micro_plus_excess').first
   .organization_quota
-    %span= format_price_00(period.organization_basic_excesses_price.to_f + period.organization_plus_micro_excesses_price.to_f) + " €"
+    %span= format_price_00(classic_excess.try(:price).to_f + micro_plus_excess.try(:price).to_f) + " €"
     .details.box.hide
       %table.table.table-condensed
         %thead
@@ -11,7 +13,7 @@
         %tbody
           %tr
             %td Pré-affectation
-            %td.center= period.basic_excess
-            %td.center= period.plus_micro_excess
+            %td.center= classic_excess.try(:associated_hash).try(:[], :excess).to_i
+            %td.center= micro_plus_excess.try(:associated_hash).try(:[], :excess).to_i
 - else
   = '-'

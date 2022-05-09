@@ -56,6 +56,6 @@ module BillingMod::UserModule
   end
 
   def total_billing_of(period)
-    self.billings.of_period(period).select("SUM(price) as price").first.price.to_i
+    self.billings.of_period(period).select("SUM(price) as price").first.price.to_f
   end
 end
