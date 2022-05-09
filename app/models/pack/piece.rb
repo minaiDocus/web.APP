@@ -446,7 +446,7 @@ class Pack::Piece < ApplicationRecord
     if self.pre_assignment_waiting_analytics?
       text    = 'awaiting_analytics'
       img_url = 'application/compta_analytics.png'
-    elsif self.is_awaiting_pre_assignment?
+    elsif self.is_awaiting_pre_assignment? || self.pre_assignment_adr?
       text    = 'awaiting_pre_assignment'
       img_url = 'application/preaff_pending.png'
     elsif self.preseizures.delivered.count > 0

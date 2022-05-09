@@ -3,9 +3,6 @@
 RefreshDashboardStatisticsWorker:
   queue: default
   cron: '*/5 * * * *'
-Billing::CreateInvoicePdfWorker:
-  queue: high
-  cron: '15 0 1 * *'
 InitializePeriodsWorker:
   queue: high
   cron: '0 3 1 * *'
@@ -15,6 +12,14 @@ Subscription::StatisticsWorker:
 Order::RemindToNewKitWorker:
   queue: default
   cron: '15 3 1 12 *'
+
+## Billing
+Billing::CreateInvoicePdfWorker:
+  queue: high
+  cron: '15 0 1 * *'
+BillingMod::PrepareUserBillingWorker:
+  queue: default
+  cron: '0 */7 * * *'
 
 ## Notifications worker
 Notifications::DocumentWorker:
