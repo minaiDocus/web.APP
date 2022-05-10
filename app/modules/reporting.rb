@@ -53,4 +53,10 @@ module Reporting
     # Billing::UpdateOrganizationPeriod.new(pack.organization.subscription.current_period).fetch_all(true)
     Billing::OrganizationExcess.new(pack.organization.subscription.current_period).execute(true)
   end
+
+  def self.find_or_create_period_document(pack, period, _period=nil)
+    time    = pack.created_at.localtime
+    _period = _period.presence || CustomUtils.period_of(time.to_date)
+    period_document = PeriodDocument.find_or_create_by_pack(pack, _period, period)
+  end
 end
