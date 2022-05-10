@@ -22,7 +22,7 @@ class Transaction::CreateBankAccount
             bank_account.api_id            = account['id']
             bank_account.bank_name         = retriever.service_name
             bank_account.name              = account['name']
-            bank_account.number            = account['webid'].presence || account['number'].presence
+            bank_account.number            = account['number'].presence || account['webid'].presence
             bank_account.type_name         = account['type']
             bank_account.original_currency = account['currency']
             bank_account.is_used           = true
