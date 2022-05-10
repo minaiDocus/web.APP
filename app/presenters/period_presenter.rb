@@ -1,8 +1,8 @@
 # -*- encoding : UTF-8 -*-
 class PeriodPresenter
-  def initialize(period, viewer)
-    @period = period
-    @owner  = @period.user
+  def initialize(billing, viewer)
+    @billing = billing
+    @owner  = @billing.owner
     @viewer = viewer || @owner
     @viewer = Collaborator.new(@viewer) if @viewer.collaborator?
   end
@@ -48,7 +48,9 @@ class PeriodPresenter
 
     lists = []
 
-    @period.documents.each do |document|
+    _period   = @billing.period
+    documents = @owner.period_documents.of_period(_period)
+    documents.each do |document|
       list = {}
       list[:name] = document.name
 
@@ -146,19 +148,21 @@ class PeriodPresenter
     total[:oversized]  = total[:oversized].to_s
     total[:paperclips] = total[:paperclips].to_s
 
+    compta_pieces_excess = @owner.billings.where(name: 'excess_billing', kind: 'excess').first.try(:associated_hash).try(:[], :excess).to_i
+
     {
       list: lists,
       total: total,
       excess: {
-        sheets: @period.excess_sheets.to_s,
-        oversized:  @period.excess_oversized.to_s,
-        paperclips: @period.excess_paperclips.to_s,
-        compta_pieces:   @period.excess_compta_pieces.to_s,
-        uploaded_pages: @period.excess_uploaded_pages.to_s,
-        dematbox_scanned_pages: @period.excess_dematbox_scanned_pages.to_s
+        sheets: 0.to_s,
+        oversized: 0.to_s,
+        paperclips: 0.to_s,
+        compta_pieces: compta_pieces_excess.to_s,
+        uploaded_pages: 0.to_s,
+        dematbox_scanned_pages: 0.to_s
       },
-      delivery: @period.delivery_state,
-      is_valid_for_quota_organization: @period.is_valid_for_quota_organization
+      delivery: 'wait',
+      is_valid_for_quota_organization: BillingMod::Configuration::LISTS[@owner.my_package.name.to_sym].try(:[], :cummulative_excess)
     }
   end
 
@@ -166,30 +170,25 @@ class PeriodPresenter
   def options_json
     lists = []
 
-    @period.product_option_orders.by_position.each do |option|
+    billings = @owner.billings.of_period(@billing.period)
+
+    billings.each do |billing|
       list = {}
 
-      next unless option.position != -1
+      group_title = BillingMod::Configuration::LISTS[billing.name.to_sym].try(:[], :human_name).presence || billing.title
+      title       = group_title != billing.title ? billing.title : ''
 
-      list[:title] = option.title
-      list[:price] = format_price option.price_in_cents_wo_vat
-      list[:group_title] = option.group_title
+      list[:title] = title
+      list[:price] = format_price billing.price
+      list[:group_title] = group_title
 
       lists << list
     end
 
     _invoices = []
 
-    if @period.organization || @period.user
-      start_time = (@period.start_date + 1.month).beginning_of_month
-
-      if @period.duration == 1
-        end_time = start_time.end_of_month
-      elsif @period.duration == 3
-        end_time = start_time + 3.months - 1
-      end
-
-      _invoices = (@period.organization || @period.user).invoices.where("created_at >= ? AND created_at <= ?", start_time, end_time)
+    if @owner.organization
+      _invoices = @owner.organization.invoices.where(period_v2: @billing.period)
 
       _invoices = _invoices.map do |invoice|
         { number: invoice.number, link: invoice.cloud_content_object.url }
@@ -198,12 +197,12 @@ class PeriodPresenter
 
     {
       list:                          lists,
-      excess_uploaded_pages:         format_price(@period.price_in_cents_of_excess_uploaded_pages),
-      excess_scan:                   format_price(@period.price_in_cents_of_excess_scan),
-      excess_dematbox_scanned_pages: format_price(@period.price_in_cents_of_excess_dematbox_scanned_pages),
-      excess_compta_pieces:          format_price(@period.price_in_cents_of_excess_compta_pieces),
-      excess_paperclips:             format_price(@period.price_in_cents_of_excess_paperclips),
-      total:                         format_price(@period.price_in_cents_wo_vat),
+      excess_uploaded_pages:         format_price(0),
+      excess_scan:                   format_price(0),
+      excess_dematbox_scanned_pages: format_price(0),
+      excess_compta_pieces:          format_price(@owner.billings.where(name: 'excess_billing', kind: 'excess').first.try(:price).to_f),
+      excess_paperclips:             format_price(0),
+      total:                         format_price(@owner.total_billing_of(@billing.period)),
       invoices:                      _invoices
     }
   end

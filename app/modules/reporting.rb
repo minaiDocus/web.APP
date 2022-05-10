@@ -6,13 +6,16 @@ module Reporting
     time = pack.created_at.localtime
 
     while remaining_dividers > 0
+      _period = CustomUtils.period_of(time.to_date)
+      current_dividers = pack.dividers.of_period(time, 1)
+
+      ##TO DO: delete period when everithing is ok
       period = pack.owner.subscription.find_or_create_period(time.to_date)
-      current_dividers = pack.dividers.of_period(time, period.duration)
 
       if current_dividers.any?
-        period_document = find_or_create_period_document(pack, period)
+        period_document = PeriodDocument.find_or_create_by_pack(pack, _period, period)
         if period_document
-          current_pages = pack.pages.of_period(time, period.duration)
+          current_pages = pack.pages.of_period(time, 1)
           period_document.pages  = Pack.count_pages_of current_pages
           period_document.pieces = current_dividers.pieces.count
 
@@ -31,8 +34,8 @@ module Reporting
 
           period_document.save
 
-          Billing::UpdatePeriodData.new(period_document.period).execute
-          Billing::UpdatePeriodPrice.new(period_document.period).execute
+          Billing::UpdatePeriodData.new(period).execute
+          Billing::UpdatePeriodPrice.new(period).execute
         end
 
         if period_document.pages - period_document.uploaded_pages > 0
@@ -40,40 +43,14 @@ module Reporting
         end
       end
 
-      current_period = pack.owner.subscription.current_period
-      Billing::UpdatePeriod.new(current_period) if current_period.updated_at < 1.days.ago
       remaining_dividers -= current_dividers.count
       time += period.duration.month
     end
 
+    current_period = pack.owner.subscription.current_period
+    Billing::UpdatePeriod.new(current_period) if current_period.updated_at < 1.days.ago
+
     # Billing::UpdateOrganizationPeriod.new(pack.organization.subscription.current_period).fetch_all(true)
     Billing::OrganizationExcess.new(pack.organization.subscription.current_period).execute(true)
-  end
-
-  def self.find_period_document(pack, start_date, end_date)
-    PeriodDocument.where('name = ? OR pack_id = ?', pack.name, pack.id).
-      for_time(start_date.to_time, end_date.to_time.end_of_day).first
-  end
-
-  def self.find_or_create_period_document(pack, period)
-    period_document = find_period_document(pack, period.start_date, period.end_date)
-
-    if period_document
-      unless period_document.period && period_document.pack
-        period_document.period = period
-        period_document.pack = pack
-        period_document.save
-      end
-      period_document
-    else
-      period_document = PeriodDocument.new
-      period_document.user         = pack.owner
-      period_document.pack         = pack
-      period_document.name         = pack.name
-      period_document.period       = period
-      period_document.organization = pack.organization
-      period_document.save
-      period_document
-    end
   end
 end

@@ -146,4 +146,24 @@ class PonctualScripts::MigrateBillings < PonctualScripts::PonctualScript
 
     tabs[name.to_s].presence || 'normal'
   end
+
+  def fill_period_document_v2
+    PeriodDocument.where('DATE_FORMAT(created_at, "%Y%m") >= 201901').each do |doc|
+      next if not doc.period
+
+      doc.period_v2 = CustomUtils.period_of(doc.period.start_date)
+      doc.save
+    end
+  end
+
+  def fill_invoice_period_v2
+    BillingMod::Invoice.where('DATE_FORMAT(created_at, "%Y%m") >= 201901').each do |invoice|
+      invoice.period_v2 = CustomUtils.period_of(invoice.created_at - 1.month)
+      invoice.save
+    end
+  end
+
+  def migrate_ido_basique_to_ido_classic
+    BillingMod::Billing.where(name: 'ido_basique').update_all(name: 'ido_classic')
+  end
 end

@@ -8,7 +8,7 @@ class PeriodDocument < ApplicationRecord
   belongs_to :period, optional: true, inverse_of: :documents
   belongs_to :organization, optional: true
 
-  validate  :uniqueness_of_name
+  # validate  :uniqueness_of_name
   validates :paperclips, numericality: { greater_than_or_equal_to: 0 }
   validates :oversized,  numericality: { greater_than_or_equal_to: 0 }
   validates_format_of   :name, with: /\A#{Pack::CODE_PATTERN} #{Pack::JOURNAL_PATTERN} #{Pack::PERIOD_PATTERN} all\z/
@@ -18,19 +18,40 @@ class PeriodDocument < ApplicationRecord
   scope :shared,   -> { where(is_shared: true) }
   scope :scanned,  -> { where.not(scanned_at: [nil]) }
   scope :for_time, -> (start_time, end_time) { where("created_at >= ? AND created_at <= ?", start_time, end_time) }
+  scope :of_period,  -> (period){ where(period_v2: period.to_i) }
 
 
-  def self.find_or_create_by_name(name, period)
-    document = period.documents.find_by_name name
+  # def self.find_or_create_by_name(name, period)
+  #   document = period.documents.find_by_name name
+  #   if document
+  #     document
+  #   else
+  #     document = PeriodDocument.new
+
+  #     document.name         = name
+  #     document.period       = period
+  #     document.user         = period.user
+  #     document.organization = period.organization
+  #     document.save
+
+  #     document
+  #   end
+  # end
+
+  def self.find_or_create_by_pack(pack, period, period_model=nil)
+    document = PeriodDocument.where("name = ? OR pack_id = ?", pack.name, pack.id).of_period(period).first
+
     if document
       document
     else
       document = PeriodDocument.new
 
-      document.name         = name
-      document.period       = period
-      document.user         = period.user
-      document.organization = period.organization
+      document.name         = pack.name
+      document.period_v2    = period
+      document.user         = pack.owner
+      document.pack         = pack
+      document.period       = period_model
+      document.organization = pack.organization
       document.save
 
       document
@@ -53,12 +74,12 @@ class PeriodDocument < ApplicationRecord
   private
 
 
-  def uniqueness_of_name
-    if period
-      document = period.documents.where(name: name).first
-      if document && document != self
-        errors.add(:name, "Document with name '#{name}' already exist.")
-      end
-    end
-  end
+  # def uniqueness_of_name
+  #   if period
+  #     document = period.documents.where(name: name).first
+  #     if document && document != self
+  #       errors.add(:name, "Document with name '#{name}' already exist.")
+  #     end
+  #   end
+  # end
 end

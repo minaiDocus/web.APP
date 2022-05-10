@@ -9,6 +9,7 @@ class BillingMod::Configuration
               customers_limit: 150,
               unit_price: 10,
               commitment: 0,
+              cummulative_excess: false,
               data_flows: { max: 0, duration: 'month', excess_price: 10 },
               options: { upload: 'strict', bank: 'optional', scan: 'strict', mail: 'optional', digitize: 'optional', preassignment: 'strict'}
             },
@@ -19,6 +20,7 @@ class BillingMod::Configuration
               label: 'Téléchargement + Pré-saisie comptable',
               price: 20,
               commitment: 0,
+              cummulative_excess: true,
               data_flows: { max: 100, duration: 'month', excess_price: 0.25 },
               options: { upload: 'strict', bank: 'optional', scan: 'strict', mail: 'optional', digitize: 'optional', preassignment: 'optional'}
             },
@@ -29,6 +31,7 @@ class BillingMod::Configuration
               label: 'Téléchargement + Pré-saisie comptable + Engagement 12 mois',
               price: 10,
               commitment: 12,
+              cummulative_excess: false,
               data_flows: { max: 100, duration: 'annual', excess_price: 0.25 },
               options: { upload: 'strict', bank: 'strict', scan: 'strict', mail: 'optional', digitize: 'optional', preassignment: 'strict'}
             },
@@ -39,6 +42,7 @@ class BillingMod::Configuration
               label: 'Téléchargement + Pré-saisie comptable + Engagement 12 mois',
               price: 10,
               commitment: 12,
+              cummulative_excess: true,
               data_flows: { max: 25, duration: 'month', excess_price: 0.3 },
               options: { upload: 'strict', bank: 'optional', scan: 'strict', mail: 'optional', digitize: 'optional', preassignment: 'strict'}
             },
@@ -49,6 +53,7 @@ class BillingMod::Configuration
               label: 'Téléchargement + Pré-saisie comptable + Engagement 12 mois',
               price: 5,
               commitment: 12,
+              cummulative_excess: false,
               data_flows: { max: 100, duration: 'annual', excess_price: 0.25 },
               options: { upload: 'strict', bank: 'optional', scan: 'strict', mail: 'optional', digitize: 'optional', preassignment: 'strict'}
             },
@@ -69,6 +74,7 @@ class BillingMod::Configuration
               label: 'Factur-X + Pré-saisie comptable',
               price: 5,
               commitment: 0,
+              cummulative_excess: false,
               data_flows: { max: 0, duration: 'month', excess_price: 0.25 },
               options: { upload: 'none', bank: 'optional', scan: 'none', mail: 'none', digitize: 'none', preassignment: 'strict' }
             },            
@@ -76,9 +82,10 @@ class BillingMod::Configuration
               human_name: "Automate",
               description: "Vous permet de bénéficier des automates de récupération bancaires",
               hint: "",
-              label: 'Récupération banque',
+              label: 'Récupération bancaire',
               price: 5,
               commitment: 0,
+              cummulative_excess: false,
               data_flows: { max: 0, duration: 'month', excess_price: 0.25 },
               options: { upload: 'none', bank: 'strict', scan: 'none', mail: 'none', digitize: 'optional', preassignment: 'strict'}
             },
@@ -86,8 +93,10 @@ class BillingMod::Configuration
               human_name: "Numérisation",
               description: "Vous permet de transférer jusqu'à 100 pièces/mois, mutualisation des quotas au niveau du cabinet.",
               hint: "",
+              label: 'Numérisation de document',
               price: 0,
               commitment: 0,
+              cummulative_excess: false,
               data_flows: { max: 0, duration: 'month', excess_price: 0.25 },
               options: { upload: 'none', bank: 'none', scan: 'strict', mail: 'none', digitize: 'strict', preassignment: 'strict'}
             },

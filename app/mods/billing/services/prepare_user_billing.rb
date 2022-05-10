@@ -41,7 +41,7 @@ class BillingMod::PrepareUserBilling
   def create_package_billing
     return true if @package.name == 'ido_premium'
 
-    create_billing({ name: @package.name, title: @package.human_name, price: @package.base_price })
+    create_billing({ name: @package.name, title: BillingMod::Configuration::LISTS[@package.name.to_sym][:label], price: @package.base_price })
   end
 
   def create_remaining_month_billing
@@ -74,9 +74,9 @@ class BillingMod::PrepareUserBilling
       next if val != 'optional'
 
       if opt.to_s == 'bank' && @package.bank_active
-        create_billing({ name: 'bank_option', title: 'Option automate', price: BillingMod::Configuration.price_of(:ido_retriever, @user) })
+        create_billing({ name: 'bank_option', title: 'Option automate / Récupération bancaire', price: BillingMod::Configuration.price_of(:ido_retriever, @user) })
       elsif opt.to_s == 'mail' && @package.mail_active
-        create_billing({ name: 'mail_option', title: 'Option courrier', price: BillingMod::Configuration.price_of(:mail) })
+        create_billing({ name: 'mail_option', title: 'Envoi par courrier A/R', price: BillingMod::Configuration.price_of(:mail) })
       elsif opt.to_s == 'preassignment' && !@package.preassignment_active
         create_billing({ name: 'preassignment_option', title: 'Remise sur pré-affectation', kind: 'discount', price: (BillingMod::Configuration.price_of(:preassignment) * -1) })
       end
@@ -202,6 +202,7 @@ class BillingMod::PrepareUserBilling
 
     @excess_data = { price: 0, count: 0 }
 
+    return @excess_data if BillingMod::Configuration::LISTS[@package.name.to_sym].try(:[], :cummulative_excess)
     return @excess_data if @package.name == 'ido_premium'
 
     if @package.excess_duration == 'month'

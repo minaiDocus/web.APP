@@ -99,7 +99,7 @@ function navigate(x,y,move){
 function render_data(period){
   if(period != null){
     var $period = $(period);
-    var period_id = $period.attr('id');
+    var billing_id = $period.attr('id');
     var user_id = $period.attr('user_id');
     var month = parseInt($period.attr('month'));
     var duration = parseInt($period.attr('duration'));
@@ -125,7 +125,7 @@ function render_data(period){
     }
 
     $.ajax({
-      url: "/reporting/invoices/periods/" + period_id,
+      url: "/reporting/invoices/periods/" + billing_id,
       data: "",
       dataType: "json",
       type: "GET",
