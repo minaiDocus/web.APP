@@ -99,10 +99,11 @@ function navigate(x,y,move){
 function render_data(period){
   if(period != null){
     var $period = $(period);
-    var billing_id = $period.attr('id');
+    var obj_id = $period.attr('id');
     var user_id = $period.attr('user_id');
     var month = parseInt($period.attr('month'));
     var duration = parseInt($period.attr('duration'));
+    var type = $period.attr('type');
 
     var $periodModal = $("#periodModal");
 
@@ -124,8 +125,11 @@ function render_data(period){
       $("#periodModal .modal-header h3").text(year);
     }
 
+    if(type == 'period')
+      obj_id = obj_id * -1
+
     $.ajax({
-      url: "/reporting/invoices/periods/" + billing_id,
+      url: "/reporting/invoices/periods/" + obj_id,
       data: "",
       dataType: "json",
       type: "GET",

@@ -4,12 +4,16 @@ class Reporting::InvoicesController < Reporting::ABaseController
   skip_before_action :load_report_organization, only: %w(period)
   skip_before_action :load_params, only: %w(period)
 
-  before_action :load_billing, :verify_rights, only: %w(period)
+  before_action :load_billing_or_period, :verify_rights, only: %w(period)
 
   prepend_view_path('app/templates/front/reporting/views')
 
   def period
-    render json: PeriodPresenter.new(@billing, current_user).render_json, status: 200
+    if @object.class.name == 'Period'
+      render json: PeriodPresenter.new(@object, current_user).render_json, status: 200
+    else
+      render json: BillingPresenter.new(@object, current_user).render_json, status: 200
+    end
   end
 
   def index
@@ -40,12 +44,16 @@ class Reporting::InvoicesController < Reporting::ABaseController
 
   private
 
-  def load_billing
-    @billing = BillingMod::Billing.find(params[:id])
+  def load_billing_or_period
+    if params[:id].to_i > 0
+      @object = BillingMod::Billing.find(params[:id].to_i)
+    else
+      @object = Period.find(params[:id].to_i * -1)
+    end
   end
 
   def verify_rights
-    unless @billing.owner.in?(accounts)
+    unless (@object.try(:owner) && @object.owner.in?(accounts)) || (@object.try(:user) && @object.user.in?(accounts))
       json_flash[:error] = 'Action non autorisée'
       render json: { json_flash: json_flash }, status: 200
     end

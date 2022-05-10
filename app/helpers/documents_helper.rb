@@ -44,7 +44,7 @@ module DocumentsHelper
     if user.created_at.year <= year && (user.inactive_at || Time.now).year >= year && user.inactive_at.try(:month) != 1
       true
     else
-      periods.compact.present?
+      periods.compact.present? || user.billings.where("period LIKE '#{year}%'")
     end
   end
 

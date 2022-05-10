@@ -66,7 +66,6 @@
                 #{month}
         %tbody
           - row = 0
-          - type = 'none'
           - User.where(id: @customers_ids).each_with_index do |user|
             - periods = annual_periods_for_user(@periods_by_users[user.id] || [])
             - if active_year_for_user?(@year, user, periods)
@@ -74,22 +73,18 @@
               %tr{ :id => "user_#{user.id}", :class => "user" }
                 %td.align-middle.semibold
                   #{[user.code,user.company].join(" - ")}
-                - periods.each_with_index do |period, index|
-                  - p_ind         = index + 1
-                  - _period_index = "#{@year}#{sprintf '%02d', p_ind}".to_i
-
-                  - if period && _period_index <= 202204
-                    - type = 'period'
+                - periods.each_with_index do |period,index|
+                  - if period
                     - period_billing = Billing::PeriodBilling.new(period)
                     - period.duration.times do |i|
                       - if period.duration == 1 || period_billing.amount_in_cents_wo_vat(i + 1) != 0
                         - annual_summary[period.start_date.month + i - 1][:active_user] += 1
-                    %td.align-middle.block.period_type{ :colspan => period.duration }
+                    %td.align-middle.block{ :colspan => period.duration }
                       %a.do-show{ href: "#" }
                         - pos = []
                         - period.duration.times do |i|
                           - pos << "pos_#{row}_#{(index + i + 1)}"
-                        .period.clearfix{ id: period.id, user_id: user.id, class: pos.join(' '), duration: period.duration, month: index+1, row: row, type: 'period'}
+                        .period.clearfix{ id: period.id, user_id: user.id, class: pos.join(' '), duration: period.duration, month: index+1, row: row}
                           - if period.scanned_pages == 0 && period.uploaded_pages == 0
                             - annual_summary[period.end_date.month - 1][:delivery_status][0] += 1
                             .delivery_state.back_red
@@ -182,83 +177,6 @@
                             - annual_summary[period.start_date.month + i - 1][:oversized] += period_billing.data(:oversized, i+1)
                             - annual_summary[period.start_date.month + i - 1][:price_in_cents] += period_billing.amount_in_cents_wo_vat(i+1)
                             - annual_summary[period.start_date.month + i - 1][:price_in_cents_of_excess] += period_billing.data(:excesses_amount_in_cents_wo_vat, i+1)
-                  - elsif user.billings.of_period(_period_index).count > 0
-                    - type = 'billing'
-                    - billing = user.billings.of_period(_period_index).first
-                    - data_flow = user.data_flows.of_period(_period_index).first
-                    - if data_flow
-                      - annual_summary[index][:active_user] += 1
-                    %td.align-middle.block.billing_type
-                      %a.do-show{ href: "#" }
-                        - pos = []
-                        - pos << "pos_#{row}_#{(index + 1 + 1)}"
-                        .period.clearfix{ id: billing.id, user_id: user.id, duration: 1, month: p_ind, row: row, class: pos.join(' '), type: 'billing'}
-                          - if data_flow.try(:pieces).to_i == 0 && data_flow.try(:operations).to_i == 0
-                            .delivery_state.back_red
-                          - else
-                            .delivery_state
-                              .half-delivery_state.left{ class: (data_flow.try(:scanned_sheets).to_i > 0 ? 'received' : 'not_received') }
-                              .half-delivery_state.right{ class: (data_flow.try(:pieces).to_i > 0 ? 'received' : 'not_received') }
-                          .value{ class: "duration-1" }
-                            %span{ :class => "hide pieces value_1" }
-                              %div{ class: "period_1" }= data_flow.try(:scanned_sheets).to_i
-                            %span{ :class => "sheets value_0" }
-                              %div{ class: "period_1" }= data_flow.try(:scanned_sheets).to_i
-                            %span{ :class => "hide pages value_2" }
-                              %div{ class: "period_1" }= data_flow.try(:scanned_sheets).to_i
-                            %span{ :class => "hide uploaded_pieces value_4" }
-                              %div{ class: "period_1" }= data_flow.try(:pieces).to_i
-                            %span{ :class => "hide uploaded_pages value_5" }
-                              %div{ class: "period_1" }= data_flow.try(:pieces).to_i
-                            %span{ :class => "hide dematbox_scanned_pieces value_14" }
-                              %div{ class: "period_1" }= data_flow.try(:pieces).to_i
-                            %span{ :class => "hide dematbox_scanned_pages value_15" }
-                              %div{ class: "period_1" }= data_flow.try(:pieces).to_i
-                            %span{ :class => "hide retrieved_pieces value_17" }
-                              %div{ class: "period_1" }= data_flow.try(:pieces).to_i
-                            %span{ :class => "hide retrieved_pages value_18" }
-                              %div{ class: "period_1" }= data_flow.try(:pieces).to_i
-                            %span{ :class => "hide paperclips value_6" }
-                              %div{ class: "period_1" }= 0
-                            %span{ :class => "hide oversized value_7" }
-                              %div{ class: "period_1" }= 0
-                            %span{ :class => "hide excess_sheets value_10" }
-                              %div{ class: "period_1" }= 0
-                            %span{ :class => "hide excess_uploaded_pages value_11" }
-                              %div{ class: "period_1" }= 0
-                            %span{ :class => "hide excess_dematbox_scanned_pages value_16" }
-                              %div{ class: "period_1" }= 0
-                            %span{ :class => "hide compta_pieces value_12" }
-                              %div{ class: "period_1" }= data_flow.try(:compta_pieces).to_i
-                            %span{ :class => "hide excess_compta_pieces value_13" }
-                              %div{ class: "period_1" }= 0
-                            - if @user.collaborator? || @user.organization.try(:is_detail_authorized)
-                              %span{ :class => "hide price value_8" }
-                                %div{ class: "period_1" }
-                                  #{format_price_00(user.total_billing_of(_period_index))} €
-                              %span{ :class => "hide excess_price value_9" }
-                                %div{ class: "period_1" }
-                                  - total_excess_price = user.billings.where(kind: 'excess').of_period(_period_index).select("SUM(price) as price").first.price.to_f
-                                  #{format_price_00(total_excess_price)} €
-
-                    - annual_summary[index][:pieces] += data_flow.try(:scanned_sheets).to_i
-                    - annual_summary[index][:sheets] += data_flow.try(:scanned_sheets).to_i
-                    - annual_summary[index][:pages] += data_flow.try(:scanned_sheets).to_i
-                    - annual_summary[index][:excess_sheets] += 0
-                    - annual_summary[index][:uploaded_pieces] += data_flow.try(:pieces).to_i
-                    - annual_summary[index][:uploaded_pages] += data_flow.try(:pieces).to_i
-                    - annual_summary[index][:excess_uploaded_pages] += 0
-                    - annual_summary[index][:dematbox_scanned_pieces] += data_flow.try(:pieces).to_i
-                    - annual_summary[index][:dematbox_scanned_pages] += data_flow.try(:pieces).to_i
-                    - annual_summary[index][:excess_dematbox_scanned_pages] += 0
-                    - annual_summary[index][:retrieved_pieces] += data_flow.try(:pieces).to_i
-                    - annual_summary[index][:retrieved_pages] += data_flow.try(:pieces).to_i
-                    - annual_summary[index][:compta_pieces] += data_flow.try(:compta_pieces).to_i
-                    - annual_summary[index][:excess_compta_pieces] += 0
-                    - annual_summary[index][:paperclips] += 0
-                    - annual_summary[index][:oversized] += 0
-                    - annual_summary[index][:price_in_cents] += user.total_billing_of(_period_index)
-                    - annual_summary[index][:price_in_cents_of_excess] += total_excess_price
                   - else
                     %td.align-middle.block
                       \-
@@ -382,12 +300,8 @@
                 Dépassement mutualisé
               - 12.times do |time|
                 %td.text-center{ id: "period_#{time}"}
-                  - if type == 'period'
-                    - date = (Time.local(@year) + time.month).to_date
-                    = render partial: 'organization_quota', locals: { objects: @user.organization.subscription.find_period(date), type: type }
-                  - else
-                    - _period = "#{@year}#{(sprintf '%02d', time)}".to_i
-                    = render partial: 'organization_quota', locals: { objects: @user.organization.billings.of_period(_period), type: type }
+                  - date = (Time.local(@year) + time.month).to_date
+                  = render partial: 'organization_quota', locals: { period: @user.organization.subscription.find_period(date) }
         %tfoot
           %tr
             %th.w-15.text-center
