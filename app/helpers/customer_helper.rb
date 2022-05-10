@@ -10,6 +10,7 @@ module CustomerHelper
     if package
       %w(name preassignment mail bank scan).each do |column|
         next if BillingMod::Configuration.options_of(package.name)[column.to_sym] == 'strict'
+        next if column == 'preassignment' && package.preassignment_active
 
         _column = column != 'name' ? column.to_s +  '_active' : column
 
@@ -23,8 +24,16 @@ module CustomerHelper
 
           price = BillingMod::Configuration.price_of(column.to_sym).to_i
 
+          if (column == 'preassignment' && !package.preassignment_active)
+            count_price -= price.to_i
+            price = "-" + price.to_s + '€'
+          else
+            count_price += price.to_i
+            price = price.to_s + '€'
+          end
+
           content_span  += content_tag :span, BillingMod::Configuration.human_name_of(column), class: 'semibold float-start'
-          content_span  += content_tag :span, price.to_s + '€', class: 'semibold float-end'
+          content_span  += content_tag :span, price, class: 'semibold float-end'
           content       += content_tag :div, content_span.html_safe, class: 'clearfix'
 
           if BillingMod::Configuration.label_of(column).present?
@@ -36,8 +45,6 @@ module CustomerHelper
           end
 
           contents += content_tag :div, content.html_safe, class: 'clearfix'
-
-          (column == 'preassignment' && !package.preassignment_active) ? count_price -= price.to_i : count_price += price.to_i
         end
       end
     end
