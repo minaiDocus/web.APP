@@ -230,10 +230,10 @@ class BillingMod::PrepareUserBilling
           data_flow    = nil
 
           if periods_12.include?(prev_period.to_i)
-            billing = @user.billings.where(period: prev_period, name: 'excess_billing').count > 0
+            billing = @user.billings.where(period: periods_12, name: 'excess_billing').where('period <= ?', prev_period).count > 0
 
             if not billing
-              billing = @user.periods.where('DATE_FORMAT(start_date, "%Y%m") < ? AND excesses_price_in_cents_wo_vat > 0', prev_period).count > 0
+              billing = @user.periods.where('DATE_FORMAT(start_date, "%Y%m") IN (?) AND DATE_FORMAT(start_date, "%Y%m") <= ? AND excesses_price_in_cents_wo_vat > 0', periods_12, prev_period).count > 0
             end
 
             if billing
