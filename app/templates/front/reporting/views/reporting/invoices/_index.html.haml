@@ -186,7 +186,7 @@
                     - type = 'billing'
                     - billing = user.billings.of_period(_period_index).first
                     - data_flow = user.data_flows.of_period(_period_index).first
-                    - if data_flow
+                    - if user.active_at?(_period_index)
                       - annual_summary[index][:active_user] += 1
                     %td.align-middle.block.billing_type
                       %a.do-show{ href: "#" }

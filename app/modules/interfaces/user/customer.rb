@@ -1,4 +1,8 @@
 module Interfaces::User::Customer
+  def active_at?(period)
+    !self.inactive_at.present? || (self.inactive_at.present? && self.inactive_at.strftime('%Y%m').to_i > period)
+  end
+
   def active?
     !inactive?
   end

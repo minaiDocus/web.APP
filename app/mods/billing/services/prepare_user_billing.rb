@@ -58,7 +58,7 @@ class BillingMod::PrepareUserBilling
       remaining_month = prev_package.try(:commitment_end_period).to_i != @period.to_i ? CustomUtils.period_diff(@period, prev_package.try(:commitment_end_period).to_i) : 1
       base_price      = prev_package.try(:base_price).to_i
       package_name    = prev_package.try(:human_name)
-    elsif next_package.try(:name) != @package.try(:name) && @package.try(:commitment_end_period).to_i > @period.to_i
+    elsif next_package.present? && next_package.try(:name) != @package.try(:name) && @package.try(:commitment_end_period).to_i > @period.to_i
       remaining_month = CustomUtils.period_diff(@period, @package.try(:commitment_end_period).to_i)
       base_price      = @package.try(:base_price).to_i
       package_name    = @package.try(:human_name)
@@ -133,11 +133,22 @@ class BillingMod::PrepareUserBilling
     operations_periods = @user.operations.where.not(processed_at: nil).where("is_locked = false AND DATE_FORMAT(created_at, '%Y%m') = #{@period}").map{ |ope| ope.date.strftime('%Y%m').to_i }.uniq
 
     operations_periods.each do |_period|
-      next if @period <= _period
+      next if _period >= @period
 
       title     = "Opérations bancaires mois de #{I18n.l(Date.new(_period.to_s[0..3].to_i, _period.to_s[4..-1].to_i), format: '%B')} #{_period.to_s[0..3].to_i}"
-      billing   = @user.billings.of_period(_period).where(name: ['ido_retriever', 'bank_option']).first
-      billing ||= @user.billings.of_period(_period).where(name: 'operations_billing', kind: 're-sit', title: title).first
+
+      billing   = @user.billings.of_period(_period).count > 0
+      billing ||= @user.billings.where(name: 'operations_billing', kind: 're-sit', title: title).count > 0
+
+      if !billing && _period <= 202204
+        title_2 = "Opérations bancaires mois de #{I18n.l(Date.new(_period.to_s[0..3].to_i, _period.to_s[4..-1].to_i), format: '%B')} #{_period.to_s[0..3].to_i}" #WARNING: keep this variable this is the previous title of previous system
+        billing = @user.periods.where("DATE_FORMAT(start_date, '%Y%m') = ?", _period).collect(&:product_option_orders).flatten.compact.size > 0
+
+        if !billing
+          periods_ids = @user.periods.pluck(:id)
+          billing     = ProductOptionOrder.where(product_optionable_id: periods_ids, product_optionable_type: 'Period').where(title: title_2).count > 0
+        end
+      end
 
       if not billing
         create_billing({ name: 'operations_billing', title: title, kind: 're-sit', price: BillingMod::Configuration.price_of(:ido_retriever, @user) })
