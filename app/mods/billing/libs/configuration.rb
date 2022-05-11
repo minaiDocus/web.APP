@@ -3,7 +3,7 @@ class BillingMod::Configuration
             ido_premium: {
               human_name: "iDo'Premium",
               description: "Vous permet de transférer vos pièces sans limite (quotas) de téléversement.",
-              hint: "Facture à 3.000 € pour les 175 premiers dossiers, au delà des 175 dossiers : 10€/dossiers",
+              hint: "Facture à 3.000€ HT pour les 175 premiers dossiers, au delà des 175 dossiers : 10€ ht/dossier",
               label: 'Téléchargement + Pré-saisie comptable',
               price: 3000,
               customers_limit: 175,

@@ -16,7 +16,7 @@ class BillingMod::PrepareUserBilling
     @data_flow = @user.data_flows.of_period(@period).first
 
     return false if not @data_flow
-    return false if @user.pieces.count == 0
+    return false if @user.pieces.count == 0 && @user.preseizures.count == 0
 
     @user.billings.of_period(@period).update_all(is_frozen: true)
 
@@ -54,7 +54,7 @@ class BillingMod::PrepareUserBilling
     remaining_month = 0
     base_price      = 0
 
-    if prev_package.try(:name) != @package.try(:name) && prev_package.try(:commitment_end_period).to_i >= @period.to_i
+    if prev_package.present? && prev_package.try(:name) != @package.try(:name) && prev_package.try(:commitment_end_period).to_i >= @period.to_i
       remaining_month = prev_package.try(:commitment_end_period).to_i != @period.to_i ? CustomUtils.period_diff(@period, prev_package.try(:commitment_end_period).to_i) : 1
       base_price      = prev_package.try(:base_price).to_i
       package_name    = prev_package.try(:human_name)
@@ -217,25 +217,57 @@ class BillingMod::PrepareUserBilling
     return @excess_data if @package.name == 'ido_premium'
 
     if @package.excess_duration == 'month'
-      data_flow = @user.data_flows.where(period: @package.period).select("compta_pieces as t_compta_pieces, compta_operations as t_compta_operations").first
+      data_flow = @user.data_flows.where(period: @package.period).select("compta_pieces as t_compta_pieces").first
     else
-      current_flow = @user.flow_of(@package.period)
-      data_flows   = @user.data_flows.where(period_version: current_flow.period_version).where('period <= ?', @package.period)
+      if Time.now.strftime('%Y%m').to_i <= 202305 && ['ido_nano', 'ido_micro'].include?(@package.name.to_s)
+        ##This code will be deprecated at 202305
+        concerened_periods = @user.packages.where(name: @package.name).order(period: :asc).pluck(:period)
 
-      billings     = @user.billings.where(period: data_flows.pluck(:period), name: 'excess_billing')
-      total_billed = 0
-      billings.each do |billing|
-        total_billed += billing.associated_hash[:excess]
+        concerened_periods.each_slice(12) do |periods_12|
+          next if not periods_12.include?(@period.to_i)
+
+          prev_period  = CustomUtils.period_operation(@period, -1)
+          data_flow    = nil
+
+          if periods_12.include?(prev_period.to_i)
+            billing = @user.billings.where(period: prev_period, name: 'excess_billing').count > 0
+
+            if not billing
+              billing = @user.periods.where('DATE_FORMAT(start_date, "%Y%m") < ? AND excesses_price_in_cents_wo_vat > 0', prev_period).count > 0
+            end
+
+            if billing
+              temp_flow = @user.data_flows.where(period: @period).select("compta_pieces as t_compta_pieces").first
+              data_flow = OpenStruct.new(t_compta_pieces: temp_flow.try(:t_compta_pieces).to_i + @package.flow_limit)
+            end
+          end
+
+          if not data_flow.present?
+            compta_pieces  = @user.preseizures.where('DATE_FORMAT(created_at, "%Y%m") IN (?) AND DATE_FORMAT(created_at, "%Y%m") <= ? AND piece_id > 0', periods_12, @period).count
+            compta_pieces += @user.expenses.where('DATE_FORMAT(created_at, "%Y%m") IN (?) AND DATE_FORMAT(created_at, "%Y%m") <= ?', periods_12, @period).count
+
+            data_flow = OpenStruct.new(t_compta_pieces: compta_pieces)
+          end
+        end
+      else
+        current_flow = @user.flow_of(@package.period)
+        data_flows   = @user.data_flows.where(period_version: current_flow.period_version).where('period <= ?', @package.period)
+
+        billings     = @user.billings.where(period: data_flows.pluck(:period), name: 'excess_billing')
+        total_billed = 0
+        billings.each do |billing|
+          total_billed += billing.associated_hash[:excess]
+        end
+
+        __flow = data_flows.select("SUM(compta_pieces) as t_compta_pieces").first
+        to_billed = __flow.try(:t_compta_pieces).to_i
+        to_billed -= total_billed
+
+        data_flow  = OpenStruct.new(t_compta_pieces: to_billed)
       end
-
-      __flow = data_flows.select("SUM(compta_pieces) as t_compta_pieces, SUM(compta_operations) as t_compta_operations").first
-      to_billed = __flow.try(:t_compta_pieces).to_i + __flow.try(:t_compta_operations).to_i
-      to_billed -= total_billed
-
-      data_flow  = OpenStruct.new(t_compta_pieces: to_billed, t_compta_operations: 0)
     end
 
-    @excess_data[:count] = (data_flow.try(:t_compta_pieces).to_i + data_flow.try(:t_compta_operations).to_i) - @package.flow_limit
+    @excess_data[:count] = data_flow.try(:t_compta_pieces).to_i - @package.flow_limit
     @excess_data[:price] = @package.excess_price * @excess_data[:count] if @package.flow_limit > 0 && @excess_data[:count] > 0
 
     @excess_data

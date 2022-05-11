@@ -9,22 +9,35 @@ class BillingMod::PrepareOrganizationBilling
     @organization.billings.of_period(@period).update_all(is_frozen: true)
     @customers_ids = []
     @organization.customers.active_at(@time_end).each do |customer|
-      next if customer.pieces.count == 0
+      next if customer.pieces.count == 0 && customer.preseizures.count == 0
 
       @customers_ids << customer.id
     end
 
+    create_premium_billing
     create_premium_overcharge_billing
+
     create_classic_discount_billing
     create_retriever_discount_billing
+
     create_classic_excess_billing
     create_micro_plus_excess_billing
+
     create_extra_order_billing
 
     @organization.billings.of_period(@period).is_frozen.destroy_all
   end
 
   private
+
+  def create_premium_billing
+    customers_count = BillingMod::Package.of_period(@period).where(user_id: @customers_ids).where(name: 'ido_premium').count
+
+    if customers_count > 0
+      price = BillingMod::Configuration.price_of(:ido_premium)
+      create_billing({ name: 'ido_premium', title: "Forfait iDo'Premium (175 Dossiers)", kind: 'normal', price: price })
+    end
+  end
 
   def create_premium_overcharge_billing
     customers_count = BillingMod::Package.of_period(@period).where(user_id: @customers_ids).where(name: 'ido_premium').count
@@ -33,7 +46,7 @@ class BillingMod::PrepareOrganizationBilling
 
     if customers_count > customers_limit
       excess = customers_count - customers_limit
-      create_billing({ name: 'ido_premium_overcharge', title: 'Documents premium en sus', kind: 'excess', price: ( unit_price * excess ), associated_hash: { excess: excess, price: unit_price, limit: customers_limit } })
+      create_billing({ name: 'ido_premium_overcharge', title: 'Dossier premium en sus', kind: 'excess', price: ( unit_price * excess ), associated_hash: { excess: excess, price: unit_price, limit: customers_limit } })
     end
   end
 

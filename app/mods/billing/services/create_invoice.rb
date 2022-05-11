@@ -33,7 +33,7 @@ module BillingMod
       @total_customers_price = 0
 
       @customers.each do |customer|
-        next if customer.pieces.count == 0
+        next if customer.pieces.count == 0 && customer.preseizures.count == 0
 
         package = customer.package_of(@period)
 
@@ -41,9 +41,9 @@ module BillingMod
 
         if @is_update || @period == CustomUtils.period_of(Time.now) || !@invoice
           BillingMod::PrepareUserBilling.new(customer, @period).execute
-          BillingMod::PrepareOrganizationBilling.new(customer, @period).execute
         end
 
+        increm_package_count('iDoPremium')    if package.name == 'ido_premium'
         increm_package_count('iDoClassique')  if package.name == 'ido_classic'
         increm_package_count('iDoNano')       if package.name == 'ido_nano'
         increm_package_count('iDoX')          if package.name == 'ido_x'
@@ -53,6 +53,10 @@ module BillingMod
         increm_package_count('Courriers')     if package.mail_option_active
 
         @total_customers_price += customer.total_billing_of(@period)
+      end
+
+      if @is_update || @period == CustomUtils.period_of(Time.now) || !@invoice
+        BillingMod::PrepareOrganizationBilling.new(@organization, @period).execute
       end
 
       create_invoice
