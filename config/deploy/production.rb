@@ -2,7 +2,7 @@ set :deploy_to, '/home/deploy/main/'
 
 set :repo_url, 'git@github.com:i-docus/web.APP.git'
 
-set :branch, 'billing'
+set :branch, 'master'
 
 set :rvm_ruby_version, '2.6.5'
 
