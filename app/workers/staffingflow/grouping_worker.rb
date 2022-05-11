@@ -20,7 +20,10 @@ class Staffingflow::GroupingWorker
 
         return false if StaffingFlow.processing_grouping.count > 3 #MAXIMUM THREAD (Concurent job)
 
-        SgiApiServices::GroupDocument.processing(params[:json_content], params[:temp_document_ids], params[:temp_pack_id], sf) if sf.processing
+        if sf.processing
+          SgiApiServices::GroupDocument.processing(params[:json_content], params[:temp_document_ids], params[:temp_pack_id], sf)
+          SgiApiServices::GroupDocument.delay_for(2.hours).retry_processing(sf.id)
+        end
       end
     end
   end

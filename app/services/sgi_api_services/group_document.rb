@@ -5,6 +5,22 @@ class SgiApiServices::GroupDocument
   FILE_NAME_PATTERN_2 = /\A([A-Z0-9]+_*[A-Z0-9]*_[A-Z][A-Z0-9]+_\d{4}([01T]\d)*)_\d{3,4}_\d{3}\.pdf\z/i
 
   class << self
+    def retry_processing(staffing_flow)
+      sf     = StaffingFlow.find(staffing_flow)
+      params = sf.params
+
+      temp_pack = TempPack.find(params[:temp_pack_id])
+      done  = 0
+      temp_pack.temp_documents.where(id: params[:temp_document_ids]).each do |temp_document|
+        done += 1 if temp_document.children.size > 0
+      end
+
+      if done != params[:temp_document_ids].size
+        sf.update(state: 'ready')
+        SgiApiServices::GroupDocument.processing(params[:json_content], params[:temp_document_ids], params[:temp_pack_id], sf) if sf.processing
+      end
+    end
+
     def processing(json_content, _temp_document_ids, temp_pack_id, staffing_flow)
       CustomUtils.mktmpdir('api_group_document') do |dir|
         temp_pack = TempPack.where(id: temp_pack_id).first
