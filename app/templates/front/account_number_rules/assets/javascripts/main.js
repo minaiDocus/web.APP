@@ -112,5 +112,9 @@ jQuery(function() {
 
   AppListenTo('window.change-per-page.account_number_rules', (e)=>{ account_number_rule.load_data(true, e.detail.name, 1, e.detail.per_page); });
   AppListenTo('window.change-page.account_number_rules', (e)=>{ account_number_rule.load_data(true, e.detail.name, e.detail.page, e.detail.per_page); });
-  AppListenTo('reload_page', (e)=>{ if (e.detail.response.json_flash.success) { window.location.reload(true); } });
+  AppListenTo('reload_page', (e)=>{ if (e.detail.response.json_flash.success) { if ($('.search-content #search_input').val() != "")
+                                                                                  account_number_rule.load_data(true);
+                                                                                else
+                                                                                  window.location.reload(true);
+                                                                              } });
 });

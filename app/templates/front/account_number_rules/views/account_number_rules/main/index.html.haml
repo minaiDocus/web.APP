@@ -9,6 +9,8 @@
       %h3.bold
         Règle d'affectations bancaires
         %span.badge.badge-secondary.badge-sm.regular= @account_number_rules_count
+        - if params[:account_number_rule_contains]
+          %span.badge.bg-info.blink.regular Filtre actif
     .col-md-2.no-padding
       .input-group.mb-3.search-content
         %span.input-group-text#basic-addon1= glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })          
