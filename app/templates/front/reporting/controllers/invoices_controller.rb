@@ -12,7 +12,7 @@ class Reporting::InvoicesController < Reporting::ABaseController
     render json: PeriodPresenter.new(@period, current_user).render_json, status: 200
   end
 
-  def index
+  def index0
     @year = begin
               Integer(params[:year])
             rescue StandardError
@@ -38,6 +38,14 @@ class Reporting::InvoicesController < Reporting::ABaseController
     end
   end
 
+  def index
+    #User, BillingMod::Billing, BillingMod::DataFlow, BillingMod::Package
+    render partial: 'index'
+    puts "eto"
+    puts "current user = #{current_user.name}"
+    
+  end
+
   private
 
   def load_period
@@ -50,4 +58,6 @@ class Reporting::InvoicesController < Reporting::ABaseController
       render json: { json_flash: json_flash }, status: 200
     end
   end
+
+
 end
