@@ -44,7 +44,7 @@ class System::JobProcessor
   end
 
   def digest_uniq_job
-    SidekiqUniqueJobs::Digests.all.each { |d| add_or_delete_on_cache(d) if d.index(':RUN').nil? }
+    # SidekiqUniqueJobs::Digests.all.each { |d| add_or_delete_on_cache(d) if d.index(':RUN').nil? }
   end
 
   def add_or_delete_on_cache(uniq_job_id)

@@ -3,7 +3,7 @@
 class PreAssignment::Pending
   class << self
     def awaiting(options = { sort: -1 })
-      Pack::Piece.awaiting_preassignment.group(:pack_id).group(:pre_assignment_comment).order(created_at: :desc).includes(:pack)
+      Pack::Piece.where("DATE_FORMAT(updated_at, '%Y%m') >= #{15.days.ago.strftime('%Y%m')}").awaiting_preassignment.group(:pack_id).group(:pre_assignment_comment).order(created_at: :desc).includes(:pack)
     end
 
     def unresolved(options = { sort: -1 })
