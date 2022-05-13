@@ -5,7 +5,7 @@ class SgiApiServices::GroupDocument
   FILE_NAME_PATTERN_2 = /\A([A-Z0-9]+_*[A-Z0-9]*_[A-Z][A-Z0-9]+_\d{4}([01T]\d)*)_\d{3,4}_\d{3}\.pdf\z/i
 
   class << self
-    def retry_processing(staffing_flow)
+    def retry_processing(staffing_flow, retry_count=1)
       sf     = StaffingFlow.find(staffing_flow)
       params = sf.params
 
@@ -15,9 +15,27 @@ class SgiApiServices::GroupDocument
         done += 1 if temp_document.children.size > 0
       end
 
-      if done != params[:temp_document_ids].size
+      if done != params[:temp_document_ids].size && retry_count <= 4
         sf.update(state: 'ready')
         SgiApiServices::GroupDocument.processing(params[:json_content], params[:temp_document_ids], params[:temp_pack_id], sf) if sf.processing
+        SgiApiServices::GroupDocument.delay_for(2.hours).retry_processing(sf.id, retry_count + 1)
+
+        mail_info = {
+          subject: "[SgiApiServices::GroupDocument]- Retry Processing",
+          name: "SgiApiServices::CreateTempDocumentFromGrouping-Retry Processing",
+          error_group: "[sgi-api-services-create-temp-document-from-grouping] Retry Processing",
+          erreur_type: "create temp document with errors - Retry Processing",
+          date_erreur: Time.now.strftime('%Y-%m-%d %H:%M:%S'),
+          more_information: {
+            retry_count: retry_count,
+            staffing_flow: sf.id,
+            temp_pack_id: temp_pack.id,
+            temp_pack_name: temp_pack.name,
+            temp_documents: params[:temp_document_ids]
+          }
+        }
+
+        ErrorScriptMailer.error_notification(mail_info).deliver
       end
     end
 

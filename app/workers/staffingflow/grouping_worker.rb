@@ -22,7 +22,7 @@ class Staffingflow::GroupingWorker
 
         if sf.processing
           SgiApiServices::GroupDocument.processing(params[:json_content], params[:temp_document_ids], params[:temp_pack_id], sf)
-          SgiApiServices::GroupDocument.delay_for(2.hours).retry_processing(sf.id)
+          SgiApiServices::GroupDocument.delay_for(2.hours).retry_processing(sf.id, 1)
         end
       end
     end
