@@ -39,11 +39,13 @@ class Reporting::InvoicesController < Reporting::ABaseController
   end
 
   def index
-    #User, BillingMod::Billing, BillingMod::DataFlow, BillingMod::Package
+    #User, BillingMod::Billing => app\mods\billing\models\billing.rb, BillingMod::DataFlow => data_flow.rb, BillingMod::Package => package.rb
     render partial: 'index'
-    puts "eto"
     puts "current user = #{current_user.name}"
-    
+    puts "current user's first name = #{current_user.first_name}"
+    puts "current user's last name = #{current_user.last_name}"
+    puts "current user's id = #{current_user.id}"
+
   end
 
   private

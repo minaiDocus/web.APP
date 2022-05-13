@@ -1,6 +1,23 @@
 - months = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"]
 
 .container-fluid
+  %h1 TEST: Infos sur l'utilsateur
+  %h3
+    %span Utilisateur :
+    %span= current_user.name
+  %h3
+    %span Nombre de billings :
+    %b= current_user.billings.count
+  .mb-4
+  %h2 
+    %span Détails
+    %span= current_user.billings.first.name
+  %h3
+    %span Title :
+    %span= current_user.billings.first.title
+  %h3
+    %span Période :
+    %span= current_user.billings.first.period
   .mb-4
   .row
     .col-md-12
@@ -12,7 +29,9 @@
         .col-md-2.p-2 : Documents téléversés reçus
         .col-md-2.p-2 : Documents papier reçus et documents téléversés reçus
         .col-md-2.p-2
-          %a.btn.btn-success.semibold.w-100{"href"  =>  "#"} Export xls
+          %button.btn.btn-primary.semibold.w-100
+            %span.me-4= glyphicon('share-boxed', { size: '15', color: 'white'})
+            %span.text-white Export xls
 
   .mb-4
   .row
@@ -41,10 +60,13 @@
           %tr
             %td document 01
             %td 
-              .btn.btn-link{"data-bs-toggle"=>"modal", "data-bs-target"=>"#exampleModal"} 01 €
-            %td 02 €
-            %td 03 €
-            %td 04 €
+              .btn.btn-link{"data-bs-toggle"=>"modal", "data-bs-target"=>"#invoiceModal"} 01 €
+            %td
+              .btn.btn-link{"data-bs-toggle"=>"modal", "data-bs-target"=>"#invoiceModal"} 02 €
+            %td
+              .btn.btn-link{"data-bs-toggle"=>"modal", "data-bs-target"=>"#invoiceModal"} 03 €
+            %td
+              .btn.btn-link{"data-bs-toggle"=>"modal", "data-bs-target"=>"#invoiceModal"} 04 €
             %td 05 €
             %td 06 €
             %td 07 €
@@ -204,10 +226,7 @@
                 #{month}
 
 
-%button.btn.btn-primary{"type"=>"button", "data-bs-toggle"=>"modal", "data-bs-target"=>"#exampleModal"}
-  %span Ouvrir fenêtre modal
-
-.modal#exampleModal.fade.in{"tabindex"=>"-1", "aria-labelledby"=>"exampleModalLabel", "aria-hidden"=>"true"}
+.modal#invoiceModal.fade.in{"tabindex"=>"-1", "aria-labelledby"=>"invoiceModalLabel", "aria-hidden"=>"true"}
   .modal-dialog.modal-dialog-scrollable.modal-dialog-centered.modal-xl
     .modal-content
       .modal-header
@@ -217,15 +236,65 @@
           %h3.no-margin.grey-label.regular Month YEAR
         %button.btn-close{"type"=>"button", "data-bs-dismiss"=>"modal", "aria-label"=>"Close"}
       .modal-body.clearfix.back-grey
-        %p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vulputate porttitor neque, sed dignissim massa interdum egestas. Phasellus eget gravida libero. Nam semper metus ac dolor posuere porttitor. Praesent elementum purus vitae erat hendrerit mattis. Phasellus accumsan lectus vel lectus iaculis semper. Aenean quis tellus at nulla suscipit facilisis at vitae ante. Nullam dictum sem cursus, dignissim ante id, ornare justo. Duis consequat, ligula vel ultricies tincidunt, justo quam feugiat eros, nec congue ex justo ut neque.
-
-        %p Nunc pulvinar maximus turpis, eget posuere ante feugiat eget. Curabitur et sapien dolor. Vivamus maximus eu neque in venenatis. Duis sollicitudin ex ipsum. Donec vulputate sapien a magna laoreet consequat. Ut fringilla urna et magna suscipit blandit. Curabitur blandit cursus lacinia. Sed cursus elementum gravida. Suspendisse potenti. Praesent in purus non nibh malesuada sagittis eget vitae mauris. Sed nec laoreet odio. Nam vel quam vel est sagittis efficitur sed nec magna.
-
-        %p Aenean id convallis lorem, non mollis turpis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Ut ut nunc vel ex lacinia pulvinar cursus ac mauris. Vestibulum porttitor, mauris gravida pretium lobortis, lectus mi vestibulum purus, eu semper lectus tellus in ligula. Mauris suscipit, elit a tempus fringilla, quam sapien imperdiet lorem, quis feugiat velit lorem ut dolor. Fusce ut lacus in tellus dignissim ornare. In auctor nisl erat. Praesent ut rutrum arcu, vitae porta arcu. Proin vitae varius lacus. Mauris convallis lacinia nunc et tempor. Etiam lacinia, dolor at mollis dictum, urna tellus maximus lacus, non faucibus tellus lectus ut sapien. Phasellus id nisl volutpat, venenatis eros quis, luctus metus. Nunc nisi ipsum, tempor at lobortis nec, mollis eu quam. Integer nec ipsum rhoncus, imperdiet ante et, rutrum tortor.
-
-        %p Suspendisse venenatis neque diam, a aliquam enim tempus nec. Donec pulvinar sem at arcu consequat, vitae feugiat dolor ullamcorper. Sed efficitur quam in luctus cursus. Etiam tincidunt, augue id lacinia tempor, sem erat tempor purus, ac rhoncus nulla nibh nec urna. In tristique felis quis sem ornare tempus. Proin eget leo pellentesque arcu pellentesque faucibus non vitae neque. Sed blandit diam ut elit scelerisque dignissim. Quisque bibendum sapien ac cursus auctor. Curabitur ac elit sapien. Pellentesque sodales neque eu felis consectetur, quis posuere justo posuere. Quisque in ante id mi ullamcorper vehicula semper ac justo. In quis imperdiet tortor. Sed at pretium ipsum, a venenatis metus. Aenean sollicitudin erat id lorem efficitur fringilla. Etiam ultricies, ipsum eget efficitur rutrum, turpis lectus suscipit nunc, eu congue metus nibh non nibh.
-
-        %p Phasellus ipsum odio, lobortis eget condimentum sit amet, dapibus in lacus. Duis sed tempus turpis, nec ullamcorper urna. Nullam vel vulputate justo. Aenean vitae ornare sapien. Maecenas quis eros in erat tincidunt tempus et mollis ipsum. Suspendisse auctor ut neque quis varius. Aenean consectetur libero in augue hendrerit, sed imperdiet sapien tincidunt. Duis dapibus id turpis in volutpat. In ornare tristique nisl ac commodo. Pellentesque id leo at ante luctus vulputate. Praesent sed viverra nisi, porttitor vulputate neque. Nam fermentum erat vel pellentesque feugiat. Suspendisse sollicitudin, erat vel pellentesque aliquam, enim turpis malesuada quam, eu sollicitudin ipsum lectus nec diam. Nam rutrum purus pretium mi commodo, ac cursus ex semper. Quisque euismod leo purus. 
+        .documentlist
+          .box
+            %table.table.table-striped
+              %thead
+                %tr
+                  %th Nom des documents
+                  %th.center Pièces
+                  %th.center Pré-aff.
+                  %th.center Feuilles
+                  %th.center Pages
+                  %th.center Attaches
+                  %th.center Hors format
+                  %th.last
+              %tbody
+                %tr
+                  %td.semibold Total
+                  %td.center
+                    %b 0(0, 0, 0, 0)
+                  %td.center
+                    %b 0
+                  %td.center
+                    %b 0
+                  %td.center
+                    %b 0(0, 0, 0, 0)
+                  %td.center
+                    %b 0
+                  %td.center
+                    %b 0
+                  %td.last
+        .optionlist.box
+          %table.table.table-striped
+            %thead
+              %tr
+                %th.header Paramètre
+                %th.header Valeur
+                %th.header Prix HT
+            %tbody
+              %tr
+                %td.semibold iDo'Classique
+                %td Téléchargement + Pré-saisie comptable
+                %td 11,00 €
+              %tr
+                %td.semibold Courrier
+                %td Envoi par courrier A/R
+                %td 11,00 €
+              %tr
+                %td.semibold Automates
+                %td Récupération banque
+                %td 5,00 €
+              %tr
+                %td
+                %td.semibold
+                  %b Total :
+                %td.semibold.text-end 41,00 €
+              %tr
+                %td
+                %td.semibold
+                  %b Facture(s) :
+                %td
       .modal-footer
         .row.w-100.form-group
           .col-md-8.p-2
@@ -238,5 +307,7 @@
             %a.down.btn.btn-light
               = glyphicon('chevron-bottom', size: '13')
             %a.right.btn.btn-light
-              = glyphicon('chevron-right', size: '13')  
- 
+              = glyphicon('chevron-right', size: '13')
+
+%script{ :type => "text/x-tmpl", :id => "tmpl-period" }
+  :plain
