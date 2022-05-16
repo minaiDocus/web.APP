@@ -11,7 +11,7 @@
           .label-section
             = label_tag 'user[sage_gec_attributes][sage_private_api_uuid]', 'Veuillez choisir le dossier GEC correspondant'
           .control-section
-            = select_tag 'user[sage_gec_attributes][sage_private_api_uuid]', options_for_select(sage_gec_companies_list_options_for_select(@organization), @customer.sage_gec&.sage_private_api_uuid), include_blank: true, class: 'form-control'
+            = select_tag 'user[sage_gec_attributes][sage_private_api_uuid]', options_for_select(sage_gec_companies_list_options_for_select(@organization), @customer.sage_gec&.sage_private_api_uuid), include_blank: true, class: 'chosen-list w-100'
       .form-group.mt-2
         - auto_deliver = @customer.try(:sage_gec).try(:auto_deliver) || -1
         .row
