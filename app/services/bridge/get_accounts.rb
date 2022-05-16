@@ -16,7 +16,7 @@ class Bridge::GetAccounts
 
 
         bank_account.update(name: account.name,
-                            number: account.iban,
+                            number: account.iban.presence || 'non renseigné',
                             is_used: true,
                             currency: account.currency_code,
                             type_name: account.type,
