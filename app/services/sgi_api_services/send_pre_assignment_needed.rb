@@ -7,7 +7,9 @@ class SgiApiServices::SendPreAssignmentNeeded
     @lists_pieces = {}
     @errors       = []
 
-    Pack::Piece.joins(:temp_document).where('temp_documents.api_name != "jefacture"').need_preassignment.each do |piece|
+    Pack::Piece.need_preassignment.each do |piece|
+      next if piece.temp_document.try(:api_name).to_s == 'jefacture'
+
       @added_piece = false
 
       compta_types.each do |compta_type|
