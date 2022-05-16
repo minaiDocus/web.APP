@@ -16,7 +16,7 @@ class BillingMod::PrepareUserBilling
     @data_flow = @user.data_flows.of_period(@period).first
 
     return false if not @data_flow
-    return false if @user.pieces.count == 0 && @user.preseizures.count == 0
+    return false if not @user.can_be_billed?
 
     @user.billings.of_period(@period).update_all(is_frozen: true)
 

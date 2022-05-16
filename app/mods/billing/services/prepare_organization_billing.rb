@@ -9,7 +9,7 @@ class BillingMod::PrepareOrganizationBilling
     @organization.billings.of_period(@period).update_all(is_frozen: true)
     @customers_ids = []
     @organization.customers.active_at(@time_end).each do |customer|
-      next if customer.pieces.count == 0 && customer.preseizures.count == 0
+      next if not customer.can_be_billed?
 
       @customers_ids << customer.id
     end
@@ -58,7 +58,7 @@ class BillingMod::PrepareOrganizationBilling
     # if price < 0
       if discount_version == 2
         customers_count = customers_count - 250
-        title = "Offre spéciale : 10€ / dossier après 250 dossiers : #{price} € X #{customers_count}"
+        title = "Offre spéciale : 10€ / dossier classique après 250 dossiers : #{price} € X #{customers_count}"
       else
         title = "Abo. mensuels : #{price} € X #{customers_count}"
       end

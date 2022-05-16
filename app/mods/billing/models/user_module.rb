@@ -8,6 +8,10 @@ module BillingMod::UserModule
     has_many :extra_orders, class_name: 'BillingMod::ExtraOrder', as: :owner
   end
 
+  def can_be_billed?
+    self.pieces.count > 0 || self.preseizures.count > 0
+  end
+
   def current_flow
     self.flow_of CustomUtils.period_of(Time.now)
   end

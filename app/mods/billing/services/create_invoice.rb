@@ -10,17 +10,23 @@ module BillingMod
       @period    = CustomUtils.period_of(@time)
     end
 
-    def execute(organizations=nil)
+    def execute(organizations=nil, force=false)
       @organizations = Array(organizations).presence || Organization.billed
+      @test_dir = 'Not a test'
+
+      @test_dir = CustomUtils.mktmpdir('create_invoice', Rails.root.join('files'), false) if @is_test
 
       @organizations.each do |organization|
         @invoice = organization.invoices.of_period(@period).first
 
-        next if organization.code == 'TEEO'
+        next if !force && (organization.is_test || !organization.is_active || organization.is_for_admin)
+        next if !force && organization.code == 'TEEO'
         next if @invoice && !@is_test && !@is_update
 
         generate_invoice_of(organization)
       end
+
+      @test_dir
     end
 
     private
@@ -32,14 +38,16 @@ module BillingMod
       @packages_count       = {}
       @total_customers_price = 0
 
+      recalculate_billing = @is_update || @period == CustomUtils.period_of(Time.now) || !@invoice
+
       @customers.each do |customer|
-        next if customer.pieces.count == 0 && customer.preseizures.count == 0
+        next if not customer.can_be_billed?
 
         package = customer.package_of(@period)
 
         next if not package
 
-        if @is_update || @period == CustomUtils.period_of(Time.now) || !@invoice
+        if recalculate_billing
           BillingMod::PrepareUserBilling.new(customer, @period).execute
         end
 
@@ -48,14 +56,14 @@ module BillingMod
         increm_package_count('iDoNano')       if package.name == 'ido_nano'
         increm_package_count('iDoX')          if package.name == 'ido_x'
         increm_package_count('iDoMicro')      if ['ido_micro_plus', 'ido_micro'].include?(package.name)
-        increm_package_count('Numérisation')  if package.name == 'ido_digitize'
-        increm_package_count('Automates')     if package.retriever_option_active
-        increm_package_count('Courriers')     if package.mail_option_active
+        increm_package_count('Numérisation')  if package.name == 'ido_digitize' || (package.scan_active && CustomUtils.is_manual_paper_set_order?(@organization) && BillingMod::Configuration::LISTS[package.name.to_sym][:options][:digitize] == 'optional')
+        increm_package_count('Automates')     if package.name == 'ido_retriever' || (package.bank_active && BillingMod::Configuration::LISTS[package.name.to_sym][:options][:bank] == 'optional')
+        increm_package_count('Courriers')     if package.mail_active && BillingMod::Configuration::LISTS[package.name.to_sym][:options][:mail] == 'optional'
 
         @total_customers_price += customer.total_billing_of(@period)
       end
 
-      if @is_update || @period == CustomUtils.period_of(Time.now) || !@invoice
+      if recalculate_billing
         BillingMod::PrepareOrganizationBilling.new(@organization, @period).execute
       end
 
@@ -67,13 +75,16 @@ module BillingMod
 
     def create_invoice
       if @is_test
+        p "========= Creating invoice of : #{@organization.code}_#{@organization.id} ==> #{ @period } "
+
         @invoice              = FakeObject.new
         @invoice.created_at   = Time.now
         @invoice.updated_at   = Time.now
         @invoice.number       = "#{@organization.code}_#{@organization.id}"
       else
-        @invoice              = @organization.invoices.of_period(@period).first || BillingMod::Invoice.new
+        @invoice            ||= BillingMod::Invoice.new
       end
+
       @invoice.vat_ratio      = @organization.subject_to_vat ? 1.2 : 1
       @invoice.period_v2      = @period
       @invoice.organization   = @organization
@@ -85,17 +96,14 @@ module BillingMod
     end
 
     def generate_pdf
-      #TO DO: generating invoice pdf
-      #classGenerator : return file_path
-
-      invoice_path = Billing::PdfGenerator.new(@organization, @packages_count, @invoice, @total_customers_price, @time).generate
+      @invoice_path = BillingMod::PdfGenerator.new(@organization, @packages_count, @invoice, @total_customers_price, @time).generate
 
       if not @is_test
-        #@invoice.cloud_content_object.attach
+        @invoice.cloud_content_object.attach(File.open(@invoice_path), File.basename(@invoice_path))
       else
-        #Test HERE
+        invoice_test_path = @test_dir.to_s + "/#{@organization.code}_#{@organization.id}.pdf"
+        FileUtils.cp @invoice_path, invoice_test_path
       end
-
     end
 
     def auto_upload_invoice
@@ -103,7 +111,7 @@ module BillingMod
         begin
           user = User.find_by_code 'ACC%IDO' # Always send invoice to ACC%IDO customer
 
-          file = File.new @invoice.cloud_content_object.path
+          file = File.new @invoice_path
           content_file_name = @invoice.cloud_content_object.filename
 
           uploaded_document = UploadedDocument.new( file, content_file_name, user, 'VT', 1, nil, 'invoice_auto', nil )
@@ -120,7 +128,7 @@ module BillingMod
         invoice_settings = @invoice.organization.invoice_settings || []
 
         invoice_settings.each do |invoice_setting|
-          next unless invoice_setting.user.packages.of_period(@period).upload_active
+          next if not invoice_setting.user.authorized_upload?
 
           uploaded_document = UploadedDocument.new( file, content_file_name, invoice_setting.user, invoice_setting.journal_code, 1, nil, 'invoice_setting', nil )
         end
@@ -249,21 +257,21 @@ module BillingMod
       @pdf.move_down 30
       data = [['<b>Forfaits & Prestations</b>', '<b>Prix HT</b>']]
 
-      data << ["Nombre de dossiers actifs : #{@organization.customers.active_at(@time)}", '']
+      data << ["Nombre de dossiers actifs : #{@organization.customers.active_at(@time).count}", '']
       data << ['Forfaits et options iDocus pour ' + @period_month.downcase + ' ' + @year.to_s + ' :', CustomUtils.format_price(@total_customers_price) + " €"]
       
 
-      @packages_count.each do |package|
-        if %w(iDoClassique iDoNano iDoX iDoMicro).include?(package)
-          data << ["- #{package[1]} forfait#{'s' if package[1] > 1} #{package[0]}", ""]
-        else
+      @packages_count.sort_by{|k, v| v}.reverse.each do |package|
+        if %w(Numérisation Automates Courriers).include?(package[0].to_s)
           data << ["- #{package[1]} option#{'s' if package[1] > 1} #{package[0]}", ""]
+        else
+          data << ["- #{package[1]} forfait#{'s' if package[1] > 1} #{package[0]}", ""]
         end
       end
 
-      # @organization.billing.where(period: @period).each do |data_organization|
-      #   data << ["#{data_organization.title}", "#{CustomUtils.format_price(data_organization.price)}"]
-      # end
+      @organization.billings.of_period(@period).each do |billing|
+        data << ["#{billing.title.capitalize}", "#{CustomUtils.format_price(billing.price)} €"]
+      end
 
       data << ['', '']
 
@@ -277,7 +285,14 @@ module BillingMod
     end
 
     def make_footer
-      total = @total_customers_price # + @organization.total_billing_of(@period)
+      total = @total_customers_price + @organization.total_billing_of(@period)
+      vat_text    = '0%'
+      total_w_vat = total
+
+      if @invoice.organization.subject_to_vat
+        vat_text    = '20%'
+        total_w_vat = total * @invoice.vat_ratio
+      end
 
       @pdf.move_down 7
       @pdf.float do
@@ -289,17 +304,10 @@ module BillingMod
 
       @pdf.move_down 7
       @pdf.float do
-        if @invoice.organization.subject_to_vat
-          @pdf.text_box 'TVA (20%)', at: [400, @pdf.cursor], width: 60, align: :right, style: :bold
-        else
-          @pdf.text_box 'TVA (0%)', at: [400, @pdf.cursor], width: 60, align: :right, style: :bold
-        end
+        @pdf.text_box "TVA (#{vat_text})", at: [400, @pdf.cursor], width: 60, align: :right, style: :bold
       end
-      if @invoice.organization.subject_to_vat
-        @pdf.text_box CustomUtils.format_price(total * @invoice.vat_ratio - total) + " €", at: [470, @pdf.cursor], width: 66, align: :right
-      else
-        @pdf.text_box "0 €", at: [470, @pdf.cursor], width: 66, align: :right
-      end
+
+      @pdf.text_box CustomUtils.format_price(total_w_vat - total) + " €", at: [470, @pdf.cursor], width: 66, align: :right
       @pdf.move_down 10
       @pdf.stroke_horizontal_line 470, 540, at: @pdf.cursor
 
@@ -307,11 +315,8 @@ module BillingMod
       @pdf.float do
         @pdf.text_box 'Total TTC', at: [400, @pdf.cursor], width: 60, align: :right, style: :bold
       end
-      if @invoice.organization.subject_to_vat
-        @pdf.text_box CustomUtils.format_price(total * @invoice.vat_ratio) + " €", at: [470, @pdf.cursor], width: 66, align: :right
-      else
-        @pdf.text_box CustomUtils.format_price(total) + " €", at: [470, @pdf.cursor], width: 66, align: :right
-      end
+
+      @pdf.text_box CustomUtils.format_price(total_w_vat) + " €", at: [470, @pdf.cursor], width: 66, align: :right
       @pdf.move_down 10
       @pdf.stroke_color '000000'
       @pdf.stroke_horizontal_line 470, 540, at: @pdf.cursor
