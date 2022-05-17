@@ -11,7 +11,7 @@ module StatisticsManager::Subscription
     period_date   = date.to_date.end_of_month - 15.days
 
     Organization.billed.where("created_at <= ?", end_date).order(created_at: :asc).each do |organization|
-      options     = { micro_package: 0, nano_package: 0, basic_package: 0, mail_package: 0, scan_box_package: 0, retriever_package: 0, mini_package: 0, idox_package: 0, digitize_package: 0 }
+      options     = { micro_package: 0, nano_package: 0, basic_package: 0, mail_package: 0, scan_box_package: 0, retriever_package: 0, mini_package: 0, idox_package: 0, digitize_package: 0, premium_package: 0 }
       consumption = { upload: 0, scan: 0, dematbox_scan: 0, retriever: 0 }
 
       periods = Period.where(user_id: organization.customers.active_at(end_date).map(&:id)).where('start_date <= ? AND end_date >= ?', period_date, period_date)
@@ -41,6 +41,31 @@ module StatisticsManager::Subscription
               options[:idox_package] += 1
           end
         end
+      end
+
+      BillingMod::Package.of_period(CustomUtils.period_of(period_date)).each do |package|
+        case package.name
+          when 'ido_premium'
+            options[:premium_package] += 1
+          when 'ido_classic'
+            options[:basic_package] += 1
+          when 'ido_nano'
+            options[:nano_package] += 1
+          when 'ido_x'
+            options[:idox_package] += 1
+          when 'ido_micro' || 'ido_micro_plus'
+            options[:micro_package] += 1
+          when 'ido_retriever' || package.bank_active
+            options[:retriever_package] += 1
+          when 'ido_digitize'
+            options[:digitize_package] += 1
+          end
+
+          options[:mail_package] += 1   if package.mail_active          
+          @retriever_package_count += 1 if package.bank_active
+          @scan_box_package_count += 1  if package.scan_active
+          @digitize_package_count += 1  if package.scan_active && CustomUtils.is_manual_paper_set_order?(package.try(:user).try(:organization))
+          @not_configured += 1          if package.name == ""
       end
 
       #consumption counter
