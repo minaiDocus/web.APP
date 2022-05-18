@@ -66,7 +66,6 @@
                 #{month}
         %tbody
           - row = 0
-          - type = 'none'
           - User.where(id: @customers_ids).each_with_index do |user|
             - periods = annual_periods_for_user(@periods_by_users[user.id] || [])
             - if active_year_for_user?(@year, user, periods)
@@ -79,7 +78,6 @@
                   - _period_index = "#{@year}#{sprintf '%02d', p_ind}".to_i
 
                   - if period && _period_index <= 202204
-                    - type = 'period'
                     - period_billing = Billing::PeriodBilling.new(period)
                     - period.duration.times do |i|
                       - if period.duration == 1 || period_billing.amount_in_cents_wo_vat(i + 1) != 0
@@ -183,7 +181,6 @@
                             - annual_summary[period.start_date.month + i - 1][:price_in_cents] += period_billing.amount_in_cents_wo_vat(i+1)
                             - annual_summary[period.start_date.month + i - 1][:price_in_cents_of_excess] += period_billing.data(:excesses_amount_in_cents_wo_vat, i+1)
                   - elsif user.billings.of_period(_period_index).count > 0 && user.can_be_billed?
-                    - type = 'billing'
                     - billing = user.billings.of_period(_period_index).first
                     - data_flow = user.data_flows.of_period(_period_index).first
                     - if user.active_at?(_period_index)
@@ -381,12 +378,13 @@
               %td
                 Facturation supplémentaire
               - 12.times do |time|
+                - time += 1
                 %td.text-center{ id: "period_#{time}"}
-                  - if type == 'period'
+                  - _period = "#{@year}#{(sprintf '%02d', time)}".to_i
+                  - if _period <= 202204
                     - date = (Time.local(@year) + time.month).to_date
                     = render partial: 'organization_quota', locals: { period: @user.organization.subscription.find_period(date) }
                   - else
-                    - _period = "#{@year}#{(sprintf '%02d', time)}".to_i
                     = render partial: 'organization_billing', locals: { billings: @user.organization.billings.of_period(_period) }
         %tfoot
           %tr

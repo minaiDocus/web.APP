@@ -59,7 +59,7 @@ class BillingMod::FetchFlow
   end
 
   def scanned_sheet_of(customer)
-    customer.temp_documents.where(api_name: 'scan').where("DATE_FORMAT(created_at, '%Y%m') = #{@period}").count
+    customer.temp_documents.where(api_name: 'scan', state: 'bundled').where("DATE_FORMAT(created_at, '%Y%m') = #{@period}").count
   end
 
 end

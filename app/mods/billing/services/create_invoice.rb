@@ -11,6 +11,9 @@ module BillingMod
     end
 
     def execute(organizations=nil, force=false)
+      p "[Start time] ==== #{Time.now}"
+      p "==== TEST MODE ACTIVATED ====" if @is_test
+
       @organizations = Array(organizations).presence || Organization.billed
       @test_dir = 'Not a test'
 
@@ -26,6 +29,7 @@ module BillingMod
         generate_invoice_of(organization)
       end
 
+      p "[End time] ==== #{Time.now}"
       @test_dir
     end
 
