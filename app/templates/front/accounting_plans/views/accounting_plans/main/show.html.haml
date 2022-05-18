@@ -124,7 +124,7 @@
                   %th{ class: autoliquidation_exist ? '' : 'hide' }= t('activerecord.models.accounting_plan_item.attributes.vat_autoliquidation_credit_account')
                   %th.text-end Actions
               %tbody
-                - @accounting_plan.providers.each do |provider|                  
+                - @accounting_plan.active_providers.each do |provider|                  
                   %tr                    
                     %td.semibold= provider.third_party_name
                     %td= provider.third_party_account
@@ -180,7 +180,7 @@
                   %th= t('activerecord.models.accounting_plan_item.attributes.code')
                   %th.text-end Actions
               %tbody
-                - @accounting_plan.customers.each do |customer|
+                - @accounting_plan.active_customers.each do |customer|
                   %tr
                     %td.semibold= customer.third_party_name
                     %td= customer.third_party_account
