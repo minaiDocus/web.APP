@@ -36,7 +36,12 @@ class Reporting::InvoicesController < Reporting::ABaseController
         render partial: 'index'
       end
       format.xls do
-        data = Subscription::PeriodsToXls.new(periods).execute
+        if @year < 2022
+          data = Subscription::PeriodsToXls.new(periods).execute
+        else
+          data = BillingMod::BillingToXls.new(@customers_ids, @year).execute
+        end
+
         send_data data, type: 'application/vnd.ms-excel', filename: "reporting_iDocus_#{@year}.xls"
       end
     end

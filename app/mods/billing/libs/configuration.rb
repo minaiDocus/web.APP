@@ -82,7 +82,7 @@ class BillingMod::Configuration
               human_name: "Automate",
               description: "Vous permet de bénéficier des automates de récupération bancaires",
               hint: "",
-              label: 'Récupération bancaire',
+              label: 'Automate, récupération bancaire',
               price: 5,
               commitment: 0,
               cummulative_excess: false,
