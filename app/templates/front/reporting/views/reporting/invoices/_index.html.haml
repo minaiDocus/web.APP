@@ -379,15 +379,15 @@
                           %a{ :href => organization_invoice_path(invoice.id, invoice.organization.id), :title => "#{invoice.number}.pdf", :class => "icon-eye-open do-showInvoice" }
             %tr.global_excess
               %td
-                Dépassement mutualisé
+                Facturation supplémentaire
               - 12.times do |time|
                 %td.text-center{ id: "period_#{time}"}
                   - if type == 'period'
                     - date = (Time.local(@year) + time.month).to_date
-                    = render partial: 'organization_quota', locals: { objects: @user.organization.subscription.find_period(date), type: type }
+                    = render partial: 'organization_quota', locals: { period: @user.organization.subscription.find_period(date) }
                   - else
                     - _period = "#{@year}#{(sprintf '%02d', time)}".to_i
-                    = render partial: 'organization_quota', locals: { objects: @user.organization.billings.of_period(_period), type: type }
+                    = render partial: 'organization_billing', locals: { billings: @user.organization.billings.of_period(_period) }
         %tfoot
           %tr
             %th.w-15.text-center

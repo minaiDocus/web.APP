@@ -301,7 +301,7 @@
               - 12.times do |time|
                 %td.text-center{ id: "period_#{time}"}
                   - date = (Time.local(@year) + time.month).to_date
-                  = render partial: 'organization_quota', locals: { period: @user.organization.subscription.find_period(date) }
+                  = render partial: 'organization_billing', locals: { period: @user.organization.subscription.find_period(date) }
         %tfoot
           %tr
             %th.w-15.text-center
