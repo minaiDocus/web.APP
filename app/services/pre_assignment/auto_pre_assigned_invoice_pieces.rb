@@ -5,8 +5,8 @@ class PreAssignment::AutoPreAssignedInvoicePieces
       PreAssignment::AutoPreAssignedInvoicePieces.new(piece).execute
     end
 
-    Billing::UpdatePeriodData.new(pieces.first.user.subscription.current_period).execute
-    Billing::UpdatePeriodPrice.new(pieces.first.user.subscription.current_period).execute
+    # Billing::UpdatePeriodData.new(pieces.first.user.subscription.current_period).execute
+    # Billing::UpdatePeriodPrice.new(pieces.first.user.subscription.current_period).execute
   end
 
   def initialize(piece)

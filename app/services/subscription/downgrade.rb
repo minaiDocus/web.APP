@@ -12,10 +12,10 @@ class Subscription::Downgrade
     @subscription.futur_packages   = nil
     @subscription.save
 
-    if @update
-      Subscription::Evaluate.new(@subscription.reload).execute unless @subscription.organization
+    # if @update
+    #   Subscription::Evaluate.new(@subscription.reload).execute unless @subscription.organization
 
-      Billing::UpdatePeriod.new(@subscription.reload.current_period).execute
-    end
+    #   Billing::UpdatePeriod.new(@subscription.reload.current_period).execute
+    # end
   end
 end

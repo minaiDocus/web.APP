@@ -4,7 +4,7 @@ class BillingMod::CreateInvoiceWorker
 
   def perform
     UniqueJobs.for 'BillinMod::CreateInvoice' do
-      BillingMod::CreateInvoicePdf.new.execute
+      BillingMod::CreateInvoice.new.execute
     end
   end
 end

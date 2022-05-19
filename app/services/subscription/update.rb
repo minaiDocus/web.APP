@@ -19,8 +19,8 @@ class Subscription::Update
 
   def execute
     if @subscription.update(@params)
-      Billing::UpdatePeriod.new(@subscription.current_period).execute # Update current period with new subscription informations
-      Subscription::Evaluate.new(@subscription, @requester, @request).execute # Assign proper rights to requester
+      # Billing::UpdatePeriod.new(@subscription.current_period).execute # Update current period with new subscription informations
+      # Subscription::Evaluate.new(@subscription, @requester, @request).execute # Assign proper rights to requester
 
       true
     else

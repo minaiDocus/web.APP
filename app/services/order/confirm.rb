@@ -35,7 +35,7 @@ class Order::Confirm
         OrderMailer.notify_paper_set_order(@order).deliver_later
       end
 
-      Billing::UpdatePeriod.new(@order.period).execute
+      # Billing::UpdatePeriod.new(@order.period).execute
     elsif @order.errors[:address].any? && @order.type == 'paper_set'
       @order.organization.admins.each do |admin|
         OrderMailer.notify_paper_set_reminder(@order, admin.email).deliver_later

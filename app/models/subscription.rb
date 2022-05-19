@@ -24,6 +24,8 @@ class Subscription < ApplicationRecord
   end
 
   def create_period(date)
+    return nil #This is not used anymore
+
     return nil unless (self.user && self.user.still_active?) || self.organization
 
     period = Period.new(start_date: date, duration: period_duration)

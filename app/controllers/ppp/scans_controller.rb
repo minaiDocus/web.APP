@@ -55,10 +55,10 @@ class Ppp::ScansController < PaperProcessesController
         if @document.user && @document.save
           create_paper_process(@document)
 
-          if @document.period
-            Billing::UpdatePeriodData.new(@document.period).execute
-            Billing::UpdatePeriodPrice.new(@document.period).execute
-          end
+          # if @document.period
+          #   Billing::UpdatePeriodData.new(@document.period).execute
+          #   Billing::UpdatePeriodPrice.new(@document.period).execute
+          # end
 
           flash[:success] = 'Créé avec succès.'
           flash[:error] = nil
@@ -90,10 +90,10 @@ class Ppp::ScansController < PaperProcessesController
 
     create_paper_process(document)
 
-    if document.period
-      Billing::UpdatePeriodData.new(document.period).execute
-      Billing::UpdatePeriodPrice.new(document.period).execute
-    end
+    # if document.period
+    #   Billing::UpdatePeriodData.new(document.period).execute
+    #   Billing::UpdatePeriodPrice.new(document.period).execute
+    # end
 
     reset_waiting_document
 
@@ -114,10 +114,10 @@ class Ppp::ScansController < PaperProcessesController
 
     create_paper_process(document)
 
-    if document.period
-      Billing::UpdatePeriodData.new(document.period).execute
-      Billing::UpdatePeriodPrice.new(document.period).execute
-    end
+    # if document.period
+    #   Billing::UpdatePeriodData.new(document.period).execute
+    #   Billing::UpdatePeriodPrice.new(document.period).execute
+    # end
 
     reset_waiting_document
 

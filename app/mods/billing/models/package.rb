@@ -45,4 +45,10 @@ class BillingMod::Package < ApplicationRecord
   def commitment_duration
     BillingMod::Configuration.excess_duration_of(self.name)
   end
+
+  def digitize_active
+    return false if not self.user.organization
+
+    self.scan_active && CustomUtils.is_manual_paper_set_order?(self.user.organization)
+  end
 end

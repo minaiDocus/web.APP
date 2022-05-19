@@ -4,7 +4,7 @@ class Order::Dematbox
   def initialize(user, order, is_an_update = false)
     @user         = user
     @order        = order
-    @period       = user.subscription.current_period
+    # @period       = user.subscription.current_period
     @is_an_update = is_an_update
   end
 
@@ -21,11 +21,11 @@ class Order::Dematbox
 
     if @order.save
       unless @is_an_update
-        @period.orders << @order
+        # @period.orders << @order
         Order::Confirm.delay_for(24.hours).execute(@order.id)
       end
 
-      Billing::UpdatePeriod.new(@period).execute
+      # Billing::UpdatePeriod.new(@period).execute
 
       true
     else

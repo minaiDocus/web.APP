@@ -1,5 +1,19 @@
-## Miscelaneous workers
+##Systems
+System::JobProcessorWorker:
+  queue: high
+  cron: '0 */5 * * * *'
 
+## destroy some data
+System::DatabaseCleanerWorker:
+  queue: default
+  cron: '0 2 * * *'
+
+## Zoho CRM sync
+System::ZohoCrmSynchronizerWorker:
+  queue: default
+  cron: '0 1 1 * *'
+
+## Miscelaneous workers
 RefreshDashboardStatisticsWorker:
   queue: default
   cron: '*/5 * * * *'
@@ -14,7 +28,7 @@ Order::RemindToNewKitWorker:
   cron: '15 3 1 12 *'
 
 ## Billing
-Billing::CreateInvoicePdfWorker:
+BillingMod::CreateInvoiceWorker:
   queue: high
   cron: '15 0 1 * *'
 BillingMod::PrepareUserBillingWorker:
@@ -79,9 +93,9 @@ DataProcessor::McfWorker:
 
 ## Accounting flow workers
 
-Ftp::FetcherWorker:
-  queue: default
-  cron: '0 */30 * * * *'
+# Ftp::FetcherWorker:
+#   queue: default
+#   cron: '0 */30 * * * *'
 
 RetrieveEmailedDocumentWorker:
   queue: default
@@ -105,7 +119,6 @@ FileImport::SftpFromAllWorker:
 FileImport::FtpFromAllWorker:
   queue: file_import
   cron: '0 30 */6 * * *'
-
 
 RetrieveOcrProcessedDocumentWorker:
   queue: default
@@ -150,20 +163,6 @@ PreAssignment::Delivery::SageGecWorker:
   queue: high
   cron: '*/10 * * * * *'
 
-
-System::JobProcessorWorker:
-  queue: high
-  cron: '0 */5 * * * *'
-
-## destroy some data
-System::DatabaseCleanerWorker:
-  queue: default
-  cron: '0 2 * * *'
-
-## Zoho CRM sync
-System::ZohoCrmSynchronizerWorker:
-  queue: default
-  cron: '0 1 1 * *'
 
 ## Daily data verifier worker
 DataVerificator::DailyDataVerifierWorker:

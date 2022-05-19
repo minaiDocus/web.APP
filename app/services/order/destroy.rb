@@ -15,7 +15,7 @@ class Order::Destroy
     end
 
     if is_cancelled
-      Billing::UpdatePeriod.new(@order.period).execute
+      # Billing::UpdatePeriod.new(@order.period).execute
       Order::Destroy.immediately(@order.id.to_s)
     end
   end
@@ -27,7 +27,7 @@ class Order::Destroy
     if order
       order.destroy
 
-      Billing::UpdatePeriod.new(order.period).execute
+      # Billing::UpdatePeriod.new(order.period).execute
     end
   end
 end

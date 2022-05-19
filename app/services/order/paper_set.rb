@@ -3,33 +3,38 @@ class Order::PaperSet
   def initialize(user, order, is_an_update = false)
     @user         = user
     @order        = order
-    @period       = user.subscription.current_period
+    # @period       = user.subscription.current_period
     @is_an_update = is_an_update
   end
 
   def execute
     @order.user ||= @user
     @order.organization ||= @user.organization
-    @order.period_duration = @period.duration
+    @order.period_duration = 1
     @order.price_in_cents_wo_vat = price_in_cents_wo_vat
     @order.address.is_for_paper_set_shipping = true if @order.address
 
-    return false if @order.period_duration == 3
+    # return false if @order.period_duration == 3
 
     if @order.save
       unless @is_an_update
-        @period.orders << @order
+        # @period.orders << @order
 
         if @order.normal_paper_set_order?
           Order::Confirm.delay_for(24.hours).execute(@order.id)
         else
-          @order.confirm if @order.pending?
+          if @order.pending?
+            @order.period_v2 = CustomUtils.period_of(Time.now)
+            @order.confirm
+
+            @order.save
+          end
         end
       end
 
       auto_ajust_number_of_journals_authorized
 
-      Billing::UpdatePeriod.new(@period).execute
+      # Billing::UpdatePeriod.new(@period).execute
 
       true
     else

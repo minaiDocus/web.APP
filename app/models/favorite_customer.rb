@@ -19,7 +19,7 @@ class FavoriteCustomer < ApplicationRecord
       result.all_retrievers_size  = 0
       result.retriever_error_size = 0
 
-      if customer.subscription.periods.last.try(:is_active?, :retriever_option)
+      if customer.is_package?(:bank_active)
         result.retriever_option_active = true
         result.all_retrievers_size     = customer.retrievers.count
         result.retriever_error_size    = customer.retrievers.where(state: 'error').count

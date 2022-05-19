@@ -5,16 +5,16 @@ class SgiApiServices::PushPreAsignmentService
       piece    = Pack::Piece.where(id: piece_id).first
       return false if not piece
 
-      period   = piece.pack.owner.subscription.current_period
-      document = Reporting.find_or_create_period_document(piece.pack, period)
+      # period   = piece.pack.owner.subscription.current_period
+      document = Reporting.find_or_create_period_document(piece.pack, nil, CustomUtils.period_of(Time.now))
       report   = document.report || create_report(piece.pack, document)
 
       return false if piece.preseizures.any?
 
       pre_assignments = get_pre_assignments(piece, report, data_pre_assignments)
 
-      Billing::UpdatePeriodData.new(period).execute
-      Billing::UpdatePeriodPrice.new(period).execute
+      # Billing::UpdatePeriodData.new(period).execute
+      # Billing::UpdatePeriodPrice.new(period).execute
 
       return false unless data_pre_assignments["process"] == 'preseizure'
 

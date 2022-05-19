@@ -3,11 +3,11 @@ module Subscription::UpdateOption
   def self.execute(subscription_option, parameters)
     if subscription_option.update(parameters)
 
-      subscription_option.subscribers.each do |subscription|
-        if subscription.owner.try(:active?)
-          Billing::UpdatePeriod.new(subscription.current_period).execute
-        end
-      end
+      # subscription_option.subscribers.each do |subscription|
+      #   if subscription.owner.try(:active?)
+      #     Billing::UpdatePeriod.new(subscription.current_period).execute
+      #   end
+      # end
 
       true
     else

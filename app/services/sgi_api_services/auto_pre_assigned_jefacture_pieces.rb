@@ -9,10 +9,10 @@ class SgiApiServices::AutoPreAssignedJefacturePieces
 
       temp_preseizure.cloned if execute(piece, raw_preseizure)
 
-      period   = piece.pack.owner.subscription.current_period
+      # period   = piece.pack.owner.subscription.current_period
 
-      Billing::UpdatePeriodData.new(period).execute
-      Billing::UpdatePeriodPrice.new(period).execute
+      # Billing::UpdatePeriodData.new(period).execute
+      # Billing::UpdatePeriodPrice.new(period).execute
     end
 
     def execute(piece, raw_preseizure)

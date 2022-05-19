@@ -42,7 +42,7 @@ class FileImport::Ibizabox
   end
 
   def execute
-    return false if @user.subscription.try(:current_period).try(:is_active?, :ido_x) || !valid?
+    return false if @user.is_package?('ido_x') || !valid?
 
     @folder.process
     accessible_ibiza_periods.each do |period|

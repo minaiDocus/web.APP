@@ -34,8 +34,8 @@ module Reporting
 
           period_document.save
 
-          Billing::UpdatePeriodData.new(period).execute
-          Billing::UpdatePeriodPrice.new(period).execute
+          # Billing::UpdatePeriodData.new(period).execute
+          # Billing::UpdatePeriodPrice.new(period).execute
         end
 
         if period_document.pages - period_document.uploaded_pages > 0
@@ -47,14 +47,14 @@ module Reporting
       time += period.duration.month
     end
 
-    current_period = pack.owner.subscription.current_period
-    Billing::UpdatePeriod.new(current_period) if current_period.updated_at < 1.days.ago
+    # current_period = pack.owner.subscription.current_period
+    # Billing::UpdatePeriod.new(current_period) if current_period.updated_at < 1.days.ago
 
     # Billing::UpdateOrganizationPeriod.new(pack.organization.subscription.current_period).fetch_all(true)
-    Billing::OrganizationExcess.new(pack.organization.subscription.current_period).execute(true)
+    # Billing::OrganizationExcess.new(pack.organization.subscription.current_period).execute(true)
   end
 
-  def self.find_or_create_period_document(pack, period, _period=nil)
+  def self.find_or_create_period_document(pack, period=nil, _period=nil)
     time    = pack.created_at.localtime
     _period = _period.presence || CustomUtils.period_of(time.to_date)
     period_document = PeriodDocument.find_or_create_by_pack(pack, _period, period)
