@@ -29,7 +29,7 @@ class Journal::AssignDefault
   end
 
   def create_event(journal)
-    params = [journal, @user, @collaborator.user]
+    params = [journal, @user, (@collaborator.try(:user) || @collaborator)]
     params << { path: @request.path, ip_address: @request.remote_ip } if @request
 
     CreateEvent.add_journal(*params)

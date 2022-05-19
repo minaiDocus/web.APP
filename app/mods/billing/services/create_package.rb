@@ -1,8 +1,9 @@
 class BillingMod::CreatePackage
-  def initialize(user, package_name, options, apply_now = false)
+  def initialize(user, package_name, options, apply_now = false, requester=nil)
     @user         = user
     @package_name = package_name
     @options      = options
+    @requester    = requester
 
     @my_package   = @user.my_package
     @apply_now    = (@my_package.present?)? apply_now : true
@@ -48,6 +49,8 @@ class BillingMod::CreatePackage
     package.save
 
     update_journal_size
+
+    Journal::AssignDefault.new(@user, @requester).execute if @requester
   end
 
   private

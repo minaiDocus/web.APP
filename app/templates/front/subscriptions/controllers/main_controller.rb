@@ -15,7 +15,7 @@ class Subscriptions::MainController < CustomerController
     package_name = params[:package].try(:[], :name)
     options      = params[:package].try(:[], package_name.to_sym)
 
-    create_package = BillingMod::CreatePackage.new(@customer, package_name, options, params[:package].try(:[], :apply_now).present?).execute
+    create_package = BillingMod::CreatePackage.new(@customer, package_name, options, params[:package].try(:[], :apply_now).present?, current_user).execute
 
     @customer.update(jefacture_account_id: params[:user][:jefacture_account_id]) if create_package && params.try(:[], :user).try(:[], :jefacture_account_id).present?  
 
