@@ -35,11 +35,16 @@ class Admin::Reporting::MainController < BackController
               with_organization_info = true
             end
 
-            periods  = Period.includes(:billings).where('user_id IN (?) OR organization_id IN (?)', customer_ids, organization_ids)
+            if @year < 2022
+              periods  = Period.includes(:billings).where('user_id IN (?) OR organization_id IN (?)', customer_ids, organization_ids)
                             .where('start_date >= ? AND end_date <= ?', date, end_date)
                             .order(start_date: :asc)
 
-            data = Subscription::PeriodsToXls.new(periods, with_organization_info).execute
+              data = Subscription::PeriodsToXls.new(periods, with_organization_info).execute
+            else
+              data = BillingMod::BillingToXls.new(customer_ids, @year).execute
+            end
+
             send_data data, type: 'application/vnd.ms-excel', filename: filename
           end
         end
