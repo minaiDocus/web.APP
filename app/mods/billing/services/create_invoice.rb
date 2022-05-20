@@ -22,7 +22,7 @@ module BillingMod
       @organizations.each do |organization|
         @invoice = organization.invoices.of_period(@period).first
 
-        next if !force && (organization.is_test || !organization.is_active || organization.is_for_admin)
+        next if !force && !organization.can_be_billed?
         next if !force && organization.code == 'TEEO'
         next if @invoice && !@is_test && !@is_update
 

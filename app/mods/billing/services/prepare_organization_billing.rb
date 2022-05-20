@@ -6,6 +6,8 @@ class BillingMod::PrepareOrganizationBilling
   end
 
   def execute
+    return false if not organization.can_be_billed?
+
     @organization.billings.of_period(@period).update_all(is_frozen: true)
     @customers_ids = []
     @organization.customers.active_at(@time_end).each do |customer|
