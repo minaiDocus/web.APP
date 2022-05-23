@@ -157,12 +157,12 @@ class PreseizureExport::PreseizureToTxt
           end
 
           journal_code     = journal.name
-          ecriture_date    = preseizure.date.strftime('%m/%d/%Y') || ""
+          ecriture_date    = preseizure.date.strftime('%d/%m/%Y') || ""
           piece_ref        = preseizure.piece_number || ""
           compte_num       = general_account || ""
           section          = ""
           compte_lib       = general_lib
-          echance_date     = preseizure.deadline_date.try(:strftime, '%m/%d/%Y')
+          echance_date     = preseizure.deadline_date.try(:strftime, '%d/%m/%Y')
           debit_credit     = entry.type == 1 ? entry.amount.to_f.to_s + "\t" : "\t" + entry.amount.to_f.to_s
           intitule_journal = ""
           intitule_compte  = ""
