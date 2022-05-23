@@ -1,24 +1,10 @@
 - months = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"]
 
+- period = 202205
+- compute_total_billing_per_period(period, current_user.id)
+- all_billings_may = all_billings_per_period(period, current_user.id)
+
 .container-fluid
-  %h1 TEST: Infos sur l'utilsateur
-  %h3
-    %span Utilisateur :
-    %span= current_user.name
-  %h3
-    %span Nombre de billings :
-    %b= current_user.billings.count
-  .mb-4
-  %h2 
-    %span Détails
-    %span= current_user.billings.first.name
-  %h3
-    %span Title :
-    %span= current_user.billings.first.title
-  %h3
-    %span Période :
-    %span= current_user.billings.first.period
-  .mb-4
   .row
     .col-md-12
       .row
@@ -50,8 +36,8 @@
         %thead
           %tr
             %th.w-15.text-center
-              %a{"href" => "2021"} 2021
-              %a{"href" => "2022"} 2022
+              %a{"class"=>"pannel_#{@year-1}", "href" => "#"} #{@year-1}
+              %a{"class"=>"pannel_#{@year}", "href" => "#"} #{@year}
             - months.each do |month|
               %th.month{ :style => "width:7%;padding-right:7px;" }
                 #{month}
@@ -75,36 +61,12 @@
             %td 10 €
             %td 11 €
             %td 12 €
-          %tr
-            %td document 02
-            %td 01 €
-            %td 02 €
-            %td 03 €
-            %td 04 €
-            %td 05 €
-            %td 06 €
-            %td 07 €
-            %td 08 €
-            %td 09 €
-            %td 10 €
-            %td 11 €
-            %td 12 €
 
           %tr
-            %td document 03
-            %td 01 €
-            %td 02 €
-            %td 03 €
-            %td 04 €
-            %td 05 €
-            %td 06 €
-            %td 07 €
-            %td 08 €
-            %td 09 €
-            %td 10 €
-            %td 11 €
-            %td 12 €
-
+            %td titre
+            - months.each_with_index do |month, index|
+              %td #{index} - #{month}
+              
 
         %tr#total
           %td
@@ -219,8 +181,8 @@
         %tfooter
           %tr
             %th.w-15.text-center
-              %a{"href" => "2021"} 2021
-              %a{"href" => "2022"} 2022
+              %a{"class"=>"pannel_#{@year-1}", "href" => "#"} #{@year-1}
+              %a{"class"=>"pannel_#{@year}", "href" => "#"} #{@year}
             - months.each do |month|
               %th.month{ :style => "width:7%;padding-right:7px;" }
                 #{month}
@@ -273,23 +235,18 @@
                 %th.header Valeur
                 %th.header Prix HT
             %tbody
-              %tr
-                %td.semibold iDo'Classique
-                %td Téléchargement + Pré-saisie comptable
-                %td 11,00 €
-              %tr
-                %td.semibold Courrier
-                %td Envoi par courrier A/R
-                %td 11,00 €
-              %tr
-                %td.semibold Automates
-                %td Récupération banque
-                %td 5,00 €
+
+              - all_billings_may.each_with_index do |bill, index|
+                %tr
+                  %td.semibold= bill.kind
+                  %td= bill.title
+                  %td #{bill.price} €
+
               %tr
                 %td
                 %td.semibold
                   %b Total :
-                %td.semibold.text-end 41,00 €
+                %td.semibold.text-end # €
               %tr
                 %td
                 %td.semibold
