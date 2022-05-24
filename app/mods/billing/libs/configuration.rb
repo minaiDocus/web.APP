@@ -1,18 +1,19 @@
 class BillingMod::Configuration
   LISTS = {
-            ido_premium: {
-              human_name: "iDo'Premium",
-              description: "Vous permet de transférer vos pièces sans limite (quotas) de téléversement.",
-              hint: "Facture à 3.000€ HT pour les 175 premiers dossiers, au delà des 175 dossiers : 10€ ht/dossier",
-              label: 'Téléchargement + Pré-saisie comptable',
-              price: 3000,
-              customers_limit: 175,
-              unit_price: 10,
-              commitment: 0,
-              cummulative_excess: false,
-              data_flows: { max: 0, duration: 'month', excess_price: 10 },
-              options: { upload: 'strict', bank: 'strict', scan: 'strict', mail: 'optional', digitize: 'optional', preassignment: 'strict'}
-            },
+            #### DEACTIVATE IDO PREMIUM #######
+            # ido_premium: {
+            #   human_name: "iDo'Premium",
+            #   description: "Vous permet de transférer vos pièces sans limite (quotas) de téléversement.",
+            #   hint: "Facture à 3.000€ HT pour les 175 premiers dossiers, au delà des 175 dossiers : 10€ ht/dossier",
+            #   label: 'Téléchargement + Pré-saisie comptable',
+            #   price: 3000,
+            #   customers_limit: 175,
+            #   unit_price: 10,
+            #   commitment: 0,
+            #   cummulative_excess: false,
+            #   data_flows: { max: 0, duration: 'month', excess_price: 10 },
+            #   options: { upload: 'strict', bank: 'strict', scan: 'strict', mail: 'optional', digitize: 'optional', preassignment: 'strict'}
+            # },
             ido_classic: {
               human_name: "iDo'Classique",
               description: "Vous permet de transférer jusqu'à 100 pièces/mois, mutualisation des quotas au niveau du cabinet.",
