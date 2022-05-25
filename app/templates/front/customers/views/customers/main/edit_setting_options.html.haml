@@ -110,11 +110,11 @@
             .col-md-2
               .form-check.form-check-inline
                 = radio_button_tag 'user[options_attributes][is_operation_processing_forced]', '0', @customer.options.is_operation_processing_forced == 0, class: 'form-check-input compta-user-options'
-                %label.form-check-label Manuel
+                %label.form-check-label Non
             .col-md-2
               .form-check.form-check-inline
                 = radio_button_tag 'user[options_attributes][is_operation_processing_forced]', '1', @customer.options.is_operation_processing_forced == 1, class: 'form-check-input compta-user-options'
-                %label.form-check-label Auto
+                %label.form-check-label Oui
         .form-group
           .row
             .col-md-6
@@ -128,11 +128,11 @@
             .col-md-2
               .form-check.form-check-inline
                 = radio_button_tag 'user[options_attributes][is_operation_value_date_needed]', '0', @customer.options.is_operation_value_date_needed == 0, class: 'form-check-input compta-user-options'
-                %label.form-check-label Manuel
+                %label.form-check-label Non
             .col-md-2
               .form-check.form-check-inline
                 = radio_button_tag 'user[options_attributes][is_operation_value_date_needed]', '1', @customer.options.is_operation_value_date_needed == 1, class: 'form-check-input compta-user-options'
-                %label.form-check-label Auto
+                %label.form-check-label Oui
                 
       %hr
       .form-group.no-margin
