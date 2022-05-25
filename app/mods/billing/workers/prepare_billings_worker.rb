@@ -27,7 +27,7 @@ class BillingMod::PrepareBillingsWorker
           BillingMod::PrepareUserBilling.new(customer).execute
         end
 
-        BillingMod::PrepareOrganzationBilling.new(organization).execute
+        BillingMod::PrepareOrganizationBilling.new(organization).execute
       end
     end
   end
