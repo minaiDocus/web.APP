@@ -9,7 +9,7 @@ module BillingMod::UserModule
   end
 
   def can_be_billed?
-    return true if self.organization.invoice_created_customer
+    return true if self.organization.try(:invoice_created_customer)
 
     (self.pieces.count > 0 || self.preseizures.count > 0)
   end
