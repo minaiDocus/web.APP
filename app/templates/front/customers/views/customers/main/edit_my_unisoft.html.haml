@@ -20,11 +20,11 @@
           .col-md-2
             .form-check.form-check-inline
               = radio_button_tag 'user[my_unisoft_attributes][auto_deliver]', auto_deliver_options[1][1], auto_deliver == 0, class: 'form-check-input compta-user-options'
-              %label.form-check-label Manuel
+              %label.form-check-label Non
           .col-md-2
             .form-check.form-check-inline
               = radio_button_tag 'user[my_unisoft_attributes][auto_deliver]', auto_deliver_options[2][1], auto_deliver == 1, class: 'form-check-input compta-user-options'
-              %label.form-check-label Auto      
+              %label.form-check-label Oui
       %input#auto_deliver_customer{ type: :hidden, name: "auto_deliver_customer", value: "#{@customer.try(:my_unisoft).try(:auto_deliver?)}"}
       %input#check_api_token{ type: :hidden, name: "check_api_token", value: "#{@customer.try(:my_unisoft).try(:encrypted_api_token).present?}"}
 
