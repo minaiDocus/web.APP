@@ -10,7 +10,7 @@ class BillingMod::Package < ApplicationRecord
   scope :by_period, ->{ order(period: :desc) }
 
   def is_with_commitment?
-    self.commitment_start_period.to_i > 0 && self.commitment_end_period.to_i > 0
+    (self.commitment_start_period.to_i > 0 && self.commitment_end_period.to_i > 0) && BillingMod::Configuration::LISTS[self.name.to_sym].try(:[], :commitment).to_i > 0
   end
 
   def is_commitment_end?

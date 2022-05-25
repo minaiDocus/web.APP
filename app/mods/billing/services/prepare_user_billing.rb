@@ -54,11 +54,14 @@ class BillingMod::PrepareUserBilling
     remaining_month = 0
     base_price      = 0
 
-    if prev_package.present? && prev_package.try(:name) != @package.try(:name) && prev_package.try(:commitment_end_period).to_i >= @period.to_i
+    deactivated_user = @user.inactive_at.present? && !next_package.present? && !@package.is_active && @package.try(:is_with_commitment?) && @package.try(:commitment_end_period).to_i > @period.to_i
+    changed_package  = next_package.present? && next_package.try(:name) != @package.try(:name) && @package.try(:is_with_commitment?) && @package.try(:commitment_end_period).to_i > @period.to_i
+
+    if prev_package.present? && prev_package.try(:name) != @package.try(:name) && prev_package.try(:is_with_commitment?) && prev_package.try(:commitment_end_period).to_i >= @period.to_i
       remaining_month = prev_package.try(:commitment_end_period).to_i != @period.to_i ? CustomUtils.period_diff(@period, prev_package.try(:commitment_end_period).to_i) : 1
       base_price      = prev_package.try(:base_price).to_i
       package_name    = prev_package.try(:human_name)
-    elsif next_package.present? && next_package.try(:name) != @package.try(:name) && @package.try(:commitment_end_period).to_i > @period.to_i
+    elsif deactivated_user || changed_package
       remaining_month = CustomUtils.period_diff(@period, @package.try(:commitment_end_period).to_i)
       base_price      = @package.try(:base_price).to_i
       package_name    = @package.try(:human_name)

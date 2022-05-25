@@ -7,6 +7,8 @@ class Subscription::Stop
   end
 
   def execute
+    return false if @user.inactive_at.present?
+
     # period = @user.subscription.find_period(Date.today)
 
     # Disable period and disable user
@@ -36,6 +38,10 @@ class Subscription::Stop
 
     my_package = @user.my_package
     my_package.update(is_active: false)
+
+    next_period  = CustomUtils.period_of(1.month.after)
+    next_package = @user.package_of( next_period )
+    next_package.destroy if next_package
 
     # Revoke authorization
     @user.email_code             = nil
