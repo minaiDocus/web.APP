@@ -123,6 +123,7 @@ class Organizations::MainController < OrganizationController
         :code,
         :authd_prev_period,
         :auth_prev_period_until_day,
+        :invoice_created_customer,
         :is_detail_authorized,
         :is_test,
         :is_pre_assignment_date_computed,

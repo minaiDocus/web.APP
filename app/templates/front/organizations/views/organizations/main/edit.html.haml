@@ -24,6 +24,14 @@
             .form-group
               .row
                 .col-md-11
+                  = f.label :invoice_created_customer, :class => "semibold"
+                .col-md-1
+                  .form-check.form-switch.idocus-custom-form-check
+                    = f.input :invoice_created_customer, as: :boolean, label: false, label_html: { class: 'semibold form-check-label' }, input_html: { class: 'form-check-input input_switch input_check_field', id: 'invoice_created_customer' }
+                    %label.semibold{class: 'form-check-label label_check_field', for: 'invoice_created_customer'} Non
+            .form-group
+              .row
+                .col-md-11
                   = f.label :is_detail_authorized, :class => "semibold"
                 .col-md-1
                   .form-check.form-switch.idocus-custom-form-check

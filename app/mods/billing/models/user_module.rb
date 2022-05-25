@@ -9,7 +9,9 @@ module BillingMod::UserModule
   end
 
   def can_be_billed?
-    self.pieces.count > 0 || self.preseizures.count > 0
+    return true if self.organization.invoice_created_customer
+
+    (self.pieces.count > 0 || self.preseizures.count > 0)
   end
 
   def current_flow
