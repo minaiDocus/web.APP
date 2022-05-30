@@ -17,12 +17,12 @@
 
     - if use_new_billing
       - extra_orders = @organization.extra_orders.select{ |order| order.period == CustomUtils.period_of(time) }.presence || []
-      - organization_option_price_wo_vat = extra_orders.any? ? extra_orders.sum(&:price) : 0
+      - organization_option_price = extra_orders.any? ? extra_orders.sum(&:price) : 0
     - else
       - period_options = @organization.subscription.periods.select{ |period| period.start_date <= time && period.end_date >= time }.first.try(:product_option_orders).presence || []
-      - organization_option_price_wo_vat = period_options.sum(&:price_in_cents_wo_vat) || 0
+      - organization_option_price = period_options.sum(&:price_in_cents_wo_vat) || 0
 
-    - if organization_option_price_wo_vat != 0
+    - if organization_option_price != 0
       .title.clearfix
         .float-left= glyphicon('info', { class: 'mr-sm-1', color: '#000' })
         .float-right
@@ -34,7 +34,7 @@
           - extra_orders.each do |order|
             - next if order.price == 0
             %i
-              = "- #{order.name} : #{ format_price_00(order.price) } €"
+              = "- #{order.name} : #{ order.price } €"
               %span{ style: 'font-size: 7px;' } HT
             %br
         - else
@@ -48,10 +48,17 @@
         %strong
           .float-left Total
           .float-right
-            = "#{ format_price_00(organization_option_price_wo_vat) } €"
+            - total_ht  = organization_option_price
+            - total_ttc = (organization_option_price * vat_ratio).round
+
+            - if not use_new_billing
+              - total_ht  = format_price_00(organization_option_price)
+              - total_ttc = format_price_00((organization_option_price * vat_ratio).round)
+
+            = "#{ total_ht } €"
             %span{ style: 'font-size: 7px;' } HT
             %br
-            = "#{ format_price_00((organization_option_price_wo_vat * vat_ratio).round) } €"
+            = "#{ total_ttc } €"
             %span{ style: 'font-size: 7px;' } TTC
     - else
       = "-"
