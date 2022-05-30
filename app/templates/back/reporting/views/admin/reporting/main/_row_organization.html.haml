@@ -16,7 +16,7 @@
       - vat_ratio = @organization.subject_to_vat ? 1.2 : 1
 
     - if use_new_billing
-      - extra_orders = @organization.extra_orders.select{ |order| order.period == CustomUtils.period_of(time) }.first.presence || []
+      - extra_orders = @organization.extra_orders.select{ |order| order.period == CustomUtils.period_of(time) }.presence || []
       - organization_option_price_wo_vat = extra_orders.any? ? extra_orders.sum(&:price) : 0
     - else
       - period_options = @organization.subscription.periods.select{ |period| period.start_date <= time && period.end_date >= time }.first.try(:product_option_orders).presence || []
