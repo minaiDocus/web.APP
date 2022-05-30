@@ -16,8 +16,8 @@ class PonctualScripts::AcdaCustomersOption < PonctualScripts::PonctualScript
     organization = Organization.find_by_code 'ACDA'
     user_code = []
 
-    organization.customers.active.each do |customer|
-      next if customer.orders.any?
+    organization.customers.active_at(Time.now).each do |customer|
+      next if ['ACDA%OPOMBAL', 'ACDA%WTDC', 'ACDA%MIAMS'].include?(customer.code)
 
       current_package = customer.package_of(current_period)
       next_package    = customer.package_of(next_period)

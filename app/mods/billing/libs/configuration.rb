@@ -27,8 +27,8 @@ class BillingMod::Configuration
             },
             ido_micro: {
               human_name: "iDo'Micro",
-              description: "Vous permet de transférer jusqu'à 100 pièces/mois, mutualisation des quotas au niveau du cabinet.",
-              hint: "Au-delà du quota cabinet cumulé, calcul du dépassement simplifié : 0,25€ ht/facture",
+              description: "Vous permet de transférer jusqu'à 100 pièces/an et de bénéficier des automates de récupérations bancaires pour un engagement de 12 mois.",
+              hint: "Au-delà de 100 factures, calcul du dépassement simplifié : 0,25€ ht/facture",
               label: 'Téléchargement + Pré-saisie comptable + Engagement 12 mois',
               price: 10,
               commitment: 12,
@@ -38,8 +38,8 @@ class BillingMod::Configuration
             },
             ido_micro_plus: {
               human_name: "iDo'Micro",
-              description: "Vous permet de transférer jusqu'à 100 pièces/mois, mutualisation des quotas au niveau du cabinet.",
-              hint: "Au-delà du quota cabinet cumulé, calcul du dépassement simplifié : 0,25€ ht/facture",
+              description: "Vous permet de transférer jusqu'à 100 pièces/an et de bénéficier des automates de récupérations bancaires pour un engagement de 12 mois.",
+              hint: "Au-delà de 100 factures, calcul du dépassement simplifié : 0,25€ ht/facture",
               label: 'Téléchargement + Pré-saisie comptable + Engagement 12 mois',
               price: 10,
               commitment: 12,
@@ -49,8 +49,8 @@ class BillingMod::Configuration
             },
             ido_nano: {
               human_name: "iDo'Nano",
-              description: "Vous permet de transférer jusqu'à 100 pièces/mois, mutualisation des quotas au niveau du cabinet.",
-              hint: "Au-delà du quota cabinet cumulé, calcul du dépassement simplifié : 0,25€ ht/facture",
+              description: "Vous permet de transférer jusqu'à 100 pièces/an pour un engagement de 12 mois.",
+              hint: "Au-delà de 100 factures, calcul du dépassement simplifié : 0,25€ ht/facture",
               label: 'Téléchargement + Pré-saisie comptable + Engagement 12 mois',
               price: 5,
               commitment: 12,
@@ -60,7 +60,7 @@ class BillingMod::Configuration
             },
             ido_mini: {
               human_name: "iDo'Mini",
-              description: "Vous permet de transférer jusqu'à 100 pièces/mois, mutualisation des quotas au niveau du cabinet.",
+              description: "Vous permet de transférer jusqu'à 300 pièces/trimèstre, mutualisation des quotas au niveau du cabinet.",
               hint: "Au-delà du quota cabinet cumulé, calcul du dépassement simplifié : 0,25€ ht/facture",
               label: 'Téléchargement + Pré-saisie comptable + Engagement 12 mois',
               price: 10,
@@ -70,8 +70,8 @@ class BillingMod::Configuration
             },            
             ido_x: {
               human_name: "iDo'X",
-              description: "Vous permet de transférer jusqu'à 100 pièces/mois, mutualisation des quotas au niveau du cabinet.",
-              hint: "Au-delà du quota cabinet cumulé, calcul du dépassement simplifié : 0,25€ ht/facture",
+              description: "Vous permet de convertir les pièces venues de jefacture.com (Factur-X) en écritures comptables !",
+              hint: "Attention, les autres modes d’import de documents (email, upload, appli mobile…) ne sont pas disponibles, seuls les fichiers venant de jefacture.com sont autorisés.",
               label: 'Factur-X + Pré-saisie comptable',
               price: 5,
               commitment: 0,
@@ -92,7 +92,7 @@ class BillingMod::Configuration
             },
             ido_digitize: {
               human_name: "Numérisation",
-              description: "Vous permet de transférer jusqu'à 100 pièces/mois, mutualisation des quotas au niveau du cabinet.",
+              description: "Vous permet de générer vos kit d'envoi de numérisation gratuitement (0 €)",
               hint: "",
               label: 'Numérisation de document',
               price: 0,
