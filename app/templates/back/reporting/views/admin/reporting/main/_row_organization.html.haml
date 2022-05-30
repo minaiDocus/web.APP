@@ -17,7 +17,7 @@
 
     - if use_new_billing
       - extra_orders = @organization.extra_orders.select{ |order| order.period == CustomUtils.period_of(time) }.first.presence || []
-      - organization_option_price_wo_vat = extra_orders.sum(&:price) || 0
+      - organization_option_price_wo_vat = extra_orders.any? ? extra_orders.sum(&:price) : 0
     - else
       - period_options = @organization.subscription.periods.select{ |period| period.start_date <= time && period.end_date >= time }.first.try(:product_option_orders).presence || []
       - organization_option_price_wo_vat = period_options.sum(&:price_in_cents_wo_vat) || 0
