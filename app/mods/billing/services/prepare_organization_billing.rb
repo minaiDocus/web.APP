@@ -91,7 +91,7 @@ class BillingMod::PrepareOrganizationBilling
     excess              = total_compta_pieces - all_excess_limit
     price               = BillingMod::Configuration.excess_price_of('ido_classic')
 
-    create_billing({ name: 'ido_classic_excess', title: 'Documents / Ecritures comptables des dossiers classiques en excès', kind: 'excess', price: ( price * excess ), associated_hash: { excess: excess, price: price, limit: all_excess_limit } }) if excess > 0
+    create_billing({ name: 'ido_classic_excess', title: 'Documents / écritures comptables des dossiers classiques en excès', kind: 'excess', price: ( price * excess ), associated_hash: { excess: excess, price: price, limit: all_excess_limit } }) if excess > 0
   end
 
   def create_micro_plus_excess_billing
@@ -103,7 +103,7 @@ class BillingMod::PrepareOrganizationBilling
     excess              = total_compta_pieces - all_excess_limit
     price               = BillingMod::Configuration.excess_price_of('ido_micro_plus')
 
-    create_billing({ name: 'ido_micro_plus_excess', title: 'Documents / Ecritures comptables des dossiers micro. en excès', kind: 'excess', price: ( price * excess ), associated_hash: { excess: excess, price: price, limit: all_excess_limit } }) if excess > 0
+    create_billing({ name: 'ido_micro_plus_excess', title: 'Documents / écritures comptables des dossiers micro. en excès', kind: 'excess', price: ( price * excess ), associated_hash: { excess: excess, price: price, limit: all_excess_limit } }) if excess > 0
   end
 
   def create_extra_order_billing
