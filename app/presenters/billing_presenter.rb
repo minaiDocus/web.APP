@@ -162,6 +162,7 @@ class BillingPresenter
         dematbox_scanned_pages: 0.to_s
       },
       delivery: 'wait',
+      type: 'billing',
       is_valid_for_quota_organization: BillingMod::Configuration::LISTS[@owner.my_package.name.to_sym].try(:[], :cummulative_excess)
     }
   end

@@ -158,6 +158,7 @@ class PeriodPresenter
         dematbox_scanned_pages: @period.excess_dematbox_scanned_pages.to_s
       },
       delivery: @period.delivery_state,
+      type: 'period',
       is_valid_for_quota_organization: @period.is_valid_for_quota_organization
     }
   end

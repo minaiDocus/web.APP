@@ -99,7 +99,7 @@ class Organizations::MainController < OrganizationController
   private
 
   def verify_rights
-    unless @user.is_admin
+    unless current_user.is_admin
       authorized = false
       if current_user.is_admin && action_name.in?(%w[index edit_options update_options edit_software_users update_software_users new create suspend unsuspend])
         authorized = true
@@ -117,7 +117,7 @@ class Organizations::MainController < OrganizationController
   end
 
   def organization_params
-    if @user.is_admin
+    if current_user.is_admin
       params.require(:organization).permit(
         :name,
         :code,

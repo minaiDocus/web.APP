@@ -17,7 +17,7 @@
             .select-container.no-padding.w-100
               = f.input :jefacture_api_key, input_html: { class: '', placeholder: "ex : T4534638846" }
 
-          - if @user.is_admin
+          - if current_user.is_admin
             .form-group
               .select-container.no-padding.w-100
                 = f.input :code, label_html: { class: 'semibold custom-label-field' }, input_html: { class: '  custom-input-field', placeholder: "IDOC" }
@@ -111,7 +111,7 @@
         .form-group
           .select-container.no-padding.w-100
             = f.input :invoice_mails, label_html: { class: 'semibold custom-label-field' }, input_html: { class: '  custom-input-field', placeholder: "Ex : jean.dupont@mail.com, marie.dupuis@mail.com" }, hint: 'Doit être séparé par une virgule (",") si plusieurs'
-        - if @user.is_admin
+        - if current_user.is_admin
           - unless @organization.specific_mission
             .form-group
               .row

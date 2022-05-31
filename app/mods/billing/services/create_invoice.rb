@@ -35,9 +35,54 @@ module BillingMod
 
     private
 
+    ## THIS IS AN ALTERNATIVE METHODE TO UPLOAD INVOICES MANUALLY (USING A send trigger method)
+    def upload_invoices(period = nil, invoices = [])
+      @auto_upload = true
+
+      if invoices.present?
+        _invoices = Array(invoices)
+      else
+        _period = period.presence || @period
+        _invoices = BillingMod::Invoice.of_period(_period.to_i)
+      end
+
+      _invoices.each_with_index do |invoice, index|
+        @invoice      = invoice
+        @invoice_path = invoice.cloud_content_object.reload.path
+
+        next if not File.exist?(@invoice_path)
+
+        p "Uploading #{index} : #{@invoice.number} / #{@invoice.organization.code}"
+        auto_upload_invoice
+      end
+    end
+
+    ## THIS IS AN ALTERNATIVE METHODE TO SEND INVOICES NOTIFICATIONS MANUALLY (USING A send trigger method)
+    def notify_invoices(period = nil, invoices = [])
+      @notify = true
+
+      if invoices.present?
+        _invoices = Array(invoices)
+      else
+        @period = period.presence || @period
+        _invoices = BillingMod::Invoice.of_period(@period.to_i)
+      end
+
+      _invoices.each_with_index do |invoice, index|
+        @invoice      = invoice
+        @invoice_path = invoice.cloud_content_object.reload.path
+        @organization = invoice.organization
+
+        next if !File.exist?(@invoice_path) || !@organization
+
+        p "Notify #{index} : #{@invoice.number} / #{@invoice.organization.code}"
+        send_notification
+      end
+    end
+
     def generate_invoice_of(organization)
       @organization = organization
-      @customers    = organization.customers.active_at(@time)
+      @customers    = organization.customers.active_at(@time.end_of_month + 1.day)
 
       @packages_count       = {}
       @total_customers_price = 0
@@ -261,7 +306,7 @@ module BillingMod
       @pdf.move_down 30
       data = [['<b>Forfaits & Prestations</b>', '<b>Prix HT</b>']]
 
-      data << ["Nombre de dossiers actifs : #{@organization.customers.active_at(@time).count}", '']
+      data << ["Nombre de dossiers actifs : #{@organization.customers.active_at(@time.end_of_month + 1.day).count}", '']
       data << ['Forfaits et options iDocus pour ' + @period_month.downcase + ' ' + @year.to_s + ' :', CustomUtils.format_price(@total_customers_price) + " €"]
       
 

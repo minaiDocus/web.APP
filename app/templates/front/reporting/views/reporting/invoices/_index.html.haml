@@ -551,7 +551,7 @@
               <td style="text-align:right;">{%= o.options.list[i].price %} €</td>
             </tr>
           {% } %}
-          {% if (!o.documents.is_valid_for_quota_organization)
+          {% if (!o.documents.is_valid_for_quota_organization && o.documents.type == 'period')
             { %}
             <tr>
               <td class='semibold' >Dépassement pré-affectation</td>

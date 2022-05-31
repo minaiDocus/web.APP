@@ -14,13 +14,17 @@ class BillingMod::FetchFlow
     _customers.each do |customer|
       next if customer.is_prescriber || !customer.still_active?
 
+      documents = customer.period_documents.of_period(@period)
+
       preseizures       = customer.preseizures.where("DATE_FORMAT(created_at, '%Y%m') = #{@period}")
       preseizures_piece = preseizures.where('piece_id > 0').count
       preseizures_ope   = preseizures.where('operation_id > 0').count
 
       operations_count  = customer.operations.where("DATE_FORMAT(created_at, '%Y%m') = #{@period}").count
-      pieces_count      = customer.pack_pieces.where("DATE_FORMAT(created_at, '%Y%m') = #{@period}").count
+      pieces_count      = documents.sum(&:pieces)
       expences_count    = customer.expenses.where("DATE_FORMAT(created_at, '%Y%m') = #{@period}").count
+
+      scanned_sheets    = documents.sum(&:scanned_sheets)
 
       data_flow         = customer.flow_of(@period)
 
@@ -34,7 +38,7 @@ class BillingMod::FetchFlow
       data_flow.bank_excess    = bank_excess_of(customer)
       data_flow.journal_excess = journal_excess_of(customer)
 
-      data_flow.scanned_sheets = scanned_sheet_of(customer)
+      data_flow.scanned_sheets = scanned_sheets
 
       data_flow.save
     end
@@ -58,8 +62,8 @@ class BillingMod::FetchFlow
     return (excess_journals_count > 0)? excess_journals_count : 0
   end
 
-  def scanned_sheet_of(customer)
-    customer.temp_documents.where(api_name: 'scan', state: 'bundled').where("DATE_FORMAT(created_at, '%Y%m') = #{@period}").count
-  end
+  # def scanned_sheet_of(customer)
+  #   customer.temp_documents.where(api_name: 'scan', state: 'bundled').where("DATE_FORMAT(created_at, '%Y%m') = #{@period}").count
+  # end
 
 end
