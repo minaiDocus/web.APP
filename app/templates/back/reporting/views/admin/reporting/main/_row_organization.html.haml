@@ -16,7 +16,7 @@
       - vat_ratio = @organization.subject_to_vat ? 1.2 : 1
 
     - if use_new_billing
-      - extra_orders = @organization.extra_orders.select{ |order| order.period == CustomUtils.period_of(time) }.presence || []
+      - extra_orders = @organization.billings.where(period: CustomUtils.period_of(time)).presence || []
       - organization_option_price = extra_orders.any? ? extra_orders.sum(&:price) : 0
     - else
       - period_options = @organization.subscription.periods.select{ |period| period.start_date <= time && period.end_date >= time }.first.try(:product_option_orders).presence || []
@@ -34,7 +34,7 @@
           - extra_orders.each do |order|
             - next if order.price == 0
             %i
-              = "- #{order.name} : #{ order.price } €"
+              = "- #{order.title} : #{ format_price_00(order.price) } €"
               %span{ style: 'font-size: 7px;' } HT
             %br
         - else
@@ -48,17 +48,10 @@
         %strong
           .float-left Total
           .float-right
-            - total_ht  = organization_option_price
-            - total_ttc = (organization_option_price * vat_ratio).round
-
-            - if not use_new_billing
-              - total_ht  = format_price_00(organization_option_price)
-              - total_ttc = format_price_00((organization_option_price * vat_ratio).round)
-
-            = "#{ total_ht } €"
+            = "#{ format_price_00(organization_option_price) } €"
             %span{ style: 'font-size: 7px;' } HT
             %br
-            = "#{ total_ttc } €"
+            = "#{ format_price_00((organization_option_price * vat_ratio).round) } €"
             %span{ style: 'font-size: 7px;' } TTC
     - else
       = "-"
