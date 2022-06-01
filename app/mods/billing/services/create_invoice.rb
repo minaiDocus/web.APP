@@ -82,7 +82,7 @@ module BillingMod
 
     def generate_invoice_of(organization)
       @organization = organization
-      @customers    = organization.customers.active_at(@time.end_of_month + 1.day)
+      @customers    = organization.customers.active_at(@time)
 
       @packages_count       = {}
       @total_customers_price = 0
@@ -115,6 +115,8 @@ module BillingMod
       if recalculate_billing
         BillingMod::PrepareOrganizationBilling.new(@organization, @period).execute
       end
+
+      return false if ( @total_customers_price + @organization.total_billing_of(@period) ) == 0
 
       create_invoice
       generate_pdf
@@ -169,6 +171,8 @@ module BillingMod
         rescue => e
           System::Log.info('auto_upload_invoice', "[#{Time.now}] - [#{@invoice.id}] - [#{@invoice.organization.id}] - Error: #{e.to_s}")
         end
+      else
+        p "====== Auto Upload : OFF ========="
       end
     end
 
@@ -197,6 +201,8 @@ module BillingMod
         end
 
         InvoiceMailer.delay(queue: :high).notify(@invoice)
+      else
+        p "====== Send Notification : OFF ========="
       end
     end
 
@@ -306,7 +312,7 @@ module BillingMod
       @pdf.move_down 30
       data = [['<b>Forfaits & Prestations</b>', '<b>Prix HT</b>']]
 
-      data << ["Nombre de dossiers actifs : #{@organization.customers.active_at(@time.end_of_month + 1.day).count}", '']
+      data << ["Nombre de dossiers actifs : #{@organization.customers.active_at(@time).count}", '']
       data << ['Forfaits et options iDocus pour ' + @period_month.downcase + ' ' + @year.to_s + ' :', CustomUtils.format_price(@total_customers_price) + " €"]
       
 

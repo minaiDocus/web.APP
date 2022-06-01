@@ -2,7 +2,7 @@ class BillingMod::PrepareOrganizationBilling
   def initialize(organization, period=nil)
     @organization = organization
     @period       = period.presence || CustomUtils.period_of(Time.now)
-    @time_end     = Date.parse("#{@period.to_s[0..3]}-#{@period.to_s[4..5]}-15").end_of_month + 1.day
+    @time_end     = Date.parse("#{@period.to_s[0..3]}-#{@period.to_s[4..5]}-15")
   end
 
   def execute
