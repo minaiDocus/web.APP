@@ -50,6 +50,7 @@ class DocumentsUploader{
 
     if ((this.load_counter > 0) && (VARIABLES.get('is_loaded')) == true)
       return
+
     this.fill_journals();
     this.fill_periods();
   }
@@ -113,6 +114,9 @@ jQuery(function() {
   uploader.base_modal.on('hide.bs.modal', function(e){ 
     uploader.reload_packs(); 
     VARIABLES.set('is_loaded', true);
+
+    VARIABLES.set('is_loaded', true);
+
   });
 
   AppListenTo('compta_analytics.hide_modal', (e)=>{
