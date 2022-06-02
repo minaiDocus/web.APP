@@ -6,9 +6,9 @@ module StatisticsManager::Subscription
   end
 
   def self.generate_statistics_of(date)
-    start_date    = date.to_date.beginning_of_month
-    end_date      = date.to_date.end_of_month
-    period_date   = date.to_date.end_of_month - 15.days
+    start_date   = date.to_date.beginning_of_month
+    end_date     = date.to_date.end_of_month
+    period_date  = CustomUtils.period_of(start_date)
 
     Organization.billed.where("created_at <= ?", end_date).order(created_at: :asc).each do |organization|
       options     = { micro_package: 0, nano_package: 0, basic_package: 0, mail_package: 0, scan_box_package: 0, retriever_package: 0, mini_package: 0, idox_package: 0, digitize_package: 0 }
@@ -16,7 +16,7 @@ module StatisticsManager::Subscription
 
       user_ids = []
       organization.customers.active.each do |customer|
-        package = customer.try(:my_package)
+        package = customer.package_of(period_date)
         next if not package
 
         case package.name
@@ -36,7 +36,7 @@ module StatisticsManager::Subscription
 
           options[:mail_package] += 1       if package.mail_active
           options[:retriever_package] += 1  if package.bank_active && package.name != 'ido_retriever'
-          options[:digitize_package] += 1   if package.scan_active && CustomUtils.is_manual_paper_set_order?(customer.try(:organization)) && package.name != 'ido_digitize'
+          options[:digitize_package] += 1   if package.digitize_active && package.name != 'ido_digitize'
 
         user_ids << package.user_id if package.user_id
       end
