@@ -3,7 +3,7 @@ class Billing::SepaDirectDebitGenerator
   def self.execute(invoice_time, debit_date)
     data = DebitMandate.configured.map do |debit_mandate|
       invoice = debit_mandate.organization.invoices.where(
-        "created_at >= ? AND created_at <= ?", invoice_time.beginning_of_month, invoice_time.end_of_month
+        "created_at >= ? AND created_at <= ? AND amount_in_cents_w_vat > 0", invoice_time.beginning_of_month, invoice_time.end_of_month
       ).first
 
       invoice ? [debit_mandate, invoice] : nil
