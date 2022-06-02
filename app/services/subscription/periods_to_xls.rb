@@ -1,7 +1,8 @@
 # -*- encoding : UTF-8 -*-
 class Subscription::PeriodsToXls
   def initialize(periods, with_organization_info = false)
-    @periods = periods
+    @periods  = periods
+    @customer_ids = @periods.pluck(:user_id)
     @with_organization_info = with_organization_info
   end
 
@@ -40,14 +41,20 @@ class Subscription::PeriodsToXls
 
     @list       = []
 
+    period_documents = PeriodDocument.where(user_id: @customer_ids, period_id: @periods.pluck(:id)).order(created_at: :asc, name: :asc)
+
+    report_ids       = Pack::Report.where(document_id: period_documents.pluck(:id)).pluck(:id)
+    preseizures      = Pack::Report::Preseizure.unscoped.where(report_id: report_ids).where.not(piece_id: nil)
+    expenses         = Pack::Report::Expense.unscoped.where(report_id: report_ids)
+
     @periods.sort_by(&:end_date).each do |period|
       user            = period.user
-      documents       = period.documents.order(created_at: :asc, name: :asc)
+      documents       = period_documents.select{|doc| doc.user_id == user.id && doc.period_id == period.id}
       @operation_count = user ? user.operations.where(created_at: period.start_date..period.end_date).count : 0
 
       if documents.any?
         documents.each do |document|
-          @preseizures_count = document.report ? (Pack::Report::Preseizure.unscoped.where(report_id: document.report).where.not(piece_id: nil).count  + document.report.expenses.count) : 0
+          @preseizures_count = preseizures.select{|pres| pres.report_id == document.report.try(:id)}.size + expenses.select{|exp| exp.report_id == document.report.try(:id)}.size
           fill_data_with(user, period, document)
         end
       else

@@ -30,7 +30,7 @@ class Admin::Reporting::MainController < BackController
               with_organization_info = false
             else
               organization_ids = @organizations.pluck(:id)
-              customer_ids = @organizations.map { |o| o.customers.active_at(end_date).pluck(:id) }.flatten
+              customer_ids     = User.customers.where(organization_id: organization_ids).active_at(end_date).pluck(:id)
               filename = params[:month].present? ? "reporting_iDocus_#{'%02d' % params[:month].to_i}_#{@year}.xls" : "reporting_iDocus_#{@year}.xls"
               with_organization_info = true
             end
