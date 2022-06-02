@@ -81,6 +81,6 @@ class MyCompanyFiles::SettingsController < OrganizationController
   end
 
   def reset_state
-    Rails.cache.write [:mcf_oauth_state, @organization.id], nil, expires_in: 0
+    Rails.cache.write [:mcf_oauth_state, @organization.id], nil, expires_in: 1.minutes
   end
 end
