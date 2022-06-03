@@ -94,7 +94,7 @@ class DataProcessor::TempPack
 
       finalize_pack
 
-      Reporting.update(pack)
+      Reporting.update_pack(pack)
 
       FileDelivery.prepare(pack)
 

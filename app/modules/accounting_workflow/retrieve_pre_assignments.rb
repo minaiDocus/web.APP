@@ -40,6 +40,7 @@ class AccountingWorkflow::RetrievePreAssignments
         PreseizureExport::GeneratePreAssignment.new(not_blocked_pre_assignments).execute
         FileDelivery.prepare(report)
         FileDelivery.prepare(pack)
+        Reporting.update_report(report)
       end
     end
   end

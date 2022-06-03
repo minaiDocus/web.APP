@@ -1,7 +1,7 @@
 # -*- encoding : UTF-8 -*-
 module Reporting
   # Update billings information for a Specific Pack
-  def self.update(pack)
+  def self.update_pack(pack)
     remaining_dividers = pack.dividers.size
     time = pack.created_at.localtime
 
@@ -52,6 +52,23 @@ module Reporting
 
     # Billing::UpdateOrganizationPeriod.new(pack.organization.subscription.current_period).fetch_all(true)
     # Billing::OrganizationExcess.new(pack.organization.subscription.current_period).execute(true)
+  end
+
+  def self.update_report(report)
+    preseizures_pieces     = report.preseizures.where('piece_id > 0').count
+    preseizures_operations = report.preseizures.where('operation_id > 0').count
+
+    expenses_pieces        = report.expenses.count
+
+    period_document = report.document
+
+    return false if not period_document
+
+    period_document.preseizures_pieces     = preseizures_pieces
+    period_document.expenses_pieces        = expenses_pieces
+    period_document.preseizures_operations = preseizures_operations
+
+    period_document.save
   end
 
   def self.find_or_create_period_document(pack, period=nil, _period=nil)

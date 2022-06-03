@@ -32,6 +32,7 @@ class SgiApiServices::PushPreAsignmentService
         end
         FileDelivery.prepare(report)
         FileDelivery.prepare(piece.pack)
+        Reporting.update_report(report)
       end
     end
 

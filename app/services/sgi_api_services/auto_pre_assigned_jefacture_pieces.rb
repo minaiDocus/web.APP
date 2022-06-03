@@ -66,6 +66,7 @@ class SgiApiServices::AutoPreAssignedJefacturePieces
             Notifications::PreAssignments.new({pre_assignment: preseizure}).notify_new_pre_assignment_available
           end
 
+          Reporting.update_report(initialize_report(piece))
           true
         else
           System::Log.info('auto_pre_assigned_jefacture_piece', "#{Time.now} - #{piece.id} - #{piece.user.organization.id} - errors : #{preseizure.errors.full_messages}")

@@ -93,6 +93,8 @@ class DataProcessor::Operation
 
             operation.update({ processed_at: Time.now, is_locked: false })
           end
+
+          Reporting.update_report(pack_report)
           if pack_report.preseizures.not_locked.not_delivered.size > 0
             pack_report.remove_delivered_to
           end
