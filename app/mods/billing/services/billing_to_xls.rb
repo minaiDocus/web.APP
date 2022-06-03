@@ -1,7 +1,8 @@
 # -*- encoding : UTF-8 -*-
 class BillingMod::BillingToXls
-  def initialize(customers_ids, year, with_organization_info = false)
+  def initialize(customers_ids, year, month = 0, with_organization_info = false)
     @year                   = year
+    @month                  = month.to_i
     @customers_ids          = customers_ids
     @with_organization_info = with_organization_info
   end
@@ -55,6 +56,8 @@ class BillingMod::BillingToXls
 
     12.times do |month_ind|
       month_ind += 1
+      next if @month > 0 && month_ind != @month
+
       real_month_ind = (sprintf '%02d', month_ind)
 
       _period     = "#{@year}#{real_month_ind}".to_i
@@ -62,11 +65,13 @@ class BillingMod::BillingToXls
 
       next if _period > Time.now.strftime('%Y%m').to_i
 
-      @customers       = User.where(id: @customers_ids).active_at(_date_end)
+      @customers       = User.where(id: @customers_ids).active_at(_date_end).order(code: :asc)
       period_documents = PeriodDocument.where(user_id: @customers_ids).of_period(_period).order(created_at: :asc, name: :asc)
+      data_flows       = BillingMod::DataFlow.where(user_id: @customers_ids).of_period(_period)
 
       @customers.each do |user|
         documents        = period_documents.to_a.extract!{ |doc| doc.user_id == user.id }
+        @operations_size = data_flows.to_a.extract!{ |flow| flow.user_id == user.id }.first.try(:operations).to_i
 
         if documents.any?
           documents.each do |document|
@@ -113,6 +118,8 @@ class BillingMod::BillingToXls
 
     12.times do |month_ind|
       month_ind += 1
+      next if @month > 0 && month_ind != @month
+
       real_month_ind = (sprintf '%02d', month_ind)
 
       _period     = "#{@year}#{real_month_ind}".to_i
@@ -120,7 +127,7 @@ class BillingMod::BillingToXls
 
       next if _period > Time.now.strftime('%Y%m').to_i
 
-      @customers    = User.where(id: @customers_ids).active_at(_date_end)
+      @customers    = User.where(id: @customers_ids).active_at(_date_end).order(code: :asc)
       all_billings  = BillingMod::Billing.of_period(_period).where(owner_id: @customers_ids, owner_type: 'User')
 
       @customers.each do |user|
@@ -180,7 +187,7 @@ class BillingMod::BillingToXls
               document.try(:name),
               document.try(:pieces),
               document.try(:preseizures_pieces).to_i + document.try(:expenses_pieces).to_i,
-              document.try(:preseizures_operations).to_i,
+              @operations_size.to_i,
               document.try(:scanned_pieces).to_i,
               document.try(:uploaded_pieces).to_i,
               document.try(:dematbox_scanned_pieces).to_i,

@@ -42,7 +42,7 @@ class Admin::Reporting::MainController < BackController
 
               data = Subscription::PeriodsToXls.new(periods, with_organization_info).execute
             else
-              data = BillingMod::BillingToXls.new(customer_ids, @year).execute
+              data = BillingMod::BillingToXls.new(customer_ids, @year, params[:month].to_i, with_organization_info).execute
             end
 
             send_data data, type: 'application/vnd.ms-excel', filename: filename
