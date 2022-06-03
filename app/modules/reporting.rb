@@ -55,14 +55,13 @@ module Reporting
   end
 
   def self.update_report(report)
-    preseizures_pieces     = report.preseizures.where('piece_id > 0').count
-    preseizures_operations = report.preseizures.where('operation_id > 0').count
-
-    expenses_pieces        = report.expenses.count
-
     period_document = report.document
 
     return false if not period_document
+
+    preseizures_pieces     = report.preseizures.where('piece_id > 0').count
+    preseizures_operations = report.preseizures.where('operation_id > 0').count
+    expenses_pieces        = report.expenses.count
 
     period_document.preseizures_pieces     = preseizures_pieces
     period_document.expenses_pieces        = expenses_pieces

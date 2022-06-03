@@ -159,6 +159,8 @@ module BillingMod
 
     def auto_upload_invoice
       if !@is_test && @auto_upload
+        return false if @invoice.amount_in_cents_w_vat.to_f == 0
+
         begin
           user = User.find_by_code 'ACC%IDO' # Always send invoice to ACC%IDO customer
 

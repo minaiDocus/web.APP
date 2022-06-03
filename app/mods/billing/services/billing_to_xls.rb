@@ -64,23 +64,15 @@ class BillingMod::BillingToXls
 
       @customers       = User.where(id: @customers_ids).active_at(_date_end)
       period_documents = PeriodDocument.where(user_id: @customers_ids).of_period(_period).order(created_at: :asc, name: :asc)
-      data_flows       = BillingMod::DataFlow.of_period(_period).where(user_id: @customers_ids)
-
-      report_ids       = Pack::Report.where(document_id: period_documents.pluck(:id)).pluck(:id)
-      preseizures      = Pack::Report::Preseizure.unscoped.where(report_id: report_ids).where.not(piece_id: nil)
-      expenses         = Pack::Report::Expense.unscoped.where(report_id: report_ids)
 
       @customers.each do |user|
         documents        = period_documents.to_a.extract!{ |doc| doc.user_id == user.id }
-        @operation_count = data_flows.to_a.extract!{|df| df.user_id == user.id}.first.try(:compta_operations).to_i
 
         if documents.any?
           documents.each do |document|
-            @preseizures_count = preseizures.to_a.extract!{|pres| pres.report_id == document.report.try(:id)}.size + expenses.to_a.extract!{|exp| exp.report_id == document.report.try(:id)}.size
             fill_data_with(user, month_ind, document)
           end
         else
-          @preseizures_count = 0
           fill_data_with(user, month_ind)
         end
       end
@@ -187,8 +179,8 @@ class BillingMod::BillingToXls
               user.try(:company),
               document.try(:name),
               document.try(:pieces),
-              @preseizures_count,
-              @operation_count,
+              document.try(:preseizures_pieces).to_i + document.try(:expenses_pieces).to_i,
+              document.try(:preseizures_operations).to_i,
               document.try(:scanned_pieces).to_i,
               document.try(:uploaded_pieces).to_i,
               document.try(:dematbox_scanned_pieces).to_i,

@@ -6,7 +6,6 @@ class Subscription::PeriodsToXls
     @with_organization_info = with_organization_info
   end
 
-
   def execute
     book = Spreadsheet::Workbook.new
 
