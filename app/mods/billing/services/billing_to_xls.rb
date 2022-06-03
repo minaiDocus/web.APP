@@ -64,19 +64,19 @@ class BillingMod::BillingToXls
 
       @customers       = User.where(id: @customers_ids).active_at(_date_end)
       period_documents = PeriodDocument.where(user_id: @customers_ids).of_period(_period).order(created_at: :asc, name: :asc)
-      operations       = Operation.where("DATE_FORMAT(created_at, '%Y%m') = #{_period}").where(user_id: @customers_ids)
+      data_flows       = BillingMod::DataFlow.of_period(_period).where(user_id: @customers_ids)
 
       report_ids       = Pack::Report.where(document_id: period_documents.pluck(:id)).pluck(:id)
       preseizures      = Pack::Report::Preseizure.unscoped.where(report_id: report_ids).where.not(piece_id: nil)
       expenses         = Pack::Report::Expense.unscoped.where(report_id: report_ids)
 
       @customers.each do |user|
-        documents        = period_documents.select{ |doc| doc.user_id == user.id }
-        @operation_count = operations.select{ |ope| ope.user_id == user.id }.size
+        documents        = period_documents.to_a.extract!{ |doc| doc.user_id == user.id }
+        @operation_count = data_flows.to_a.extract!{|df| df.user_id == user.id}.first.try(:compta_operations).to_i
 
         if documents.any?
           documents.each do |document|
-            @preseizures_count = preseizures.select{|pres| pres.report_id == document.report.try(:id)}.size + expenses.select{|exp| exp.report_id == document.report.try(:id)}.size
+            @preseizures_count = preseizures.to_a.extract!{|pres| pres.report_id == document.report.try(:id)}.size + expenses.to_a.extract!{|exp| exp.report_id == document.report.try(:id)}.size
             fill_data_with(user, month_ind, document)
           end
         else
@@ -129,17 +129,11 @@ class BillingMod::BillingToXls
       next if _period > Time.now.strftime('%Y%m').to_i
 
       @customers    = User.where(id: @customers_ids).active_at(_date_end)
-      # packages      = BillingMod::Package.of_period(_period).where(user_id: @customers_ids)
-      # data_flows    = BillingMod::DataFlow.of_period(_period).where(user_id: @customers_ids)
       all_billings  = BillingMod::Billing.of_period(_period).where(owner_id: @customers_ids, owner_type: 'User')
 
       @customers.each do |user|
-        # package   = packages.select{|pak| pak.user_id == user.id}
-        # data_flow = data_flows.select{|df| df.user_id == user.id}.first
-        billings  = all_billings.select{|bl| bl.owner_id == user.id}
+        billings  = all_billings.to_a.extract!{|bl| bl.owner_id == user.id}
 
-        # next if !package && _period >= 202205
-        # next if !data_flow && _period >= 202205
         next if billings.size == 0 
 
         billings.each do |billing|

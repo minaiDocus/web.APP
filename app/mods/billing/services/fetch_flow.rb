@@ -12,7 +12,8 @@ class BillingMod::FetchFlow
     _customers = Array(customers).presence || User.where(is_prescriber: false).active_at(@time)
 
     _customers.each do |customer|
-      next if customer.is_prescriber || !customer.still_active?
+      # next if customer.is_prescriber || !customer.still_active?
+      next if customer.is_prescriber
 
       documents = customer.period_documents.of_period(@period)
 
@@ -28,7 +29,7 @@ class BillingMod::FetchFlow
 
       data_flow         = customer.flow_of(@period)
 
-      return false if data_flow.nil?
+      next false if data_flow.nil?
 
       data_flow.pieces            = pieces_count
       data_flow.operations        = operations_count
