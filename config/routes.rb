@@ -112,6 +112,7 @@ Rails.application.routes.draw do
   back_draw('zoho_crms')
   back_draw('pkill')
   back_draw('reset')
+  back_draw('package_setting')
 
   #### -------------------------------- native resources -----------------------------###
 

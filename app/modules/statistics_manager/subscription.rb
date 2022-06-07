@@ -11,7 +11,7 @@ module StatisticsManager::Subscription
     period_date  = CustomUtils.period_of(start_date)
 
     Organization.billed.where("created_at <= ?", end_date).order(created_at: :asc).each do |organization|
-      options     = { micro_package: 0, nano_package: 0, basic_package: 0, mail_package: 0, scan_box_package: 0, retriever_package: 0, mini_package: 0, idox_package: 0, digitize_package: 0 }
+      options     = { micro_package: 0, nano_package: 0, basic_package: 0, mail_package: 0, scan_box_package: 0, retriever_package: 0, mini_package: 0, idox_package: 0, digitize_package: 0, premium_package: 0 }
       consumption = { upload: 0, scan: 0, dematbox_scan: 0, retriever: 0 }
 
       user_ids = []
@@ -32,6 +32,8 @@ module StatisticsManager::Subscription
             options[:retriever_package] += 1
           when 'ido_digitize'
             options[:digitize_package] += 1
+          when 'ido_premium'
+            options[:premium_package] += 1
           end
 
           options[:mail_package] += 1       if package.mail_active

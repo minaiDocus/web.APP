@@ -16,6 +16,7 @@
               %th iDo Micro
               %th iDo Nano
               %th iDo X
+              %th iDo Premium
               %th Automate uniquement
               %th Numérisation uniquement
               %th Non configuré
@@ -32,10 +33,11 @@
               %td= link_to @micro_package_count, "#", class: 'do-showAccounts', title: "iDo Micro", type: "micro_package"
               %td= link_to @nano_package_count, "#", class: 'do-showAccounts', title: "iDo Nano", type: "nano_package"
               %td= link_to @idox_package_count, "#", class: 'do-showAccounts', title: "iDo X", type: "idox_package"
+              %td= link_to @premium_package_count, "#", class: 'do-showAccounts', title: "iDo Premium", type: "premium_package"
               %td= link_to @retriever_only_package_count, "#", class: 'do-showAccounts', title: "Automate uniquement", type: "retriever_only_package"
               %td= link_to @digitize_only_package_count, "#", class: 'do-showAccounts', title: "Numérisation uniquement", type: "digitize_only_package"
               %td= link_to @not_configured, "#", class: 'do-showAccounts', title: "Non configuré", type: "not_configured"
-              %td= @basic_package_count + @idox_package_count + @mini_package_count + @micro_package_count + @nano_package_count + @retriever_only_package_count + @not_configured + @digitize_only_package_count
+              %td= @premium_package_count + @basic_package_count + @idox_package_count + @mini_package_count + @micro_package_count + @nano_package_count + @retriever_only_package_count + @not_configured + @digitize_only_package_count
               %td= link_to @mail_package_count, "#", class: 'do-showAccounts', title: "Fofait Courrier", type: "mail_package"
               %td= link_to @digitize_package_count, "#", class: 'do-showAccounts', title: "Numériser", type: "digitize_package"
               %td= link_to @retriever_package_count, "#", class: 'do-showAccounts', title: "Forfait automates", type: "retriever_package"
@@ -50,7 +52,7 @@
           %thead
             %tr.bg-brown.text-white
               %th(colspan='3') Information
-              %th(colspan='8') Forfaits
+              %th(colspan='9') Forfaits
               %th(colspan='4') Utilisation
               %th(colspan='3') Clients
             %tr.bg-brown-light.text-white
@@ -65,6 +67,7 @@
               %th= sortable 'options.micro_package', 'micro'
               %th= sortable 'options.nano_package', 'nano'
               %th= sortable 'options.idox_package', 'idox'
+              %th= sortable 'options.premium_package', 'premium'
               %th= sortable 'consumption.upload', 'téléversement'
               %th= sortable 'consumption.scan', 'numérisation'
               %th= sortable 'consumption.dematbox_scan', 'dematbox'
@@ -102,6 +105,9 @@
                 %td
                   %span= statistic.options[:idox_package]
                   = subscription_diff_content_for(statistic.options[:idox_package_diff])
+                %td
+                  %span= statistic.options[:premium_package]
+                  = subscription_diff_content_for(statistic.options[:premium_package_diff])
                 %td= statistic.consumption[:upload]
                 %td= statistic.consumption[:scan]
                 %td= statistic.consumption[:dematbox_scan]
@@ -139,6 +145,9 @@
               %td.total_footer
                 %span= @statistics_total[:idox_package]
                 = subscription_diff_content_for(@statistics_total[:idox_package_diff])
+              %td.total_footer
+                %span= @statistics_total[:premium_package]
+                = subscription_diff_content_for(@statistics_total[:premium_package_diff])
               %td.total_footer= @statistics_total[:upload]
               %td.total_footer= @statistics_total[:scan]
               %td.total_footer= @statistics_total[:dematbox_scan]

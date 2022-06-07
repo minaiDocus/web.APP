@@ -108,6 +108,8 @@ class Customers::MainController < CustomerController
       @customer.is_group_required = @user.not_leader?
 
       if Subscription::UpdateCustomer.new(@customer, user_params).execute
+        update_package  if params[:package].present?
+
         flash[:success] = 'Modifié avec succès'
       else
         flash[:error] = "Impossible de modifier: #{@customer.errors.messages.to_s}"
@@ -455,5 +457,10 @@ class Customers::MainController < CustomerController
 
   def softwares_attributes
     "#{Interfaces::Software::Configuration.h_softwares[params[:part]]}_attributes"
+  end
+
+  def update_package
+    BillingMod::CreatePackage.new(@customer, "ido_premium", params[:package], false, current_user).execute
+    BillingMod::PrepareUserBilling.new(@customer.reload).execute
   end
 end

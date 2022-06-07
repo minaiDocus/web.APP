@@ -228,6 +228,10 @@ class CustomUtils
       ['ADV', 'ALM'].include?(organization_code)
     end
 
+    def is_ido_premium?(organization_code)
+      ['ACDA'].include?(organization_code)
+    end
+
     def can_create_budgea_documents(customer)
       return true if ["ACC%0336"].include?(customer.try(:my_code).to_s)
       return true if ["IDOC", "AFH"].include?(customer.try(:organization).try(:code).to_s)

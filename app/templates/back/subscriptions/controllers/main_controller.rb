@@ -109,11 +109,13 @@ class Admin::Subscriptions::MainController < BackController
   end
 
   def new_subscription_count
-    @mail_package_count = @basic_package_count = @pre_assignment_count = @annual_package_count = @scan_box_package_count = @retriever_package_count = @digitize_package_count = @mini_package_count = @micro_package_count = @nano_package_count = @idox_package_count = @retriever_only_package_count = @digitize_only_package_count = @ido_premium = @not_configured = 0
+    @mail_package_count = @premium_package_count = @basic_package_count = @pre_assignment_count = @annual_package_count = @scan_box_package_count = @retriever_package_count = @digitize_package_count = @mini_package_count = @micro_package_count = @nano_package_count = @idox_package_count = @retriever_only_package_count = @digitize_only_package_count = @ido_premium = @not_configured = 0
 
     BillingMod::Package.of_period(CustomUtils.period_of(Time.now)).each do |package|
       next if not @accounts_ids.include?(package.user_id)
       case package.name
+      when 'ido_premium'
+          @premium_package_count += 1
         when 'ido_classic'
           @basic_package_count += 1
         when 'ido_nano'
@@ -158,7 +160,7 @@ class Admin::Subscriptions::MainController < BackController
     when 'mini_package'
       data_accounts = Rails.cache.fetch('admin_report_mini_package_accounts', expires_in: 10.minutes) { package.where(name: 'ido_mini') }
     when 'premium_package'
-      data_accounts = Rails.cache.fetch('admin_report_mini_package_accounts', expires_in: 10.minutes) { package.where(name: 'ido_premium') }
+      data_accounts = Rails.cache.fetch('admin_report_premium_package_accounts', expires_in: 10.minutes) { package.where(name: 'ido_premium') }
     when 'micro_package'
       data_accounts = Rails.cache.fetch('admin_report_micro_package_accounts', expires_in: 10.minutes) { package.where(name: ['ido_micro', 'ido_micro_plus']) }
     when 'nano_package'

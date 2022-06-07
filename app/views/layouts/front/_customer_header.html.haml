@@ -32,7 +32,7 @@
           %ul.list.nav.nav-tabs.ms-3
             %li.nav-item.no-margin
               %a.head_customer_link.semibold.nav-link#customer_information{ class: ('active' if (controller_path == 'customers/main' && action_name == 'show') ), href: organization_customer_path(@organization, @customer) } Informations générales
-            - if @customer.active? && !@organization.specific_mission
+            - if !CustomUtils.is_ido_premium?(@organization.code) && @customer.active? && !@organization.specific_mission
               %li.nav-item.no-margin
                 %a.head_customer_link.semibold.nav-link#customer_subscription{ class: ('active' if (controller_path == 'subscriptions/main' && action_name == 'edit')), href: edit_organization_customer_subscription_path(@organization, @customer) } Forfait
               - if !@customer.is_package?('ido_x')
