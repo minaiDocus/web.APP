@@ -73,11 +73,11 @@
       %li.nav-item.no-margin{ "role" => "presentation" }
         %button.semibold.nav-link#check-provider-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#provider", type: :button, "role" => "tab", "aria-controls" => "provider-selection", "aria-selected" => "true", class: ((params[:tab] == 'provider' || !params[:tab].present?) ? 'active': '') } 
           Fournisseurs
-          %span.ms-1.badge.badge-secondary.regular= @accounting_plan.providers.size
+          %span.ms-1.badge.badge-secondary.regular= @accounting_plan.active_providers.size
       %li.nav-item.no-margin{ "role" => "presentation" }
         %button.semibold.nav-link#check-customer-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#customer", type: :button, "role" => "tab", "aria-controls" => "customer-selection", "aria-selected" => "false", class: (params[:tab] == 'customer' ? 'active': '')} 
           Clients
-          %span.ms-1.badge.badge-secondary.regular= @accounting_plan.customers.size
+          %span.ms-1.badge.badge-secondary.regular= @accounting_plan.active_customers.size
       %li.nav-item.no-margin{ "role" => "presentation" }
         %button.semibold.nav-link#check-vat_accounts-tab{ "data-bs-toggle" => "tab", "data-bs-target" => "#vat_accounts", type: :button, "role" => "tab", "aria-controls" => "vat_accounts-selection", "aria-selected" => "false", class: (params[:tab] == 'vat_accounts' ? 'active': '')}
           TVA
