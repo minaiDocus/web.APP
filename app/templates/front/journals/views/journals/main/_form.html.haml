@@ -77,7 +77,8 @@
                   .block_selection_journals
                     .help-block{style: 'margin-top: 2px; margin-left: 0px'}
                       = text_journal
-                    = select_tag 'select_external_journal', options_for_select(journals_for_select(@journal.try(:pseudonym)), @journal.try(:pseudonym)), size: 8, style: "height: auto", class: 'form-control select form-select form-select-sm optional'
+                    - ajax_emit = param_encode({ name: 'journal.select_external_journal' , events: 'change'})
+                    = select_tag 'select_external_journal', options_for_select(journals_for_select(@journal.try(:pseudonym)), @journal.try(:pseudonym)), size: 8, style: "height: auto", class: 'form-control select form-select form-select-sm optional as_idocus_emit', idocus: ajax_emit
                   %i.help-block si différent de "Code journal" ci-dessus
             - else
               = f.label :pseudonym, :class => "semibold"
