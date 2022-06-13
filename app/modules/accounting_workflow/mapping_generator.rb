@@ -12,6 +12,8 @@ class AccountingWorkflow::MappingGenerator
 
 
   def execute
+    return false
+
     @users.each do |user|
       write_xml(user.code, user.accounting_plan.to_xml) if user.accounting_plan
     end
@@ -29,7 +31,6 @@ class AccountingWorkflow::MappingGenerator
   end
 
   private
-
 
   def dir
     AccountingWorkflow.pre_assignments_dir.join('mapping')

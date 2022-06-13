@@ -23,7 +23,6 @@ class AccountingPlan::IbizaUpdateWorker
         customer = User.find(customer_id)
 
         AccountingPlan::IbizaUpdate.new(customer).run if customer.organization.ibiza.try(:configured?)
-        AccountingWorkflow::MappingGenerator.new([customer]).execute
       end
     end
   end

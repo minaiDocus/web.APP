@@ -21,6 +21,12 @@
           .alert.alert-danger
             = devise_error_messages!
 
+          %i.badge.bg-warning
+            Vous pouvez demander à recevoir un nouveau mail pour générer votre mot de passe en cliquant 
+            %a{ href: 'https://my.idocus.com/users/password/new'} ici
+          %br
+          %br
+
         = simple_form_for resource, url: password_path(resource_name), method: 'patch' do |f|
           = f.hidden_field :reset_password_token
           = f.input :password, label: 'Nouveau mot de passe :'

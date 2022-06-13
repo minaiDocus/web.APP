@@ -23,7 +23,6 @@ class AccountingPlan::ExactOnlineUpdateWorker
         customer = User.find(customer_id)
 
         AccountingPlan::ExactOnlineUpdate.new(customer).run if customer.organization.try(:exact_online).try(:used?)
-        AccountingWorkflow::MappingGenerator.new([customer]).execute
       end
     end
   end
