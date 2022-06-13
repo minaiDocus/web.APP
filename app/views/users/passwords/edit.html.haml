@@ -17,6 +17,10 @@
 
         %p Utilisez le formulaire ci-dessous, pour modifier votre mot de passe.
 
+        - if devise_error_messages!.present?
+          .alert.alert-danger
+            = devise_error_messages!
+
         = simple_form_for resource, url: password_path(resource_name), method: 'patch' do |f|
           = f.hidden_field :reset_password_token
           = f.input :password, label: 'Nouveau mot de passe :'
