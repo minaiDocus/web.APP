@@ -5,6 +5,9 @@ class PreAssignment::CreateDelivery
 
   def initialize(preseizures, deliver_to=['ibiza'], options = {})
     @preseizures = Array(preseizures)
+
+    @preseizures = @preseizures.select{|preseizure| preseizure.pre_assignment_exports.where(state: 'generated').count == 0 } if @preseizures.any? && !options[:force]
+
     @deliver_to  = Array(deliver_to)
     @report      = @preseizures.first.try(:report)
     @is_auto     = options[:is_auto] || false
