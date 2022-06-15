@@ -41,9 +41,9 @@
                 %th.text-end Action
               %tbody
                 - @customers.each do |customer|
-                  - color = customer.still_active? ? 'rgba(26, 26, 26, 0.7);' : 'white'
+                  - color = customer.try(:inactive_at).blank? ? 'rgba(26, 26, 26, 0.7);' : 'white'
                   - package = customer.my_package
-                  %tr{ class: (!customer.still_active?)? 'inactive' : '' }
+                  %tr{ class: (customer.try(:inactive_at).present?)? 'inactive' : '' }
                     %td.align-middle= customer.name
                     %td.align-middle
                       %span.info
