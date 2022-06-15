@@ -169,8 +169,10 @@
 
                 - if @customer.persisted? && CustomUtils.is_ido_premium?(@organization.code)
                   .mb-4
-                  .box
+                  .box.no-margin
                     %h5.semibold Option courrier
+                    %i.hint
+                      Vous permet d’adresser vos pièces par courrier à notre centre de numérisation.
                     %hr
                       .row.mail-option
                         .col-md-10.form-group.no-margin

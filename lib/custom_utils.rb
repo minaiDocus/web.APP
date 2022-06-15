@@ -229,7 +229,7 @@ class CustomUtils
     end
 
     def is_ido_premium?(organization_code)
-      ['ACDA'].include?(organization_code)
+      ['IDOC'].include?(organization_code)
     end
 
     def can_create_budgea_documents(customer)
