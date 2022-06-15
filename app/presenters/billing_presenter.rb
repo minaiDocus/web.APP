@@ -1,10 +1,13 @@
 # -*- encoding : UTF-8 -*-
 class BillingPresenter
-  def initialize(billing, viewer)
+  def initialize(billing=nil, viewer=nil)
     @billing = billing
-    @owner  = @billing.owner
+
+    @owner   = @billing.try(:owner)
+    @period  = @billing.try(:period)
+
     @viewer = viewer || @owner
-    @viewer = Collaborator.new(@viewer) if @viewer.collaborator?
+    @viewer = Collaborator.new(@viewer) if @viewer && @viewer.try(:collaborator?)
   end
 
 
@@ -16,6 +19,8 @@ class BillingPresenter
 
 
   def can_display_options?
+    return false if not @viewer
+
     @viewer.is_admin || (@viewer.is_prescriber && @viewer.customers.include?(@owner)) ||
       (
         @viewer.organization.try(:is_detail_authorized) &&
@@ -48,8 +53,7 @@ class BillingPresenter
 
     lists = []
 
-    _period   = @billing.period
-    documents = @owner.period_documents.of_period(_period)
+    documents = @owner? @owner.period_documents.of_period(@period) : []
     documents.each do |document|
       list = {}
       list[:name] = document.name
@@ -148,7 +152,7 @@ class BillingPresenter
     total[:oversized]  = total[:oversized].to_s
     total[:paperclips] = total[:paperclips].to_s
 
-    compta_pieces_excess = @owner.billings.where(name: 'excess_billing', kind: 'excess').first.try(:associated_hash).try(:[], :excess).to_i
+    compta_pieces_excess = @owner? @owner.billings.where(name: 'excess_billing', kind: 'excess').first.try(:associated_hash).try(:[], :excess).to_i : 0
 
     {
       list: lists,
@@ -163,7 +167,7 @@ class BillingPresenter
       },
       delivery: 'wait',
       type: 'billing',
-      is_valid_for_quota_organization: BillingMod::Configuration::LISTS[@owner.my_package.name.to_sym].try(:[], :cummulative_excess)
+      is_valid_for_quota_organization: (@owner? BillingMod::Configuration::LISTS[@owner.my_package.name.to_sym].try(:[], :cummulative_excess) : false)
     }
   end
 
@@ -171,7 +175,7 @@ class BillingPresenter
   def options_json
     lists = []
 
-    billings = @owner.billings.of_period(@billing.period)
+    billings = @owner? @owner.billings.of_period(@period) : []
 
     billings.each do |billing|
       list = {}
@@ -188,22 +192,25 @@ class BillingPresenter
 
     _invoices = []
 
-    if @owner.organization
-      _invoices = @owner.organization.invoices.where(period_v2: @billing.period)
+    if @owner && @owner.organization
+      _invoices = @owner.organization.invoices.where(period_v2: @period)
 
       _invoices = _invoices.map do |invoice|
         { number: invoice.number, link: invoice.cloud_content_object.url }
       end
     end
 
+    excess_compta_pieces = @owner? @owner.billings.where(name: 'excess_billing', kind: 'excess').first.try(:price).to_f : 0
+    total_price          = @owner? @owner.total_billing_of(@period) : 0
+
     {
       list:                          lists,
       excess_uploaded_pages:         format_price(0),
       excess_scan:                   format_price(0),
       excess_dematbox_scanned_pages: format_price(0),
-      excess_compta_pieces:          format_price(@owner.billings.where(name: 'excess_billing', kind: 'excess').first.try(:price).to_f),
+      excess_compta_pieces:          format_price(excess_compta_pieces),
       excess_paperclips:             format_price(0),
-      total:                         format_price(@owner.total_billing_of(@billing.period)),
+      total:                         format_price(total_price),
       invoices:                      _invoices
     }
   end

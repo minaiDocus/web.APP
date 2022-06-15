@@ -125,6 +125,10 @@
   height:415px;
 }
 
+table.reporting td .not_billed{
+  background-color: #ffe1e1;
+}
+
 @media (max-width: 1280px) {
   .table tbody {
     font-size: 11px;

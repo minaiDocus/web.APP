@@ -76,7 +76,6 @@
                 - periods.each_with_index do |period, index|
                   - p_ind         = index + 1
                   - _period_index = "#{@year}#{sprintf '%02d', p_ind}".to_i
-
                   - if period && _period_index <= 202204
                     - period_billing = Billing::PeriodBilling.new(period)
                     - period.duration.times do |i|
@@ -180,7 +179,7 @@
                             - annual_summary[period.start_date.month + i - 1][:oversized] += period_billing.data(:oversized, i+1)
                             - annual_summary[period.start_date.month + i - 1][:price_in_cents] += period_billing.amount_in_cents_wo_vat(i+1)
                             - annual_summary[period.start_date.month + i - 1][:price_in_cents_of_excess] += period_billing.data(:excesses_amount_in_cents_wo_vat, i+1)
-                  - elsif user.billings.of_period(_period_index).count > 0 && user.can_be_billed?
+                  - elsif (user.billings.of_period(_period_index).count > 0 || user.active_at?(_period_index)) && _period_index.to_i < CustomUtils.period_of(1.month.after).to_i
                     - billing = user.billings.of_period(_period_index).first
                     - data_flow = user.data_flows.of_period(_period_index).first
                     - if user.active_at?(_period_index)
@@ -189,7 +188,7 @@
                       %a.do-show{ href: "#" }
                         - pos = []
                         - pos << "pos_#{row}_#{(index + 1 + 1)}"
-                        .period.clearfix{ id: billing.id, user_id: user.id, duration: 1, month: p_ind, row: row, class: pos.join(' '), type: 'billing'}
+                        .period.clearfix{ id: billing.try(:id).to_i, user_id: user.id, duration: 1, month: p_ind, row: row, class: (billing.blank? ? "not_billed #{pos.join(' ')}" : "#{pos.join(' ')}"), type: 'billing' }
                           - if data_flow.try(:pieces).to_i == 0 && data_flow.try(:operations).to_i == 0
                             .delivery_state.back_red
                           - else

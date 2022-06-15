@@ -50,14 +50,18 @@ class Reporting::InvoicesController < Reporting::ABaseController
   private
 
   def load_billing_or_period
+    return @object = nil if params[:id].to_i == 0
+
     if params[:id].to_i > 0
-      @object = BillingMod::Billing.find(params[:id].to_i)
+      @object = BillingMod::Billing.where(id: params[:id].to_i).first
     else
       @object = Period.find(params[:id].to_i * -1)
     end
   end
 
   def verify_rights
+    return true if params[:id].present? && params[:id].to_i == 0
+
     unless (@object.try(:owner) && @object.owner.in?(accounts)) || (@object.try(:user) && @object.user.in?(accounts))
       json_flash[:error] = 'Action non autorisée'
       render json: { json_flash: json_flash }, status: 200
