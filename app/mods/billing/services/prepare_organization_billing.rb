@@ -16,9 +16,8 @@ class BillingMod::PrepareOrganizationBilling
       @customers_ids << customer.id
     end
 
-    ### DEACTIVATED NOW
-    # create_premium_billing
-    # create_premium_overcharge_billing
+    create_premium_billing
+    create_premium_overcharge_billing
 
     create_classic_discount_billing
     create_retriever_discount_billing

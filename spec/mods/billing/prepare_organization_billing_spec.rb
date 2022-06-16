@@ -13,10 +13,12 @@ describe BillingMod::PrepareOrganizationBilling do
 
       user.build_options if user.options.nil?
 
-      if _package == 'ido_classic'
-        package = BillingMod::Package.create(period: CustomUtils.period_of(Time.now), user: user, name: 'ido_classic', upload_active: true, bank_active: true, scan_active: true, mail_active: true, preassignment_active: false)
+      if _package == 'ido_premium'
+        package = BillingMod::Package.create(period: CustomUtils.period_of(Time.now), user: user, name: 'ido_premium', journal_size: 5, upload_active: true, bank_active: true, scan_active: true, mail_active: false, preassignment_active: true)
+      elsif _package == 'ido_classic'
+        package = BillingMod::Package.create(period: CustomUtils.period_of(Time.now), user: user, name: 'ido_classic', journal_size: 5, upload_active: true, bank_active: true, scan_active: true, mail_active: true, preassignment_active: false)
       else
-        package = BillingMod::Package.create(period: CustomUtils.period_of(Time.now), user: user, name: 'ido_micro_plus', upload_active: true, bank_active: false, scan_active: true, mail_active: true, preassignment_active: true)
+        package = BillingMod::Package.create(period: CustomUtils.period_of(Time.now), user: user, name: 'ido_micro_plus', journal_size: 5, upload_active: true, bank_active: false, scan_active: true, mail_active: true, preassignment_active: true)
       end
 
       package.save
@@ -162,6 +164,24 @@ describe BillingMod::PrepareOrganizationBilling do
 
       expect(data_excess[:excess]).to eq 250
       expect(excess_billing.price).to eq (0.3 * 250) * 100
+    end
+  end
+
+  context 'Premium', :premium do
+    it 'creates normal premium billing' do
+      period       = CustomUtils.period_of(Time.now)
+
+      organization = Organization.first
+      organization.code = 'IDOC'
+      organization.save
+
+      create_users(2, 'ido_premium')
+
+      BillingMod::PrepareOrganizationBilling.new(organization, period).execute
+
+      billing = organization.billings_of(period).where(name: 'ido_premium').first
+
+      expect(billing.price).to eq (3000)
     end
   end
 end
