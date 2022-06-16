@@ -69,9 +69,9 @@ AccountingPlan::IbizaUpdateWorker:
   queue: default
   cron: '0 4 * * *'
 
-AccountingPlan::ExactOnlineUpdateWorker:
-  queue: default
-  cron: '0 3 * * *'
+# AccountingPlan::ExactOnlineUpdateWorker:
+  # queue: default
+  # cron: '0 3 * * *'
 
 AccountingPlan::MyUnisoftUpdateWorker:
   queue: default
@@ -135,9 +135,9 @@ PreAssignment::Builder::IbizaWorker:
   queue: high
   cron: '*/10 * * * * *'
 
-PreAssignment::Builder::ExactOnlineWorker:
-  queue: high
-  cron: '*/10 * * * * *'
+# PreAssignment::Builder::ExactOnlineWorker:
+  # queue: high
+  # cron: '*/10 * * * * *'
 
 PreAssignment::Builder::MyUnisoftWorker:
   queue: high
@@ -151,9 +151,9 @@ PreAssignment::Delivery::IbizaWorker:
   queue: high
   cron: '*/10 * * * * *'
 
-PreAssignment::Delivery::ExactOnlineWorker:
-  queue: high
-  cron: '*/10 * * * * *'
+# PreAssignment::Delivery::ExactOnlineWorker:
+  # queue: high
+  # cron: '*/10 * * * * *'
 
 PreAssignment::Delivery::MyUnisoftWorker:
   queue: high

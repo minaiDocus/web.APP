@@ -1,13 +1,13 @@
 module Interfaces::Software::Configuration
-  SOFTWARES = ['acd', 'ibiza', 'exact_online', 'my_unisoft', 'coala', 'sage_gec', 'quadratus', 'cegid', 'fec_agiris', 'fec_acd', 'csv_descriptor', 'cogilog']
-  SOFTWARES_HUMAN_NAME = { acd: 'ACD', ibiza: 'iBiza', exact_online: 'Exact Online', my_unisoft: 'My Unisoft', coala: 'Coala', sage_gec: 'Sage GEC - Privé', quadratus: 'Quadratus', cegid: 'Cegid', fec_agiris: 'Agiris', fec_acd: 'FEC ACD', csv_descriptor: 'CSV', cogilog: 'Cogilog' }
+  SOFTWARES = ['acd', 'ibiza', 'my_unisoft', 'coala', 'sage_gec', 'quadratus', 'cegid', 'fec_agiris', 'fec_acd', 'csv_descriptor', 'cogilog']
+  SOFTWARES_HUMAN_NAME = { acd: 'ACD', ibiza: 'iBiza', my_unisoft: 'My Unisoft', coala: 'Coala', sage_gec: 'Sage GEC - Privé', quadratus: 'Quadratus', cegid: 'Cegid', fec_agiris: 'Agiris', fec_acd: 'FEC ACD', csv_descriptor: 'CSV', cogilog: 'Cogilog' }
   TABLE_NAME_WITH_SOFTWARES_USING_API = ['software_ibizas', 'software_exact_online', 'software_my_unisofts', 'software_sage_gec', 'software_acd']
-  SOFTWARES_OBJECTS = [::Software::Ibiza, ::Software::ExactOnline, ::Software::Cegid, ::Software::Coala, ::Software::SageGec, ::Software::FecAgiris, ::Software::FecAcd, ::Software::Quadratus, ::Software::CsvDescriptor, ::Software::MyUnisoft, ::Software::Cogilog]
+  SOFTWARES_OBJECTS = [::Software::Ibiza, ::Software::Cegid, ::Software::Coala, ::Software::SageGec, ::Software::FecAgiris, ::Software::FecAcd, ::Software::Quadratus, ::Software::CsvDescriptor, ::Software::MyUnisoft, ::Software::Cogilog]
 
   def self.softwares
     {
       ibiza:          Software::Ibiza,
-      exact_online:   Software::ExactOnline,
+      # exact_online:   Software::ExactOnline,
       cegid:          Software::Cegid,
       coala:          Software::Coala,
       sage_gec:       Software::SageGec,
@@ -24,7 +24,7 @@ module Interfaces::Software::Configuration
   def self.h_softwares
     {
       ibiza:          'ibiza',
-      exact_online:   'exact_online',
+      # exact_online:   'exact_online',
       my_unisoft:     'my_unisoft',
       coala:          'coala',
       sage_gec:       'sage_gec',
@@ -41,7 +41,7 @@ module Interfaces::Software::Configuration
   def self.human_format
     {
       ibiza:          "iBiza",
-      exact_online:   "Exact Online",
+      # exact_online:   "Exact Online",
       my_unisoft:     "My Unisoft",
       coala:          "Coala",
       sage_gec:       "Sage GEC - Privé",
@@ -58,7 +58,7 @@ module Interfaces::Software::Configuration
   def self.softwares_table_name
     {
       ibiza:          'software_ibizas',
-      exact_online:   'software_exact_online',
+      # exact_online:   'software_exact_online',
       my_unisoft:     'software_my_unisofts',
       coala:          'software_coalas',
       sage_gec:       'software_sage_gec',
@@ -75,7 +75,7 @@ module Interfaces::Software::Configuration
   def self.software_object_name
     {
       'Software::Ibiza'         => 'ibiza',
-      'Software::ExactOnline'   => 'exact_online',
+      # 'Software::ExactOnline'   => 'exact_online',
       'Software::Cegid'         => 'cegid',
       'Software::Coala'         => 'coala',
       'Software::SageGec'       => 'sage_gec',
