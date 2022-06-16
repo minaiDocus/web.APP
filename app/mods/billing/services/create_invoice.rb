@@ -240,7 +240,7 @@ module BillingMod
         @pdf = pdf
 
         @pdf.repeat [1] do
-          @pdf.image "#{Rails.root}/app/assets/images/application/bandeau_facture_parrainage.jpg", width: 472, height: 151, align: :center, :at => [35, 10]
+          @pdf.image "#{Rails.root}/app/assets/images/application/bandeau_dematbox.jpg", width: 472, height: 220, align: :center, :at => [35, 70]
         end
 
         make_header
@@ -259,7 +259,6 @@ module BillingMod
 
     def make_header
       address = @organization.addresses.for_billing.first
-
       @pdf.font 'Helvetica'
       @pdf.fill_color '49442A'
 
