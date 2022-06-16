@@ -172,21 +172,18 @@
                   .box.no-margin
                     %h5.semibold Option courrier
                     %i.hint
-                      Vous permet d’adresser vos pièces par courrier à notre centre de numérisation.
+                      = "Vous permet d’adresser vos pièces par courrier à notre centre de numérisation. Pour #{BillingMod::Configuration.price_of('mail')}€ HT"
                     %hr
                       .row.mail-option
                         .col-md-10.form-group.no-margin
                           .form-check.form-check-inline{ data: { toggle: 'tooltip', placement: 'right' }}
-                            %label.semibold Avec option courrier
+                            %label.semibold= "Avec option courrier (#{BillingMod::Configuration.price_of('mail')}€ HT)"
                         .col-md-2.form-check.form-switch
                           %label.form-check-label Non
                           = hidden_field_tag "package[check]", true
                           = check_box_tag "package[mail]", "mail", @customer.package_of(CustomUtils.period_of(Time.now)).try(:mail_active), class: "form-check-input option_checkbox input_switch", data: { price: BillingMod::Configuration.price_of('mail', @customer)}
                       .future_package
-                        - next_period  = CustomUtils.period_of(1.month.after)
-                        - next_package = @customer.package_of(next_period)
-
-                        - if next_package
+                        - if not @customer.next_package.mail_active
                           .my-4
                           .text-center
                             .alert.alert-warning.mb-3.w-100.semibold

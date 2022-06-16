@@ -1,4 +1,8 @@
 class BillingMod::Configuration
+  PREMIUM = {
+              IDOC: { price: 3000, customers_limit: 175, unit_price: 10 }
+            }
+
   LISTS = {
             ido_premium: {
               human_name: "iDo'Premium",
@@ -6,8 +10,6 @@ class BillingMod::Configuration
               hint: "Facture à 3.000€ HT pour les 175 premiers dossiers, au delà des 175 dossiers : 10€ ht/dossier",
               label: 'Téléchargement + Pré-saisie comptable',
               price: 0,
-              customers_limit: 175,
-              unit_price: 10,
               commitment: 0,
               cummulative_excess: false,
               data_flows: { max: 0, duration: 'month', excess_price: 10 },
@@ -192,6 +194,18 @@ class BillingMod::Configuration
       end
 
       _price
+    end
+
+    def premium_price_of(organization_code)
+      BillingMod::Configuration::PREMIUM[organization_code.to_sym][:price]
+    end
+
+    def premium_limit_of(organization_code)
+      BillingMod::Configuration::PREMIUM[organization_code.to_sym][:customers_limit]
+    end
+
+    def premium_unit_customer_price_of(organization_code)
+      BillingMod::Configuration::PREMIUM[organization_code.to_sym][:unit_price]
     end
   end
 end

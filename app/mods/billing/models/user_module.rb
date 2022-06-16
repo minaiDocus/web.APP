@@ -23,6 +23,10 @@ module BillingMod::UserModule
     self.packages.where('period <= ?', CustomUtils.period_of(Time.now)).order(period: :desc).limit(1).first
   end
 
+  def next_package
+    self.package_of CustomUtils.period_of(1.month.after)
+  end
+
   def is_package?(name)
     begin
       self.my_package.try(:name).to_s == name.to_s || ( self.my_package.respond_to?(name.to_sym) && self.my_package.send(name.to_sym) )

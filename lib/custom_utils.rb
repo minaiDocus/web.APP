@@ -229,7 +229,7 @@ class CustomUtils
     end
 
     def is_ido_premium?(organization_code)
-      ['IDOC'].include?(organization_code)
+      BillingMod::Configuration::PREMIUM[organization_code.to_sym].present?
     end
 
     def can_create_budgea_documents(customer)
