@@ -26,3 +26,5 @@
 //= link application/preaff_pending.png
 //= link application/compta_analytics.png
 //= link application/spinner_loading.gif
+
+//= link_tree ../images

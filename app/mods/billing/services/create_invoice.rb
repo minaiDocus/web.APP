@@ -458,7 +458,7 @@ module BillingMod
   end
 
   class PdfGeneratorV2
-    def initialize(organization, packages_count, invoice, total_customers_price, time, customers_excess, other_orders)
+    def initialize(organization, packages_count, invoice, total_customers_price, time, customers_excess, other_orders, banner_path = '/app/assets/images/application/bandeau_dematbox.jpg', banner_width = 272, banner_height = 120, banner_alignment = ':center', banner_pos_y = 142, banner_pos_x = 1, create_new = false)
       @organization          = organization
       @packages_count        = packages_count
       @customers_excess      = customers_excess
@@ -471,18 +471,46 @@ module BillingMod
       @months                = I18n.t('date.month_names').map { |e| e.capitalize if e }
       @period_month          = @months[time.month]
       @year                  = time.year
+
+      if create_new
+        @banner_path = banner_path
+        @banner_width = banner_width.to_i
+        @banner_height = banner_height.to_i
+        @banner_alignment = banner_alignment
+        @banner_pos_y = banner_pos_y.to_i
+        @banner_pos_x = banner_pos_x.to_i
+      else
+        @current_banner_image = BannerImage.find_by(is_used: :true)
+        if @current_banner_image
+          @banner_path = @current_banner_image.path
+          @banner_width = @current_banner_image.width.to_i
+          @banner_height = @current_banner_image.height.to_i
+          @banner_alignment = @current_banner_image.align
+          @banner_pos_y = @current_banner_image.pos_x.to_i
+          @banner_pos_x = @current_banner_image.pos_y.to_i
+        else
+          @banner_path = '/app/assets/images/application/bandeau_dematbox.jpg'
+          @banner_width = 272
+          @banner_height = 120
+          @banner_pos_y = 142
+          @banner_pos_x = 1
+        end
+      end
     end
 
     def generate
       @pdf.destroy if @pdf
 
-      invoice_path = "#{Rails.root}/tmp/#{@invoice.number}.pdf"
+      #invoice_path = "#{Rails.root}/tmp/#{@invoice.number}.pdf"
+      dir = File.join(Rails.root, 'app', 'assets', 'images', 'billing_template')
+      FileUtils.mkdir_p(dir) unless File.exist?(dir)
+      invoice_path = "#{dir}/#{@invoice.number}.pdf"
 
       Prawn::Document.generate(invoice_path, :bottom_margin => 150) do |pdf|
         @pdf = pdf
 
         @pdf.repeat [1] do
-          @pdf.image "#{Rails.root}/app/assets/images/application/bandeau_dematbox.jpg", width: 272, height: 120, align: :center, :at => [142, 1]
+          @pdf.image "#{Rails.root}/app#{@banner_path}", width: @banner_width, height: @banner_height, align: :center, :at => [@banner_pos_x, @banner_pos_y]
         end
 
         make_header
@@ -529,9 +557,13 @@ module BillingMod
       @pdf.font_size 10
       @pdf.default_leading 5
 
+      if address.present?
       formatted_address = [address.company, address.first_name + ' ' + address.last_name, address.address_1, address.address_2, address.zip.to_s + ' ' + address.city, address.country]
                           .reject { |a| a.nil? || a.empty? }
                           .join("\n")
+      else
+        formatted_address = "Adresse de l'entreprise \n Adresse de l'entreprise \n"
+      end
 
       @pdf.bounding_box([262, @pdf.cursor], width: 270) do
         @pdf.text formatted_address, align: :right, style: :bold
@@ -718,6 +750,7 @@ module BillingMod
       @pdf.text "<b>Retrouvez le détails de vos consommations dans votre espace client dans le menu \"Mon Reporting\".</b>", align: :center, inline_format: true
     end
 
+ 
     def get_human_name_of(package)
       BillingMod::Configuration::LISTS[package.to_sym][:human_name]
     end

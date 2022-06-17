@@ -1,0 +1,217 @@
+.container-fluid
+  .card
+    = form_tag upload_file_admin_banners_path, method: 'patch', multipart: true, class: 'form-horizontal clearfix label-auto' do
+      .card-header.clearfix
+        .w-100.text-end
+          .row
+            .col-md-6
+              .row
+                .col-md-12
+                  .h1.text-start Gestion des bandeaux
+                  .my-5
+                .col-md-4
+                  .form-group.clearfix.text-start
+                    .control-section0
+                      = text_field_tag :name,'', class:'form-control', placeholder: 'Ajouter un Nom'
+                .col-md-4
+                  .form-group.clearfix.text-start
+                    .control-section0
+                      = file_field_tag :banner_image_file, class: 'filestyle form-control', id: 'file_upload_field'
+                .col-md-4
+                  .form-actions.clearfix.text-start.d-grid
+                    = submit_tag 'Démarrer', class: 'button btn btn-primary'
+            .col-md-6
+              .form-group.clearfix.text-end
+                .h4
+                  %span.badge.bg-dark.regular
+                    - if @current_banner_image != nil
+                      Bandeau actuel : 
+                      = @current_banner_image.name
+                      %img#current_banner_preview{:src => "", :width => "175px", :class => "img-thumbnail img-fluid"}
+                    - else
+                      Commencez par ajouter une image
+
+           
+
+  .card
+    .card-header.clearfix
+      .row
+        .col-md-12
+          .h2 Générer un modèle de facture
+          .my-5
+        .col-md-6
+          = form_tag configure_image_properties_admin_banners_path, method: 'patch' do
+            .row
+              .col-md-4
+                %label.form-label Sélectionner le bandeau à utiliser : 
+                = select_tag 'banner_path_temp', options_for_select(@banner_images.collect{ |b_i| [b_i.name, b_i.id] }), class: 'form-control form-select', id:'select_banner'
+                %input{type: 'hidden', name: 'banner_path', id: 'banner_path_input'}
+              .col-md-4
+                %label.form-label Longueur (width) en pixels : 
+                %input.form-control{ type: 'number', name: 'banner_width', placeholder: 272, value: 272, id:'banner_width_input' }
+              .col-md-4
+                %label.form-label Lauteur (height) en pixels :
+                %input.form-control{ type: 'number', name: 'banner_height', placeholder: 120, value: 120, id:'banner_height_input' }
+            
+            .my-4
+            .row
+              .col-md-4
+                %label.form-label Alignement (align) :
+                %select.form-control.form-select{name: 'banner_alignment', id: 'banner_align_select'}
+                  %option{:value => ':center'} Centré
+                  //%option{:value => ':left'} Aligné à gauche
+                  //%option{:value => ':right'} Aligné à droite
+                  //%option{:value => ':justify'} Justifié
+              .col-md-4
+                %label.form-label Position horizontale en pixels:
+                %input.form-control{type: 'number', name: 'banner_pos_x', placeholder: 1, value:1, id:'banner_pos_x_input'}
+              .col-md-4
+                %label.form-label Position verticale en pixels :
+                %input.form-control{type: 'number', name: 'banner_pos_y', placeholder: 142, value:142, id:'banner_pos_y_input'}
+                  
+            .my-5
+            .row
+              .col-md-6.d-grid
+                = submit_tag 'Générer un modèle de facture', class:'button btn btn-primary start', id:'btn_triger0'
+              .col-md-6.d-grid
+                %button.btn.btn-light.cancel{ type: 'reset' }
+                  Rétablir les champs par défaut
+ 
+      
+        .col-md-6.text-center#image_banner_container{style:'border-left:1px solid #bbb'}
+          %img#banner_preview{:src => "", :width => "500px", :class => "img-thumbnail img-fluid"}
+        .my-5
+        %button.btn.btn-md.btn-success#btn_triger Afficher le modèle de facture
+        
+  
+  .my-5
+  .card
+    .card-body
+      .h3 Tous les bandeaux
+      %table.table.table-dark.table-striped{ role: "presentation" }
+        %tbody.files{ data: { toggle: "modal-gallery", target: "#modal-gallery" } }
+      #banner_images  
+        %table.table.table-striped
+          %tbody
+            %tr
+              %th #
+              //%th Aperçu
+              %th Nom de l'image
+              %th Lien
+              %th Propriétés de l'image
+              %th Action
+            - @banner_images.each_with_index do |banner_image,index|
+              %tr
+                %td
+                  %b= index+1
+                //%td
+                //  %img{:src => "#{banner_image.path}", :width => "100px", :alt => "#{banner_image.name}", :class => "img-thumbnail img-fluid"}
+                %td= banner_image.name
+                %td
+                  = banner_image.path
+                  %br
+                  = banner_image.created_at
+                %td
+                  width : 
+                  = banner_image.width
+                  px; height :
+                  = banner_image.height
+                  px; coordonnées : [
+                  = banner_image.pos_x
+                  px ,
+                  = banner_image.pos_y
+                  px]
+
+                %td.center
+                  = link_to 'Supprimer', admin_banner_destroy_path(banner_image.id), method: :delete, data: { confirm: t('actions.confirm') }, class: 'btn btn-danger'
+
+  .modal.fade.in#generated_bill_modal
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %h5.modal-title.bold Rendu du modèle de facture
+          %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+        .modal-body
+          .row#bill_details
+            %iframe{ src: "/assets/billing_template/2019010003.pdf", style: "height: 700px" }
+        .modal-footer
+          .row
+            .col-md-6.d-grid
+              //%button.btn.btn-success.btn-lg#btn_confirm_invoice_template_modification{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+              //  Valider et utiliser le modèle généré
+                
+            //.col-md-6.d-grid
+            //  %button.btn.btn-light.btn-lg{'data-bs-dismiss' => 'modal', :type => 'button'}
+            //    Ignorer et fermer
+
+
+
+:javascript
+    $(document).ready( function() {
+
+      
+      init_fields();
+
+      $('#btn_triger').click(function(e){
+        e.preventDefault();
+        this.blur();
+        $('.modal#generated_bill_modal').modal('show');
+      });
+
+      $('#select_banner').on('change', function() {
+        $.ajax({
+          url: '/admin/banners/fetch_banner/',
+          method: 'GET',
+          data: {"id": this.value},
+          success: function(result) {
+            console.log('Banner found. Now loading.....');
+
+            $banner_image_update = result.banner_image_update;
+            $('#banner_width_input').val($banner_image_update.width)
+            $('#banner_path_input').val($banner_image_update.path)
+            $('#banner_height_input').val($banner_image_update.height)
+            $('#banner_pos_x_input').val($banner_image_update.pos_x)
+            $('#banner_pos_y_input').val($banner_image_update.pos_y)
+            $('#banner_align_select').val($banner_image_update.align)
+
+
+            $banner_preview_path = ($banner_image_update.path).replace('/images','')
+            document.getElementById('banner_preview').src=$banner_preview_path
+          },
+          error: function() {
+            console.log("Ajax request error");
+          }
+        })
+      });
+
+
+      $('#btn_confirm_invoice_template_modification').click(function(){
+        $.ajax({
+          url: 'admin/banners/confirm_invoice_template_modification/',
+          method: 'GET',
+          success: function(){
+            console.log("Invoice template changed")
+          },
+          error: function(){
+          console.log("Ajax request error");
+          }
+        })
+      });
+
+
+      function init_fields(){
+
+          $current_banner_preview_path = '#{@current_banner_image.path}'.replace('/images','')
+          document.getElementById('current_banner_preview').src=$current_banner_preview_path
+          document.getElementById('banner_preview').src=$current_banner_preview_path
+
+          $('#select_banner').val(#{@current_banner_image.id});
+          $('#banner_path_input').val("#{@current_banner_image.path}");
+          $('#banner_width_input').val(#{@current_banner_image.width});
+          $('#banner_height_input').val(#{@current_banner_image.height});
+          $('#banner_pos_x_input').val(#{@current_banner_image.pos_x});
+          $('#banner_pos_y_input').val(#{@current_banner_image.pos_y});
+        
+      }
+
+    });
