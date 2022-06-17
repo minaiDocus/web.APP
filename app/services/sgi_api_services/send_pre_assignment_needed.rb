@@ -58,24 +58,6 @@ class SgiApiServices::SendPreAssignmentNeeded
         piece.update(pre_assignment_state: 'ready')     if piece.temp_document.nil?
         piece.update(pre_assignment_state: 'processed') if piece.preseizures.any?
       end
-
-      log_document = {
-        subject: "[Api::Sgi::V1::PreassignmentController] re-init pre assignment state",
-        name: "Api::Sgi::V1::PreassignmentController",
-        error_group: "[Api-sgi-pre-assignment] re-init pre assignment state",
-        erreur_type: "Re-init pre assignment state",
-        date_erreur: Time.now.strftime('%Y-%m-%d %H:%M:%S'),
-        more_information: {
-          piece_id: piece.id,
-          piece_name: piece.name,
-          temp_doc: piece.temp_document.nil?,
-          preseizures: piece.preseizures.any?,
-          state: piece.pre_assignment_state,
-          piece:  piece.inspect
-        }
-      }
-
-      ErrorScriptMailer.error_notification(log_document).deliver
     else
       detected_third_party_id = piece.detected_third_party_id.presence || 6930
 

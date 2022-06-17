@@ -6,11 +6,7 @@ class Retrievers::BudgeaCallbacksController < ApiController
   def user_synced
     if params['user'].present? && params["connections"].present?
       retriever = Retriever.where(budgea_id: params["connections"][0]['id']).first
-      if retriever
-        DataProcessor::RetrievedData.delay.execute(params, "USER_SYNCED", retriever.user)
-      else
-        retriever_alert(params, 'USER_SYNCED')
-      end
+      DataProcessor::RetrievedData.delay.execute(params, "USER_SYNCED", retriever.user) if retriever
 
       render plain: '', status: :ok
     else
@@ -33,11 +29,7 @@ class Retrievers::BudgeaCallbacksController < ApiController
   def connection_deleted
     if params["id_user"].present? && params['id'].present?
       retriever = Retriever.where(budgea_id: params['id']).first
-      if retriever
-        DataProcessor::RetrievedData.delay.execute(params, "CONNECTION_DELETED", retriever.user)
-      else
-        retriever_alert(params, 'CONNECTION_DELETED')
-      end
+      DataProcessor::RetrievedData.delay.execute(params, "CONNECTION_DELETED", retriever.user) if retriever
 
       render plain: '', status: :ok
     else
@@ -63,8 +55,6 @@ class Retrievers::BudgeaCallbacksController < ApiController
 
       html_dom = `curl #{url}`
 
-      send_webauth_notification(params, url, html_dom)
-
       render json: { success: true, html_dom: html_dom }, status: 200
     else
       render json: { success: false, error: 'Erreur de service interne' }, status: 200
@@ -73,7 +63,6 @@ class Retrievers::BudgeaCallbacksController < ApiController
 
   def callback
     authorization = request.headers['Authorization']
-    send_callback_notification(params, authorization) if params.try(:[], 'user').try(:[], 'id').to_i == 210
 
     if authorization.present? && params['user'] #callback for retrieved data
       access_token = authorization.split[1]
@@ -91,8 +80,6 @@ class Retrievers::BudgeaCallbacksController < ApiController
         render plain: '', status: :unauthorized
       end
     else #callback for webauth
-      send_webauth_notification(params, 'callback', '', 'callback')
-
       if params[:error_description].present? && params[:error_description] != 'None'
         flash[:error] = params[:error_description].presence || 'Id connection not found'
 
@@ -114,47 +101,5 @@ class Retrievers::BudgeaCallbacksController < ApiController
         render plain: '', status: :unauthorized
       end
     end
-  end
-
-  private
-
-  def send_webauth_notification(parameters, url='', html_dom='', type = 'fetch')
-    log_document = {
-      subject: "[RetrieversController] budgea webauth retrievers #{type}",
-      name: "BudgeaWebAuth",
-      error_group: "[Budgea Error Handler] : webAuth - retrievers - #{type}",
-      erreur_type: "webAuth retrievers #{type}",
-      date_erreur: Time.now.strftime('%Y-%m-%d %H:%M:%S'),
-      more_information: { params: parameters.inspect, url: url.to_s  },
-      raw_information: html_dom
-    }
-
-    ErrorScriptMailer.error_notification(log_document).deliver
-  end
-
-  def send_callback_notification(parameters, access_token)
-    log_document = {
-      subject: "[RetrieversController] budgea callback retriever",
-      name: "BudgeaCallback",
-      error_group: "[Budgea Callback] : Callback - retrievers",
-      erreur_type: "Callback retriever",
-      date_erreur: Time.now.strftime('%Y-%m-%d %H:%M:%S'),
-      more_information: { access_token: access_token, params: parameters.inspect }
-    }
-
-    ErrorScriptMailer.error_notification(log_document).deliver
-  end
-
-  def retriever_alert(params, type_synced)
-    log_document = {
-      subject: "[RetrieversController] budgea webhook callback retriever does not exist #{type_synced}",
-      name: "BudgeaWebhookCallback",
-      error_group: "[Budgea Webhook Callback] : Retriever does not exist - #{type_synced}",
-      erreur_type: "retriever does not exist",
-      date_erreur: Time.now.strftime('%Y-%m-%d %H:%M:%S'),
-      more_information: { params: params.inspect }
-    }
-
-    ErrorScriptMailer.error_notification(log_document).deliver
   end
 end

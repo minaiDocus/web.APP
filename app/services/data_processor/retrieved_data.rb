@@ -166,8 +166,6 @@ class DataProcessor::RetrievedData
 
       @user.budgea_account.destroy
     end
-
-    webhook_notification(json_content)
   end
 
   def execute_process(connection)
@@ -463,18 +461,5 @@ class DataProcessor::RetrievedData
     whook.retriever    = retriever
 
     whook.save
-  end
-
-  def webhook_notification(json_content)
-    log_document = {
-      subject: "[DataProcessor::RetrievedData] retrieved data webhook #{@type_synced}",
-      name: "RetrievedDataWebhook",
-      error_group: "[Retrieved Data Webhook] : Data for - #{@type_synced}",
-      erreur_type: "Data for - #{@type_synced}",
-      date_erreur: Time.now.strftime('%Y-%m-%d %H:%M:%S'),
-      more_information: { user_code: @user.code, type_synced: @type_synced }
-    }
-
-    ErrorScriptMailer.error_notification(log_document, { attachements: [{name: 'json_content.json', file: json_content.try(:to_unsafe_h).to_s}] }).deliver
   end
 end

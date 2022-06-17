@@ -238,24 +238,7 @@ class Pack::Piece < ApplicationRecord
   end
 
   def recreate_pdf(temp_dir = nil)
-    unless temp_document
-      log_document = {
-        subject: "[Pack::Piece] piece without temp document recreate pdf",
-        name: "Pack::Piece",
-        error_group: "[pack-piece] piece without temp_document recreate_pdf",
-        erreur_type: "Piece without temp_document - recreate_pdf",
-        date_erreur: Time.now.strftime('%Y-%m-%d %H:%M:%S'),
-        more_information: {
-          model: self.inspect,
-          user: self.user.inspect,
-          method: "recreate_pdf"
-        }
-      }
-
-      ErrorScriptMailer.error_notification(log_document).deliver
-
-      return false
-    end
+    return false unless temp_document
 
     piece_file_path = ''
 
@@ -337,24 +320,6 @@ class Pack::Piece < ApplicationRecord
       self.save
 
       Pack::Piece.delay_for(2.hours, queue: :low).correct_pdf_signature_of(self.id)
-
-      log_document = {
-        subject: "[Pack::Piece] piece signing rescue #{e.message}",
-        name: "Pack::Piece",
-        error_group: "[pack-piece] piece signing rescue",
-        erreur_type: "Piece - Signing rescue",
-        date_erreur: Time.now.strftime('%Y-%m-%d %H:%M:%S'),
-        more_information: {
-          validation_model: self.valid?,
-          file_to_sign: to_sign_file.to_s,
-          model: self.inspect,
-          user: self.user.inspect,
-          method: "sign_piece",
-          error: e.to_s
-        }
-      }
-
-      ErrorScriptMailer.error_notification(log_document).deliver
     end
   end
 

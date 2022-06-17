@@ -159,30 +159,10 @@ class Retrievers::ConfigurationStepsController < RetrieverController
 
     sleep(5)
 
-    send_notification(@retriever.reload, initial_state, params_connection)
-
     render json: { success: true }, status: 200
   end
 
   private
-
-  def send_notification(retriever, initial_state, connection)
-    log_document = {
-      subject: "[RetrieversController] budgea error event handler service",
-      name: "BudgeaErrorEventHandlerService",
-      error_group: "[Budgea Error Handler] : SCARequired/decoupled - retrievers",
-      erreur_type: "SCARequired/decoupled retrievers",
-      date_erreur: Time.now.strftime('%Y-%m-%d %H:%M:%S'),
-      more_information: { real_params: params.to_json.to_s, decoup_params: connection.to_json.to_s },
-      raw_information: "<table style='border: 1px solid #CCC;font-family: \"Open Sans\", sans-serif; font-size:12px;'><tbody>
-                          <tr><td colspan='2' style='text-align:center; background-color: #BBD8E6;'> #{retriever.id} -- #{connection.try(:[], :id)} </td></tr>
-                          <tr><td style='border: 1px solid #CCC;text-align:center;'>Initial</td><td style='border: 1px solid #CCC;'> #{initial_state} </td></tr>
-                          <tr style='background-color: #F5F5F5;'><td style='border: 1px solid #CCC;text-align:center;'>Final</td><td style='border: 1px solid #CCC;'> #{retriever.to_json.to_s} </td></tr>
-                        </tbody></table>"
-    }
-
-    ErrorScriptMailer.error_notification(log_document).deliver
-  end
   
   def params_connection
     _params_tmp = params.dup

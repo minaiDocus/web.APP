@@ -180,22 +180,6 @@ class CustomActiveStorageObject
         retry
       end
 
-      log_document = {
-        subject: "[CustomActiveStorageObject] generate file retry #{e.message}",
-        name: "CustomActiveStorageObject",
-        error_group: "[custom-active-storage-object] generate file retry",
-        erreur_type: "Active Storage, Generate File Retry",
-        date_erreur: Time.now.strftime('%Y-%M-%d %H:%M:%S'),
-        more_information: {
-          object: @object.inspect,
-          style: style.to_s,
-          error: e.to_s,
-          retry: retries
-        }
-      }
-
-      ErrorScriptMailer.error_notification(log_document).deliver
-
       @base_path = nil
     end
   end

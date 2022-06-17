@@ -44,26 +44,6 @@ class Retriever::RetrievedDocument
       Retriever::RetrievedDocument.delay_for(24.hours).process_file(retriever.id, document, (count_day+1)) if !is_success && count_day <= 2
     end
 
-    log_document = {
-      subject: "[Retriever::RetrievedDocument] retry get file from retriever #{retriever.name.to_s}",
-      name: "RetrievedDocument",
-      error_group: "[retrieved-document] retry get file from retriever",
-      erreur_type: "Retry get file from retriever : #{retriever.name.to_s}",
-      date_erreur: Time.now.strftime('%Y-%m-%d %H:%M:%S'),
-      more_information: {
-        is_success: is_success,
-        count_day: count_day,
-        retriever: retriever.inspect,
-        client: client.inspect,
-        reponse_code: client.response.status.to_s,
-        document: document.inspect,
-        error_message: return_object.to_s,
-        temp_file_path: temp_file_path.to_s
-      }
-    }
-
-    ErrorScriptMailer.error_notification(log_document).deliver if !is_success
-
     { success: is_success, return_object: return_object }
   end
 

@@ -59,20 +59,6 @@ class DataProcessor::TempPack
         if !File.exist?(temp_document.cloud_content_object.path.to_s)
           sleep(15)
           if !File.exist?(temp_document.cloud_content_object.reload.path.to_s)
-            log_document = {
-              subject: "[DataProcessor::TempPack] - Unreadable temp_document",
-              name: "DataProcessor::TempPack",
-              error_group: "[data_processor-temp_pack] unreadable temp_document",
-              erreur_type: "Unreadable temp document : #{temp_document.id}",
-              date_erreur: Time.now.strftime('%Y-%m-%d %H:%M:%S'),
-              more_information: {
-                temp_document: temp_document.inspect,
-                path: temp_document.cloud_content_object.reload.path.to_s
-              }
-            }
-
-            ErrorScriptMailer.error_notification(log_document, { unlimited: true }).deliver
-
             temp_document.unreadable
             DataProcessor::TempPack.delay_for(1.hours, queue: :low).unblock_temp_doc(temp_document.id)
             next
@@ -179,22 +165,6 @@ class DataProcessor::TempPack
       end
 
       if !@original_doc_merged || @pack_locked
-        log_document = {
-          subject: "[DataProcessor::TempPack] recreate bundle all document pack id #{pack.id}",
-          name: "DataProcessor::TempPack",
-          error_group: "[datap_rocessor-temp_pack] recreate bundle all document pack id",
-          erreur_type: "Recreate bundle all document, pack ID : #{pack.id}",
-          date_erreur: Time.now.strftime('%Y-%m-%d %H:%M:%S'),
-          more_information: {
-            pack_name: pack.name,
-            model: pack.inspect,
-            original_doc_merged: @original_doc_merged.to_s,
-            is_locked: @pack_locked.to_s
-          }
-        }
-
-        ErrorScriptMailer.error_notification(log_document).deliver
-
         Pack.delay_for(1.hours, queue: :low).recreate_original_document(pack.id)
 
         @original_doc_merged = false #Avoid multiple merging when original_doc_merged or pack_locked once detected

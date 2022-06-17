@@ -334,27 +334,6 @@ class Retriever < ApplicationRecord
     end
 
     self.reload
-
-    log_info = {
-      subject: "[Retriever] state after update",
-      name: "UpdateRetrieverState",
-      error_group: "[update-retriever-state] state after update",
-      erreur_type: "update retriever state - state after update",
-      date_erreur: Time.now.strftime('%Y-%m-%d %H:%M:%S'),
-      more_information: {
-        retriever_id: self.id,
-        retriever_name: self.service_name,
-        user_code: self.user.code,
-        state: self.state,
-        error_message: self.error_message,
-        previous_state: prev_state,
-        previous_mess: prev_message,
-        source: connection['source'],
-        connection: connection.to_json
-      }
-    }
-
-    ErrorScriptMailer.error_notification(log_info).deliver if connection['source'] == 'ProcessRetrievedData' && self.state != prev_state
   end
 
   def resume_me(force=false)
