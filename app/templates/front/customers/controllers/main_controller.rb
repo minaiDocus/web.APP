@@ -460,6 +460,8 @@ class Customers::MainController < CustomerController
   end
 
   def update_package
+    @customer.update(jefacture_account_id: params[:package][:jefacture_account_id]) if params.try(:[], :package).try(:[], :jefacture_account_id).present?
+
     BillingMod::CreatePackage.new(@customer, "ido_premium", params[:package], false, current_user).execute
     BillingMod::PrepareUserBilling.new(@customer.reload).execute
   end

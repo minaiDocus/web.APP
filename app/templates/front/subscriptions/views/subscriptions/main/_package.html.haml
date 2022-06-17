@@ -24,7 +24,7 @@
     - next if package.to_s == 'ido_premium'    && !CustomUtils.is_ido_premium?(@organization.code)
 
     .package{ class: "#{class_derivation} #{'active' if is_my_package}", data: { name: package } }
-      .row.box{ class: "#{'back-golden' if package.to_s == 'ido_premium'}"}
+      .row.box{ class: "#{'hide' if package.to_s == 'ido_premium'}"}
         .col-sm-4.text-center
           .label-package.bold{ class: "label-#{package}" }= human_name
         .col-sm-4
@@ -48,7 +48,7 @@
       .options{class: "#{'hide' if not is_my_package}"}
         .row
           .col-sm-6.m-3
-            - if package.to_s == 'ido_x'
+            - if package.to_s == 'ido_x' || package.to_s == 'ido_premium'
               .form-group.ms-3
                 = label_tag 'user[jefacture_account_id]', "Identifiant Jefacture (SIREN)", class: 'col-form-label semibold'
                 .select-container.no-padding.w-100                  
@@ -60,7 +60,7 @@
                 .row.retriever-option
                   .col-md-10.form-group.no-margin
                     .form-check.form-check-inline{ data: { toggle: 'tooltip', placement: 'right' }}
-                      %label.semibold Avec option  automate
+                      %label.semibold Avec option automate
                   .col-md-2.form-check.form-switch
                     %label.form-check-label Non
                     = check_box_tag "package[#{package.to_s}][bank]", opt.to_s, is_my_package && my_package.try(:bank_active), class: "form-check-input input_switch option_checkbox", data: { price: BillingMod::Configuration.price_of('ido_retriever', @customer) }
@@ -69,6 +69,10 @@
                   .col-md-10.form-group.no-margin
                     .form-check.form-check-inline{ data: { toggle: 'tooltip', placement: 'right' }}
                       %label.semibold Avec option courrier
+                      - if package.to_s == 'ido_premium'
+                        %br
+                        %i.hint
+                          = "Vous permet d’adresser vos pièces par courrier à notre centre de numérisation. Pour #{BillingMod::Configuration.price_of('mail')}€ HT"
                   .col-md-2.form-check.form-switch
                     %label.form-check-label Non
                     = check_box_tag "package[#{package.to_s}][mail]", opt.to_s, is_my_package && my_package.try(:mail_active), class: "form-check-input option_checkbox input_switch", data: { price: BillingMod::Configuration.price_of('mail', @customer)}

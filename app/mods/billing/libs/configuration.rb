@@ -1,6 +1,7 @@
 class BillingMod::Configuration
   PREMIUM = {
-              IDOC: { price: 3000, customers_limit: 175, unit_price: 10 }
+              IDOC: { price: 3000, customers_limit: 175, unit_price: 10 },
+              ACE: { price: 3000, customers_limit: 175, unit_price: 10 }
             }
 
   LISTS = {

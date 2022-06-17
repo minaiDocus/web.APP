@@ -19,7 +19,7 @@ class BillingMod::CreatePackage
 
     if @apply_now || can_be_updated_now
       _period = @period
-      @user.package_of(@next_period).try(:destroy)
+      @user.package_of(@next_period).try(:destroy) if @package_name != 'ido_premium'
     else
       _period = @next_period
     end
