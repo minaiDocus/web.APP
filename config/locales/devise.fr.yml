@@ -43,7 +43,7 @@ fr:
       models:
         user:
           attributes:
-            password:
+            password_confirmation:
               confirmation: confirmation incorrecte
     attributes:
       user:

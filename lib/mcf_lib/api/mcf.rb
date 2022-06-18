@@ -29,7 +29,7 @@ module McfLib
         end
 
         def accounts
-          @response = send_request('https://uploadservice.mycompanyfiles.fr/api/idocus/TakeAllStorages', { 'AccessToken' => @access_token, 'AttributeName' => 'Storage' })
+          @response = send_curl_request('https://uploadservice.mycompanyfiles.fr/api/idocus/TakeAllStorages', { 'AccessToken' => @access_token, 'AttributeName' => 'Storage' })
           data_response = handle_response
 
           data_response['ListStorageDto'].select{ |storage| storage["Read"] && storage["Write"] && !storage["IsArchive"] }.collect{ |storage| storage["Name"] }
@@ -90,7 +90,7 @@ module McfLib
         end
 
         def handle_response
-          status = @response.try(:code).presence || @response.try(:status).presence
+          status = @response&.code.presence || @response&.status.presence
 
           if status.to_i == 200
             data = JSON.parse(@response.body)
@@ -111,7 +111,7 @@ module McfLib
 
         def send_request(uri, params)
           @response = connection(uri).post do |request|
-            request.headers = { accept: 'json' }
+            request.headers = { 'accept'=> 'json', 'content-type' => 'application/json' }
             request.options.timeout = 180
             request.body = params.to_query #params.to_json not supported
           end
@@ -121,13 +121,27 @@ module McfLib
           @request = Typhoeus::Request.new(
             uri,
             method:  :post,
-            headers: { accept: :json },
+            headers: { accept: :json, 'content-type' => 'application/json' },
             timeout: 180,
             body: params
           )
           @request.run
         end
 
+        def send_curl_request(uri, params)
+          response = FakeObject.new
+
+          begin
+            response.code   = 200
+            response.status = 200
+            response.body = `curl -X POST #{uri} -H 'Content-Type: application/json' -d '#{params.to_json}'`
+          rescue => e
+            resonse.code   = 500
+            resonse.status = 500
+          end
+
+          response
+        end
       end
 
       class Errors

@@ -12,6 +12,8 @@ class AccountingWorkflow::MappingGenerator
 
 
   def execute
+    return false
+
     @users.each do |user|
       write_xml(user.code, user.accounting_plan.to_xml) if user.accounting_plan
     end
@@ -30,7 +32,6 @@ class AccountingWorkflow::MappingGenerator
 
   private
 
-
   def dir
     AccountingWorkflow.pre_assignments_dir.join('mapping')
   end
@@ -42,15 +43,23 @@ class AccountingWorkflow::MappingGenerator
 
 
   def write_xml(user_code, content)
-    file_path = dir.join("#{user_code}.xml")
-    File.write file_path, content
+    begin
+      file_path = dir.join("#{user_code}.xml")
+      File.write file_path, content
+    rescue
+      return false
+    end
   end
 
 
   def write_csv(body)
-    header = [%w(category name number associate customer_code).join(',')]
-    file_path = abbyy_dir.join('comptes.csv')
-    File.write file_path, (header + body).join("\n")
+    begin
+      header = [%w(category name number associate customer_code).join(',')]
+      file_path = abbyy_dir.join('comptes.csv')
+      File.write file_path, (header + body).join("\n")
+    rescue
+      return false
+    end
   end
 
 

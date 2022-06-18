@@ -15,6 +15,10 @@
         %h4.regular.m-3.p-4.semibold
           Réinitialiser mot de passe
 
+        - if devise_error_messages!.present?
+          .alert.alert-danger
+            = devise_error_messages!
+
         %p
           Veuillez saisir votre adresse e-mail. Ensuite, vérifiez votre boîte aux lettres, nous vous envoyons immédiatement un mail qui vous indiquera la démarche à suivre pour réinitialiser votre mot de passe.
 

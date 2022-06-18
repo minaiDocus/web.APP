@@ -72,7 +72,7 @@
               %table.table.table-striped{ role: "presentation" }
                 %tbody.files{ data: { toggle: "modal-gallery", target: "#modal-gallery" } }
             .modal-footer
-              %button.btn.btn-light.semibold.cancel{:type => 'button'} Annuler
+              %button.btn.btn-light.semibold.cancel{:type => 'button', 'data-bs-dismiss' => 'modal'} Annuler
               %button.btn.btn-primary.semibold.btn-add.start{:type => 'button', id: 'launch-filter'} Démarrer
 
         :plain

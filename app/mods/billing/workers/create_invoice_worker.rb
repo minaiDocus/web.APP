@@ -4,7 +4,7 @@ class BillingMod::CreateInvoiceWorker
 
   def perform
     UniqueJobs.for 'BillinMod::CreateInvoice' do
-      BillingMod::CreateInvoice.new.execute(nil, {notify: false, auto_upload: false})
+      BillingMod::CreateInvoice.new(nil, {notify: false, auto_upload: false}).execute
     end
   end
 end

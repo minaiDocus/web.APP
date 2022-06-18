@@ -5,10 +5,12 @@ class DocumentsUploader{
     this.input_journal = $('#add-document #file_account_book_type');
     this.start_button = $('#add-document .btn-add');
     this.base_modal = $('#add-document');
+    this.load_counter = 0;
   }
 
   initialize_params(){
     this.upload_params = JSON.parse($('#fileupload').attr('data-params'));
+    
   }
 
   fetch_url(url, data, method = 'GET'){
@@ -46,6 +48,9 @@ class DocumentsUploader{
   fill_journals_and_periods(){
     this.current_code = this.input_user.val();
 
+    if ((this.load_counter > 0) && (VARIABLES.get('is_loaded')) == true)
+      return
+
     this.fill_journals();
     this.fill_periods();
   }
@@ -68,6 +73,7 @@ class DocumentsUploader{
           me.input_journal.html(options);
 
           me.input_journal.unbind('change').bind('change', (e)=>{
+            this.load_counter++;
             let self = e.target;
             me.fetch_analytics();
 
@@ -75,19 +81,22 @@ class DocumentsUploader{
             if( option_processable == '1' )
               $('#add-document #compta_processable').css('display', 'none');
             else
-              $('#add-document #compta_processable').css('display', 'inline');
+              $('#add-document #compta_processable').css('display', 'inline'); 
           });
-
-          me.input_journal.change();
+            me.input_journal.change();
         })
   }
 }
 
 jQuery(function() {
   let uploader = new DocumentsUploader;
-  VARIABLES.set('can_reload_packs', false);
+  if (typeof(VARIABLES.get('is_loaded')) == "undefined" || VARIABLES.get('is_loaded') == null)
+    VARIABLES.set('is_loaded', false);
 
-  uploader.input_user.unbind('change').on('change', function(e){ uploader.fill_journals_and_periods(); });
+  uploader.input_user.unbind('change').on('change', function(e){ 
+    uploader.load_counter = 0;
+    uploader.fill_journals_and_periods();
+  });
 
   uploader.start_button.livequery(function(){ 
     $('#add-document .btn-add').unbind('click.addition').bind('click.addition', function(e){ VARIABLES.set('can_reload_packs', true); });
@@ -102,7 +111,10 @@ jQuery(function() {
         uploader.fill_journals_and_periods();
     }, 500)
   });
-  uploader.base_modal.on('hide.bs.modal', function(e){ uploader.reload_packs(); });
+  uploader.base_modal.on('hide.bs.modal', function(e){ 
+    uploader.reload_packs(); 
+    VARIABLES.set('is_loaded', true);
+  });
 
   AppListenTo('compta_analytics.hide_modal', (e)=>{
     $('.analytic_resume_box').html(e.detail.resume);
