@@ -57,24 +57,26 @@ class AccountingPlan::SageGecUpdate < AccountingPlan::UpdateService
     @user.sage_gec&.sage_private_api_uuid
   end
 
-  def period
-    sage_gec_client.get_periods_list(accountancy_practice_uuid, company_uuid)[:body].last
+  def periods
+    sage_gec_client.get_periods_list(accountancy_practice_uuid, company_uuid)[:body].last(2)
   end
 
   def trading_accounts
-    sage_gec_client.get_trading_accounts_list(accountancy_practice_uuid, company_uuid, period["$uuid"])[:body]
+    sage_gec_client.get_trading_accounts_list(accountancy_practice_uuid, company_uuid, periods.last["$uuid"])[:body]
   end
 
-  def entries
-    sage_gec_client.get_entries_list(accountancy_practice_uuid, company_uuid, period["$uuid"])[:body]
+  def entries(period_uuid)
+    sage_gec_client.get_entries_list(accountancy_practice_uuid, company_uuid, period_uuid)[:body]
   end
 
   def entries_by_ledgers
     ledgers = {}
     account_book_types.each {|abt| ledgers["#{!abt.pseudonym.blank? ? abt.pseudonym : abt.name}"] = [] }
 
-    entries.each do |entry|
-      ledgers["#{entry["lines"][0]["financialAccountJournalReference"]}"] << entry if ledgers[entry["lines"][0]["financialAccountJournalReference"]]
+    periods.each do |period|
+      entries(period["$uuid"]).each do |entry|
+        ledgers["#{entry["lines"][0]["financialAccountJournalReference"]}"] << entry if ledgers[entry["lines"][0]["financialAccountJournalReference"]]
+      end
     end
 
     ledgers
