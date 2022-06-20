@@ -25,6 +25,37 @@ class PonctualScripts::PonctualScript
     System::Log.info('ponctual_scripts', infos)
   end
 
+  def send_csv_datas(datas, filename=nil)
+    filename = Time.now.strftime('%Y%m%d%H%M%S') if filename.blank?
+
+    lines = []
+    datas.each do |data|
+      lines << data.join(';')
+    end
+
+    CustomUtils.mktmpdir(filename, nil, false) do |dir|
+      file_path = File.join(dir, "#{filename}.csv")
+
+      File.write(file_path, lines.join("\n"));
+
+      log_document = {
+        subject: "[PonctualScript] - #{filename}",
+        name: "PonctualScript - #{filename}",
+        error_group: "[PonctualScript] - #{filename}",
+        erreur_type: "[PonctualScript] - #{filename}",
+        date_erreur: Time.now.strftime('%Y-%m-%d %H:%M:%S')
+      }
+
+      begin
+        ErrorScriptMailer.error_notification(log_document, { attachements: [{name: "#{filename}.csv", file: File.read(file_path)}]} ).deliver
+      rescue
+        ErrorScriptMailer.error_notification(log_document).deliver
+      end
+
+      p file_path
+    end
+  end
+
   private
 
   def ponctual_dir
