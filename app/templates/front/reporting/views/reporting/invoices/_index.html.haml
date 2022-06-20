@@ -179,7 +179,7 @@
                             - annual_summary[period.start_date.month + i - 1][:oversized] += period_billing.data(:oversized, i+1)
                             - annual_summary[period.start_date.month + i - 1][:price_in_cents] += period_billing.amount_in_cents_wo_vat(i+1)
                             - annual_summary[period.start_date.month + i - 1][:price_in_cents_of_excess] += period_billing.data(:excesses_amount_in_cents_wo_vat, i+1)
-                  - elsif (user.billings.of_period(_period_index).count > 0 || user.active_at?(_period_index)) && _period_index.to_i < CustomUtils.period_of(1.month.after).to_i
+                  - elsif _period_index > 202204 && user.active_at?(_period_index) && _period_index.to_i < CustomUtils.period_of(1.month.after).to_i
                     - billing = user.billings.of_period(_period_index).first
                     - data_flow = user.data_flows.of_period(_period_index).first
                     - if user.active_at?(_period_index)
