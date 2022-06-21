@@ -19,7 +19,7 @@ class BillingMod::CreatePackage
 
     if @apply_now || can_be_updated_now
       _period = @period
-      @user.package_of(@next_period).try(:destroy) if @package_name != 'ido_premium'
+      @user.package_of(@next_period).try(:destroy)
     else
       _period = @next_period
     end
@@ -63,7 +63,7 @@ class BillingMod::CreatePackage
     @package_conf = BillingMod::Configuration::LISTS[@package_name.to_sym]
     options       = @package_conf[:options]
 
-    if option.to_s == 'scan' && CustomUtils.is_manual_paper_set_order?(@user.organization)
+    if option.to_s == 'scan' && CustomUtils.is_manual_paper_set_order?(@user.organization) && options[:digitize] == 'optional'
       return _params(option.to_sym)
     elsif options[option.to_sym] == 'strict'
       return true
@@ -75,16 +75,21 @@ class BillingMod::CreatePackage
   end
 
   def can_be_updated_now
-    count = 0
-    opts  = ['scan', 'preassignment', 'mail', 'bank']
+    opts                = ['scan', 'preassignment', 'mail', 'bank']
+    to_activate_count   = 0
+    to_deactivate_count = 0
 
     if @package_name == @my_package.try(:name)
       opts.each do |opt|
-        count += 1 if not (@my_package.send("#{opt}_active".to_sym) == true && activate?(opt.to_sym) == false)
+        to_activate   = @my_package.send("#{opt}_active".to_sym) == false && activate?(opt.to_sym) == true
+        to_deactivate = @my_package.send("#{opt}_active".to_sym) == true && activate?(opt.to_sym) == false
+
+        to_activate_count   += 1 if to_activate
+        to_deactivate_count += 1 if to_deactivate
       end
     end
 
-    return (count == opts.size)? true : false
+    return (to_activate_count > 0 && to_deactivate_count == 0)? true : false
   end
 
   def update_journal_size

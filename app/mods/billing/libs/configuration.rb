@@ -1,20 +1,19 @@
 class BillingMod::Configuration
   PREMIUM = {
-              IDOC: { price: 3000, customers_limit: 175, unit_price: 10 },
-              ACE: { price: 3000, customers_limit: 175, unit_price: 10 }
+              MCN: { price: 3000, customers_limit: 5, unit_price: 10 },
             }
 
   LISTS = {
             ido_premium: {
               human_name: "iDo'Premium",
               description: "Vous permet de transférer vos pièces sans limite (quotas) de téléversement.",
-              hint: "Facture à 3.000€ HT pour les 175 premiers dossiers, au delà des 175 dossiers : 10€ ht/dossier",
+              hint: "Facture à 3.000€ HT pour les $$X premiers dossiers, au delà des $$X dossiers : 10€ ht/dossier",
               label: 'Téléchargement + Pré-saisie comptable',
               price: 0,
               commitment: 0,
               cummulative_excess: false,
-              data_flows: { max: 0, duration: 'month', excess_price: 10 },
-              options: { upload: 'strict', bank: 'strict', scan: 'strict', mail: 'optional', digitize: 'optional', preassignment: 'strict'}
+              data_flows: { max: 0, duration: 'month', excess_price: 0 },
+              options: { upload: 'strict', bank: 'strict', scan: 'strict', mail: 'optional', digitize: 'strict', preassignment: 'strict'}
             },
             ido_classic: {
               human_name: "iDo'Classique",
@@ -40,8 +39,8 @@ class BillingMod::Configuration
             },
             ido_micro_plus: {
               human_name: "iDo'Micro",
-              description: "Vous permet de transférer jusqu'à 100 pièces/an et de bénéficier des automates de récupérations bancaires pour un engagement de 12 mois.",
-              hint: "Au-delà de 100 factures, calcul du dépassement simplifié : 0,25€ ht/facture",
+              description: "Vous permet de transférer jusqu'à 25 pièces/mois pour un engagement de 12 mois.",
+              hint: "Au-delà de 25 factures, calcul du dépassement simplifié : 0,3€ ht/facture",
               label: 'Téléchargement + Pré-saisie comptable + Engagement 12 mois',
               price: 10,
               commitment: 12,

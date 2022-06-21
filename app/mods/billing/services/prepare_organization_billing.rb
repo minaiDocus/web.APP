@@ -36,8 +36,10 @@ class BillingMod::PrepareOrganizationBilling
     customers_count = BillingMod::Package.of_period(@period).where(user_id: @customers_ids).where(name: 'ido_premium').count
 
     if customers_count > 0
-      price = BillingMod::Configuration.premium_price_of(@organization.code)
-      create_billing({ name: 'ido_premium', title: "Forfait iDo'Premium (175 Dossiers)", kind: 'normal', price: price })
+      price           = BillingMod::Configuration.premium_price_of(@organization.code)
+      customers_limit = BillingMod::Configuration.premium_customers_limit_of(@organization.code)
+
+      create_billing({ name: 'ido_premium', title: "Forfait iDo'Premium (#{customers_limit} Dossiers)", kind: 'normal', price: price })
     end
   end
 
@@ -72,7 +74,9 @@ class BillingMod::PrepareOrganizationBilling
   end
 
   def create_retriever_discount_billing
-    customers_count = BillingMod::Package.of_period(@period).where(user_id: @customers_ids).where(bank_active: true).count
+    packages_name_out_list = ['ido_premium', 'ido_micro']
+
+    customers_count = BillingMod::Package.of_period(@period).where.not(name: packages_name_out_list).where(user_id: @customers_ids).where(bank_active: true).count
 
     price = BillingMod::Configuration.discount_price(:bank_option, customers_count, discount_version)
 
