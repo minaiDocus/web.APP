@@ -200,12 +200,12 @@ class BillingMod::Configuration
       BillingMod::Configuration::PREMIUM[organization_code.to_sym][:price]
     end
 
-    def premium_limit_of(organization_code)
-      BillingMod::Configuration::PREMIUM[organization_code.to_sym][:customers_limit]
+    def premium_customers_limit_of(organization_code)
+      BillingMod::Configuration::PREMIUM[organization_code.to_sym].try(:[], :customers_limit).to_i
     end
 
     def premium_unit_customer_price_of(organization_code)
-      BillingMod::Configuration::PREMIUM[organization_code.to_sym][:unit_price]
+      BillingMod::Configuration::PREMIUM[organization_code.to_sym].try(:[], :unit_price).to_f
     end
   end
 end
