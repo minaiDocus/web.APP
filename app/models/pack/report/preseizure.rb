@@ -81,7 +81,7 @@ class Pack::Report::Preseizure < ApplicationRecord
     if software.nil?
       user_ids = []
 
-      ['ibiza', 'my_unisoft', 'exact_online', 'sage_gec', 'acd'].each do |software_name|
+      ['ibiza', 'my_unisoft', 'sage_gec', 'acd'].each do |software_name|
         model_software = Interfaces::Software::Configuration.softwares[software_name.to_sym]
         user_ids = user_ids + model_software.where(is_used: true, owner_type: 'User').pluck(:owner_id)
       end
