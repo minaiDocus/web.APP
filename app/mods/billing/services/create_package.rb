@@ -17,11 +17,15 @@ class BillingMod::CreatePackage
 
     @package_conf = BillingMod::Configuration::LISTS[@package_name.to_sym]
 
-    if @apply_now || can_be_updated_now
+    if @apply_now
       _period = @period
       @user.package_of(@next_period).try(:destroy)
     else
-      _period = @next_period
+      _period = @period
+
+      if @my_package.present? && ( has_options_to_disable || @package_name != @my_package.name )
+        _period = @next_period
+      end
     end
 
     package        = @user.package_of(_period) || BillingMod::Package.new
@@ -74,22 +78,17 @@ class BillingMod::CreatePackage
     end
   end
 
-  def can_be_updated_now
+  def has_options_to_disable
     opts                = ['scan', 'preassignment', 'mail', 'bank']
-    to_activate_count   = 0
     to_deactivate_count = 0
 
     if @package_name == @my_package.try(:name)
       opts.each do |opt|
-        to_activate   = @my_package.send("#{opt}_active".to_sym) == false && activate?(opt.to_sym) == true
-        to_deactivate = @my_package.send("#{opt}_active".to_sym) == true && activate?(opt.to_sym) == false
-
-        to_activate_count   += 1 if to_activate
-        to_deactivate_count += 1 if to_deactivate
+        to_deactivate_count += 1 if @my_package.send("#{opt}_active".to_sym) == true && activate?(opt.to_sym) == false
       end
     end
 
-    return (to_activate_count > 0 && to_deactivate_count == 0)? true : false
+    return (to_deactivate_count > 0)? true : false
   end
 
   def update_journal_size
