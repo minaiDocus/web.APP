@@ -33,6 +33,8 @@ class BillingMod::PrepareOrganizationBilling
   private
 
   def create_premium_billing
+    return false if not CustomUtils.is_ido_premium?(@organization.code)
+
     customers_count = BillingMod::Package.of_period(@period).where(user_id: @customers_ids).where(name: 'ido_premium').count
 
     if customers_count > 0
@@ -44,6 +46,8 @@ class BillingMod::PrepareOrganizationBilling
   end
 
   def create_premium_overcharge_billing
+    return false if not CustomUtils.is_ido_premium?(@organization.code)
+
     customers_count = BillingMod::Package.of_period(@period).where(user_id: @customers_ids).where(name: 'ido_premium').count
     customers_limit = BillingMod::Configuration.premium_customers_limit_of(@organization.code)
     unit_price      = BillingMod::Configuration.premium_unit_customer_price_of(@organization.code)
