@@ -76,21 +76,6 @@ class Retriever::RetrievedDocument
         }
         @temp_document = AddTempDocumentToTempPack.execute(pack, file, options)
         retriever.temp_documents << @temp_document
-      else
-        log_document = {
-          subject: "[Retriever::RetrievedDocument] invalid retrieved document #{retriever.name.to_s}",
-          name: "RetrievedDocument",
-          error_group: "[retrieved-document] invalid retrieved document",
-          erreur_type: "Invalid document from retriever : #{retriever.name.to_s}",
-          date_erreur: Time.now.strftime('%Y-%m-%d %H:%M:%S'),
-          more_information: {
-            retriever: retriever.inspect,
-            document: document.inspect,
-            modifiable: DocumentTools.modifiable?(@temp_file_path).to_s
-          }
-        }
-
-        ErrorScriptMailer.error_notification(log_document).deliver
       end
 
       @file.close if @file

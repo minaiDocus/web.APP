@@ -9,17 +9,6 @@ class Api::Mobile::ErrorReportController < MobileApiController
   respond_to :json
 
   def send_error_report
-    data_report = {
-      title: params[:error] || 'Erreur App mobile',
-      user_id: params[:user_id],
-      user_token: params[:user_token],
-      platform: params[:platform],
-      version: params[:version],
-      report: params[:report]
-    }
-
-    MobileReportMailer.report(data_report).deliver
-
     render json: { success: true }, status: 200
   end
 end

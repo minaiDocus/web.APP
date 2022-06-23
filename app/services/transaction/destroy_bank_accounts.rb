@@ -12,19 +12,5 @@ class Transaction::DestroyBankAccounts
 
       # bank_account.destroy unless bank_account.reload.retriever
     end
-
-    log_document = {
-      subject: "[Transaction::DestroyBankAccounts] - Destroying bank accounts",
-      name: "DestroyBankAccounts",
-      error_group: "[Destroy Banks] : Destroying banks",
-      erreur_type: "Destroying banks",
-      date_erreur: Time.now.strftime('%Y-%m-%d %H:%M:%S'),
-      more_information: {
-      	banks: @bank_accounts.collect(&:id),
-      	reason: reason.to_s
-      }
-    }
-
-    ErrorScriptMailer.error_notification(log_document).deliver
   end
 end

@@ -295,24 +295,6 @@ class Pack::Piece < ApplicationRecord
         self.save
 
         Pack::Piece.delay_for(20.minutes, queue: :low).correct_pdf_signature_of(self.id)
-
-        log_document = {
-          subject: "[Pack::Piece] piece can't be saved or signed file not genereted",
-          name: "Pack::Piece",
-          error_group: "[pack-piece] piece can't be saved or signed file not genereted",
-          erreur_type: "Piece can't be saved or signed file not genereted (#{to_sign_file.to_s}",
-          date_erreur: Time.now.strftime('%Y-%m-%d %H:%M:%S'),
-          more_information: {
-            validation_model: self.valid?,
-            file_to_sign_exist: File.exist?(to_sign_file.to_s),
-            file_to_sign: to_sign_file.to_s,
-            model: self.inspect,
-            user: self.user.inspect,
-            method: "sign_piece"
-          }
-        }
-
-        ErrorScriptMailer.error_notification(log_document).deliver
       end
     rescue => e
       System::Log.info('pieces_events', "[Signing] #{self.id} - #{self.name} - #{e.to_s} (#{to_sign_file.to_s})")

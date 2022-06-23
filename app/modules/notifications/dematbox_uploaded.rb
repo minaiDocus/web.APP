@@ -21,22 +21,6 @@ class Notifications::DematboxUploaded < Notifications::Notifier
       begin
         result = DematboxApi.notify_uploaded temp_document.dematbox_doc_id, temp_document.dematbox_box_id, message
       rescue Savon::SOAPFault => e
-        log_document = {
-          subject: "[Dematbox] - Can't notify document",
-          name: "Unotified_documents",
-          error_group: "[Dematbox] : Unotified document",
-          erreur_type: "Dematbox - Unotified document",
-          date_erreur: Time.now.strftime('%Y-%m-%d %H:%M:%S'),
-          more_information: {
-            td: temp_document.inspect,
-            dematbox_box_id: temp_document.dematbox_box_id,
-            dematbox_doc_id: temp_document.dematbox_doc_id,
-            error: e.message
-          }
-        }
-
-        ErrorScriptMailer.error_notification(log_document).deliver
-
         if e.message.match(/702:DocId already notified/)
           result = true
         elsif e.message.match(/703:DocId not sent/) && @arguments[:remaining_tries] > 0 && Rails.env == 'production'
@@ -60,23 +44,5 @@ class Notifications::DematboxUploaded < Notifications::Notifier
         # end
       end
     end
-
-    log_document = {
-      subject: "[Dematbox] - Document notification",
-      name: "document_notification_dematbox",
-      error_group: "[Dematbox] - Document notification",
-      erreur_type: "Dematbox - Document notification",
-      date_erreur: Time.now.strftime('%Y-%m-%d %H:%M:%S'),
-      more_information: {
-        from: @arguments[:from],
-        td: temp_document.try(:id),
-        dematbox_box_id: temp_document.try(:dematbox_box_id),
-        dematbox_doc_id: temp_document.try(:dematbox_doc_id),
-        Notified_at: temp_document.dematbox_notified_at,
-        result: result.to_s
-      }
-    }
-
-    ErrorScriptMailer.error_notification(log_document).deliver
   end
 end

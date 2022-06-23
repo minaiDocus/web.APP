@@ -125,20 +125,6 @@ class EmailedDocument
             if emailed_document.get_invalid_attachments.any?
               email.update_attribute(:errors_list, emailed_document.errors)
               EmailedDocumentMailer.notify_finished_with_failure(email, emailed_document).deliver
-
-              log_document = {
-                subject: "[EmailedDocument] finish with failure",
-                name: "EmailedDocument finish_with_failure",
-                error_group: "[EmailedDocument] - finish_with_failure",
-                erreur_type: "Emailed documents finish_with_failure",
-                date_erreur: Time.now.strftime('%Y-%m-%d %H:%M:%S'),
-                more_information: {
-                  email: email.inspect,
-                  emailed_document_errors: emailed_document.errors,
-                }
-              }
-
-              ErrorScriptMailer.error_notification(log_document).deliver
             else
               if email.from_user_id.presence.to_i > 0
                 sender = User.find email.from_user_id
@@ -150,19 +136,6 @@ class EmailedDocument
             email.failure
             emailed_document.user && EmailedDocumentMailer.notify_failure(email, emailed_document).deliver
 
-            log_document = {
-              subject: "[EmailedDocument] failure",
-              name: "EmailedDocument failure",
-              error_group: "[EmailedDocument] - failure",
-              erreur_type: "Emailed documents failure",
-              date_erreur: Time.now.strftime('%Y-%m-%d %H:%M:%S'),
-              more_information: {
-                email: email.inspect,
-                emailed_document_errors: emailed_document.errors,
-              }
-            }
-
-            ErrorScriptMailer.error_notification(log_document).deliver
           end
           [emailed_document, email]
         else
@@ -176,21 +149,6 @@ class EmailedDocument
             File.extname(filename).casecmp('.pdf').zero?
           end
           EmailedDocumentMailer.notify_error(email, attachment_names).deliver
-
-          log_document = {
-            subject: "[EmailedDocument] error #{e.message}",
-            name: "EmailedDocument error",
-            error_group: "[EmailedDocument] - error",
-            erreur_type: "Emailed documents error",
-            date_erreur: Time.now.strftime('%Y-%m-%d %H:%M:%S'),
-            more_information: {
-              email: email.inspect,
-              error: e.to_s,
-              attachements: attachment_names.try(:to_s)
-            }
-          }
-
-          ErrorScriptMailer.error_notification(log_document).deliver
 
           email.update_attribute(:is_error_notified, true)
         end
