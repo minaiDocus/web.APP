@@ -66,7 +66,7 @@ class ConterpartAccount {
       let selector_container = $('.account-item-selector-container');
       let selector = this.account_selector.clone();
       selector.html('');
-      selector.append('<option value="">Selectionnez un compte de charge</option>');
+      selector.append('<option value="">Selectionner une catégorie</option>');
 
       res.accounts.forEach((account)=>{
         selector.append(`<option value='${account.id}'>${account.name} - ${account.number}</option>`);

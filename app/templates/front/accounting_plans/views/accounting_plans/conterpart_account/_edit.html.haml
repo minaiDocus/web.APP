@@ -6,6 +6,6 @@
   = f.input :is_default, as: :boolean, input_html: { style: 'width: 40px' }
 
   .mb-3.form-group.string.required
-    = label_tag 'conterpart_account[accounting_plan_items][]', 'Compte de tiers associé'
+    = label_tag 'conterpart_account[accounting_plan_items][]', 'Compte de tiers'
     .select-container.no-padding.w-100
     = select_tag 'conterpart_account[accounting_plan_items][]', options_for_select(@accounting_plan_items, @conterpart_account.accounting_plan_items.map(&:id)), include_blank: false,  class: 'w-100 searchable-option-list', multiple: true
