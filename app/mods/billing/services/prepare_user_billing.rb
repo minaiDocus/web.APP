@@ -112,7 +112,7 @@ class BillingMod::PrepareUserBilling
   end
 
   def create_extra_orders_billing
-    @user.extra_orders.of_period(@period).map do |extra_order|
+    @user.extra_orders.of_period(@period).each do |extra_order|
       create_billing({ name: 'extra_order', title: extra_order.name, kind: 'extra', price: extra_order.price })
     end
   end

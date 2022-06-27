@@ -11,7 +11,7 @@ module BillingMod::UserModule
   def can_be_billed?
     return true if self.organization.try(:invoice_created_customer)
 
-    will_not_billed = (self.pieces.count == 0 && self.preseizures.count == 0 && self.created_at.strftime('%Y%m').to_i >= 202205)
+    will_not_billed = (self.created_at.strftime('%Y%m').to_i >= 202205 && self.pieces.count == 0 && self.preseizures.count == 0)
     not(will_not_billed)
   end
 
