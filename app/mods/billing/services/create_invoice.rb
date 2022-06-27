@@ -16,14 +16,15 @@ module BillingMod
 
       @organizations = Array(organizations).presence || Organization.billed
       @test_dir = 'Not a test'
+      @force    = force
 
       @test_dir = CustomUtils.mktmpdir('create_invoice', Rails.root.join('files'), false) if @is_test
 
       @organizations.each do |organization|
         @invoice = organization.invoices.of_period(@period).first
 
-        next if !force && !organization.can_be_billed?
-        next if !force && organization.code == 'TEEO'
+        next if !@force && !organization.can_be_billed?
+        next if !@force && organization.code == 'TEEO'
         next if @invoice && !@is_test && !@is_update
 
         generate_invoice_of(organization)
@@ -113,7 +114,7 @@ module BillingMod
       end
 
       if recalculate_billing
-        BillingMod::PrepareOrganizationBilling.new(@organization, @period).execute
+        BillingMod::PrepareOrganizationBilling.new(@organization, @period).execute(@force)
       end
 
       return false if ( @total_customers_price + @organization.total_billing_of(@period) ) == 0

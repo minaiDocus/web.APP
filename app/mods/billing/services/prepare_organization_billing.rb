@@ -5,8 +5,8 @@ class BillingMod::PrepareOrganizationBilling
     @time_end     = Date.parse("#{@period.to_s[0..3]}-#{@period.to_s[4..5]}-15")
   end
 
-  def execute
-    return false if not @organization.can_be_billed?
+  def execute(force=false)
+    return false if !force && !@organization.can_be_billed?
 
     @organization.billings.of_period(@period).update_all(is_frozen: true)
     @customers_ids = []
@@ -41,7 +41,7 @@ class BillingMod::PrepareOrganizationBilling
       price           = BillingMod::Configuration.premium_price_of(@organization.code)
       customers_limit = BillingMod::Configuration.premium_customers_limit_of(@organization.code)
 
-      create_billing({ name: 'ido_premium', title: "Forfait iDo'Premium (#{customers_limit} Dossiers)", kind: 'normal', price: price })
+      create_billing({ name: 'ido_premium', title: "Abonnement iDo'Premium (pour #{customers_limit} Dossiers)", kind: 'normal', price: price })
     end
   end
 
@@ -54,7 +54,7 @@ class BillingMod::PrepareOrganizationBilling
 
     if customers_count > 0 && customers_limit > 0 && customers_count > customers_limit
       excess = customers_count - customers_limit
-      create_billing({ name: 'ido_premium_overcharge', title: 'Dossier premium en sus', kind: 'excess', price: ( unit_price * excess ), associated_hash: { excess: excess, price: unit_price, limit: customers_limit } })
+      create_billing({ name: 'ido_premium_overcharge', title: "Dossier(s) premium en sus ( #{excess} x #{unit_price} € )", kind: 'excess', price: ( unit_price * excess ), associated_hash: { excess: excess, price: unit_price, limit: customers_limit } })
     end
   end
 
