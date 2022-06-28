@@ -101,15 +101,21 @@ module BillingMod
           BillingMod::PrepareUserBilling.new(customer, @period).execute
         end
 
-        increm_package_count('iDoPremium')    if package.name == 'ido_premium'
-        increm_package_count('iDoClassique')  if package.name == 'ido_classic'
-        increm_package_count('iDoNano')       if package.name == 'ido_nano'
-        increm_package_count('iDoX')          if package.name == 'ido_x'
-        increm_package_count('iDoMicro')      if ['ido_micro_plus', 'ido_micro'].include?(package.name)
-        increm_package_count('Numérisation')  if package.name == 'ido_digitize' || (package.scan_active && CustomUtils.is_manual_paper_set_order?(@organization) && BillingMod::Configuration::LISTS[package.name.to_sym][:options][:digitize] == 'optional')
-        increm_package_count('Automates')     if package.name == 'ido_retriever' || (package.bank_active && BillingMod::Configuration::LISTS[package.name.to_sym][:options][:bank] == 'optional')
-        increm_package_count('Courriers')     if package.mail_active && BillingMod::Configuration::LISTS[package.name.to_sym][:options][:mail] == 'optional'
-
+        if @is_test
+          increm_package_count(package.name)    if ['ido_premium', 'ido_classic', 'ido_nano', 'ido_x', 'ido_micro_plus', 'ido_micro'].include?(package.name)
+          increm_package_count('ido_digitize')  if package.name == 'ido_digitize' || (package.scan_active && CustomUtils.is_manual_paper_set_order?(@organization) && BillingMod::Configuration::LISTS[package.name.to_sym][:options][:digitize] == 'optional')
+          increm_package_count('ido_retriever') if package.name == 'ido_retriever' || (package.bank_active && BillingMod::Configuration::LISTS[package.name.to_sym][:options][:bank] == 'optional')
+          increm_package_count('mail')          if package.mail_active && BillingMod::Configuration::LISTS[package.name.to_sym][:options][:mail] == 'optional'
+        else
+          increm_package_count('iDoPremium')    if package.name == 'ido_premium'
+          increm_package_count('iDoClassique')  if package.name == 'ido_classic'
+          increm_package_count('iDoNano')       if package.name == 'ido_nano'
+          increm_package_count('iDoX')          if package.name == 'ido_x'
+          increm_package_count('iDoMicro')      if ['ido_micro_plus', 'ido_micro'].include?(package.name)
+          increm_package_count('Numérisation')  if package.name == 'ido_digitize' || (package.scan_active && CustomUtils.is_manual_paper_set_order?(@organization) && BillingMod::Configuration::LISTS[package.name.to_sym][:options][:digitize] == 'optional')
+          increm_package_count('Automates')     if package.name == 'ido_retriever' || (package.bank_active && BillingMod::Configuration::LISTS[package.name.to_sym][:options][:bank] == 'optional')
+          increm_package_count('Courriers')     if package.mail_active && BillingMod::Configuration::LISTS[package.name.to_sym][:options][:mail] == 'optional'
+        end
         @total_customers_price += customer.total_billing_of(@period)
       end
 
@@ -148,7 +154,11 @@ module BillingMod
     end
 
     def generate_pdf
-      @invoice_path = BillingMod::PdfGenerator.new(@organization, @packages_count, @invoice, @total_customers_price, @time).generate
+      if @is_test
+        @invoice_path = BillingMod::PdfGeneratorV2.new(@organization, @packages_count, @invoice, @total_customers_price, @time).generate
+      else
+        @invoice_path = BillingMod::PdfGenerator.new(@organization, @packages_count, @invoice, @total_customers_price, @time).generate
+      end
 
       if not @is_test
         @invoice.cloud_content_object.attach(File.open(@invoice_path), File.basename(@invoice_path))
@@ -210,6 +220,8 @@ module BillingMod
     end
 
     def increm_package_count(package_name)
+      package_name = 'ido_micro' if @is_test && package_name == 'ido_micro_plus'
+
       begin
         @packages_count[package_name] += 1
       rescue
@@ -389,6 +401,290 @@ module BillingMod
 
       @pdf.move_down 7
       @pdf.text "<b>Retrouvez le détails de vos consommations dans votre espace client dans le menu \"Mon Reporting\".</b>", align: :center, inline_format: true
+    end
+  end
+
+  class PdfGeneratorV2
+    def initialize(organization, packages_count, invoice, total_customers_price, time)
+      @organization          = organization
+      @packages_count        = packages_count
+      @invoice               = invoice
+      @total_customers_price = total_customers_price
+      @time                  = time
+      @period                = CustomUtils.period_of(@time)
+
+      @months                = I18n.t('date.month_names').map { |e| e.capitalize if e }
+      @period_month          = @months[time.month]
+      @year                  = time.year
+    end
+
+    def generate
+      @pdf.destroy if @pdf
+
+      invoice_path = "#{Rails.root}/tmp/#{@invoice.number}.pdf"
+
+      Prawn::Document.generate(invoice_path, :bottom_margin => 150) do |pdf|
+        @pdf = pdf
+
+        @pdf.repeat [1] do
+          @pdf.image "#{Rails.root}/app/assets/images/application/bandeau_dematbox.jpg", width: 272, height: 120, align: :center, :at => [142, 1]
+        end
+
+        make_header
+
+        make_body
+
+        make_footer
+
+        @pdf
+      end
+
+      invoice_path
+    end
+
+    private
+
+    def make_header
+      address = @organization.addresses.for_billing.first
+
+      @pdf.font 'Helvetica'
+      @pdf.fill_color '49442A'
+
+      @pdf.font_size 8
+      @pdf.default_leading 4
+
+      header_data = [
+        [
+          "IDOCUS\n17, rue Galilée\n75116 Paris.",
+          "SAS au capital de 50 000 €\nRCS PARIS: 804 067 726\nTVA FR12804067726",
+          "contact@idocus.com\nwww.idocus.com\nTél : 01 84 250 251"
+        ]
+      ]
+
+      @pdf.table(header_data, width: 540) do
+        style(row(0), borders: [:top, :bottom], border_color: 'AFA6A6', text_color: 'AFA6A6')
+        style(columns(1), align: :center)
+        style(columns(2), align: :right)
+      end
+
+      @pdf.move_down 10
+      @pdf.image "#{Rails.root}/app/assets/images/logo/big_logo.png", width: 90, height: 30, at: [4, @pdf.cursor]
+
+      @pdf.stroke_color '49442A'
+      @pdf.font_size 10
+      @pdf.default_leading 5
+
+      formatted_address = [address.company, address.first_name + ' ' + address.last_name, address.address_1, address.address_2, address.zip.to_s + ' ' + address.city, address.country]
+                          .reject { |a| a.nil? || a.empty? }
+                          .join("\n")
+
+      @pdf.bounding_box([262, @pdf.cursor], width: 270) do
+        @pdf.text formatted_address, align: :right, style: :bold
+
+        if @organization.vat_identifier
+          @pdf.move_down 7
+
+          @pdf.text "TVA : #{@organization.vat_identifier}", align: :right, style: :bold
+        end
+      end
+
+      @pdf.font_size(14) do
+        @pdf.move_down 10
+        @pdf.text "Facture n° " + @invoice.number.to_s + ' du ' + (@invoice.created_at - 1.month).end_of_month.day.to_s + ' ' + @period_month + ' ' + (@invoice.created_at - 1.month).year.to_s, align: :left, style: :bold
+      end
+
+      @pdf.move_down 2
+      @pdf.text "<b>Période concernée :</b> " + @period_month + ' ' + @year.to_s, align: :left, inline_format: true
+    end
+
+    def make_body
+      @pdf.move_down 10
+
+      @total_data_test = 0
+
+      data = [['<b>Forfaits & Prestations</b>', '<b>Prix HT</b>']]
+
+      data << ["- Nombre de dossiers actifs : #{@organization.customers.active_at(@time).count}", '']
+
+      @packages_count.sort_by{|k, v| v}.reverse.each do |package|
+        if %w(ido_digitize ido_retriever mail).include?(package[0].to_s)
+          data << ["- Option#{'s' if package[1] > 1} #{get_human_name_of(package[0])} : #{package[1]}", "#{package[1] * get_price_of(package[0])} €"]
+        else
+          data << ["- Forfait#{'s' if package[1] > 1} #{get_human_name_of(package[0])} : #{package[1]}", "#{package[1] * get_price_of(package[0])} €"]
+        end
+
+        @total_data_test += package[1] * get_price_of(package[0])
+      end
+
+      get_excess
+
+      data << ['', '']
+
+      @pdf.default_leading 0
+      if @bank_excess[:count] == 0 && @journal_excess[:count] == 0 && @excess_billing[:count] == 0 && @organization.billings.of_period(@period).size == 0
+        @pdf.table(data, width: 540, cell_style: { inline_format: true, :padding => [5, 1, 1, 1] }) do
+          @pdf.default_leading 0
+          style(row(0..-1), borders: [], text_color: '49442A')
+          style(row(0), borders: [:bottom])
+          style(row(-1), borders: [:bottom])
+          style(columns(2), align: :right)
+          style(columns(1), align: :right)
+        end
+      else
+        @pdf.table(data, width: 540, cell_style: { inline_format: true, :padding => [5, 1, 1, 1] }) do
+          @pdf.default_leading 0
+          style(row(0..-1), borders: [], text_color: '49442A')
+          style(row(0), borders: [:bottom])
+          style(columns(2), align: :right)
+          style(columns(1), align: :right)
+        end
+      end
+
+      if @bank_excess[:count] > 0 || @journal_excess[:count] > 0 || @excess_billing[:count] > 0
+        data = [['<b>Dépassements</b>', '']]
+
+        data << ["- Pièces : #{@excess_billing[:count]}", "#{CustomUtils.format_price(@excess_billing[:price])} €"]    if @excess_billing[:count] > 0
+        data << ["- Journals : #{@journal_excess[:count]}", "#{CustomUtils.format_price(@journal_excess[:price])} €"]  if @journal_excess[:count] > 0
+        data << ["- Banques : #{@bank_excess[:count]}", "#{CustomUtils.format_price(@bank_excess[:price])} €"]         if @bank_excess[:count] > 0
+
+        data << ['', '']
+
+        @total_data_test += CustomUtils.format_price(@bank_excess[:price]).to_i
+        @total_data_test += CustomUtils.format_price(@journal_excess[:price]).to_i
+        @total_data_test += CustomUtils.format_price(@excess_billing[:price]).to_i
+
+        if @organization.billings.of_period(@period).size == 0
+          @pdf.table(data, width: 540, cell_style: { inline_format: true, :padding => [4, 1, 1, 1] }) do
+            @pdf.default_leading 0
+            style(row(0..-1), borders: [], text_color: '49442A')
+            style(row(0), borders: [:bottom])
+            style(row(-1), borders: [:bottom])
+            style(columns(2), align: :right)
+            style(columns(1), align: :right)
+          end
+        else
+          @pdf.table(data, width: 540, cell_style: { inline_format: true, :padding => [4, 1, 1, 1] }) do
+            @pdf.default_leading 0
+            style(row(0..-1), borders: [], text_color: '49442A')
+            style(row(0), borders: [:bottom])
+            style(columns(2), align: :right)
+            style(columns(1), align: :right)
+          end
+        end
+      end
+
+      if @organization.billings.of_period(@period).size > 0
+        data = [['<b>Autres</b>', '']]
+
+        @organization.billings.of_period(@period).each do |billing|
+          data << ["#{billing.title.capitalize}", "#{CustomUtils.format_price(billing.price)} €"]
+
+          @total_data_test += CustomUtils.format_price(billing.price).to_i
+        end
+
+        data << ['', '']
+
+        @pdf.table(data, width: 540, cell_style: { inline_format: true, :padding => [5, 1, 1, 1] }) do
+          @pdf.default_leading 0
+          style(row(0..-1), borders: [], text_color: '49442A')
+          style(row(0), borders: [:bottom])
+          style(row(-1), borders: [:bottom])
+          style(columns(2), align: :right)
+          style(columns(1), align: :right)
+        end
+      end
+    end
+
+    def make_footer
+      total = @total_customers_price + @organization.total_billing_of(@period)
+      total_data_test = @total_data_test * 100
+      vat_text    = '0%'
+      total_w_vat = total
+
+      if @invoice.organization.subject_to_vat
+        vat_text    = '20%'
+        total_w_vat = total * @invoice.vat_ratio
+      end
+
+      @pdf.move_down 7
+      @pdf.float do
+        ##### TOTAL TEST ######
+        @pdf.text_box 'Total TEST', at: [400, @pdf.cursor], width: 60, align: :right, style: :bold
+        @pdf.move_down 15
+        ##### TOTAL TEST ######
+        @pdf.text_box 'Total HT', at: [400, @pdf.cursor], width: 60, align: :right, style: :bold
+      end
+      ##### TOTAL TEST ######
+      @pdf.text_box CustomUtils.format_price(total_data_test) + " €", at: [470, @pdf.cursor], width: 66, align: :right
+      @pdf.move_down 15
+      ##### TOTAL TEST ######
+      @pdf.text_box CustomUtils.format_price(total) + " €", at: [470, @pdf.cursor], width: 66, align: :right
+      @pdf.move_down 10
+      @pdf.stroke_horizontal_line 470, 540, at: @pdf.cursor
+
+      @pdf.move_down 7
+      @pdf.float do
+        @pdf.text_box "TVA (#{vat_text})", at: [400, @pdf.cursor], width: 60, align: :right, style: :bold
+      end
+
+      @pdf.text_box CustomUtils.format_price(total_w_vat - total) + " €", at: [470, @pdf.cursor], width: 66, align: :right
+      @pdf.move_down 10
+      @pdf.stroke_horizontal_line 470, 540, at: @pdf.cursor
+
+      @pdf.move_down 7
+      @pdf.float do
+        @pdf.text_box 'Total TTC', at: [400, @pdf.cursor], width: 60, align: :right, style: :bold
+      end
+
+      @pdf.text_box CustomUtils.format_price(total_w_vat) + " €", at: [470, @pdf.cursor], width: 66, align: :right
+      @pdf.move_down 10
+      @pdf.stroke_color '000000'
+      @pdf.stroke_horizontal_line 470, 540, at: @pdf.cursor
+
+      # Other information
+      @pdf.move_down 13
+      @pdf.text "Cette somme sera prélevée sur votre compte le 4 #{@months[@invoice.created_at.month].downcase} #{@invoice.created_at.year}"
+
+      if @invoice.organization.vat_identifier && !@invoice.organization.subject_to_vat
+        @pdf.move_down 7
+        @pdf.text 'Auto-liquidation par le preneur - Art 283-2 du CGI'
+      end
+
+      @pdf.move_down 7
+      @pdf.text "<b>Retrouvez le détails de vos consommations dans votre espace client dans le menu \"Mon Reporting\".</b>", align: :center, inline_format: true
+    end
+
+    def get_human_name_of(package)
+      BillingMod::Configuration::LISTS[package.to_sym][:human_name]
+    end
+
+    def get_price_of(package)
+      BillingMod::Configuration::LISTS[package.to_sym][:price]
+    end
+
+    def get_excess
+      @bank_excess    = {count: 0, price: 0}
+      @journal_excess = {count: 0, price: 0}
+      @excess_billing = {count: 0, price: 0}
+
+      @organization.customers.each do |customer|
+        customer.billings.of_period(@period).where(kind: 'excess').each do |excess|
+          data = excess.associated_hash
+          next if data.empty?
+
+          case excess.name
+            when "bank_excess"
+              @bank_excess[:count] += data[:excess]
+              @bank_excess[:price] += excess.price
+            when "journal_excess"
+              @journal_excess[:count] += data[:excess]
+              @journal_excess[:price] += excess.price
+            when "excess_billing"
+              @excess_billing[:count] += data[:excess]
+              @excess_billing[:price] += excess.price
+          end
+        end
+      end
     end
   end
 end
