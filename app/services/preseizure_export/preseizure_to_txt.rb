@@ -157,12 +157,12 @@ class PreseizureExport::PreseizureToTxt
           end
 
           journal_code     = journal.name
-          ecriture_date    = preseizure.date.strftime('%d/%m/%Y') || ""
+          ecriture_date    = preseizure.computed_date.strftime('%d/%m/%Y') || ""
           piece_ref        = preseizure.piece_number || ""
           compte_num       = general_account || ""
           section          = ""
           compte_lib       = general_lib
-          echance_date     = preseizure.deadline_date.try(:strftime, '%d/%m/%Y')
+          echance_date     = preseizure.computed_deadline_date.try(:strftime, '%d/%m/%Y')
           debit_credit     = entry.type == 1 ? entry.amount.to_f.to_s + "\t" : "\t" + entry.amount.to_f.to_s
           intitule_journal = ""
           intitule_compte  = ""
@@ -396,13 +396,13 @@ class PreseizureExport::PreseizureToTxt
           journal_code   = preseizure.journal_name || ""
           journal_lib    = user.account_book_types.where(name: journal_code).first.try(:description).try(:gsub, "\t", ' ').try(:tr, '()', '  ') || ""
           ecriture_num   = ""
-          ecriture_date  = preseizure.date.strftime('%Y%m%d') || ""
+          ecriture_date  = preseizure.computed_date.strftime('%Y%m%d') || ""
           compte_num     = general_account || ""
           compte_lib     = general_lib
           comp_aux       = auxiliary_account || ""
           comp_aux_lib   = auxiliary_lib || ""
           piece_ref      = preseizure.piece_number || ""
-          piece_date     = preseizure.date.strftime('%Y%m%d') || ""
+          piece_date     = preseizure.computed_date.strftime('%Y%m%d') || ""
           ecriture_libc  = label || ""          
           debit_credit   = entry.type == 1 ? entry.amount.to_f.to_s + "|" : "|" + entry.amount.to_f.to_s
           ecriture_let   = account.lettering || ""
@@ -505,13 +505,13 @@ class PreseizureExport::PreseizureToTxt
           journal_code   = preseizure.journal_name || ""
           journal_lib    = user.account_book_types.where(name: journal_code).first.try(:description).try(:gsub, "\t", ' ').try(:tr, '()', '  ') || ""
           ecriture_num   = ""
-          ecriture_date  = preseizure.date.strftime('%Y%m%d') || ""
+          ecriture_date  = preseizure.computed_date.strftime('%Y%m%d') || ""
           compte_num     = general_account || ""
           compte_lib     = general_lib
           comp_aux       = auxiliary_account || ""
           comp_aux_lib   = auxiliary_lib || ""
           piece_ref      = piece_ref || ""
-          piece_date     = preseizure.date.strftime('%Y%m%d') || ""
+          piece_date     = preseizure.computed_date.strftime('%Y%m%d') || ""
           ecriture_libc  = label || ""
           debit_credit   = entry.type == 1 ? entry.amount.to_f.to_s + "|" : "|" + entry.amount.to_f.to_s
           ecriture_let   = account.lettering || ""
