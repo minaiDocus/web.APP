@@ -166,7 +166,7 @@ class BillingMod::PrepareUserBilling
       if @data_flow.scanned_sheets > 0
         #### ------- Scanned sheet Option -------- ####
         price = 0.1
-        create_billing({ name: 'scanned_sheets', title: "#{@data_flow.scanned_sheets} feuille(s) numérisée(s)", price: (@data_flow.scanned_sheets * price), associated_hash: { excess: @data_flow.scanned_sheets, price: price } })
+        create_billing({ name: 'scanned_sheets', title: "#{@data_flow.scanned_sheets} feuille(s) numérisée(s)", kind: 'digitize', price: (@data_flow.scanned_sheets * price), associated_hash: { excess: @data_flow.scanned_sheets, price: price } })
 
         #### --------- Pack size Option -------- ####
         pack_names = @user.paper_processes.where('DATE_FORMAT(created_at, "%Y%m") = ?', @period).where(type: 'scan').select(:pack_name).distinct
@@ -174,7 +174,7 @@ class BillingMod::PrepareUserBilling
 
         if pack_size > 0
           price = 1
-          create_billing({ name: 'paper_processes', title: "#{pack_size} pochette(s) scannée(s)", price: (pack_size * price), associated_hash: { excess: pack_size, price: price } })
+          create_billing({ name: 'paper_processes', title: "#{pack_size} pochette(s) scannée(s)", kind: 'digitize', price: (pack_size * price), associated_hash: { excess: pack_size, price: price } })
         end
       end
     end

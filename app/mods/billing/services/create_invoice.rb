@@ -88,6 +88,10 @@ module BillingMod
       @packages_count       = {}
       @total_customers_price = 0
 
+      @customers_excess = { bank_excess_count: 0, bank_excess_price: 0, journal_excess_count: 0, journal_excess_price: 0, excess_billing_count: 0, excess_billing_price: 0 }
+
+      @other_orders = { re_site_price: 0, orders_price: 0, digitize_price: 0, remaining_month_price: 0 }
+
       recalculate_billing = @is_update || @period == CustomUtils.period_of(Time.now) || !@invoice
 
       @customers.each do |customer|
@@ -117,6 +121,8 @@ module BillingMod
           increm_package_count('Courriers')     if package.mail_active && BillingMod::Configuration::LISTS[package.name.to_sym][:options][:mail] == 'optional'
         end
         @total_customers_price += customer.total_billing_of(@period)
+
+        more_datas_of(customer)
       end
 
       if recalculate_billing
@@ -129,6 +135,35 @@ module BillingMod
       generate_pdf
       auto_upload_invoice
       send_notification
+    end
+
+    def more_datas_of(customer)
+      customer.billings.of_period(@time).each do |billing|
+        data = billing.associated_hash
+        next if data.empty?
+
+        case billing.kind
+          when "excess"
+            if billing.name == "bank_excess"
+              @customers_excess[:bank_excess_count] += data[:excess]
+              @customers_excess[:bank_excess_price] += billing.price
+            elsif billing.name == "journal_excess"
+              @customers_excess[:journal_excess_count] += data[:excess]
+              @customers_excess[:journal_excess_price] += billing.price
+            elsif billing.name == "excess_billing"
+              @customers_excess[:excess_billing_count] += data[:excess]
+              @customers_excess[:excess_billing_price] += billing.price
+            end
+        when "re-sit"
+          @other_orders[:re_site_price] += billing.price
+        when "digitize"
+          @other_orders[:digitize_price] += billing.price
+        when "order" || "extra"
+          @other_orders[:orders_price] += billing.price
+        end
+
+        @other_orders[:remaining_month_price] += billing.price if billing.name == "remaining_month"
+      end
     end
 
     def create_invoice
@@ -155,7 +190,7 @@ module BillingMod
 
     def generate_pdf
       if @is_test
-        @invoice_path = BillingMod::PdfGeneratorV2.new(@organization, @packages_count, @invoice, @total_customers_price, @time).generate
+        @invoice_path = BillingMod::PdfGeneratorV2.new(@organization, @packages_count, @invoice, @total_customers_price, @time, @customers_excess, @other_orders).generate
       else
         @invoice_path = BillingMod::PdfGenerator.new(@organization, @packages_count, @invoice, @total_customers_price, @time).generate
       end
@@ -405,9 +440,11 @@ module BillingMod
   end
 
   class PdfGeneratorV2
-    def initialize(organization, packages_count, invoice, total_customers_price, time)
+    def initialize(organization, packages_count, invoice, total_customers_price, time, customers_excess, other_orders)
       @organization          = organization
       @packages_count        = packages_count
+      @customers_excess      = customers_excess
+      @other_orders          = other_orders
       @invoice               = invoice
       @total_customers_price = total_customers_price
       @time                  = time
@@ -508,20 +545,27 @@ module BillingMod
 
       @packages_count.sort_by{|k, v| v}.reverse.each do |package|
         if %w(ido_digitize ido_retriever mail).include?(package[0].to_s)
-          data << ["- Option#{'s' if package[1] > 1} #{get_human_name_of(package[0])} : #{package[1]}", "#{package[1] * get_price_of(package[0])} €"]
+          data << ["- Option#{'s' if package[1] > 1} #{get_human_name_of(package[0])} : #{package[1]}", "#{CustomUtils.format_price(package[1] * get_price_of(package[0]) * 100)} €"]
         else
-          data << ["- Forfait#{'s' if package[1] > 1} #{get_human_name_of(package[0])} : #{package[1]}", "#{package[1] * get_price_of(package[0])} €"]
+          data << ["- Forfait#{'s' if package[1] > 1} #{get_human_name_of(package[0])} : #{package[1]}", "#{CustomUtils.format_price(package[1] * get_price_of(package[0]) * 100)} €"]
         end
 
-        @total_data_test += package[1] * get_price_of(package[0])
+        @total_data_test += (package[1] * get_price_of(package[0])).to_f
       end
 
-      get_excess
+      @other_orders.each do |order|
+        data << ["- Rattrapages opérations", "#{CustomUtils.format_price(order[1])} €"]     if order[0].to_s == "re_site_price" && order[1] > 0
+        data << ["- Commandes divers", "#{CustomUtils.format_price(order[1])} €"]           if order[0].to_s == "orders_price" && order[1] > 0
+        data << ["- Numérisation", "#{CustomUtils.format_price(order[1])} €"]               if order[0].to_s == "digitize_price" && order[1] > 0
+        data << ["- Fin d'engagement prématuré", "#{CustomUtils.format_price(order[1])} €"] if order[0].to_s == "remaining_month_price" && order[1] > 0
+
+        @total_data_test += CustomUtils.format_price(order[1]).to_f
+      end
 
       data << ['', '']
 
       @pdf.default_leading 0
-      if @bank_excess[:count] == 0 && @journal_excess[:count] == 0 && @excess_billing[:count] == 0 && @organization.billings.of_period(@period).size == 0
+      if @customers_excess[:bank_excess_count] == 0 && @customers_excess[:journal_excess_count] == 0 && @customers_excess[:excess_billing_count] == 0 && @organization.billings.of_period(@period).size == 0
         @pdf.table(data, width: 540, cell_style: { inline_format: true, :padding => [5, 1, 1, 1] }) do
           @pdf.default_leading 0
           style(row(0..-1), borders: [], text_color: '49442A')
@@ -540,18 +584,18 @@ module BillingMod
         end
       end
 
-      if @bank_excess[:count] > 0 || @journal_excess[:count] > 0 || @excess_billing[:count] > 0
+      if @customers_excess[:bank_excess_count] > 0 || @customers_excess[:journal_excess_count] > 0 || @customers_excess[:excess_billing_count] > 0
         data = [['<b>Dépassements</b>', '']]
 
-        data << ["- Pièces : #{@excess_billing[:count]}", "#{CustomUtils.format_price(@excess_billing[:price])} €"]    if @excess_billing[:count] > 0
-        data << ["- Journals : #{@journal_excess[:count]}", "#{CustomUtils.format_price(@journal_excess[:price])} €"]  if @journal_excess[:count] > 0
-        data << ["- Banques : #{@bank_excess[:count]}", "#{CustomUtils.format_price(@bank_excess[:price])} €"]         if @bank_excess[:count] > 0
+        data << ["- Pièces : #{@customers_excess[:excess_billing_count]}", "#{CustomUtils.format_price(@customers_excess[:excess_billing_price])} €"]    if @customers_excess[:excess_billing_count] > 0
+        data << ["- Journals : #{@customers_excess[:journal_excess_count]}", "#{CustomUtils.format_price(@customers_excess[:journal_excess_price])} €"]  if @customers_excess[:journal_excess_count] > 0
+        data << ["- Banques : #{@customers_excess[:bank_excess_count]}", "#{CustomUtils.format_price(@customers_excess[:bank_excess_price])} €"]         if @customers_excess[:bank_excess_count] > 0
 
         data << ['', '']
 
-        @total_data_test += CustomUtils.format_price(@bank_excess[:price]).to_i
-        @total_data_test += CustomUtils.format_price(@journal_excess[:price]).to_i
-        @total_data_test += CustomUtils.format_price(@excess_billing[:price]).to_i
+        @total_data_test += CustomUtils.format_price(@customers_excess[:excess_billing_price]).to_f
+        @total_data_test += CustomUtils.format_price(@customers_excess[:journal_excess_price]).to_f
+        @total_data_test += CustomUtils.format_price(@customers_excess[:bank_excess_price]).to_f
 
         if @organization.billings.of_period(@period).size == 0
           @pdf.table(data, width: 540, cell_style: { inline_format: true, :padding => [4, 1, 1, 1] }) do
@@ -579,7 +623,7 @@ module BillingMod
         @organization.billings.of_period(@period).each do |billing|
           data << ["#{billing.title.capitalize}", "#{CustomUtils.format_price(billing.price)} €"]
 
-          @total_data_test += CustomUtils.format_price(billing.price).to_i
+          @total_data_test += CustomUtils.format_price(billing.price).to_f
         end
 
         data << ['', '']
@@ -660,31 +704,6 @@ module BillingMod
 
     def get_price_of(package)
       BillingMod::Configuration::LISTS[package.to_sym][:price]
-    end
-
-    def get_excess
-      @bank_excess    = {count: 0, price: 0}
-      @journal_excess = {count: 0, price: 0}
-      @excess_billing = {count: 0, price: 0}
-
-      @organization.customers.each do |customer|
-        customer.billings.of_period(@period).where(kind: 'excess').each do |excess|
-          data = excess.associated_hash
-          next if data.empty?
-
-          case excess.name
-            when "bank_excess"
-              @bank_excess[:count] += data[:excess]
-              @bank_excess[:price] += excess.price
-            when "journal_excess"
-              @journal_excess[:count] += data[:excess]
-              @journal_excess[:price] += excess.price
-            when "excess_billing"
-              @excess_billing[:count] += data[:excess]
-              @excess_billing[:price] += excess.price
-          end
-        end
-      end
     end
   end
 end
