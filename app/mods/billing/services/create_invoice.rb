@@ -90,8 +90,8 @@ module BillingMod
 
       @customers_excess = { bank_excess_count: 0, bank_excess_price: 0, journal_excess_count: 0, journal_excess_price: 0, excess_billing_count: 0, excess_billing_price: 0 }
 
-      ### WARNING: june_extra node is valid only for June billing
-      @other_orders = { june_extra: 0, discount_price: 0, re_site_price: 0, orders_price: 0, digitize_price: 0, remaining_month_price: 0 }
+      ### WARNING: june_price node is valid only for June billing
+      @other_orders = { june_price: 0, discount_price: 0, re_site_price: 0, orders_price: 0, digitize_price: 0, remaining_month_price: 0 }
 
       recalculate_billing = @is_update || @period == CustomUtils.period_of(Time.now) || !@invoice
 
@@ -163,7 +163,7 @@ module BillingMod
         when "extra"
           #### CONDITION : only valid for june billing
           if billing.title == 'Rattrapage sur facturation : Mai'
-            @other_orders[:june_extra] += billing.price
+            @other_orders[:june_price] += billing.price
           else
             @other_orders[:orders_price] += billing.price
           end
@@ -563,12 +563,12 @@ module BillingMod
       end
 
       @other_orders.each do |order|
-        data << ["- Rattrapage sur facturation : Mai", "#{CustomUtils.format_price(order[1])} €"] if order[0].to_s == "june_price" && order[1] > 0
-        data << ["- Remise sur pré-affectation", "#{CustomUtils.format_price(order[1])} €"] if order[0].to_s == "discount_price" && order[1] > 0
-        data << ["- Rattrapages opérations", "#{CustomUtils.format_price(order[1])} €"]     if order[0].to_s == "re_site_price" && order[1] > 0
-        data << ["- Commandes et frais divers", "#{CustomUtils.format_price(order[1])} €"]  if order[0].to_s == "orders_price" && order[1] > 0
-        data << ["- Numérisation", "#{CustomUtils.format_price(order[1])} €"]               if order[0].to_s == "digitize_price" && order[1] > 0
-        data << ["- Fin d'engagement prématuré", "#{CustomUtils.format_price(order[1])} €"] if order[0].to_s == "remaining_month_price" && order[1] > 0
+        data << ["- Rattrapage : Dossier(s) non facturé(s) en Mai", "#{CustomUtils.format_price(order[1])} €"] if order[0].to_s == "june_price" && order[1] != 0
+        data << ["- Remise sur pré-affectation", "#{CustomUtils.format_price(order[1])} €"] if order[0].to_s == "discount_price" && order[1] != 0
+        data << ["- Rattrapage : Opérations antérieur", "#{CustomUtils.format_price(order[1])} €"]     if order[0].to_s == "re_site_price" && order[1] != 0
+        data << ["- Commandes et frais divers", "#{CustomUtils.format_price(order[1])} €"]  if order[0].to_s == "orders_price" && order[1] != 0
+        data << ["- Numérisation", "#{CustomUtils.format_price(order[1])} €"]               if order[0].to_s == "digitize_price" && order[1] != 0
+        data << ["- Dossier(s) avec engagement cloturé(s)", "#{CustomUtils.format_price(order[1])} €"] if order[0].to_s == "remaining_month_price" && order[1] != 0
 
         @total_data_test += CustomUtils.format_price(order[1]).to_f
       end
@@ -577,7 +577,7 @@ module BillingMod
 
       @pdf.default_leading 0
       if @customers_excess[:bank_excess_count] == 0 && @customers_excess[:journal_excess_count] == 0 && @customers_excess[:excess_billing_count] == 0 && @organization.billings.of_period(@period).size == 0
-        @pdf.table(data, width: 540, cell_style: { inline_format: true, :padding => [5, 1, 1, 1] }) do
+        @pdf.table(data, width: 540, cell_style: { size: 8, inline_format: true, :padding => [5, 1, 1, 1] }) do
           @pdf.default_leading 0
           style(row(0..-1), borders: [], text_color: '49442A')
           style(row(0), borders: [:bottom])
@@ -586,7 +586,7 @@ module BillingMod
           style(columns(1), align: :right)
         end
       else
-        @pdf.table(data, width: 540, cell_style: { inline_format: true, :padding => [5, 1, 1, 1] }) do
+        @pdf.table(data, width: 540, cell_style: { size: 8, inline_format: true, :padding => [5, 1, 1, 1] }) do
           @pdf.default_leading 0
           style(row(0..-1), borders: [], text_color: '49442A')
           style(row(0), borders: [:bottom])
@@ -598,8 +598,8 @@ module BillingMod
       if @customers_excess[:bank_excess_count] > 0 || @customers_excess[:journal_excess_count] > 0 || @customers_excess[:excess_billing_count] > 0
         data = [['<b>Dépassements</b>', '']]
 
-        data << ["- Pièces : #{@customers_excess[:excess_billing_count]}", "#{CustomUtils.format_price(@customers_excess[:excess_billing_price])} €"]    if @customers_excess[:excess_billing_count] > 0
-        data << ["- Journals : #{@customers_excess[:journal_excess_count]}", "#{CustomUtils.format_price(@customers_excess[:journal_excess_price])} €"]  if @customers_excess[:journal_excess_count] > 0
+        data << ["- Pré-affectations : #{@customers_excess[:excess_billing_count]}", "#{CustomUtils.format_price(@customers_excess[:excess_billing_price])} €"]    if @customers_excess[:excess_billing_count] > 0
+        data << ["- Journaux Comptables : #{@customers_excess[:journal_excess_count]}", "#{CustomUtils.format_price(@customers_excess[:journal_excess_price])} €"]  if @customers_excess[:journal_excess_count] > 0
         data << ["- Banques : #{@customers_excess[:bank_excess_count]}", "#{CustomUtils.format_price(@customers_excess[:bank_excess_price])} €"]         if @customers_excess[:bank_excess_count] > 0
 
         data << ['', '']
@@ -609,7 +609,7 @@ module BillingMod
         @total_data_test += CustomUtils.format_price(@customers_excess[:bank_excess_price]).to_f
 
         if @organization.billings.of_period(@period).size == 0
-          @pdf.table(data, width: 540, cell_style: { inline_format: true, :padding => [4, 1, 1, 1] }) do
+          @pdf.table(data, width: 540, cell_style: { size: 8, inline_format: true, :padding => [4, 1, 1, 1] }) do
             @pdf.default_leading 0
             style(row(0..-1), borders: [], text_color: '49442A')
             style(row(0), borders: [:bottom])
@@ -618,7 +618,7 @@ module BillingMod
             style(columns(1), align: :right)
           end
         else
-          @pdf.table(data, width: 540, cell_style: { inline_format: true, :padding => [4, 1, 1, 1] }) do
+          @pdf.table(data, width: 540, cell_style: { size: 8, inline_format: true, :padding => [4, 1, 1, 1] }) do
             @pdf.default_leading 0
             style(row(0..-1), borders: [], text_color: '49442A')
             style(row(0), borders: [:bottom])
@@ -639,7 +639,7 @@ module BillingMod
 
         data << ['', '']
 
-        @pdf.table(data, width: 540, cell_style: { inline_format: true, :padding => [5, 1, 1, 1] }) do
+        @pdf.table(data, width: 540, cell_style: { size: 8, inline_format: true, :padding => [5, 1, 1, 1] }) do
           @pdf.default_leading 0
           style(row(0..-1), borders: [], text_color: '49442A')
           style(row(0), borders: [:bottom])
@@ -663,16 +663,16 @@ module BillingMod
 
       @pdf.move_down 7
       @pdf.float do
-        ##### TOTAL TEST ######
-        @pdf.text_box 'Total TEST', at: [400, @pdf.cursor], width: 60, align: :right, style: :bold
-        @pdf.move_down 15
-        ##### TOTAL TEST ######
+        # ##### TOTAL TEST ######
+        # @pdf.text_box 'Total TEST', at: [400, @pdf.cursor], width: 60, align: :right, style: :bold
+        # @pdf.move_down 15
+        # ##### TOTAL TEST ######
         @pdf.text_box 'Total HT', at: [400, @pdf.cursor], width: 60, align: :right, style: :bold
       end
-      ##### TOTAL TEST ######
-      @pdf.text_box CustomUtils.format_price(total_data_test) + " €", at: [470, @pdf.cursor], width: 66, align: :right
-      @pdf.move_down 15
-      ##### TOTAL TEST ######
+      # ##### TOTAL TEST ######
+      # @pdf.text_box CustomUtils.format_price(total_data_test) + " €", at: [470, @pdf.cursor], width: 66, align: :right
+      # @pdf.move_down 15
+      # ##### TOTAL TEST ######
       @pdf.text_box CustomUtils.format_price(total) + " €", at: [470, @pdf.cursor], width: 66, align: :right
       @pdf.move_down 10
       @pdf.stroke_horizontal_line 470, 540, at: @pdf.cursor

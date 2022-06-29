@@ -140,8 +140,8 @@ class BillingMod::PrepareUserBilling
 
       title     = "Opérations bancaires mois de #{I18n.l(Date.new(_period.to_s[0..3].to_i, _period.to_s[4..-1].to_i), format: '%B')} #{_period.to_s[0..3].to_i}"
 
-      billing   = @user.billings.of_period(_period).count > 0
-      billing ||= @user.billings.where(name: 'operations_billing', kind: 're-sit', title: title).count > 0
+      billing   = @user.billings.is_not_frozen.of_period(_period).count > 0
+      billing ||= @user.billings.is_not_frozen.where(name: 'operations_billing', kind: 're-sit', title: title).count > 0
 
       if !billing && _period <= 202204
         title_2 = "Opérations bancaires mois de #{I18n.l(Date.new(_period.to_s[0..3].to_i, _period.to_s[4..-1].to_i), format: '%B')} #{_period.to_s[0..3].to_i}" #WARNING: keep this variable this is the previous title of previous system
