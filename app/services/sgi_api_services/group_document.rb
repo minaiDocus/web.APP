@@ -15,7 +15,7 @@ class SgiApiServices::GroupDocument
         done += 1 if temp_document.children.size > 0
       end
 
-      if done != params[:temp_document_ids].size && retry_count <= 4
+      if done != params[:temp_document_ids].size && retry_count <= 2
         sf.update(state: 'ready')
         SgiApiServices::GroupDocument.processing(params[:json_content], params[:temp_document_ids], params[:temp_pack_id], sf) if sf.processing
         SgiApiServices::GroupDocument.delay_for(2.hours).retry_processing(sf.id, retry_count + 1)
@@ -36,6 +36,31 @@ class SgiApiServices::GroupDocument
         }
 
         ErrorScriptMailer.error_notification(mail_info).deliver
+      else
+        temp_docs = temp_pack.temp_documents.where(id: params[:temp_document_ids]).bundle_needed
+
+        if temp_docs.size > 0
+          mail_info = {
+            subject: "[SgiApiServices::GroupDocument]- To unreadable",
+            name: "SgiApiServices::CreateTempDocumentFromGrouping To unreadable",
+            error_group: "[sgi-api-services-create-temp-document-from-grouping] To unreadable",
+            erreur_type: "create temp document with errors - To unreadable",
+            date_erreur: Time.now.strftime('%Y-%m-%d %H:%M:%S'),
+            more_information: {
+              retry_count: retry_count,
+              staffing_flow: sf.id,
+              temp_pack_id: temp_pack.id,
+              temp_pack_name: temp_pack.name,
+              temp_documents: temp_docs.collect(&:id)
+            }
+          }
+
+          ErrorScriptMailer.error_notification(mail_info).deliver
+
+          temp_docs.update_all(state: 'unreadable')
+        end
+
+        sf.update(state: 'processed')
       end
     end
 
@@ -43,7 +68,7 @@ class SgiApiServices::GroupDocument
       CustomUtils.mktmpdir('api_group_document') do |dir|
         temp_pack = TempPack.where(id: temp_pack_id).first
 
-        if temp_pack
+        if temp_pack && temp_pack.temp_documents.where(id: _temp_document_ids).bundle_needed.size > 0
           create_new_temp_document(json_content, _temp_document_ids, dir, temp_pack)
 
           sf_to_processed = true
@@ -73,8 +98,10 @@ class SgiApiServices::GroupDocument
           if sf_to_processed
             staffing_flow.processed
           else
-            if(staffing_flow.created_at < 36.hours.ago)
+            if(staffing_flow.created_at < 24.hours.ago)
               staffing_flow.processed
+
+              temp_pack.temp_documents.where(id: _temp_document_ids).bundle_needed.update_all(state: 'unreadable')
 
               mail_info = {
                 subject: "[SgiApiServices::GroupDocument]- Staffing flow aborted",
@@ -85,7 +112,8 @@ class SgiApiServices::GroupDocument
                 more_information: {
                   staffing_flow: staffing_flow.id,
                   temp_pack_id: temp_pack.id,
-                  temp_pack_name: temp_pack.name
+                  temp_pack_name: temp_pack.name,
+                  temp_documents: _temp_document_ids
                 }
               }
 
@@ -94,6 +122,9 @@ class SgiApiServices::GroupDocument
               StaffingFlow.delay_for(30.minutes, queue: :low).set_to_ready(staffing_flow.id)
             end
           end
+        else
+          staffing_flow.state = 'processed'
+          staffing_flow.save
         end
       end
     end
