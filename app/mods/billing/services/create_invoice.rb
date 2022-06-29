@@ -90,7 +90,8 @@ module BillingMod
 
       @customers_excess = { bank_excess_count: 0, bank_excess_price: 0, journal_excess_count: 0, journal_excess_price: 0, excess_billing_count: 0, excess_billing_price: 0 }
 
-      @other_orders = { re_site_price: 0, orders_price: 0, digitize_price: 0, remaining_month_price: 0 }
+      ### WARNING: june_extra node is valid only for June billing
+      @other_orders = { june_extra: 0, discount_price: 0, re_site_price: 0, orders_price: 0, digitize_price: 0, remaining_month_price: 0 }
 
       recalculate_billing = @is_update || @period == CustomUtils.period_of(Time.now) || !@invoice
 
@@ -138,28 +139,36 @@ module BillingMod
     end
 
     def more_datas_of(customer)
-      customer.billings.of_period(@time).each do |billing|
+      customer.billings.of_period(@period).each do |billing|
         data = billing.associated_hash
-        next if data.empty?
 
         case billing.kind
           when "excess"
             if billing.name == "bank_excess"
-              @customers_excess[:bank_excess_count] += data[:excess]
+              @customers_excess[:bank_excess_count] += data.try(:[], :excess).to_i
               @customers_excess[:bank_excess_price] += billing.price
             elsif billing.name == "journal_excess"
-              @customers_excess[:journal_excess_count] += data[:excess]
+              @customers_excess[:journal_excess_count] += data.try(:[], :excess).to_i
               @customers_excess[:journal_excess_price] += billing.price
             elsif billing.name == "excess_billing"
-              @customers_excess[:excess_billing_count] += data[:excess]
+              @customers_excess[:excess_billing_count] += data.try(:[], :excess).to_i
               @customers_excess[:excess_billing_price] += billing.price
             end
         when "re-sit"
           @other_orders[:re_site_price] += billing.price
         when "digitize"
           @other_orders[:digitize_price] += billing.price
-        when "order" || "extra"
+        when "order"
           @other_orders[:orders_price] += billing.price
+        when "extra"
+          #### CONDITION : only valid for june billing
+          if billing.title == 'Rattrapage sur facturation : Mai'
+            @other_orders[:june_extra] += billing.price
+          else
+            @other_orders[:orders_price] += billing.price
+          end
+        when "discount"
+          @other_orders[:discount_price] += billing.price
         end
 
         @other_orders[:remaining_month_price] += billing.price if billing.name == "remaining_month"
@@ -554,8 +563,10 @@ module BillingMod
       end
 
       @other_orders.each do |order|
+        data << ["- Rattrapage sur facturation : Mai", "#{CustomUtils.format_price(order[1])} €"] if order[0].to_s == "june_price" && order[1] > 0
+        data << ["- Remise sur pré-affectation", "#{CustomUtils.format_price(order[1])} €"] if order[0].to_s == "discount_price" && order[1] > 0
         data << ["- Rattrapages opérations", "#{CustomUtils.format_price(order[1])} €"]     if order[0].to_s == "re_site_price" && order[1] > 0
-        data << ["- Commandes divers", "#{CustomUtils.format_price(order[1])} €"]           if order[0].to_s == "orders_price" && order[1] > 0
+        data << ["- Commandes et frais divers", "#{CustomUtils.format_price(order[1])} €"]  if order[0].to_s == "orders_price" && order[1] > 0
         data << ["- Numérisation", "#{CustomUtils.format_price(order[1])} €"]               if order[0].to_s == "digitize_price" && order[1] > 0
         data << ["- Fin d'engagement prématuré", "#{CustomUtils.format_price(order[1])} €"] if order[0].to_s == "remaining_month_price" && order[1] > 0
 
