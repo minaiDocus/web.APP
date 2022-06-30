@@ -14,6 +14,7 @@ module Reporting
 
       if current_dividers.any?
         period_document = PeriodDocument.find_or_create_by_pack(pack, _period, period)
+
         if period_document
           current_pages = pack.pages.of_period(time, 1)
           period_document.pages  = Pack.count_pages_of current_pages
@@ -38,13 +39,11 @@ module Reporting
           # Billing::UpdatePeriodPrice.new(period).execute
         end
 
-        if period_document.pages - period_document.uploaded_pages > 0
-          period.update(delivery_state: 'delivered')
-        end
+        period.update(delivery_state: 'delivered') if period && period_document.pages - period_document.uploaded_pages > 0
       end
 
       remaining_dividers -= current_dividers.count
-      time += period.duration.month
+      time += period.try(:duration).try(:month).presence || 1
     end
 
     # current_period = pack.owner.subscription.current_period
