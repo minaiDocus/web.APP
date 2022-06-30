@@ -45,6 +45,7 @@ class Documents::UploaderController < Documents::AbaseController
       format.json { render json: data }
       format.html { render json: data } # IE8 compatibility
     end
+
   end
 
   def periods
@@ -69,11 +70,19 @@ class Documents::UploaderController < Documents::AbaseController
   def journals
     account_book_types = []
 
-    if @upload_user.authorized_upload? || @upload_user.authorized_all_upload?
-      account_book_types = @upload_user.account_book_types.specific_mission.by_position if not @upload_user.authorized_upload?
-      account_book_types = @upload_user.account_book_types.by_position if @upload_user.authorized_upload?
-    elsif @upload_user.authorized_bank_upload?
-      account_book_types = @upload_user.account_book_types.bank_processable.by_position
+    if @upload_user.organization.try(:specific_mission)
+      account_book_types = @upload_user.account_book_types.specific_mission.by_position
+    elsif @upload_user.authorized_upload?
+      account_book_types_all      = @upload_user.account_book_types.by_position
+      account_book_types_bank     = @upload_user.account_book_types.bank_processable.by_position
+
+      account_book_types = account_book_types_all
+
+      if not @upload_user.authorized_bank_upload?
+        account_book_types = account_book_types_all - account_book_types_bank
+      elsif not @upload_user.authorized_basic_upload?
+        account_book_types = account_book_types_bank
+      end
     end
 
     options = account_book_types.map do |j|
