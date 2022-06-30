@@ -1,11 +1,20 @@
 module BillingMod
   class CreateInvoice
+    def self.launch_test(organization_code=[], time=Time.now, version=1)
+      organization_code = Array(organization_code)
+      organizations = (organization_code.any?)? Organization.where(code: organization_code) : []
+
+      p "=== Test MODE : #{Time.now} - #{version}"
+      BillingMod::CreateInvoice.new(time, {is_test: true, version: version}).execute(organizations)
+    end
+
     def initialize(_time=nil, options={})
       @time              = _time.presence || 1.month.ago
       @is_test           = options[:is_test] ? true : false
       @is_update         = options[:is_update] ? true : false
       @notify            = options[:notify] === false ? false : true
       @auto_upload       = options[:auto_upload] === false ? false : true
+      @version           = options[:version].presence || 1
 
       @period    = CustomUtils.period_of(@time)
     end
@@ -106,7 +115,7 @@ module BillingMod
           BillingMod::PrepareUserBilling.new(customer, @period).execute
         end
 
-        if @is_test
+        if @version == 2
           increm_package_count(package.name)    if ['ido_premium', 'ido_classic', 'ido_nano', 'ido_x', 'ido_micro_plus', 'ido_micro'].include?(package.name)
           increm_package_count('ido_digitize')  if package.name == 'ido_digitize' || (package.scan_active && CustomUtils.is_manual_paper_set_order?(@organization) && BillingMod::Configuration::LISTS[package.name.to_sym][:options][:digitize] == 'optional')
           increm_package_count('ido_retriever') if package.name == 'ido_retriever' || (package.bank_active && BillingMod::Configuration::LISTS[package.name.to_sym][:options][:bank] == 'optional')
@@ -123,7 +132,7 @@ module BillingMod
         end
         @total_customers_price += customer.total_billing_of(@period)
 
-        more_datas_of(customer)
+        more_datas_of(customer) if @version == 2
       end
 
       if recalculate_billing
@@ -198,7 +207,7 @@ module BillingMod
     end
 
     def generate_pdf
-      if @is_test
+      if @version == 2
         @invoice_path = BillingMod::PdfGeneratorV2.new(@organization, @packages_count, @invoice, @total_customers_price, @time, @customers_excess, @other_orders).generate
       else
         @invoice_path = BillingMod::PdfGenerator.new(@organization, @packages_count, @invoice, @total_customers_price, @time).generate
@@ -264,7 +273,7 @@ module BillingMod
     end
 
     def increm_package_count(package_name)
-      package_name = 'ido_micro' if @is_test && package_name == 'ido_micro_plus'
+      package_name = 'ido_micro' if @version == 2 && package_name == 'ido_micro_plus'
 
       begin
         @packages_count[package_name] += 1
@@ -565,7 +574,7 @@ module BillingMod
       @other_orders.each do |order|
         data << ["- Rattrapage : Dossier(s) non facturé(s) en Mai", "#{CustomUtils.format_price(order[1])} €"] if order[0].to_s == "june_price" && order[1] != 0
         data << ["- Remise sur pré-affectation", "#{CustomUtils.format_price(order[1])} €"] if order[0].to_s == "discount_price" && order[1] != 0
-        data << ["- Rattrapage : Opérations antérieur", "#{CustomUtils.format_price(order[1])} €"]     if order[0].to_s == "re_site_price" && order[1] != 0
+        data << ["- Rattrapage : Opérations antérieures", "#{CustomUtils.format_price(order[1])} €"]     if order[0].to_s == "re_site_price" && order[1] != 0
         data << ["- Commandes et frais divers", "#{CustomUtils.format_price(order[1])} €"]  if order[0].to_s == "orders_price" && order[1] != 0
         data << ["- Numérisation", "#{CustomUtils.format_price(order[1])} €"]               if order[0].to_s == "digitize_price" && order[1] != 0
         data << ["- Dossier(s) avec engagement cloturé(s)", "#{CustomUtils.format_price(order[1])} €"] if order[0].to_s == "remaining_month_price" && order[1] != 0

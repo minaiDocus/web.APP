@@ -255,16 +255,23 @@ module DocumentsHelper
       journals                    = []
       journals_compta_processable = []
 
-      if user.authorized_all_upload? || user.authorized_upload?
-        journals = user_account_book_types.map do |j|
-          j.name + ' ' + j.description
+      if user.authorized_upload?
+        journals_bank = user_bank_processable_account_book_types.map{|j| j.name + ' ' + j.description}
+        journals_all  = user_account_book_types.map{|j| j.name + ' ' + j.description }
+
+        journals_compta_processable_bank = user_bank_processable_account_book_types.map{|j| j.name if j.compta_processable? }.compact
+        journals_compta_processable_all  = user_account_book_types.map{|j| j.name if j.compta_processable? }.compact
+
+        journals                    = journals_all
+        journals_compta_processable = journals_compta_processable_all
+
+        if !user.authorized_bank_upload?
+          journals                    = journals_all - journals_bank
+          journals_compta_processable = journals_compta_processable_all - journals_compta_processable_bank
+        elsif !user.authorized_basic_upload?
+          journals                    = journals_bank
+          journals_compta_processable = journals_compta_processable_bank
         end
-        journals_compta_processable  = user_account_book_types.map do |j|
-          j.name if j.compta_processable?
-        end.compact
-      elsif user.authorized_bank_upload?
-        journals = user_bank_processable_account_book_types.map{|j| j.name + ' ' + j.description}
-        journals_compta_processable = user_bank_processable_account_book_types.map{|j| j.name if j.compta_processable? }
       end
 
       hsh = {
