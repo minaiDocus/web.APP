@@ -4,7 +4,7 @@ module BillingMod
       organization_code = Array(organization_code)
       organizations = (organization_code.any?)? Organization.where(code: organization_code) : []
 
-      p "=== Test MODE : #{Time.now} - #{version}"
+      p "=== Test MODE : #{time} - #{version}"
       BillingMod::CreateInvoice.new(time, {is_test: true, version: version}).execute(organizations)
     end
 
@@ -102,10 +102,20 @@ module BillingMod
       ### WARNING: june_price node is valid only for June billing
       @other_orders = { june_price: 0, discount_price: 0, re_site_price: 0, orders_price: 0, digitize_price: 0, remaining_month_price: 0 }
 
-      recalculate_billing = @is_update || @period == CustomUtils.period_of(Time.now) || !@invoice
+      recalculate_billing = @force || @is_update || @period == CustomUtils.period_of(Time.now) || !@invoice
 
       @customers.each do |customer|
         next if not customer.can_be_billed?
+
+        if customer.created_at.strftime('%Y%m').to_i >= 202205 && @period != CustomUtils.period_of(Time.now)
+          first_preseizure = customer.preseizures.first
+          next if first_preseizure && first_preseizure.created_at.strftime('%Y%m').to_i > @period
+
+          if !first_preseizure
+            first_piece      = customer.pieces.first
+            next if first_piece && first_piece.created_at.strftime('%Y%m').to_i > @period
+          end
+        end
 
         package = customer.package_of(@period)
 
@@ -563,9 +573,9 @@ module BillingMod
 
       @packages_count.sort_by{|k, v| v}.reverse.each do |package|
         if %w(ido_digitize ido_retriever mail).include?(package[0].to_s)
-          data << ["- Option#{'s' if package[1] > 1} #{get_human_name_of(package[0])} : #{package[1]}", "#{CustomUtils.format_price(package[1] * get_price_of(package[0]) * 100)} €"]
+          data << ["- #{package[1]} option#{'s' if package[1] > 1} #{get_human_name_of(package[0])}", "#{CustomUtils.format_price(package[1] * get_price_of(package[0]) * 100)} €"]
         else
-          data << ["- Forfait#{'s' if package[1] > 1} #{get_human_name_of(package[0])} : #{package[1]}", "#{CustomUtils.format_price(package[1] * get_price_of(package[0]) * 100)} €"] if package[0].to_s != 'ido_premium'
+          data << ["- #{package[1]} forfait#{'s' if package[1] > 1} #{get_human_name_of(package[0])}", "#{CustomUtils.format_price(package[1] * get_price_of(package[0]) * 100)} €"] if package[0].to_s != 'ido_premium'
         end
 
         @total_data_test += (package[1] * get_price_of(package[0])).to_f
