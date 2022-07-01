@@ -57,7 +57,9 @@ class PeriodPresenter
         if pack
           list[:historic] = pack.content_historic.each { |h| h[:date] = h[:date].strftime('%d/%m/%Y') }
           list[:link] = Rails.application.routes.url_helpers.documents_path(pack_name: pack.name)
-          pre_assignments = document.report ? (Pack::Report::Preseizure.unscoped.where(report_id: document.report).where.not(piece_id: nil).count  + document.report.expenses.count) : 0
+
+          pre_assignments = document.preseizures_pieces + document.expenses_pieces
+          pre_assignments = document.report ? (Pack::Report::Preseizure.unscoped.where(report_id: document.report).where.not(piece_id: nil).count  + document.report.expenses.count) : 0 if pre_assignments == 0
         else
           list[:historic] = ''
           list[:link] = '#'

@@ -38,7 +38,7 @@ class SgiApiServices::PushPreAsignmentService
 
     def create_report(pack, document)
       journal = pack.owner.account_book_types.where(name: pack.name.split[1]).first
-      report = Pack::Report.new
+      report              = Pack::Report.new
       report.organization = pack.owner.organization
       report.user         = pack.owner
       report.pack         = pack

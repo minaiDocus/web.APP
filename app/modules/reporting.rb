@@ -54,13 +54,21 @@ module Reporting
   end
 
   def self.update_report(report)
+    reports = Pack::Report.where(name: report.name, document_id: report.document_id)
+
     period_document = report.document
 
     return false if not period_document
 
-    preseizures_pieces     = report.preseizures.where('piece_id > 0').count
-    preseizures_operations = report.preseizures.where('operation_id > 0').count
-    expenses_pieces        = report.expenses.count
+    preseizures_pieces = 0
+    preseizures_operations = 0
+    expenses_pieces = 0
+
+    reports.each do |rep|
+      preseizures_pieces     += report.preseizures.where('piece_id > 0').count
+      preseizures_operations += report.preseizures.where('operation_id > 0').count
+      expenses_pieces        += report.expenses.count
+    end
 
     period_document.preseizures_pieces     = preseizures_pieces
     period_document.expenses_pieces        = expenses_pieces
