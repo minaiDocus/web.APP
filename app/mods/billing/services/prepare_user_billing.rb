@@ -18,6 +18,16 @@ class BillingMod::PrepareUserBilling
     return false if not @data_flow
     return false if not @user.can_be_billed?
 
+    if @user.created_at.strftime('%Y%m').to_i >= 202205 && @period != CustomUtils.period_of(Time.now)
+      first_preseizure = @user.preseizures.first
+      return false if first_preseizure && first_preseizure.created_at.strftime('%Y%m').to_i > @period
+
+      if !first_preseizure
+        first_piece      = @user.pieces.first
+        return false if first_piece && first_piece.created_at.strftime('%Y%m').to_i > @period
+      end
+    end
+
     @user.billings.of_period(@period).update_all(is_frozen: true)
 
     create_package_billing
