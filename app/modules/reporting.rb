@@ -65,9 +65,9 @@ module Reporting
     expenses_pieces = 0
 
     reports.each do |rep|
-      preseizures_pieces     += report.preseizures.where('piece_id > 0').count
-      preseizures_operations += report.preseizures.where('operation_id > 0').count
-      expenses_pieces        += report.expenses.count
+      preseizures_pieces     = preseizures_pieces + rep.preseizures.where('piece_id > 0').count
+      preseizures_operations = preseizures_operations + rep.preseizures.where('operation_id > 0').count
+      expenses_pieces        = expenses_pieces + rep.expenses.count
     end
 
     period_document.preseizures_pieces     = preseizures_pieces
