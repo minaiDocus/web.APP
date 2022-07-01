@@ -1,6 +1,6 @@
 module BillingMod
   class CreateInvoice
-    def self.launch_test(organization_code=[], time=Time.now, version=1)
+    def self.launch_test(organization_code=[], time=Time.now, version=2)
       organization_code = Array(organization_code)
       organizations = (organization_code.any?)? Organization.where(code: organization_code) : []
 
@@ -14,7 +14,7 @@ module BillingMod
       @is_update         = options[:is_update] ? true : false
       @notify            = options[:notify] === false ? false : true
       @auto_upload       = options[:auto_upload] === false ? false : true
-      @version           = options[:version].presence || 1
+      @version           = options[:version].presence || 2
 
       @period    = CustomUtils.period_of(@time)
     end
@@ -392,7 +392,7 @@ module BillingMod
       end
 
       @organization.billings.of_period(@period).each do |billing|
-        data << ["#{billing.title.capitalize}", "#{CustomUtils.format_price(billing.price)} €"]
+        data << ["#{billing.title}", "#{CustomUtils.format_price(billing.price)} €"]
       end
 
       data << ['', '']
@@ -559,25 +559,25 @@ module BillingMod
 
       data = [['<b>Forfaits & Prestations</b>', '<b>Prix HT</b>']]
 
-      data << ["- Nombre de dossiers actifs : #{@organization.customers.active_at(@time).count}", '']
+      data << ["Nombre de dossiers actifs : #{@organization.customers.active_at(@time).count}", '']
 
       @packages_count.sort_by{|k, v| v}.reverse.each do |package|
         if %w(ido_digitize ido_retriever mail).include?(package[0].to_s)
           data << ["- Option#{'s' if package[1] > 1} #{get_human_name_of(package[0])} : #{package[1]}", "#{CustomUtils.format_price(package[1] * get_price_of(package[0]) * 100)} €"]
         else
-          data << ["- Forfait#{'s' if package[1] > 1} #{get_human_name_of(package[0])} : #{package[1]}", "#{CustomUtils.format_price(package[1] * get_price_of(package[0]) * 100)} €"]
+          data << ["- Forfait#{'s' if package[1] > 1} #{get_human_name_of(package[0])} : #{package[1]}", "#{CustomUtils.format_price(package[1] * get_price_of(package[0]) * 100)} €"] if package[0].to_s != 'ido_premium'
         end
 
         @total_data_test += (package[1] * get_price_of(package[0])).to_f
       end
 
       @other_orders.each do |order|
-        data << ["- Rattrapage : Dossier(s) non facturé(s) en Mai", "#{CustomUtils.format_price(order[1])} €"] if order[0].to_s == "june_price" && order[1] != 0
-        data << ["- Remise sur pré-affectation", "#{CustomUtils.format_price(order[1])} €"] if order[0].to_s == "discount_price" && order[1] != 0
-        data << ["- Rattrapage : Opérations antérieures", "#{CustomUtils.format_price(order[1])} €"]     if order[0].to_s == "re_site_price" && order[1] != 0
-        data << ["- Commandes et frais divers", "#{CustomUtils.format_price(order[1])} €"]  if order[0].to_s == "orders_price" && order[1] != 0
-        data << ["- Numérisation", "#{CustomUtils.format_price(order[1])} €"]               if order[0].to_s == "digitize_price" && order[1] != 0
-        data << ["- Dossier(s) avec engagement cloturé(s)", "#{CustomUtils.format_price(order[1])} €"] if order[0].to_s == "remaining_month_price" && order[1] != 0
+        data << ["Autre : Dossiers non facturés en Mai", "#{CustomUtils.format_price(order[1])} €"] if order[0].to_s == "june_price" && order[1] != 0
+        data << ["Remise sur pré-affectation", "#{CustomUtils.format_price(order[1])} €"] if order[0].to_s == "discount_price" && order[1] != 0
+        data << ["Rattrapage : Opérations antérieures", "#{CustomUtils.format_price(order[1])} €"]     if order[0].to_s == "re_site_price" && order[1] != 0
+        data << ["Commandes et frais divers", "#{CustomUtils.format_price(order[1])} €"]  if order[0].to_s == "orders_price" && order[1] != 0
+        data << ["Numérisation", "#{CustomUtils.format_price(order[1])} €"]               if order[0].to_s == "digitize_price" && order[1] != 0
+        data << ["Dossiers avec engagement cloturés", "#{CustomUtils.format_price(order[1])} €"] if order[0].to_s == "remaining_month_price" && order[1] != 0
 
         @total_data_test += CustomUtils.format_price(order[1]).to_f
       end
@@ -607,9 +607,9 @@ module BillingMod
       if @customers_excess[:bank_excess_count] > 0 || @customers_excess[:journal_excess_count] > 0 || @customers_excess[:excess_billing_count] > 0
         data = [['<b>Dépassements</b>', '']]
 
-        data << ["- Pré-affectations : #{@customers_excess[:excess_billing_count]}", "#{CustomUtils.format_price(@customers_excess[:excess_billing_price])} €"]    if @customers_excess[:excess_billing_count] > 0
-        data << ["- Journaux Comptables : #{@customers_excess[:journal_excess_count]}", "#{CustomUtils.format_price(@customers_excess[:journal_excess_price])} €"]  if @customers_excess[:journal_excess_count] > 0
-        data << ["- Banques : #{@customers_excess[:bank_excess_count]}", "#{CustomUtils.format_price(@customers_excess[:bank_excess_price])} €"]         if @customers_excess[:bank_excess_count] > 0
+        data << ["Pré-affectations : #{@customers_excess[:excess_billing_count]}", "#{CustomUtils.format_price(@customers_excess[:excess_billing_price])} €"]    if @customers_excess[:excess_billing_count] > 0
+        data << ["Journaux Comptables : #{@customers_excess[:journal_excess_count]}", "#{CustomUtils.format_price(@customers_excess[:journal_excess_price])} €"]  if @customers_excess[:journal_excess_count] > 0
+        data << ["Banques : #{@customers_excess[:bank_excess_count]}", "#{CustomUtils.format_price(@customers_excess[:bank_excess_price])} €"]         if @customers_excess[:bank_excess_count] > 0
 
         data << ['', '']
 
@@ -641,7 +641,7 @@ module BillingMod
         data = [['<b>Autres</b>', '']]
 
         @organization.billings.of_period(@period).each do |billing|
-          data << ["#{billing.title.capitalize}", "#{CustomUtils.format_price(billing.price)} €"]
+          data << ["#{billing.title}", "#{CustomUtils.format_price(billing.price)} €"]
 
           @total_data_test += CustomUtils.format_price(billing.price).to_f
         end

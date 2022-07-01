@@ -54,7 +54,7 @@ class BillingMod::PrepareOrganizationBilling
 
     if customers_count > 0 && customers_limit > 0 && customers_count > customers_limit
       excess = customers_count - customers_limit
-      create_billing({ name: 'ido_premium_overcharge', title: "Dossier(s) premium en sus ( #{excess} x #{unit_price} € )", kind: 'excess', price: ( unit_price * excess ), associated_hash: { excess: excess, price: unit_price, limit: customers_limit } })
+      create_billing({ name: 'ido_premium_overcharge', title: "Dossiers iDo'Premium en sus ( #{excess} x #{unit_price} € )", kind: 'excess', price: ( unit_price * excess ), associated_hash: { excess: excess, price: unit_price, limit: customers_limit } })
     end
   end
 
