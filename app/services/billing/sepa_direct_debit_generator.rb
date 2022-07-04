@@ -1,11 +1,11 @@
 # Generate a SepaDirectDebit CSV format to import in Slimpay
 class Billing::SepaDirectDebitGenerator
   def self.execute(invoice_time, debit_date)
-    data = DebitMandate.configured.map do |debit_mandate|
-      invoice = debit_mandate.organization.invoices.where(
-        "created_at >= ? AND created_at <= ? AND amount_in_cents_w_vat > 0", invoice_time.beginning_of_month, invoice_time.end_of_month
-      ).first
+    @period = CustomUtils.period_of(invoice_time.beginning_of_month - 1.month)
 
+    data   = DebitMandate.configured.map do |debit_mandate|
+      invoice = debit_mandate.organization.invoices.of_period(@period).where(
+        "amount_in_cents_w_vat > 0").first
       invoice ? [debit_mandate, invoice] : nil
     end.compact
 
@@ -22,7 +22,7 @@ class Billing::SepaDirectDebitGenerator
   end
 
   def self.header(count)
-    "0;iDocus;;iDocus;;;;#{Date.today};#{count};;;;;;"
+    "0;iDocus;;iDocus;;;;#{@period};#{count};;;;;;"
   end
 
   def self.footer(total_amount_in_cents)
