@@ -10,4 +10,10 @@ class Admin::PackageSetting::MainController < BackController
 
     render partial: 'list_customers'
   end
+
+  def rollback_customers
+    @lists = BillingMod::UpdatePremiumCustomers.new(params[:organization_code].strip).execute("rollback")
+
+    render partial: 'list_customers'
+  end
 end
