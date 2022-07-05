@@ -66,7 +66,11 @@ jQuery(function() {
     VARIABLES['reporting_customer_change'] = true;
 
     AppLoading('show');
-    statistics.load_all(); 
+    statistics.load_all();
   });
   AppListenTo('reporting_load_all', (e)=>{ handle_customer_change(statistics); });
+  AppListenTo('export_xls', (e)=>{ statistics.export_xls(e.detail.action)});
+
+
+
 });

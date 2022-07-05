@@ -39,7 +39,7 @@ class ReportingStatistics {
                         data: this.data_params.json_type
                       }
     VARIABLES['reporting_loading']++;
-    this.applicationJS.sendRequest(ajax_params).then((res)=>{ this.chart.flow_chart(res); this.finalize_loading(); });
+    this.applicationJS.sendRequest(ajax_params).then((res)=>{ this.chart.flow_chart(res); this.finalize_loading();  });
 
     //html table fetching
     let ajax_params2 =  {
@@ -48,7 +48,7 @@ class ReportingStatistics {
                           data: this.data_params.html_type
                         }
     VARIABLES['reporting_loading']++;
-    this.applicationJS.sendRequest(ajax_params2).then((e)=>{ $('#lastest_sending_docs').html(e); this.finalize_loading(); });
+    this.applicationJS.sendRequest(ajax_params2).then((e)=>{ $('#lastest_sending_docs').html(e); this.finalize_loading(); bind_all_events()});
   }
 
   pre_assignment_accounts(){
@@ -69,7 +69,7 @@ class ReportingStatistics {
                           data: this.data_params.html_type
                         }
     VARIABLES['reporting_loading']++;
-    this.applicationJS.sendRequest(ajax_params2).then((e)=>{ $('#pre_assignment_accounts').html(e); this.finalize_loading(); });
+    this.applicationJS.sendRequest(ajax_params2).then((e)=>{ $('#pre_assignment_accounts').html(e); this.finalize_loading(); bind_all_events() });
   }
 
   retrievers_report(){
@@ -90,6 +90,10 @@ class ReportingStatistics {
                           data: this.data_params.html_type
                         }
     VARIABLES['reporting_loading']++;
-    this.applicationJS.sendRequest(ajax_params2).then((e)=>{ $('#failed_retrievers').html(e); this.finalize_loading(); });
+    this.applicationJS.sendRequest(ajax_params2).then((e)=>{ $('#failed_retrievers').html(e); this.finalize_loading(); bind_all_events()});
+  }
+
+  export_xls(to_export){
+    window.location.href = `/reporting/export_xls/${encodeURIComponent($('#organization_id').val())}?to_export=${to_export}&ids=${encodeURIComponent($('#customer_filter').val())}&date_range=${$('#date_filter').val()}`
   }
 }
