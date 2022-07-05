@@ -5,12 +5,6 @@ class Admin::Reset::MainController < BackController
   # GET /admin/reset
   def index; end
 
-  def grouping
-  	@result = PonctualScripts::ResetAdminDashboard.new().execute("grouping")
-
-  	render partial: 'grouping'
-  end
-
   def lad
   	@result = PonctualScripts::ResetAdminDashboard.new().execute("lad")
 
