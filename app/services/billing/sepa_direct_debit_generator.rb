@@ -22,7 +22,7 @@ class Billing::SepaDirectDebitGenerator
   end
 
   def self.header(count)
-    "0;iDocus;;iDocus;;;;#{@period};#{count};;;;;;"
+    "0;iDocus;;iDocus;;;;#{Date.today};#{count};;;;;;"
   end
 
   def self.footer(total_amount_in_cents)
