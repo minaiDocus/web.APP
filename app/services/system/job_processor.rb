@@ -75,9 +75,9 @@ class System::JobProcessor
     p "Processing preassignments - #{staffs.size}"
     staffs.each{|st| st.update(state: 'ready')}
 
-    staffs = StaffingFlow.processing_grouping
-    p "Processing grouping - #{staffs.size}"
-    staffs.each{|st| st.update(state: 'ready')}
+    # staffs = StaffingFlow.processing_grouping
+    # p "Processing grouping - #{staffs.size}"
+    # staffs.each{|st| st.update(state: 'ready')}
 
     staffs = PreAssignmentDelivery.ibiza.building_data
     p "Building ibiza datas - #{staffs.size}"
@@ -86,5 +86,10 @@ class System::JobProcessor
     staffs = PreAssignmentDelivery.ibiza.sending
     p "Sending ibiza datas - #{staffs.size}"
     staffs.each{|st| st.update(state: 'data_built')}
+
+    #Reset grouping
+    p "Reset grouping"
+    result = PonctualScripts::ResetAdminDashboard.new.execute("grouping", true)
+    @result[:pack_names].each{|pack_name| p "- #{pack_name}"}
   end
 end

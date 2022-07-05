@@ -1,7 +1,9 @@
 class PonctualScripts::ResetAdminDashboard
   def initialize; end
 
-  def execute(reset_type)
+  def execute(reset_type, force=false)
+    @force = force
+
     case reset_type
       when "grouping"
         reset_grouping
@@ -23,7 +25,7 @@ class PonctualScripts::ResetAdminDashboard
       staffings << sf if sf
     end
 
-    staffings.each{ |st| st.update(state: "ready")  if not st.processing? }
+    staffings.each{ |st| st.update(state: "ready")  if @force || !st.processing? }
 
     { pack_names: pack_names, staffings_size: staffings.size}
   end
