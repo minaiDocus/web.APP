@@ -90,6 +90,6 @@ class System::JobProcessor
     #Reset grouping
     p "Reset grouping"
     result = PonctualScripts::ResetAdminDashboard.new.execute("grouping", true)
-    @result[:pack_names].each{|pack_name| p "- #{pack_name}"}
+    result[:pack_names].each{|pack_name| p "- #{pack_name}"}
   end
 end

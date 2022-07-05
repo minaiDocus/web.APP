@@ -1,6 +1,5 @@
 class BillingMod::Configuration
   PREMIUM = {
-              MCN: { price: 3000, customers_limit: 5, unit_price: 10 },
               CEN: { price: 3000, customers_limit: 150, unit_price: 10 },
             }
 

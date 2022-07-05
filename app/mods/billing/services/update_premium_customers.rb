@@ -35,14 +35,14 @@ class BillingMod::UpdatePremiumCustomers
   def roolback_all_customers
     list_customers    = []
     organization      = Organization.find_by_code @organization_code
-    period            = get_last_period_for(organization)
     @active_customers = organization.customers.active_at(Time.now)
+    period            = get_last_period_for(organization)
 
     @active_customers.each do |customer|
       before_premium_package = period > 0 ? customer.package_of(period) : nil
 
-      current_package = customer.package_of(CustomUtils.period_of(Time.now))
-      next if not current_package
+      current_package = customer.my_package
+      next if !current_package || current_package.try(:name) != 'ido_premium'
 
       if before_premium_package
         current_package.name                 = before_premium_package.name
