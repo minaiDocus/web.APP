@@ -74,22 +74,28 @@ class Reporting::StatisticsController < Reporting::ABaseController
     @retrievers = Retriever.where("updated_at BETWEEN '#{@date_range.join("' AND '")}'").where(user_id: @customers_ids)
 
     respond_to do |format|
-        format.html do
-          @retrievers = @retrievers.where(state: 'error')
+      format.html do
+        @retrievers = @retrievers.where(state: 'error')
 
-          render partial: 'failed_retrievers'
-        end
-        format.json do
-          retrievers = @retrievers.count
-          retrievers_error = @retrievers.where(state: 'error').count
-          retrievers_error_percentage = (retrievers > 0) ? ((retrievers_error * 100) / retrievers).ceil : 0
+        render partial: 'failed_retrievers'
+      end
+      format.json do
+        retrievers = @retrievers.count
+        retrievers_error = @retrievers.where(state: 'error').count
+        retrievers_error_percentage = (retrievers > 0) ? ((retrievers_error * 100) / retrievers).ceil : 0
 
-          render json:{ actif_percentage: ((retrievers > 0) ? (100 - retrievers_error_percentage) : 0), error_percentage: retrievers_error_percentage }, state: 200
-        end
+        render json:{ actif_percentage: ((retrievers > 0) ? (100 - retrievers_error_percentage) : 0), error_percentage: retrievers_error_percentage }, state: 200
+      end
     end
   end
 
   def index
     render file: Rails.root.join('app/templates/front/reporting/views/reporting/_index.html.haml')
+  end
+
+  def export_xls
+    data = Reporting::StatisticToXls.new(@customers_ids, @date_range).execute(params[:to_export])
+
+    send_data(data, type: 'application/vnd.ms-excel', filename: "Statistic_#{params[:to_export]}.xls", disposition: 'inline')
   end
 end

@@ -1,4 +1,11 @@
-%h4.bold= t('reporting.top_delivery_waiting_account')
+.row
+  .col-md-8
+    %h4.bold= t('reporting.top_delivery_waiting_account')
+  .col-md-4.text-end
+    %button.btn.btn-dark.w-75.export_xls#pre_assignment_accounts
+      %span.me-4= glyphicon('share-boxed', { size: '15', color: 'white'})
+      %span.text-white Export XLS
+.mb-3
 %table.table.table-striped
   %thead.w-100
     %th= t('reporting.pack_name')
@@ -7,7 +14,7 @@
     %th= t('reporting.share_default_account')
   %tbody
     - @reports.each do |report|
-      - result = accounts_repartition_stat(report)
+      - result = Reporting::StatisticToXls.accounts_repartition_stat(report, @date_range)
       - all_accounts_size     = result[:all_accounts_size]
       - anomaly_accounts_size = result[:anomaly_accounts_size]
       - waiting_accounts_size = result[:waiting_accounts_size]
