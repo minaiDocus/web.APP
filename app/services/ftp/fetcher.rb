@@ -5,6 +5,61 @@ class Ftp::Fetcher
   # FILENAME_PATTERN = /\A#{Pack::CODE_PATTERN}(_| )#{Pack::JOURNAL_PATTERN}(_| )#{Pack::PERIOD_PATTERN}(_| )#{Pack::POSITION_PATTERN}#{Pack::EXTENSION_PATTERN}\z/
   FILENAME_PATTERN = /\A#{Pack::CODE_PATTERN}(_| )#{Pack::JOURNAL_PATTERN}(_| )#{Pack::PERIOD_PATTERN}(_| )page\d{3,4}#{Pack::EXTENSION_PATTERN}\z/
 
+  def self.prepare_dir
+    url      = FTPDeliveryConfiguration::FTP_SERVER
+    username = FTPDeliveryConfiguration::FTP_USERNAME
+    password = FTPDeliveryConfiguration::FTP_PASSWORD
+    dir      = FTPDeliveryConfiguration::FTP_PATH || '/'
+    provider = FTPDeliveryConfiguration::FTP_PROVIDER
+
+    begin
+      ftp = Net::FTP.new
+      ftp.connect url, 21
+      ftp.login username, password
+      ftp.passive = true
+
+      ftp.chdir dir
+
+      root_path = "/nfs/ppp/"
+      dirs      = ftp.nlst.sort
+
+      to_process = []
+      dirs.each do |f_path|
+        path = root_path + f_path
+
+        next if path && (path.match(/_fetched$/) || File.file?(f_path))
+
+        to_process << f_path
+        File.rename path, "#{path}_ready"
+      end
+
+      p "=========== TO PROCESS =========="
+      p "#{to_process}"
+
+      if to_process.size > 0
+        Ftp::Fetcher.fetch(FTPDeliveryConfiguration::FTP_SERVER, FTPDeliveryConfiguration::FTP_USERNAME, FTPDeliveryConfiguration::FTP_PASSWORD, FTPDeliveryConfiguration::FTP_PATH, FTPDeliveryConfiguration::FTP_PROVIDER)
+      end
+    rescue => e
+      log_document = {
+            subject: "[FtpFetcher] - connexion failed",
+            name: "ftp fetcher",
+            error_group: "[FtpFetcher] - connexion failed",
+            erreur_type: "[FtpFetcher] - connexion failed",
+            date_erreur: Time.now.strftime('%Y-%m-%d %H:%M:%S'),
+            more_information: {
+              message: 'Unable to connect to fetcher FTP',
+              error: e.to_s
+            }
+          }
+
+          begin
+            ErrorScriptMailer.error_notification(log_document, { attachements: [{ name: File.basename(file_path), file: File.open(file_path) }] }).deliver
+          rescue
+            ErrorScriptMailer.error_notification(log_document).deliver
+          end
+    end
+  end
+
   def self.fetch(url, username, password, dir = '/', provider = '')
     begin
       ftp = Net::FTP.new
