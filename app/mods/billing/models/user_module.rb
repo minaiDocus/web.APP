@@ -8,11 +8,20 @@ module BillingMod::UserModule
     has_many :extra_orders, class_name: 'BillingMod::ExtraOrder', as: :owner
   end
 
-  def can_be_billed?
+  def can_be_billed_at?(period)
     return true if self.organization.try(:invoice_created_customer)
 
-    will_not_billed = (self.created_at.strftime('%Y%m').to_i >= 202205 && self.pieces.count == 0 && self.preseizures.count == 0)
-    not(will_not_billed)
+    if self.created_at.strftime('%Y%m') < 202205
+      return true
+    else
+      piece      = nil
+      preseizure = self.preseizures.where('DATE_FORMAT(created_at, "%Y%m") <= ?', period).limit(1).first
+      if not preseizure
+        piece = self.pieces.where('DATE_FORMAT(created_at, "%Y%m") <= ?', period).limit(1).first
+      end
+
+      return (preseizure || piece)? true : false
+    end
   end
 
   def current_flow

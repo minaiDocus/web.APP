@@ -22,8 +22,6 @@ class BillingMod::PrepareBillingsWorker
         next if not organization.can_be_billed?
 
         organization.customers.active_at(Time.now.end_of_month + 1.day).each do |customer|
-          next if not customer.can_be_billed?
-
           BillingMod::PrepareUserBilling.new(customer).execute
         end
 

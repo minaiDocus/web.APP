@@ -105,18 +105,6 @@ module BillingMod
       recalculate_billing = @force || @is_update || @period == CustomUtils.period_of(Time.now) || !@invoice
 
       @customers.each do |customer|
-        next if not customer.can_be_billed?
-
-        if customer.created_at.strftime('%Y%m').to_i >= 202205 && @period != CustomUtils.period_of(Time.now)
-          first_preseizure = customer.preseizures.first
-          next if first_preseizure && first_preseizure.created_at.strftime('%Y%m').to_i > @period
-
-          if !first_preseizure
-            first_piece      = customer.pieces.first
-            next if first_piece && first_piece.created_at.strftime('%Y%m').to_i > @period
-          end
-        end
-
         package = customer.package_of(@period)
 
         next if not package
@@ -124,6 +112,8 @@ module BillingMod
         if recalculate_billing
           BillingMod::PrepareUserBilling.new(customer, @period).execute
         end
+
+        next if not customer.can_be_billed_at?(@period)
 
         if @version == 2
           increm_package_count(package.name)    if ['ido_premium', 'ido_classic', 'ido_nano', 'ido_x', 'ido_micro_plus', 'ido_micro'].include?(package.name)

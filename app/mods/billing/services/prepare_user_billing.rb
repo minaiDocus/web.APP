@@ -16,37 +16,34 @@ class BillingMod::PrepareUserBilling
     @data_flow = @user.data_flows.of_period(@period).first
 
     return false if not @data_flow
-    return false if not @user.can_be_billed?
-
-    if @user.created_at.strftime('%Y%m').to_i >= 202205 && @period != CustomUtils.period_of(Time.now)
-      first_preseizure = @user.preseizures.first
-      return false if first_preseizure && first_preseizure.created_at.strftime('%Y%m').to_i > @period
-
-      if !first_preseizure
-        first_piece      = @user.pieces.first
-        return false if first_piece && first_piece.created_at.strftime('%Y%m').to_i > @period
-      end
-    end
 
     @user.billings.of_period(@period).update_all(is_frozen: true)
 
-    create_package_billing
-    create_remaining_month_billing
-    create_options_billing
-    create_orders_billing
-    create_extra_orders_billing
-    create_excess_billing
+    if @user.can_be_billed_at?(@period)
+      create_package_billing
+      create_remaining_month_billing
+      create_options_billing
+      create_orders_billing
+      create_extra_orders_billing
+      create_excess_billing
 
-    create_bank_excess_billing
-    create_journals_excess_billing
+      create_bank_excess_billing
+      create_journals_excess_billing
 
-    create_resit_operations_billing
-    create_digitize_billing
+      create_resit_operations_billing
+      create_digitize_billing
+    else
+      create_null_billing
+    end
 
     @user.billings.of_period(@period).is_frozen.destroy_all
   end
 
   private
+
+  def create_null_billing
+    create_billing({ name: 'unbilled', title: 'Aucun document', price: 0 })
+  end
 
   def create_package_billing
     return true if @package.name == 'ido_premium'
