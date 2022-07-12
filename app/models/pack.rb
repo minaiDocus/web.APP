@@ -389,6 +389,8 @@ class Pack < ApplicationRecord
   end
 
   def recreate_original_document
+    return true #WORKARROUND don't create pack document
+
     return false if self.is_locked?
 
     pieces  = self.pieces.by_position
