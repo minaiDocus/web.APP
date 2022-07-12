@@ -89,7 +89,7 @@ DataProcessor::OperationsWorker:
 
 DataProcessor::McfWorker:
   queue: default
-  cron: '0 */5 * * * *'
+  cron: '0 */15 * * * *'
 
 ## Accounting flow workers
 

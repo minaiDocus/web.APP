@@ -11,17 +11,17 @@ module McfLib
         end
 
         def move_uploaded_file
-          @response = send_request('https://uploadservice.mycompanyfiles.fr/api/idocus/moveobject', { 'AccessToken' => @access_token })
+          @response = send_curl_request('https://uploadservice.mycompanyfiles.fr/api/idocus/moveobject', { 'AccessToken' => @access_token })
           data_response = handle_response
         end
 
         def ask_to_resend_file
-          @response = send_request('https://uploadservice.mycompanyfiles.fr/api/idocus/resendobject', { 'AccessToken' => @access_token })
+          @response = send_curl_request('https://uploadservice.mycompanyfiles.fr/api/idocus/resendobject', { 'AccessToken' => @access_token })
           data_response = handle_response
         end
 
         def renew_access_token(refresh_token)
-          @response = send_request('https://uploadservice.mycompanyfiles.fr/api/idocus/TakeAnotherToken', { 'RefreshToken' => refresh_token })
+          @response = send_curl_request('https://uploadservice.mycompanyfiles.fr/api/idocus/TakeAnotherToken', { 'RefreshToken' => refresh_token })
           data_response = handle_response
 
           @access_token = data_response['AccessToken']
