@@ -233,6 +233,14 @@ class Organization < ApplicationRecord
     self.cedricom_user.present? && self.encrypted_cedricom_password.present? && self.cedricom_name.present?
   end
 
+  def can_upload_documents?
+    return true  if self.code == 'TEEO'
+    return false if not self.is_active
+    return false if self.can_be_billed? && !self.debit_mandate.try(:configured?)
+
+    true
+  end
+
   private
 
   def software

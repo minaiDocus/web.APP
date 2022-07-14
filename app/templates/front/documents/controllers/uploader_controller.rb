@@ -24,7 +24,7 @@ class Documents::UploaderController < Documents::AbaseController
       to_upload = true
     end
 
-    if customer && customer.still_active? && ( (customer.authorized_upload? && to_upload) || customer.organization.specific_mission )
+    if customer && !customer.inactive? && ( (customer.authorized_upload? && to_upload) || customer.organization.specific_mission )
       uploaded_document = UploadedDocument.new(File.open(file),
                                                original_filename,
                                                customer,

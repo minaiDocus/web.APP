@@ -130,31 +130,30 @@ module Interfaces::User::Customer
   end
 
   def authorized_all_upload?
+    return false if self.inactive?
+    return false if not self.organization.try(:can_upload_documents?)
     # (self.try(:options).try(:upload_authorized?) && authorized_bank_upload?) || self.organization.try(:specific_mission)
     ( authorized_basic_upload? && authorized_bank_upload? ) || self.organization.try(:specific_mission)
   end
 
   def authorized_upload?
+    return false if self.inactive?
+    return false if not self.organization.try(:can_upload_documents?)
     # self.try(:options).try(:upload_authorized?) || authorized_bank_upload? || self.organization.try(:specific_mission)
     authorized_basic_upload? || authorized_bank_upload? || self.organization.try(:specific_mission)
   end
 
   def authorized_basic_upload?
+    return false if self.inactive?
+    return false if not self.organization.try(:can_upload_documents?)
     self.my_package.try(:is_active) && self.my_package.try(:upload_active)
   end
 
   def authorized_bank_upload?
-    # self.try(:options).try(:retriever_authorized?)
+    return false if self.inactive?
+    return false if not self.organization.try(:can_upload_documents?)
 
     self.my_package.try(:is_active) && self.my_package.try(:bank_active)
-
-    #period = self.try(:subscription).try(:current_period)
-
-    #if period
-    #  self.try(:options).try(:retriever_authorized?) && period.is_active?(:retriever_option)
-    #else
-    #  false
-    #end
   end
 
   def banking_provider
