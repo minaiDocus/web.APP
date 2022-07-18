@@ -5,7 +5,7 @@
   - my_package.preassignment_active = true
 - count      = 0
 
-- is_manual_paper_set_order = @customer.persisted? ? CustomUtils.is_manual_paper_set_order?(@customer.try(:organization)) : false
+- is_manual_paper_set_order = CustomUtils.is_manual_paper_set_order?(@organization)
 
 .packages_list  
   - packages.each do |package, infos|
@@ -17,8 +17,8 @@
 
     - next if human_name.blank? || %w(preassignment mail).include?(package.to_s)
     - next if package.to_s == 'ido_mini'
-    - next if package.to_s == 'ido_micro'      && @customer.try(:organization).try(:uses_micro_plus?)
-    - next if package.to_s == 'ido_micro_plus' && !@customer.try(:organization).try(:uses_micro_plus?)
+    - next if package.to_s == 'ido_micro'      && @organization.try(:uses_micro_plus?)
+    - next if package.to_s == 'ido_micro_plus' && !@organization.try(:uses_micro_plus?)
     - next if package.to_s == 'ido_digitize'   && !is_manual_paper_set_order
     - next if package.to_s != 'ido_premium'    && CustomUtils.is_ido_premium?(@organization.code)
     - next if package.to_s == 'ido_premium'    && !CustomUtils.is_ido_premium?(@organization.code)
