@@ -16,7 +16,7 @@
             .form-check.form-switch.idocus-custom-form-check
               = sf.input :is_used, as: :boolean, label: false, label_html: { class: 'form-check-label' }, input_html: { checked: @organization.send(software.to_sym).try(:used?), id: nil, class: 'form-check-input input_switch input_check_field'}
               %label.semibold{class: 'form-check-label label_check_field', for: 'is_used_software'} Non
-      .form-group{ class: (['exact_online', 'my_unisoft', 'sage_gec', 'acd'].include? software)? '' : 'hide' }
+      .form-group{ class: (['exact_online', 'my_unisoft', 'acd'].include? software)? '' : 'hide' }
         .row
           .col-md-11
             = sf.label :auto_deliver, t("activerecord.models.software_#{software}.attributes.auto_deliver"), class: 'semibold'

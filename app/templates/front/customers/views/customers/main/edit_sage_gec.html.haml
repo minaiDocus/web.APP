@@ -13,21 +13,21 @@
           .control-section
             = select_tag 'user[sage_gec_attributes][sage_private_api_uuid]', options_for_select(sage_gec_companies_list_options_for_select(@organization), @customer.sage_gec&.sage_private_api_uuid), include_blank: true, class: 'chosen-list w-100'
       .form-group.mt-2
-        - auto_deliver = @customer.try(:sage_gec).try(:auto_deliver) || -1
+        - auto_deliver = @customer.try(:sage_gec).try(:auto_deliver)
         .row
-          .col-md-4
+          .col-md-8
             = label_tag 'user[sage_gec_attributes][auto_deliver]', t('activerecord.models.software_sage_gec.attributes.auto_deliver'), class: 'semibold'
-          .col-md-4
-            .form-check.form-check-inline               
-              = radio_button_tag 'user[sage_gec_attributes][auto_deliver]', auto_deliver_options[0][1], auto_deliver == -1, class: 'form-check-input'
-              %label.form-check-label Paramètres du cabinet
+          / .col-md-4
+          /   .form-check.form-check-inline
+          /     = radio_button_tag 'user[sage_gec_attributes][auto_deliver]', auto_deliver_options[0][1], auto_deliver == -1, class: 'form-check-input'
+          /     %label.form-check-label Paramètres du cabinet
           .col-md-2
             .form-check.form-check-inline
-              = radio_button_tag 'user[sage_gec_attributes][auto_deliver]', auto_deliver_options[1][1], auto_deliver == 0, class: 'form-check-input compta-user-options'
+              = radio_button_tag 'user[sage_gec_attributes][auto_deliver]', auto_deliver_options[1][1], !auto_deliver, class: 'form-check-input compta-user-options'
               %label.form-check-label Non
           .col-md-2
             .form-check.form-check-inline
-              = radio_button_tag 'user[sage_gec_attributes][auto_deliver]', auto_deliver_options[2][1], auto_deliver == 1, class: 'form-check-input compta-user-options'
+              = radio_button_tag 'user[sage_gec_attributes][auto_deliver]', auto_deliver_options[2][1], auto_deliver, class: 'form-check-input compta-user-options'
               %label.form-check-label Oui
       %input#auto_deliver_customer{ type: :hidden, name: "auto_deliver_customer", value: "#{@customer.try(:sage_gec).try(:auto_deliver?)}"}
 
