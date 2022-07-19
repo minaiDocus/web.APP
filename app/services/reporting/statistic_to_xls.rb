@@ -3,7 +3,8 @@ class Reporting::StatisticToXls
   def self.accounts_repartition_stat(report, date)
     user = report.user
 
-    journals         = AccountBookType.where(user_id: user.id).select(:anomaly_account, :account_number, :default_account_number)
+    journals = Rails.cache.fetch([:journals]).map { |jl| jl if jl.user_id == user.id }.compact.uniq
+
     anomaly_accounts = []
     waiting_accounts = []
     default_accounts = []
@@ -13,12 +14,12 @@ class Reporting::StatisticToXls
       default_accounts << journal.default_account_number if journal.default_account_number.present?
     end
 
-    preseizures_ids  = Pack::Report::Preseizure.where("created_at BETWEEN '#{date.join("' AND '")}'").where(user_id: user.id, report_id: report.id).select(:id)
+    preseizures = Rails.cache.fetch([:preseizures]).map { |pre| pre if pre.user_id == user.id && pre.report_id == report.id }.compact.uniq
 
     anomaly_accounts_size = 0
     waiting_accounts_size = 0
     default_accounts_size = 0
-    all_accounts    = Pack::Report::Preseizure::Account.where(preseizure_id: preseizures_ids).select(:number)
+    all_accounts    = Pack::Report::Preseizure::Account.where(preseizure_id: preseizures.pluck(:id)).select(:number)
 
     all_accounts.each do |account|
       if anomaly_accounts.include?(account.number)

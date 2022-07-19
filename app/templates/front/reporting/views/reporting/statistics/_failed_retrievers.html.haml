@@ -2,9 +2,8 @@
   .col-md-10
     %h4.bold= t('reporting.failed_retrievers')
   .col-md-2.text-end
-    %button.btn.btn-dark.w-75.export_xls#failed_delivery
-      %span.me-4= glyphicon('share-boxed', { size: '15', color: 'white'})
-      %span.text-white Export XLS
+    %button.btn.btn-default.export_xls#failed_delivery{ title: "Export XLS" }
+      %img{ src: '/assets/application/icon-xls.png'}
 .mb-3
 %table.table.table-striped
   %thead
