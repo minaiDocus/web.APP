@@ -23,8 +23,6 @@ module Idocus
     Dir.glob("#{Rails.root}/app/workers/*.{rb}").each { |file| require file }
     Dir.glob("#{Rails.root}/lib/*.{rb}").each { |file| require file }
     Dir.glob("#{Rails.root}/lib/patches/*.{rb}").each { |file| require file }
-    Dir.glob("#{Rails.root}/lib/knowings_api/*.{rb}").each { |file| require file }
-    Dir.glob("#{Rails.root}/lib/gdr/*.{rb}").each { |file| require file }
     Dir.glob("#{Rails.root}/lib/acd_lib/*.{rb}").each { |file| require file }
     Dir.glob("#{Rails.root}/lib/acd_lib/api/*.{rb}").each { |file| require file }
     Dir.glob("#{Rails.root}/lib/supplier_recognition/*.{rb}").each { |file| require file }
@@ -37,8 +35,6 @@ module Idocus
     Dir.glob("#{Rails.root}/lib/sage_gec_lib/api/*.{rb}").each { |file| require file }
     Dir.glob("#{Rails.root}/lib/exact_online_lib/api/*.{rb}").each { |file| require file }
     Dir.glob("#{Rails.root}/lib/exact_online_lib/*.{rb}").each { |file| require file }
-    Dir.glob("#{Rails.root}/lib/mcf_lib/api/*.{rb}").each { |file| require file }
-    Dir.glob("#{Rails.root}/lib/mcf_lib/*.{rb}").each { |file| require file }
 
     Dir[Rails.root.join("app/templates/front/*/config.rb")].each do |f|
      require f
