@@ -90,6 +90,9 @@ module Interfaces::Software::Configuration
   end
 
   def auto_deliver?
+    return false if self.owner.is_a?(User) && auto_deliver === false
+    return true  if self.owner.is_a?(User) && auto_deliver === true
+
     (self.owner.is_a?(User) && auto_deliver == -1) ? self.owner.organization.auto_deliver?(self) : (auto_deliver == 1)
   end
 

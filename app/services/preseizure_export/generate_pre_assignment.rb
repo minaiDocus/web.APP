@@ -38,6 +38,9 @@ class PreseizureExport::GeneratePreAssignment
   end
 
   def execute
+    ##NOTE : There is no need to generate export automaticly from now
+    return false
+
     group = @all_preseizures.group_by { |p| p.report }
     group.each do |g|
       @report = g.first
@@ -50,93 +53,114 @@ class PreseizureExport::GeneratePreAssignment
       #   generate_ibiza_export
       # end
 
-      if valid_coala?
-        create_pre_assignment_export_for('coala')
-        generate_coala_export(true, true)
-      end
+      # if valid_coala?
+      #   create_pre_assignment_export_for('coala')
+      #   generate_coala_export(true, true)
+      # end
 
-      if valid_cegid?
-        create_pre_assignment_export_for('cegid')
-        generate_cegid_export
-      end
+      # if valid_cegid?
+      #   create_pre_assignment_export_for('cegid')
+      #   generate_cegid_export
+      # end
 
-      if valid_fec_agiris?
-        create_pre_assignment_export_for('fec_agiris')
-        generate_fec_agiris_export
-      end
+      # if valid_fec_agiris?
+      #   create_pre_assignment_export_for('fec_agiris')
+      #   generate_fec_agiris_export
+      # end
 
-      if valid_fec_acd?
-        create_pre_assignment_export_for('fec_agiris')
-        generate_fec_agiris_export
-      end
+      # if valid_fec_acd?
+      #   create_pre_assignment_export_for('fec_acd')
+      #   generate_fec_agiris_export
+      # end
 
-      if valid_quadratus?
-        create_pre_assignment_export_for('quadratus')
-        generate_quadratus_export(true)
-      end
+      # if valid_quadratus?
+      #   create_pre_assignment_export_for('quadratus')
+      #   generate_quadratus_export(true)
+      # end
 
-      if valid_cogilog?
-        create_pre_assignment_export_for('cogilog')
-        generate_cogilog_export
-      end
+      # if valid_cogilog?
+      #   create_pre_assignment_export_for('cogilog')
+      #   generate_cogilog_export
+      # end
 
-      if valid_csv_descriptor?
-        create_pre_assignment_export_for('csv_descriptor')
-        generate_csv_descriptor_export
-      end
+      # if valid_csv_descriptor?
+      #   create_pre_assignment_export_for('csv_descriptor')
+      #   generate_csv_descriptor_export
+      # end
     end
   end
 
   def generate_on_demand
     @report = @all_preseizures.first.report
+    user    = @report.user
     @preseizures = @all_preseizures
     @is_notified = true
 
     case @export_type
     when 'csv'
-      create_pre_assignment_export_for('csv_descriptor')
+      if user.uses?(:csv_descriptor)
+        create_pre_assignment_export_for('csv_descriptor')
 
-      generate_csv_descriptor_export(false)
+        generate_csv_descriptor_export(false)
+      end
     when 'xml_ibiza'
-      create_pre_assignment_export_for('ibiza')
+      if user.uses?(:ibiza)
+        create_pre_assignment_export_for('ibiza')
 
-      generate_ibiza_export
+        generate_ibiza_export
+      end
     when 'txt_quadratus'
-      create_pre_assignment_export_for('quadratus')
+      if user.uses?(:quadratus)
+        create_pre_assignment_export_for('quadratus')
 
-      generate_quadratus_export
+        generate_quadratus_export
+      end
     when 'zip_quadratus'
       create_pre_assignment_export_for('quadratus')
 
       generate_quadratus_export(true)
     when 'zip_coala'
-      create_pre_assignment_export_for('coala')
+      if user.uses?(:coala)
+        create_pre_assignment_export_for('coala')
 
-      generate_coala_export(true)
+        generate_coala_export(true)
+      end
     when 'xls_coala'
-      create_pre_assignment_export_for('coala')
+      if user.uses?(:coala)
+        create_pre_assignment_export_for('coala')
 
-      generate_coala_export
+        generate_coala_export
+      end
     when 'txt_fec_agiris'
-      create_pre_assignment_export_for('fec_agiris')
+      if user.uses?(:fec_agiris)
+        create_pre_assignment_export_for('fec_agiris')
 
-      generate_fec_agiris_export(false)
+        generate_fec_agiris_export(false)
+      end
     when 'txt_fec_acd'
-      create_pre_assignment_export_for('fec_acd')
+      if user.uses?(:fec_acd)
+        create_pre_assignment_export_for('fec_acd')
 
-      generate_fec_acd_export(true)
+        generate_fec_acd_export(true)
+      end
     when 'csv_cegid'
-      create_pre_assignment_export_for('cegid')
+      if user.uses?(:cegid)
+        create_pre_assignment_export_for('cegid')
 
-      generate_cegid_export(false)
+        generate_cegid_export(false)
+      end
     when 'tra_cegid'
-      create_pre_assignment_export_for('cegid')
+      if user.uses?(:cegid)
+        create_pre_assignment_export_for('cegid')
 
-      generate_cegid_tra_export(false)
+        generate_cegid_tra_export(false)
+      end
     when 'txt_cogilog'
-      create_pre_assignment_export_for('cogilog')
+      if user.uses?(:cogilog)
+        create_pre_assignment_export_for('cogilog')
 
-      generate_cogilog_export
+        generate_cogilog_export
+      end
     end
 
     @export

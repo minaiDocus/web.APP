@@ -45,13 +45,19 @@ module SageGecLib
 
           account_number = entry.account.number
 
+          if preseizure.piece
+            label = "#{preseizure.third_party} - #{preseizure.piece_number}"
+          else
+            label = preseizure.operation.try(:label)
+          end
+
           __data << { "credit" => credit, 
                       "debit" => debit, 
                       "dueDate" => deadline,
                       "date" => preseizure.date.try(:to_date).to_s,
                       "accountReferenceForJournal" => account_number,
                       "originalDocumentReference" => preseizure.coala_piece_name,
-                      "description" => "#{preseizure.third_party} - #{preseizure.piece_number}",
+                      "description" => "#{label}",
                       "financialAccountJournalReference" => ledger_code }
         end     
       end
