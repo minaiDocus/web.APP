@@ -11,12 +11,17 @@ module SageGecLib
       client = SageGecLib::Api::Client.new
 
       retry_count = 0
+      preseizure = @delivery.preseizures.first
       begin
-        retry_count += 1
-        file_path = @delivery.preseizures.first.piece.cloud_content_object.reload.path
-        sleep(1)
+        if preseizure.piece
+          retry_count += 1
+          file_path = preseizure.piece.cloud_content_object.reload.path
+          sleep(1)
 
-        data["attachment"] = Faraday::UploadIO.new(StringIO.new(File.read(file_path)), @delivery.preseizures.first.piece.cloud_content.content_type, "#{@delivery.preseizures.first.coala_piece_name}.pdf")
+          data["attachment"] = Faraday::UploadIO.new(StringIO.new(File.read(file_path)), preseizure.piece.cloud_content.content_type, "#{preseizure.coala_piece_name}.pdf")
+        else
+          data["attachment"] = nil
+        end
       rescue => e
         if retry_count <= 3
           sleep(5)
