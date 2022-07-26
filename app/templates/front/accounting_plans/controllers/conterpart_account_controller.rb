@@ -4,6 +4,18 @@ class AccountingPlans::ConterpartAccountController < CustomerController
 
   prepend_view_path('app/templates/front/accounting_plans/views')
 
+  def show
+    if params[:kind] == 'customer'
+      accounting_plan_items   = @customer.accounting_plan.active_customers
+    else
+      accounting_plan_items   = @customer.accounting_plan.active_providers
+    end
+
+    @accounting_plan_items = accounting_plan_items.map{ |account| ["#{account.third_party_name} - #{account.third_party_account}", account.id] }
+
+    render partial: 'show'
+  end
+
   def accounts_list
     if params[:type] == 'customer'
       _accounts = @customer.conterpart_accounts.customer
@@ -14,6 +26,35 @@ class AccountingPlans::ConterpartAccountController < CustomerController
     accounts = _accounts.map{|account| { id: account.id, name: account.name, number: account.number } }
 
     render json: { accounts: accounts }, status: 200
+  end
+
+  def link
+    conterpart_accounts_ids = params[:conterpart_account].try(:[], :conterpart_accounts) || []
+    third_party_ids         = params[:conterpart_account].try(:[], :accounting_plan_items) || []
+
+    error_mess = ''
+    error_mess = 'Veuillez sélectionner une catégorie' if conterpart_accounts_ids.empty?
+    error_mess = 'Veuillez sélectionner un compte de tiers' if third_party_ids.empty?
+
+    if error_mess.blank?
+      conterpart_accounts_ids.each do |account_id|
+        account = @customer.conterpart_accounts.where(id: account_id).first
+        next if not account
+
+        third_party_assigned = account.accounting_plan_items
+        third_party_list     = AccountingPlanItem.where(id: third_party_ids)
+
+        to_assign = (third_party_assigned + third_party_list).uniq
+
+        account.update(accounting_plan_items: to_assign)
+      end
+
+      json_flash[:success] = 'Mise à jour effectué.'
+    else
+      json_flash[:error] = error_mess
+    end
+
+    render json: { json_flash: json_flash }, status: 200
   end
 
   def edit
@@ -28,7 +69,7 @@ class AccountingPlans::ConterpartAccountController < CustomerController
 
     @accounting_plan_items = accounting_plan_items.map{ |account| ["#{account.third_party_name} - #{account.third_party_account}", account.id] }
     
-    render partial: 'edit'
+    render partial: 'edit_conterpart'
   end
 
   def update
@@ -56,16 +97,49 @@ class AccountingPlans::ConterpartAccountController < CustomerController
   end
 
   def delete
-    if params[:id] == 'all-provider'
-      @customer.conterpart_accounts.provider.destroy_all
-    elsif params[:id] == 'all-customer'
-      @customer.conterpart_accounts.customer.destroy_all
-    else
-      @conterpart_account = @customer.conterpart_accounts.where(id: params[:id].to_i).first
-      @conterpart_account.try(:destroy)
+    if params[:ids].present?
+      ids = params[:ids].split(',')
+      @customer.conterpart_accounts.where(id: ids).destroy_all
     end
 
     render json: { json_flash: { success: 'Supprimer avec succès.' } }, status: 200
+  end
+
+  def select_from_customer
+    selected_customer = User.find params[:selected_id]
+
+    if params[:type] == 'customer'
+      _accounts = selected_customer.conterpart_accounts.customer
+    else
+      _accounts = selected_customer.conterpart_accounts.provider
+    end
+
+    accounts = _accounts.map{|account| { id: account.id, name: account.name, number: account.number } }
+
+    render json: { accounts: accounts }, status: 200
+  end
+
+  def validate_from_customer
+    selected_customer   = User.find params[:from_customer][:customer]
+    conterpart_accounts = selected_customer.conterpart_accounts.where(id: params[:from_customer][:conterpart_accounts])
+
+    conterpart_accounts.each do |account|
+      new_account = @customer.conterpart_accounts.where(name: account.name, number: account.number).first
+      next if new_account
+
+      new_account = account.dup
+      new_account.accounting_plan = @customer.accounting_plan
+
+      @customer.conterpart_accounts << new_account
+    end
+
+    if @customer.save
+      json_flash[:success] = 'Mise à jour effectué.'
+    else
+      json_flash[:error] = 'Action impossible, Veuillez reéssayer ultérieurement.'
+    end
+
+    render json: { json_flash: json_flash }, status: 200
   end
 
   private

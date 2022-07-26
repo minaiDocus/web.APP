@@ -83,7 +83,7 @@ function custom_dynamic_animation(){
 }
 
 function iDocus_event_emiter(){
-  let events_list = 'click.as_idocus_emit change.as_idocus_emit keyup.as_idocus_emit';
+  let events_list = 'dblclick.as_idocus_emit click.as_idocus_emit change.as_idocus_emit keyup.as_idocus_emit';
   $('.as_idocus_emit').unbind(events_list).bind(events_list, function(e){
     if( $(this).type != 'checkbox' && $(this).type == 'radio' )
       e.preventDefault();
@@ -111,7 +111,7 @@ function iDocus_event_emiter(){
 }
 
 function iDocus_ajax_links(){
-  let events_list = 'click.as_idocus_ajax change.as_idocus_ajax keyup.as_idocus_ajax';
+  let events_list = 'dblclick.as_idocus_ajax click.as_idocus_ajax change.as_idocus_ajax keyup.as_idocus_ajax';
   $('.as_idocus_ajax').unbind(events_list).bind(events_list, function(e){
     if( $(this).type != 'checkbox' && $(this).type == 'radio' )
       e.preventDefault();
