@@ -281,6 +281,36 @@ class DocumentsPreseizures{
       this.refresh_view(id); 
     });
   }
+
+  insert_new_entry(element, preseizure_id){
+    let data = { id: preseizure_id, account: element.find('.account input').val(), entry_type_1: element.find('.entry #type_1').val(), entry_type_2: element.find('.entry #type_2').val() }
+
+    let params =  {
+                    'url': `/preseizures/new_entry`,
+                    type: 'POST',
+                    'data': data,
+                    'dataType': 'json'
+                  }
+
+    this.applicationJS.sendRequest(params).then((e)=>{
+      this.refresh_view(preseizure_id);
+    });
+  }
+
+  remove_entry(preseizure_id, account_id, entry_id){
+    let data = { id: preseizure_id, account: account_id, entry: entry_id }
+
+    let params =  {
+                    'url': `/preseizures/remove_entry`,
+                    type: 'POST',
+                    'data': data,
+                    'dataType': 'json'
+                  }
+
+    this.applicationJS.sendRequest(params).then((e)=>{
+      this.refresh_view(preseizure_id);
+    });
+  }
 }
 
 jQuery(function() {
@@ -297,4 +327,7 @@ jQuery(function() {
     $('#date-preseizure, #deadline-date-preseizure').asDateRange({ defaultBlank: true, singleDatePicker: true, locale: { format: 'YYYY-MM-DD' }});
   });
   $('#edit_preseizures.modal #preseizures_edit').unbind('click').bind('click', function(e){ main.update_preseizures(); });
+
+  AppListenTo('new_entry', (e)=>{ main.insert_new_entry(e.detail.elt, e.detail.preseizure_id) });
+  AppListenTo('remove_entry', (e)=>{ main.remove_entry(e.detail.preseizure_id, e.detail.account_id, e.detail.entry_id) });
 });
