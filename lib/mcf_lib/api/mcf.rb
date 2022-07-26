@@ -40,14 +40,14 @@ module McfLib
           remote_path.slice!("#{remote_storage}/")
 
           #IMPORTANT-WORKAROUND : Mcf upload doesn't support faraday request
-          @response = send_typhoeus_request('https://uploadservice.mycompanyfiles.fr/api/idocus/Upload', {  accessToken: @access_token,
-                                                                                                            attributeName:  "Storage",
-                                                                                                            attributeValue: remote_storage,
-                                                                                                            sendMail:    'false',
-                                                                                                            force:       force.to_s,
-                                                                                                            pathFile:    remote_path,
-                                                                                                            file:        File.open(file_path, 'r')
-                                                                                                          })
+          @response = send_curl_request('https://uploadservice.mycompanyfiles.fr/api/idocus/Upload',  { 'AccessToken' => @access_token,
+                                                                                                        'AttributeName' =>  "Storage",
+                                                                                                        'AttributeValue' => remote_storage,
+                                                                                                        'sendMail' =>    'false',
+                                                                                                        'force' =>       force.to_s,
+                                                                                                        'pathFile' =>    remote_path,
+                                                                                                        'file' =>        File.open(file_path, 'r')
+                                                                                                      })
           data_response = handle_response
         end
 
@@ -55,14 +55,16 @@ module McfLib
           remote_storage = file_paths.first.split("/")[0]
           file_paths = file_paths.map { |path| path.sub("#{remote_storage}/", "") }
 
-          @response = send_request('https://uploadservice.mycompanyfiles.fr/api/idocus/VerifyFile', {
-                                                                                                      AccessToken:    @access_token,
-                                                                                                      AttributeName:  "Storage",
-                                                                                                      AttributeValue: remote_storage,
-                                                                                                      ListPath:       file_paths
-                                                                                                    })
+          @response = send_curl_request('https://uploadservice.mycompanyfiles.fr/api/idocus/VerifyFile', {
+                                                                                                            'AccessToken' =>    @access_token,
+                                                                                                            'AttributeName' =>  "Storage",
+                                                                                                            'AttributeValue' => remote_storage,
+                                                                                                            'ListPath' =>       file_paths
+                                                                                                          })
 
-          if @response.status.to_i == 200
+          status = @response&.code.presence || @response&.status.presence
+
+          if status.to_i == 200
             if @response.body.match(/(access token doesn't exist|argument missing AccessToken)/i)
               raise Errors::Unauthorized
             else
@@ -73,7 +75,7 @@ module McfLib
                 { path: File.join(remote_storage, info['Path']), md5: info['Md5'] }
               end
             end
-          elsif @response.status.to_i == 0
+          elsif status.to_i == 0
             []
           else
             raise Errors::Unknown.new("#{@response.status} / verif=> #{@response.body}")
@@ -93,13 +95,17 @@ module McfLib
           status = @response&.code.presence || @response&.status.presence
 
           if status.to_i == 200
-            data = JSON.parse(@response.body)
-            if data['Status'] == 600 || data['CodeError'] == 600
-              data
-            elsif data['Message'].match(/(access token doesn't exist|argument missing AccessToken)/i)
-              raise Errors::Unauthorized
+            if @response.body.present?
+              data = JSON.parse(@response.body)
+              if data['Status'] == 600 || data['CodeError'] == 600
+                data
+              elsif data['Message'].match(/(access token doesn't exist|argument missing AccessToken)/i)
+                raise Errors::Unauthorized
+              else
+                raise Errors::Unknown.new("#{status} / response=> #{data.to_s}")
+              end
             else
-              raise Errors::Unknown.new("#{status} / response=> #{data.to_s}")
+              ''
             end
           else
             error_mess = status
@@ -136,8 +142,8 @@ module McfLib
             response.status = 200
             response.body = `curl -X POST #{uri} -H 'Content-Type: application/json' -d '#{params.to_json}'`
           rescue => e
-            resonse.code   = 500
-            resonse.status = 500
+            response.code   = 500
+            response.status = 500
           end
 
           response
