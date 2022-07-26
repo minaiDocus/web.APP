@@ -6,9 +6,9 @@
   = f.input :conterpart_account, label: 'Compte de contrepartie par défaut'
   = f.input :code
 
-  - if @organization.code == 'IDO'
+  - if @organization.code == 'IDOC'
     .mb-3.form-group.string.required
-      = label_tag 'accounting_plan_item[conterpart_accounts][]', 'Compte de charges associés par catégorie'
+      = label_tag 'accounting_plan_item[conterpart_accounts][]', 'Comptes associés par catégorie'
       .select-container.no-padding.w-100
       = select_tag 'accounting_plan_item[conterpart_accounts][]', options_for_select(@conterpart_accounts, @accounting_plan_item.conterpart_accounts.map(&:id)), include_blank: false,  class: 'w-100 searchable-option-list', multiple: true
 

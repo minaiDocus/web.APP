@@ -232,27 +232,14 @@
           %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
         .modal-body
           .account-item
-            .row
-              .col-sm-6
-                %input#conterpart-kind.conterpart-kind{ type: 'hidden', value: 'provider' }
-                %input.conterpart-accounts-list{ type: 'hidden', value: accounts_list_organization_customer_conterpart_account_path(@organization, @customer, 'type') }
-                %input.conterpart-edition{ type: 'hidden', value: edit_organization_customer_conterpart_account_path(@organization, @customer) }
-                %input.conterpart-deletion{ type: 'hidden', value: delete_organization_customer_conterpart_account_path(@organization, @customer) }
-                .account-item-selector-container.pt-2
-                  %select.account-item-selector.w-100{ name: "account-item-selector" }
-              .col-sm-6
-                .float-end
-                  - idocus_params = param_encode({ name: 'ca.delete-conterpart-account', datas: { type: 'single' } })
-                  %button.btn.mt-1.btn-secondary.delete-conterpart-account.as_idocus_emit{ type: :button, idocus: idocus_params } Supprimer la selection
-                  - idocus_params = param_encode({ name: 'ca.new-conterpart-account' })
-                  %button.btn.mt-1.btn-secondary.new-conterpart-account.as_idocus_emit{ type: :button, idocus: idocus_params } Nouveau
-                  - idocus_params = param_encode({ name: 'ca.delete-conterpart-account', datas: { type: 'all' } })
-                  %button.btn.mt-1.btn-danger.delete-conterpart-account.as_idocus_emit{ type: :button, idocus: idocus_params } Supprimer tout
-
+            %input#conterpart-kind.conterpart-kind{ type: 'hidden', value: 'provider' }
+            %input.conterpart-accounts-list{ type: 'hidden', value: accounts_list_organization_customer_conterpart_account_path(@organization, @customer, 'type') }
+            %input.conterpart-show{ type: 'hidden', value: organization_customer_conterpart_account_path(@organization, @customer) }
+            %input.conterpart-edition{ type: 'hidden', value: edit_organization_customer_conterpart_account_path(@organization, @customer) }
+            %input.conterpart-deletion{ type: 'hidden', value: delete_organization_customer_conterpart_account_path(@organization, @customer) }
+            %input.conterpart-add-from-customer{ type: 'hidden', value: select_from_customer_organization_customer_conterpart_account_path(@organization, @customer) }
           .conterpart-body-form
         .modal-footer
-          - idocus_params = param_encode({ url: "#conterpart_accounts", method: 'POST', form: { id: 'conterpart_account_form', dump_action: true }, after_send: 'ca.refresh_accounts_list' })
-          %button.btn.btn-primary.as_idocus_ajax{ type: :button, idocus: idocus_params } Enregistrer
 
   - if @params_fec.present?
     #import_dialog.modal.fade.in
@@ -262,4 +249,4 @@
             %h3 Paramétrage import FEC
           = render :partial => "/accounting_plans/main/dialog_box", locals: { organization: @organization, customer: @customer, params_fec: @params_fec }
 
-  = javascript_include_tag 'front/accounting_plans/assets/javascripts/main'  
+  = javascript_include_tag 'front/accounting_plans/assets/javascripts/main'
