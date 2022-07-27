@@ -96,7 +96,7 @@ class Setups::MainController < OrganizationController
       elsif step == 'order_paper_set'
         if @customer.is_package?('mail_active') && (@customer.orders.paper_sets.empty? || @customer.orders.paper_sets.pending.first)
           result = 'order_paper_set'
-        elsif @customer.is_dematbox_authorized && (@customer.orders.dematboxes.empty? || @customer.orders.dematboxes.pending.first)
+        elsif @customer.my_package.try(:scan_active) && (@customer.orders.dematboxes.empty? || @customer.orders.dematboxes.pending.first)
           result = 'order_dematbox'
         elsif @customer.is_package?('bank_active')
           result = 'retrievers'
@@ -104,7 +104,7 @@ class Setups::MainController < OrganizationController
           result = 'ged'
         end
       elsif step == 'order_dematbox'
-        if @customer.is_dematbox_authorized && (@customer.orders.dematboxes.empty? || @customer.orders.dematboxes.pending.first)
+        if @customer.my_package.try(:scan_active) && (@customer.orders.dematboxes.empty? || @customer.orders.dematboxes.pending.first)
           result = 'order_dematbox'
         elsif @customer.is_package?('bank_active')
           result = 'retrievers'

@@ -1,4 +1,4 @@
-- if @user.is_dematbox_authorized
+- if @user.my_package.try(:scan_active)
   #idocus_box
     %h3 iDocus'Box
     .mb-2

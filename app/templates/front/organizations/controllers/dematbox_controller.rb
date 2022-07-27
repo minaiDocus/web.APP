@@ -28,7 +28,7 @@ class Organizations::DematboxController < OrganizationController
   private
 
   def verify_access
-    unless @customer.is_dematbox_authorized
+    unless @customer.my_package.try(:scan_active)
       flash[:success] = t('authorization.unessessary_rights')
 
       redirect_to organization_customer_path(@organization, @customer)

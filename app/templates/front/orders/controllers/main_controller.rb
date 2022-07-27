@@ -120,7 +120,7 @@ class Orders::MainController < CustomerController
     authorized = true
     authorized = false unless @user.leader? || @user.manage_customers
     authorized = false unless @customer.active?
-    unless @customer.is_package?('mail_active') || @customer.is_dematbox_authorized
+    unless @customer.is_package?('mail_active') || @customer.my_package.try(:scan_active)
       authorized = false
     end
 
@@ -128,7 +128,7 @@ class Orders::MainController < CustomerController
       if !params[:order].present?
         authorized = false
       else
-        if params[:order][:type].in?(['dematbox', nil]) && !@customer.is_dematbox_authorized
+        if params[:order][:type].in?(['dematbox', nil]) && !@customer.my_package.try(:scan_active)
           authorized = false
         end
 

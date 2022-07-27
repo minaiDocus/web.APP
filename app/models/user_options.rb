@@ -58,7 +58,7 @@ class UserOptions < ApplicationRecord
   def active_summary
     list = []
     list += %w(last_scans last_uploads) if user.is_prescriber || is_upload_authorized
-    list << 'last_dematbox_scans' if user.is_prescriber || user.is_dematbox_authorized
+    list << 'last_dematbox_scans' if user.is_prescriber || user.my_package.try(:scan_active)
     list << 'last_retrieved' if user.is_prescriber || is_retriever_authorized
     list
   end

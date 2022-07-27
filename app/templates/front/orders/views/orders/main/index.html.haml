@@ -49,7 +49,7 @@
 
     .form-group.no-margin
       .w-100.text-end
-        - if @customer.is_dematbox_authorized
+        - if @customer.my_package.try(:scan_active)
           = link_to "Commander un/des scanner(s) iDocus'box", "#", class: 'btn btn-dark bold new_edit_order_url', link: new_organization_customer_order_path(@organization, @customer, order: { type: 'dematbox' })
         - if @customer.is_package?('mail_active') || @customer.is_package?('digitize_active')
           - if CustomUtils.is_manual_paper_set_order?(@organization)

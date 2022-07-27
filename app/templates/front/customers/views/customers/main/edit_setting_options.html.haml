@@ -11,7 +11,7 @@
         - if @user.is_admin
           .select-container.no-padding.w-100.hide
             = f.input :auth_prev_period_until_month, as: :integer, input_html: { min: 0, max: 2 }, hint: '0 = actuel, 1 = le mois suivant, 2 = dans 2 mois'
-      - if @customer.is_dematbox_authorized
+      - if @customer.my_package.try(:scan_active)
         - if @customer.dematbox.try(:is_configured)
           %h4.margin1bottom Liste des services
           - if @customer.dematbox.try(:services).try(:any?)

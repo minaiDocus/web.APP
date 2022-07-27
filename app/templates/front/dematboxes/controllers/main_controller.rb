@@ -22,7 +22,7 @@ class Dematboxes::MainController < FrontController
   private
 
   def verify_access
-    unless @user.is_dematbox_authorized
+    unless @user.my_package.try(:scan_active)
       flash[:error] = t('authorization.unessessary_rights')
       redirect_to profiles_path
     end
