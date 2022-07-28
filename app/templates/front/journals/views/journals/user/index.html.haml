@@ -108,7 +108,7 @@
                 = link_to '(Activer la pré-saisie comptable)', edit_organization_customer_subscription_path(@organization, @customer), class: 'no-style'
         .col-md-6.text-end.notif-booktype
           %span= "#{@customer.account_book_types.count}/#{@customer.my_package.try(:journal_size).to_i} journaux comptables utilisés"
-          - if @customer.my_package.try(:journal_size).to_i < 10
+          - if @customer.my_package.try(:journal_size).to_i < 15
             %i.text-muted
               = link_to '(Augmenter le total autorisé de journaux comptables)', edit_organization_customer_subscription_path(@organization, @customer), class: 'no-style'
 

@@ -51,6 +51,8 @@ class Journal::AssignDefault
 
   def available_slot
     # @user.options.max_number_of_journals - @user.account_book_types.size
+    return 15 if @user.organization.specific_mission
+
     (@user.my_package.try(:journal_size).to_i || 5) - @user.account_book_types.size
   end
 

@@ -14,7 +14,7 @@
         Rappel: il est nécessaire de créer vos journaux comptables afin de créer les chemises correspondantes lors de la commande de votre kit.
         %br
         %br
-      - if @customer.my_package.try(:journal_size).to_i == @journals.size
+      - if !@customer.organization.specific_mission && @customer.my_package.try(:journal_size).to_i == @journals.size
         Si vous souhaitez ajouter un journal comptable, merci de terminer la création par étape du dossier et d’ajouter un nouveau journal dans l’onglet forfait puis journaux comptables.
         %br
         %br
