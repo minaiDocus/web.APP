@@ -127,10 +127,42 @@ class BillingMod::BillingToXls
 
       next if _period > Time.now.strftime('%Y%m').to_i
 
-      @customers    = User.where(id: @customers_ids).active_at(_date_end).order(code: :asc)
+      @customers    = User.where(id: @customers_ids).active_at(_date_end).order(organization_id: :asc, code: :asc)
       all_billings  = BillingMod::Billing.of_period(_period).where(owner_id: @customers_ids, owner_type: 'User')
 
+      last_org     = nil
+      last_invoice = nil
+
       @customers.each do |user|
+        if last_org != user.organization
+          last_org     = user.organization
+          last_invoice = nil
+
+          if last_org
+            last_invoice = last_org.invoices.of_period(_period).first
+
+            if last_invoice || _period == CustomUtils.period_of(Time.now)
+              last_org.billings.of_period(_period).each do |billing|
+                data = []
+                data << last_org.try(:name) if @with_organization_info
+
+                data +=   [
+                            month_ind,
+                            @year,
+                            last_org.code,
+                            last_org.name,
+                            billing.title,
+                            '',
+                            format_price(billing.price)
+                          ]
+                @list << data
+              end
+            end
+          end
+        end
+
+        next if !last_invoice && _period != CustomUtils.period_of(Time.now)
+
         billings  = all_billings.to_a.extract!{|bl| bl.owner_id == user.id}
 
         next if billings.size == 0 
