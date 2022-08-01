@@ -74,7 +74,8 @@
 
       - price_in_cents_w_vat  = (price_in_cents_wo_vat * vat_ratio).round
 
-    - if price_in_cents_w_vat > 0
+    - current_period = CustomUtils.period_of(Time.now)
+    - if price_in_cents_w_vat > 0 && (invoice.present? || current_period == period_time)
       %div
         = "#{format_price_00(price_in_cents_wo_vat)} €"
         %span.df_symbol HT
