@@ -230,7 +230,7 @@
         .modal-header
           %h5.modal-title.bold Gestion des comptes associés par catégorie
           %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
-        .modal-body
+        .modal-body.back-grey
           .account-item
             %input#conterpart-kind.conterpart-kind{ type: 'hidden', value: 'provider' }
             %input.conterpart-accounts-list{ type: 'hidden', value: accounts_list_organization_customer_conterpart_account_path(@organization, @customer, 'type') }
