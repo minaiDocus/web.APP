@@ -76,10 +76,10 @@ class ConterpartAccount {
     });
   }
 
-  fetch_account(id, kind){
+  fetch_account(id, action_kind){
     let self = this;
     let url   = $('input.conterpart-edition').val();
-    let param = `?kind=${this.type}`;
+    let param = `?kind=${this.type}&action_kind=${action_kind}`;
     if(id > 0)
       param = param + `&id=${id}`;
 
@@ -164,12 +164,12 @@ jQuery(function() {
     conterpart_account.fetch_account(parseInt(value[0]), 'conterpart_account');
   });
 
-  // AppListenTo('ca.select-third-part', (e)=>{
-  //   let elem  = e.detail.obj;
-  //   let value = elem.val();
+  AppListenTo('ca.select-third-part', (e)=>{
+    let elem  = e.detail.obj;
+    let value = elem.val();
 
-  //   conterpart_account.get_account_infos(value[0], 'third_part');
-  // });
+    conterpart_account.fetch_account(parseInt(value[0]), 'third_part');
+  });
 
   AppListenTo('window.application_auto_rebind', (e)=>{
     $('button.manage-conterpart-accounts').unbind('click.manage-conterpart-accounts').bind('click.manage-conterpart-accounts', function(e){

@@ -44,7 +44,11 @@ class AccountingPlans::ConterpartAccountController < CustomerController
         third_party_assigned = account.accounting_plan_items
         third_party_list     = AccountingPlanItem.where(id: third_party_ids)
 
-        to_assign = (third_party_assigned + third_party_list).uniq
+        if params[:action_kind].to_s == 'add'
+          to_assign = (third_party_assigned + third_party_list).uniq
+        else
+          to_assign = third_party_list
+        end
 
         account.update(accounting_plan_items: to_assign)
       end
@@ -58,39 +62,67 @@ class AccountingPlans::ConterpartAccountController < CustomerController
   end
 
   def edit
-    @conterpart_account      = @customer.conterpart_accounts.where(id: params[:id].to_i).first || ConterpartAccount.new
-    @conterpart_account.kind = params[:kind].presence || 'provider'
+    if params[:action_kind] == 'third_part'
+      if params[:kind] == 'customer'
+        _accounts    = @customer.accounting_plan.active_customers
+        _conterparts = @customer.conterpart_accounts.customer
+      else
+        _accounts    = @customer.accounting_plan.active_providers
+        _conterparts = @customer.conterpart_accounts.provider
+      end
 
-    if params[:kind] == 'customer'
-      accounting_plan_items   = @customer.accounting_plan.active_customers
+      @account = _accounts.where(id: params[:id].to_i).first
+      @conterpart_accounts = _conterparts.map{|account| ["#{account.name} - #{account.number}", account.id] }
+
+      render partial: 'edit_third_part'
     else
-      accounting_plan_items   = @customer.accounting_plan.active_providers
-    end
+      @conterpart_account      = @customer.conterpart_accounts.where(id: params[:id].to_i).first || ConterpartAccount.new
+      @conterpart_account.kind = params[:kind].presence || 'provider'
 
-    @accounting_plan_items = accounting_plan_items.map{ |account| ["#{account.third_party_name} - #{account.third_party_account}", account.id] }
-    
-    render partial: 'edit_conterpart'
+      if params[:kind] == 'customer'
+        accounting_plan_items   = @customer.accounting_plan.active_customers
+      else
+        accounting_plan_items   = @customer.accounting_plan.active_providers
+      end
+
+      @accounting_plan_items = accounting_plan_items.map{ |account| ["#{account.third_party_name} - #{account.third_party_account}", account.id] }
+      
+      render partial: 'edit_conterpart'
+    end
   end
 
   def update
-    @conterpart_account = @customer.conterpart_accounts.where(id: params[:conterpart_account][:id].to_i).first || ConterpartAccount.new
+    if params[:edit] == 'third_part'
+      @account   = @customer.accounting_plan.active_customers.where(id: params[:accounting_plan_item][:id].to_i).first
+      @account ||= @customer.accounting_plan.active_providers.where(id: params[:accounting_plan_item][:id].to_i).first
 
-    @conterpart_account.user            = @customer
-    @conterpart_account.accounting_plan = @customer.accounting_plan
+      @conterpart_accounts = @customer.conterpart_accounts.where(id: params[:accounting_plan_items].try(:[], :conterpart_accounts))
 
-    @conterpart_account.assign_attributes(_params)
-
-    if @conterpart_account.save
-      if @conterpart_account.is_default
-        _kind = @conterpart_account.kind == 'customer' ? 'active_customers' : 'active_providers'
-        @conterpart_account.update( accounting_plan_items: @customer.accounting_plan.send(_kind.to_sym) )
+      if @account.update(conterpart_accounts: @conterpart_accounts)
+        json_flash[:success] = 'Mise à jour effectué'
       else
-        @conterpart_account.update( accounting_plan_items: AccountingPlanItem.where(id: params[:conterpart_account].try(:[], :accounting_plan_items)) )
+        json_flash[:error] = errors_to_list(@account)
       end
-
-      json_flash[:success] = 'Mise à jour effectué.'
     else
-      json_flash[:error]  = errors_to_list(@conterpart_account)
+      @conterpart_account = @customer.conterpart_accounts.where(id: params[:conterpart_account][:id].to_i).first || ConterpartAccount.new
+
+      @conterpart_account.user            = @customer
+      @conterpart_account.accounting_plan = @customer.accounting_plan
+
+      @conterpart_account.assign_attributes(_params)
+
+      if @conterpart_account.save
+        if @conterpart_account.is_default
+          _kind = @conterpart_account.kind == 'customer' ? 'active_customers' : 'active_providers'
+          @conterpart_account.update( accounting_plan_items: @customer.accounting_plan.send(_kind.to_sym) )
+        else
+          @conterpart_account.update( accounting_plan_items: AccountingPlanItem.where(id: params[:conterpart_account].try(:[], :accounting_plan_items)) )
+        end
+
+        json_flash[:success] = 'Mise à jour effectué.'
+      else
+        json_flash[:error]  = errors_to_list(@conterpart_account)
+      end
     end
 
     render json: { json_flash: json_flash }, status: 200
@@ -108,7 +140,7 @@ class AccountingPlans::ConterpartAccountController < CustomerController
   def select_from_customer
     selected_customer = User.find params[:selected_id]
 
-    if params[:type] == 'customer'
+    if params[:kind] == 'customer'
       _accounts = selected_customer.conterpart_accounts.customer
     else
       _accounts = selected_customer.conterpart_accounts.provider
