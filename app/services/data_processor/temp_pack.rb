@@ -6,7 +6,7 @@ class DataProcessor::TempPack
     UniqueJobs.for "PublishDocument-#{temp_pack_name}", 2.hours, 2 do
       temp_pack = TempPack.find_by_name temp_pack_name
       execute(temp_pack)
-      # sleep(60) #lock multi temp pack processing to avoid access disk overload
+      sleep(40) #lock multi temp pack processing to avoid access disk overload
     end
   end
 
