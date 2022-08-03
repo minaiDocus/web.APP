@@ -21,10 +21,10 @@ class AccountingPlans::MainController < CustomerController
   def edit
     if params[:type] == 'provider'
       @accounting_plan_item = @accounting_plan.providers.find(params[:accounting_id])
-      @conterpart_accounts  = @accounting_plan.conterpart_accounts.provider.map{|account| ["#{account.name} - #{account.number}", account.id] }
+      @conterpart_accounts  = @accounting_plan.conterpart_accounts.provider.order(:name).map{|account| ["#{account.name} - #{account.number}", account.id] }
     else
       @accounting_plan_item = @accounting_plan.customers.find(params[:accounting_id])
-      @conterpart_accounts  = @accounting_plan.conterpart_accounts.customer.map{|account| ["#{account.name} - #{account.number}", account.id] }
+      @conterpart_accounts  = @accounting_plan.conterpart_accounts.customer.order(:name).map{|account| ["#{account.name} - #{account.number}", account.id] }
     end
 
     render partial: 'edit'
@@ -75,9 +75,9 @@ class AccountingPlans::MainController < CustomerController
     @accounting_plan_item = AccountingPlanItem.new
 
     if params[:type] == 'provider'
-      @conterpart_accounts  = @accounting_plan.conterpart_accounts.provider.map{|account| ["#{account.name} - #{account.number}", account.id] }
+      @conterpart_accounts  = @accounting_plan.conterpart_accounts.provider.order(:name).map{|account| ["#{account.name} - #{account.number}", account.id] }
     else
-      @conterpart_accounts  = @accounting_plan.conterpart_accounts.customer.map{|account| ["#{account.name} - #{account.number}", account.id] }
+      @conterpart_accounts  = @accounting_plan.conterpart_accounts.customer.order(:name).map{|account| ["#{account.name} - #{account.number}", account.id] }
     end
     
     render partial: 'edit'

@@ -6,9 +6,9 @@ class AccountingPlans::ConterpartAccountController < CustomerController
 
   def show
     if params[:kind] == 'customer'
-      accounting_plan_items   = @customer.accounting_plan.active_customers
+      accounting_plan_items   = @customer.accounting_plan.active_customers.order(:third_party_name)
     else
-      accounting_plan_items   = @customer.accounting_plan.active_providers
+      accounting_plan_items   = @customer.accounting_plan.active_providers.order(:third_party_name)
     end
 
     @accounting_plan_items = accounting_plan_items.map{ |account| ["#{account.third_party_name} - #{account.third_party_account}", account.id] }
@@ -18,9 +18,9 @@ class AccountingPlans::ConterpartAccountController < CustomerController
 
   def accounts_list
     if params[:type] == 'customer'
-      _accounts = @customer.conterpart_accounts.customer
+      _accounts = @customer.conterpart_accounts.customer.order(:name)
     else
-      _accounts = @customer.conterpart_accounts.provider
+      _accounts = @customer.conterpart_accounts.provider.order(:name)
     end
 
     accounts = _accounts.map{|account| { id: account.id, name: account.name, number: account.number } }
@@ -33,8 +33,8 @@ class AccountingPlans::ConterpartAccountController < CustomerController
     third_party_ids         = params[:conterpart_account].try(:[], :accounting_plan_items) || []
 
     error_mess = ''
-    error_mess = 'Veuillez sélectionner une catégorie' if conterpart_accounts_ids.empty?
-    error_mess = 'Veuillez sélectionner un compte de tiers' if third_party_ids.empty?
+    error_mess = 'Veuillez sélectionner une/des catégorie(s)' if conterpart_accounts_ids.empty?
+    error_mess = 'Veuillez sélectionner un/des compte(s) de tiers' if third_party_ids.empty?
 
     if error_mess.blank?
       conterpart_accounts_ids.each do |account_id|
@@ -44,16 +44,12 @@ class AccountingPlans::ConterpartAccountController < CustomerController
         third_party_assigned = account.accounting_plan_items
         third_party_list     = AccountingPlanItem.where(id: third_party_ids)
 
-        if params[:action_kind].to_s == 'add'
-          to_assign = (third_party_assigned + third_party_list).uniq
-        else
-          to_assign = third_party_list
-        end
+        to_assign = (third_party_assigned + third_party_list).uniq
 
         account.update(accounting_plan_items: to_assign)
       end
 
-      json_flash[:success] = 'Mise à jour effectué.'
+      json_flash[:success] = 'Mise à jour effectuée.'
     else
       json_flash[:error] = error_mess
     end
@@ -80,9 +76,9 @@ class AccountingPlans::ConterpartAccountController < CustomerController
       @conterpart_account.kind = params[:kind].presence || 'provider'
 
       if params[:kind] == 'customer'
-        accounting_plan_items   = @customer.accounting_plan.active_customers
+        accounting_plan_items   = @customer.accounting_plan.active_customers.order(:third_party_name)
       else
-        accounting_plan_items   = @customer.accounting_plan.active_providers
+        accounting_plan_items   = @customer.accounting_plan.active_providers.order(:third_party_name)
       end
 
       @accounting_plan_items = accounting_plan_items.map{ |account| ["#{account.third_party_name} - #{account.third_party_account}", account.id] }
@@ -99,7 +95,7 @@ class AccountingPlans::ConterpartAccountController < CustomerController
       @conterpart_accounts = @customer.conterpart_accounts.where(id: params[:accounting_plan_items].try(:[], :conterpart_accounts))
 
       if @account.update(conterpart_accounts: @conterpart_accounts)
-        json_flash[:success] = 'Mise à jour effectué'
+        json_flash[:success] = 'Mise à jour effectuée'
       else
         json_flash[:error] = errors_to_list(@account)
       end
@@ -119,7 +115,7 @@ class AccountingPlans::ConterpartAccountController < CustomerController
           @conterpart_account.update( accounting_plan_items: AccountingPlanItem.where(id: params[:conterpart_account].try(:[], :accounting_plan_items)) )
         end
 
-        json_flash[:success] = 'Mise à jour effectué.'
+        json_flash[:success] = 'Mise à jour effectuée.'
       else
         json_flash[:error]  = errors_to_list(@conterpart_account)
       end
@@ -141,9 +137,9 @@ class AccountingPlans::ConterpartAccountController < CustomerController
     selected_customer = User.find params[:selected_id]
 
     if params[:kind] == 'customer'
-      _accounts = selected_customer.conterpart_accounts.customer
+      _accounts = selected_customer.conterpart_accounts.customer.order(:name)
     else
-      _accounts = selected_customer.conterpart_accounts.provider
+      _accounts = selected_customer.conterpart_accounts.provider.order(:name)
     end
 
     accounts = _accounts.map{|account| { id: account.id, name: account.name, number: account.number } }
@@ -166,7 +162,7 @@ class AccountingPlans::ConterpartAccountController < CustomerController
     end
 
     if @customer.save
-      json_flash[:success] = 'Mise à jour effectué.'
+      json_flash[:success] = 'Mise à jour effectuée.'
     else
       json_flash[:error] = 'Action impossible, Veuillez reéssayer ultérieurement.'
     end

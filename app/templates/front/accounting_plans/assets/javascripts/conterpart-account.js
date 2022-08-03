@@ -32,7 +32,7 @@ class ConterpartAccount {
   delete_account(ids = []){
     if(ids.length < 0){ return false }
 
-    if(confirm('Etes vous sûr?')){
+    if(confirm('Etes vous sûr de vouloir supprimer les catégories séléctionnées?')){
       let self  = this;
       let url   = $('input.conterpart-deletion').val();
       let param = `?ids=${ids.join(',')}`;
