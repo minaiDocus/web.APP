@@ -33,8 +33,10 @@ class DataProcessor::TempPack
   end
 
   def execute
+    return false if @temp_pack.document_delivery_id.to_i > 0
     return false if @temp_documents.empty? || !@user
 
+    @temp_pack.update(document_delivery_id: 1)
     @original_doc_merged = true
     sleep_counter = 5
 
@@ -86,6 +88,8 @@ class DataProcessor::TempPack
 
       Pack.delay(queue: :low).store_archive_of(pack.id)
     end
+
+    @temp_pack.update(document_delivery_id: nil)
   end
 
   private
