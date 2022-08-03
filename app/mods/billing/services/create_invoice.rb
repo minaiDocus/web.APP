@@ -105,14 +105,13 @@ module BillingMod
       recalculate_billing = @force || @is_update || @period == CustomUtils.period_of(Time.now) || !@invoice
 
       @customers.each do |customer|
-        package = customer.package_of(@period)
-
-        next if not package
-
         if recalculate_billing
           BillingMod::PrepareUserBilling.new(customer, @period).execute
         end
 
+        package = customer.package_of(@period)
+
+        next if not package
         next if not customer.can_be_billed_at?(@period)
 
         if @version == 2
