@@ -2,8 +2,9 @@
   .col-md-8
     %h4.bold= t('reporting.top_delay_sending_document')
   .col-md-4.text-end
-    %button.btn.btn-default.export_xls#latest_sending_docs{ title: "Export XLS" }
-      %img{ src: '/assets/application/icon-xls.png'}
+    - if %w(ACC).include?@report_organization.code
+      %button.btn.btn-default.export_xls#latest_sending_docs{ title: "Export XLS" }
+        %img{ src: '/assets/application/icon-xls.png'}
 .mb-3
 %table.table.table-striped
   %thead

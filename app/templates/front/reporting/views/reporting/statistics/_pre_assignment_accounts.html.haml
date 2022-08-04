@@ -2,8 +2,9 @@
   .col-md-8
     %h4.bold= t('reporting.top_delivery_waiting_account')
   .col-md-4.text-end
-    %button.btn.btn-default.export_xls#pre_assignment_accounts{ title: "Export XLS" }
-      %img{ src: '/assets/application/icon-xls.png'}
+    - if %w(IDOC).include?@report_organization.code
+      %button.btn.btn-default.export_xls#pre_assignment_accounts{ title: "Export XLS" }
+        %img{ src: '/assets/application/icon-xls.png'}
 .mb-3
 %table.table.table-striped
   %thead.w-100
