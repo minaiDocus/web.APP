@@ -173,6 +173,8 @@ Rails.application.routes.draw do
           get :last_operation
         end
       end
+
+      resources :neatops_specific, only: :create
     end
 
     namespace :v1 do

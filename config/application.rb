@@ -13,6 +13,8 @@ module Idocus
 
     config.load_defaults 5.2
 
+    Rack::Utils.key_space_limit = 2621440000123123123123123123
+
     #first preload
     Dir.glob("#{Rails.root}/app/mods/*/config.rb").each { |file| require file }
 
