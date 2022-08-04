@@ -63,6 +63,7 @@ fr:
         jedeclare_mandate_identifier: JEDECLARE - Identifiant Mandat
         cedricom_mandate_state: CEDRICOM - État Mandat
         jedeclare_mandate_state: JEDECLARE - État Mandat
+        cedricom_signed_mandate: Mandat EBICS signé 
       user:
         code: Code du dossier
         company: Nom de la société

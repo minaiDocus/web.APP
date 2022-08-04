@@ -23,6 +23,10 @@ module Cedricom
             @bank_account.update(cedricom_mandate_identifier: mandate["reference"], cedricom_mandate_state: mandate["etat"])
             
             fetch_pdf_mandate(mandate["reference"])
+
+            true
+          else 
+            false
           end
         end
       end

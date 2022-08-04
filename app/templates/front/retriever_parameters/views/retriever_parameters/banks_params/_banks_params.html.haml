@@ -32,8 +32,12 @@
                 %td
                   - if bank_account.cedricom_mandate_identifier
                     = bank_account.cedricom_mandate_state
+                  - elsif bank_account.type_name == "checking" && bank_account.user.organization.cedricom_configured? && bank_account.user.cedricom_configured?
+                    = link_to 'Créer un mandat EBICS', retriever_create_cedricom_mandate_path(bank_account.id), class: 'green-label-dark'
+                  - elsif bank_account.type_name == "checking" && bank_account.user.organization.cedricom_configured?
+                    = link_to 'Créer un mandat EBICS', '#', class: 'green-label-dark', data: { confirm: "La configuration du dossier est incomplète : vous devez spécifier l'adresser complète, les informations légales et les coordonnées du client dans le paramétrage du dossier" }
                   - else
-                    = "Non créé"
+                    = link_to 'Créer un mandat EBICS', '#', class: 'green-label-dark', data: { confirm: "Votre cabinet n'est pas configuré pour créer des mandats EBICS, veuillez vous rapprocher du service commercial" }
                 %td
                   - if bank_account.cedricom_mandate_identifier
                     = bank_account.ebics_enabled_starting

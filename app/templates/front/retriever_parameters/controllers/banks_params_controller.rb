@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class RetrieverParameters::BanksParamsController < RetrieverController
   before_action :verif_account
-  before_action :load_bank_account, only: %w[edit update bank_activation download_cedricom_mandate]
+  before_action :load_bank_account, only: %w[edit update bank_activation download_cedricom_mandate create_cedricom_mandate]
   prepend_view_path('app/templates/front/retriever_parameters/views')
 
   def index
@@ -29,7 +29,7 @@ class RetrieverParameters::BanksParamsController < RetrieverController
 
     if @bank_account.persisted?
       if @bank_account.ebics_enabled_starting
-        Cedricom::CreateMandate.new(@bank_account).execute
+        
       end
 
       success = true
@@ -56,10 +56,6 @@ class RetrieverParameters::BanksParamsController < RetrieverController
     if @bank_account.save
       if start_date_changed && @bank_account.start_date.present?
         @bank_account.operations.not_duplicated.where('is_locked = ? and is_coming = ? and date >= ?', true, false, @bank_account.start_date).update_all(is_locked: false)
-      end
-
-      if @bank_account.ebics_enabled_starting && !@bank_account.cedricom_mandate_identifier
-        Cedricom::CreateMandate.new(@bank_account).execute
       end
 
       PreAssignment::UpdateAccountNumbers.delay.execute(@bank_account.id.to_s, changes)
@@ -93,6 +89,16 @@ class RetrieverParameters::BanksParamsController < RetrieverController
     if @bank_account.cedricom_original_mandate.attached?
       send_data @bank_account.cedricom_original_mandate.download, filename: @bank_account.cedricom_original_mandate.filename.to_s, content_type: @bank_account.cedricom_original_mandate.content_type
     end
+  end
+
+  def create_cedricom_mandate
+    if Cedricom::CreateMandate.new(@bank_account).execute
+      flash[:success] = "Mandat créé avec succès"
+    else
+      flash[:error] = "Erreur technique, veuillez-vous rapprocher du support"
+    end
+
+    redirect_to retriever_parameters_path
   end
 
   private
