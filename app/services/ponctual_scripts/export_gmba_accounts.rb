@@ -8,7 +8,7 @@ class PonctualScripts::ExportGmbaAccounts < PonctualScripts::PonctualScript
   private
 
   def execute
-    date_range = ['2022-01-01 00:00:00', '2022-01-31 23:59:59']
+    date_range = ['2022-05-01 00:00:00', '2022-05-31 23:59:59']
 
     datas = []
 
@@ -101,7 +101,7 @@ class PonctualScripts::ExportGmbaAccounts < PonctualScripts::PonctualScript
       }
 
       begin
-        ErrorScriptMailer.error_notification(log_document, { attachements: [{name: "export_gmba_accounts_janvier.csv", file: File.read(file_path)}]} ).deliver
+        ErrorScriptMailer.error_notification(log_document, { attachements: [{name: "export_gmba_accounts_mai.csv", file: File.read(file_path)}]} ).deliver
       rescue
         ErrorScriptMailer.error_notification(log_document).deliver
       end
