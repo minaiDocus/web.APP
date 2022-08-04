@@ -1,0 +1,94 @@
+= stylesheet_link_tag 'front/documents_reloaded/assets/stylesheets/main'
+
+.container-fluid.main-content
+  .row
+    .col-md-10.derivationLeft
+      %h3.bold
+        %span.me-2 Mes Documents
+        %span.badge.badge-secondary.regular.datas_size= @pieces.total_count
+        - if @filters.present?
+          %span.filter-info.badge.bg-info.regular.datas_size.blink Filtre actif    
+    - if @user.still_active?
+      .col-md-2.derivationRight
+        %button.btn.btn-primary.add-document.w-100.semibold
+          %span.me-3= glyphicon('plus', { size: '12', color: '#FFFF'})
+          %span Ajouter des documents
+  .mb-4
+
+  .row
+    .col-md-2
+      = render partial: 'lefter'
+    .col-md-10
+      .row
+        .col-md-3
+          .row
+            .col-md-3.pt-2
+              .semibold Dossier
+            .col-md-9
+              - if accounts_options.size == (@options.try(:[], :owner_ids).try(:size) rescue 0)
+                = select_tag 'customer_document_filter', options_for_select(accounts_options), id: 'customer_document_filter', multiple: true
+              - else
+                = select_tag 'customer_document_filter', options_for_select(accounts_options, @options.try(:[], :owner_ids)), id: 'customer_document_filter', multiple: true
+        .col-md-3
+          .row
+            .col-md-3.pt-2
+              .semibold Journal
+            .col-md-9
+              = select_tag 'journal_document_filter', options_for_select(accounts_journaux, @options.try(:[], :journal)), id: 'journal_document_filter', multiple: true
+        .col-md-2
+          .row
+            .col-md-4.pt-2
+              .semibold Periode
+            .col-md-8
+              = select_tag 'journal_document_filter', options_for_select(period_list, @options.try(:[], :period)), id: 'period_document_filter', multiple: true
+        .col-md-3
+          .search-content
+            .row.no-margin
+              .col-md-1.no-padding.text-center.glass
+                = glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })
+              .col-md-11.no-padding.no-margin
+                %input#search_input{ name:'pack_name', placeholder: 'Recherche (contenu, dossier)', value: @options.try(:[], :text) }
+        .col-md-1
+          %button.btn.btn-light.more-filter.w-100.semibold
+            %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
+            %span Filtrer            
+      .box
+        .row
+          .col-md-12
+            %table.table.table-striped.list_customers#table_pieces            
+              %thead
+                %th Dossier / Ref pièce
+                %th Date
+                %th Tiers - Numéro de pièce
+                %th Montant TTC
+                %th Etat
+                %th.text-end Action
+              %tbody
+                - @pieces.each do |piece|                  
+                  %tr
+                    %td.pointer.show-detail{ title: 'Voir détail', data: { piece_id: piece.id }}
+                      .name= piece.name                                     
+                    %td
+                      %span.info= piece.created_at.strftime('%d/%m/%Y')                    
+                    %td FREENEWS
+                    %td 500 €
+                    %td= piece.pre_assignment_state
+                    %td.text-end.pointer.align-middle
+                      .action.sub_edit_delete.list-collaborators
+                        %span.glyph= glyphicon('ellipses', { size: '15', style: 'transform: rotate(90deg)'})
+                      .sub_menu.text-start.hide
+                        %ul.no-margin.no-padding.regular
+                          %li.edit.edit-customer
+                            %span.me-2= glyphicon('pencil', { size: 8})
+                            %span Edit
+                  %tr.hide{ class: "tr_piece_#{piece.id}" }
+                    %td{ colspan: 6 }
+                      .detail-piece
+                        = render partial: 'detail', locals: { piece: piece }  
+
+   
+
+            = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: documents_reloaded_path, target: '#table_pieces', total_pages: @pieces.total_pages, filter: 'form-customer-filter' }
+    
+= javascript_include_tag 'front/documents_reloaded/assets/javascripts/pieces'
+
