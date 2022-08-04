@@ -222,4 +222,23 @@ module JournalHelper
       accounts.map{ |acc| acc.account_book_types }.map{ |book| book.collect(&:name).compact }.flatten.uniq
     end
   end
+
+  def period_list
+    periods  = []
+    time_now = Time.now.strftime('%Y%m').to_i
+
+    2.times.each do |y|
+      year = y.year.ago.year
+
+      12.times.each do |m|
+        month      = m.month.ago.strftime('%m')
+
+        tmp_period = year.to_s + month.to_s
+
+        periods << tmp_period if tmp_period.to_i << time_now
+      end
+    end
+
+    periods
+  end
 end
