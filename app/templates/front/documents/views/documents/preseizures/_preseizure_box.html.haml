@@ -117,7 +117,8 @@
                     - else
                       &#45;
                   .col-md-1
-                    %span.remove=glyphicon('trash', { color: 'black', size: 8 })
+                    - if entry.account.type != 1
+                      %span.remove=glyphicon('trash', { color: 'black', size: 11 })
 
               - if @user.has_collaborator_action?
                 %input.entry_id_hidden{type: :hidden, value: entry.id}
