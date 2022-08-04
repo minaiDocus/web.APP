@@ -2,6 +2,7 @@ class Organization < ApplicationRecord
   include BillingMod::OrganizationModule
 
   attr_encrypted :cedricom_password, random_iv: true
+  attr_encrypted :jedeclare_password, random_iv: true
 
   validates :authd_prev_period,            inclusion: { in: 0..36 }
   validates :auth_prev_period_until_day,   inclusion: { in: 0..28 }

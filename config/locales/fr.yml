@@ -618,6 +618,8 @@ fr:
           organization: Organisation
           jefacture_account_id: Identifiant Jefacture (SIREN)
           default_banking_provider: Fournisseur d'opérations bancaires
+          cedricom_account_identifier: CEDRICOM - ID API dossier
+          jedeclare_account_identifier: JEDECLARE - ID API dossier
       user_options:
         zero: 0 option
         one: 1 option
@@ -913,6 +915,12 @@ fr:
           authd_prev_period: Nombre de périodes antérieures accessibles au téléversement des pièces par l'utilisateur
           auth_prev_period_until_day: "Jour de clôture de la période précédente dans la période en cours (exemple : 11 février pour clôturer janvier)"
           auth_prev_period_until_month: Mois de clôture de la période précédente (Uniquement pour le trimestriel et l'annuel)
+          cedricom_name: CEGID Relations Bancaires - Nom technique du cabinet
+          cedricom_user: CEGID Relations Bancaires - Identifiant
+          cedricom_password: CEGID Relations Bancaires - Mot de passe
+          jedeclare_account_identifier: JEDECLARE - ID API Cabinet
+          jedeclare_user: JEDECLARE - Identifiant
+          jedeclare_password: JEDECLARE - Mot de passe
       group:
         zero: 0 groupe
         one: 1 groupe
@@ -1064,6 +1072,10 @@ fr:
           accounting_number: Compte de trésorerie
           temporary_account: Compte d’attente
           start_date: Date historique
+          cedricom_mandate_identifier: CEDRICOM - Identifiant Mandat
+          jedeclare_mandate_identifier: JEDECLARE - Identifiant Mandat
+          cedricom_mandate_state: CEDRICOM - État Mandat
+          jedeclare_mandate_state: JEDECLARE - État Mandat
       vat_account:
         zero: 0 compte de TVA
         one: 1 compta de TVA
