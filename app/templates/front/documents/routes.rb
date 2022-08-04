@@ -34,6 +34,9 @@ Rails.application.routes.draw do
     get 'preseizures/edit_multiple_preseizures/:ids', to: 'preseizures#edit_multiple_preseizures', as: 'preseizures_edit_multiple_preseizures'
     post 'preseizures/update_multiple_preseizures', to: 'preseizures#update_multiple_preseizures', as: 'preseizures_update_multiple_preseizures'
 
+    post 'preseizures/new_entry', to: 'preseizures#new_entry', as: 'preseizures_new_entry'
+    post 'preseizures/remove_entry', to: 'preseizures#remove_entry', as: 'preseizures_remove_entry'
+
     post 'pieces/update_analytics', to: 'pieces#update_analytics', as: 'update_pieces_analytics'
     get 'account/documents/pieces/:id/download/(:style)', to: 'pieces#get_piece_file', as: 'get_piece_file'
     get 'account/documents/temp_documents/:id/download/(:style)', to: 'pieces#get_temp_document_file', as: 'get_temp_document_file'

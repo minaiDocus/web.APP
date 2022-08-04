@@ -124,6 +124,43 @@ class Documents::PreseizuresController < Documents::AbaseController
     end   
   end
 
+  def new_entry
+    account            = Pack::Report::Preseizure::Account.new
+    account.type       = params[:type_account]
+    account.number     = params[:account]
+    account.preseizure = @preseizure
+
+    if not account.save
+      json_flash[:error] = errors_to_list account
+    end
+
+    entry            = Pack::Report::Preseizure::Entry.new
+    entry.type       = params[:entry_type_1].present? ? 1 : 2
+    entry.amount     = params[:entry_type_1].present? ? params[:entry_type_1].sub(',', '.').to_f : params[:entry_type_2].sub(',', '.').to_f
+    entry.account    = account.reload
+    entry.preseizure = @preseizure
+
+    if not entry.save
+      json_flash[:error] = errors_to_list entry
+    end
+
+    if not json_flash[:error]
+      json_flash[:success] = 'Ajouter avec succès'
+    end
+
+    render json: { json_flash: json_flash }, status: 200
+  end
+
+  def remove_entry
+    account = Pack::Report::Preseizure::Account.find params[:account]
+    entry   = Pack::Report::Preseizure::Entry.find params[:entry]
+
+    account.destroy
+    entry.destroy
+
+    render json: { success: true }, status: 200
+  end
+
   private
 
   def update_multiple_preseizures_params

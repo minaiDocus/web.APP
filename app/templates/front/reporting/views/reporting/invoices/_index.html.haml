@@ -188,7 +188,8 @@
                       %a.do-show{ href: "#" }
                         - pos = []
                         - pos << "pos_#{row}_#{(index + 1 + 1)}"
-                        - class_not_billed  = (user.total_billing_of(_period_index).to_f == 0 && (user.my_package.name != 'ido_premium')) ? 'not_billed' : ''
+                        - class_not_billed  = (user.total_billing_of(_period_index).to_f == 0 && (user.my_package&.name != 'ido_premium')) ? 'not_billed' : ''
+
                         .period.clearfix{ id: billing.try(:id).to_i, user_id: user.id, duration: 1, month: p_ind, row: row, class: "#{class_not_billed} #{pos.join(' ')}", type: 'billing' }
                           - if data_flow.try(:pieces).to_i == 0 && data_flow.try(:operations).to_i == 0
                             .delivery_state.back_red
