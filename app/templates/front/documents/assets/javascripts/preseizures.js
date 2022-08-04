@@ -283,7 +283,7 @@ class DocumentsPreseizures{
   }
 
   insert_new_entry(element, preseizure_id){
-    let data = { id: preseizure_id, account: element.find('.account input').val(), entry_type_1: element.find('.entry #type_1').val(), entry_type_2: element.find('.entry #type_2').val() }
+    let data = { id: preseizure_id, type_account: element.find('.type_account').val() , account: element.find('.account input').val(), entry_type_1: element.find('.entry #type_1').val(), entry_type_2: element.find('.entry #type_2').val() }
 
     let params =  {
                     'url': `/preseizures/new_entry`,

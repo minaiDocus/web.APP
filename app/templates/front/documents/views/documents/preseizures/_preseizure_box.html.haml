@@ -219,14 +219,21 @@
 %template
   %tr.new-entrie-content
     %td.account
-      %span.acount-number
-      .content_account
-      .edit_account
-        %input.w-100.edit_account_number
-        .suggestion_account_list.hide
+      .row
+        .col-md-3
+          .select-container.no-padding.w-100
+            %select.type_account
+              %option{ value: 2 } Montant HT
+              %option{ value: 3 } TVA
+        .col-md-9
+          %span.acount-number
+          .content_account
+          .edit_account
+            %input.w-100.edit_account_number{ placeholder: "N° de compte "}
+            .suggestion_account_list.hide
     %td.entry
       %span.entry-1
-      %input.w-100#type_1
+      %input.w-100#type_1{ placeholder: "Débit "}
     %td.entry
       %span.entry-2
-      %input.w-100#type_2
+      %input.w-100#type_2{ placeholder: "Crédit "}

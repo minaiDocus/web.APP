@@ -126,7 +126,7 @@ class Documents::PreseizuresController < Documents::AbaseController
 
   def new_entry
     account            = Pack::Report::Preseizure::Account.new
-    account.type       = 3
+    account.type       = params[:type_account]
     account.number     = params[:account]
     account.preseizure = @preseizure
 
