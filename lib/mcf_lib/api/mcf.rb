@@ -39,15 +39,17 @@ module McfLib
           remote_storage = remote_path.split("/")[0]
           remote_path.slice!("#{remote_storage}/")
 
-          #IMPORTANT-WORKAROUND : Mcf upload doesn't support faraday request
-          @response = send_curl_request('https://uploadservice.mycompanyfiles.fr/api/idocus/Upload',  { 'AccessToken' => @access_token,
-                                                                                                        'AttributeName' =>  "Storage",
-                                                                                                        'AttributeValue' => remote_storage,
-                                                                                                        'sendMail' =>    'false',
-                                                                                                        'force' =>       force.to_s,
-                                                                                                        'pathFile' =>    remote_path,
-                                                                                                        'file' =>        File.open(file_path, 'r')
-                                                                                                      })
+          params =  {   'accessToken' => @access_token,
+                        'attributeName' =>  "Storage",
+                        'attributeValue' => remote_storage,
+                        'sendMail' =>    'false',
+                        'force' =>       force.to_s,
+                        'pathFile' =>    remote_path,
+                        'file' =>        File.open(file_path, 'r')
+                    }
+
+          #IMPORTANT-WORKAROUND : Mcf upload supports only typhoeus request
+          @response = send_typhoeus_request('https://uploadservice.mycompanyfiles.fr/api/idocus/Upload', params)
           data_response = handle_response
         end
 
@@ -117,7 +119,7 @@ module McfLib
 
         def send_request(uri, params)
           @response = connection(uri).post do |request|
-            request.headers = { 'accept'=> 'json', 'content-type' => 'application/json' }
+            request.headers = { 'Accept'=> 'json', 'Content-Type' => 'application/json' }
             request.options.timeout = 180
             request.body = params.to_query #params.to_json not supported
           end
@@ -126,8 +128,9 @@ module McfLib
         def send_typhoeus_request(uri, params)
           @request = Typhoeus::Request.new(
             uri,
+            followlocation: true,
             method:  :post,
-            headers: { accept: :json, 'content-type' => 'application/json' },
+            headers: { 'Accept' => '*/*', 'Content-Type' => 'multipart/form-data' },
             timeout: 180,
             body: params
           )
@@ -138,9 +141,11 @@ module McfLib
           response = FakeObject.new
 
           begin
+            ccurl = "curl -L -X POST '#{uri}' -H 'Content-Type: application/json' -d '#{params.to_json}'"
+
             response.code   = 200
             response.status = 200
-            response.body = `curl -X POST #{uri} -H 'Content-Type: application/json' -d '#{params.to_json}'`
+            response.body = `#{ccurl}`
           rescue => e
             response.code   = 500
             response.status = 500
