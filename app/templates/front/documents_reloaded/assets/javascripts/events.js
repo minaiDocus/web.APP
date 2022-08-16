@@ -19,7 +19,9 @@ function bind_all_events(){
   });
 
   $('#customer_document_filter').unbind('change.mix_journal').bind('change.mix_journal', function(e){
-    let lists        = JSON.parse( $('.user_and_journals').val() );
+    if ($('.user_and_journals').length > 0){
+      let lists = JSON.parse( $('.user_and_journals').val() );
+    }
     let current_code = $(this).val();
 
     if(current_code !== null && current_code !== undefined && current_code.length > 0){

@@ -11,13 +11,15 @@ class DocumentsReloaded::PiecesController < Documents::AbaseController
 
   # GET /documents_reloaded
   def index
+    @render_upload = request.xhr? ? false : true
+
     @options[:page]     = params[:page]
     @options[:per_page] =  20
 
     @options[:ids] = @options[:piece_ids] if @options[:piece_ids].present?
 
-    user    = accounts.first
-    @pieces = user.packs.first.pieces.search(@options[:text], @options).distinct.order(created_at: :desc).page(@options[:page]).per(@options[:per_page])
+    @user_static = User.find_by_code 'ACC%0266'
+    @pieces = @user_static.packs.first.pieces.search(@options[:text], @options).distinct.order(created_at: :desc).page(@options[:page]).per(@options[:per_page])
   end
 
   # GET /documents_reloaded/:id
