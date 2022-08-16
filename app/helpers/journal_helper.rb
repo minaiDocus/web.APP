@@ -235,10 +235,10 @@ module JournalHelper
 
         tmp_period = year.to_s + month.to_s
 
-        periods << tmp_period if tmp_period.to_i << time_now
+        periods << tmp_period if tmp_period.to_i <= time_now
       end
     end
 
-    periods
+    periods.sort.reverse
   end
 end
