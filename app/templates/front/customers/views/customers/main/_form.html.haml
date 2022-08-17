@@ -35,7 +35,8 @@
                     = f.input :jefacture_account_id, label: false, input_html: { class: 'jefacture_account_id_field', placeholder: "ex : T4534638846" }
                 = f.label :code, :class => "required semibold"
                 .select-container.no-padding.w-100
-                  = f.input :code, hint: "Doit impérativement commencer par : #{@organization.code}%, 15 caractères alphanumériques maximum, code cabinet inclus.", label: false, input_html: { class: 'code_field required_field', placeholder: "IDOC%CLIENT10", disabled: ('disabled' if action_name.in? %w(edit update)) }, :required => true
+                  - to_disable = @customer.try(:persisted?)? true : false
+                  = f.input :code, hint: "Doit impérativement commencer par : #{@organization.code}%, 15 caractères alphanumériques maximum, code cabinet inclus.", label: false, input_html: { class: 'code_field required_field', placeholder: "IDOC%CLIENT10", disabled: ('disabled' if to_disable) }, :required => true
                 = f.label :first_name, :class => "semibold"
                 .select-container.no-padding.w-100
                   = f.input :first_name, label: false, input_html: { class: 'first_name_field' }
