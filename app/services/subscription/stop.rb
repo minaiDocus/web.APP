@@ -29,7 +29,7 @@ class Subscription::Stop
 
     if @close_now
       @user.inactive_at = Time.now
-      @user.billings.destroy_all
+      @user.billings.of_period(CustomUtils.period_of(Time.now)).destroy_all
     else
       @user.inactive_at = 1.month.after.beginning_of_month
     end
