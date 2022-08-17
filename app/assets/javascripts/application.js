@@ -546,6 +546,7 @@ class ApplicationJS {
       }
       else
       {
+        console.log('Url not defined ... No request launched');
         success();
       }
     });
