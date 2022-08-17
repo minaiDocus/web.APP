@@ -248,6 +248,10 @@ function bind_all_events(){
     $("#PdfViewerDialog").modal('show');
   });
 
+  $('.icon-actions .t-info').mouseover(function(){ 
+    $('#t-content-' + $(this).data('id')).show('').css('z-index', '900');
+  }).mouseout(function(){ $('#t-content-' + $(this).data('id')).hide(); });
+
   $('.content-list-pieces-deleted li.get-pieces-deleted').unbind('click').bind('click', function(e){
     $("#DeletedPiece .modal-body .view-content").html($(this).data('content'));
 
