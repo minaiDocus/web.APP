@@ -158,7 +158,7 @@ module DocumentsHelper
 
     contents += content_tag :h4, 'Historique des ajouts de pages'
     contents += content_tag :div, custom_table_for(columns, pack.content_historic)
-    content_tag :div, contents, style: 'width: 100%'
+    content_tag :div, contents.html_safe, style: 'width: 100%'
   end
 
   def html_report_info(report)

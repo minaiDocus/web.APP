@@ -1,10 +1,14 @@
 .container-fluid.main-content
   .row
-    .col-md-10.derivationLeft
+    .col-md-9.derivationLeft
       %h3.bold
         %span.me-2 Mes Documents        
         - if @filters.present?
           %span.filter-info.badge.bg-info.regular.datas_size.blink Filtre actif
+    .col-md-1
+      %button.btn.btn-light.more-filter.w-100.semibold
+        %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
+        %span Filtrer
     - if @user.still_active?
       .col-md-2.derivationRight
         %button.btn.btn-primary.add-document.w-100.semibold
@@ -65,9 +69,8 @@
               .col-md-11.no-padding.no-margin
                 %input#search_input{ name:'pack_name', placeholder: 'Recherche (contenu, dossier)', value: @options.try(:[], :text) }
         .col-md-1
-          %button.btn.btn-light.more-filter.w-100.semibold
-            %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
-            %span Filtrer
+          %button.btn.btn-dark.more-filter.w-100.semibold
+            %span.semibold Valider
       .box.derivationLeft
         .row
           .col-md-12
