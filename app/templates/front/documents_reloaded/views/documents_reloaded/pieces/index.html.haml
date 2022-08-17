@@ -1,6 +1,6 @@
 = stylesheet_link_tag 'front/documents_reloaded/assets/stylesheets/main'
 
-- if !@user_static.collaborator?
+- if @user_static.collaborator?
   = render partial: 'for_collaborator'
 - else
   = render partial: 'for_customer'

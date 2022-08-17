@@ -327,8 +327,11 @@ class Pack::Piece < ApplicationRecord
   end
 
 
-  def journal
-    name.split[1]
+  def journal(name_only = true)
+    _name = name.split[1]
+
+    return _name if name_only
+    self.user.account_book_types.where(name: _name).first
   end
 
   def is_deleted?

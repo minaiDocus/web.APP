@@ -238,4 +238,12 @@ jQuery(function() {
 
   AppListenTo('documents_export_preseizures', (e)=>{ main.fetch_export_options($(e.detail.obj)); });
   $('#preseizures_export.modal #export_button').unbind('click').bind('click', function(){ main.launch_export(); });
+
+  AppListenTo('journal.before_rubric_addition', (e)=>{
+    let customer_id = $('#customer_document').val();
+    let form        = $('#edit-rubric-form');
+    let base_uri    = form.attr('base_uri');
+
+    $('#edit-rubric-form').attr('action', `${base_uri.replace('cst_id', customer_id)}`);
+  })
 });
