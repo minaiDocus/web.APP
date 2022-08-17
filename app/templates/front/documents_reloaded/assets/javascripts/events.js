@@ -113,6 +113,11 @@ function bind_all_events(){
     $('#add-document').modal("show");    
   });
 
+  $('.add-rubric').unbind('click').bind('click',function(e) {
+    e.stopPropagation();
+    $('#AddRubric').modal("show");    
+  });
+
   $('span.edit-third-party').unbind('click').bind('click',function(e) {
     e.stopPropagation();
 

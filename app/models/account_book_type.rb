@@ -32,7 +32,6 @@ class AccountBookType < ApplicationRecord
   belongs_to :organization, optional: true
   belongs_to :analytic_reference, inverse_of: :journals, optional: true
 
-
   accepts_nested_attributes_for :expense_categories, allow_destroy: true
 
   validate  :format_of_name
@@ -45,7 +44,7 @@ class AccountBookType < ApplicationRecord
   validates_presence_of :name
   validates_presence_of :currency
   validates_presence_of :description
-  validates_presence_of :vat_accounts,         if: proc { |j| j.is_pre_assignment_processable? && j.try(:user).try(:options).try(:is_taxable) }
+  validates_presence_of :vat_accounts,        if: proc { |j| j.is_pre_assignment_processable? && j.try(:user).try(:options).try(:is_taxable) }
   validates_presence_of :anomaly_account,     if: proc { |j| j.is_pre_assignment_processable? }
   validates_presence_of :meta_account_number, if: proc { |j| j.is_pre_assignment_processable? }
   validates_presence_of :meta_charge_account, if: proc { |j| j.is_pre_assignment_processable? }

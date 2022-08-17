@@ -164,6 +164,7 @@ fr:
         account_number: Numéro de compte
       account_book_type:
         name: Code journal iDocus
+        label: Libelé
         pseudonym: Code journal comptable
         use_pseudonym_for_import: Code journal comptable pour l'import
         description: Nom du journal comptable à mettre entre parenthèses ()

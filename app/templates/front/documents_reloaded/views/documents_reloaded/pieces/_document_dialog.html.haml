@@ -17,7 +17,6 @@
         .view-content
           %iframe.src-piece{ src: "", style: "height: 700px" }
 
-
 #DeletedPiece.modal.fade.in{'aria-hidden' => 'true', :role => 'dialog', :tabindex => '-1'}
   .modal-dialog{ style: 'min-width: 1180px;' }
     .modal-content
@@ -58,3 +57,15 @@
         .mb-4
         .view-content
       .modal-footer
+
+#AddRubric.modal.fade.in{'aria-hidden' => 'true', :role => 'dialog', :tabindex => '-1'}
+  .modal-dialog{ style: 'min-width: 1180px;' }
+    .modal-content
+      .modal-header
+        %h5.modal-title.bold Ajouter une rubrique
+        %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+      .modal-body
+        = render file: Rails.root.join('app/templates/front/journals/views/journals/main/_rubric_form.html.haml')
+      .modal-footer
+        - ajx_params = param_encode({ url: '#url', form: { id: 'edit-rubric-form', dump_action: true, validate: true }, before_send: 'journal.before_rubric_addition' })
+        %button.btn.btn-primary.as_idocus_ajax{ idocus: ajx_params } Valider

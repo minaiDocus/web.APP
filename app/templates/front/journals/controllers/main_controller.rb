@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Journals::MainController < OrganizationController
+  before_action :init_vars, only: %w[add_rubric]
   before_action :load_customer, except: %w[index]
   before_action :verify_rights
   before_action :verify_if_customer_is_active
@@ -185,7 +186,33 @@ class Journals::MainController < OrganizationController
     render json: { json_flash: json_flash }, status: 200
   end
 
+  def add_rubric
+    json_flash = {} ##TODO: global var json_flash is not working here, don't know why?
+
+    if is_max_number_reached?
+      json_flash[:error] = 'Vous avez atteint le nombre maximum de rubrique'
+    else
+      @journal = Journal::Handling.new({ owner: @customer, params: rubric_params, current_user: current_user, request: request }).insert_ged
+      if @journal && !@journal.errors.messages.present?
+        json_flash[:success] = "Rubrique #{ @journal.label } créé avec succès"
+      else
+        if @journal
+          json_flash[:error] = errors_to_list @journal
+        else
+          json_flash[:error] = 'Impossible de créer la rubrique, Veuillez réessayer ultérieurement.'
+        end
+      end
+    end
+
+    render json: { json_flash: json_flash }, status: 200
+  end
+
   private
+
+  def init_vars
+    @customer     = User.find params[:customer_id]
+    @organization = @customer.organization
+  end
 
   def verify_rights
     is_ok = false
@@ -209,6 +236,7 @@ class Journals::MainController < OrganizationController
 
   def journal_params
     attrs = %i[
+      label
       pseudonym
       use_pseudonym_for_import
       description
@@ -245,6 +273,14 @@ class Journals::MainController < OrganizationController
     end
 
     attributes[:jefacture_enabled] = attributes[:jefacture_enabled].to_s.gsub('1', 'true').gsub('0', 'false') if is_preassignment_authorized?
+    attributes
+  end
+
+  def rubric_params
+    attrs = %i[label]
+
+    attributes = params.require(:account_book_type).permit(*attrs)
+
     attributes
   end
 
