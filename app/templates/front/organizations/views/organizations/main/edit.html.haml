@@ -111,6 +111,14 @@
         .form-group
           .select-container.no-padding.w-100
             = f.input :invoice_mails, label_html: { class: 'semibold custom-label-field' }, input_html: { class: '  custom-input-field', placeholder: "Ex : jean.dupont@mail.com, marie.dupuis@mail.com" }, hint: 'Doit être séparé par une virgule (",") si plusieurs'
+        .form-group
+          .select-container.no-padding.w-100
+            = f.input :jedeclare_user, input_html: { class: '', placeholder: "ex : cabinet@cabinet.com" }
+
+        .form-group
+          .select-container.no-padding.w-100
+            = f.input :jedeclare_password, input_html: { class: '', placeholder: "" }
+            
         - if current_user.is_admin
           - unless @organization.specific_mission
             .form-group
@@ -148,14 +156,6 @@
         .form-group
           .select-container.no-padding.w-100
             = f.input :cedricom_password, input_html: { class: '', placeholder: "" }
-
-      .form-group
-        .select-container.no-padding.w-100
-          = f.input :jedeclare_user, input_html: { class: '', placeholder: "ex : cabinet@cabinet.com" }
-
-      .form-group
-        .select-container.no-padding.w-100
-          = f.input :jedeclare_password, input_html: { class: '', placeholder: "" }
 
 
       - elsif !@organization.specific_mission
