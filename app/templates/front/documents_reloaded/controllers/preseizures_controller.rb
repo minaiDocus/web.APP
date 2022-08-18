@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-class Documents::PreseizuresController < Documents::AbaseController
+class DocumentsReloaded::PreseizuresController < Documents::AbaseController
   skip_before_action :verify_if_active, only: %w[index show]
   before_action :load_preseizure, except: %w[accounts_list update_multiple_preseizures edit_multiple_preseizures]
 
-  prepend_view_path('app/templates/front/documents/views')
+  prepend_view_path('app/templates/front/documents_reloaded/views')
 
   def index
     render partial: 'preseizure_box', locals: { preseizure: @preseizure, piece: @preseizure.try(:piece), operation: @preseizure.try(:operation) }
@@ -13,10 +13,10 @@ class Documents::PreseizuresController < Documents::AbaseController
   def show
     if params[:view] == 'by_type'
       if @preseizure.operation
-        render file: Rails.root.join('app/templates/front/documents/views/documents/operations/_operation_box.html.haml'), locals: { preseizure: @preseizure, animation: 'toLeft' }
+        render file: Rails.root.join('app/templates/front/documents_reloaded/views/documents/operations/_operation_box.html.haml'), locals: { preseizure: @preseizure, animation: 'toLeft' }
       else
         @pieces = [@preseizure.piece]
-        render file: Rails.root.join('app/templates/front/documents/views/documents/pieces/_piece_box.html.haml')
+        render file: Rails.root.join('app/templates/front/documents_reloaded/views/documents/pieces/_piece_box.html.haml')
       end
     else
       render partial: 'show'
