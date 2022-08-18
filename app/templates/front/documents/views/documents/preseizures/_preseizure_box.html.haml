@@ -76,6 +76,7 @@
           %th.no-border.table-three-column N° de compte
           %th.no-border.table-three-column Débit
           %th.no-border.table-three-column Crédit
+          %th.no-border.table-three-column
         %tbody.semibold
           - entries.each_with_index do |entry, index|
             %tr{ class: (index % 2 == 0)? '' : 'striped' }
@@ -102,28 +103,24 @@
                 - else
                   &#45;
               %td.entry{title: "#{(@user.has_collaborator_action? && entry.type == 2) ? 'Cliquez pour modifier' : ''}", class: "#{irregular_debit_credit_somme ? 'color_red' : '' }"}
-                .row
-                  .col-md-11
-                    - if entry.type == 2
-                      .content_amount
-                        - if @user.has_collaborator_action?
-                          %span.debit_or_credit.hide.float-start.pointer= glyphicon('arrow-thick-left', {size: 20})
-                        .content_amount_number
-                          %span.ms-2= entry.amount.to_f
-                      - if @user.has_collaborator_action?
-                        .edit_amount.hide
-                          %input.margin0{type: :text, placeholder: entry.amount, value: entry.amount}
-                          %input.entry_type{type: :hidden, value: entry.type}
-                    - else
-                      &#45;
-                  .col-md-1
-                    - if entry.account.type != 1
-                      %span.remove=glyphicon('trash', { color: 'black', size: 11 })
+                - if entry.type == 2
+                  .content_amount
+                    - if @user.has_collaborator_action?
+                      %span.debit_or_credit.hide.float-start.pointer= glyphicon('arrow-thick-left', {size: 20})
+                    .content_amount_number
+                      %span.ms-2= entry.amount.to_f
+                  - if @user.has_collaborator_action?
+                    .edit_amount.hide
+                      %input.margin0{type: :text, placeholder: entry.amount, value: entry.amount}
+                      %input.entry_type{type: :hidden, value: entry.type}
+                - else
+                  &#45;
+              %td
+                - if piece && entry.account.type != 1
+                  %span.remove=glyphicon('trash', { color: 'black', size: 11 })
 
               - if @user.has_collaborator_action?
                 %input.entry_id_hidden{type: :hidden, value: entry.id}
-
-
 
       - if piece
         .mt-2
@@ -220,12 +217,12 @@
   %tr.new-entrie-content
     %td.account
       .row
-        .col-md-3
+        .col-md-4
           .select-container.no-padding.w-100
-            %select.type_account
+            %select.type_account.w-100
               %option{ value: 2 } Montant HT
               %option{ value: 3 } TVA
-        .col-md-9
+        .col-md-8
           %span.acount-number
           .content_account
           .edit_account
