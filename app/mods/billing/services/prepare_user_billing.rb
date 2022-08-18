@@ -20,18 +20,24 @@ class BillingMod::PrepareUserBilling
     @user.billings.of_period(@period).update_all(is_frozen: true)
 
     if @user.can_be_billed_at?(@period)
-      create_package_billing
-      create_remaining_month_billing
-      create_options_billing
-      create_orders_billing
-      create_extra_orders_billing
-      create_excess_billing
+      if @user.code == 'NEAT%ARAPL'
+        create_neatops_billing
+        create_orders_billing
+        create_extra_orders_billing
+      else
+        create_package_billing
+        create_remaining_month_billing
+        create_options_billing
+        create_orders_billing
+        create_extra_orders_billing
+        create_excess_billing
 
-      create_bank_excess_billing
-      create_journals_excess_billing
+        create_bank_excess_billing
+        create_journals_excess_billing
 
-      create_resit_operations_billing
-      create_digitize_billing
+        create_resit_operations_billing
+        create_digitize_billing
+      end
     else
       create_null_billing
     end
@@ -40,6 +46,12 @@ class BillingMod::PrepareUserBilling
   end
 
   private
+
+  def create_neatops_billing
+    price = @data_flow.pieces * 2
+
+    create_billing({ name: @package.name, title: BillingMod::Configuration::LISTS[@package.name.to_sym][:label], price: price })
+  end
 
   def create_null_billing
     create_billing({ name: 'unbilled', title: 'Aucun document', price: 0 })
