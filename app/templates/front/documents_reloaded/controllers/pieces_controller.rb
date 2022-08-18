@@ -4,43 +4,41 @@ class DocumentsReloaded::PiecesController < Documents::AbaseController
   skip_before_action :login_user!, only: %w[download get_piece_file get_temp_document_file handle_bad_url temp_document get_tag already_exist_document], raise: false
   skip_before_action :verify_if_active, only: %w[index show]
   before_action :set_is_document
-  before_action :load_pack, only: %w[show]
   before_action :load_params, only: %w[index show]
 
   prepend_view_path('app/templates/front/documents_reloaded/views')
 
   # GET /documents_reloaded
   def index
-    @render_upload = request.xhr? ? false : true
+    if @user.collaborator?
+      @collaborator_view  = true
+      @options[:page]     = params[:page]
+      @options[:per_page] = params[:per_page]
 
-    @options[:page]     = params[:page]
-    @options[:per_page] =  20
+      @options[:ids] = @options[:piece_ids] if @options[:piece_ids].present?
 
-    @options[:ids] = @options[:piece_ids] if @options[:piece_ids].present?
+      # TODO : optimize created_at search
+      #@options[:piece_created_at] = @options[:by_piece].try(:[], :created_at)
+      #@options[:piece_created_at_operation] = @options[:by_piece].try(:[], :created_at_operation)
 
-    @user_static = User.find_by_code 'ACC%0266'
-    @pieces = @user_static.packs.first.pieces.search(@options[:text], @options).distinct.order(created_at: :desc).page(@options[:page]).per(@options[:per_page])
+      ids = accounts.collect(&:id)
+      @pieces_deleted = Pack::Piece.unscoped.where(user_id: ids).deleted.presence || []
+
+      @pieces = Pack::Piece.where(user_id: ids).search(@options[:text], @options).distinct.order(created_at: :desc).page(@options[:page]).per(@options[:per_page])
+
+      # @temp_pack      = TempPack.find_by_name(pack.name)
+       @temp_pack      = TempPack.find_by_name(@pieces.first.pack.name)
+       @temp_documents = @temp_pack.temp_documents.not_published
+    else
+      @collaborator_view = false
+    end
   end
 
   # GET /documents_reloaded/:id
   def show
-    @options[:page]     = params[:page]
-    @options[:per_page] =  8       #IMPORTANT: per_page option must be a multiple of 4 and > 8 (needed by grid type view)
+    @piece = Pack::Piece.find params[:id]
 
-    @options[:ids] = @options[:piece_ids] if @options[:piece_ids].present?
-
-    # TODO : optimize created_at search
-    #@options[:piece_created_at] = @options[:by_piece].try(:[], :created_at)
-    #@options[:piece_created_at_operation] = @options[:by_piece].try(:[], :created_at_operation)
-
-    pack = Pack.find(params[:id])
-
-    @pieces_deleted = Pack::Piece.unscoped.where(pack_id: params[:id]).deleted.presence || []
-
-    @pieces = @pack.pieces.search(@options[:text], @options).distinct.order(created_at: :desc).page(@options[:page]).per(@options[:per_page])
-
-    @temp_pack      = TempPack.find_by_name(pack.name)
-    @temp_documents = @temp_pack.temp_documents.not_published
+    render partial: 'detail'
   end
 
   def delete
@@ -178,12 +176,5 @@ class DocumentsReloaded::PiecesController < Documents::AbaseController
 
   def set_is_document
     @is_documents = true
-  end
-
-  def load_pack
-    @pack = Pack.where(id: params[:id]).first
-    @pack = nil if not account_ids.include? @pack.owner_id
-
-    redirect_to documents_path if not @pack
   end
 end
