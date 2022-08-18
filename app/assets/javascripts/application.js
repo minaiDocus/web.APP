@@ -409,8 +409,9 @@ class ApplicationJS {
       let appJS           = new ApplicationJS();
       let url             = idocus_params['url'];
       let confirm_message = idocus_params['confirm'];
+      let skip_ajax       = idocus_params['skip_ajax'] || false;
 
-      if( url && url != '#' )
+      if( !skip_ajax && url && url != '#' )
       {
         let type        = idocus_params['method'] || 'GET';
         let ajax_params = {
@@ -546,7 +547,11 @@ class ApplicationJS {
       }
       else
       {
-        console.log('Url not defined ... No request launched');
+        if(skip_ajax)
+          console.log("Ajax skipped");
+        else
+          console.log('Url not defined ... No request launched');
+
         success();
       }
     });

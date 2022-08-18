@@ -40,6 +40,7 @@ Attribut:
     events        => Event authorisé (triggered event), séparés par espace si plusieurs (ex: 'click change keyup')
     before_send   => Appel (AppEmit) sur le nom de l'évènement avant lancement ajax ( paramètre: { element: $(this), idocus_params: idocus_params } )
     after_send    => Appel (AppEmit) sur le nom de l'évènement après success ( paramètre: { element: $(this), response: e } )
+    skip_ajax     => Saute l'appel ajax de la requete (Defaut: false)
     form => form associé à la requete   
       id          => ID (html) d'une formulaire (form) à serialisé (ex: 'quelquechose')
       dump_action => (default false), récupère l'url (action) et methode du formulaire (form) et ecrase l'url et methode en paramètre

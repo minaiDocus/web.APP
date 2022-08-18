@@ -1,6 +1,7 @@
 //= require './main'
 //= require './tags'
 //= require './uploader'
+//= require './preseizures'
 
 class DocumentsReloadedPieces extends DocumentsReloadedMain{
   constructor(){
@@ -29,4 +30,16 @@ jQuery(function() {
 
   AppListenTo('document_customer_filter', (e)=>{ main.load_packs(true); });
   AppListenTo('filter_pack_badge', (e)=>{ main.load_packs(true); });
+
+  AppListenTo('document_reloaded.toggle_piece_detail', (e)=>{
+    let obj = e.detail.element;
+    let piece_id  = $(obj).attr('datas-piece-id');
+    let container = $(`.tr_piece_${piece_id}`);
+    
+    container.toggle('');
+
+    if( container.find('.preseizures_box').length > 0 ){
+      e.set_key('skip_ajax', true);
+    }
+  });
 });
