@@ -115,7 +115,16 @@ function bind_all_events(){
 
   $('.add-rubric').unbind('click').bind('click',function(e) {
     e.stopPropagation();
-    $('#AddRubric').modal("show");    
+    $(this).hide('');
+
+    $('li.input-add-rubric').show('');
+  });
+
+  $('.cancel-add-rubric').unbind('click').bind('click',function(e) {
+    e.stopPropagation();
+    $('.add-rubric').show('');
+
+    $('li.input-add-rubric').hide();
   });
 
   $('span.edit-third-party').unbind('click').bind('click',function(e) {
