@@ -3,7 +3,7 @@
     .col-md-10.derivationLeft
       %h3.bold
         %span.me-2 Mes Documents
-        %span.badge.badge-secondary.regular.datas_size= @pieces.total_count
+        %span.badge.badge-secondary.regular.datas_size= @temp_documents.total_count
         - if @filters.present?
           %span.filter-info.badge.bg-info.regular.datas_size.blink Filtre actif
     - if @user.still_active?
@@ -15,71 +15,28 @@
 
   .row
     .col-md-2
-      .mt-5
-      .lefter
-        %ul.principal
-          %li.direct_links{ data: { href: 'documents_reloaded' } }
-            %a{href: documents_reloaded_path }
-              %span.link_principal{class: (controller_name == 'pieces') ? 'active' : ''} Facture fournisseurs
-          %li.direct_links{ data: { href: 'pieces_errors' } }
-            %a{href: pieces_errors_path }
-              %span.link_principal{class: (controller_name == 'pieces_errors') ? 'active' : ''} Facture clients
-          %li.direct_links{ data: { href: 'pieces_errors' } }
-            %a{href: pieces_errors_path }
-              %span.link_principal{class: (controller_name == 'pieces_errors') ? 'active' : ''} Divers
-          %li.direct_links.add-rubric{ data: { href: 'pieces_errors' } }
-            %span.float-end{class: (controller_name == 'pieces_errors') ? 'active' : ''}= glyphicon('plus', { color: "#C1D837", size: 10})
-            %span.link_principal.green-label Ajouter une rubrique
-    .col-md-10
+    .col-md-3
       .row
-        .col-md-3
-          .row
-            .col-md-3.pt-2
-              .semibold Dossier
-            .col-md-9
-              = select_tag 'customer_document', options_for_select(accounts_options, @options.try(:[], :owner_ids)), id: 'customer_document', class: 'form-select'
-        .col-md-5
-        .col-md-3
-          .search-content
-            .row.no-margin
-              .col-md-1.no-padding.text-center.glass
-                = glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })
-              .col-md-11.no-padding.no-margin
-                %input#search_input{ name:'pack_name', placeholder: 'Recherche (contenu, dossier)', value: @options.try(:[], :text) }
-        .col-md-1
-          %button.btn.btn-light.more-filter.w-100.semibold
-            %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
-            %span Filtrer
-      .box.derivationLeft
-        .row
-          .col-md-12
-            %table.table.table-striped.list_customers#table_pieces
-              %thead
-                %th Nom du fichier
-                %th Date envoi
-                %th Libellé personnalisé
-                %th Etiquettes
-                %th.text-end Action
-              %tbody
-                - @pieces.each do |piece|
-                  %tr
-                    %td.pointer.show-detail{ title: 'Voir détail', data: { piece_id: piece.id }}
-                      .name.text-table-green= piece.temp_document.original_file_name.presence || piece.name
-                    %td
-                      %span.info= piece.created_at.strftime('%d/%m/%Y')
-                    - journal = piece.journal(false)
-                    %td= journal.try(:label).presence || journal.try(:name).presence || '-'
-                    %td
-                      - piece.get_tags.split('-').each do |tag|
-                        %span.badge.bg-dark= tag.strip
-                    %td.text-end.pointer.align-middle
-                      .action.sub_edit_delete.list-collaborators
-                        %span.glyph= glyphicon('ellipses', { size: '15', color: 'gba(26, 26, 26, 0.7)', style: 'transform: rotate(90deg)'})
-                      .sub_menu.text-start.hide
-                        %ul.no-margin.no-padding.regular
-                          %li.edit.edit-customer
-                            = link_to glyphicon('trash', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Supprimer', documents_reloaded_path
+        .col-md-3.pt-2
+          .semibold Dossier
+        .col-md-9
+          = select_tag 'customer_document_filter', options_for_select(file_upload_users_list.map{ |e| [e.short_info, e.code] }), id: 'customer_document_filter', class: 'form-select', multiple: true
+    .col-md-3
+    .col-md-3
+      .search-content
+        .row.no-margin
+          .col-md-1.no-padding.text-center.glass
+            = glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })
+          .col-md-11.no-padding.no-margin
+            %input#search_input{ name:'pack_name', placeholder: 'Recherche (contenu, dossier)', value: @options.try(:[], :text) }
+    .col-md-1
+      %button.btn.btn-light.more-filter.w-100.semibold
+        %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
+        %span Filtrer
 
-            = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: documents_reloaded_path, target: '#table_pieces', total_pages: @pieces.total_pages, filter: 'form-customer-filter' }
+  .customer-document-content
+    = render partial: 'body_customer' 
 
 = render partial: 'upload_dialog_customer' if @render_upload
+
+= javascript_include_tag 'front/documents_reloaded/assets/javascripts/customer'

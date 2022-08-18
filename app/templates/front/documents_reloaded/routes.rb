@@ -5,7 +5,7 @@ Rails.application.routes.draw do
     get 'documents_reloaded/:id', to: 'pieces#show', as: 'show_piece_detail'
     get 'preseizures_reloaded/infos', to: 'preseizures#index', as: 'preseizures_reloaded_infos'
   end
-  
+
   namespace :documents_reloaded do
     resource :upload, controller: 'uploads'
 
