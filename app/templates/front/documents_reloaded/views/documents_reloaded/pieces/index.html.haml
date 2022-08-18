@@ -1,5 +1,10 @@
 = stylesheet_link_tag 'front/documents_reloaded/assets/stylesheets/main'
 
+.box.hide
+  = link_to documents_path, target: "_blank", class: 'no-style' do   
+    %span.me-2= glyphicon('grid-two-up', {size: 13})
+    %span.black-label.semibold Affichage classique
+
 - if @collaborator_view
   = render partial: 'for_collaborator'
 - else

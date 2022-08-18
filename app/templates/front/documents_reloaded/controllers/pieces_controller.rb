@@ -12,25 +12,10 @@ class DocumentsReloaded::PiecesController < Documents::AbaseController
   def index
     if @user.collaborator?
       @collaborator_view  = true
-      @options[:page]     = params[:page]
-      @options[:per_page] = params[:per_page]
-
-      @options[:ids] = @options[:piece_ids] if @options[:piece_ids].present?
-
-      # TODO : optimize created_at search
-      #@options[:piece_created_at] = @options[:by_piece].try(:[], :created_at)
-      #@options[:piece_created_at_operation] = @options[:by_piece].try(:[], :created_at_operation)
-
-      ids = accounts.collect(&:id)
-      @pieces_deleted = Pack::Piece.unscoped.where(user_id: ids).deleted.presence || []
-
-      @pieces = Pack::Piece.where(user_id: ids).search(@options[:text], @options).distinct.order(created_at: :desc).page(@options[:page]).per(@options[:per_page])
-
-      # @temp_pack      = TempPack.find_by_name(pack.name)
-       @temp_pack      = TempPack.find_by_name(@pieces.first.pack.name)
-       @temp_documents = @temp_pack.temp_documents.not_published
+      index_collaborators      
     else
       @collaborator_view = false
+      index_customers
     end
   end
 
@@ -161,6 +146,37 @@ class DocumentsReloaded::PiecesController < Documents::AbaseController
     messages = PiecesAnalyticReferences.new(pieces, params[:analysis][:analytic]).update_analytics
 
     render json: { json_flash: { error: messages[:error_message], success: messages[:sending_message] } }, status: 200
+  end
+
+  def index_collaborators
+    @options[:page]     = params[:page]
+    @options[:per_page] = params[:per_page]
+
+    @options[:ids] = @options[:piece_ids] if @options[:piece_ids].present?
+
+    # TODO : optimize created_at search
+    #@options[:piece_created_at] = @options[:by_piece].try(:[], :created_at)
+    #@options[:piece_created_at_operation] = @options[:by_piece].try(:[], :created_at_operation)
+
+    ids = accounts.collect(&:id)
+    @pieces_deleted = Pack::Piece.unscoped.where(user_id: ids).deleted.presence || []
+
+    @pieces = Pack::Piece.where(user_id: ids).search(@options[:text], @options).distinct.order(created_at: :desc).page(@options[:page]).per(@options[:per_page])
+
+    # @temp_pack      = TempPack.find_by_name(pack.name)
+     @temp_pack      = TempPack.find_by_name(@pieces.first.pack.name)
+     @temp_documents = @temp_pack.temp_documents.not_published
+  end
+
+  def index_customers
+    @render_upload = request.xhr? ? false : true
+
+    @options[:page]     = params[:page]
+    @options[:per_page] =  20
+
+    user_ids = accounts.includes(:options, :ibiza, :subscription, organization: [:ibiza, :exact_online, :my_unisoft, :coala, :cogilog, :sage_gec, :acd, :quadratus, :cegid, :csv_descriptor, :fec_agiris]).active.order(code: :asc).select { |user| user.authorized_upload? }.collect(&:id)
+
+    @temp_documents = TempDocument.where(user_id: user_ids).page(@options[:page]).per(@options[:per_page])
   end
 
   private

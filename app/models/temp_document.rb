@@ -10,6 +10,8 @@ class TempDocument < ApplicationRecord
   serialize :parents_documents_pages, Array
   serialize :parents_documents_ids, Array
 
+  serialize :tags
+
   validates_inclusion_of :delivery_type, within: %w(scan upload dematbox_scan retriever)
 
   serialize :retrieved_metadata, Hash
@@ -443,6 +445,17 @@ class TempDocument < ApplicationRecord
 
   def parents_documents
     self.temp_pack.temp_documents.where(id: Array(self.parents_documents_ids.presence))
+  end
+
+  def get_tags(separator='-')
+    # filters = self.original_file_name.split.collect do |f|
+    #   f.strip.match(/^[0-9]+$/) ? f.strip.to_i.to_s : f.strip.downcase
+    # end
+
+    # _tags = self.tags.present? ? self.tags.select{ |tag| !filters.include?(tag.to_s.strip.downcase) } : []
+    _tags = []
+
+    _tags.join(" #{separator} ").presence || ''
   end
 
   private
