@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   scope module: 'documents_reloaded' do
     get 'documents_reloaded', to: 'pieces#index', as: 'documents_reloaded'
     get 'documents_reloaded/:id', to: 'pieces#show', as: 'show_piece_detail'
+    post 'documents_reloaded/delete', to: 'pieces#delete', as: 'delete_documents_reloaded'
+    post 'documents_reloaded/restore', to: 'pieces#restore', as: 'restore_document_reloaded'
     get 'preseizures_reloaded/infos', to: 'preseizures#index', as: 'preseizures_reloaded_infos'
   end
 

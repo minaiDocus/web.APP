@@ -16,7 +16,51 @@ class DocumentsReloadedPieces extends DocumentsReloadedMain{
   load_packs(serialize_form=false, append=false){
     this.load_datas(serialize_form, append);
   }
+
+
+  delete_piece(elem){
+    if(confirm('Voulez vous vraiment supprimer cette(ces) pièce(s)')){
+      let multi = elem.attr('multi') || false;
+      let ids   = []
+
+      if(multi == 'true'){
+        ids = get_all_selected('piece');
+      }
+      else{
+        ids.push( parseInt(elem.attr('data-id')) );
+      }
+
+      if(ids.length > 0){
+        let params =  {
+                        'url': '/documents_reloaded/delete',
+                        'data': { ids: ids },
+                        'type': 'POST',
+                        'dataType': 'json'
+                      }
+
+        this.applicationJS.sendRequest(params).then((e)=>{ this.load_pieces(true); });
+      }
+    }
+  }
+
+  restore_piece(id){
+     if(confirm('Voulez vous vraiment restaurer cette pièce')){
+        let params =  {
+                        'url': '/documents_reloaded/restore',
+                        'data': { id: id },
+                        'type': 'POST',
+                        'dataType': 'json'
+                      }
+
+        this.applicationJS.sendRequest(params).then((e)=>{ this.load_pieces(true); $(".modal").modal('hide');});
+    }
+  }
+
+
 }
+
+
+
 
 jQuery(function() {
   let main = new DocumentsReloadedPieces();
@@ -30,6 +74,10 @@ jQuery(function() {
 
   AppListenTo('document_customer_filter', (e)=>{ main.load_packs(true); });
   AppListenTo('filter_pack_badge', (e)=>{ main.load_packs(true); });
+
+
+  AppListenTo('documents_loaded_delete_piece', (e)=>{ main.delete_piece($(e.detail.obj)) });
+  AppListenTo('documents_loaded_restore_piece', (e)=>{ main.restore_piece(e.detail.id) });
 
   AppListenTo('document_reloaded.toggle_piece_detail', (e)=>{
     let obj = e.detail.element;

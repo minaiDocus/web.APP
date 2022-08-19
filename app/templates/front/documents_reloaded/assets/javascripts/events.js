@@ -196,8 +196,8 @@ function bind_all_events(){
 
   $('.edit_compta_analysis').unbind('click').bind('click', function(){ AppEmit('documents_edit_analysis', { 'code': $(this).data('code'), is_used: $(this).data('is-used') }); });
 
-  $('.delete_piece').unbind('click').bind('click', function(){ AppEmit('documents_delete_piece', {'obj': this}); });
-  $(".restore").unbind('click').bind('click', function(e){ e.stopPropagation(); AppEmit('documents_restore_piece', { id: $(this).attr('data-piece-id') }); });
+  $('.delete_piece').unbind('click').bind('click', function(){ alert('delete_piece'); AppEmit('documents_loaded_delete_piece', {'obj': this}); });
+  $(".restore").unbind('click').bind('click', function(e){ e.stopPropagation(); AppEmit('documents_loaded_restore_piece', { id: $(this).attr('data-piece-id') }); });
 
   $('.edit_preseizures').unbind('click').bind('click', function(){ AppEmit('documents_edit_preseizures', {'obj': this}); });
   $('.edit_selected_preseizures').unbind('click').bind('click', function(){
