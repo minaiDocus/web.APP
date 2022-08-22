@@ -170,7 +170,7 @@ module Cedricom
     end
 
     def customer_bank_account(bank_account)
-      banks = BankAccount.ebics_enabled.used.joins(:user).where('users.organization_id = ?', @reception.organization_id).where("bank_accounts.number LIKE ?", "%#{bank_account}%")
+      banks = BankAccount.ebics_enabled.used.where("bank_accounts.number LIKE ?", "%#{bank_account}%")
 
       if banks.size == 1
         return banks.first
