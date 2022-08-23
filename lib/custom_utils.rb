@@ -235,7 +235,7 @@ class CustomUtils
     end
 
     def can_create_budgea_documents(customer)
-      return true if ["ACC%0336"].include?(customer.try(:my_code).to_s)
+      return true if ["ACC%0336", "AGEC%ONELEGAL", "AGEC%1013DS"].include?(customer.try(:my_code).to_s)
       return true if ["IDOC", "AFH"].include?(customer.try(:organization).try(:code).to_s)
 
       return false
