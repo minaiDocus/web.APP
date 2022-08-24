@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     get 'documents_reloaded/:id', to: 'pieces#show', as: 'show_piece_detail'
     post 'documents_reloaded/delete', to: 'pieces#delete', as: 'delete_documents_reloaded'
     post 'documents_reloaded/restore', to: 'pieces#restore', as: 'restore_document_reloaded'
+    delete 'documents_reloaded/delete_temp_document', to: 'pieces#delete_temp_document', as: 'delete_temp_document'
     get 'preseizures_reloaded/infos', to: 'preseizures#index', as: 'preseizures_reloaded_infos'
   end
 
