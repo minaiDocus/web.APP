@@ -31,34 +31,10 @@ class DocumentsReloaded::PiecesController < Documents::AbaseController
     pack        = nil
 
     pieces_ids.each do |piece_id|
-      piece           = Pack::Piece.find piece_id
-      piece.delete_at = DateTime.now
-      piece.delete_by = @user.code
-      piece.save
-
+      piece         = Pack::Piece.find piece_id
       temp_document = piece.temp_document
-
-      if temp_document
-        temp_document.original_fingerprint    = nil
-        temp_document.content_fingerprint     = nil
-        temp_document.raw_content_fingerprint = nil
-        temp_document.save
-
-        parents_documents = temp_document.parents_documents
-
-        if parents_documents.any?
-          parents_documents.each do |parent_document|
-            blank_children =  parent_document.children.select{ |child| child.fingerprint_is_nil? }
-
-            if parent_document.children.size == blank_children.size
-              parent_document.original_fingerprint    = nil
-              parent_document.content_fingerprint     = nil
-              parent_document.raw_content_fingerprint = nil
-              parent_document.save
-            end
-          end
-        end
-      end
+      
+      processed_to_delete(temp_document, piece)
 
       pack ||= piece.pack
     end
@@ -66,6 +42,18 @@ class DocumentsReloaded::PiecesController < Documents::AbaseController
     pack.delay.try(:recreate_original_document) if pack
 
     render json: { success: true, json_flash: { success: 'Pièce(s) supprimée(s) avec succès' } }, status: 200
+  end
+
+  def delete_temp_document
+    temp_document = TempDocument.find params[:id]
+
+    if temp_document.piece
+      processed_to_delete(temp_document, temp_document.piece)
+    else
+      processed_to_delete(temp_document)
+    end
+
+    redirect_to documents_reloaded_path({ rubric: params[:rubric]})
   end
 
   def restore
@@ -180,10 +168,44 @@ class DocumentsReloaded::PiecesController < Documents::AbaseController
 
     user_ids = accounts.includes(:options, :ibiza, :subscription, organization: [:ibiza, :exact_online, :my_unisoft, :coala, :cogilog, :sage_gec, :acd, :quadratus, :cegid, :csv_descriptor, :fec_agiris]).active.order(code: :asc).select { |user| user.authorized_upload? }.collect(&:id)
 
-    @temp_documents = TempDocument.where(user_id: user_ids).page(@options[:page]).per(@options[:per_page])
+    @rubrics = AccountBookType.where(user_id: user_ids).collect(&:label)
+
+    check_rubric = params[:rubric] || @rubrics.first
+
+    @temp_documents = TempDocument.not_deleted.where(user_id: user_ids, label: check_rubric).page(@options[:page]).per(@options[:per_page])
   end
 
   private
+
+  def processed_to_delete(temp_document, piece=nil)
+    if piece 
+      piece.delete_at = DateTime.now
+      piece.delete_by = @user.code
+      piece.save
+    end
+
+    if temp_document
+      temp_document.original_fingerprint    = nil
+      temp_document.content_fingerprint     = nil
+      temp_document.raw_content_fingerprint = nil
+      temp_document.save
+
+      parents_documents = temp_document.parents_documents
+
+      if parents_documents.any?
+        parents_documents.each do |parent_document|
+          blank_children =  parent_document.children.select{ |child| child.fingerprint_is_nil? }
+
+          if parent_document.children.size == blank_children.size
+            parent_document.original_fingerprint    = nil
+            parent_document.content_fingerprint     = nil
+            parent_document.raw_content_fingerprint = nil
+            parent_document.save
+          end
+        end
+      end
+    end
+  end
 
   def packs_with_failed_delivery
     reports = Pack::Report.where(pack_id: @packs.map(&:id))

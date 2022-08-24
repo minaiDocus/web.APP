@@ -91,6 +91,7 @@ class TempDocument < ApplicationRecord
   scope :wait_selection,    -> { where(state: 'wait_selection') }
   scope :ocr_layer_applied, -> { where(is_ocr_layer_applied: true) }
   scope :from_ibizabox,     -> { where.not(ibizabox_folder_id: nil) }
+  scope :not_deleted,     -> { where.not(original_fingerprint: nil) }
   scope :from_mobile,       -> { where("state='processed' AND delivery_type = 'upload' AND api_name = 'mobile'") }
   scope :by_source, -> (delivery_type) { where('delivery_type = ?', delivery_type) }
   scope :with, -> (period) { where(updated_at: period) }
@@ -445,17 +446,6 @@ class TempDocument < ApplicationRecord
 
   def parents_documents
     self.temp_pack.temp_documents.where(id: Array(self.parents_documents_ids.presence))
-  end
-
-  def get_tags(separator='-')
-    # filters = self.original_file_name.split.collect do |f|
-    #   f.strip.match(/^[0-9]+$/) ? f.strip.to_i.to_s : f.strip.downcase
-    # end
-
-    # _tags = self.tags.present? ? self.tags.select{ |tag| !filters.include?(tag.to_s.strip.downcase) } : []
-    _tags = []
-
-    _tags.join(" #{separator} ").presence || ''
   end
 
   private
