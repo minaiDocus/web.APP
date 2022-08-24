@@ -23,6 +23,13 @@ class DocumentsReloaded::UploaderController < Documents::AbaseController
       original_filename = params[:files][0].original_filename
       to_upload = true
     end
+    
+    if params[:for_customer].present?
+      journal = AccountBookType.find params[:l_journal]
+
+      params[:file_account_book_type] = journal.name
+      params[:label]                  = journal.label
+    end
 
     if customer && !customer.inactive? && ( (customer.authorized_upload? && to_upload) || customer.organization.specific_mission )
       uploaded_document = UploadedDocument.new(File.open(file),
@@ -34,7 +41,9 @@ class DocumentsReloaded::UploaderController < Documents::AbaseController
                                                'web',
                                                params[:analytic],
                                                nil,
-                                               params[:force])
+                                               params[:force],
+                                               params[:label],
+                                               params[:tags])
 
       data = present(uploaded_document).to_json
     else

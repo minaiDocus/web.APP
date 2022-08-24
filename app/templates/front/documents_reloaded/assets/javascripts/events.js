@@ -283,7 +283,7 @@ function bind_all_events(){
 
   $('#table_pieces td.show-detail').unbind('click').bind('click', function(e){ 
     let piece_id    = $(this).data('piece-id');
-    $('tr.tr_piece_'+piece_id).toggle('');
+    $('tr.tr_piece_' + piece_id).toggle('');
   });
 
 

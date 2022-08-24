@@ -20,7 +20,7 @@
         .col-md-3.pt-2
           .semibold Dossier
         .col-md-9
-          = select_tag 'customer_document_filter', options_for_select(file_upload_users_list.map{ |e| [e.short_info, e.code] }), id: 'customer_document_filter', class: 'form-select', multiple: true
+          = select_tag 'customers', options_for_select(file_upload_users_list.map{ |e| [e.short_info, e.code] }), id: 'customers', class: 'form-select', include_blank: false
     .col-md-3
     .col-md-3
       .search-content

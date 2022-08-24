@@ -2,17 +2,13 @@
   .col-md-2
     .lefter
       %ul.principal
-        %li.direct_links{ data: { href: 'documents_reloaded' } }
-          %a{href: documents_reloaded_path }
-            %span.link_principal{class: (controller_name == 'pieces') ? 'active' : ''} Facture fournisseurs
-        %li.direct_links{ data: { href: 'pieces_errors' } }
-          %a{href: pieces_errors_path }
-            %span.link_principal{class: (controller_name == 'pieces_errors') ? 'active' : ''} Facture clients
-        %li.direct_links{ data: { href: 'pieces_errors' } }
-          %a{href: pieces_errors_path }
-            %span.link_principal{class: (controller_name == 'pieces_errors') ? 'active' : ''} Divers
-        %li.direct_links.add-rubric{ data: { href: 'pieces_errors' } }
-          %span.float-end{class: (controller_name == 'pieces_errors') ? 'active' : ''}= glyphicon('plus', { color: "#C1D837", size: 10})
+        - @rubrics.each_with_index do |rubric, index|
+          %li.direct_links
+            %a{ href: documents_reloaded_path({ rubric: rubric }) }
+              %span.link_principal{ class: (rubric == params[:rubric] || (!params[:rubric].present? && index == 0)) ? 'active' : ''}= rubric.presence || '-'
+        
+        %li.direct_links.add-rubric
+          %span.float-end= glyphicon('plus', { color: "#C1D837", size: 10})
           %span.link_principal.green-label Ajouter une rubrique
         %li.input-add-rubric.hide
           %hr
@@ -42,15 +38,15 @@
                   %td
                     %span.info= temp_document.created_at.strftime('%d/%m/%Y')                  
                   %td= temp_document.try(:label).presence || '-'
-                  %td
-                    - temp_document.get_tags.split('-').each do |tag|
+                  %td 
+                    - temp_document.tags&.each do |tag|
                       %span.badge.bg-dark= tag.strip
                   %td.text-end.pointer.align-middle
                     .action.sub_edit_delete.list-collaborators
                       %span.glyph= glyphicon('ellipses', { size: '15', color: 'gba(26, 26, 26, 0.7)', style: 'transform: rotate(90deg)'})
                     .sub_menu.text-start.hide
                       %ul.no-margin.no-padding.regular
-                        %li.edit.edit-customer
-                          = link_to glyphicon('trash', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Supprimer', documents_reloaded_path
+                        %li
+                          = link_to glyphicon('trash', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Supprimer', delete_temp_document_path({ id: temp_document.id, rubric: temp_document.label }), method: :delete, data: { confirm: t('actions.confirm') }
 
           = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: documents_reloaded_path, target: '#table_pieces', total_pages: @temp_documents.total_pages, filter: 'form-customer-filter' }
