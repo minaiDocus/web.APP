@@ -29,17 +29,37 @@
             %a{href: pieces_errors_path }
               %span.link_principal{class: (controller_name == 'pieces_errors') ? 'active' : ''} Pièces en erreur
           %hr
-          - if @temp_documents.count > 0
             %li.direct_links{ data: { href: 'documents_processing' } }
-              %a{href: "#" }
-                %span.float-end.badge.bg-dark.mt-1.semibold.me-1= @temp_documents.count.to_s
-                %span.link_principal{class: (controller_name == 'documents_processing') ? 'active' : ''} Pièces en cours de traitement
+              %span.float-end.badge.bg-dark.mt-1.semibold.me-1= @temp_documents.count.to_s || 0
+              %span.link_principal.show-list-document.pointer{class: (controller_name == 'documents_processing') ? 'active' : ''} 
+                Pièces en cours de traitement
+                - if @temp_documents.count > 0
+                  .temp-document-view.hide
+                    - _index = 0
+                    - @temp_documents.each_slice(4) do |documents|
+                      .temp-document-content
+                        - documents.each do |document|
+                          - _index += 1
+                          .temp-document-content-lists
+                            .image_piece.text-center.animated-pointer{ id: "each_"+_index.to_s, "data-content" => html_piece_view(document, true), "data-each-class" => ".temp-document-view .image_piece", "data-index" => _index}
+                              = image_tag document_thumb_url(document)
+                            .white-label.p-2= truncate(document.original_file_name, length: 25)
+                      .clearfix
+
 
           - if @pieces_deleted.count > 0
-            %li.direct_links{ data: { href: 'documents_deleted' } }
-              %a{href: "#" }
-                %span.float-end.badge.bg-danger.mt-1.semibold.me-1= @pieces_deleted.count.to_s
-                %span.link_principal{class: (controller_name == 'documents_deleted') ? 'active' : ''} Pièce(s) supprimée(s)
+            %li.direct_links
+              %span.float-end.badge.bg-danger.mt-1.semibold.me-1= @pieces_deleted.count.to_s
+              %span.link_principal.deleted-piece-count.pointer{class: (controller_name == 'documents_deleted') ? 'active' : '', style: 'font-size: 12px; color:red'}
+                Pièce(s) supprimée(s)
+                .content-list-pieces-deleted.text-start.regular.hide
+                  %ul
+                    - @pieces_deleted.each do |piece_deleted|
+                      %li.get-pieces-deleted.pointer{ "data-content" => html_piece_view(piece_deleted), "data-content-url" => piece_deleted.get_access_url, id: piece_deleted.id}
+                        %span 
+                          #{piece_deleted.name} supprimée le #{piece_deleted.delete_at.try(:to_date)} par #{piece_deleted.delete_by}
+                          %span.float-end.restore{ data: {"piece-id": piece_deleted.id}} Restaurer
+            %hr
 
     .col-md-10
       .row
@@ -48,6 +68,8 @@
             .col-md-3.pt-2
               .semibold Dossier
             .col-md-9
+              .form-group.no-margin.hide_on_load.hide
+                %input.user_and_journals{ type: 'hidden', value: user_and_journal_list(true) }
               - if accounts_options.size == (@options.try(:[], :owner_ids).try(:size) rescue 0)
                 = select_tag 'customer_document_filter', options_for_select(accounts_options), id: 'customer_document_filter', multiple: true
               - else
@@ -72,7 +94,7 @@
               .col-md-11.no-padding.no-margin
                 %input#search_input{ name:'pack_name', placeholder: 'Recherche (contenu, dossier)', value: @options.try(:[], :text) }
         .col-md-1
-          %button.btn.btn-dark.more-filter.w-100.semibold
+          %button.btn.btn-dark.w-100.semibold#document-filter
             %span.semibold Valider
       .box.derivationLeft
         .row#table_pieces
@@ -121,8 +143,8 @@
                         %span.glyph= glyphicon('ellipses', { size: '15', color: 'gba(26, 26, 26, 0.7)', style: 'transform: rotate(90deg)'})
                       .sub_menu.text-start.hide
                         %ul.no-margin.no-padding.regular
-                          %li.edit.edit-customer
-                            = link_to glyphicon('trash', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Supprimer', documents_reloaded_path
+                          %li
+                            %span.ms-2.delete_piece{title: 'Supprimer la pièce', data: {id: piece.id}}=glyphicon('trash', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Supprimer'
                   %tr.hide{ class: "tr_piece_#{piece.id}" }
                     %td{ colspan: 6 }
                       .detail{ class: "detail-piece-#{piece.id}" }
@@ -130,9 +152,6 @@
                           %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}
 
             = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: documents_reloaded_path, target: '#table_pieces', total_pages: @pieces.total_pages }
-
-= render partial: 'upload_dialog' if @render_upload
-
 
 #edit_preseizures.modal.fade.in{'aria-hidden' => 'true', :role => 'dialog', :tabindex => '-1'}
   .modal-dialog
@@ -143,3 +162,28 @@
       .modal-body
       .modal-footer
         %button.btn.btn-primary.semibold#preseizures_edit{:type => 'button'} Valider
+
+#DeletedPiece.modal.fade.in{'aria-hidden' => 'true', :role => 'dialog', :tabindex => '-1'}
+  .modal-dialog{ style: 'min-width: 1180px;' }
+    .modal-content
+      .modal-header
+        %h5.modal-title.bold Visionner les pieces supprimées
+        %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+      .modal-body
+        .action-pieces-deleted
+          .piece_deleted_selection_content
+            %button.btn.btn-light.previous{"data-content" => "", id: ""}
+              %span.me-2= glyphicon('arrow-thick-left', size: 12, color: "#72AA42")
+              %span Préc
+            %button.btn.btn-light.next{"data-content" => "", id: ""}
+              %span.me-2 Suiv
+              %span= glyphicon('arrow-thick-right', size: 12, color: "#72AA42")
+            %button.btn.btn-dark.float-end.restore{ "data-piece-id": "" }
+              %span.me-2= glyphicon('share', size: 12, color: "white")
+              %span Restaurer
+        .mb-4
+        .view-content
+      .modal-footer
+
+= render partial: 'upload_dialog' if @render_upload
+
