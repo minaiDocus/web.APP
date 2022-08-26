@@ -18,7 +18,7 @@ function bind_all_events(){
     "noneText": "Choix",
   });
 
-  $('#customer_document_filter').unbind('change.mix_journal').bind('change.mix_journal', function(e){
+  $('#customer_document_filter0').unbind('change.mix_journal').bind('change.mix_journal', function(e){
     if ($('.user_and_journals').length > 0){
       let lists = JSON.parse( $('.user_and_journals').val() );
     }
@@ -196,7 +196,7 @@ function bind_all_events(){
 
   $('.edit_compta_analysis').unbind('click').bind('click', function(){ AppEmit('documents_edit_analysis', { 'code': $(this).data('code'), is_used: $(this).data('is-used') }); });
 
-  $('.delete_piece').unbind('click').bind('click', function(){ alert('delete_piece'); AppEmit('documents_loaded_delete_piece', {'obj': this}); });
+  $('.delete_piece').unbind('click').bind('click', function(){ AppEmit('documents_loaded_delete_piece', {'obj': this}); });
   $(".restore").unbind('click').bind('click', function(e){ e.stopPropagation(); AppEmit('documents_loaded_restore_piece', { id: $(this).attr('data-piece-id') }); });
 
   $('.edit_preseizures').unbind('click').bind('click', function(){ AppEmit('documents_edit_preseizures', {'obj': this}); });
@@ -279,10 +279,65 @@ function bind_all_events(){
     }
   });
 
+  $('.show-list-document').mouseover(function() { $(".temp-document-view").show(); }).mouseout(function() { $(".temp-document-view").hide(); });
+
   $('#table_pieces td.show-detail').unbind('click').bind('click', function(e){ 
     let piece_id    = $(this).data('piece-id');
     $('tr.tr_piece_'+piece_id).toggle('');
   });
+
+
+  $('.btn.add-entry').unbind('click').bind('click', function(e){
+    $(this).closest('.content-table').find('.entries tbody').append($('template').html())
+    $(this).parent('.btn-add-content').find('.add-entry').addClass('hide');
+    $(this).parent('.btn-add-content').find('.action-add-content').removeClass('hide');
+
+    $('.btn.add-entry').prop('disabled', true);
+
+    bind_all_events();
+  })
+
+  $('.action-add-content.text-end #valid-entry').unbind('click').bind('click', function(e){
+    AppEmit('new_entry', { elt: $(this).closest('.content-table').find('.entries tbody .new-entrie-content'), preseizure_id: $(this).closest('.preseizure-content-list').data('preseizure-id') });
+
+    $('.btn.add-entry').prop('disabled', false);
+  })
+
+  $('.action-add-content.text-end #cancel-entry').unbind('click').bind('click', function(e){
+    $(this).closest('.content-table').find('.entries tbody tr:last').remove();
+    $(this).closest('.btn-add-content').find('.add-entry').removeClass('hide');
+    $(this).closest('.btn-add-content').find('.action-add-content').addClass('hide');
+
+    $('.btn.add-entry').prop('disabled', false);
+  });
+
+  $('#document-filter').unbind('click').bind('click', function(e){
+    console.log("valid bouton clicked");
+    if ($('.user_and_journals').length > 0){
+      let lists = JSON.parse( $('.user_and_journals').val() );
+      console.log("lists = user_and_journals.val" + lists);
+    }
+    let current_code = $(this).val();
+    console.log("current_code = " + current_code);
+/*
+    if(current_code !== null && current_code !== undefined && current_code.length > 0){
+      $('#journal_document_filter option').addClass('hide');
+      $('#journal_document_filter').parent().find('.multi-select-container .multi-select-menuitem').addClass('hide');
+      current_code.forEach((code)=>{
+        let found_result = lists.find((e)=>{ return e.user == code })
+        if(found_result){
+          found_result.journals.forEach((journal)=>{ 
+            $(`#journal_document_filter option[value=${journal}]`).removeClass('hide');
+            $('#journal_document_filter').parent().find(`.multi-select-container .multi-select-menuitem input[value=${journal}]`).parent().removeClass('hide');
+          });
+        }
+      })
+    }else{
+      $('#journal_document_filter option').removeClass('hide');
+      $('#journal_document_filter').parent().find('.multi-select-container .multi-select-menuitem').removeClass('hide');
+    }*/
+  });
+
 }
 
 jQuery(function() {

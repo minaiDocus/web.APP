@@ -117,6 +117,16 @@
                   &#45;
               - if @user.has_collaborator_action?
                 %input.entry_id_hidden{type: :hidden, value: entry.id}
+      - if piece
+        .mt-2
+        .btn-add-content.text-end.me-4
+          %button.btn.btn-light.btn-sm.add-entry.py-0
+            %span.me-2= glyphicon('plus', { color: '#72AA42', size: 8 })
+            %span Ajouter
+          .action-add-content.text-end.hide
+            %button.btn.btn-default.btn-sm#cancel-entry Annuler
+            %button.btn.btn-primary.btn-sm.w-25#valid-entry Valider
+        .mb-2
 
   - if data_analytics.any?
     .col-md-5
@@ -197,4 +207,24 @@
       %span.ms-2.update_tags{title: 'Taguer la pièce', data: {id: piece.id, type: 'piece'}}= glyphicon('tag', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
       %span.ms-2.delete_piece{title: 'Supprimer la pièce', data: {id: piece.id}}= glyphicon('trash', { size: '14', color:'#FF4848'})
     
-    
+%template
+  %tr.new-entrie-content
+    %td.account
+      .row
+        .col-md-4
+          .select-container.no-padding.w-100
+            %select.type_account.w-100
+              %option{ value: 2 } Montant HT
+              %option{ value: 3 } TVA
+        .col-md-8
+          %span.acount-number
+          .content_account
+          .edit_account
+            %input.w-100.edit_account_number{ placeholder: "N° de compte "}
+            .suggestion_account_list.hide
+    %td.entry
+      %span.entry-1
+      %input.w-100#type_1{ placeholder: "Débit "}
+    %td.entry
+      %span.entry-2
+      %input.w-100#type_2{ placeholder: "Crédit "}

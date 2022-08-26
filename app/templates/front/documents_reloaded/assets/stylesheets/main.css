@@ -234,11 +234,11 @@ img{
 }
 
 .content-list-pieces-deleted{
-  position: absolute;  
+  /*position: absolute;  */
   color: rgba(26,26,26,0.7);
   border: 1px solid rgba(26,26,26,0.2);
   background: #FFFFFF;
-  width: 35%;  
+  min-width: 35%;
   border-radius: 5px;
   z-index: 1080;
 }
@@ -310,7 +310,8 @@ img{
 .temp-document-view {
   position: absolute;
   z-index: 1024;
-  background: #5b5b5b;
+  /*background: #5b5b5b;*/
+  background: #fff;
   padding: 1%;
   box-shadow: 0px 4px 2px rgba(43, 56, 56, 0.3);
   max-height: 530px;
