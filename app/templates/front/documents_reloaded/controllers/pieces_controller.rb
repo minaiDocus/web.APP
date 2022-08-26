@@ -98,7 +98,7 @@ class DocumentsReloaded::PiecesController < Documents::AbaseController
 
     piece.waiting_pre_assignment if temp_pack.is_compta_processable? && piece.preseizures.size == 0 && piece.temp_document.try(:api_name) != 'invoice_auto' && !piece.pre_assignment_waiting_analytics?
 
-    render json: { success: true, json_flash: { success: 'Pièce réstorée avec succès' } }, status: 200
+    render json: { success: true, json_flash: { success: 'Pièce réstaurée avec succès' } }, status: 200
   end
 
   # GET /account/documents/:id/download/:style
@@ -163,9 +163,13 @@ class DocumentsReloaded::PiecesController < Documents::AbaseController
 
     @pieces = Pack::Piece.where(user_id: ids).search(@options[:text], @options).distinct.order(created_at: :desc).page(@options[:page]).per(@options[:per_page])
 
+    
+
+
     # @temp_pack      = TempPack.find_by_name(pack.name)
-     @temp_pack      = TempPack.find_by_name(@pieces.first.pack.name)
-     @temp_documents = @temp_pack.temp_documents.not_published
+    # @temp_pack      = TempPack.find_by_name(@pieces.first.pack.name)
+    # @temp_documents = @temp_pack.temp_documents.not_published
+     @temp_documents = TempDocument.where(user_id: ids).not_published
   end
 
   def index_customers
