@@ -46,6 +46,8 @@
                       %span.glyph= glyphicon('ellipses', { size: '15', color: 'gba(26, 26, 26, 0.7)', style: 'transform: rotate(90deg)'})
                     .sub_menu.text-start.hide
                       %ul.no-margin.no-padding.regular
+                        %li.edit-tags
+                          = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Editer les tags', '#', class: 'link'
                         %li
                           = link_to glyphicon('trash', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Supprimer', delete_temp_document_path({ id: temp_document.id, rubric: temp_document.label }), method: :delete, data: { confirm: t('actions.confirm') }
 

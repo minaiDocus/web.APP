@@ -3,9 +3,12 @@
 class DocumentsReloadedCustomer{
   constructor(){
     this.applicationJS = new ApplicationJS();
-    this.action_locker = false;
-    this.page = 1;
-  }  
+
+  }
+
+  show_temp_document(e){
+    console.log(e)
+  }
 }
 
 jQuery(function() {
@@ -19,5 +22,5 @@ jQuery(function() {
     $('#edit-rubric-form').attr('action', `${base_uri.replace('cst_id', customer_id)}`);
   });
 
-  // AppListenTo('refresh_customer_view', (e)=>{ main.load_customers_view(); })
+  AppListenTo('show_temp_document', (e)=>{ main.show_temp_document(e); })
 });

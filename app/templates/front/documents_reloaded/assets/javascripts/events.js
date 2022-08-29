@@ -282,8 +282,9 @@ function bind_all_events(){
   $('.show-list-document').mouseover(function() { $(".temp-document-view").show(); }).mouseout(function() { $(".temp-document-view").hide(); });
 
   $('#table_pieces td.show-detail').unbind('click').bind('click', function(e){ 
-    let piece_id    = $(this).data('piece-id');
-    $('tr.tr_piece_' + piece_id).toggle('');
+    let temp_document_id  = $(this).data('temp_document-id');
+
+    AppEmit('show_temp_document', { id: temp_document_id })
   });
 
 

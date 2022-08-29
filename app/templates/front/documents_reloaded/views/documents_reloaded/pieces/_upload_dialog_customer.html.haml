@@ -1,7 +1,7 @@
 #add-document.modal.fade.in{'aria-hidden' => 'true', :role => 'dialog', :tabindex => '-1'}
   .modal-dialog
     .modal-content
-      %form#fileupload{ action: '/documents/uploader', method: 'POST', enctype: 'multipart/form-data', data: { params: file_upload_params.to_json } }
+      %form#fileupload{ action: '/documents_reloaded/uploader', method: 'POST', enctype: 'multipart/form-data', data: { params: file_upload_params.to_json } }
         .modal-header
           %h5.modal-title.bold Ajouter des documents
           %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
@@ -15,8 +15,8 @@
                 Ce journal n'est pas paramétré pour une pré-saisie comptable.
           .form-group
             %label.semibold Tags
-            = select_tag :tags, '', id: :tags, class: 'text_field form-select'
-
+            .select-container.no-padding.no-margin.w-100
+              = text_field_tag :tags, '', id: :tags, class: 'text_field'
             %i Pour ajouter plusieurs tags à ce(s) document(s), separer les tags avec des espaces.
 
           .hidden_analytic_fields
