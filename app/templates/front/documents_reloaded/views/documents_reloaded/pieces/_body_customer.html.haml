@@ -12,8 +12,8 @@
           %span.link_principal.green-label Ajouter une rubrique
         %li.input-add-rubric.hide
           %hr
-          = render file: Rails.root.join('app/templates/front/journals/views/journals/main/_rubric_form.html.haml')
-          - ajx_params = param_encode({ url: '#url', form: { id: 'edit-rubric-form', dump_action: true, validate: true }, before_send: 'journal.before_rubric_addition', after_send: 'refresh_customer_view' })
+          = render file: Rails.root.join('app/templates/front/journals/views/journals/main/_rubric_form.html.haml'), locals: { organization_id: @user.organization_id }
+          - ajx_params = param_encode({ url: '#url', form: { id: 'edit-rubric-form', dump_action: true, validate: true }, before_send: 'journal.before_rubric_addition' })
           .row
             .col-md-5
             .col-md-7
