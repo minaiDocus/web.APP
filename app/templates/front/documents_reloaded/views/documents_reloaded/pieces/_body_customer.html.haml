@@ -13,7 +13,7 @@
         %li.input-add-rubric.hide
           %hr
           = render file: Rails.root.join('app/templates/front/journals/views/journals/main/_rubric_form.html.haml'), locals: { organization_id: @user.organization_id }
-          - ajx_params = param_encode({ url: '#url', form: { id: 'edit-rubric-form', dump_action: true, validate: true }, before_send: 'journal.before_rubric_addition' })
+          - ajx_params = param_encode({ url: '#url', form: { id: 'edit-rubric-form', dump_action: true, validate: true }, before_send: 'journal.before_rubric_addition', after_send: 'refresh_customer_view' })
           .row
             .col-md-5
             .col-md-7
@@ -33,7 +33,7 @@
             %tbody
               - @temp_documents.each do |temp_document|
                 %tr
-                  %td.pointer.show-detail{ title: 'Voir détail', data: { temp_document_id: temp_document.id }}
+                  %td.pointer.show-detail{ title: 'Voir détail', data: { content_url: temp_document.get_access_url, temp_document_id: temp_document.id }}
                     .name.text-table-green= temp_document.original_file_name
                   %td
                     %span.info= temp_document.created_at.strftime('%d/%m/%Y')                  
@@ -47,8 +47,8 @@
                     .sub_menu.text-start.hide
                       %ul.no-margin.no-padding.regular
                         %li.edit-tags
-                          = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Editer les tags', '#', class: 'link'
-                        %li
-                          = link_to glyphicon('trash', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Supprimer', delete_temp_document_path({ id: temp_document.id, rubric: temp_document.label }), method: :delete, data: { confirm: t('actions.confirm') }
+                          = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Editer les tags', '#', class: 'link update_tags', data: { id: temp_document.id, type: 'temp_documents' }
+                        / %li
+                        /   = link_to glyphicon('trash', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Supprimer', delete_temp_document_path({ id: temp_document.id, rubric: temp_document.label }), method: :delete, data: { confirm: t('actions.confirm') }
 
           = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: documents_reloaded_path, target: '#table_pieces', total_pages: @temp_documents.total_pages, filter: 'form-customer-filter' }

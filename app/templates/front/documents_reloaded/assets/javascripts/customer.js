@@ -2,12 +2,8 @@
 
 class DocumentsReloadedCustomer{
   constructor(){
-    this.applicationJS = new ApplicationJS();
-
-  }
-
-  show_temp_document(e){
-    console.log(e)
+    this.applicationJS   = new ApplicationJS();
+    this.edit_tags_modal = $('#tags-edit');
   }
 }
 
@@ -19,10 +15,8 @@ jQuery(function() {
     let form        = $('#edit-rubric-form');
     let base_uri    = form.attr('base_uri');
 
-    console.log( customer_id + ' --- ' + base_uri);
-
     $('#edit-rubric-form').attr('action', `${base_uri.replace('cst_id', customer_id)}`);
   });
 
-  AppListenTo('show_temp_document', (e)=>{ main.show_temp_document(e); })
+  AppListenTo('refresh_customer_view', (e)=>{ windows.location.reload })
 });

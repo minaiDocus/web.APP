@@ -3,7 +3,7 @@ class DocumentsReloaded::AbaseController < FrontController #Must be loaded first
   skip_before_action :login_user!, only: %w[download piece handle_bad_url temp_document get_tag already_exist_document], raise: false
   skip_before_action :verify_if_active, only: %w[export_options export_preseizures download_archive download_bundle get_tags update_tags]
 
-  prepend_view_path('app/templates/front/documents/views')
+  prepend_view_path('app/templates/front/documents_reloaded/views')
 
   def export_options
     if params[:type] == 'piece'
@@ -143,6 +143,8 @@ class DocumentsReloaded::AbaseController < FrontController #Must be loaded first
   def get_tags
     if params[:type] == 'pack'
       @models = Pack.where(id: params[:id])
+    elsif params[:type] == "temp_documents"
+      @models = TempDocument.where(id: params[:id])
     else
       @models = Pack::Piece.where(id: params[:id])
     end

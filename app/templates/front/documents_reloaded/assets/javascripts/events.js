@@ -192,7 +192,7 @@ function bind_all_events(){
 
   $('.preseizures_export').unbind('click').bind('click',function(e) { AppEmit('documents_export_preseizures', {'obj': this}) });
 
-  $('.update_tags').unbind('click').bind('click', function(){ AppEmit('documents_update_tags', {'obj': this}); });
+  $('.update_tags').unbind('click').bind('click', function(e){ e.preventDefault(); AppEmit('documents_update_tags', {'obj': this}); });
 
   $('.edit_compta_analysis').unbind('click').bind('click', function(){ AppEmit('documents_edit_analysis', { 'code': $(this).data('code'), is_used: $(this).data('is-used') }); });
 
@@ -213,7 +213,7 @@ function bind_all_events(){
   $('table.entries td.entry').mouseover(function(){ $(this).find('.content_amount span.debit_or_credit').show(); }).mouseout(function(){ $(this).find('.content_amount span.debit_or_credit').hide(); });
   $('table.entries .debit_or_credit').unbind('click').bind('click', function(){ AppEmit('documents_change_entry_type', {'obj': this}); });
 
-  $(".zoom.pdf-viewer").unbind('click').bind('click', function(){ 
+  $(".zoom.pdf-viewer, #table_pieces td.show-detail").unbind('click').bind('click', function(){ 
     var url = $(this).attr('data-content-url');
     
     $("#PdfViewerDialog .modal-body .view-content iframe.src-piece").attr("src", url);
@@ -280,13 +280,6 @@ function bind_all_events(){
   });
 
   $('.show-list-document').mouseover(function() { $(".temp-document-view").show(); }).mouseout(function() { $(".temp-document-view").hide(); });
-
-  $('#table_pieces td.show-detail').unbind('click').bind('click', function(e){ 
-    let temp_document_id  = $(this).data('temp_document-id');
-
-    AppEmit('show_temp_document', { id: temp_document_id })
-  });
-
 
   $('.btn.add-entry').unbind('click').bind('click', function(e){
     $(this).closest('.content-table').find('.entries tbody').append($('template').html())
@@ -359,12 +352,10 @@ function bind_all_events(){
       $('#collaborator_journal_document_filter').parent().find('.multi-select-container .multi-select-menuitem').removeClass('hide');
     }
   });
+
   setTimeout(()=>{ $('.hide_on_load').removeClass('hide'); $('#collaborator_document_filter').change() }, 1000); //TODO: find a better way to change the user selector
 
-
-
   $('#document-filter').unbind('click').bind('click', function(e){ AppEmit('document_collaborator_filter'); });
-
 }
 
 jQuery(function() {

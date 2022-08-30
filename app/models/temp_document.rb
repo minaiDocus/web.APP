@@ -413,6 +413,9 @@ class TempDocument < ApplicationRecord
     delivered_by == 'ibiza'
   end
 
+  def get_tags(separator='-')
+    tags.join(" #{separator} ").presence || '-'
+  end
 
   def is_a_cover?
     if scanned?
