@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Journals::MainController < OrganizationController
-  before_action :init_vars, only: %w[add_rubric]
+  before_action :rubric_initializer, only: %w[add_rubric]
   before_action :load_customer, except: %w[index]
   before_action :verify_rights
   before_action :verify_if_customer_is_active
@@ -187,8 +187,6 @@ class Journals::MainController < OrganizationController
   end
 
   def add_rubric
-    json_flash = {} ##TODO: global var json_flash is not working here, don't know why?
-
     if is_max_number_reached?
       json_flash[:error] = 'Vous avez atteint le nombre maximum de rubrique'
     else
@@ -209,7 +207,7 @@ class Journals::MainController < OrganizationController
 
   private
 
-  def init_vars
+  def rubric_initializer
     @customer     = User.find params[:customer_id]
     @organization = @customer.organization
   end
