@@ -23,6 +23,8 @@ class DocumentsReloaded::PiecesController < Documents::AbaseController
   def show
     @piece = Pack::Piece.find params[:id]
 
+    debugger
+
     render partial: 'detail'
   end
 
@@ -137,6 +139,7 @@ class DocumentsReloaded::PiecesController < Documents::AbaseController
   end
 
   def index_collaborators
+  
     @options[:page]     = params[:page]
     @options[:per_page] = params[:per_page]
 
@@ -149,7 +152,8 @@ class DocumentsReloaded::PiecesController < Documents::AbaseController
     ids = accounts.collect(&:id)
     @pieces_deleted = Pack::Piece.unscoped.where(user_id: ids).deleted.presence || []
 
-    @pieces = Pack::Piece.where(user_id: ids).search(@options[:text], @options).distinct.order(created_at: :desc).page(@options[:page]).per(@options[:per_page])
+    #@pieces = Pack::Piece.where(user_id: ids).search(@options[:text], @options).distinct.order(created_at: :desc).page(@options[:page]).per(@options[:per_page])
+    @pieces = Pack::Piece.where(user_id: ids).search(@options[:text] , @options).distinct.order(created_at: :desc).page(@options[:page]).per(@options[:per_page])
 
     
 
@@ -158,6 +162,9 @@ class DocumentsReloaded::PiecesController < Documents::AbaseController
     # @temp_pack      = TempPack.find_by_name(@pieces.first.pack.name)
     # @temp_documents = @temp_pack.temp_documents.not_published
      @temp_documents = TempDocument.where(user_id: ids).not_published
+
+    @render_upload = request.xhr? ? false : true
+
   end
 
   def index_customers

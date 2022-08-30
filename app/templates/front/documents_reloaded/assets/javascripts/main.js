@@ -77,7 +77,8 @@ class DocumentsReloadedMain{
 
     this.ajax_params['target'] = (append)? null : '.main-content';
     this.ajax_params['data']   = data.join('&');
-
+    console.log("data = ");
+    console.log(data);
     this.applicationJS.sendRequest(this.ajax_params, function(){ $('#more-filter.modal').modal('hide'); })
                        .then((e)=>{
                           if(append){
@@ -93,6 +94,72 @@ class DocumentsReloadedMain{
                           bind_all_events();
                         })
                        .catch(()=>{ this.action_locker = false; });
+  }
+
+  load_collaborator_datas(serialize_form=false, append=false){
+    if(this.action_locker)
+      return false
+
+     if(!append)
+      this.page = 1;
+
+    this.action_locker = true;
+
+    let data = [];
+
+
+    if(serialize_form){
+      data.push($('#pack_filter_form').serialize().toString());
+      if(!append)
+        data.push(`activate_filter=true`);
+    }
+    else
+    {
+      let selector = "#pack_filter_form input, #pack_filter_form select, #customer_document_filter, #journal_document_filter, #search_input";
+      $(selector).not('.operator').val(''); data.push( `reinit=true` );
+    }
+
+    let search_pattern = $('.search-content #search_input').val();
+
+
+    if ($('#collaborator_document_filter').val()){
+      data.push( 'view=' + $('#collaborator_document_filter').val() )
+    }
+
+    if($('#collaborator_journal_document_filter').val()){
+      data.push( 'journal=' + $('#collaborator_journal_document_filter').val() )
+    }
+
+    if($('#collaborator_period_document_filter').val()){
+      data.push( 'period=' + $('#collaborator_period_document_filter').val() )
+    }
+
+    console.log("data = ");
+    console.log(data);
+
+    this.ajax_params['target'] = (append)? null : '.main-content';
+    this.ajax_params['type'] = 'GET'
+    this.ajax_params['data']   = data.join('&');
+
+    console.log("ajax_params = ");
+    console.log(this.ajax_params);
+
+    this.applicationJS.sendRequest(this.ajax_params)
+                       .then((e)=>{
+                        if(append){
+                            if($(e).find('.no-data-found').length > 0){
+                              this.applicationJS.noticeSuccessMessageFrom(null, 'Plus aucun résultat!');
+                              this.page = -1;
+                            }else{
+                              $('.all-results').append($(e).find('.all-results').html());
+                            }
+                          }
+
+                          this.action_locker = false
+                          bind_all_events();
+                        })
+                       .catch(()=>{ this.action_locker = false; });
+
   }
 
   load_next_page(){
