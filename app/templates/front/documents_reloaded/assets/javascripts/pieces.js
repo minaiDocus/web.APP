@@ -8,13 +8,17 @@ class DocumentsReloadedPieces extends DocumentsReloadedMain{
     super();
 
     this.ajax_params =  {
-                          'url': '/documents',
+                          'url': '/documents_reloaded',
                           'type': 'GET',
                         }
   }
 
   load_packs(serialize_form=false, append=false){
     this.load_datas(serialize_form, append);
+  }
+
+  load_collaborator_pieces(serialize_form=false, append=false){
+    this.load_collaborator_datas(serialize_form);
   }
 
 
@@ -74,6 +78,9 @@ jQuery(function() {
 
   AppListenTo('document_customer_filter', (e)=>{ main.load_packs(true); });
   AppListenTo('filter_pack_badge', (e)=>{ main.load_packs(true); });
+
+  AppListenTo('document_collaborator_filter', (e)=>{ main.load_collaborator_pieces(true); });
+
 
 
   AppListenTo('documents_loaded_delete_piece', (e)=>{ main.delete_piece($(e.detail.obj)) });
