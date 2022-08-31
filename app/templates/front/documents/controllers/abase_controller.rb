@@ -484,6 +484,7 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
                           else
                             account_ids
                           end
+    @options[:user_ids]  = @options[:user_ids].presence || [-1]
     @options[:owner_ids] = @options[:user_ids]
 
     @options[:journal] =  if @s_params[:journal].present?
