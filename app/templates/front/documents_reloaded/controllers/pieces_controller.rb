@@ -23,8 +23,6 @@ class DocumentsReloaded::PiecesController < Documents::AbaseController
   def show
     @piece = Pack::Piece.find params[:id]
 
-    debugger
-
     render partial: 'detail'
   end
 
@@ -140,6 +138,7 @@ class DocumentsReloaded::PiecesController < Documents::AbaseController
 
   def index_collaborators
   
+    @testa = false
     @options[:page]     = params[:page]
     @options[:per_page] = params[:per_page]
 

@@ -109,17 +109,20 @@ class DocumentsReloadedMain{
 
 
     if(serialize_form){
-      data.push($('#pack_filter_form').serialize().toString());
+      data.push($('#piece_filter_form').serialize().toString());
       if(!append)
         data.push(`activate_filter=true`);
     }
     else
     {
-      let selector = "#pack_filter_form input, #pack_filter_form select, #customer_document_filter, #journal_document_filter, #search_input";
+      let selector = "#piece_filter_form input, #piece_filter_form select, #collaborator_document_filter, #collaborator_journal_document_filter, collaborator_period_filter, #search_input";
       $(selector).not('.operator').val(''); data.push( `reinit=true` );
     }
 
     let search_pattern = $('.search-content #search_input').val();
+
+    if(search_pattern && search_pattern != ''){ data.push(`text=${encodeURIComponent(search_pattern)}`); }
+    if(this.page > 1){ data.push(`page=${this.page}`) }
 
 
     if ($('#collaborator_document_filter').val()){
@@ -150,12 +153,15 @@ class DocumentsReloadedMain{
                             if($(e).find('.no-data-found').length > 0){
                               this.applicationJS.noticeSuccessMessageFrom(null, 'Plus aucun résultat!');
                               this.page = -1;
+                              console.log(e)
                             }else{
                               $('.all-results').append($(e).find('.all-results').html());
                             }
                           }
 
                           this.action_locker = false
+                          console.log("this.action_locker = ")
+                          console.log(this.action_locker)
                           bind_all_events();
                         })
                        .catch(()=>{ this.action_locker = false; });
