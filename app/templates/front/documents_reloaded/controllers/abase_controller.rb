@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Documents::AbaseController < FrontController #Must be loaded first that's why there is an "A" in the name
+class DocumentsReloaded::AbaseController < FrontController #Must be loaded first that's why there is an "A" in the name
   skip_before_action :login_user!, only: %w[download piece handle_bad_url temp_document get_tag already_exist_document], raise: false
   skip_before_action :verify_if_active, only: %w[export_options export_preseizures download_archive download_bundle get_tags update_tags]
 
@@ -418,7 +418,7 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
 
   def load_params
     session_version = 001 #IMPORTANT: CHANGE THE SESSION VERSION IF SESSION STRUCTURE HAS BEEN CHANGED
-    session_name    = @is_operations ? 'params_document_operation' : 'params_document_piece'
+    session_name    = @is_operations ? 'params_document_reloaded_operation' : 'params_document_reloaded_piece'
 
     if params[:activate_filter] || params[:reinit]
       @s_params = params.permit!.to_h
@@ -441,7 +441,8 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
     @filters[:by_piece]      = @s_params[:by_piece]              if @s_params[:by_piece].present?
     @filters[:by_preseizure] = @s_params[:by_preseizure]         if @s_params[:by_preseizure].present?
     @filters[:journal]       = @s_params[:journal]               if @s_params[:journal].present?
-    @filters[:view]          = (@s_params[:view].try(:split, ',').try(:size).to_i >= 15) ? nil : @s_params[:view] if @s_params[:view]
+    @filters[:period]        = @s_params[:period]                if @s_params[:period].present?
+    @filters[:view]          = ((@s_params[:view].try(:split, ',').try(:size).to_i >= 15) ? nil : @s_params[:view]) if @s_params[:view].present?
 
     if params[:reinit].present?
       session.delete(session_name.to_sym)
@@ -484,10 +485,18 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
                           else
                             account_ids
                           end
+
+    @options[:user_ids]  = @options[:user_ids].presence || [-1]
     @options[:owner_ids] = @options[:user_ids]
 
     @options[:journal] =  if @s_params[:journal].present?
                             @s_params[:journal].try(:split, ',') || []
+                          else
+                            []
+                          end
+
+    @options[:period] =   if @s_params[:period].present?
+                            @s_params[:period].try(:split, ',') || []
                           else
                             []
                           end

@@ -107,7 +107,6 @@ class DocumentsReloadedMain{
 
     let data = [];
 
-
     if(serialize_form){
       data.push($('#piece_filter_form').serialize().toString());
       if(!append)

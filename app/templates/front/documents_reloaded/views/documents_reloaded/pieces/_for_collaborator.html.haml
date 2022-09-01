@@ -103,7 +103,7 @@
                   .col-md-11.no-padding.no-margin
                     %input#search_input{ name:'piece_name', placeholder: 'Recherche (contenu, dossier)', value: @options.try(:[], :text) }
           .col-md-1
-            %button.btn.btn-dark.w-100.semibold#document-filter
+            %button.btn.btn-dark.w-100.semibold#document-filter{ :type => 'button' }
               %span.semibold Valider
           .col-md-1
             %button.btn.btn-default.semibold.btn-reinit{:type => 'button', id: 'launch-reinit'} Réinitialiser

@@ -42,7 +42,7 @@ class DocumentsReloadedPieces extends DocumentsReloadedMain{
                         'dataType': 'json'
                       }
 
-        this.applicationJS.sendRequest(params).then((e)=>{ this.load_pieces(true); });
+        this.applicationJS.sendRequest(params).then((e)=>{ this.load_collaborator_pieces(true); });
       }
     }
   }
@@ -56,11 +56,9 @@ class DocumentsReloadedPieces extends DocumentsReloadedMain{
                         'dataType': 'json'
                       }
 
-        this.applicationJS.sendRequest(params).then((e)=>{ this.load_pieces(true); $(".modal").modal('hide');});
+        this.applicationJS.sendRequest(params).then((e)=>{ this.load_collaborator_pieces(true); $(".modal").modal('hide');});
     }
   }
-
-
 }
 
 

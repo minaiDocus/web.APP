@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class DocumentsReloaded::PreseizuresController < Documents::AbaseController
+class DocumentsReloaded::PreseizuresController < DocumentsReloaded::AbaseController
   skip_before_action :verify_if_active, only: %w[index show]
   before_action :load_preseizure, except: %w[accounts_list update_multiple_preseizures edit_multiple_preseizures]
 
