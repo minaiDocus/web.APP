@@ -368,4 +368,15 @@ function bind_all_events(){
 
 jQuery(function() {
   AppListenTo('window.application_auto_rebind', (e)=>{ bind_all_events() });
+
+  if ($('.verif-fixed-action').length > 0)
+    {
+      if ($('.verif-fixed-action').offset().top <= 100){
+        $('.action-fixed').addClass('fixed-to-top');
+      }else{
+        $('.action-fixed').removeClass('fixed-to-top');        
+      }
+    }
+
+
 });

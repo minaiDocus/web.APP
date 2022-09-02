@@ -249,7 +249,7 @@ class DocumentsReloadedMain{
     window.location.href = `/documents/download_bundle/${pack_id}`
   }
 
-  deliver_preseizures(elem){
+  deliver_preseizures_collaborator(elem){
     let tmp_params = { 'ids': [elem.attr('data-id')], 'type': elem.attr('data-type'), 'multi': elem.attr('data-multi') };
     let params = JSON.parse(JSON.stringify(tmp_params)) || {}; //IMPORTANT: Clone the json object
     let information = 'Voulez vous vraiment livrer cette écriture comptable';
@@ -259,8 +259,10 @@ class DocumentsReloadedMain{
       if(params['type'] == 'special_piece')
       {
         params['ids']  = get_all_selected('piece');
+        params['piece_ids']  = get_all_selected('piece');
         params['type'] = 'piece';
-        information    = `Voulez vous vraiment livrer les écritures comptables non livrées de ${params['ids'].length} pièce(s)?`;
+        //information    = `Voulez vous vraiment livrer les écritures comptables non livrées de ${params['ids'].length} pièce(s)?`;
+        information    = `Voulez vous vraiment livrer les écritures comptables non livrées de ${params['piece_ids'].length} pièce(s)?`;
 
         if(params['ids'].length == 0){
           params['ids']  = tmp_params['ids'];
@@ -289,7 +291,7 @@ class DocumentsReloadedMain{
     params['is_operations'] = VARIABLES.get('is_from_operation_page');
 
     let ajax_params =  {
-                          'url': '/documents/deliver_preseizures',
+                          'url': '/documents_reloaded/deliver_preseizures',
                           'type': 'POST',
                           'data': params,
                           'dataType': 'json'
@@ -306,7 +308,7 @@ jQuery(function() {
   AppListenTo('download_pack_archive', (e)=>{ main.download_pack_archive($(e.detail.obj).attr('data-id')); });
   AppListenTo('download_pack_bundle', (e)=>{ main.download_pack_bundle($(e.detail.obj).attr('data-id')); });
 
-  AppListenTo('documents_deliver_preseizures', (e)=>{ main.deliver_preseizures($(e.detail.obj)); });
+  AppListenTo('documents_deliver_preseizures', (e)=>{ main.deliver_preseizures_collaborator($(e.detail.obj)); });
 
   AppListenTo('documents_export_preseizures', (e)=>{ main.fetch_export_options($(e.detail.obj)); });
   $('#preseizures_export.modal #export_button').unbind('click').bind('click', function(){ main.launch_export(); });
