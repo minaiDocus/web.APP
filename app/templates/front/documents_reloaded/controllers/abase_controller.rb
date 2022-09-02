@@ -156,8 +156,7 @@ class DocumentsReloaded::AbaseController < FrontController #Must be loaded first
     render json: {message: 'Tag mis à jours avec succès'}, status: :ok
   end
 
-  def deliver_preseizures_reloaded
-
+  def deliver_preseizures
     if @user.has_collaborator_action?
       export_type = params[:type]
       export_ids  = Array(params[:ids] || [])
