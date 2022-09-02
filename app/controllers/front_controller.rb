@@ -33,6 +33,8 @@ class FrontController < ApplicationController
   def define_layout
     if request.env["SERVER_NAME"].include?("axelium")
       'front/layout_axelium'
+    elsif request.env["SERVER_NAME"].include?('dk-partners')
+      'front/layout_dk_partners'
     else
       'front/layout'
     end
