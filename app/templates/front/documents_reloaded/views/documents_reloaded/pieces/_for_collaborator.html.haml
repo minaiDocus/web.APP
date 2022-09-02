@@ -1,4 +1,5 @@
 = stylesheet_link_tag 'front/documents_reloaded/assets/stylesheets/main'
+
 .container-fluid.main-content
   .row
     .col-md-9.derivationLeft
@@ -61,7 +62,8 @@
                         %span 
                           #{piece_deleted.name} supprimée le #{piece_deleted.delete_at.try(:to_date)} par #{piece_deleted.delete_by}
                           %span.float-end.restore{ data: {"piece-id": piece_deleted.id}} Restaurer
-            %hr
+          %hr
+
 
     .col-md-10
       %form#piece_filter_form.form-horizontal
@@ -110,8 +112,16 @@
       .box.derivationLeft
         .row#table_pieces
           .col-md-12
-            %table.table.table-striped.list_customers
-              %thead
+            %table.table.table-striped.table-hover.list_customers
+              %thead.verif-fixed-action
+                %th
+                  .row
+                    .icon-actions
+                      %span.pointer.form-check.d-inline.ms-2      
+                        %input.form-check-input.pointer.float-none.select-all{ type: :checkbox, value: "" }
+                      - if @user.has_collaborator_action?
+                        %span.pointer.ms-2.action-selected.deliver_preseizures.hide{title: 'Livraison écriture comptable', data: { id:"@pieces.first.pack.id", type: 'special_piece', multi: 'true'}}= glyphicon('loop-circular', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
+                      %span.pointer.ms-2.action-selected.delete_piece.hide{title: 'Supprimer', multi: 'true'}= glyphicon('trash', { size: '14',  color:'#FF4848'})
                 %th Dossier / Ref pièce
                 %th Date
                 %th Tiers - Numéro de pièce
@@ -121,8 +131,11 @@
               %tbody
                 - @pieces.each do |piece|
                   - preseizure = piece.preseizures.first               
-                  %tr
+                  %tr.box.list
                     - ajx_params = param_encode({ url: show_piece_detail_path(piece.id), method: 'GET', events: 'click', html: { target: '.preseizures_box', target_dest: ".detail-piece-#{piece.id}" }, before_send: 'document_reloaded.toggle_piece_detail' })
+                    %td
+                      %span.form-check          
+                        %input.form-check-input.pointer.float-none.select-document{ data: { id: piece.id, preseizure_ids: piece.preseizures.collect(&:id) }, type: :checkbox, value: "" }
                     %td.pointer.as_idocus_ajax{ title: 'Voir détail', idocus: ajx_params, datas: { piece_id: piece.id } }
                       .name.text-table-green= piece.name
                     %td

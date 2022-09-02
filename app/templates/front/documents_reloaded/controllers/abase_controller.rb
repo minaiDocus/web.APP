@@ -156,7 +156,8 @@ class DocumentsReloaded::AbaseController < FrontController #Must be loaded first
     render json: {message: 'Tag mis à jours avec succès'}, status: :ok
   end
 
-  def deliver_preseizures
+  def deliver_preseizures_reloaded
+
     if @user.has_collaborator_action?
       export_type = params[:type]
       export_ids  = Array(params[:ids] || [])
@@ -168,7 +169,6 @@ class DocumentsReloaded::AbaseController < FrontController #Must be loaded first
       load_params if export_type == 'pack' || export_type == 'report'
 
       preseizures = []
-
       if export_ids.any?
         if export_type == 'piece'
           pieces = Pack::Piece.where(id: export_ids)
@@ -192,7 +192,9 @@ class DocumentsReloaded::AbaseController < FrontController #Must be loaded first
         end
       end
 
+
       preseizures = preseizures.select{ |preseizure| preseizure.is_not_delivered? }
+
       if preseizures.any?
         preseizures.group_by(&:report_id).each do |_report_id, preseizures_by_report|
           PreAssignment::CreateDelivery.new(preseizures_by_report, %w[ibiza exact_online my_unisoft sage_gec acd]).execute

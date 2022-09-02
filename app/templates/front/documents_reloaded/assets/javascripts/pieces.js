@@ -23,7 +23,8 @@ class DocumentsReloadedPieces extends DocumentsReloadedMain{
 
 
   delete_piece(elem){
-    if(confirm('Voulez vous vraiment supprimer cette pièce')){
+
+    if(confirm('Voulez vous vraiment supprimer la(les) pièce(s) sélectionnée(s)')){
       let multi = elem.attr('multi') || false;
       let ids   = []
 
