@@ -1,3 +1,5 @@
+= stylesheet_link_tag 'front/documents_reloaded/assets/stylesheets/main'
+
 .container-fluid.main-content
   .row
     .col-md-9.derivationLeft
@@ -17,6 +19,7 @@
   .mb-4
 
   .row
+    .hide.result-sol
     .col-md-2
       .mt-5
       .lefter
@@ -59,48 +62,66 @@
                         %span 
                           #{piece_deleted.name} supprimée le #{piece_deleted.delete_at.try(:to_date)} par #{piece_deleted.delete_by}
                           %span.float-end.restore{ data: {"piece-id": piece_deleted.id}} Restaurer
-            %hr
+          %hr
+
 
     .col-md-10
-      .row
-        .col-md-3
-          .row
-            .col-md-3.pt-2
-              .semibold Dossier
-            .col-md-9
-              .form-group.no-margin.hide_on_load.hide
-                %input.user_and_journals{ type: 'hidden', value: user_and_journal_list(true) }
-              - if accounts_options.size == (@options.try(:[], :owner_ids).try(:size) rescue 0)
-                = select_tag 'customer_document_filter', options_for_select(accounts_options), id: 'customer_document_filter', multiple: true
-              - else
-                = select_tag 'customer_document_filter', options_for_select(accounts_options, @options.try(:[], :owner_ids)), id: 'customer_document_filter', multiple: true
-        .col-md-3
-          .row
-            .col-md-3.pt-2
-              .semibold Journal
-            .col-md-9
-              = select_tag 'journal_document_filter', options_for_select(accounts_journaux, @options.try(:[], :journal)), id: 'journal_document_filter', multiple: true
-        .col-md-2
-          .row
-            .col-md-4.pt-2
-              .semibold Periode
-            .col-md-8
-              = select_tag 'period_document_filter', options_for_select(period_list, @options.try(:[], :period)), id: 'period_document_filter', multiple: true
-        .col-md-3
-          .search-content
-            .row.no-margin
-              .col-md-1.no-padding.text-center.glass
-                = glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })
-              .col-md-11.no-padding.no-margin
-                %input#search_input{ name:'pack_name', placeholder: 'Recherche (contenu, dossier)', value: @options.try(:[], :text) }
-        .col-md-1
-          %button.btn.btn-dark.w-100.semibold#document-filter
-            %span.semibold Valider
+      %form#piece_filter_form.form-horizontal
+        .row
+          .col-md-3
+            .row
+              .col-md-3.pt-2
+                .semibold Dossier
+              .col-md-9
+                .form-group.no-margin.hide_on_load.hide
+                  %input.user_and_journals{ type: 'hidden', value: user_and_journal_list(true) }
+
+                  - if accounts_options.size == (@options.try(:[], :owner_ids).try(:size) rescue 0)
+                    = select_tag 'collaborator_document_filter', options_for_select(accounts_options), id: 'collaborator_document_filter', multiple: true
+                  - else
+                    = select_tag 'collaborator_document_filter', options_for_select(accounts_options, @options.try(:[], :owner_ids)), id: 'collaborator_document_filter', multiple: true
+          .col-md-2
+            .row
+              .col-md-3.pt-2
+                .semibold Journal
+              .col-md-9
+                .form-group.no-margin.hide_on_load.hide
+                  %input.user_and_journals{ type: 'hidden', value: accounts_journaux(true) }
+                  = select_tag 'collaborator_journal_document_filter', options_for_select(accounts_journaux, @options.try(:[], :journal)), id: 'collaborator_journal_document_filter', multiple: true
+          .col-md-2
+            .row
+              .col-md-4.pt-2
+                .semibold Periode
+              .col-md-8
+                .form-group.no-margin.hide_on_load.hide
+                  %input.user_and_journals{ type: 'hidden', value: period_list() }
+                  = select_tag 'collaborator_period_document_filter', options_for_select(period_list, @options.try(:[], :period)), id: 'collaborator_period_document_filter', multiple: true
+          .col-md-3
+            .form-group.no-margin.hide_on_load.hide
+              .search-content
+                .row.no-margin
+                  .col-md-1.no-padding.text-center.glass
+                    = glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })
+                  .col-md-11.no-padding.no-margin
+                    %input#search_input{ name:'piece_name', placeholder: 'Recherche (contenu, dossier)', value: @options.try(:[], :text) }
+          .col-md-1
+            %button.btn.btn-dark.w-100.semibold#document-filter{ :type => 'button' }
+              %span.semibold Valider
+          .col-md-1
+            %button.btn.btn-default.semibold.btn-reinit{:type => 'button', id: 'launch-reinit'} Réinitialiser
       .box.derivationLeft
         .row#table_pieces
           .col-md-12
-            %table.table.table-striped.list_customers
-              %thead
+            %table.table.table-striped.table-hover.list_customers
+              %thead.verif-fixed-action
+                %th
+                  .row
+                    .icon-actions
+                      %span.pointer.form-check.d-inline.ms-2      
+                        %input.form-check-input.pointer.float-none.select-all{ type: :checkbox, value: "" }
+                      - if @user.has_collaborator_action?
+                        %span.pointer.ms-2.action-selected.deliver_preseizures.hide{title: 'Livraison écriture comptable', data: { id:"@pieces.first.pack.id", type: 'special_piece', multi: 'true'}}= glyphicon('loop-circular', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
+                      %span.pointer.ms-2.action-selected.delete_piece.hide{title: 'Supprimer', multi: 'true'}= glyphicon('trash', { size: '14',  color:'#FF4848'})
                 %th Dossier / Ref pièce
                 %th Date
                 %th Tiers - Numéro de pièce
@@ -110,8 +131,11 @@
               %tbody
                 - @pieces.each do |piece|
                   - preseizure = piece.preseizures.first               
-                  %tr
+                  %tr.box.list
                     - ajx_params = param_encode({ url: show_piece_detail_path(piece.id), method: 'GET', events: 'click', html: { target: '.preseizures_box', target_dest: ".detail-piece-#{piece.id}" }, before_send: 'document_reloaded.toggle_piece_detail' })
+                    %td
+                      %span.form-check          
+                        %input.form-check-input.pointer.float-none.select-document{ data: { id: piece.id, preseizure_ids: piece.preseizures.collect(&:id) }, type: :checkbox, value: "" }
                     %td.pointer.as_idocus_ajax{ title: 'Voir détail', idocus: ajx_params, datas: { piece_id: piece.id } }
                       .name.text-table-green= piece.name
                     %td
@@ -146,7 +170,7 @@
                           %li
                             %span.ms-2.delete_piece{title: 'Supprimer la pièce', data: {id: piece.id}}=glyphicon('trash', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Supprimer'
                   %tr.hide{ class: "tr_piece_#{piece.id}" }
-                    %td{ colspan: 6 }
+                    %td{ colspan: 7 }
                       .detail{ class: "detail-piece-#{piece.id}" }
                         .text-center
                           %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}
@@ -184,6 +208,12 @@
         .mb-4
         .view-content
       .modal-footer
+
+
+
+
+
+
 
 = render partial: 'upload_dialog' if @render_upload
 

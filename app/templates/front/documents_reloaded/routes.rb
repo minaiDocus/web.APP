@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     post 'documents_reloaded/restore', to: 'pieces#restore', as: 'restore_document_reloaded'
     delete 'documents_reloaded/delete_temp_document', to: 'pieces#delete_temp_document', as: 'delete_temp_document'
     get 'preseizures_reloaded/infos', to: 'preseizures#index', as: 'preseizures_reloaded_infos'
+    post 'documents_reloaded/deliver_preseizures', to: 'abase#deliver_preseizures', as: 'documents_reloaded_deliver_preseizures'
   end
 
   namespace :documents_reloaded do

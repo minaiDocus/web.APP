@@ -163,7 +163,7 @@ $(document).ready(function() {
           blob = this.response
           download_link = document.createElement('a')
           download_link.href = window.URL.createObjectURL(new Blob([ blob ], {type: 'application/vnd.ms-excel; charset=utf-8'}))
-          download_link.download = "reporting_iDocus_#{month}_#{year}.xls"
+          download_link.download = `reporting_iDocus_${month}_${year}.xls`
           download_link.click()
       }
     }

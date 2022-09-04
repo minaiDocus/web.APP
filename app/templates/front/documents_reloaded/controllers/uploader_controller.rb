@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class DocumentsReloaded::UploaderController < Documents::AbaseController
+class DocumentsReloaded::UploaderController < DocumentsReloaded::AbaseController
   before_action :load_upload_user, except: %w[create]
 
   def create

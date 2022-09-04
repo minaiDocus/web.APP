@@ -8,7 +8,7 @@ class DocumentsReloadedPieces extends DocumentsReloadedMain{
     super();
 
     this.ajax_params =  {
-                          'url': '/documents',
+                          'url': '/documents_reloaded',
                           'type': 'GET',
                         }
   }
@@ -17,9 +17,14 @@ class DocumentsReloadedPieces extends DocumentsReloadedMain{
     this.load_datas(serialize_form, append);
   }
 
+  load_collaborator_pieces(serialize_form=false, append=false){
+    this.load_collaborator_datas(serialize_form);
+  }
+
 
   delete_piece(elem){
-    if(confirm('Voulez vous vraiment supprimer cette pièce')){
+
+    if(confirm('Voulez vous vraiment supprimer la(les) pièce(s) sélectionnée(s)')){
       let multi = elem.attr('multi') || false;
       let ids   = []
 
@@ -38,7 +43,7 @@ class DocumentsReloadedPieces extends DocumentsReloadedMain{
                         'dataType': 'json'
                       }
 
-        this.applicationJS.sendRequest(params).then((e)=>{ this.load_pieces(true); });
+        this.applicationJS.sendRequest(params).then((e)=>{ this.load_collaborator_pieces(true); });
       }
     }
   }
@@ -52,11 +57,9 @@ class DocumentsReloadedPieces extends DocumentsReloadedMain{
                         'dataType': 'json'
                       }
 
-        this.applicationJS.sendRequest(params).then((e)=>{ this.load_pieces(true); $(".modal").modal('hide');});
+        this.applicationJS.sendRequest(params).then((e)=>{ this.load_collaborator_pieces(true); $(".modal").modal('hide');});
     }
   }
-
-
 }
 
 
@@ -74,6 +77,9 @@ jQuery(function() {
 
   AppListenTo('document_customer_filter', (e)=>{ main.load_packs(true); });
   AppListenTo('filter_pack_badge', (e)=>{ main.load_packs(true); });
+
+  AppListenTo('document_collaborator_filter', (e)=>{ main.load_collaborator_pieces(true); });
+
 
 
   AppListenTo('documents_loaded_delete_piece', (e)=>{ main.delete_piece($(e.detail.obj)) });

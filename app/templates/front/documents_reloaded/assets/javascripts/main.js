@@ -77,7 +77,8 @@ class DocumentsReloadedMain{
 
     this.ajax_params['target'] = (append)? null : '.main-content';
     this.ajax_params['data']   = data.join('&');
-
+    console.log("data = ");
+    console.log(data);
     this.applicationJS.sendRequest(this.ajax_params, function(){ $('#more-filter.modal').modal('hide'); })
                        .then((e)=>{
                           if(append){
@@ -93,6 +94,77 @@ class DocumentsReloadedMain{
                           bind_all_events();
                         })
                        .catch(()=>{ this.action_locker = false; });
+  }
+
+  load_collaborator_datas(serialize_form=false, append=false){
+    if(this.action_locker)
+      return false
+
+     if(!append)
+      this.page = 1;
+
+    this.action_locker = true;
+
+    let data = [];
+
+    if(serialize_form){
+      data.push($('#piece_filter_form').serialize().toString());
+      if(!append)
+        data.push(`activate_filter=true`);
+    }
+    else
+    {
+      let selector = "#piece_filter_form input, #piece_filter_form select, #collaborator_document_filter, #collaborator_journal_document_filter, collaborator_period_filter, #search_input";
+      $(selector).not('.operator').val(''); data.push( `reinit=true` );
+    }
+
+    let search_pattern = $('.search-content #search_input').val();
+
+    if(search_pattern && search_pattern != ''){ data.push(`text=${encodeURIComponent(search_pattern)}`); }
+    if(this.page > 1){ data.push(`page=${this.page}`) }
+
+
+    if ($('#collaborator_document_filter').val()){
+      data.push( 'view=' + $('#collaborator_document_filter').val() )
+    }
+
+    if($('#collaborator_journal_document_filter').val()){
+      data.push( 'journal=' + $('#collaborator_journal_document_filter').val() )
+    }
+
+    if($('#collaborator_period_document_filter').val()){
+      data.push( 'period=' + $('#collaborator_period_document_filter').val() )
+    }
+
+    console.log("data = ");
+    console.log(data);
+
+    this.ajax_params['target'] = (append)? null : '.main-content';
+    this.ajax_params['type'] = 'GET'
+    this.ajax_params['data']   = data.join('&');
+
+    console.log("ajax_params = ");
+    console.log(this.ajax_params);
+
+    this.applicationJS.sendRequest(this.ajax_params)
+                       .then((e)=>{
+                        if(append){
+                            if($(e).find('.no-data-found').length > 0){
+                              this.applicationJS.noticeSuccessMessageFrom(null, 'Plus aucun résultat!');
+                              this.page = -1;
+                              console.log(e)
+                            }else{
+                              $('.all-results').append($(e).find('.all-results').html());
+                            }
+                          }
+
+                          this.action_locker = false
+                          console.log("this.action_locker = ")
+                          console.log(this.action_locker)
+                          bind_all_events();
+                        })
+                       .catch(()=>{ this.action_locker = false; });
+
   }
 
   load_next_page(){
@@ -177,7 +249,7 @@ class DocumentsReloadedMain{
     window.location.href = `/documents/download_bundle/${pack_id}`
   }
 
-  deliver_preseizures(elem){
+  deliver_preseizures_collaborator(elem){
     let tmp_params = { 'ids': [elem.attr('data-id')], 'type': elem.attr('data-type'), 'multi': elem.attr('data-multi') };
     let params = JSON.parse(JSON.stringify(tmp_params)) || {}; //IMPORTANT: Clone the json object
     let information = 'Voulez vous vraiment livrer cette écriture comptable';
@@ -187,8 +259,10 @@ class DocumentsReloadedMain{
       if(params['type'] == 'special_piece')
       {
         params['ids']  = get_all_selected('piece');
+        params['piece_ids']  = get_all_selected('piece');
         params['type'] = 'piece';
-        information    = `Voulez vous vraiment livrer les écritures comptables non livrées de ${params['ids'].length} pièce(s)?`;
+        //information    = `Voulez vous vraiment livrer les écritures comptables non livrées de ${params['ids'].length} pièce(s)?`;
+        information    = `Voulez vous vraiment livrer les écritures comptables non livrées de ${params['piece_ids'].length} pièce(s)?`;
 
         if(params['ids'].length == 0){
           params['ids']  = tmp_params['ids'];
@@ -217,7 +291,7 @@ class DocumentsReloadedMain{
     params['is_operations'] = VARIABLES.get('is_from_operation_page');
 
     let ajax_params =  {
-                          'url': '/documents/deliver_preseizures',
+                          'url': '/documents_reloaded/deliver_preseizures',
                           'type': 'POST',
                           'data': params,
                           'dataType': 'json'
@@ -234,7 +308,7 @@ jQuery(function() {
   AppListenTo('download_pack_archive', (e)=>{ main.download_pack_archive($(e.detail.obj).attr('data-id')); });
   AppListenTo('download_pack_bundle', (e)=>{ main.download_pack_bundle($(e.detail.obj).attr('data-id')); });
 
-  AppListenTo('documents_deliver_preseizures', (e)=>{ main.deliver_preseizures($(e.detail.obj)); });
+  AppListenTo('documents_deliver_preseizures', (e)=>{ main.deliver_preseizures_collaborator($(e.detail.obj)); });
 
   AppListenTo('documents_export_preseizures', (e)=>{ main.fetch_export_options($(e.detail.obj)); });
   $('#preseizures_export.modal #export_button').unbind('click').bind('click', function(){ main.launch_export(); });

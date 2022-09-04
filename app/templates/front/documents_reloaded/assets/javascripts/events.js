@@ -18,7 +18,7 @@ function bind_all_events(){
     "noneText": "Choix",
   });
 
-  $('#customer_document_filter0').unbind('change.mix_journal').bind('change.mix_journal', function(e){
+  $('#customer_document_filter').unbind('change.mix_journal').bind('change.mix_journal', function(e){
     if ($('.user_and_journals').length > 0){
       let lists = JSON.parse( $('.user_and_journals').val() );
     }
@@ -311,35 +311,72 @@ function bind_all_events(){
     $('.btn.add-entry').prop('disabled', false);
   });
 
-  $('#document-filter').unbind('click').bind('click', function(e){
-    console.log("valid bouton clicked");
+
+
+  $('#collaborator_document_filter').multiSelect({
+    "texts" : { "searchplaceholder": "Choix dossiers", "noItemsAvailable": 'Aucun dossier trouvé'},
+    "resultsContainer": '.result-sol',
+    "maxHeight": "500px",
+    "noneText": "Choix dossier",
+  });
+
+  $('#collaborator_journal_document_filter').multiSelect({
+    "noneText": "Choix journaux",
+  });
+
+  $('#collaborator_period_document_filter').multiSelect({
+    "noneText": "Choix",
+  });
+
+  $('#collaborator_document_filter').unbind('change.mix_journal').bind('change.mix_journal', function(e){
+    let lists = [];
     if ($('.user_and_journals').length > 0){
-      let lists = JSON.parse( $('.user_and_journals').val() );
-      console.log("lists = user_and_journals.val" + lists);
+      lists = JSON.parse( $('.user_and_journals').val() );
     }
     let current_code = $(this).val();
-    console.log("current_code = " + current_code);
-/*
+    console.log("current_code = ");
+    console.log(current_code);
+
+    console.log("#collaborator_document_filter.val = ");
+    console.log($("#collaborator_document_filter").val());
+
+
     if(current_code !== null && current_code !== undefined && current_code.length > 0){
-      $('#journal_document_filter option').addClass('hide');
-      $('#journal_document_filter').parent().find('.multi-select-container .multi-select-menuitem').addClass('hide');
+      $('#collaborator_journal_document_filter option').addClass('hide');
+      $('#collaborator_journal_document_filter').parent().find('.multi-select-container .multi-select-menuitem').addClass('hide');
       current_code.forEach((code)=>{
         let found_result = lists.find((e)=>{ return e.user == code })
         if(found_result){
           found_result.journals.forEach((journal)=>{ 
-            $(`#journal_document_filter option[value=${journal}]`).removeClass('hide');
-            $('#journal_document_filter').parent().find(`.multi-select-container .multi-select-menuitem input[value=${journal}]`).parent().removeClass('hide');
+            $(`#collaborator_journal_document_filter option[value=${journal}]`).removeClass('hide');
+            $('#collaborator_journal_document_filter').parent().find(`.multi-select-container .multi-select-menuitem input[value=${journal}]`).parent().removeClass('hide');
           });
         }
       })
     }else{
-      $('#journal_document_filter option').removeClass('hide');
-      $('#journal_document_filter').parent().find('.multi-select-container .multi-select-menuitem').removeClass('hide');
-    }*/
+      $('#collaborator_journal_document_filter option').removeClass('hide');
+      $('#collaborator_journal_document_filter').parent().find('.multi-select-container .multi-select-menuitem').removeClass('hide');
+    }
   });
+  setTimeout(()=>{ $('.hide_on_load').removeClass('hide'); $('#collaborator_document_filter').change() }, 1000); //TODO: find a better way to change the user selector
+
+
+
+  $('#document-filter').unbind('click').bind('click', function(e){ AppEmit('document_collaborator_filter'); });
 
 }
 
 jQuery(function() {
   AppListenTo('window.application_auto_rebind', (e)=>{ bind_all_events() });
+
+  if ($('.verif-fixed-action').length > 0)
+    {
+      if ($('.verif-fixed-action').offset().top <= 100){
+        $('.action-fixed').addClass('fixed-to-top');
+      }else{
+        $('.action-fixed').removeClass('fixed-to-top');        
+      }
+    }
+
+
 });

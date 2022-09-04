@@ -441,7 +441,7 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
     @filters[:by_piece]      = @s_params[:by_piece]              if @s_params[:by_piece].present?
     @filters[:by_preseizure] = @s_params[:by_preseizure]         if @s_params[:by_preseizure].present?
     @filters[:journal]       = @s_params[:journal]               if @s_params[:journal].present?
-    @filters[:view]          = (@s_params[:view].try(:split, ',').try(:size).to_i >= 15) ? nil : @s_params[:view] if @s_params[:view]
+    @filters[:view]          = ((@s_params[:view].try(:split, ',').try(:size).to_i >= 15) ? nil : @s_params[:view]) if @s_params[:view]
 
     if params[:reinit].present?
       session.delete(session_name.to_sym)
@@ -484,6 +484,8 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
                           else
                             account_ids
                           end
+
+    @options[:user_ids]  = @options[:user_ids].presence || [-1]
     @options[:owner_ids] = @options[:user_ids]
 
     @options[:journal] =  if @s_params[:journal].present?
