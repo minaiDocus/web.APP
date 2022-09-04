@@ -725,6 +725,7 @@ DEPENDENCIES
   fast_jsonapi
   ftpd
   gio2 (= 3.4.9)
+  glib2
   gobject-introspection (= 3.4.9)
   google-api-client
   google_drive
