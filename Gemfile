@@ -44,6 +44,7 @@ gem 'gio2', '3.4.9'
 gem 'gobject-introspection', '3.4.9'
 gem 'cairo-gobject', '3.4.9'
 gem 'poppler', '3.4.9'
+gem 'glib2'
 
 # Object renderer
 gem 'rabl'
@@ -65,6 +66,7 @@ gem 'capistrano-rvm'
 gem 'capistrano-slackify'
 gem 'capistrano_colors', require: false
 gem 'ed25519'
+gem 'net-ssh', '7.0.1'
 
 # Validators
 gem 'validate_url'
