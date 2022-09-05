@@ -62,12 +62,14 @@ function bind_all_events(){
   $('.select-all').unbind('click').bind('click',function(e) {
     e.stopPropagation();
     if($(this).is(':checked')){
+      $(this).attr('title', 'Désélectionner toutes les pièces')
       $('.select-document, .select-operation').prop('checked', true);
       $('.select-document, .select-operation').closest('.box').addClass('selected');
       $('.action-selected').removeClass('hide');
       $('.grid .stamp-content').addClass('selected');      
     }
     else{
+      $(this).attr('title', 'Sélectionner toutes les pièces')
       $('.select-document, .select-operation').prop('checked', false);
       $('.select-document, .select-operation').closest('.box').removeClass('selected');
       $('.action-selected').addClass('hide');
@@ -85,7 +87,7 @@ function bind_all_events(){
       $('.grid .stamp-content#document_grid_' + piece_id).addClass('selected');
     }else{
       if ($('.select-all').is(':checked')) { $('.select-all').prop('checked', false); }
-
+      $('.select-all').attr('title', 'Sélectionner toutes les pièces');
       $(this).closest('.box').removeClass('selected');
       $('.grid .stamp-content#document_grid_' + piece_id).removeClass('selected');
     }
@@ -334,12 +336,6 @@ function bind_all_events(){
       lists = JSON.parse( $('.user_and_journals').val() );
     }
     let current_code = $(this).val();
-    console.log("current_code = ");
-    console.log(current_code);
-
-    console.log("#collaborator_document_filter.val = ");
-    console.log($("#collaborator_document_filter").val());
-
 
     if(current_code !== null && current_code !== undefined && current_code.length > 0){
       $('#collaborator_journal_document_filter option').addClass('hide');
@@ -366,15 +362,4 @@ function bind_all_events(){
 
 jQuery(function() {
   AppListenTo('window.application_auto_rebind', (e)=>{ bind_all_events() });
-
-  if ($('.verif-fixed-action').length > 0)
-    {
-      if ($('.verif-fixed-action').offset().top <= 100){
-        $('.action-fixed').addClass('fixed-to-top');
-      }else{
-        $('.action-fixed').removeClass('fixed-to-top');        
-      }
-    }
-
-
 });

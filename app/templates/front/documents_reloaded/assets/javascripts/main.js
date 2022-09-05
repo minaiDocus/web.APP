@@ -77,8 +77,6 @@ class DocumentsReloadedMain{
 
     this.ajax_params['target'] = (append)? null : '.main-content';
     this.ajax_params['data']   = data.join('&');
-    console.log("data = ");
-    console.log(data);
     this.applicationJS.sendRequest(this.ajax_params, function(){ $('#more-filter.modal').modal('hide'); })
                        .then((e)=>{
                           if(append){
@@ -136,15 +134,10 @@ class DocumentsReloadedMain{
       data.push( 'period=' + $('#collaborator_period_document_filter').val() )
     }
 
-    console.log("data = ");
-    console.log(data);
-
     this.ajax_params['target'] = (append)? null : '.main-content';
     this.ajax_params['type'] = 'GET'
     this.ajax_params['data']   = data.join('&');
 
-    console.log("ajax_params = ");
-    console.log(this.ajax_params);
 
     this.applicationJS.sendRequest(this.ajax_params)
                        .then((e)=>{
@@ -152,15 +145,13 @@ class DocumentsReloadedMain{
                             if($(e).find('.no-data-found').length > 0){
                               this.applicationJS.noticeSuccessMessageFrom(null, 'Plus aucun résultat!');
                               this.page = -1;
-                              console.log(e)
                             }else{
                               $('.all-results').append($(e).find('.all-results').html());
                             }
                           }
 
                           this.action_locker = false
-                          console.log("this.action_locker = ")
-                          console.log(this.action_locker)
+
                           bind_all_events();
                         })
                        .catch(()=>{ this.action_locker = false; });
