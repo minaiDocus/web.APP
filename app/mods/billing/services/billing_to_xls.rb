@@ -65,22 +65,28 @@ class BillingMod::BillingToXls
 
       next if _period > Time.now.strftime('%Y%m').to_i
 
-      @customers       = User.where(id: @customers_ids).active_at(_date_end).order(code: :asc)
-      period_documents = PeriodDocument.where(user_id: @customers_ids).of_period(_period).order(created_at: :asc, name: :asc)
-      data_flows       = BillingMod::DataFlow.where(user_id: @customers_ids).of_period(_period)
+      @customers = User.where(id: @customers_ids).active_at(_date_end).order(code: :asc)
 
-      @customers.each do |user|
-        documents        = period_documents.to_a.extract!{ |doc| doc.user_id == user.id }
-        @operations_size = data_flows.to_a.extract!{ |flow| flow.user_id == user.id }.first.try(:operations).to_i
+      all_thread = []
 
-        if documents.any?
-          documents.each do |document|
-            fill_data_with(user, month_ind, document)
+      @customers.each_slice(100) do |user_groups|
+        all_thread << Thread.new(user_groups) do |usr_grp|
+          usr_grp.each do |user|
+            @operations_size   = BillingMod::DataFlow.where(user_id: user.id).of_period(_period).limit(1).select(:operations).first.try(:operations).to_i
+            documents          = PeriodDocument.where(user_id: user.id).of_period(_period).order(created_at: :asc, name: :asc).select(:name, :pieces, :preseizures_pieces, :expenses_pieces, :scanned_pieces, :uploaded_pieces, :dematbox_scanned_pieces, :retrieved_pieces, :scanned_sheets, :pages, :scanned_pages, :uploaded_pages, :dematbox_scanned_pages, :retrieved_pages, :paperclips, :oversized)
+
+            if documents.any?
+              documents.each do |document|
+                fill_data_with(user, month_ind, document)
+              end
+            else
+              fill_data_with(user, month_ind)
+            end
           end
-        else
-          fill_data_with(user, month_ind)
         end
       end
+
+      all_thread.each(&:join)
     end
 
     range = @with_organization_info ? 0..5 : 0..4
@@ -116,6 +122,9 @@ class BillingMod::BillingToXls
 
     @list = []
 
+    organizations_id = User.where(id: @customers_ids).distinct.pluck(:organization_id)
+    organizations    = Organization.where(id: organizations_id)
+
     12.times do |month_ind|
       month_ind += 1
       next if @month > 0 && month_ind != @month
@@ -127,66 +136,62 @@ class BillingMod::BillingToXls
 
       next if _period > Time.now.strftime('%Y%m').to_i
 
-      @customers    = User.where(id: @customers_ids).active_at(_date_end).order(organization_id: :asc, code: :asc)
-      all_billings  = BillingMod::Billing.of_period(_period).where(owner_id: @customers_ids, owner_type: 'User')
+      all_thread = []
 
-      last_org     = nil
-      last_invoice = nil
+      organizations.each do |organization|
+        all_thread << Thread.new do
+          next if not organization.debit_mandate.configured?
 
-      @customers.each do |user|
-        if last_org != user.organization
-          last_org     = user.organization
-          last_invoice = nil
+          last_invoice = organization.invoices.of_period(_period).first
+          next if !last_invoice && _period != CustomUtils.period_of(Time.now)
 
-          if last_org
-            last_invoice = last_org.invoices.of_period(_period).first
+          if last_invoice || _period == CustomUtils.period_of(Time.now)
+            organization.billings.of_period(_period).select(:name, :title, :price).each do |billing|
+              data = []
+              data << organization.try(:name) if @with_organization_info
 
-            if last_invoice || _period == CustomUtils.period_of(Time.now)
-              last_org.billings.of_period(_period).each do |billing|
-                data = []
-                data << last_org.try(:name) if @with_organization_info
+              data +=   [
+                          month_ind,
+                          @year,
+                          organization.code,
+                          organization.name,
+                          billing.title,
+                          '',
+                          format_price(billing.price)
+                        ]
+              @list << data
+            end
+          end
 
-                data +=   [
-                            month_ind,
-                            @year,
-                            last_org.code,
-                            last_org.name,
-                            billing.title,
-                            '',
-                            format_price(billing.price)
-                          ]
-                @list << data
-              end
+          @customers = User.where(id: @customers_ids, organization_id: organization.id).active_at(_date_end).order(code: :asc)
+          @customers.each do |user|
+            billings  = BillingMod::Billing.of_period(_period).where(owner_id: user.id, owner_type: 'User').select(:name, :title, :price)
+            next if billings.size == 0 
+
+            billings.each do |billing|
+              data = []
+              data << user.try(:organization).try(:name) if @with_organization_info
+
+              group_title = BillingMod::Configuration::LISTS[billing.name.to_sym].try(:[], :human_name).presence || billing.title
+              title       = group_title != billing.title ? billing.title : ''
+
+              data += [
+                        month_ind,
+                        @year,
+                        user.try(:code).to_s,
+                        user.try(:name).to_s,
+                        group_title,
+                        title,
+                        format_price(billing.price)
+                      ]
+
+              @list << data
             end
           end
         end
-
-        next if !last_invoice && _period != CustomUtils.period_of(Time.now)
-
-        billings  = all_billings.to_a.extract!{|bl| bl.owner_id == user.id}
-
-        next if billings.size == 0 
-
-        billings.each do |billing|
-          data = []
-          data << user.try(:organization).try(:name) if @with_organization_info
-
-          group_title = BillingMod::Configuration::LISTS[billing.name.to_sym].try(:[], :human_name).presence || billing.title
-          title       = group_title != billing.title ? billing.title : ''
-
-          data += [
-                    month_ind,
-                    @year,
-                    user.try(:code).to_s,
-                    user.try(:name).to_s,
-                    group_title,
-                    title,
-                    format_price(billing.price)
-                  ]
-
-          @list << data
-        end
       end
+
+      all_thread.each(&:join)
     end
 
     range = @with_organization_info ? 0..3 : 0..2
@@ -231,8 +236,9 @@ class BillingMod::BillingToXls
               document.try(:dematbox_scanned_pages).to_i,
               document.try(:retrieved_pages).to_i,
               document.try(:paperclips).to_i,
-              document.try(:oversize).to_i
+              document.try(:oversized).to_i
             ]
+
     @list << data
   end
 end
