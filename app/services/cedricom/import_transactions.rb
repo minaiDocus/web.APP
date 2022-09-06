@@ -189,7 +189,7 @@ module Cedricom
       cfonb_by_line.each do |line|
         # REMOVE : FILTER DUPLICATED DATA FROM CEDRICOM RECEPTION
         # next if raw_operations.size > 0 && raw_operations.select{ |raw| raw[:date] == date(line) && raw[:label] == label(line) && raw[:amount] == amount(line) && raw[:bank_account] == bank_account(line) }.size > 0
-        next if lines.size > 0 && lines.include?(line.squish)
+        # next if lines.size > 0 && lines.include?(line.squish)
 
         lines << line.squish
 
