@@ -29,8 +29,7 @@ class DocumentsReloadedUploader{
   reload_packs(){
     if(VARIABLES.get('can_reload_packs')){
       VARIABLES.set('can_reload_packs', false);
-      let main = new DocumentsPieces();
-      main.load_packs(true);
+      window.location.replace(window.location.href);
     }
   }
 
@@ -111,7 +110,7 @@ jQuery(function() {
         uploader.fill_journals_and_periods();
     }, 500)
   });
-  uploader.base_modal.on('hide.bs.modal', function(e){ 
+  uploader.base_modal.on('hidden.bs.modal', function(e){ 
     uploader.reload_packs(); 
     VARIABLES.set('is_loaded', true);
   });

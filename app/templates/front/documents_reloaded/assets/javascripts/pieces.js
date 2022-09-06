@@ -68,6 +68,8 @@ class DocumentsReloadedPieces extends DocumentsReloadedMain{
 jQuery(function() {
   let main = new DocumentsReloadedPieces();
 
+  alert('piece JS');
+
   AppListenTo('documents_load_datas', (e)=>{ main.load_packs(true); });
   AppListenTo('documents_reinit_datas', (e)=>{ main.load_packs(false); });
 

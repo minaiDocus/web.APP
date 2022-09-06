@@ -152,6 +152,27 @@ class TempDocument < ApplicationRecord
     end
   end
 
+  def self.search(options, text="")
+    page     = options[:page] || 1
+    per_page = options[:per_page] || 20
+
+    query = self.not_deleted
+
+    query = query.where(user_id: options[:user_ids])                                             if options[:user_ids].present?
+    query = query.where(label: options[:label])                                                  if options[:label].present?
+    query = query.where('tags LIKE ?', "%#{options[:tags]}%")                                    if options[:tags].present?
+    query = query.where('original_file_name LIKE ? OR tags LIKE ?', "%#{text}%", "%#{text}%")    if text.present?
+
+    # if options[:position_operation].present?
+    #   query = query.where("pack_pieces.position #{options[:position_operation].tr('012', ' ><')}= ?", options[:position]) if options[:position].present?
+    # else
+    #   query = query.where("pack_pieces.position IN (#{options[:position].join(',')})" ) if options[:position].present?
+    # end
+
+    query.order(position: :asc) if options[:sort] == true
+
+    query.page(page).per(per_page)      
+  end
 
   def self.find_with(options)
     where(options).first

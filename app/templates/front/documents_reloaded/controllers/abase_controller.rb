@@ -471,7 +471,7 @@ class DocumentsReloaded::AbaseController < FrontController #Must be loaded first
       @options[:piece_created_at]           = @s_params[:by_piece].try(:[], :created_at)
       @options[:piece_created_at_operation] = @s_params[:by_piece].try(:[], :created_at_operation)
 
-      @options[:tags] = @s_params[:by_piece].try(:[], :tags)
+      @options[:tags] = params[:by_all].try(:[], :tags)
 
       @options[:pre_assignment_state] = @s_params[:by_piece].try(:[], :state_piece)
       @options[:piece_number]         = @s_params[:by_piece].try(:[], :piece_number)
