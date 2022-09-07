@@ -137,16 +137,17 @@ class BillingMod::BillingToXls
       next if _period > Time.now.strftime('%Y%m').to_i
 
       all_thread = []
+      amounts    = 0
 
       organizations.each do |organization|
-        all_thread << Thread.new do
-          next if not organization.debit_mandate.configured?
-
+        # all_thread << Thread.new do
           last_invoice = organization.invoices.of_period(_period).first
           next if !last_invoice && _period != CustomUtils.period_of(Time.now)
 
           if last_invoice || _period == CustomUtils.period_of(Time.now)
-            organization.billings.of_period(_period).select(:name, :title, :price).each do |billing|
+            organization.billings.of_period(_period).select(:id, :name, :title, :price).each do |billing|
+              amounts = amounts.to_f + billing.price.to_f
+
               data = []
               data << organization.try(:name) if @with_organization_info
 
@@ -165,10 +166,12 @@ class BillingMod::BillingToXls
 
           @customers = User.where(id: @customers_ids, organization_id: organization.id).active_at(_date_end).order(code: :asc)
           @customers.each do |user|
-            billings  = BillingMod::Billing.of_period(_period).where(owner_id: user.id, owner_type: 'User').select(:name, :title, :price)
+            billings  = BillingMod::Billing.of_period(_period).where(owner_id: user.id, owner_type: 'User').select(:id, :name, :title, :price)
             next if billings.size == 0 
 
             billings.each do |billing|
+              amounts = amounts.to_f + billing.price.to_f
+
               data = []
               data << user.try(:organization).try(:name) if @with_organization_info
 
@@ -188,10 +191,12 @@ class BillingMod::BillingToXls
               @list << data
             end
           end
-        end
+        # end
       end
 
-      all_thread.each(&:join)
+      # all_thread.each(&:join)
+
+      p "=== Amount : #{amounts.to_f / 100}"
     end
 
     range = @with_organization_info ? 0..3 : 0..2
