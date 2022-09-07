@@ -166,10 +166,11 @@
                     %td.text-end.pointer.align-middle
                       .action.sub_edit_delete.list-collaborators
                         %span.glyph= glyphicon('ellipses', { size: '15', color: 'gba(26, 26, 26, 0.7)', style: 'transform: rotate(90deg)'})
-                      .sub_menu.text-start.hide
-                        %ul.no-margin.no-padding.regular
-                          %li
-                            %span.ms-2.delete_piece{title: 'Supprimer la pièce', data: {id: piece.id}}=glyphicon('trash', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Supprimer'
+                      .row.sub_menu.text-center.hide{style: 'min-height:35px;'}
+                        %ul.no-margin.no-padding.regular.align-self-center
+                          %li.align-self-center
+                            %span.ms-2.delete_piece{title: 'Supprimer la pièce', data: {id: piece.id}}=glyphicon('trash', { size: '15', color: '#FF4848;'}) + ' Supprimer'
+                          
                   %tr.hide{ class: "tr_piece_#{piece.id}" }
                     %td{ colspan: 7 }
                       .detail{ class: "detail-piece-#{piece.id}" }

@@ -45,6 +45,6 @@
           %span.ms-2.preseizures_export{title: 'Export écriture comptable', data:{ id: pack.id, type: 'special_piece', multi: 'true' }}= glyphicon('external-link', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
           - if pack.try(:user).try(:uses_api_softwares?)
             %span.ms-2.deliver_preseizures{title: 'Livraison écriture comptable', data: {id: pack.id, type: 'special_piece', multi: 'true'}}= glyphicon('loop-circular', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
-        %span.ms-2.t-info{ title: 'Informations', data: { id: pack.id } }= glyphicon('info', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
-        .hide.t-info-content{ id: "t-content-#{pack.id}" }
-          = html_pack_info(pack)        
+        / %span.ms-2.t-info{ title: 'Informations', data: { id: pack.id } }= glyphicon('info', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
+        / .hide.t-info-content{ id: "t-content-#{pack.id}" }
+        /  = html_pack_info(pack)        
