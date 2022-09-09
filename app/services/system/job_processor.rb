@@ -71,6 +71,10 @@ class System::JobProcessor
     # di = SidekiqUniqueJobs::Digests.all
     # di.each{|d| SidekiqUniqueJobs::Digests.delete_by_digest d}
 
+    tps_processing = TempPack.where('document_delivery_id > 0')
+    p "Processing temp_pack - #{tps_processing.size}"
+    tps_processing.update_all(document_delivery_id: 0)
+
     staffs = StaffingFlow.processing_preassignment
     p "Processing preassignments - #{staffs.size}"
     staffs.each{|st| st.update(state: 'ready')}

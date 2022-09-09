@@ -4,9 +4,13 @@ class DataProcessor::TempPack
 
   def self.process(temp_pack_name)
     UniqueJobs.for "PublishDocument-#{temp_pack_name}", 2.hours, 2 do
-      temp_pack = TempPack.find_by_name temp_pack_name
-      execute(temp_pack)
-      sleep(40) #lock multi temp pack processing to avoid access disk overload
+      counter_limit = TempPack.where('document_delivery_id > 0').size
+
+      if counter_limit <= 5
+        temp_pack = TempPack.find_by_name temp_pack_name
+        execute(temp_pack)
+        sleep(40) #lock multi temp pack processing to avoid access disk overload
+      end
     end
   end
 
