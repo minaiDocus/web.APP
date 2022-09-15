@@ -122,7 +122,9 @@ class Admin::Subscriptions::MainController < BackController
           @nano_package_count += 1
         when 'ido_x'
           @idox_package_count += 1
-        when 'ido_micro' || 'ido_micro_plus'
+        when 'ido_micro'
+          @micro_package_count += 1
+        when 'ido_micro_plus'
           @micro_package_count += 1
         when 'ido_retriever'
           @retriever_only_package_count += 1
