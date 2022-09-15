@@ -184,11 +184,11 @@ Staffingflow::JefactureWorker:
   cron: '*/20 * * * * *'
 
 Staffingflow::SendPreAssignmentNeededWorker:
-  queue: default
+  queue: high
   cron: '0 */5 * * * *'
 
 Staffingflow::SendBundleNeededWorker:
-  queue: default
+  queue: high
   cron: '0 */5 * * * *'
 
 ## Archive resend document corrupted
