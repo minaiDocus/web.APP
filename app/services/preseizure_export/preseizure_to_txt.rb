@@ -497,7 +497,7 @@ class PreseizureExport::PreseizureToTxt
             general_lib = accounting.try(:first).try(:third_party_name).to_s
           end
 
-          piece_ref = preseizure.piece.name.to_s[-10, 10].tr(' ', '_').tr('%', '_')
+          piece_ref = preseizure.piece.name.to_s[-10, 10].tr(' ', '_').tr('%', '_') if preseizure.piece
 
           label = preseizure.piece_number
           label = preseizure.operation_label[0..34].gsub("\t", ' ') if preseizure.operation_label.present?
