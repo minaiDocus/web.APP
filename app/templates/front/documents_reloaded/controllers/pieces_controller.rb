@@ -156,18 +156,23 @@ class DocumentsReloaded::PiecesController < DocumentsReloaded::AbaseController
   end
 
   def index_customers
+    @options[:page]     = params[:page]
+    @options[:per_page] = params[:per_page]
+
     @render_upload = request.xhr? ? false : true
 
-    @options[:page]     = params[:page]
-    @options[:per_page] =  20
+    @users = accounts.includes(:options, :ibiza, :subscription, organization: [:ibiza, :exact_online, :my_unisoft, :coala, :cogilog, :sage_gec, :acd, :quadratus, :cegid, :csv_descriptor, :fec_agiris]).active.order(code: :asc).select { |user| user.authorized_upload? }    
 
-    user_ids = accounts.includes(:options, :ibiza, :subscription, organization: [:ibiza, :exact_online, :my_unisoft, :coala, :cogilog, :sage_gec, :acd, :quadratus, :cegid, :csv_descriptor, :fec_agiris]).active.order(code: :asc).select { |user| user.authorized_upload? }.collect(&:id)
+    @options[:user_ids] = params[:uid].presence || @user.id
 
-    @rubrics = AccountBookType.where(user_id: user_ids).collect(&:label)
+    @rubrics         = AccountBookType.where(user_id: @options[:user_ids]).collect(&:label).compact
+    check_rubric     = params[:rubric] || @rubrics.first
 
-    check_rubric = params[:rubric] || @rubrics.first
+    # debugger
 
-    @temp_documents = TempDocument.not_deleted.where(user_id: user_ids, label: check_rubric).page(@options[:page]).per(@options[:per_page])
+    @options[:label] = check_rubric if check_rubric
+
+    @temp_documents  = TempDocument.search(@options)
   end
 
   private

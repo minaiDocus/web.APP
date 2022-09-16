@@ -21,7 +21,7 @@ class DocumentsReloadedTags{
     }
 
     let params =  {
-                    'url': '/documents/tags',
+                    'url': '/documents_reloaded/get/tags',
                     'data': { type: this.type, id: s_id },
                     'dataType': 'html'
                   }
@@ -33,16 +33,16 @@ class DocumentsReloadedTags{
   }
 
   update_tags(elem){
-    let new_tags = this.tags_modal.find('#selectionsTags').val();
+    let new_tags = this.tags_modal.find('.tag_reloaded_content #selectionsTags').val();
 
     let params =  {
-                    'url': '/documents/tags/update',
+                    'url': '/documents_reloaded/tags/update',
                     'type': 'POST',
                     'data': { type: this.type, ids: this.ids, tags: new_tags },
                     'dataType': 'json'
                   }
 
-    this.applicationJS.sendRequest(params).then((e)=>{ this.applicationJS.noticeSuccessMessageFrom(null, e.message); });
+    this.applicationJS.sendRequest(params).then((e)=>{ window.location.replace(window.location.href); this.applicationJS.noticeSuccessMessageFrom(null, e.message);  });
 
     this.tags_modal.modal('hide');
   }

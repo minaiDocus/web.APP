@@ -20,7 +20,8 @@
         .col-md-3.pt-2
           .semibold Dossier
         .col-md-9
-          = select_tag 'customers', options_for_select(file_upload_users_list.map{ |e| [e.short_info, e.code] }), id: 'customers', class: 'form-select', include_blank: false
+          / = select_tag 'customers', options_for_select(@users.map{ |e| [e.short_info, e.id] }), id: 'customers', class: 'form-select', include_blank: false
+          = select_tag 'customers', options_for_select([["IDOC%1234- MJ", 2164], ["IDOC%001 - ID", 284], ["IDOC%AIDE - AI", 1874]], params[:uid].presence || nil), id: 'customers', class: 'form-select', include_blank: false
     .col-md-3
     .col-md-3
       .search-content

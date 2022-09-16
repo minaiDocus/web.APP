@@ -10,10 +10,6 @@ class PonctualScripts::MigrateBillings < PonctualScripts::PonctualScript
   private 
 
   def execute
-    # Truncate tables before insert
-    # ActiveRecord::Base.connection.execute("TRUNCATE #{BillingMod::Package.table_name}")
-    # ActiveRecord::Base.connection.execute("TRUNCATE #{BillingMod::Billing.table_name}")
-
     Period.where('DATE_FORMAT(created_at, "%Y%m") >= 202201 AND DATE_FORMAT(created_at, "%Y%m") < 202205 AND duration = 1').where(user_id: user_ids).each do |period|
       # create_packages_from(period)
       create_billings_from(period)
@@ -92,7 +88,9 @@ class PonctualScripts::MigrateBillings < PonctualScripts::PonctualScript
 
     return false if !owner || owner.try(:code) == 'TEEO' || owner.try(:organization).try(:code) == 'TEEO'
 
-    owner.billings.of_period(__period).destroy_all
+    # owner.billings.of_period(__period).destroy_all
+
+    return true if owner.billings.of_period(__period).size > 0
 
     logger_infos("Creating Billing: #{__period} / #{owner.code}")
 
@@ -184,7 +182,7 @@ class PonctualScripts::MigrateBillings < PonctualScripts::PonctualScript
   end
 
   def user_ids
-    org = Organization.find_by_code 'JC'
+    org = Organization.find_by_code 'FA'
 
     org.customers.pluck(:id)
   end

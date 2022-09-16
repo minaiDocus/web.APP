@@ -5,7 +5,11 @@ Rails.application.routes.draw do
     get 'documents_reloaded/:id', to: 'pieces#show', as: 'show_piece_detail'
     post 'documents_reloaded/delete', to: 'pieces#delete', as: 'delete_documents_reloaded'
     post 'documents_reloaded/restore', to: 'pieces#restore', as: 'restore_document_reloaded'
-    delete 'documents_reloaded/delete_temp_document', to: 'pieces#delete_temp_document', as: 'delete_temp_document'
+
+    get 'documents_reloaded/get/tags', to: 'abase#get_tags', as: 'documents_reloaded_tags'
+    post 'documents_reloaded/tags/update', to: 'abase#update_tags', as: 'documents_reloaded_update_tags'
+
+    post 'documents_reloaded/update_tag_temp_documents', to: 'pieces#update_tag_temp_documents', as: 'update_tag_temp_documents'
     get 'preseizures_reloaded/infos', to: 'preseizures#index', as: 'preseizures_reloaded_infos'
     post 'documents_reloaded/deliver_preseizures', to: 'abase#deliver_preseizures', as: 'documents_reloaded_deliver_preseizures'
   end

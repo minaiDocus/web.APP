@@ -41,6 +41,12 @@ function bind_all_events(){
       $('#journal_document_filter').parent().find('.multi-select-container .multi-select-menuitem').removeClass('hide');
     }
   });
+
+  $('#customers').unbind('change.mix_customer').bind('change.mix_customer', function(e){
+    let url = window.location.href.split('?')[0];
+
+    window.location.replace(url + "?uid=" + $(this).val());
+  });
   setTimeout(()=>{ $('.hide_on_load').removeClass('hide'); $('#customer_document_filter').change() }, 1000); //TODO: find a better way to change the user selector
 
   $('.more-filter').unbind('click').bind('click',function(e) {
@@ -56,12 +62,14 @@ function bind_all_events(){
   $('.select-all').unbind('click').bind('click',function(e) {
     e.stopPropagation();
     if($(this).is(':checked')){
+      $(this).attr('title', 'Désélectionner toutes les pièces')
       $('.select-document, .select-operation').prop('checked', true);
       $('.select-document, .select-operation').closest('.box').addClass('selected');
       $('.action-selected').removeClass('hide');
       $('.grid .stamp-content').addClass('selected');      
     }
     else{
+      $(this).attr('title', 'Sélectionner toutes les pièces')
       $('.select-document, .select-operation').prop('checked', false);
       $('.select-document, .select-operation').closest('.box').removeClass('selected');
       $('.action-selected').addClass('hide');
@@ -79,7 +87,7 @@ function bind_all_events(){
       $('.grid .stamp-content#document_grid_' + piece_id).addClass('selected');
     }else{
       if ($('.select-all').is(':checked')) { $('.select-all').prop('checked', false); }
-
+      $('.select-all').attr('title', 'Sélectionner toutes les pièces');
       $(this).closest('.box').removeClass('selected');
       $('.grid .stamp-content#document_grid_' + piece_id).removeClass('selected');
     }
@@ -192,7 +200,7 @@ function bind_all_events(){
 
   $('.preseizures_export').unbind('click').bind('click',function(e) { AppEmit('documents_export_preseizures', {'obj': this}) });
 
-  $('.update_tags').unbind('click').bind('click', function(){ AppEmit('documents_update_tags', {'obj': this}); });
+  $('.update_tags').unbind('click').bind('click', function(e){ e.preventDefault(); AppEmit('documents_update_tags', {'obj': this}); });
 
   $('.edit_compta_analysis').unbind('click').bind('click', function(){ AppEmit('documents_edit_analysis', { 'code': $(this).data('code'), is_used: $(this).data('is-used') }); });
 
@@ -213,7 +221,7 @@ function bind_all_events(){
   $('table.entries td.entry').mouseover(function(){ $(this).find('.content_amount span.debit_or_credit').show(); }).mouseout(function(){ $(this).find('.content_amount span.debit_or_credit').hide(); });
   $('table.entries .debit_or_credit').unbind('click').bind('click', function(){ AppEmit('documents_change_entry_type', {'obj': this}); });
 
-  $(".zoom.pdf-viewer").unbind('click').bind('click', function(){ 
+  $(".zoom.pdf-viewer, #table_pieces td.show-detail").unbind('click').bind('click', function(){ 
     var url = $(this).attr('data-content-url');
     
     $("#PdfViewerDialog .modal-body .view-content iframe.src-piece").attr("src", url);
@@ -281,12 +289,6 @@ function bind_all_events(){
 
   $('.show-list-document').mouseover(function() { $(".temp-document-view").show(); }).mouseout(function() { $(".temp-document-view").hide(); });
 
-  $('#table_pieces td.show-detail').unbind('click').bind('click', function(e){ 
-    let piece_id    = $(this).data('piece-id');
-    $('tr.tr_piece_' + piece_id).toggle('');
-  });
-
-
   $('.btn.add-entry').unbind('click').bind('click', function(e){
     $(this).closest('.content-table').find('.entries tbody').append($('template').html())
     $(this).parent('.btn-add-content').find('.add-entry').addClass('hide');
@@ -334,12 +336,6 @@ function bind_all_events(){
       lists = JSON.parse( $('.user_and_journals').val() );
     }
     let current_code = $(this).val();
-    console.log("current_code = ");
-    console.log(current_code);
-
-    console.log("#collaborator_document_filter.val = ");
-    console.log($("#collaborator_document_filter").val());
-
 
     if(current_code !== null && current_code !== undefined && current_code.length > 0){
       $('#collaborator_journal_document_filter option').addClass('hide');
@@ -358,25 +354,12 @@ function bind_all_events(){
       $('#collaborator_journal_document_filter').parent().find('.multi-select-container .multi-select-menuitem').removeClass('hide');
     }
   });
+
   setTimeout(()=>{ $('.hide_on_load').removeClass('hide'); $('#collaborator_document_filter').change() }, 1000); //TODO: find a better way to change the user selector
 
-
-
   $('#document-filter').unbind('click').bind('click', function(e){ AppEmit('document_collaborator_filter'); });
-
 }
 
 jQuery(function() {
   AppListenTo('window.application_auto_rebind', (e)=>{ bind_all_events() });
-
-  if ($('.verif-fixed-action').length > 0)
-    {
-      if ($('.verif-fixed-action').offset().top <= 100){
-        $('.action-fixed').addClass('fixed-to-top');
-      }else{
-        $('.action-fixed').removeClass('fixed-to-top');        
-      }
-    }
-
-
 });

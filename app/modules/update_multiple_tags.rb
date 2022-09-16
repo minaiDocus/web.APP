@@ -21,6 +21,9 @@ module UpdateMultipleTags
       elsif type == 'pack'
         document = Pack.where(id: document_id).first
         doc_user = document.try(:owner)
+      elsif type == 'temp_documents'
+        document = TempDocument.where(id: document_id).first
+        doc_user = document.try(:user)  
       end
 
       next unless document && (doc_user == user ||

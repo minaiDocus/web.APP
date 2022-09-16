@@ -15,6 +15,11 @@
               .w-75.select-container.no-padding
                 %input{ name: 'by_all[position]', value: (@options[:position].join(',') rescue '' ) }
                 %i Séparer par virgule (ex: 1,2,3), si plusieurs.
+          .form-group
+            %label.semibold Tags
+            .select-container.no-padding
+              %input{ name: 'by_all[tags]', value: (@options[:tags] rescue '' ) }
+
           - if !@is_operations
             .form-group
               %label Etat pièce
@@ -76,14 +81,3 @@
           = select_tag :export_type, '', id: :export_type, class: 'form-select'
       .modal-footer
         %button.btn.btn-primary.semibold#export_button{:type => 'button'} Exporter
-
-#tags.modal.fade.in{'aria-hidden' => 'true', :role => 'dialog', :tabindex => '-1'}
-  .modal-dialog
-    .modal-content
-      .modal-header
-        %h5.modal-title.bold Taguer vos documents  
-        %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
-      .modal-body
-      .modal-footer        
-        %button.btn.btn-primary.semibold#add_tags{:type => 'button'} Taguer
-

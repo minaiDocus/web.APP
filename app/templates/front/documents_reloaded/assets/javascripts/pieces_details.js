@@ -100,6 +100,8 @@ class DocumentsReloadedDetails extends DocumentsReloadedMain{
 jQuery(function() {
   let main = new DocumentsReloadedDetails();
 
+  alert('piece detail JS');
+
   AppListenTo('documents_show_preseizures_details', (e)=>{ main.show_preseizures_modal($(e.detail.obj)) });
 
   AppListenTo('documents_load_datas', (e)=>{ main.load_pieces(true) });
