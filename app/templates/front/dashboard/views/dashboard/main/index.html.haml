@@ -1,5 +1,7 @@
 - if request.env["SERVER_NAME"].include?("axelium")
   = stylesheet_link_tag 'front/dashboard/assets/stylesheets/main_axelium'
+- elsif request.env["SERVER_NAME"].include?("dkpartners")
+  = stylesheet_link_tag 'front/dashboard/assets/stylesheets/main_dk_partners'
 - else
   = stylesheet_link_tag 'front/dashboard/assets/stylesheets/main'
 
@@ -26,6 +28,8 @@
         %button.btn.btn-default.add-to-favorite.float-end{'data-bs-target' => '#add-to-favorite', 'data-bs-toggle' => 'modal', 'data-bs-original-value' => '455', :type => 'button'}
           - if request.env["SERVER_NAME"].include?("axelium")
             %span.me-2= glyphicon('plus', {size: '12', color: '#fa8e2e'})
+          - elsif request.env["SERVER_NAME"].include?("dkpartners")
+            %span.me-2= glyphicon('plus', {size: '12', color: '#051077'})
           - else
             %span.me-2= glyphicon('plus', {size: '12', color: '#72AA42'})
           %span= t('dashboard.add_folder_to_favorite')

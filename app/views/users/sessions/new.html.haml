@@ -9,6 +9,8 @@
     %link{ :rel => 'shortcut icon', :type => "image/ico", :href => image_path('favicon.ico') }
     - if request.env["SERVER_NAME"].include?("axelium")
       = stylesheet_link_tag 'front/main_axelium'
+    - elsif request.env["SERVER_NAME"].include?("dkpartners")
+      = stylesheet_link_tag 'front/main_dk_partners'
     - else
       = stylesheet_link_tag 'front/main'
 
@@ -19,6 +21,8 @@
           Bienvenue sur
           - if request.env["SERVER_NAME"].include?("axelium")
             %span.semibold.label_idocus Axelium
+          - elsif request.env["SERVER_NAME"].include?("dkpartners")
+            %span.semibold.label_idocus DK Partners
           - else
             %span.semibold.label_idocus iDocus
 

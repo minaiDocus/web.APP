@@ -1,6 +1,9 @@
 - if @user.organization.try(:code) == 'ALM'
   - url = 'https://www.idp-axeliumconseil.fr/'
   - team = 'Axelium'
+- elsif @user.organization.try(:code) == 'DK'
+  - url = 'https://demat.dkpartners.fr/'
+  - team = 'DK Partners'
 - else
   - url = @url
   - team = 'iDocus'
