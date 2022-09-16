@@ -21,7 +21,7 @@ class ExactOnline::MainController < FrontController
 
       if success = ExactOnlineLib::Setup.new(@exact_online.id.to_s, params[:code], subscribe_exact_online_url).execute
         if @customer.exact_online.fully_configured?
-          AccountingPlan::ExactOnlineUpdate.new(@customer).delay.run
+          AccountingPlan::ExactOnlineUpdate.new(@customer).delay(queue: :default).run
         end
       end
     end

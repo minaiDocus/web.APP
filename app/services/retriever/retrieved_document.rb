@@ -41,7 +41,7 @@ class Retriever::RetrievedDocument
         tries += 1
       end
 
-      Retriever::RetrievedDocument.delay_for(24.hours).process_file(retriever.id, document, (count_day+1)) if !is_success && count_day <= 2
+      Retriever::RetrievedDocument.delay_for(24.hours, queue: :high).process_file(retriever.id, document, (count_day+1)) if !is_success && count_day <= 2
     end
 
     { success: is_success, return_object: return_object }

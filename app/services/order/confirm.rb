@@ -40,7 +40,7 @@ class Order::Confirm
       @order.organization.admins.each do |admin|
         OrderMailer.notify_paper_set_reminder(@order, admin.email).deliver_later
       end
-      Order::Confirm.delay_for(24.hours).execute(@order.id)
+      Order::Confirm.delay_for(24.hours, queue: :high).execute(@order.id)
     end
   end
 end

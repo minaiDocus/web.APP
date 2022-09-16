@@ -21,7 +21,7 @@ class Order::PaperSet
         # @period.orders << @order
 
         if @order.normal_paper_set_order?
-          Order::Confirm.delay_for(24.hours).execute(@order.id)
+          Order::Confirm.delay_for(24.hours, queue: :high).execute(@order.id)
         else
           if @order.pending?
             @order.period_v2 = CustomUtils.period_of(Time.now)

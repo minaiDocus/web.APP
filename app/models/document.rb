@@ -45,7 +45,7 @@ class Document < ApplicationRecord
 
   after_create_commit do |document|
     unless document.mixed? || Rails.env.test?
-      Document.delay_for(10.seconds, queue: :low).generate_thumbs(document.id)
+      Document.delay_for(10.seconds, queue: :high).generate_thumbs(document.id)
       Document.delay_for(10.seconds, queue: :low).extract_content(document.id)
     end
   end

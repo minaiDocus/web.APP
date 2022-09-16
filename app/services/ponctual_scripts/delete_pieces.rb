@@ -27,7 +27,7 @@ class PonctualScripts::DeletePieces < PonctualScripts::PonctualScript
           @list_deleted_pieces << piece.id.to_s
         end
 
-        pack.delay.try(:recreate_original_document)
+        pack.delay(queue: :low).try(:recreate_original_document)
       end
 
       logger_infos " ================================ [Fin du processus] =========================== "

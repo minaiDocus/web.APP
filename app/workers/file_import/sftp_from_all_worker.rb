@@ -5,7 +5,7 @@ class FileImport::SftpFromAllWorker
   def perform
     UniqueJobs.for 'ImportFromAllSFTP' do
       Sftp.importable.each do |sftp|
-        FileImport::Sftp.delay.process sftp.id
+        FileImport::Sftp.delay(queue: :low).process sftp.id
       end
       true
     end

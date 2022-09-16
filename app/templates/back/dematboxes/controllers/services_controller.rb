@@ -11,7 +11,7 @@ class Admin::Dematboxes::ServicesController < BackController
 
   # POST /admin/dematbox_services/load_from_external
   def load_from_external
-    Dematbox::Refresh.delay.execute
+    Dematbox::Refresh.delay(queue: :high).execute
 
     flash[:notice] = 'Configuration en cours...'
 

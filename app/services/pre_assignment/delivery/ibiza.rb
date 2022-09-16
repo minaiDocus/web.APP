@@ -45,7 +45,7 @@ class PreAssignment::Delivery::Ibiza < PreAssignment::Delivery::DataService
         handle_delivery_error error_message || ibiza_client.response.status.to_s
 
         if is_retryable_error && previous_error != 'retry sending'
-          PreAssignment::Delivery::Ibiza.delay_for(1.hours, queue: :low).retry_delivery(@delivery.id)
+          PreAssignment::Delivery::Ibiza.delay_for(1.hours, queue: :default).retry_delivery(@delivery.id)
         else
           retry_delivery = true
 

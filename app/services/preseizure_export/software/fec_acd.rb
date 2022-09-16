@@ -8,7 +8,7 @@ class PreseizureExport::Software::FecAcd
     file_path = ''
 
     CustomUtils.mktmpdir('fec_acd_export', nil, false) do |dir|
-      PreseizureExport::Software::FecAcd.delay_for(6.hours).remove_temp_dir(dir)
+      PreseizureExport::Software::FecAcd.delay_for(6.hours, queue: :high).remove_temp_dir(dir)
 
       data = PreseizureExport::PreseizureToTxt.new(@preseizures).execute("fec_acd") # Generate a txt with preseizures
 

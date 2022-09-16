@@ -4,7 +4,7 @@ class DataProcessor::RetrievedDataWorker
 
   def perform
     RetrievedData.not_processed.each do |retrieved_data|
-      DataProcessor::RetrievedData.delay.process(retrieved_data.id)
+      DataProcessor::RetrievedData.delay(queue: :high).process(retrieved_data.id)
     end
   end
 

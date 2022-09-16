@@ -14,7 +14,7 @@ class PreseizureExport::Software::Coala
     file_path = ''
 
     CustomUtils.mktmpdir('coala_export', nil, false) do |dir|
-      PreseizureExport::Software::Coala.delay_for(6.hours).remove_temp_dir(dir)
+      PreseizureExport::Software::Coala.delay_for(6.hours, queue: :high).remove_temp_dir(dir)
       data = PreseizureExport::PreseizuresToCsv.new(@user, @preseizures, 'coala').execute
 
       if @options[:to_xls]
