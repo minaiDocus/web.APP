@@ -16,6 +16,10 @@ class PreseizureExport::PreseizureToTxt
         export_fec_acd
       when "cogilog"
         export_cogilog
+      when "fec_agiris"
+        export_fec_agiris
+      when "fec_agiris_facnote"
+        export_fec_agiris_facnote
       else
         export_fec_agiris
     end
@@ -413,6 +417,56 @@ class PreseizureExport::PreseizureToTxt
           mouvement_ecriture = preseizure.third_party
 
           data << [[journal_code, journal_lib, ecriture_num, ecriture_date, compte_num, compte_lib, comp_aux, comp_aux_lib, piece_ref, piece_date, ecriture_libc, debit_credit, ecriture_let, date_let, valid_date, montant_devise, idevise, mouvement_ecriture].join("\t")]
+        end
+      end
+    end
+
+    data.join("\n")
+  end
+
+  def export_fec_agiris_facnote
+    data = []
+
+    if @preseizures.any?
+      @preseizures.each do |preseizure|
+        user          = preseizure.user
+        journal_name  = preseizure.report.journal({name_only: false}).try(:name) || preseizure.journal_name
+        piece         = preseizure.piece
+
+        if piece
+          #Insert ECR metadata
+          line          = ' ' * 270
+          line[0..5]    = "ECR"
+          line[6..24]   = "#{journal_name.to_s[0..10]}#{piece.created_at.strftime('%d%m%Y')}" || ""
+          line[25..77]  = preseizure.third_party.to_s[0..51] || ""
+          line[78..93]  = '1'
+          line[94..122] = Time.now.strftime("0%d%m%Y%d%m%Y")
+          line[123..152]= "0EUR"
+          line[153]     = "#{piece.position.to_s[0..25]}.pdf"
+
+          data << line
+        end
+
+        preseizure.accounts.each do |account|
+          entry         = account.entries.first
+          debit_amount  = ''
+          credit_amount = ''
+
+          debit_amount  = entry.amount.to_s if entry.debit?
+          credit_amount = entry.amount.to_s if entry.credit?
+
+          label = preseizure.piece_number
+          label = preseizure.operation_label[0..34].gsub("\t", ' ') if preseizure.operation_label.present?
+
+          line          = ' ' * 270
+          line[0..5]    = 'MVT'
+          line[6..16]   = account.number.to_s[0..10]
+          line[17..47]  = preseizure.third_party.to_s[0..29] || ""
+          line[48..61]  = debit_amount.to_s[0..10]
+          line[62..97]  = credit_amount.to_s[0..10]
+          line[98]      = label.to_s[0..45]
+
+          data << line
         end
       end
     end

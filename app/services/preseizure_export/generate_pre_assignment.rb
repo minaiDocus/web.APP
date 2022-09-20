@@ -137,6 +137,12 @@ class PreseizureExport::GeneratePreAssignment
 
         generate_fec_agiris_export(false)
       end
+    when 'ecr_fec_agiris_facnote'
+      if user.uses?(:fec_agiris)
+        create_pre_assignment_export_for('fec_agiris')
+
+        generate_fec_agiris_facnote_export(true)
+      end
     when 'txt_fec_acd'
       if user.uses?(:fec_acd)
         create_pre_assignment_export_for('fec_acd')
@@ -245,6 +251,32 @@ private
       end
 
       @export.got_success "#{final_file_name}"
+    rescue => e
+      @export.got_error e
+    end
+  end
+
+  def generate_fec_agiris_facnote_export(with_file = true)
+    begin
+      FileUtils.remove_dir(file_path, true)
+      file_txt           = PreseizureExport::Software::FecAgiris.new(@preseizures).execute('fec_agiris_facnote')
+      final_name_facnote = "#{@preseizures.first.user.code}_#{Time.now.strftime("%Y%m%d")}_#{Time.now.strftime("%H%M%S")}_manual"
+      final_file_name    = "#{final_name_facnote}.ecr"
+      zip_file_name      = "#{final_name_facnote}.zip"
+
+      FileUtils.mv file_txt, "#{file_path}/#{final_file_name}"
+
+      if with_file
+        @preseizures.each do |preseizure|
+          FileUtils.cp preseizure.piece.cloud_content_object.path, "#{file_path}/#{preseizure.piece.position.to_s}.pdf" if preseizure.piece
+        end
+      end
+
+      # Finaly zip the temp @dir
+      Dir.chdir file_path
+      POSIX::Spawn.system "zip #{zip_file_name} *"
+
+      @export.got_success "#{zip_file_name}"
     rescue => e
       @export.got_error e
     end
