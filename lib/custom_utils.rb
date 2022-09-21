@@ -201,7 +201,7 @@ class CustomUtils
 
         yield(final_dir) if block_given?
 
-        FileUtils.delay_for(rand(2..10).minutes, queue: :low).remove_entry(final_dir, true) if block_given? && with_remove && final_dir
+        FileUtils.delay_for(rand(2..10).minutes, queue: :high).remove_entry(final_dir, true) if block_given? && with_remove && final_dir
       rescue => e
         log_document = {
           subject: "[CustomUtils] error on tmp dir creation",

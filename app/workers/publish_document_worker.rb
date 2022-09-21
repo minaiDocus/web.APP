@@ -8,7 +8,7 @@ class PublishDocumentWorker
     TempPack.not_processed.order(updated_at: :asc).limit(10).each do |temp_pack|
       next if counter_limit > 5
 
-      DataProcessor::TempPack.delay.process(temp_pack.name)
+      DataProcessor::TempPack.delay(queue: :low).process(temp_pack.name)
     end
   end
 end

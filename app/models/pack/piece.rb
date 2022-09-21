@@ -37,7 +37,7 @@ class Pack::Piece < ApplicationRecord
 
   after_create_commit do |piece|
     unless Rails.env.test?
-      Pack::Piece.delay_for(10.seconds, queue: :low).finalize_piece(piece.id)
+      Pack::Piece.delay_for(10.seconds, queue: :high).finalize_piece(piece.id)
     end
   end
 
@@ -294,14 +294,14 @@ class Pack::Piece < ApplicationRecord
         self.is_signed = false
         self.save
 
-        Pack::Piece.delay_for(20.minutes, queue: :low).correct_pdf_signature_of(self.id)
+        Pack::Piece.delay_for(20.minutes, queue: :default).correct_pdf_signature_of(self.id)
       end
     rescue => e
       System::Log.info('pieces_events', "[Signing] #{self.id} - #{self.name} - #{e.to_s} (#{to_sign_file.to_s})")
       self.is_signed = false
       self.save
 
-      Pack::Piece.delay_for(2.hours, queue: :low).correct_pdf_signature_of(self.id)
+      Pack::Piece.delay_for(2.hours, queue: :default).correct_pdf_signature_of(self.id)
     end
   end
 

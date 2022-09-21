@@ -8,7 +8,7 @@ class BillingMod::PrepareBillingsWorker
 
       time = 10
       organizations.each do |organization|
-        BillingMod::PrepareBillingsWorker::Launcher.delay_for(time.minutes).process(organization.id)
+        BillingMod::PrepareBillingsWorker::Launcher.delay_for(time.minutes, queue: :low).process(organization.id)
         time += 10 #Step every 10 minutes
       end
     end

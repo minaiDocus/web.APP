@@ -12,7 +12,7 @@ class PreseizureExport::Software::Cegid
 
     CustomUtils.mktmpdir('cegid_export', nil, false) do |dir|
       @dir      = dir
-      PreseizureExport::Software::Cegid.delay_for(6.hours).remove_temp_dir(@dir)
+      PreseizureExport::Software::Cegid.delay_for(6.hours, queue: :high).remove_temp_dir(@dir)
 
       file_path = @software_type == 'csv_cegid' ? cegid : cegid_tra
     end

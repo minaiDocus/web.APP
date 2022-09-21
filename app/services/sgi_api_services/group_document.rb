@@ -18,7 +18,7 @@ class SgiApiServices::GroupDocument
       if done != params[:temp_document_ids].size && retry_count <= 2
         sf.update(state: 'ready')
         SgiApiServices::GroupDocument.processing(params[:json_content], params[:temp_document_ids], params[:temp_pack_id], sf) if sf.processing
-        SgiApiServices::GroupDocument.delay_for(2.hours).retry_processing(sf.id, retry_count + 1)
+        SgiApiServices::GroupDocument.delay_for(2.hours, queue: :low).retry_processing(sf.id, retry_count + 1)
 
         mail_info = {
           subject: "[SgiApiServices::GroupDocument]- Retry Processing",
@@ -119,7 +119,7 @@ class SgiApiServices::GroupDocument
 
               ErrorScriptMailer.error_notification(mail_info).deliver
             else
-              StaffingFlow.delay_for(30.minutes, queue: :low).set_to_ready(staffing_flow.id)
+              StaffingFlow.delay_for(30.minutes, queue: :high).set_to_ready(staffing_flow.id)
             end
           end
         else

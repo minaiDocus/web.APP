@@ -5,12 +5,12 @@ System::JobProcessorWorker:
 
 ## destroy some data
 System::DatabaseCleanerWorker:
-  queue: default
+  queue: low
   cron: '0 2 * * *'
 
 ## Zoho CRM sync
 System::ZohoCrmSynchronizerWorker:
-  queue: default
+  queue: high
   cron: '0 1 1 * *'
 
 ## Miscelaneous workers
@@ -18,21 +18,21 @@ RefreshDashboardStatisticsWorker:
   queue: default
   cron: '*/5 * * * *'
 InitializePeriodsWorker:
-  queue: high
+  queue: low
   cron: '0 3 1 * *'
 Subscription::StatisticsWorker:
   queue: default
   cron: '0 5 * * *'
 Order::RemindToNewKitWorker:
-  queue: default
+  queue: high
   cron: '15 3 1 12 *'
 
 ## Billing
 BillingMod::CreateInvoiceWorker:
-  queue: high
+  queue: low
   cron: '15 0 1 * *'
 BillingMod::PrepareBillingsWorker:
-  queue: default
+  queue: low
   cron: '0 */8 * * *'
 
 ## Notifications worker
@@ -43,7 +43,7 @@ Notifications::RetrieversWorker:
   queue: default
   cron: '0 8 * * *'
 Notifications::ScansNotDeliveredNotificationWorker:
-  queue: high
+  queue: default
   cron: '0 1 * * *'
 # Notifications::PaperQuotaReachedWorker:
 #   queue: default
@@ -66,7 +66,7 @@ Notifications::ProcessedRequestsWorker:
 ## Accounting Plan worker
 
 AccountingPlan::IbizaUpdateWorker:
-  queue: default
+  queue: low
   cron: '0 4 * * *'
 
 # AccountingPlan::ExactOnlineUpdateWorker:
@@ -74,11 +74,11 @@ AccountingPlan::IbizaUpdateWorker:
   # cron: '0 3 * * *'
 
 AccountingPlan::MyUnisoftUpdateWorker:
-  queue: default
+  queue: low
   cron: '0 5 * * *'
 
 AccountingPlan::SageGecUpdateWorker:
-  queue: default
+  queue: low
   cron: '0 6 * * *'
 
 ## Budgea retrievers workers
@@ -88,13 +88,13 @@ DataProcessor::OperationsWorker:
   cron: '*/10 * * * * *'
 
 DataProcessor::McfWorker:
-  queue: default
+  queue: low
   cron: '0 */15 * * * *'
 
 ## Accounting flow workers
 
 Ftp::FetcherWorker:
-  queue: default
+  queue: low
   cron: '0 */30 * * * *'
 
 RetrieveEmailedDocumentWorker:
@@ -121,18 +121,18 @@ FileImport::FtpFromAllWorker:
   cron: '0 30 */6 * * *'
 
 RetrieveOcrProcessedDocumentWorker:
-  queue: default
+  queue: high
   cron: '*/10 * * * * *'
 
 PublishDocumentWorker:
-  queue: high
+  queue: low
   cron: '*/2 * * * * *'
 
 
 ## Pre assignment builder & delivery
 
 PreAssignment::Builder::IbizaWorker:
-  queue: high
+  queue: default
   cron: '*/10 * * * * *'
 
 # PreAssignment::Builder::ExactOnlineWorker:
@@ -140,15 +140,15 @@ PreAssignment::Builder::IbizaWorker:
   # cron: '*/10 * * * * *'
 
 PreAssignment::Builder::MyUnisoftWorker:
-  queue: high
+  queue: default
   cron: '*/10 * * * * *'
 
 PreAssignment::Builder::SageGecWorker:
-  queue: high
+  queue: default
   cron: '*/10 * * * * *'
 
 PreAssignment::Delivery::IbizaWorker:
-  queue: high
+  queue: default
   cron: '*/10 * * * * *'
 
 # PreAssignment::Delivery::ExactOnlineWorker:
@@ -156,23 +156,23 @@ PreAssignment::Delivery::IbizaWorker:
   # cron: '*/10 * * * * *'
 
 PreAssignment::Delivery::MyUnisoftWorker:
-  queue: high
+  queue: default
   cron: '*/10 * * * * *'
 
 PreAssignment::Delivery::SageGecWorker:
-  queue: high
+  queue: default
   cron: '*/10 * * * * *'
 
 
 ## Daily data verifier worker
 DataVerificator::DailyDataVerifierWorker:
-  queue: default
+  queue: high
   cron: '0 3 * * *'
 
 ## Staffing flows
 
 Staffingflow::GroupingWorker:
-  queue: default
+  queue: low
   cron: '*/20 * * * * *'
 
 Staffingflow::PreassignmentWorker:
@@ -194,7 +194,7 @@ Staffingflow::SendBundleNeededWorker:
 ## Archive resend document corrupted
 
 Archive::ResendDocumentCorruptedWorker:
-  queue: default
+  queue: low
   cron: '0 0 */1 * * *'
 
 ## Delivery workers

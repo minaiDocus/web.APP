@@ -39,7 +39,7 @@ class PreAssignment::Delivery::DataService
     result = execute
     notify
 
-    PreAssignment::Delivery::DataService.delay.notify_deliveries if @@notified_at <= 10.minutes.ago
+    PreAssignment::Delivery::DataService.delay(queue: :high).notify_deliveries if @@notified_at <= 10.minutes.ago
     result
   end
 

@@ -50,7 +50,7 @@ class TempDocument < ApplicationRecord
 
   after_create_commit do |temp_document|
     unless Rails.env.test?
-      TempDocument.delay_for(10.seconds, queue: :low).generate_thumbs(temp_document.id)
+      TempDocument.delay_for(10.seconds, queue: :high).generate_thumbs(temp_document.id)
     end
   end
 
@@ -110,7 +110,7 @@ class TempDocument < ApplicationRecord
     end
 
     after_transition on: :ocr_needed do |temp_document, _transition|
-      AccountingWorkflow::OcrProcessing.delay_for(10.seconds, queue: :low).send_document(temp_document.id)
+      AccountingWorkflow::OcrProcessing.delay_for(10.seconds, queue: :high).send_document(temp_document.id)
     end
 
 

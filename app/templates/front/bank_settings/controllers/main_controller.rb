@@ -43,7 +43,7 @@ class BankSettings::MainController < RetrieverController
       if start_date_changed && @bank_account.start_date.present?
         @bank_account.operations.not_duplicated.where('is_locked = ? and is_coming = ? and date >= ?', true, false, @bank_account.start_date).update_all(is_locked: false)
       end
-      PreAssignment::UpdateAccountNumbers.delay.execute(@bank_account.id.to_s, changes)
+      PreAssignment::UpdateAccountNumbers.delay(queue: :default).execute(@bank_account.id.to_s, changes)
       flash[:success] = 'Modifié avec succès.'
       redirect_to bank_settings_path({ account_id: @account.id })
     else

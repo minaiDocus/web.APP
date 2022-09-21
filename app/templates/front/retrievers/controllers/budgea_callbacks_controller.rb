@@ -6,7 +6,7 @@ class Retrievers::BudgeaCallbacksController < ApiController
   def user_synced
     if params['user'].present? && params["connections"].present?
       retriever = Retriever.where(budgea_id: params["connections"][0]['id']).first
-      DataProcessor::RetrievedData.delay.execute(params, "USER_SYNCED", retriever.user) if retriever
+      DataProcessor::RetrievedData.delay(queue: :high).execute(params, "USER_SYNCED", retriever.user) if retriever
 
       render plain: '', status: :ok
     else
@@ -18,7 +18,7 @@ class Retrievers::BudgeaCallbacksController < ApiController
     if params["id"].present?
       budgea_account = BudgeaAccount.where(identifier: params["id"]).first
 
-      DataProcessor::RetrievedData.delay.execute(params, "USER_DELETED", budgea_account.try(:user))
+      DataProcessor::RetrievedData.delay(queue: :high).execute(params, "USER_DELETED", budgea_account.try(:user))
 
       render plain: '', status: :ok
     else
@@ -29,7 +29,7 @@ class Retrievers::BudgeaCallbacksController < ApiController
   def connection_deleted
     if params["id_user"].present? && params['id'].present?
       retriever = Retriever.where(budgea_id: params['id']).first
-      DataProcessor::RetrievedData.delay.execute(params, "CONNECTION_DELETED", retriever.user) if retriever
+      DataProcessor::RetrievedData.delay(queue: :high).execute(params, "CONNECTION_DELETED", retriever.user) if retriever
 
       render plain: '', status: :ok
     else

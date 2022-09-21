@@ -7,7 +7,7 @@ class Staffingflow::GroupingWorker
       StaffingFlow.ready_grouping.each do |sf|
         next if StaffingFlow.processing_grouping.count > 10 #MAXIMUM THREAD (Concurent job)
 
-        Staffingflow::GroupingWorker::Launcher.delay.process(sf.id)
+        Staffingflow::GroupingWorker::Launcher.delay(queue: :low).process(sf.id)
       end
     end
   end
@@ -22,7 +22,7 @@ class Staffingflow::GroupingWorker
 
         if sf.processing
           SgiApiServices::GroupDocument.processing(params[:json_content], params[:temp_document_ids], params[:temp_pack_id], sf)
-          SgiApiServices::GroupDocument.delay_for(2.hours).retry_processing(sf.id, 1)
+          SgiApiServices::GroupDocument.delay_for(2.hours, queue: :low).retry_processing(sf.id, 1)
         end
       end
     end

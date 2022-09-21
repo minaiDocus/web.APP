@@ -22,7 +22,7 @@ class Order::Dematbox
     if @order.save
       unless @is_an_update
         # @period.orders << @order
-        Order::Confirm.delay_for(24.hours).execute(@order.id)
+        Order::Confirm.delay_for(24.hours, queue: :high).execute(@order.id)
       end
 
       # Billing::UpdatePeriod.new(@period).execute

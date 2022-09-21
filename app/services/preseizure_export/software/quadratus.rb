@@ -11,7 +11,7 @@ class PreseizureExport::Software::Quadratus
     file_path = ''
 
     CustomUtils.mktmpdir('quadratus_export', nil, false) do |dir|
-      PreseizureExport::Software::Quadratus.delay_for(6.hours).remove_temp_dir(dir)
+      PreseizureExport::Software::Quadratus.delay_for(6.hours, queue: :high).remove_temp_dir(dir)
 
       data = PreseizureExport::PreseizureToTxt.new(@preseizures).execute # Generate a txt with preseizures
 

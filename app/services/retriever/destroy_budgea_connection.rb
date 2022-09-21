@@ -22,7 +22,7 @@ class Retriever::DestroyBudgeaConnection
   end
 
   def destroy
-    Retriever::DestroyBudgeaConnection.delay.disable_accounts(@retriever.id)
+    Retriever::DestroyBudgeaConnection.delay(queue: :high).disable_accounts(@retriever.id)
     true
   end
 end

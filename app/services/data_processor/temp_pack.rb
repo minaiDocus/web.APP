@@ -3,13 +3,13 @@ class DataProcessor::TempPack
   POSITION_SIZE = 3
 
   def self.process(temp_pack_name)
-    UniqueJobs.for "PublishDocument-#{temp_pack_name}", 2.hours, 2 do
+    UniqueJobs.for "PublishDocument-#{temp_pack_name}", 1.hours, 2 do
       counter_limit = TempPack.where('document_delivery_id > 0').size
 
       if counter_limit <= 5
         temp_pack = TempPack.find_by_name temp_pack_name
         execute(temp_pack)
-        sleep(40) #lock multi temp pack processing to avoid access disk overload
+        sleep(10) #lock multi temp pack processing to avoid access disk overload
       end
     end
   end
@@ -66,7 +66,7 @@ class DataProcessor::TempPack
           sleep(15)
           if !File.exist?(temp_document.cloud_content_object.reload.path.to_s)
             temp_document.unreadable
-            DataProcessor::TempPack.delay_for(1.hours, queue: :low).unblock_temp_doc(temp_document.id)
+            DataProcessor::TempPack.delay_for(1.hours, queue: :high).unblock_temp_doc(temp_document.id)
             next
           end
         end

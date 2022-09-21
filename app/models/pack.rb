@@ -304,7 +304,7 @@ class Pack < ApplicationRecord
       end
 
       DocumentTools.archive(zip_path, files_paths) if files_paths.present?
-      FileUtils.delay_for(5.minutes, queue: :low).remove_entry(dir, true)
+      FileUtils.delay_for(5.minutes, queue: :high).remove_entry(dir, true)
     end
 
     zip_path

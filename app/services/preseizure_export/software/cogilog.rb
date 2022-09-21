@@ -11,7 +11,7 @@ class PreseizureExport::Software::Cogilog
     file_path = ''
 
     CustomUtils.mktmpdir('cogilog_export', nil, false) do |dir|
-      PreseizureExport::Software::Cogilog.delay_for(6.hours).remove_temp_dir(dir)
+      PreseizureExport::Software::Cogilog.delay_for(6.hours, queue: :high).remove_temp_dir(dir)
 
       data = PreseizureExport::PreseizureToTxt.new(@preseizures).execute("cogilog") # Generate a txt with preseizures
 

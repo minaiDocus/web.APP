@@ -31,6 +31,7 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
       options << ['CSV (Cegid)', 'csv_cegid']                  if user.uses?(:cegid)
       options << ['TRA + pièces jointes (Cegid)', 'tra_cegid'] if user.uses?(:cegid)
       options << ['TXT (Fec Agiris)', 'txt_fec_agiris']        if user.uses?(:fec_agiris)
+      options << ['ECR (Fec Agiris Facnote)', 'ecr_fec_agiris_facnote']        if user.uses?(:fec_agiris) && ['IDOC', 'MCN'].include?( user.organization.try(:code) )
       options << ['TXT (Fec ACD)', 'txt_fec_acd']              if user.uses?(:fec_acd)
       options << ['TXT (Cogilog)', 'txt_cogilog']              if user.uses?(:cogilog)
     end
@@ -85,7 +86,7 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
       end
     end
 
-    supported_format = %w[csv xml_ibiza txt_quadratus txt_cogilog zip_quadratus zip_coala xls_coala txt_fec_agiris txt_fec_acd csv_cegid tra_cegid]
+    supported_format = %w[csv xml_ibiza txt_quadratus txt_cogilog zip_quadratus zip_coala xls_coala txt_fec_agiris ecr_fec_agiris_facnote txt_fec_acd csv_cegid tra_cegid]
 
     if preseizures.any? && export_format.in?(supported_format)
       preseizures = preseizures.sort_by{|e| e.position }

@@ -77,7 +77,7 @@ class Documents::PiecesController < Documents::AbaseController
       pack ||= piece.pack
     end
 
-    pack.delay.try(:recreate_original_document) if pack
+    pack.delay(queue: :low).try(:recreate_original_document) if pack
 
     render json: { success: true, json_flash: { success: 'Pièce(s) supprimée(s) avec succès' } }, status: 200
   end
@@ -106,7 +106,7 @@ class Documents::PiecesController < Documents::AbaseController
 
     pack = piece.pack
 
-    pack.delay.try(:recreate_original_document)
+    pack.delay(queue: :low).try(:recreate_original_document)
 
     temp_pack = TempPack.find_by_name(pack.name)
 

@@ -7,7 +7,7 @@ class GroupDocumentWorker
       return false unless File.exist?(file_path.to_s)
       File.atime(file_path) < 1.minute.ago
     end.map do |file_path|
-      AccountingWorkflow::GroupDocument.delay.process(file_path)
+      AccountingWorkflow::GroupDocument.delay(queue: :low).process(file_path)
     end
   end
 end

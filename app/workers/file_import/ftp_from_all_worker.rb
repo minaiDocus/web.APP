@@ -5,7 +5,7 @@ class FileImport::FtpFromAllWorker
   def perform
     UniqueJobs.for 'ImportFromAllFTP' do
       Ftp.importable.each do |ftp|
-        FileImport::Ftp.delay.process ftp.id
+        FileImport::Ftp.delay(queue: :low).process ftp.id
       end
       true
     end

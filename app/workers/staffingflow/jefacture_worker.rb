@@ -7,7 +7,7 @@ class Staffingflow::JefactureWorker
       StaffingFlow.ready_jefacture.each do |sf|
         next if StaffingFlow.processing_jefacture.count > 3 #MAXIMUM THREAD (Concurent job)
 
-        Staffingflow::JefactureWorker::Launcher.delay.process(sf.id)
+        Staffingflow::JefactureWorker::Launcher.delay(queue: :high).process(sf.id)
       end
     end
   end
