@@ -24,23 +24,9 @@ class News < ApplicationRecord
     news = news.where(target_audience: contains[:target_audience]) if contains[:target_audience].present?
     news = news.where("title LIKE ?", "%#{contains[:title]}%") if contains[:title].present?
 
-    if contains[:created_at]
-      contains[:created_at].each do |operator, value|
-        news = news.where("created_at #{operator} ?", value) if operator.in?(['>=', '<='])
-      end
-    end
-
-    if contains[:updated_at]
-      contains[:updated_at].each do |operator, value|
-        news = news.where("updated_at #{operator} ?", value) if operator.in?(['>=', '<='])
-      end
-    end
-
-    if contains[:published_at]
-      contains[:published_at].each do |operator, value|
-        news = news.where("published_at #{operator} ?", value) if operator.in?(['>=', '<='])
-      end
-    end
+    news = news.where("created_at BETWEEN '#{CustomUtils.parse_date_range_of(contains[:created_at]).join("' AND '")}'")     if contains[:created_at].present?
+    news = news.where("updated_at BETWEEN '#{CustomUtils.parse_date_range_of(contains[:updated_at]).join("' AND '")}'")     if contains[:updated_at].present?
+    news = news.where("published_at BETWEEN '#{CustomUtils.parse_date_range_of(contains[:published_at]).join("' AND '")}'") if contains[:published_at].present?
 
     news
   end

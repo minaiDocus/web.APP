@@ -1,6 +1,6 @@
 %td.organization.clearfix
   = link_to @organization.name, organization_path(@organization)
-  = link_to image_tag('application/icon-xls.png', alt: 'Export XLS', style: 'position:relative;top:-2px;'), "/admin/reporting/#{@year}.xls?organization_id=#{@organization.id}", title: 'Export XLS', class: 'float-right'
+  = link_to image_tag('application/icon-xls-admin.png', alt: 'Export XLS', style: 'position:relative;top:-2px;'), "/admin/reporting/#{@year}.xls?organization_id=#{@organization.id}", title: 'Export XLS', class: 'float-end'
   %input{ :type => "hidden", class: 'total-span-3', value: @year }
 - @total = 12.times.map { |e| [0,0,0] }
 
@@ -19,14 +19,14 @@
       - extra_orders = @organization.billings.where(period: CustomUtils.period_of(time)).presence || []
       - organization_option_price = extra_orders.any? ? extra_orders.sum(&:price) : 0
     - else
-      - period_options = @organization.subscription.periods.select{ |period| period.start_date <= time && period.end_date >= time }.first.try(:product_option_orders).presence || []
+      - period_options = @organization.subscription ? (@organization.subscription.periods.select{ |period| period.start_date <= time && period.end_date >= time }.first.try(:product_option_orders).presence || []) : []
       - organization_option_price = period_options.sum(&:price_in_cents_wo_vat) || 0
 
     - if organization_option_price != 0
       .title.clearfix
-        .float-left= glyphicon('info', { class: 'mr-sm-1', color: '#000' })
-        .float-right
-          %h4= @organization.code
+        .float-left= glyphicon('info', { size: 10, class: 'mr-sm-1', color: '#000' })
+        .float-end
+          %h4.semibold= @organization.code
       .content.clearfix
         %span{ style: "text-decoration: underline"} Options :
         %br
@@ -114,8 +114,10 @@
   - if tooltip_content.present? && tooltip_content != '-'
     %td.months_list
       .content.clearfix
-        .float-left.custom_popover{ data: { content: tooltip_content } }= glyphicon('info', { class: 'mr-sm-1', color: '#000', size: 9 })
-        .float-right= content_for "td_content_#{@organization.id}_#{i}".to_sym
+        .i_info= glyphicon('info', { class: 'mr-sm-1', color: '#000', size: 9 })
+        %div= content_for "td_content_#{@organization.id}_#{i}".to_sym
+        .i_info_content
+          = tooltip_content.html_safe
   - else
     %td.months_list
       = content_for "td_content_#{@organization.id}_#{i}".to_sym

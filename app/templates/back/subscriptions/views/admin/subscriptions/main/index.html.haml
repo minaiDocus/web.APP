@@ -1,15 +1,12 @@
 #subscriptions
-  .row
-    .col-md-12
-      .box.small-shadow.clearfix
-        = render 'navigation'
-  .row
+  .row.derivationLeft
     .col-md-12
       .box
-        %h3.margin1top.margin1bottom Récapitulatif des Forfaits actuels
-        %table.table.table-condensed.table-striped.table-bordered
+        %h3 Récapitulatif des Forfaits actuels
+        .mb-2
+        %table.table.table-condensed.table-striped
           %thead
-            %tr.bg-brown.text-white
+            %tr.text-center
               %th
               %th iDo Classique
               %th iDo Mini
@@ -26,7 +23,7 @@
               %th Forfait Automates
               %th Pré-saisie
           %tbody
-            %tr
+            %tr.text-center
               %th Abonnés
               %td= link_to @basic_package_count, "#", class: 'do-showAccounts', title: "iDo Classique", type: "basic_package"
               %td= link_to @mini_package_count, "#", class: 'do-showAccounts', title: "iDo Mini", type: "mini_package"
@@ -42,20 +39,17 @@
               %td= link_to @digitize_package_count, "#", class: 'do-showAccounts', title: "Numériser", type: "digitize_package"
               %td= link_to @retriever_package_count, "#", class: 'do-showAccounts', title: "Forfait automates", type: "retriever_package"
               %td= link_to @pre_assignment_count, "#", class: 'do-showAccounts', title: "Pré-saisie", type: "pre_assignment_active"
-  .row.retractable.with-filter
-    .col-md-12.retractable-content
-      .box.clearfix
-        .row
-          .col-md-12
-            = render partial: 'shared/list_options', locals: { collection: @statistics }
-        %table#statistic_table.table.table-condensed.table-striped.margin1top.table-detachable-head.table-bordered-inner
+  .row.derivationRight
+    .col-md-12
+      .box.clearfix#statistic_table
+        %table.table.table-condensed.table-striped
           %thead
-            %tr.bg-brown.text-white
+            %tr.text-start.bg-dark.text-white.border-end.border-white
               %th(colspan='3') Information
               %th(colspan='9') Forfaits
               %th(colspan='4') Utilisation
               %th(colspan='3') Clients
-            %tr.bg-brown-light.text-white
+            %tr.text-center
               %th période
               %th= sortable 'organization_name', 'organisation'
               %th= sortable 'organization_code', 'code'
@@ -77,7 +71,7 @@
               %th= sortable 'closed_customers', 'clôturés'
           %tbody
             - @statistics.each do |statistic|
-              %tr
+              %tr.text-center
                 %td= I18n.l(statistic.month, format: "%b%y").titleize
                 %td= statistic.organization_name
                 %td= statistic.organization_code
@@ -117,7 +111,7 @@
                   = subscription_customers_popover_content_for(statistic.new_customers, 'positive')
                 %td
                   = subscription_customers_popover_content_for(statistic.closed_customers, 'negative')
-            %tr
+            %tr.text-center
               %td.total_footer -
               %td.total_footer -
               %td.total_footer -
@@ -157,43 +151,40 @@
                 %span{ class: ("positive" if @statistics_total[:new_customers] > 0) }= @statistics_total[:new_customers]
               %td.total_footer
                 %span{ class: ("negative" if @statistics_total[:closed_customers] > 0) }= @statistics_total[:closed_customers]
-        %br
-        .row
-          .col-12
-            = render partial: 'shared/list_options', locals: { collection: @statistics }
-    .card.retractable-filter
-      = form_tag admin_subscriptions_index_path, method: :get, class: 'form-filter' do
-        .card-header.clearfix
-          .float-start
-            %h3 Filtres
-          .float-end
-            %a.locker{ href: "#", title: "Cacher le Filtre" }= glyphicon('layers')
-        .retractable-filter-content
-          .card-body
+        = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: admin_subscriptions_index_path, target: '#statistic_table', total_pages: @statistics.total_pages, filter: 'form-filter' }
+
+    .card.retractable-filter.hide
+      
+
+  .modal#filter-subscription
+    .modal-dialog
+      .modal-content
+        .modal-header.clearfix
+          %h5.modal-title.bold Filtrer
+          %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+        = form_tag admin_subscriptions_index_path, method: :get, class: 'form-filter' do
+          .modal-body        
             .form-group
-              .label-section
-                %span.badge.badge-info.fs-origin
+              %label.semibold
+                %span.badge.bg-info
                   = label_tag 'Nb. Organisations : '
                   = @organization_count
             .form-group
-              .label-section
-                = label_tag 'first_period', 'Première période'
-              .control-section
-                = select_tag 'first_period', subscription_period_options_for_select(params[:first_period]), class: 'form-control'
+              %label.semibold
+                = label_tag 'first_period', 'Première période'            
+              = select_tag 'first_period', subscription_period_options_for_select(params[:first_period]), class: 'form-select'
             .form-group
-              .label-section
+              %label.semibold
                 = label_tag 'second_period', 'Deuxième période'
-              .control-section
-                = select_tag 'second_period', subscription_period_options_for_select(params[:second_period]), class: 'form-control'
+              = select_tag 'second_period', subscription_period_options_for_select(params[:second_period]), class: 'form-select'
             .form-group
-              .label-section
+              %label.semibold
                 = label_tag 'organization', 'Organisation'
-              .control-section
+              .select-container.w-100.no-padding  
                 = text_field_tag 'organization', (params[:organization] rescue ''), class: 'input-small'
-          .card-footer
-            .form-actions
-              = submit_tag t('filters.compare'), name: nil, class: 'btn btn-primary'
-              = link_to glyphicon('x'), admin_subscriptions_index_path, class: 'btn btn-light', title: t('filters.reset')
+          .modal-footer            
+            = link_to 'Réinitialiser', admin_subscriptions_index_path, class: 'btn btn-light', title: t('filters.reset')
+            = submit_tag t('filters.compare'), name: nil, class: 'btn btn-primary'
 
   #showAccounts.modal.fade.in
     .modal-dialog.modal-dialog-centered
@@ -202,5 +193,6 @@
           %h3
           %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
         .modal-body
+        .modal-footer
 
-= javascript_include_tag 'admin/subscriptions'
+= javascript_include_tag 'back/subscriptions/assets/javascripts/main'

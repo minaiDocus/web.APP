@@ -5,12 +5,14 @@ before_action :load_scanning_provider, except: %w[index new create]
 
   # GET /admin/scanning_providers
   def index
-    @scanning_providers = ScanningProvider.all.page(params[:page]).per(params[:per_page])
+    @scanning_providers = ScanningProvider.all.order(created_at: :desc).page(params[:page]).per(params[:per_page])
   end
 
   # GET /admin/scanning_providers/new
   def new
     @scanning_provider = ScanningProvider.new
+
+    render partial: 'form'
   end
 
   # POST /admin/scanning_providers
@@ -18,27 +20,29 @@ before_action :load_scanning_provider, except: %w[index new create]
     @scanning_provider = ScanningProvider.new(scanning_provider_params)
 
     if @scanning_provider.save
-      flash[:notice] = 'Créé avec succès.'
-
-      redirect_to admin_scanning_provider_path(@scanning_provider)
+       json_flash[:success] = 'Créé avec succès.'      
     else
-      render :new
+      json_flash[:error] = errors_to_list @scanning_provider
     end
+
+    render json: { json_flash: json_flash }, status: 200
   end
 
   # GET /admin/scanning_providers/:id/edit
-  def edit; end
+  def edit 
+    render partial: 'form'
+  end
 
   # PUT /admin/scanning_providers/:id
   def update
     if @scanning_provider.update(scanning_provider_params)
 
-      flash[:notice] = 'Modifié avec succès.'
-
-      redirect_to admin_scanning_provider_path(@scanning_provider)
+      json_flash[:success] = 'Modifié avec succès.'
     else
-      render :edit
+      json_flash[:error] = errors_to_list @scanning_provider
     end
+
+    render json: { json_flash: json_flash }, status: 200
   end
 
   # DELETE /admin/scanning_providers/:id

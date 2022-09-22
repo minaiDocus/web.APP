@@ -16,6 +16,11 @@ Rails.application.routes.draw do
       get '/awaiting_supplier_recognition', to: "main#awaiting_supplier_recognition", as: "awaiting_supplier_recognition"
       get '/awaiting_adr', to: "main#awaiting_adr", as: "awaiting_adr"
       get '/cedricom_orphans', to: "main#cedricom_orphans", as: "cedricom_orphans"
+      get '/chart_flux_document', to: "main#chart_flux_document", as: "chart_flux_document"
+      get '/document_delivery', to: "main#document_delivery", as: "document_delivery"
+      get '/document_api', to: "main#document_api", as: "document_api"
+      get '/software_customers', to: "main#software_customers", as: "software_customers"
+      get '/bank_operation', to: "main#bank_operation", as: "bank_operation"
     end
   end
 end

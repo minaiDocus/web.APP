@@ -1,18 +1,155 @@
-@import common
+@import front/main
 
 // Admin
 body
-  background-color: #778899
-  background: #{"linear-gradient(#778899, #FFF)"}
-  background: #{"-moz-linear-gradient(#778899, #FFF)"}
-  background: #{"-webkit-linear-gradient(#778899, #FFF)"}
-  background: #{"-o-linear-gradient(#778899, #FFF)"}
-  background-repeat: repeat
-  background-attachment: fixed
-  padding-top: 30px
+  overflow-y: hidden
+  overflow-x: hidden
+  background: linear-gradient(90deg, rgba(26, 26, 26, 0.04) 0%, #8B9A9B 100%)
 
-.box, .card-body
-  background-color: #F5F5F5
+.navbar-brand img
+  margin: 5% auto
+
+.lefter-content
+  width: 100%
+  z-index: 100
+  background: linear-gradient(90deg, rgba(26, 26, 26, 0.04) 0%, #9FA897 100%)
+  li
+    a
+      transition: padding .3s ease-out
+      display: block
+      width: 100%
+  li
+    a:hover
+      padding-left: 9px
+  .nav-item
+    .dropdown-menu.show
+      -webkit-animation-duration: .16s !important
+      animation-duration: .16s !important
+
+.header-connexion
+  position: fixed
+  width: 85%
+  height: 70px
+  z-index: 100
+  background: linear-gradient(90deg, rgba(26, 26, 26, 0.04) 0%, #DDD 100%)
+  li.nav-item:hover
+    background-color: inherit !important
+
+.head-logo
+  border-radius: 8px
+  .admin-label
+    font-size: 34px
+    color: rgba(26, 26, 26, 4)
+
+.body_content
+  padding: 0.1% 2%
+
+.box
+  border-radius: 6px
+  box-shadow: 0 4px 20px 0 rgba(0,0,0,.14),0 7px 10px -5px rgba(64,64,64,.4)!important  
+  .table
+    thead
+      
+.btn
+  border-radius: 8px
+  border: none
+  box-shadow: 0 4px 2px 0 rgba(0, 0, 0, 0.36), 0 2px 1px 0 rgba(0, 0, 0, 0.32) !important
+  font-size: 13px
+  a
+    color: #FFF !important
+
+.btn-primary
+  background: linear-gradient(90deg, #578EE3 0%, #4249AA 100%)
+
+.btn-secondary
+  background: linear-gradient(90deg, #BBB 0%, #6c757d 100%)
+
+.btn-warning
+  background: linear-gradient(90deg, #ffe9a9 0%, #ffc107 100%)
+
+
+.header-connexion
+  font-size: 13px
+  .user-name
+    padding: 1%
+    padding-left: 3%
+    h1
+      color: rgba(26, 26, 26, 4)
+  svg icon
+    transition: all 1s
+
+  svg icon
+    transform: rotate(360deg)
+
+.for-badge
+  position: absolute
+  padding: 5px
+  border-radius: 6px
+  box-shadow: 0 4px 20px 0 rgba(0,0,0,.14),0 7px 10px -5px rgba(64,64,64,.4)!important
+  margin-left: 1%
+  z-index: 100
+
+.back-blue-sky
+  background: #26a9e4
+
+.bottom-blue-sky
+  border-bottom: 1px solid #26a9e4
+
+.back-green
+  background: #28b679
+  
+.bottom-green
+  border-bottom: 1px solid #28b679
+
+.back-yellow
+  background: #ffb94a
+
+.bottom-yellow
+  border-bottom: 1px solid #ffb94a
+
+.back-magenta
+  background: #db542f
+
+.bottom-magenta
+  border-bottom: 1px solid #db542f
+
+.back-grey
+  background: rgba(26, 26, 26, 0.7)
+
+.bottom-grey
+  border-bottom: 1px solid rgba(26, 26, 26, 0.7)
+
+.back-blue
+  background: #2555a4
+
+.bottom-blue
+  border-bottom: 1px solid #2555a4
+
+.label_more_info
+  color: #4caf50
+
+.back-red-metal
+  background: #f84d4f
+
+.dropdown-menu
+  min-width: 17rem
+
+.dropdown-toggle::after
+  border-top: none !important
+
+li.nav-item 
+  padding: 2%
+  padding-left: 10%
+  a span
+    font-size: 14px
+    color: white
+
+li.nav-item.active
+  background-color: #696969 !important
+
+li.nav-item:hover
+  background-color: #919191
+
 
 /*menu base*/
 .bg-menu
@@ -24,22 +161,15 @@ body
       .dropdown-item:hover
         background-color: #696969 !important
 
-nav.navbar
-  :background-color: #696969
+.dropdown-item:active, .dropdown-item.active
+  background-color: #b9d633 !important
 
-nav.navbar .dropdown-menu
-  background-color: #696969
 
 nav.navbar .nav-link, nav.navbar .dropdown-item, footer a
   :color #FFF !important
 
 a
   text-decoration: none
-
-.bg-brown
-  background-color: #696969
-.bg-brown-light
-  background-color: #323232
 
 /* Sticky footer */
 .wrapper
@@ -49,11 +179,8 @@ a
   margin: 0 auto -4em
 
 .footer
-  background-image: url('application/bg_body.png')
-  background-repeat: repeat
-  background-attachment: fixed
-  background-color: #DAE0E2
-  color: #214255
+  background: rgba(26, 26, 26, 0.04)
+  color: #5b5b5b
   padding: 4px
 .footer
   height: 2em
@@ -62,7 +189,20 @@ a
 
 /*****************/
 
+
+.popover_content_tickets
+  position: absolute
+  border: 1px solid #CCC
+  z-index: 120
+  margin: -3% 0px 0px 3%
+  min-width: 300px
+  box-shadow: 2px 5px 13px -1px rgba(0,0,0,0.75)
+  -webkit-box-shadow: 2px 5px 13px -1px rgba(0,0,0,0.75)
+  -moz-box-shadow: 2px 5px 13px -1px rgba(0,0,0,0.75)
+
+
 table
+  font-size: 12px
   tr
     th.total, td.total
       text-align: right
@@ -150,8 +290,15 @@ i.gray
     input[type=text]
       width: 70%
 
+.sub_menu
+  ul
+    li
+      transition: transform .2s ease-in
+    li:hover
+      transform: scale(1.07)
 
-
+.modal-content
+  border-radius: 6px
 
 
 @import "admin/*"

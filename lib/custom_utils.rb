@@ -156,7 +156,9 @@ class CustomUtils
     end
 
     def add_chmod_access_into(nfs_directory, type=0777)
-      FileUtils.chmod(type, nfs_directory)
+      directory = Rails.env == "production" ? nfs_directory : nfs_directory.sub(/nfs/, 'tmp')
+
+      FileUtils.chmod(type, directory)
     end
 
     def customize_file_name(file_naming_policy, options)
@@ -194,6 +196,8 @@ class CustomUtils
       default_tmp_dir = Rails.root.join("tmp")
 
       final_dir = specific_dir || default_tmp_dir
+
+      final_dir = default_tmp_dir if specific_dir.present? && specific_dir.match(/nfs/).present? && Rails.env != "production"
 
       begin
         add_chmod_access_into(final_dir)

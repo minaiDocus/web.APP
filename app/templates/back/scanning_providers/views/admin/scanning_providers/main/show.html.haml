@@ -12,7 +12,7 @@
         %h2 
           Atelier : 
           .badge.badge-info.fs-origin #{@scanning_provider}
-      .float-right
+      .float-right.readonly-container
         = link_to t('actions.edit'), edit_admin_scanning_provider_path(@scanning_provider), { class: 'btn btn-primary' }
         = link_to t('actions.return'), admin_scanning_providers_path, class: 'btn btn-light'
 
@@ -57,4 +57,3 @@
                   - if address
                     .col-md-4
                       = render partial: 'address', locals: { address: address, single: false }
-= javascript_include_tag 'admin/scanning_providers'

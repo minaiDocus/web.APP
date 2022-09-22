@@ -47,6 +47,12 @@
   margin-top: 1.5%;
 }
 
+
+.result-sol-container{
+  max-height: 90px;
+  overflow: auto;
+}
+
 .content-table{
   border: 1px solid rgba(26, 26, 26, 0.1); 
   border-radius: 8px;
@@ -213,7 +219,7 @@ img{
 .suggestion_account_list ul, .content-list-pieces-deleted ul{
   margin: 0 !important;
   padding: 0 !important;
-  max-height: 500px;
+  max-height: 400px;
   overflow-y: auto;
 }
 
@@ -226,6 +232,7 @@ img{
 }
 
 .deleted-piece-count{
+  position: relative;
   font-size: 15px;
 }
 
@@ -234,13 +241,22 @@ img{
 }
 
 .content-list-pieces-deleted{
-  /*position: absolute;  */
+  position: absolute;
   color: rgba(26,26,26,0.7);
   border: 1px solid rgba(26,26,26,0.2);
   background: #FFFFFF;
-  min-width: 35%;
-  border-radius: 5px;
+  width: 520px;
+  max-height: 380px;
+  border-radius: 10px;
   z-index: 1080;
+  padding: 1%;
+  overflow-y: auto;
+}
+
+.deleted-piece-name{
+  font-weight: bold;
+  font-size: 14px;
+  color: rgba(26,26,26,0.7);
 }
 
 .restore{
@@ -320,6 +336,7 @@ img{
 }
 
 .show-list-document{
+  position: relative;
   transition: all 0.5s ease-out;
 }
 
@@ -330,7 +347,8 @@ img{
   background: #fff;
   padding: 1%;
   box-shadow: 0px 4px 2px rgba(43, 56, 56, 0.3);
-  max-height: 530px;
+  max-height: 390px;
+  width: 820px;
   overflow-y: auto;
   border-radius: 8px;
 }
@@ -340,8 +358,10 @@ img{
 }
 
 .temp-document-content-lists {
-  width: 200px;
+  width: 196px;
   float: left;
+  height: 200px;
+  text-align: center;
 }
 
 .sol-caret-container {
@@ -542,15 +562,6 @@ img{
   .multi-select-container span svg{
     width: 11px !important;
     height: 11px !important;
-  }
-
-  .temp-document-content {
-    max-width: 600px;
-  }
-
-  .temp-document-content-lists {
-    width: 150px;
-    float: left;
   }
 
   .sol-caret-container {

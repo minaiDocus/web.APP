@@ -55,7 +55,7 @@ jQuery ->
       if item == 'simplified_xls'
         ch_text = 'Régénérer à nouveau XLS Simplifié '
     $(this).text(ch_text)
-    $(this).append('<img alt="Export xls" style="position:relative;top:-2px;" src="/assets/application/icon-xls.png">')
+    $(this).append('<img alt="Export xls" style="position:relative;top:-2px;" src="/assets/application/icon-xls-admin.png">')
     $('#reporting .download-export_xls').hide()
     $('#reporting #show-export-xls-link .download-link, #reporting #show-export-xls-link .show-content').remove()
 

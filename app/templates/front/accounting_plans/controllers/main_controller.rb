@@ -158,11 +158,7 @@ class AccountingPlans::MainController < CustomerController
       else
         return false if params[:fec_file].content_type != "text/plain"
 
-        if Rails.env == "production"
-          @dir = CustomUtils.mktmpdir('fec_import', "/nfs/import/FEC/", false)
-        else
-          @dir = CustomUtils.mktmpdir('fec_import', nil, false)
-        end
+        @dir = CustomUtils.mktmpdir('fec_import', "/nfs/import/FEC/", false)
 
         @file   = File.join(@dir, "file_#{Time.now.strftime('%Y%m%d%H%M%S')}.txt")
         journal = []

@@ -91,7 +91,7 @@ class TempDocument < ApplicationRecord
   scope :wait_selection,    -> { where(state: 'wait_selection') }
   scope :ocr_layer_applied, -> { where(is_ocr_layer_applied: true) }
   scope :from_ibizabox,     -> { where.not(ibizabox_folder_id: nil) }
-  scope :not_deleted,     -> { where.not(original_fingerprint: nil) }
+  scope :not_deleted,       -> { where.not(original_fingerprint: nil) }
   scope :from_mobile,       -> { where("state='processed' AND delivery_type = 'upload' AND api_name = 'mobile'") }
   scope :by_source, -> (delivery_type) { where('delivery_type = ?', delivery_type) }
   scope :with, -> (period) { where(updated_at: period) }
@@ -156,24 +156,21 @@ class TempDocument < ApplicationRecord
     page     = options[:page] || 1
     per_page = options[:per_page] || 20
 
-    query = self.not_deleted
+    query = self.all
 
-    if options[:user_ids] && options[:label]
-      ledger_short_name = User.find(options[:user_ids]).account_book_types.find(options[:label]).name
-    end
+    query = query.where(temp_pack_id: options[:temp_pack_ids])                                   if options[:temp_pack_ids]
 
     query = query.where(user_id: options[:user_ids])                                             if options[:user_ids].present?
-    query = query.where("content_file_name LIKE ?", "%#{ledger_short_name}%")                    if options[:label].present?
-    query = query.where('tags LIKE ?', "%#{options[:tags]}%")                                    if options[:tags].present?
-    query = query.where('original_file_name LIKE ? OR tags LIKE ?', "%#{text}%", "%#{text}%")    if text.present?
+    query = query.where('temp_documents.tags LIKE ?', "%#{options[:tags]}%")                     if options[:tags].present?
+    query = query.where('temp_documents.original_file_name LIKE ? OR temp_documents.tags LIKE ?', "%#{text}%", "%#{text}%")    if text.present?
+    query = query.joins(:piece)                                                                  if options[:position].present? || options[:pre_assignment_state].present?
+    query = query.where('pack_pieces.pre_assignment_state = ?', options[:pre_assignment_state])  if options[:pre_assignment_state].present?
 
-    # if options[:position_operation].present?
-    #   query = query.where("pack_pieces.position #{options[:position_operation].tr('012', ' ><')}= ?", options[:position]) if options[:position].present?
-    # else
-    #   query = query.where("pack_pieces.position IN (#{options[:position].join(',')})" ) if options[:position].present?
-    # end
-
-    query.order(position: :asc) if options[:sort] == true
+    if options[:position_operation].present?
+      query = query.where("pack_pieces.position #{options[:position_operation].tr('012', ' ><')}= ?", options[:position]) if options[:position].present?
+    else
+      query = query.where("pack_pieces.position IN (#{options[:position].join(',')})" ) if options[:position].present?
+    end
 
     query.page(page).per(per_page)      
   end
@@ -233,13 +230,9 @@ class TempDocument < ApplicationRecord
 
     dematbox_files = dematbox_files.where(dematbox_doc_id: contains[:dematbox_doc_id]) if contains[:dematbox_doc_id]
 
-    if contains[:created_at]
-      contains[:created_at].each do |operator, value|
-        dematbox_files = dematbox_files.where("created_at #{operator} ?", value) if operator.in?(['>=', '<='])
-      end
-    end
+    dematbox_files = dematbox_files.where("created_at BETWEEN '#{CustomUtils.parse_date_range_of(contains[:created_at]).join("' AND '")}'") if contains[:created_at].present?
 
-    dematbox_files.where(delivered_by: contains[:delivered_by]) if contains[:delivered_by]
+    dematbox_files = dematbox_files.where(delivered_by: contains[:delivered_by]) if contains[:delivered_by]
 
     dematbox_files = dematbox_files.where('content_file_name LIKE ?', "%#{contains[:content_file_name]}%") if contains[:content_file_name]
 
@@ -440,7 +433,11 @@ class TempDocument < ApplicationRecord
   end
 
   def get_tags(separator='-')
-    tags.join(" #{separator} ").presence || '-'
+    if tags.present?
+      tags.join(" #{separator} ").presence || '-'
+    else
+      '-'
+    end
   end
 
   def is_a_cover?

@@ -1,1 +1,1 @@
-//= require ckeditor/config
+

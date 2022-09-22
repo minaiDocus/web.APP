@@ -12,6 +12,7 @@
 //= link application/ftp_logo.png
 //= link application/box_logo.png
 //= link application/icon-xls.png
+//= link application/icon-xls-admin.png
 //= link application/icon-csv.png
 //= link application/icon-pdf.png
 //= link application/budgealogo.png

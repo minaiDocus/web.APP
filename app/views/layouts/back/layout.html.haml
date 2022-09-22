@@ -13,9 +13,9 @@
     %link{ :rel => 'shortcut icon', :type => "image/ico", :href => image_path('favicon.ico') }
     = csrf_meta_tag
     = stylesheet_link_tag 'admin'
-    = stylesheet_link_tag 'admin/subscriptions'
-    = stylesheet_link_tag 'admin/retriever_services'
-    = stylesheet_link_tag 'admin/budgea_retriever'
+    / = stylesheet_link_tag 'admin/subscriptions'
+    / = stylesheet_link_tag 'admin/retriever_services'
+    / = stylesheet_link_tag 'admin/budgea_retriever'
     = javascript_include_tag Ckeditor.cdn_url
     = javascript_include_tag 'back/main'
 
@@ -25,14 +25,30 @@
       <![endif]-->
 
 
-  = render partial: 'layouts/back/navigation'
-  .body_content{ style: 'padding: 15px' }
-    = render 'layouts/back/messages'
-    = yield
-    .push
-    
-    %footer.fixed-bottom.footer.clearfix
-      %p.copyright{ style: 'text-align:center;' } &copy; iDocus #{Time.now.year}
+  / = render partial: 'layouts/back/navigation'
+  .row
+    .col-md-2.lefter-dark.no-padding
+      = render 'layouts/back/lefter'
+    .col-md-10.no-padding
+      = render 'layouts/back/header_connexion'  
+      .body_content{ style: "height: 900px;" }
+        = yield
+        .push
+
+      = render partial: 'layouts/notice_flush_messages'
+
+      %footer.fixed-bottom.footer.clearfix
+        %p.copyright{ style: 'text-align:center;' } &copy; iDocus #{Time.now.year}
+
+      
+
+  .loading_box.hide
+    .box.text-center
+      %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}
+      %label.mt-2.semibold Chargement
+
+  .scroll-on-top.pointer.hide
+    .scroll-arrow= glyphicon('chevron-top', { size: '16', color: 'white' })
 
   .to_delete
     = javascript_include_tag 'admin/archives'

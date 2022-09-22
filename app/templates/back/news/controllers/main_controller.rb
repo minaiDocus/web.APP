@@ -8,36 +8,45 @@ before_action :load_news, except: %w[index new create]
     @news = News.search(search_terms(params[:news_contains])).order(sort_column => sort_direction).page(params[:page]).per(params[:per_page])
   end
 
-  def show; end
+  def show
+    render partial: 'show'
+  end
 
   def new
     @news = News.new
+
+    render partial: 'form'
   end
 
   def create
     @news = News.new(news_params)
     if @news.save
-      flash[:notice] = 'Créé avec succès.'
-      redirect_to admin_news_path(@news)
+      json_flash[:success] = 'Créé avec succès.'      
     else
-      render :new
+      json_flash[:error] = errors_to_list @news
     end
+
+    render json: { json_flash: json_flash }, status: 200
   end
 
-  def edit; end
+  def edit
+
+    render partial: 'form'
+  end
 
   def update
     if @news.update(news_params)
-      flash[:notice] = 'Modifié avec succès.'
-      redirect_to admin_news_path(@news)
+      json_flash[:success] = 'Modifié avec succès.'
     else
-      render :edit
+      json_flash[:error] = errors_to_list @news
     end
+
+    render json: { json_flash: json_flash }, status: 200
   end
 
   def destroy
     @news.destroy
-    flash[:notice] = 'Supprimé avec succès.'
+    json_flash[:success] = 'Supprimé avec succès.'
     redirect_to admin_news_index_path
   end
 

@@ -31,7 +31,14 @@ $(document).ready(function() {
       contentType: 'application/json',
       }).success(function(response){
         $('.custom_popover').custom_popover();
-        $("#reporting .organization_list tr#total_footer").html(response)
+        $("#reporting .organization_list tr#total_footer").html(response);
+
+        $('.i_info').mouseover(function() {
+          $(this).parent().find('.i_info_content').show('');
+        })
+        .mouseout(function() {
+          $('.i_info_content').hide();
+        });
       })
   }
 
@@ -65,7 +72,7 @@ $(document).ready(function() {
     });
 
     $(this).text(ch_text)
-    $(this).append('<img alt="Export xls" style="position:relative;top:-2px;" src="/assets/application/icon-xls.png">')
+    $(this).append('<img alt="Export xls" style="position:relative;top:-2px;" src="/assets/application/icon-xls-admin.png">')
     $('#reporting .download-export_xls').hide()
     $('#reporting #show-export-xls-link .download-link, #reporting #show-export-xls-link .show-content').remove()
 

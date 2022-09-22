@@ -3,10 +3,10 @@ function bind_all_events(){
 
   $('.date-edit-third-party').asDateRange({ defaultBlank: true, singleDatePicker: true, locale: { format: 'DD/MM/YYYY' }});
 
-  $('#customer_document_filter').asMultiSelect({
+  $('#customer_document_filter').asMultiSelect({    
     "texts" : { "searchplaceholder": "Choix dossiers", "noItemsAvailable": 'Aucun dossier trouvé'},
     "resultsContainer": '.result-sol',
-    "maxHeight": "300px",
+    "maxHeight": "300px"
   });
 
   $('#journal_document_filter').multiSelect({

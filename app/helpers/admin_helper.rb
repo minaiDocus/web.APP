@@ -40,9 +40,10 @@ module AdminHelper
 
 
   def pre_assignment_delivery_state(delivery)
-    klass = 'badge fs-origin'
+    klass = 'badge'
+    klass += ' bg-dark'   if delivery.state == 'pending'
     klass += ' bg-success'   if delivery.state == 'sent'
-    klass += ' bg-danger' if delivery.state == 'error'
+    klass += ' bg-danger'    if delivery.state == 'error'
 
     content_tag 'span', PreAssignmentDelivery.state_machine.states[delivery.state].try(:human_name), class: klass
   end

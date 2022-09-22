@@ -1,15 +1,14 @@
 #archive_budgea_retrievers
   = render partial: 'tab_menu'
 
-  .row.retractable.with-filter
-    .col-md-12.retractable-content
-      .box.clearfix
-        = render partial: 'shared/list_options', locals: { collection: @budgea_retrievers }
+  .row.derivationRight
+    .col-md-12
+      .box
         .row
           .col-md-12
-            %table.table.table-condensed.table-striped.margin1top.margin0bottom.table-detachable-head.table-bordered-inner
+            %table.table.table-condensed.table-striped
               %thead
-                %tr.bg-brown.text-white
+                %tr
                   %th= sortable :created, 'Date de création'
                   %th= sortable :budgea_id,  'Id budgea'
                   %th= sortable :state,  'Etat'
@@ -22,7 +21,7 @@
                   %th= sortable :is_updated, 'Mis à jour ?'
                   %th= sortable :is_deleted, 'Supprimé ?'
                   %th= sortable :deleted_date, 'Date de suppression'
-              %tbody.retractable.slidedown.archive_budgea_retrievers_content
+              %tbody.archive_budgea_retrievers_content
                 - @budgea_retrievers.each do |budgea_retriever|
                   %tr
                     %td= l(budgea_retriever.created, format: '%d %b %Y %H:%M', default: '-')
@@ -38,8 +37,8 @@
                     %td= budgea_retriever.is_deleted ? t('yes_value') : t('no_value')
                     %td= l(budgea_retriever.deleted_date, format: '%d %b %Y %H:%M', default: '-')
 
-        = render partial: 'shared/list_options', locals: { collection: @budgea_retrievers }
 
+  .hide
     = form_tag archives_budgea_retrievers_admin_retrievers_path(tab: 'budgea_retrievers'), method: :get, class: 'form-filter' do
       = hidden_field_tag :direction, sort_direction
       = hidden_field_tag :sort, sort_column

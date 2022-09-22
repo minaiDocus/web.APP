@@ -4,8 +4,7 @@
       %h3.bold
         %span.me-2 Mes Documents
         %span.badge.badge-secondary.regular.datas_size= @temp_documents.total_count
-        - if @filters.present?
-          %span.filter-info.badge.bg-info.regular.datas_size.blink Filtre actif
+        %span.filter-info.badge.bg-info.regular.datas_size.blink.hide Filtre actif
     - if @user.still_active?
       .col-md-2.derivationRight
         %button.btn.btn-primary.add-document.w-100.semibold
@@ -15,13 +14,17 @@
 
   .row
     .col-md-2
+      .w-100.text-center
+        = link_to documents_path, target: "_blank", class: 'no-style btn btn-light' do
+          %span.me-2= glyphicon('grid-two-up', {size: 13, color: '#72AA42'})
+          %span.semibold Interface classique
     .col-md-3
       .row
         .col-md-3.pt-2
           .semibold Dossier
         .col-md-9
-          = select_tag 'customers', options_for_select(@users.map{ |e| [e.short_info, e.id] }), id: 'customers', class: 'form-select', include_blank: false
-          =# select_tag 'customers', options_for_select([["IDOC%1234- MJ", 2164], ["IDOC%001 - ID", 284], ["IDOC%AIDE - AI", 1874]], params[:uid].presence || nil), id: 'customers', class: 'form-select', include_blank: false
+          - @users << @user if !@users.select { |u| u.id == @user.id }.any?
+          = select_tag 'customers', options_for_select(@users.reverse.map{ |e| [e.short_info, e.id] }, params[:uid].present? ? params[:uid] : @user.id), id: 'customers', class: 'form-select', include_blank: false
     .col-md-3
     .col-md-3
       .search-content

@@ -6,15 +6,10 @@
 class DocumentsReloadedPieces extends DocumentsReloadedMain{
   constructor(){
     super();
-
-    this.ajax_params =  {
-                          'url': '/documents_reloaded',
-                          'type': 'GET',
-                        }
   }
 
   load_packs(serialize_form=false, append=false){
-    this.load_datas(serialize_form, append);
+    this.load_collaborator_datas(serialize_form, append);
   }
 
   load_collaborator_pieces(serialize_form=false, append=false){
@@ -23,7 +18,6 @@ class DocumentsReloadedPieces extends DocumentsReloadedMain{
 
 
   delete_piece(elem){
-
     if(confirm('Voulez vous vraiment supprimer la(les) pièce(s) sélectionnée(s)')){
       let multi = elem.attr('multi') || false;
       let ids   = []
@@ -71,7 +65,7 @@ jQuery(function() {
   AppListenTo('documents_load_datas', (e)=>{ main.load_packs(true); });
   AppListenTo('documents_reinit_datas', (e)=>{ main.load_packs(false); });
 
-  AppListenTo('documents_search_text', (e)=>{ main.load_packs(true); });
+  AppListenTo('documents_search_text', (e)=>{ main.load_collaborator_pieces(true); });
 
   AppListenTo('documents_next_page', (e)=>{ main.load_next_page(); });
 
@@ -79,8 +73,6 @@ jQuery(function() {
   AppListenTo('filter_pack_badge', (e)=>{ main.load_packs(true); });
 
   AppListenTo('document_collaborator_filter', (e)=>{ main.load_collaborator_pieces(true); });
-
-
 
   AppListenTo('documents_loaded_delete_piece', (e)=>{ main.delete_piece($(e.detail.obj)) });
   AppListenTo('documents_loaded_restore_piece', (e)=>{ main.restore_piece(e.detail.id) });

@@ -100,11 +100,9 @@ class DocumentsReloadedDetails extends DocumentsReloadedMain{
 jQuery(function() {
   let main = new DocumentsReloadedDetails();
 
-  alert('piece detail JS');
-
   AppListenTo('documents_show_preseizures_details', (e)=>{ main.show_preseizures_modal($(e.detail.obj)) });
 
-  AppListenTo('documents_load_datas', (e)=>{ main.load_pieces(true) });
+  AppListenTo('documents_load_datas', (e)=>{ console.log('button'); main.load_pieces(true) });
   AppListenTo('documents_reinit_datas', (e)=>{ main.load_pieces(false) });
 
   AppListenTo('documents_delete_piece', (e)=>{ main.delete_piece($(e.detail.obj)) });
@@ -112,7 +110,7 @@ jQuery(function() {
 
   AppListenTo('documents_edit_analysis', (e)=>{ main.edit_analysis(e.detail.code, e.detail.is_used) });
 
-  AppListenTo('documents_search_text', (e)=>{ main.load_pieces(true); });
+  AppListenTo('documents_search_text', (e)=>{ console.log('key'); main.load_pieces(true); });
 
   AppListenTo('compta_analytics.validate_analysis', (e)=>{ main.update_analytics(e.detail.data) });
 

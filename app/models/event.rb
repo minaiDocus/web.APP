@@ -33,11 +33,7 @@ class Event < ApplicationRecord
       end
     end
 
-    if contains[:created_at].present?
-      contains[:created_at].each do |operator, value|
-        events = events.where("created_at #{operator} ?", value) if operator.in?(['>=', '<='])
-      end
-    end
+    events = events.where("created_at BETWEEN '#{CustomUtils.parse_date_range_of(contains[:created_at]).join("' AND '")}'") if contains[:created_at].present?
 
     events = events.where(id:          contains[:id])          if contains[:id].present?
     events = events.where(action:      contains[:action])      if contains[:action].present?

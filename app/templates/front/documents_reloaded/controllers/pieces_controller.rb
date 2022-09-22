@@ -146,13 +146,17 @@ class DocumentsReloaded::PiecesController < DocumentsReloaded::AbaseController
     #@options[:piece_created_at] = @options[:by_piece].try(:[], :created_at)
     #@options[:piece_created_at_operation] = @options[:by_piece].try(:[], :created_at_operation)
 
-    @pieces_deleted = Pack::Piece.unscoped.where(user_id: @options[:user_ids]).deleted.presence || []
-    @pieces = Pack::Piece.search(@options[:text] , @options).distinct.order(created_at: :desc).page(@options[:page]).per(@options[:per_page])
+    @pieces = Pack::Piece.search(@options[:text] , @options).distinct.order(id: :desc).page(@options[:page]).per(@options[:per_page])
 
+    @pieces_deleted = Pack::Piece.unscoped.where(user_id: @options[:user_ids]).deleted
     @temp_documents = TempDocument.where(user_id: @options[:user_ids]).not_published
 
-    @render_upload = request.xhr? ? false : true
+    if @options[:user_ids].size > 2
+      @pieces_deleted = @pieces_deleted.limit(20)
+      @temp_documents = @temp_documents.order(id: :desc).limit(20)
+    end
 
+    @render_upload = request.xhr? ? false : true
   end
 
   def index_customers
@@ -164,15 +168,20 @@ class DocumentsReloaded::PiecesController < DocumentsReloaded::AbaseController
     @users = accounts.includes(:options, :ibiza, :subscription, organization: [:ibiza, :exact_online, :my_unisoft, :coala, :cogilog, :sage_gec, :acd, :quadratus, :cegid, :csv_descriptor, :fec_agiris]).active.order(code: :asc).select { |user| user.authorized_upload? }    
 
     @options[:user_ids] = params[:uid].presence || @user.id
+    @journals = AccountBookType.where(user_id: @options[:user_ids])
 
-    @rubrics         = AccountBookType.where(user_id: @options[:user_ids]).pluck(:id, :label)
-    check_rubric     = params[:rubric] || @rubrics.first[0]
+    @journal = params[:journal_id].present? ? @journals.where(id: params[:journal_id]).first.name : @journals.first.name
 
-    # debugger
+    @options[:pre_assignment_state] = params[:by_piece][:state_piece]       if params[:by_piece].present? && params[:by_piece][:state_piece].present?
+    @options[:position]             = params[:by_all][:position]            if params[:by_all].present? && params[:by_all][:position].present?
+    @options[:position_operation]   = params[:by_all][:position_operation]  if params[:by_all].present? && params[:by_all][:position_operation].present?
+    text                            = params[:text]                         if params[:text].present?
 
-    @options[:label] = check_rubric if check_rubric
+    @options[:temp_pack_ids] = TempPack.where(user_id: @options[:user_ids]).where("temp_packs.name LIKE '% #{@journal} %'").pluck(:id)
 
-    @temp_documents  = TempDocument.search(@options).order(created_at: :desc)
+    @filter_active = @options[:pre_assignment_state].present? || @options[:position].present? || params[:text].present?
+
+    @temp_documents = TempDocument.where.not(state: ['bundeled', 'unreadable']).search(@options, text).page(@options[:page]).per(@options[:per_page])
   end
 
   private

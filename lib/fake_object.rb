@@ -1,6 +1,6 @@
 class FakeObject
-  def initialize
-    @object = OpenStruct.new
+  def initialize(options=nil)
+    @object = OpenStruct.new(options)
   end
 
   def method_missing(name, *args, &block)
@@ -8,7 +8,8 @@ class FakeObject
       @object.send(name, args)
     rescue
       begin
-        @object.send(name).first
+        value = @object.send(name)
+        value.is_a?(Array) ? value.first : value
       rescue
         nil
       end

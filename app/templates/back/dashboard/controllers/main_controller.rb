@@ -17,7 +17,7 @@ class Admin::Dashboard::MainController < BackController
       object
     end
 
-    render partial: 'ocr_needed_temp_packs', locals: { collection: @ocr_needed_temp_packs }
+    render partial: 'result', locals: { collection: @ocr_needed_temp_packs, header: {1 => 'Date', 2 => 'Nom Lot', 3 => 'Nb. docs.', 4 => 'Origine'}}
   end
 
   # GET /admin/bundle_needed_temp_packs
@@ -32,7 +32,7 @@ class Admin::Dashboard::MainController < BackController
       object
     end.sort_by { |o| [o.date ? 0 : 1, o.date] }.reverse
 
-    render partial: 'bundle_needed_temp_packs', locals: { collection: @bundle_needed_temp_packs }
+    render partial: 'result', locals: { collection: @bundle_needed_temp_packs, header: {1 => 'Date dernier doc.', 2 => 'Lot', 3 => 'Nb. docs.', 4 => 'Origine'}}    
   end
 
   # GET /admin/processing_temp_packs
@@ -47,7 +47,7 @@ class Admin::Dashboard::MainController < BackController
       object
     end.sort_by { |o| [o.date ? 0 : 1, o.date] }.reverse
 
-    render partial: 'processing_temp_packs', locals: { collection: @processing_temp_packs }
+    render partial: 'result', locals: { collection: @processing_temp_packs, header: {1 => 'Date dernier doc.', 2 => 'Lot', 3 => 'Nb. docs.', 4 => 'Origine'}}
   end
 
   # GET /admin/currently_being_delivered_packs
@@ -70,7 +70,7 @@ class Admin::Dashboard::MainController < BackController
       end
     end.sort_by { |o| [o.date ? 0 : 1, o.date] }.reverse
 
-    render partial: 'currently_being_delivered_packs', locals: { collection: @currently_being_delivered_packs }
+    render partial: 'result', locals: { collection: @currently_being_delivered_packs, header: {1 => 'Date dernier doc.', 2 => 'Lot', 3 => 'Nb. pièces.', 4 => 'Message'}}
   end
 
   # GET /admin/failed_packs_delivery
@@ -97,20 +97,22 @@ class Admin::Dashboard::MainController < BackController
         object
       end
     end.sort_by { |o| [o.date ? 0 : 1, o.date] }.reverse
-    render partial: 'failed_packs_delivery', locals: { collection: @failed_packs_delivery }
+
+    render partial: 'result', locals: { collection: @failed_packs_delivery, header: {1 => 'Date dernier doc.', 2 => 'Lot', 3 => 'Nb. pièces.', 4 => 'Message'}} 
   end
 
   # GET /admin/blocked_pre_assignments
   def blocked_pre_assignments
     @blocked_pre_assignments = PreAssignment::Pending.unresolved.select { |e| e.message.present? }
-    render partial: 'blocked_pre_assignments', locals: { collection: @blocked_pre_assignments }
+
+    render partial: 'result', locals: { collection: @blocked_pre_assignments, header: {1 => 'Date dernier doc.', 2 => 'Lot', 3 => 'Nb. pièces.', 4 => 'Message'}} 
   end
 
   # GET /admin/awaiting_pre_assignments
   def awaiting_pre_assignments
     @awaiting_pre_assignments = PreAssignment::Pending.unresolved.select { |e| (e.message.blank? || e.pre_assignment_state == 'force_processing') }
 
-    render partial: 'awaiting_pre_assignments', locals: { collection: @awaiting_pre_assignments }
+    render partial: 'result', locals: { collection: @awaiting_pre_assignments, header: {1 => 'Date dernier doc.', 2 => 'Lot', 3 => 'Nb. pièces.', 4 => 'Message'}} 
   end
 
   # GET /admin/awaiting_supplier_recognition
@@ -123,7 +125,7 @@ class Admin::Dashboard::MainController < BackController
         object
     end
 
-    render partial: 'awaiting_supplier_recognition', locals: { collection: @awaiting_supplier_recognition }
+    render partial: 'result', locals: { collection: @awaiting_supplier_recognition, header: {1 => 'Date dernier doc.', 2 => 'Lot', 3 => 'Nb. pièces.', 4 => 'Message'}}
   end
 
   # GET /admin/awaiting_adr
@@ -136,7 +138,7 @@ class Admin::Dashboard::MainController < BackController
         object
     end
 
-    render partial: 'awaiting_adr', locals: { collection: @awaiting_adr}
+    render partial: 'result', locals: { collection: @awaiting_adr, header: {1 => 'Date dernier doc.', 2 => 'Lot', 3 => 'Nb. pièces.', 4 => 'Message'}}
   end
 
   # GET /admin/reports_delivery
@@ -150,20 +152,156 @@ class Admin::Dashboard::MainController < BackController
       object
     end
 
-    render partial: 'reports_delivery', locals: { collection: @reports_delivery }
+    render partial: 'result', locals: { collection: @reports_delivery, header: {1 => 'Date dernier doc.', 2 => 'Lot', 3 => 'Nb. écritures.', 4 => 'Message'}}  
   end
 
   # GET /admin/failed_reports_delivery
   def failed_reports_delivery
     @failed_reports_delivery = Pack::Report.failed_delivery(nil, 200)
 
-    render partial: 'failed_reports_delivery', locals: { collection: @failed_reports_delivery }
+    render partial: 'result', locals: { collection: @failed_reports_delivery, header: {1 => 'Date dernier doc.', 2 => 'Lot', 3 => 'Nb. écritures.', 4 => 'Message'}} 
   end
 
   # GET /admin/cedricom_orphans
   def cedricom_orphans
     @orphans = Operation.cedricom_orphans.group(:organization_id, :unrecognized_iban).group("DATE(created_at)").count
-    
-    render partial: 'cedricom_orphans', locals: { collection: @orphans }
+
+    render partial: 'result', locals: { collection: @orphans, header: {1 => 'Date import', 2 => 'Organisation', 3 => 'Nb. opérations', 4 => 'Compte', 5 => 'cedricom'}} 
+  end
+
+  def chart_flux_document
+    data = {}
+    data['title'] = 'Traitement des documents'
+    data['header'] = ['Corrompus', 'Bloqués', 'En attente de sélection', 'OCR', 'A regrouper', 'Prêt à être intégrés', 'Traités']
+    data['info'] = "Nb. Documents"
+    data['value'] = %w(unreadable_temp_documents_count locked_temp_documents_count wait_selection_temp_documents_count ocr_needed_temp_documents_count bundle_needed_temp_documents_count ready_temp_documents_count processed_temp_documents_count).map { |doc| StatisticsManager.get_statistic(doc) }
+    data['bg_color'] = [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(255, 205, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(201, 203, 207, 0.2)'
+              ]
+    data['border_color'] = [
+                'rgb(255, 99, 132)',
+                'rgb(255, 159, 64)',
+                'rgb(255, 205, 86)',
+                'rgb(75, 192, 192)',
+                'rgb(54, 162, 235)',
+                'rgb(153, 102, 255)',
+                'rgb(201, 203, 207)'
+              ]
+
+    render json: { result: data }, status: 200   
+  end
+  def document_delivery
+    data = {}
+    data['x_name'] = ['Dropbox Ext.', 'Dropbox', 'Google Drive', 'Box', 'FTP', 'MCF']
+    data['legend_1'] = 'Restant'
+    data['legend_2'] = 'Echoué'
+
+    data['value_1'] = %w(not_processed_retryable_dropbox_extended_remote_files_count not_processed_retryable_dropbox_remote_files_count not_processed_retryable_google_drive_remote_files_count not_processed_retryable_box_remote_files_count not_processed_retryable_ftp_remote_files_count not_processed_retryable_mcf_remote_files_count).map { |doc| StatisticsManager.get_statistic(doc) }
+
+    data['value_2'] = %w(not_processed_not_retryable_dropbox_extended_remote_files_count not_processed_not_retryable_dropbox_remote_files_count not_processed_not_retryable_google_drive_remote_files_count not_processed_not_retryable_box_remote_files_count not_processed_not_retryable_ftp_remote_files_count not_processed_not_retryable_mcf_remote_files_count).map { |doc| StatisticsManager.get_statistic(doc) }
+
+    data['border_color_1'] = "rgb(75, 192, 192)"
+    data['border_color_2'] = "rgb(255, 159, 64)"
+
+    render json: { result: data }, status: 200    
+  end
+
+  def document_api
+    data = {}
+    data['title'] = 'Documents téléversés par api'
+    data['header'] = ['Aucun', 'fiduceo', 'budgea', 'ibiza', 'web', 'email', 'dropbox', 'ftp', 'mcf', 'mobile', 'invoice auto', 'scan', 'invoice setting', 'jefacture', 'sftp']
+    data['info'] = "Nb. Documents"
+    data['value'] = %w(aucun_temp_documents_count fiduceo_temp_documents_count budgea_temp_documents_count ibiza_temp_documents_count web_temp_documents_count email_temp_documents_count dropbox_temp_documents_count ftp_temp_documents_count mcf_temp_documents_count mobile_temp_documents_count invoice_auto_temp_documents_count scan_temp_documents_count invoice_setting_temp_documents_count jefacture_temp_documents_count sftp_temp_documents_count).map { |doc| StatisticsManager.get_statistic(doc) }
+
+    data['value'] = [12, 54, 32, 45, 17, 96, 23, 12, 54, 47, 16, 58, 36, 86, 15] if Rails.env == 'development'
+
+    data['bg_color'] = [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(255, 205, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(80, 200, 39, 0.2)',
+                'rgba(145, 123, 75, 0.2)',
+                'rgba(23, 45, 26, 0.2)',
+                'rgba(85, 56, 198, 0.2)',
+                'rgba(36, 75, 139, 0.2)',
+                'rgba(126, 36, 128, 0.2)',
+                'rgba(53, 75, 250, 0.2)',
+                'rgba(93, 95, 255, 0.2)',
+                'rgba(56, 34, 128, 0.2)'
+              ]
+    data['border_color'] = [
+                'rgba(255, 99, 132)',
+                'rgba(255, 159, 64)',
+                'rgba(255, 205, 86)',
+                'rgba(75, 192, 192)',
+                'rgba(54, 162, 235)',
+                'rgba(153, 102, 255)',
+                'rgba(80, 200, 39)',
+                'rgba(145, 123, 75)',
+                'rgba(23, 45, 26)',
+                'rgba(85, 56, 198)',
+                'rgba(36, 75, 139)',
+                'rgba(126, 36, 128)',
+                'rgba(53, 75, 250)',
+                'rgba(93, 95, 255)',
+                'rgba(56, 34, 128)'
+              ]    
+    render json: { result: data }, status: 200    
+  end
+
+  def bank_operation
+    data = {}
+    data['x_name'] = ['Aucun', 'Traités', 'En attente', 'Bloqués']
+    data['legend_1'] = 'Budgea'
+    data['legend_2'] = 'Bridge'
+    data['legend_3'] = 'Manuel'
+
+    data['value_1'] = %w(budgea_operations_count budgea_processed_operations_count budgea_not_processed_not_locked_operations_count budgea_not_processed_locked_operations_count).map { |doc| StatisticsManager.get_statistic(doc) }
+
+    data['value_2'] = %w(bridge_operations_count bridge_processed_operations_count bridge_not_processed_not_locked_operations_count bridge_not_processed_locked_operations_count).map { |doc| StatisticsManager.get_statistic(doc) }
+
+    data['value_3'] = %w(capidocus_operations_count capidocus_processed_operations_count capidocus_not_processed_not_locked_operations_count capidocus_not_processed_locked_operations_count).map { |doc| StatisticsManager.get_statistic(doc) }
+
+    if Rails.env == 'development'
+      data['value_1'] = [12, 54, 32, 45, 17, 96, 23, 12]
+      data['value_2'] = [22, 54, 47, 16, 58, 36, 86, 15]
+      data['value_3'] = [22, 54, 16, 58, 36, 47, 86, 15]
+    end
+
+    data['border_color_1'] = "rgb(75, 21, 192)"
+    data['border_color_2'] = "rgb(255, 85, 64)"
+    data['border_color_3'] = "rgb(26, 85, 64)"
+
+    render json: { result: data }, status: 200
+  end
+
+  def software_customers
+    data = {}
+    data['x_name'] = ['iBiza', 'Exact Online', 'My Unisoft', 'Coala', 'Quadratus', 'Cegid', 'Fec Agiris', 'Autre(format d\'export .csv)']
+    data['legend_1'] = 'Organisation'
+    data['legend_2'] = 'Client'
+
+    data['value_1'] = %w(ibiza_organizations_count exact_online_organizations_count my_unisoft_organizations_count coalaorganizations_count quadratus_organizations_count cegid_organizations_count fec_agirisorganizations_count csv_descriptor_organizations_count).map { |doc| StatisticsManager.get_statistic(doc) }
+
+    data['value_2'] = %w(ibiza_users_count exact_online_users_count my_unisoft_users_count coala_users_count quadratus_users_count cegid_users_count fec_agiris_users_count csv_descriptor_users_count).map { |doc| StatisticsManager.get_statistic(doc) }
+
+    if Rails.env == 'development'
+      data['value_1'] = [12, 54, 32, 45, 17, 96, 23, 12]
+      data['value_2'] = [22, 54, 47, 16, 58, 36, 86, 15]
+    end
+
+    data['border_color_1'] = "rgb(75, 21, 192)"
+    data['border_color_2'] = "rgb(255, 85, 64)"
+
+    render json: { result: data }, status: 200
   end
 end

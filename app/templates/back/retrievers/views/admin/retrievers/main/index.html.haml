@@ -1,64 +1,65 @@
-#retrievers
-  .row
-    .col-12
-      .box.small-shadow.clearfix
-        = render file: Rails.root.join('app/templates/back/retrievers/views/admin/retrievers/_navigation.html.haml')
+#retrievers  
+  .row.box.clearfix.derivationLeft
+    .col-md-3.p-2  
+      %h3 Automates de récupérations
 
-  .row
-    .col-md-12
-      .box.clearfix
-        .float-start
-          %h3 Automates de récupérations
+    .col-md-7.text-center.semibold.p-2
+      = link_to admin_retrievers_path do
+        %span.badge.bg-dark Tous
+      = link_to admin_retrievers_path(retriever_contains: { created_at: { '>=' => Time.now.beginning_of_month.strftime('%Y-%m-%d') } }, per_page: params[:per_page]) do
+        %span.badge.bg-info Récent
+      = link_to admin_retrievers_path(retriever_contains: { state: 'ready' }, per_page: params[:per_page]) do
+        %span.badge.bg-success OK
+      = link_to admin_retrievers_path(retriever_contains: { state: 'waiting_selection' }, per_page: params[:per_page]) do
+        %span.badge.bg-secondary Sélection
+      = link_to admin_retrievers_path(retriever_contains: { state: 'error' }, per_page: params[:per_page]) do
+        %span.badge.bg-danger Erreur
 
-        .row
-          .col-md-12.m-1
-            = link_to admin_retrievers_path do
-              %span.badge.bg-dark Tous
-            = link_to admin_retrievers_path(retriever_contains: { created_at: { '>=' => Time.now.beginning_of_month.strftime('%Y-%m-%d') } }, per_page: params[:per_page]) do
-              %span.badge.bg-info Récent
-            = link_to admin_retrievers_path(retriever_contains: { state: 'ready' }, per_page: params[:per_page]) do
-              %span.badge.bg-success OK
-            = link_to admin_retrievers_path(retriever_contains: { state: 'waiting_selection' }, per_page: params[:per_page]) do
-              %span.badge.bg-secondary Sélection
-            = link_to admin_retrievers_path(retriever_contains: { state: 'error' }, per_page: params[:per_page]) do
-              %span.badge.bg-danger Erreur
+    .col-md-2.text-end
+      %button.btn.btn-warning.retrievers-filter.w-50
+        %span.me-2= glyphicon('transfer', { size: '10', color: '#000', style: 'transform: rotate(90deg)'})
+        %span Filtrer
 
-  .row.retractable.with-filter
-    .col-md-12.retractable-content
-      .box.clearfix
-        = render partial: 'shared/list_options', locals: { collection: @retrievers }
-        .row
-          .col-md-12
-            %table.table.table-condensed.table-striped.margin1top.margin0bottom.table-detachable-head.table-bordered-inner
-              %thead
-                %tr.bg-brown.text-white
-                  %th= sortable :created_at,   'Créé le'
-                  %th= sortable :updated_at,   'Modifié le'
-                  %th= sortable :user_id,      t('activerecord.models.user.name')
-                  %th= sortable :capabilities, t('activerecord.models.retriever.attributes.capabilities')
-                  %th= sortable :service_name, t('activerecord.models.retriever.attributes.service_name')
-                  %th= sortable :name,         t('activerecord.models.retriever.attributes.name')
-                  %th Journal
-                  %th= t('activerecord.models.retriever.attributes.state')
-                  %th= sortable :is_sane,      t('activerecord.models.retriever.attributes.is_sane')
-                  %th Action
-              %tbody.retractable.slidedown
-                - @retrievers.each do |retriever|
-                  - present retriever do |retriever_presenter|
-                    %tr
-                      %td= l(retriever.created_at, format: '%d %b %Y %H:%M')
-                      %td= l(retriever.updated_at, format: '%d %b %Y %H:%M')
-                      %td= link_to retriever.user.code, [:admin, retriever.user]
-                      %td= retriever_presenter.capabilities
-                      %td= retriever_presenter.service_name
-                      %td= retriever_presenter.name
-                      %td= retriever_presenter.journal.try(:name) || '-'
-                      %td!= retriever_presenter.state(:admin)
-                      %td= retriever.is_sane ? t('yes_value') : t('no_value')
-                      %td.text-center= icon_link_to retrievers_path(user_code: retriever.user.code), { icon: 'eye' }
-        
-        = render partial: 'shared/list_options', locals: { collection: @retrievers }
-    .card.retractable-filter
+  .row.box.clearfix.derivationRight
+    .col-md-12#table_retrievers      
+      %table.table.table-condensed.table-striped
+        %thead
+          %tr
+            %th= sortable :created_at,   'Créé le'
+            %th= sortable :updated_at,   'Modifié le'
+            %th= sortable :user_id,      t('activerecord.models.user.name')
+            %th= sortable :capabilities, t('activerecord.models.retriever.attributes.capabilities')
+            %th= sortable :service_name, t('activerecord.models.retriever.attributes.service_name')
+            %th= sortable :name,         t('activerecord.models.retriever.attributes.name')
+            %th Journal
+            %th= t('activerecord.models.retriever.attributes.state')
+            %th= sortable :is_sane,      t('activerecord.models.retriever.attributes.is_sane')
+            %th.text-end Action
+        %tbody
+          - @retrievers.each do |retriever,|
+            - present retriever do |retriever_presenter|
+              %tr
+                %td= l(retriever.created_at, format: '%d %b %Y %H:%M')
+                %td= l(retriever.updated_at, format: '%d %b %Y %H:%M')
+                %td= link_to retriever.user.code, [:admin, retriever.user]
+                %td= retriever_presenter.capabilities
+                %td= retriever_presenter.service_name
+                %td= retriever_presenter.name
+                %td= retriever_presenter.journal.try(:name) || '-'
+                %td!= retriever_presenter.state(:admin)
+                %td= retriever.is_sane ? t('yes_value') : t('no_value')
+                %td.text-end.pointer.readonly-container
+                  .action.sub_edit_delete.list-collaborators
+                    %span.glyph= glyphicon('ellipses', { size: '12', style: 'transform: rotate(90deg)'})
+                  .sub_menu.text-start.hide
+                    %ul.no-margin.no-padding.regular
+                      %li
+                        = link_to retrievers_path(user_code: retriever.user.code) do
+                          %span.me-2= glyphicon('eye', size: 12)
+                          %span Voir
+      = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: admin_retrievers_path, target: '#table_retrievers', total_pages: @retrievers.total_pages, filter: 'form-filter' }
+
+    .card.retractable-filter.hide
       = form_tag admin_retrievers_path, method: :get, class: 'form-filter' do
         = hidden_field_tag :direction, sort_direction
         = hidden_field_tag :sort, sort_column

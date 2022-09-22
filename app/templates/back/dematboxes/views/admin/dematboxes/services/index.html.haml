@@ -1,32 +1,36 @@
 #dematboxes
-  .row
-    .col-md-12
-      .box.small-shadow.clearfix
-        = render file: Rails.root.join('app/templates/back/dematboxes/views/admin/dematboxes/_navigation.html.haml')
+  .row.derivationLeft.box.small-shadow.clearfix
+    .col-md-10
+      %h3
+        Services et Groupes
+        %span.badge.bg-dark= @dematbox_services.count
+    %span.readonly-container
+      .col-md-2.text-end
+        = link_to 'Mettre à jour', load_from_external_admin_dematbox_services_path, class: 'btn btn-primary w-50', data: { method: :post }
 
-  .card
-    .card-header.clearfix
-      .float-left
-        %h3
-          Services et Groupes
-          .badge.badge-info.fs-origin #{@dematbox_services.count}
-      .float-right
-        = link_to 'Mettre à jour', load_from_external_admin_dematbox_services_path, class: 'btn btn-primary', data: { method: :post }
-    .card-body
-      %table.table.table-striped.table-bordered-inner.table-condensed.table-detachable-head
+  .row.box.derivationRight
+    .col-md-12
+      %table.table.table-striped.table-condensed
         %thead
-          %tr.bg-brown.text-white
+          %tr
             %th Id
             %th Type
             %th Nom
             %th Etat
-            %th Action
-        %tbody.rectractable.slidedown
+            %th.text-end Action
+        %tbody
           - @dematbox_services.each do |dematbox_service|
             %tr
               %td= dematbox_service.pid
               %td= dematbox_type dematbox_service.type
               %td= dematbox_service.name
               %td= dematbox_state dematbox_service.state
-              %td
-                = link_to glyphicon('trash'), admin_dematbox_service_path(dematbox_service), title: 'Supprimer', data: { method: 'delete', confirm: t('actions.confirm') }
+              %td.text-end.pointer.align-middle.readonly-container           
+                .action.sub_edit_delete
+                  %span.glyph= glyphicon('ellipses', { size: '12', style: 'transform: rotate(90deg)'})
+                .sub_menu.text-start.hide
+                  %ul.no-margin.no-padding.regular
+                    %li                              
+                      = link_to admin_dematbox_service_path(dematbox_service), data: { method: 'delete', confirm: t('actions.confirm') }, class: 'no-style black-label' do
+                        %span.me-2= glyphicon('trash', size: 12)
+                        %span Supprimer

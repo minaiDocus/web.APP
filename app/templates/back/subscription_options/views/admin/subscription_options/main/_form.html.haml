@@ -1,13 +1,28 @@
-.row
-  .col-md-12
-    .card
-      = simple_form_for [:admin, @subscription_option], html: { class: 'form form-horizontal margin2top' } do |f|
-        .card-body
-          = f.input :name
-          = f.input :price_in_cents_wo_vat, as: :integer
-          = f.input :position,              as: :integer
-          = f.input :period_duration, collection: [['Continuelle', 0], ['Une période', '1']], include_blank: false, as: :radio_buttons
-        .card-footer
-          .form-actions.margin0bottom
-            = f.submit t('actions.submit'), class: 'btn btn-primary'
-            = link_to t('actions.cancel'), admin_subscription_options_path, class: 'btn btn-light'
+= simple_form_for [:admin, @subscription_option], html: { id: 'new_subscription_option' } do |f|
+  .form-group
+    %label.semibold
+      = f.label :name
+    .select-container.w-100.no-padding
+      = f.input :name, label: false
+  .form-group
+    %label.semibold
+      = f.label :price_in_cents_wo_vat
+    .select-container.w-100.no-padding
+      = f.input :price_in_cents_wo_vat, as: :integer, label: false
+  .form-group
+    %label.semibold
+      = f.label :position
+    .select-container.w-100.no-padding
+      = f.input :position, as: :integer, label: false
+  .form-group
+    .row
+      .col-md-5.semibold 
+        = f.label :period_duration
+      .col-md-3
+        .form-check.form-check-inline
+          = f.radio_button :period_duration, 0, id: '', class: 'form-check-input'
+          %label.semibold.form-check-label Continuelle
+      .col-md-4
+        .form-check.form-check-inline
+          = f.radio_button :period_duration, 1, id: '', class: 'form-check-input'          
+          %label.semibold.form-check-label Une période  

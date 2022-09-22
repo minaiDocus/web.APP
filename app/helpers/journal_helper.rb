@@ -211,26 +211,20 @@ module JournalHelper
   def user_and_journal_list(operation=false)
     result = []
 
-    journals = AccountBookType.where(user: accounts)
-    bank_accounts = BankAccount.where(user: accounts)
-
     if operation
-      accounts.each { |account| result << { user: account.id, journals: bank_accounts.select { |j|j.user_id == account.id }.collect(&:journal).compact  } }
+      accounts.each{|account| result << { user: account.id, journals: account.bank_accounts.distinct.pluck(:journal).compact  } }
     else
-      accounts.each { |account| result << { user: account.id, journals: journals.select { |j|j.user_id == account.id }.collect(&:name).compact } }
+      accounts.each{|account| result << { user: account.id, journals: account.account_book_types.distinct.pluck(:name).compact } }
     end
 
     result.to_json
   end
 
   def accounts_journaux(operation=false)
-    journals = AccountBookType.where(user: accounts)
-    bank_accounts = BankAccount.where(user: accounts)
-
     if operation
-      bank_accounts.pluck(:journal).uniq
+      BankAccount.where(user_id: accounts.map(&:id)).distinct.pluck(:journal).compact
     else
-      journals.pluck(:name).uniq
+      AccountBookType.where(user_id: accounts.map(&:id)).distinct.pluck(:name).compact
     end
   end
 

@@ -12,7 +12,7 @@ class UploadedDocument
   end
 
 
-  def initialize(file, original_file_name, user, journal, prev_period_offset, uploader = nil, api_name=nil, analytic=nil, api_id=nil, force=false)
+  def initialize(file, original_file_name, user, journal, prev_period_offset, uploader = nil, api_name=nil, analytic=nil, api_id=nil, force=false, label=nil, tags=nil)
     @file     = file
     @user     = user
     @code     = @user.code
@@ -20,6 +20,8 @@ class UploadedDocument
     @api_id   = api_id
     @api_name = api_name
     @uploader = uploader || user
+    @label    = label
+    @tags     = tags
 
     @original_file_name  = original_file_name.gsub(/\0/, '')
     @prev_period_offset  = prev_period_offset.to_i
@@ -127,6 +129,7 @@ class UploadedDocument
         temp_pack.update_pack_state # Create or update pack related to temp_pack
         System::Log.info('document_upload', "[Pack - #{api_name}] #{temp_pack.name} - #{Pack.where(name: temp_pack.name).size} found - pack")
 
+
         options = {
           delivered_by:          @uploader.try(:my_code) || @uploader.try(:code),
           delivery_type:         'upload',
@@ -136,7 +139,9 @@ class UploadedDocument
           is_content_file_valid: true,
           original_fingerprint:  fingerprint,
           analytic:              analytic_validator.analytic_params_present? ? analytic : nil,
-          is_forced:              is_forced
+          is_forced:             is_forced,
+          label:                 @label,
+          tags:                  @tags
         }
 
         @temp_document = AddTempDocumentToTempPack.execute(temp_pack, @processed_file, options) # Create temp document for temp pack

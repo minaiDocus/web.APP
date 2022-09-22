@@ -61,12 +61,7 @@ class BillingMod::Invoice < ApplicationRecord
       invoices = invoices.where(organization_id: organizations.pluck(:id))
     end
 
-
-    if contains[:created_at]
-      contains[:created_at].each do |operator, value|
-        invoices = invoices.where("created_at #{operator} ?", value) if operator.in?(['>=', '<='])
-      end
-    end
+    invoices = invoices.where("created_at BETWEEN '#{CustomUtils.parse_date_range_of(contains[:created_at]).join("' AND '")}'")     if contains[:created_at].present?
 
     invoices
   end

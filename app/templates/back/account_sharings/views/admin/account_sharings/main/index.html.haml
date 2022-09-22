@@ -1,38 +1,30 @@
 #account_sharings
-  .row
-    .col-md-12
-      .box.small-shadow.clearfix
-        .float-left
-          %h3
-            Liste des partages de compte
-            %span.badge.badge-info.fs-origin= @account_sharings.total_count
-
-  .row.retractable.with-filter
-    .col-md-12
-      .box
-        .row
-          .col.mt-4
-            = render partial: 'shared/list_options', locals: { collection: @account_sharings }
-        %table.table.table-condensed.table-striped.margin1top.margin0bottom.table-detachable-head.table-bordered-inner
-          %thead
-            %tr.bg-brown.text-white
-              %th= sortable :created_at, 'Date'
-              %th Dossier
-              %th Client ou contact
-              %th Etat
-          %tbody.retractable.slidedown
-            - @account_sharings.each do |account_sharing|
-              %tr
-                %td.date= account_sharing.created_at.strftime('%d/%m/%Y %H:%M')
-                %td= link_to account_sharing.account.info, organization_customer_path(account_sharing.account.organization, account_sharing.account)
-                %td
-                  - if account_sharing.collaborator.is_guest
-                    = account_sharing.collaborator.info
-                  - else
-                    = link_to account_sharing.collaborator.info, organization_customer_path(account_sharing.collaborator.organization, account_sharing.collaborator)
-                %td= account_sharing.is_approved? ? 'Partagé' : 'En attente de validation'
-        %br
-        .row
-          .col.mb-4
-            = render partial: 'shared/list_options', locals: { collection: @account_sharings }
-    = render partial: 'sidebar'
+  .row.derivationLeft.box.small-shadow.clearfix.header
+    .col-md-6      
+      %h3
+        Liste des partages de compte
+        %span.badge.bg-dark= @account_sharings.total_count
+    .col-md-6.text-end
+      %button.btn.btn-warning.retriever-admin-filter
+        %span.me-2= glyphicon('transfer', { size: '10', color: '#000', style: 'transform: rotate(90deg)'})
+        %span Filtrer
+  .row.box.derivationRight
+    .col-md-12        
+      %table.table.table-condensed.table-striped
+        %thead
+          %tr
+            %th= sortable :created_at, 'Date'
+            %th Dossier
+            %th Client ou contact
+            %th Etat
+        %tbody
+          - @account_sharings.each do |account_sharing|
+            %tr
+              %td.date= account_sharing.created_at.strftime('%d/%m/%Y %H:%M')
+              %td= link_to account_sharing.account.info, organization_customer_path(account_sharing.account.organization, account_sharing.account)
+              %td
+                - if account_sharing.collaborator.is_guest
+                  = account_sharing.collaborator.info
+                - else
+                  = link_to account_sharing.collaborator.info, organization_customer_path(account_sharing.collaborator.organization, account_sharing.collaborator)
+              %td= account_sharing.is_approved? ? 'Partagé' : 'En attente de validation'

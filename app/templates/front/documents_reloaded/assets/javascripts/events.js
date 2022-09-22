@@ -3,18 +3,18 @@ function bind_all_events(){
 
   $('.date-edit-third-party').asDateRange({ defaultBlank: true, singleDatePicker: true, locale: { format: 'DD/MM/YYYY' }});
 
-  $('#customer_document_filter').multiSelect({
+  $('#customer_document_filter').asMultiSelect({
     "texts" : { "searchplaceholder": "Choix dossiers", "noItemsAvailable": 'Aucun dossier trouvé'},
     "resultsContainer": '.result-sol',
     "maxHeight": "300px",
     "noneText": "Choix dossier",
   });
 
-  $('#journal_document_filter').multiSelect({
+  $('#journal_document_filter').asMultiSelect({
     "noneText": "Choix journaux",
   });
 
-  $('#period_document_filter').multiSelect({
+  $('#period_document_filter').asMultiSelect({
     "noneText": "Choix",
   });
 
@@ -43,9 +43,9 @@ function bind_all_events(){
   });
 
   $('#customers').unbind('change.mix_customer').bind('change.mix_customer', function(e){
-    let url = window.location.href.split('?')[0];
+    $('#hidden-customer-id').val($(this).val());
 
-    window.location.replace(url + "?uid=" + $(this).val());
+    AppEmit('load_customer');
   });
   setTimeout(()=>{ $('.hide_on_load').removeClass('hide'); $('#customer_document_filter').change() }, 1000); //TODO: find a better way to change the user selector
 
@@ -65,6 +65,7 @@ function bind_all_events(){
       $(this).attr('title', 'Désélectionner toutes les pièces')
       $('.select-document, .select-operation').prop('checked', true);
       $('.select-document, .select-operation').closest('.box').addClass('selected');
+      $('.piece-detail-container').addClass('selected');
       $('.action-selected').removeClass('hide');
       $('.grid .stamp-content').addClass('selected');      
     }
@@ -74,6 +75,7 @@ function bind_all_events(){
       $('.select-document, .select-operation').closest('.box').removeClass('selected');
       $('.action-selected').addClass('hide');
       $('.grid .stamp-content').removeClass('selected');
+      $('.piece-detail-container').removeClass('selected');
     }    
   });
 
@@ -84,11 +86,13 @@ function bind_all_events(){
 
     if($(this).is(':checked')){
       $(this).closest('.box').addClass('selected');
+      $('.tr_piece_' + piece_id).addClass('selected');
       $('.grid .stamp-content#document_grid_' + piece_id).addClass('selected');
     }else{
       if ($('.select-all').is(':checked')) { $('.select-all').prop('checked', false); }
       $('.select-all').attr('title', 'Sélectionner toutes les pièces');
       $(this).closest('.box').removeClass('selected');
+      $('.tr_piece_' + piece_id).removeClass('selected');
       $('.grid .stamp-content#document_grid_' + piece_id).removeClass('selected');
     }
 
@@ -100,6 +104,15 @@ function bind_all_events(){
     }else{
       $('.action-selected').removeClass('hide');
     }
+  });
+
+  $('li.direct_links .rubric').unbind('click').bind('click',function(e) {
+    e.preventDefault();
+    $('li.direct_links .rubric .link_principal').removeClass('active');
+    $(this).find('.link_principal').addClass('active');
+    $('#hidden-journal-id').val($(this).data('journal-id'));
+
+    AppEmit('load_rubric');
   });
 
   $('.more-filter').unbind('click').bind('click',function(e) {
@@ -189,10 +202,16 @@ function bind_all_events(){
   });
 
 
-  $('#more-filter .modal-footer .btn-add').unbind('click').bind('click', function(){ AppEmit('documents_load_datas'); });
-  $('.btn-reinit').unbind('click').bind('click', function(){ AppEmit('documents_reinit_datas'); });
 
-  $('.search-content #search_input').unbind('keyup').bind('keyup', function(e){ if(e.key == 'Enter'){ /*e.keyCode == 13*/ AppEmit('documents_search_text'); } });
+  $('#more-filter .modal-footer .btn-add').unbind('click').bind('click', function(){ $('#more-filter').modal('hide'); AppEmit('documents_load_datas'); });
+  $('.btn-reinit').unbind('click').bind('click', function(){ $('#more-filter').modal('hide'); AppEmit('documents_reinit_datas'); });
+
+  //prevent form submition
+  $('.search-content #search_input').unbind('keydown').bind('keydown', function(e){ if(e.key == 'Enter'){ e.preventDefault(); return false; } });
+  $('.search-content #search_input').unbind('keypress').bind('keypress', function(e){ if(e.key == 'Enter'){ e.preventDefault(); return false; } });
+  $('.search-content #search_input').unbind('keyup').bind('keyup', function(e){ if(e.key == 'Enter'){ e.preventDefault(); return false; } });
+  $('.search-content #search_input').unbind('keyup.search').bind('keyup.search', function(e){ if(e.key == 'Enter'){ AppEmit('documents_search_text'); } });
+
   $('.search-content .glass svg').unbind('click').bind('click', function(e){ AppEmit('documents_search_text'); });
 
   $('.download_pack_archive').unbind('click').bind('click', function(){ AppEmit('download_pack_archive', {'obj': this}); });
@@ -313,21 +332,39 @@ function bind_all_events(){
     $('.btn.add-entry').prop('disabled', false);
   });
 
+  $('.entry .remove').unbind('click').bind('click', function(e){
+    let tr = $(this).closest('tr');
+    if (confirm('Voulez-vous vraiment supprimer cette ligne ? ')){
+      let preseizure_id = $(this).closest('.preseizure-content-list').data('preseizure-id');
+      let account_id    = tr.find('input.account_id_hidden').val();
+      let entry_id      = tr.find('input.entry_id_hidden').val();
 
+      AppEmit('remove_entry', { preseizure_id: preseizure_id, account_id: account_id, entry_id: entry_id });
+    }
+  });
 
-  $('#collaborator_document_filter').multiSelect({
+  $('#collaborator_document_filter').asMultiSelect({
     "texts" : { "searchplaceholder": "Choix dossiers", "noItemsAvailable": 'Aucun dossier trouvé'},
-    "resultsContainer": '.result-sol',
+    "resultsContainer": '.result-sol-customer',
     "maxHeight": "500px",
     "noneText": "Choix dossier",
+    "showSelectAll": false
   });
 
-  $('#collaborator_journal_document_filter').multiSelect({
+  $('#collaborator_journal_document_filter').asMultiSelect({
+    "texts" : { "searchplaceholder": "Choix journaux", "noItemsAvailable": 'Aucun journal trouvé'},
+    "resultsContainer": '.result-sol-journal',
+    "maxHeight": "500px",
     "noneText": "Choix journaux",
+    "showSelectAll": false
   });
 
-  $('#collaborator_period_document_filter').multiSelect({
-    "noneText": "Choix",
+  $('#collaborator_period_document_filter').asMultiSelect({
+    "texts" : { "searchplaceholder": "Choix périodes", "noItemsAvailable": 'Aucune période trouvée'},
+    "resultsContainer": '.result-sol-period',
+    "maxHeight": "500px",
+    "noneText": "Choix périodes",
+    "showSelectAll": false
   });
 
   $('#collaborator_document_filter').unbind('change.mix_journal').bind('change.mix_journal', function(e){
@@ -361,5 +398,7 @@ function bind_all_events(){
 }
 
 jQuery(function() {
-  AppListenTo('window.application_auto_rebind', (e)=>{ bind_all_events() });
+  AppListenTo('window.application_auto_rebind', (e)=>{
+    bind_all_events();
+  });
 });

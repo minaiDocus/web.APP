@@ -12,41 +12,56 @@ class DocumentsReloadedCustomer{
                     }
   }
 
-  load_temp_documents(serialize_form=false){
+  load_temp_documents(serialize_form=false, load_customer=false){
     if(this.action_locker)
       return false
 
     this.action_locker = true;
     let data = [];
+    let search_pattern = $('.search-content #search_input').val();
 
     if(serialize_form){
       data.push($('#pack_filter_form').serialize().toString());
+
+      data.push(`activate_filter=true`);
     }
     else
     {
+      search_pattern = '';
       let selector = "#pack_filter_form input, #pack_filter_form select, #customer_document_filter, #journal_document_filter, #search_input";
       $(selector).not('.operator').val(''); data.push( `reinit=true` );
     }
 
-    let search_pattern = $('.search-content #search_input').val();
-
     if(search_pattern && search_pattern != ''){ data.push(`text=${encodeURIComponent(search_pattern)}`); }
+
     if(this.page > 1){ data.push(`page=${this.page}`) }
 
-    if ($('#customer_document_filter').val()){
-      data.push( 'view=' + $('#customer_document_filter').val() )
-    }
-
-    if($('#journal_document_filter').val()){
-      data.push( 'journal=' + $('#journal_document_filter').val() )
-    }
+    data.push( 'uid=' + $('#customers').val() );
 
     this.ajax_params['data'] = data.join('&');
 
     this.applicationJS.sendRequest(this.ajax_params, function(){ $('#more-filter.modal').modal('hide'); })
                        .then((e)=>{
-                          $('.box#table_pieces').html($(e).find(".box#table_pieces").html());
+                          if (load_customer){
+                            $(".customer-document-content").html($(e).find(".customer-document-content").html());
+
+                            $("#hidden-journal-id").val($('.rubric').first().data('journal-id'));
+                            $("#hidden-customer-id").val($('#customers').val());
+                          }
+                          else{
+                            $('.box#table_pieces').html($(e).find(".box#table_pieces").html());
+                          }
+
+                          $(`.search-content #search_input`).val(search_pattern);
+
+                          if ( $('.filter_active').length > 0 ){
+                            $('.filter-info').removeClass('hide');
+                          }
+                          else{
+                            $('.filter-info').addClass('hide');
+                          }
                           bind_all_events();
+                          this.action_locker = false;
                         })
                        .catch(()=>{ this.action_locker = false; });
   }
@@ -63,10 +78,12 @@ jQuery(function() {
     $('#edit-rubric-form').attr('action', `${base_uri.replace('cst_id', customer_id)}`);
   });
 
-  AppListenTo('refresh_customer_view', (e)=>{ windows.location.reload });
+  AppListenTo('refresh_customer_view', (e)=>{ setTimeout(()=>{ window.location.reload(true) }, 2000);    });
 
   AppListenTo('documents_load_datas', (e)=>{ main.load_temp_documents(true); });
   AppListenTo('documents_reinit_datas', (e)=>{ main.load_temp_documents(false); });
 
-  AppListenTo('documents_search_text', (e)=>{ main.load_temp_documents(true); window.location.replace(window.location.href);});
+  AppListenTo('documents_search_text', (e)=>{ main.load_temp_documents(true); });
+  AppListenTo('load_rubric', (e)=>{ main.load_temp_documents(true); });
+  AppListenTo('load_customer', (e)=>{ main.load_temp_documents(false, true); });
 });

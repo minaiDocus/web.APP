@@ -1,30 +1,27 @@
-#group_organizations.container-fluid
-  .alerts
-    = render partial: 'shared/messages'
-  .row.derivationLeft
-    .col-md-12
-      .box.small-shadow.clearfix
-        .float-start
-          %h3
-            Liste des groupes d'organisation &nbsp;
-            %span.badge.badge-info= @organization_groups.total_count
-        .float-end
-          = link_to t('actions.new'), new_admin_organizations_group_path, class: 'btn btn-primary'
+#group_organizations.container-fluid  
+  .row.derivationLeft.box.small-shadow.clearfix
+    .col-md-10
+      %h3.semibold
+        Liste des groupes d'organisation &nbsp;
+        %span.badge.bg-dark= @organization_groups.total_count
+    .col-md-2.text-end
+      %button.btn.btn-primary.create-group-organization
+        %span.me-2= glyphicon('plus', size: 10, color: "white")
+        %span Nouveau groupe  
 
   .row.derivationRight
     .col-md-12
-      .box
-        = render partial: 'shared/list_options', locals: { collection: @organization_groups }
+      .box        
         .row
           .col-md-12
-            %table.table.table-condensed.table-striped.margin1top.margin1bottom.table-detachable-head.table-bordered-inner
+            %table.table.table-condensed.table-striped
               %thead
-                %tr.bg-brown.text-white
+                %tr
                   %th= t('activerecord.models.common.attributes.created_at')
                   %th= t('activerecord.models.common.attributes.updated_at')
                   %th Nom
                   %th Membres
-                  %th Actions
+                  %th.text-end Actions
               %tbody.retractable.slidedown
                 - @organization_groups.each do |group|
                   %tr
@@ -35,7 +32,33 @@
                       - group.organizations.order(:name).each_with_index do |organization, index|
                         = ',' if index != 0
                         = link_to organization.name, '#'
-                    %td
-                      = link_to 'Éditer', edit_admin_organizations_group_path(group), class: 'btn btn-light'
-                      = link_to 'Supprimer', admin_organizations_group_path(group), method: 'delete', data: { confirm: t('actions.confirm') }, class: 'btn btn-light'
-        = render partial: 'shared/list_options', locals: { collection: @organization_groups }
+
+                    %td.text-end.pointer.align-middle                      
+                      .action.sub_edit_delete
+                        %span.glyph= glyphicon('ellipses', { size: '12', style: 'transform: rotate(90deg)'})
+                      .sub_menu.text-start.hide
+                        %ul.no-margin.no-padding.regular                            
+                          %li.edit-group-organization{ id: group.id }                         
+                            = link_to '#' do
+                              %span.me-2= glyphicon('pencil', size: 12)
+                              %span Éditer
+                          %li.delete
+                            = link_to admin_organizations_group_path(group), method: 'delete', data: { confirm: t('actions.confirm') } do
+                              %span.me-2= glyphicon('trash', size: 12, color: 'red')
+                              %span.red-label Supprimer
+
+.modal#create-new-group
+  .modal-dialog
+    .modal-content
+      .modal-header.clearfix
+        %h5.modal-title.bold Création d'une nouvelle groupe organisation
+        %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}      
+      .modal-body   
+            
+      .modal-footer
+        %button.btn.btn-light.cancel{ type: :button, 'aria-label' => 'Close', 'data-bs-dismiss' => 'modal' } Annuler
+        - idocus_params = param_encode({ url: "#create-new-organization", method: 'POST', form: { id: 'new_organization_group', dump_action: true }, modal: { id: 'create-new-group' }, after_send: 'show_organization' })
+        %button.btn.btn-primary.as_idocus_ajax{ type: :button, idocus: idocus_params } Valider
+                           
+
+= javascript_include_tag 'back/organizations/assets/javascripts/main'

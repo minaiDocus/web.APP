@@ -464,7 +464,7 @@ class DocumentsReloaded::AbaseController < FrontController #Must be loaded first
     @options[:text] = @s_params[:text]
 
     if @s_params[:by_all].present?
-      @s_params[:by_piece] = @s_params[:by_piece].present? ? @s_params[:by_piece].merge(@s_params[:by_all].permit!) : @s_params[:by_all]
+      @s_params[:by_piece] = @s_params[:by_piece].present? ? (@s_params[:by_all].respond_to?(:permit) ? @s_params[:by_piece].merge(@s_params[:by_all].permit!) : @s_params[:by_piece].merge(@s_params[:by_all])) : @s_params[:by_all]
     end
 
     if @is_documents

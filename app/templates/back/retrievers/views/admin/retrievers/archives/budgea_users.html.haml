@@ -1,10 +1,9 @@
 #archive_budgea_users
   = render partial: 'tab_menu'
 
-  .row.retractable.with-filter
-    .col-md-12.retractable-content
-      .box.clearfix
-        = render partial: 'shared/list_options', locals: { collection: @budgea_users }
+  .row.derivationRight
+    .col-md-12
+      .box
         .row
           .col-md-12
             %table.table.table-condensed.table-striped.margin1top.margin0bottom.table-detachable-head.table-bordered-inner
@@ -28,8 +27,7 @@
                     %td= budgea_user.is_deleted ? t('yes_value') : t('no_value')
                     %td= l(budgea_user.deleted_date, format: '%d %b %Y %H:%M', default: '-')
 
-        = render partial: 'shared/list_options', locals: { collection: @budgea_users }
-
+  .hide
     = form_tag archives_budgea_users_admin_retrievers_path(tab: 'budgea_users'), method: :get, class: 'form-filter' do
       = hidden_field_tag :direction, sort_direction
       = hidden_field_tag :sort, sort_column

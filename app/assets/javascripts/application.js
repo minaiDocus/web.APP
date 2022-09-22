@@ -163,6 +163,21 @@
   };
 
 
+  $.fn.readOnlyAdmin = function(options={}){
+    if( this.hasClass('readonly-trigger')){
+      let is_super_admin = VARIABLES.get('is_super_admin');
+      let full_access    = VARIABLES.get('full_access')
+
+      if (is_super_admin == 'false' || full_access == 'false')
+      {
+        $('.readonly-container').empty();
+        $('.readonly-link-container a').attr("href", '#')
+        $('.readonly-link-container input').prop( "disabled", true );
+      }
+    }
+  }
+
+
 /******************* GLOBAL FUNCTIONS *********************/
   AppDecode64 = (str_64) =>{
     try{
@@ -242,7 +257,7 @@ class ApplicationJS {
 
   noticeSuccessMessageFrom(page=null, message = null){
     var html = message;
-    var is_present = null;
+    var is_present = "";
     if(message)
     {
       is_present = 'true';
@@ -261,9 +276,9 @@ class ApplicationJS {
     }
   }
 
-  noticeErrorMessageFrom(page=null, message = null, danger=false){
+  noticeErrorMessageFrom(page=null, message=null , danger=false){
     var html = message;
-    var is_present = null;
+    var is_present = "";
 
     var used_alert = '#idocus_notifications_messages .notice-internal-error .alert.alert-warning';
     var not_used_alert = '#idocus_notifications_messages .notice-internal-error .alert.alert-danger';
@@ -339,9 +354,9 @@ class ApplicationJS {
                 console.log(err);
               }
 
-              if(!found){
-                window.setTimeout((el)=>{ window.location.reload(); }, 1000);
-              }
+              // if(!found){
+              //   window.setTimeout((el)=>{ window.location.reload(); }, 1000);
+              // }
             }
 
             if(params.mode == 'append'){

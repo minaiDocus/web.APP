@@ -147,9 +147,16 @@ class Organization < ApplicationRecord
   def self.search(contains)
     organizations = Organization.all
     organizations = organizations.where(is_active:    (contains[:is_active] == '1'))    unless contains[:is_active].blank?
-    organizations = organizations.where(is_test:      (contains[:is_test] == '1'))      unless contains[:is_test].blank?
+    organizations = organizations.where(is_test:      (contains[:is_test] == '1'))      unless contains[:is_test].blank?        
 
-    contains[:created_at].each { |compare,date| organizations = organizations.where("organizations.created_at #{compare} ? ", "#{date}")} unless contains[:created_at].blank?
+    unless contains[:created_at].blank?
+      date = contains[:created_at].split(' - ')
+
+      start_date = date[0].split('/').reverse.join()
+      end_date   = date[1].split('/').reverse.join()
+
+      organizations = organizations.where("DATE_FORMAT(organizations.created_at, '%Y%m%d') >= #{start_date} AND DATE_FORMAT(organizations.created_at, '%Y%m%d') <= #{end_date}")
+    end
 
     organizations = organizations.where(is_for_admin: (contains[:is_for_admin] == '1')) unless contains[:is_for_admin].blank?
     organizations = organizations.where(is_suspended: (contains[:is_suspended] == '1')) unless contains[:is_suspended].blank?

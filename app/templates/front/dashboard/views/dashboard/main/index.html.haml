@@ -14,7 +14,8 @@
       %span.ms-1 !
   .row.direct_access.derivationLeft
     %p= t('dashboard.folder_text_info')
-
+          
+  %br
   .row.derivationLeft
     .col-md-4.view-documents.no-padding.semibold
       %a.btn.btn-primary.view-documents-btn{href: documents_path}= t('dashboard.view_my_documents')
@@ -32,8 +33,8 @@
             %span.me-2= glyphicon('plus', {size: '12', color: '#051077'})
           - else
             %span.me-2= glyphicon('plus', {size: '12', color: '#72AA42'})
-          %span= t('dashboard.add_folder_to_favorite')
-
+          %span= t('dashboard.add_folder_to_favorite')    
+    
     .row.my-favorite-customers
       - if @favorites.size > 0
         - count       = @favorites.size

@@ -28,7 +28,12 @@ class Admin::Invoices::MainController < BackController
   def download
     if params['invoice_ids'].present?
       zip_path = Billing::InvoicesToZip.new(params['invoice_ids']).execute
-      send_file(zip_path, type: 'application/zip', filename: 'factures.zip', x_sendfile: true)
+
+      if File.exist?(zip_path)
+        send_file(zip_path, type: 'application/zip', filename: 'factures.zip', x_sendfile: true)
+      else
+        redirect_to admin_invoices_index_path
+      end
     else
       redirect_to admin_invoices_index_path
     end
@@ -87,6 +92,8 @@ class Admin::Invoices::MainController < BackController
       type = 'application/pdf'
       filename = File.basename @invoice.cloud_content_object.path
       send_file(@invoice.cloud_content_object.path('', true), type: type, filename: filename, x_sendfile: true, disposition: 'inline')
+    else
+      render body: "Aucun fichier trouvé", status: :not_found
     end
   end
 

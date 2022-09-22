@@ -108,17 +108,9 @@ class PreAssignmentDelivery < ApplicationRecord
     deliveries = deliveries.where("pack_name LIKE ?", "%#{contains[:pack_name]}%")             if contains[:pack_name].present?
     deliveries = deliveries.where("error_message LIKE ?", "%#{contains[:error_message]}%")     if contains[:error_message].present?
 
-    if contains[:created_at]
-      contains[:created_at].each do |operator, value|
-        deliveries = deliveries.where("created_at #{operator} ?", value) if operator.in?(['>=', '<='])
-      end
-    end
+    deliveries = deliveries.where("created_at BETWEEN '#{CustomUtils.parse_date_range_of(contains[:created_at]).join("' AND '")}'") if contains[:created_at].present?
 
-    if contains[:updated_at]
-      contains[:updated_at].each do |operator, value|
-        deliveries = deliveries.where("updated_at #{operator} ?", value) if operator.in?(['>=', '<='])
-      end
-    end
+    deliveries = deliveries.where("updated_at BETWEEN '#{CustomUtils.parse_date_range_of(contains[:updated_at]).join("' AND '")}'") if contains[:updated_at].present?
 
     deliveries
   end

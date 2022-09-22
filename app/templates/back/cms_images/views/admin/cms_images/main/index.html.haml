@@ -1,25 +1,24 @@
-.card
-  %form#fileupload{ action: '/admin/cms_images', method: 'POST', enctype: 'multipart/form-data' }
-    .card-header.clearfix
-      .float-left
-        %h2.margin1bottom.title
-          Toutes les Images
-          .badge.badge-info.fs-origin #{@cms_images.count}
-      .float-right
-        .row.fileupload-buttonbar
-          .col
-            %span.btn.btn-secondary.fileinput-button
-              %span Ajouter des fichiers ...
+#cms_image
+  .row.derivationLeft.box.small-shadow.clearfix.header
+    .col-md-6      
+      %h3
+        Toutes les Images
+        %span.badge.bg-dark= @cms_images.count
+    .col-md-6.text-end
+      %form#fileupload{ action: '/admin/cms_images', method: 'POST', enctype: 'multipart/form-data' }
+        .row.fileupload-buttonbar.readonly-container
+          .col-md-8
+            %span.btn.btn-secondary.fileinput-button.w-75
+              %span.black-label Ajouter des fichiers ...
               %input{ type: 'file', name: 'files[]', multiple: true }
-            %button.btn.btn-primary.start{ type: 'submit' }
-              Démarrer
-            %button.btn.btn-light.cancel{ type: 'reset' }
-              Annuler
-    .card-body
-      %table.table.table-dark.table-striped{ role: "presentation" }
-        %tbody.files{ data: { toggle: "modal-gallery", target: "#modal-gallery" } }
+          .col-md-2
+            %button.btn.btn-primary.start.w-100{ type: 'submit' } Démarrer
+          .col-md-2
+            %button.btn.btn-dark.cancel.w-100{ type: 'reset' } Annuler
+        %table.table.table-striped{ role: "presentation" }
+          %tbody.files{ data: { toggle: "modal-gallery", target: "#modal-gallery" } }
 
-      :plain
+        :plain
           <script>
             var fileUploadErrors = {
               maxFileSize: 'File is too big',
@@ -81,19 +80,21 @@
                     </td>
               </tr>
           {% } %}
-          </script>
-
-      #cms_images
-        %table.table.table-striped
-          %tbody
-            - @cms_images.each_with_index do |cms_image,index|
-              %tr
-                %td.center
-                  %b= index+1
-                %td= link_to image_tag(cms_image.cloud_content_thumbnail_object.path.to_s), cms_image.cloud_content_object.service_url.to_s, target: :_blank
-                %td
-                  = link_to cms_image.name, cms_image.cloud_content_object.service_url.to_s, target: :_blank
-                  %br
-                  = cms_image.get_identity
-                %td.center
+          </script>     
+      
+  .row.box.derivationRight
+    .col-md-12
+      %table.table.table-striped
+        %tbody
+          - @cms_images.each_with_index do |cms_image,index|
+            %tr
+              %td.center
+                %b= index+1
+              %td= link_to image_tag(cms_image.cloud_content_thumbnail_object.path.to_s), cms_image.cloud_content_object.service_url.to_s, target: :_blank
+              %td
+                = link_to cms_image.name, cms_image.cloud_content_object.service_url.to_s, target: :_blank
+                %br
+                = cms_image.get_identity
+              %td.center
+                .readonly-container
                   = link_to 'supprimer', [:admin, cms_image], method: :delete, data: { confirm: t('actions.confirm') }

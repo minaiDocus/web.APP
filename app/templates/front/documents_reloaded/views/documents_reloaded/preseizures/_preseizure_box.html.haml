@@ -76,6 +76,7 @@
           %th.no-border.table-three-column N° de compte
           %th.no-border.table-three-column Débit
           %th.no-border.table-three-column Crédit
+          %th.no-border.table-three-column
         %tbody.semibold
           - entries.each_with_index do |entry, index|
             %tr{ class: (index % 2 == 0)? '' : 'striped' }
@@ -115,6 +116,9 @@
                       %input.entry_type{type: :hidden, value: entry.type}
                 - else
                   &#45;
+              %td.entry
+                - if piece && entry.account.type != 1
+                  %span.remove=glyphicon('trash', { color: 'black', size: 11 })
               - if @user.has_collaborator_action?
                 %input.entry_id_hidden{type: :hidden, value: entry.id}
       - if piece

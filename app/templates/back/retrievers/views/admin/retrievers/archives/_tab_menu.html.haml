@@ -1,15 +1,16 @@
-.row
-  .col-12
-    .box.small-shadow.clearfix
-      = render file: Rails.root.join('app/templates/back/retrievers/views/admin/retrievers/_navigation.html.haml')
-
-.row
-  .col-md-12
-    .box.clearfix
-      .float-left
-        %h3 Archives Budgea:&nbsp;
-      %ul.nav.nav-tabs
-        %li.nav-item
-          = link_to 'Utilisateurs', archives_budgea_users_admin_retrievers_path(tab: 'budgea_users'), class: "nav-link #{('active' if params[:tab] == 'budgea_users' || params[:tab].blank? )}"
-        %li.nav-item
-          = link_to 'Automates', archives_budgea_retrievers_admin_retrievers_path(tab: 'budgea_retrievers'), class: "nav-link #{('active' if params[:tab] == 'budgea_retrievers' )}"
+.row.derivationLeft.box.small-shadow.clearfix.header
+  .col-md-6      
+    %h3
+      Archives Budgea
+  .col-md-6.text-end
+    %button.btn.btn-warning.retriever-admin-filter
+      %span.me-2= glyphicon('transfer', { size: '10', color: '#000', style: 'transform: rotate(90deg)'})
+      %span Filtrer
+    %button.btn{ class: "#{(params[:tab] == 'budgea_users' || params[:tab].blank?) ? 'btn-primary' : 'btn-dark'}"}
+      = link_to archives_budgea_users_admin_retrievers_path(tab: 'budgea_users'), class: 'no-style' do
+        %span.me-2= glyphicon('person', size: 10, color: 'white')
+        %span Utilisateurs
+    %button.btn{ class: "#{ params[:tab] == 'budgea_retrievers' ? 'btn-primary' : 'btn-dark'}"}
+      = link_to archives_budgea_retrievers_admin_retrievers_path(tab: 'budgea_retrievers'), class: 'no-style' do
+        %span.me-2= glyphicon('audio-spectrum', size: 10, color: 'white')
+        %span Automates

@@ -71,6 +71,19 @@ SimpleForm.setup do |config|
     end
   end
 
+  config.wrappers :new_template, tag: 'div', class: 'form-group clearfix', error_class: 'error' do |b|
+    b.use :html5
+    b.use :placeholder
+    b.wrapper tag: 'div' do |ba|
+      ba.use :label, class: 'semibold'
+      ba.use :error, wrap_with: { tag: 'i', class: 'help-inline' }
+    end
+    b.wrapper tag: 'div', class: 'select-container w-100 no-padding' do |ba|
+      ba.use :input
+      ba.use :hint,  wrap_with: { tag: 'i', class: 'help-block' }
+    end
+  end
+
   config.wrappers :prepend, tag: 'div', class: 'form-group', error_class: 'error' do |b|
     b.use :html5
     b.use :placeholder

@@ -25,6 +25,8 @@ function elements_initializer(){
       format: 'DD/MM/YYYY'
     }
   });
+
+  $('.readonly-trigger').readOnlyAdmin({});
 }
 
 function custom_dynamic_height(){
@@ -74,6 +76,10 @@ function custom_dynamic_animation(){
             $(this).addClass('derivationLeft');
           else if($(this).hasClass('toRight'))
             $(this).addClass('derivationRight');
+          else if($(this).hasClass('toTop'))
+            $(this).addClass('derivationTop');
+          else if($(this).hasClass('toBottom'))
+            $(this).addClass('derivationBottom');
 
           $(this).removeClass('animatedChild');
         }, duration)
@@ -340,5 +346,137 @@ function iDocus_dynamic_modals(){
     }else{
       console.error(`Impossible de trouvé le modal: ${params.id}`)
     }
+  });
+}
+
+function iDocus_pagination(){
+  $('.pagination .per-page').unbind('change').bind('change', function(e){
+    let url          = $(this).data('url');
+    let target       = $(this).data('target');
+    let filter       = $(this).data('filter');
+    let name         = $(this).data('name');
+    let mark       = $(this).data('mark');
+    let current_page = $(this).data('current-page');
+
+    const emit_pagination_events = ()=>{
+      AppEmit(`window.change-per-page.${name}`, { url: url, filter: filter, name: name, mark: mark, page: current_page, per_page: $(this).val() });
+      if(mark != name)
+        AppEmit(`window.change-per-page.${mark}`, { url: url, filter: filter, name: name, mark: mark, page: current_page, per_page: $(this).val() });
+    }
+
+    if( url != undefined && url != null && url != '' && url != '#'){
+      let url2 = url
+      let page_params = `per_page=${ $(this).val() }&page=${ current_page }`;
+      if(/[?]/.test(url2))
+        url2 = `${url2}&${page_params}`;
+      else
+        url2 = `${url2}?${page_params}`;
+
+      if(filter){
+        try{ url2 = `${url2}&${ $(`form#${filter}`).serialize() }` }catch{};
+      }
+
+      ApplicationJS.launch_async({ url: url2, method: 'GET', html: { target: target } }).then((e)=>{ emit_pagination_events() });
+    }else{
+      emit_pagination_events();
+    }
+  });
+
+  $('.pagination .previous-page').unbind('click').bind('click', function(e){
+    let url          = $(this).data('url');
+    let target       = $(this).data('target');
+    let filter       = $(this).data('filter');
+    let name         = $(this).data('name');
+    let mark         = $(this).data('mark');
+    let per_page     = $(this).data('per-page');
+    let current_page = $(this).data('current-page');
+    let next_value   = current_page - 1;
+
+    const emit_pagination_events = ()=>{
+      AppEmit(`window.change-page.${name}`, { url: url, filter: filter, name: name, mark: mark, page: next_value, per_page: per_page, trigger: 'previous' });
+      if(mark != name)
+        AppEmit(`window.change-page.${mark}`, { url: url, filter: filter, name: name, mark: mark, page: next_value, per_page: per_page, trigger: 'previous' });
+    }
+
+    if( url != undefined && url != null && url != '' && url != '#'){
+      if(next_value >= 1){
+        let url2 = url
+        let page_params = `per_page=${ per_page }&page=${ next_value }`;
+        if(/[?]/.test(url2))
+          url2 = `${url2}&${page_params}`;
+        else
+          url2 = `${url2}?${page_params}`;
+
+        if(filter){
+          try{ url2 = `${url2}&${ $(`form#${filter}`).serialize() }` }catch{};
+        }
+
+        ApplicationJS.launch_async({ url: url2, method: 'GET', html: { target: target } }).then(e=>{ emit_pagination_events(); });
+      }
+    }else{
+      emit_pagination_events();
+    }
+  });
+
+  $('.pagination .next-page').unbind('click').bind('click', function(e){
+    let url           = $(this).data('url');
+    let target        = $(this).data('target');
+    let filter        = $(this).data('filter');
+    let name          = $(this).data('name');
+    let mark          = $(this).data('mark');
+    let per_page      = $(this).data('per-page');
+    let current_page  = $(this).data('current-page');
+    let total_pages   = $(this).data('total-pages');
+    let next_value = current_page + 1;
+
+    const emit_pagination_events = ()=>{
+      AppEmit(`window.change-page.${name}`, { url: url, filter: filter, name: name, mark: mark, page: next_value, per_page: per_page, trigger: 'next' });
+                      if(mark != name)
+                        AppEmit(`window.change-page.${mark}`, { url: url, filter: filter, name: name, mark: mark, page: next_value, per_page: per_page, trigger: 'next' });
+    }
+
+    if( url != undefined && url != null && url != '' && url != '#'){
+      if(next_value <= total_pages){
+        let url2 = url
+        let page_params = `per_page=${ per_page }&page=${ next_value }`;
+        if(/[?]/.test(url2))
+          url2 = `${url2}&${page_params}`;
+        else
+          url2 = `${url2}?${page_params}`;
+
+        if(filter){
+          try{ url2 = `${url2}&${ $(`form#${filter}`).serialize() }` }catch{};
+        }
+
+        ApplicationJS.launch_async({ url: url2, method: 'GET', html: { target: target } }).then(e=>{ emit_pagination_events(); });
+      }
+    }else{
+      emit_pagination_events();
+    }
+  });
+
+  $('.scroll-on-top').unbind('click').bind('click', function(e){
+    e.preventDefault();
+
+    let body = $(".body_content");
+    body.stop().animate({scrollTop:0}, 500, 'swing', function() {});
+  });
+
+  $('table tbody .action, .action.submenu_action').unbind('click').bind('click',function(e) {
+    e.stopPropagation();
+
+    $('.sub_menu').not(this).each(function(){
+      $(this).addClass('hide');
+    });
+
+    $(this).parent().find('.sub_menu').removeClass('hide');
+  });
+
+  $(document).unbind('click.organizations').bind('click.organizations',function(e){
+    if ($('.sub_menu').is(':visible')) {
+      $('.sub_menu').addClass('hide');
+    }
+
+    if ($('.sub_rule_menu').is(':visible')) { $('.sub_rule_menu').addClass('hide'); }
   });
 }

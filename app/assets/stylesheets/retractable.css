@@ -77,6 +77,32 @@
   to { max-height: 500px; }
 }
 
+@mozkeyframes derivationTop {
+  from { opacity: 0; top: -60px; transform: scale(1.06); }
+  to { opacity: 1; top: 0; transform: scale(1); }
+}
+@webkitkeyframes derivationTop {
+  from { opacity: 0; top: -60px; transform: scale(1.06); }
+  to { opacity: 1; top: 0; transform: scale(1); }
+}
+@keyframes derivationTop {
+  from { opacity: 0; top: -60px; transform: scale(1.06); }
+  to { opacity: 1; top: 0; transform: scale(1); }
+}
+
+@mozkeyframes derivationBottom {
+  from { opacity: 0; top: 60px; transform: scale(1.06); }
+  to { opacity: 1; top: 0; transform: scale(1); }
+}
+@webkitkeyframes derivationBottom {
+  from { opacity: 0; top: 60px; transform: scale(1.06); }
+  to { opacity: 1; top: 0; transform: scale(1); }
+}
+@keyframes derivationBottom {
+  from { opacity: 0; top: 60px; transform: scale(1.06); }
+  to { opacity: 1; top: 0; transform: scale(1); }
+}
+
 @mozkeyframes derivationLeft {
   from { opacity: 0; left: -60px; transform: scale(1.06); }
   to { opacity: 1; left: 0; transform: scale(1); }
@@ -130,15 +156,15 @@
 }
 
 @mozkeyframes showSideMenu {
-  from { left: -40px; }
+  from { left: -450px; }
   to { left: 0; }
 }
 @webkitkeyframes showSideMenu {
-  from { left: -40px; }
+  from { left: -450px; }
   to { left: 0; }
 }
 @keyframes showSideMenu {
-  from { left: -40px; }
+  from { left: -450px; }
   to { left: 0; }
 }
 
@@ -175,7 +201,7 @@
 
 // CSS ANIMATED
 .btn, .scroll-on-top, .animated-pointer, .underlined-pointer{
-  transition: all 0.2s ease-out;
+  transition: all 0.3s ease-out;
 }
 
 .btn:hover, .scroll-on-top:hover, .animated-pointer:hover{
@@ -242,6 +268,18 @@ tbody.retractable.slidedown tr {
   display: none;
 }
 
+.derivationTop {
+  animation-name: derivationTop;
+  animation-duration: 0.8s;
+  position: relative;
+}
+
+.derivationBottom {
+  animation-name: derivationBottom;
+  animation-duration: 0.8s;
+  position: relative;
+}
+
 .derivationLeft {
   animation-name: derivationLeft;
   animation-duration: 0.8s;
@@ -272,7 +310,8 @@ tbody.retractable.slidedown tr {
 
 .side-menu{
   animation-name: showSideMenu;
-  animation-duration: 0.3s;
+  animation-duration: 1s;
+  animation-timing-function: ease-out;
   position: relative;
 }
 

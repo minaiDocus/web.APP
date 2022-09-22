@@ -71,7 +71,7 @@
             %span.badge.rounded-pill.bg-light.text-dark.regular.mt-2=  Rails.env
         - if current_user.try(:is_admin)
           %li.nav-item
-            =link_to glyphicon('fork', color: "rgba(26, 26, 26, 0.7);", size: '22'), '/admin', class: 'nav-link bold'
+            =link_to glyphicon('fork', color: "rgba(26, 26, 26, 0.7);", size: '22'), '/admin', class: 'nav-link bold', target: '_blank'
           - if session[:user_code].presence
             %li.nav-item
               %span.badge.rounded-pill.badge-warning.semibold.mt-2= current_user_info        

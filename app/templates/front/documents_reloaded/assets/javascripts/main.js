@@ -31,69 +31,6 @@ class DocumentsReloadedMain{
     this.export_params = {};
   }
 
-  load_datas(serialize_form=false, append=false){
-    if(this.action_locker)
-      return false
-
-    if(!append)
-      this.page = 1;
-
-    this.action_locker = true;
-    let data = [];
-
-    if(serialize_form){
-      data.push($('#pack_filter_form').serialize().toString());
-      if(!append)
-        data.push(`activate_filter=true`);
-    }
-    else
-    {
-      let selector = "#pack_filter_form input, #pack_filter_form select, #customer_document_filter, #journal_document_filter, #search_input";
-      $(selector).not('.operator').val(''); data.push( `reinit=true` );
-    }
-
-    let search_pattern = $('.search-content #search_input').val();
-
-    if(search_pattern && search_pattern != ''){ data.push(`text=${encodeURIComponent(search_pattern)}`); }
-    if(this.page > 1){ data.push(`page=${this.page}`) }
-
-    let grid_or_list_view = 'list'
-    if($('.box.grid').length > 0 && $('.box.grid').not('.hide').length > 0){
-      grid_or_list_view = 'grid'
-    }
-    data.push(`grid_or_list_view=${grid_or_list_view}`)
-
-    if ($('#customer_document_filter').val()){
-      data.push( 'view=' + $('#customer_document_filter').val() )
-    }
-
-    if($('#journal_document_filter').val()){
-      data.push( 'journal=' + $('#journal_document_filter').val() )
-    }
-
-    if($('#badge-filter').val()){
-      data.push( 'badge_filter=' + $('#badge-filter').val() )
-    }
-
-    this.ajax_params['target'] = (append)? null : '.main-content';
-    this.ajax_params['data']   = data.join('&');
-    this.applicationJS.sendRequest(this.ajax_params, function(){ $('#more-filter.modal').modal('hide'); })
-                       .then((e)=>{
-                          if(append){
-                            if($(e).find('.no-data-found').length > 0){
-                              this.applicationJS.noticeSuccessMessageFrom(null, 'Plus aucun résultat!');
-                              this.page = -1;
-                            }else{
-                              $('.all-results').append($(e).find('.all-results').html());
-                            }
-                          }
-
-                          this.action_locker = false
-                          bind_all_events();
-                        })
-                       .catch(()=>{ this.action_locker = false; });
-  }
-
   load_collaborator_datas(serialize_form=false, append=false){
     if(this.action_locker)
       return false
@@ -107,12 +44,14 @@ class DocumentsReloadedMain{
 
     if(serialize_form){
       data.push($('#piece_filter_form').serialize().toString());
+      data.push($('#pack_filter_form').serialize().toString());
+
       if(!append)
         data.push(`activate_filter=true`);
     }
     else
     {
-      let selector = "#piece_filter_form input, #piece_filter_form select, #collaborator_document_filter, #collaborator_journal_document_filter, collaborator_period_filter, #search_input";
+      let selector = "#pack_filter_form input, #pack_filter_form select, #piece_filter_form input, #piece_filter_form select, #collaborator_document_filter, #collaborator_journal_document_filter, collaborator_period_filter, #search_input";
       $(selector).not('.operator').val(''); data.push( `reinit=true` );
     }
 
