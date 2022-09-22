@@ -31,7 +31,7 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
       options << ['CSV (Cegid)', 'csv_cegid']                  if user.uses?(:cegid)
       options << ['TRA + pièces jointes (Cegid)', 'tra_cegid'] if user.uses?(:cegid)
       options << ['TXT (Fec Agiris)', 'txt_fec_agiris']        if user.uses?(:fec_agiris)
-      options << ['ECR (Fec Agiris Facnote)', 'ecr_fec_agiris_facnote']        if user.uses?(:fec_agiris) && ['IDOC', 'MCN'].include?( user.organization.try(:code) )
+      options << ['ECR (Fec Agiris ECR zip)', 'ecr_fec_agiris_facnote']        if user.uses?(:fec_agiris) && ['IDOC', 'MCN'].include?( user.organization.try(:code) )
       options << ['TXT (Fec ACD)', 'txt_fec_acd']              if user.uses?(:fec_acd)
       options << ['TXT (Cogilog)', 'txt_cogilog']              if user.uses?(:cogilog)
     end
