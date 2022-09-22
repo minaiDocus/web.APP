@@ -30,7 +30,7 @@
     .col-md-9
     .col-md-3.icon-actions.text-end
       - if @user.has_collaborator_action?
-        %span.pointer.ms-2.preseizures_export{title: 'Export écriture', data:{ id: @report.id, type: 'special_operation', multi: 'true' }}= glyphicon('cloud-download', { size: '18', color:'rgba(26, 26, 26, 0.32);'})
+        %span.pointer.ms-2.preseizures_export{title: 'Export écriture', data:{ id: @report.id, type: 'special_operation', multi: 'true' }}= glyphicon('external-link', { size: '18', color:'rgba(26, 26, 26, 0.32);'})
         %span.pointer.ms-2.deliver_preseizures{title: 'Livraison écriture comptable', data: { id: @report.id, type: 'special_operation', multi: 'true'}}= glyphicon('loop-circular', { size: '18', color:'rgba(26, 26, 26, 0.32);'})
         %span.pointer.ms-2.action-selected.edit_selected_preseizures.hide{ title: 'Edition multiple', data: { type: 'operation' } }= glyphicon('pencil', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
       %span.pointer.form-check.d-inline.ms-2      

@@ -30,6 +30,6 @@
       .col-md-4.icon-actions.text-end
         / %span.ms-2= glyphicon('flag', { size: '18', color:'rgba(26, 26, 26, 0.32);'})
         - if @user.pre_assignement_displayed? && @user.has_collaborator_action?
-          %span.ms-2.preseizures_export{title: 'Export écriture comptable', data:{ id: report.id, type: 'special_operation', multi: 'true' }}= glyphicon('cloud-download', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
+          %span.ms-2.preseizures_export{title: 'Export écriture comptable', data:{ id: report.id, type: 'special_operation', multi: 'true' }}= glyphicon('external-link', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
           - if report.user.uses_api_softwares?
             %span.ms-2.deliver_preseizures{title: 'Livraison écriture comptable', data: {id: report.id, type: 'special_operation', multi: 'true'}}= glyphicon('loop-circular', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
