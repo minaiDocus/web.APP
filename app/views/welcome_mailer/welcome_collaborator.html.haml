@@ -96,6 +96,15 @@
       %br
       %br
       %br
+      - organization = @collaborator.memberships.first.try(:organization)
+      - if organization && @collaborator.is_prescriber && !organization.debit_mandate.try(:configured?)
+        %strong{ style: "color: #752D2D" }
+          Le mode de paiement n'a pas encore été configuré (prélèvement automatique des factures émises par IDocus).
+          Sans intervention de votre part, le traitement de vos documents sera suspendu dans 48h.
+          Merci de bien vouloir y remédier via le lien suivant : #{link_to edit_payment_organization_url(organization), edit_payment_organization_url(organization)}
+        %br
+        %br
+        %br
       Nous vous souhaitons une bonne utilisation de notre service.
       %br
       %br
