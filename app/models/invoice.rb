@@ -12,6 +12,9 @@ class Invoice < ApplicationRecord
                             url: '/account/invoices/:id/download/:style'
   do_not_validate_attachment_file_type :content
 
+
+  belongs_to :organization
+
   # TO DO : Find a way to migrate cloud_content to BillingMod::Invoice
   # IMPORTANT : this model is a workarround for cloud_content migration error
   # See BillingMod::Invoice for real invoice model
