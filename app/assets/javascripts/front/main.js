@@ -81,6 +81,7 @@ function bind_globals_events(){
 
   /* PAGINATIONS */
     $('.pagination .per-page').unbind('change').bind('change', function(e){
+      e.stopPropagation();
       let url          = $(this).data('url');
       let target       = $(this).data('target');
       let filter       = $(this).data('filter');
@@ -114,6 +115,7 @@ function bind_globals_events(){
     });
 
     $('.pagination .previous-page').unbind('click').bind('click', function(e){
+      e.stopPropagation();
       let url          = $(this).data('url');
       let target       = $(this).data('target');
       let filter       = $(this).data('filter');
@@ -150,6 +152,7 @@ function bind_globals_events(){
     });
 
     $('.pagination .next-page').unbind('click').bind('click', function(e){
+      e.stopPropagation();
       let url           = $(this).data('url');
       let target        = $(this).data('target');
       let filter        = $(this).data('filter');
