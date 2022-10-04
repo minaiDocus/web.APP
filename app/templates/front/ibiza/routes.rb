@@ -3,7 +3,9 @@ Rails.application.routes.draw do
   scope module: 'ibiza' do
     resources :organizations, only: [] do
       resource :ibiza, controller: 'main', only: %w(create update) do
-      	get 'setting', to: 'main#setting'
+      	get 'full_authorization', to: 'main#full_authorization'
+        get 'callback_full_setting', to: 'main#callback_full_setting'
+        get 'setting', to: 'main#setting'
       end
       resources :ibiza_users, only: :index, controller: 'users'
 

@@ -2,8 +2,6 @@
 - tab_present = @organization.send(params[:tab].to_s.to_sym).try(:used?) rescue nil
 = stylesheet_link_tag 'front/software_setting/assets/stylesheets/main'
 
-
-
 .general
   .row
     .col-md-8.derivationRight
@@ -29,7 +27,7 @@
         - if @organization.send(software.to_sym).try(:is_used) && software == 'ibiza'
           - first_active = true if is_active
           .tab-pane.no-margin#ibiza-software{ "role" => "tabpanel", "aria-labelledby" => "ibiza-software-tab", class: (is_active)? 'active' : '' }
-            = render file: Rails.root.join('app/templates/front/ibiza/views/ibiza/main/setting.html.haml'), locals: { ibiza: @organization.ibiza }
+            = render file: Rails.root.join('app/templates/front/ibiza/views/ibiza/main/setting_full.html.haml'), locals: { ibiza: @organization.ibiza }
         - elsif @organization.send(software.to_sym).try(:used?)
           - first_active = true if is_active
           .tab-pane{ id: "#{software}-software", "role" => "tabpanel", "aria-labelledby" => "#{software}-software-tab", class: (is_active)? 'active' : '' }

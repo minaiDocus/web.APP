@@ -1,0 +1,21 @@
+defaults: &defaults
+  domain: https://auth.fulll.io
+  client_id: xxx
+  client_secret: xxx
+
+test:
+  <<: *defaults
+
+development:
+  <<: *defaults
+
+sandbox:
+  <<: *defaults
+
+staging:
+  <<: *defaults
+
+production:
+  domain: https://auth.fulll.io
+  client_id: xxx
+  client_secret: xxx

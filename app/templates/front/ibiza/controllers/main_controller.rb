@@ -5,9 +5,21 @@ class Ibiza::MainController < OrganizationController
 
   prepend_view_path('app/templates/front/ibiza/views')
 
+  def full_authorization
+    redirect_to IbizaFullLib.new.get_authorization_url
+  end
+
+  def callback_full_setting
+    IbizaFullLib.new(@organization.ibiza).request_auth_token( params[:code] )
+
+    redirect_to softwares_list_path(@organization)
+  end
+
   # GET /organizations/:organization_id/ibiza/edit
   def setting
     @ibiza = @organization.ibiza
+
+    render 'setting_full'
   end
 
   # PUT /organizations/:organization_id/ibiza
