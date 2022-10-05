@@ -65,6 +65,7 @@ class User < ApplicationRecord
   has_many :received_emails, class_name: 'Email',                    inverse_of: :to_user,   dependent: :destroy, foreign_key: :to_user_id
   has_many :period_documents
   has_many :account_book_types
+  has_many :cedricom_receptions
   has_many :pre_assignment_deliveries
   has_many :pre_assignment_exports
   has_many :notifications, dependent: :destroy
@@ -106,6 +107,7 @@ class User < ApplicationRecord
   scope :prescribers,                 -> { where(is_prescriber: true) }
   scope :not_operators,               -> { where(is_operator: [false, nil]) }
   scope :fake_prescribers,            -> { where(is_prescriber: true, is_fake_prescriber: true) }
+  scope :jedeclare_configured,        -> { where.not(jedeclare_account_identifier: nil) }
   scope :not_fake_prescribers,        -> { where(is_prescriber: true, is_fake_prescriber:  [false, nil]) }
   scope :dropbox_extended_authorized, -> { where(is_dropbox_extended_authorized: true) }
   scope :guest_collaborators,         -> { where(is_prescriber: false, is_guest: true) }

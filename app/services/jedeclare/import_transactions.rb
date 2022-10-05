@@ -1,4 +1,4 @@
-module Cedricom
+module Jedeclare
   class ImportTransactions
     CREDIT_OPERATION_CODES = %w(02 04 05 09 12 13 15 16 17 18 24 25 30 31 32 34 35 37 39 40 45 47 49 55 57 59 63 69 72 73 74 77 78 85 87 97 A1 A2 A3 A4 B5 B6 C2 C3 C5)
 
@@ -7,13 +7,13 @@ module Cedricom
     end
 
     def self.perform
-      CedricomReception.cedricom.to_import.each do |reception|
+      CedricomReception.jedeclare.to_import.each do |reception|
         new(reception).perform
       end
     end
 
     def perform
-      cfonb_by_line = @reception.content.download.split(/\r\n+/)
+      cfonb_by_line = @reception.content.download.scan(/.{120}/)
 
       raw_operations = read_cfonb(cfonb_by_line)
 

@@ -21,7 +21,7 @@ module Cedricom
     end
 
     def self.fetch_missing_contents
-      receptions = CedricomReception.to_download
+      receptions = CedricomReception.cedricom.to_download
 
       receptions.each do |reception|
         content = Cedricom::Api.new(reception.organization).get_reception(reception.cedricom_id)

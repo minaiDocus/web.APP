@@ -80,6 +80,7 @@ class Organization < ApplicationRecord
   scope :not_billed,  -> { where("is_test = ? OR is_active = ? OR is_for_admin = ?", true, false, true) }
   scope :unsuspended, -> { where(is_suspended: false) }
   scope :cedricom_configured, -> { where.not(cedricom_user: nil, encrypted_cedricom_password: nil, cedricom_name: nil) }
+  scope :jedeclare_configured, -> { where.not(jedeclare_user: nil, encrypted_jedeclare_password: nil, jedeclare_account_identifier: nil) }
 
   def self.billed_for_year(year)
     start_time = Time.local(year).beginning_of_year + 15.days

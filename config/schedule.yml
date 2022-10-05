@@ -252,6 +252,20 @@ Cedricom::ReconciliateOrphansWorker:
   queue: cedricom
   cron: 0 15 * * *
 
+## Jedeclare ##
+
+Jedeclare::GetListWorker:
+  queue: cedricom
+  cron: 0 12 * * *
+
+Jedeclare::FetchReceptionstWorker:
+  queue: cedricom
+  cron: 0 13 * * *
+
+Jedeclare::ImportTransactionsWorker:
+  queue: cedricom
+  cron: 0 14 * * *
+
  ## Budgea ##
 
 Retriever::FetchOperationsWorker:
