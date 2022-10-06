@@ -43,7 +43,7 @@ module Reporting
       end
 
       remaining_dividers -= current_dividers.count
-      time += period.try(:duration).try(:month).presence || 1
+      time += period.try(:duration).try(:month).presence || 1.month
     end
 
     # current_period = pack.owner.subscription.current_period

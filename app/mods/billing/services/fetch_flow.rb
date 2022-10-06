@@ -15,7 +15,7 @@ class BillingMod::FetchFlow
       # next if customer.is_prescriber || !customer.still_active?
       next if customer.is_prescriber
 
-      documents = customer.period_documents.of_period(@period)
+      documents         = customer.period_documents.of_period(@period)
 
       preseizures       = customer.preseizures.where("DATE_FORMAT(created_at, '%Y%m') = #{@period}")
       preseizures_piece = preseizures.where('piece_id > 0').count
