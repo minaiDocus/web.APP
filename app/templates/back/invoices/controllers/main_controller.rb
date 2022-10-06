@@ -15,7 +15,7 @@ class Admin::Invoices::MainController < BackController
 
   # GET /admin/invoices/archive
   def archive
-    file_path = BillingMod::ArchiveInvoice..archive_path(params[:file_name])
+    file_path = BillingMod::ArchiveInvoice.archive_path(params[:file_name])
 
     if File.exist? file_path
       send_file(file_path, type: 'application/zip', filename: params[:file_name], x_sendfile: true)
@@ -86,7 +86,7 @@ class Admin::Invoices::MainController < BackController
       # Find a way to get active record mime type
       type = 'application/pdf'
       filename = File.basename @invoice.cloud_content_object.path
-      send_file(@invoice.cloud_content_object.path, type: type, filename: filename, x_sendfile: true, disposition: 'inline')
+      send_file(@invoice.cloud_content_object.path('', true), type: type, filename: filename, x_sendfile: true, disposition: 'inline')
     end
   end
 

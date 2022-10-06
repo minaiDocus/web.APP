@@ -15,7 +15,7 @@ module SageGecLib
       begin
         if preseizure.piece
           retry_count += 1
-          file_path = preseizure.piece.cloud_content_object.reload.path
+          file_path = preseizure.piece.cloud_content_object.path
           sleep(1)
 
           data["attachment"] = Faraday::UploadIO.new(StringIO.new(File.read(file_path)), preseizure.piece.cloud_content.content_type, "#{preseizure.coala_piece_name}.pdf")

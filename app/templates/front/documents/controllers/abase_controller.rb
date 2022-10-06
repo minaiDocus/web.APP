@@ -115,7 +115,7 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
         pack.save_archive_to_storage #May takes several times
       end
 
-      zip_path = pack.cloud_archive_object.reload.path.presence || pack.archive_file_path
+      zip_path = pack.cloud_archive_object.reload.path('', true).presence || pack.archive_file_path
 
       ok = pack && File.exist?(zip_path)
     rescue => e
@@ -131,7 +131,7 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
 
   def download_bundle
     @pack = Pack.find params[:id]
-    filepath = @pack.cloud_content_object.path
+    filepath = @pack.cloud_content_object.path('', true)
 
     if File.exist?(filepath.to_s) && (@pack.owner.in?(accounts) || current_user.try(:is_admin))
       mime_type = 'application/pdf'
@@ -234,7 +234,7 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
     token = request.original_url.partition('token=').last
 
     @piece = Pack::Piece.where('created_at >= ?', '2019-12-28 00:00:00').where('created_at <= ?', '2019-12-31 23:59:59').find_by_token(token)
-    filepath = @piece.cloud_content_object.path(:original)
+    filepath = @piece.cloud_content_object.path(:original, true)
 
     if File.exist?(filepath)
       mime_type = File.extname(filepath) == '.png' ? 'image/png' : 'application/pdf'
@@ -314,7 +314,7 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
   def download_processing
     document = TempDocument.find(params[:id])
     owner    = document.temp_pack.user
-    filepath = document.cloud_content_object.path(params[:style].presence)
+    filepath = document.cloud_content_object.path(params[:style].presence, true)
 
     if File.exist?(filepath) && (owner.in?(accounts) || current_user.try(:is_admin))
       mime_type = File.extname(filepath) == '.png' ? 'image/png' : 'application/pdf'
@@ -332,12 +332,12 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
 
     pieces_ids.each do |piece_id|
       piece = Pack::Piece.unscoped.find(piece_id)
-      file_path = piece.cloud_content_object.path(params[:style].presence || :original)
+      file_path = piece.cloud_content_object.path(params[:style].presence || :original, true)
 
       if !File.exist?(file_path.to_s) && !piece.cloud_content.attached?
         sleep 1
         piece.try(:recreate_pdf)
-        file_path = piece.cloud_content_object.reload.path(params[:style].presence || :original)
+        file_path = piece.cloud_content_object.reload.path(params[:style].presence || :original, true)
       end
 
       merged_paths << file_path
@@ -372,7 +372,7 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
     auth_token ||= request.original_url.partition('token=').last
 
     @temp_document = TempDocument.find(params[:id])
-    filepath = @temp_document.cloud_content_object.reload.path(params[:style].presence || :original)
+    filepath = @temp_document.cloud_content_object.reload.path(params[:style].presence || :original, true)
 
     if File.exist?(filepath.to_s) && (@temp_document.user.in?(accounts) || current_user.try(:is_admin) || auth_token == @temp_document.get_token)
       mime_type = File.extname(filepath) == '.png' ? 'image/png' : 'application/pdf'

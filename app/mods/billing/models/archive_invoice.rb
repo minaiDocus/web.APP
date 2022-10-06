@@ -25,9 +25,9 @@ class BillingMod::ArchiveInvoice < ApplicationRecord
   end
 
   def self.archive_path(file_name)
-    archive_invoice = BillingMod::ArchiveInvoice..where(name: file_name).first
-    if archive_invoice.present? && File.exist?(archive_invoice.cloud_content_object.path.to_s)
-      archive_invoice.cloud_content_object.try(:path)
+    archive_invoice = BillingMod::ArchiveInvoice.where(name: file_name).first
+    if archive_invoice.present? && File.exist?(archive_invoice.cloud_content_object.path('', true).to_s)
+      archive_invoice.cloud_content_object.path('', true)
     else
       _file_name = File.basename file_name
 

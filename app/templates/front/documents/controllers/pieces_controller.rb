@@ -122,12 +122,14 @@ class Documents::PiecesController < Documents::AbaseController
     auth_token ||= request.original_url.partition('token=').last
 
     @piece = params[:id].length > 20 ? Pack::Piece.find_by_mongo_id(params[:id]) : Pack::Piece.unscoped.find(params[:id])
-    filepath = @piece.cloud_content_object.path(params[:style].presence || :original)
+    filepath = @piece.cloud_content_object.reload.path(params[:style].presence || :original, true)
+
+    p "==========Find me here: #{File.exist?(filepath)}==============="
 
     if !File.exist?(filepath.to_s) && !@piece.cloud_content.attached?
       sleep 1
       @piece.try(:recreate_pdf)
-      filepath = @piece.cloud_content_object.reload.path(params[:style].presence || :original)
+      filepath = @piece.cloud_content_object.reload.path(params[:style].presence || :original, true)
     end
 
     if File.exist?(filepath.to_s) && (@piece.pack.owner.in?(accounts) || current_user.try(:is_admin) || auth_token == @piece.get_token)
@@ -144,7 +146,7 @@ class Documents::PiecesController < Documents::AbaseController
     auth_token ||= request.original_url.partition('token=').last
 
     @temp_document = TempDocument.find(params[:id])
-    filepath = @temp_document.cloud_content_object.reload.path(params[:style].presence || :original)
+    filepath = @temp_document.cloud_content_object.reload.path(params[:style].presence || :original, true)
 
     if File.exist?(filepath.to_s) && (@temp_document.user.in?(accounts) || current_user.try(:is_admin) || auth_token == @temp_document.get_token)
       mime_type = File.extname(filepath) == '.png' ? 'image/png' : 'application/pdf'

@@ -15,7 +15,7 @@ class Admin::EmailedDocuments::MainController < BackController
   def show
     @email = Email.find(params[:id])
 
-    file_path = @email.cloud_original_content_object.path
+    file_path = @email.cloud_original_content_object.path('', true)
 
     if file_path.present? && File.exist?(file_path)
       file_name = File.basename(file_path)

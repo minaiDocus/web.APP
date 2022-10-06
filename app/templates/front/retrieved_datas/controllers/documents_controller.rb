@@ -20,7 +20,7 @@ class RetrievedDatas::DocumentsController < RetrieverController
   def show
     if File.exist?(@document.cloud_content_object.path)
       file_name = @document.metadata['name'] + '.pdf'
-      send_file(@document.cloud_content_object.path, type: 'application/pdf', filename: file_name, x_sendfile: true, disposition: 'inline')
+      send_file(@document.cloud_content_object.path('', true), type: 'application/pdf', filename: file_name, x_sendfile: true, disposition: 'inline')
     else
       render body: nil, status: 404
     end
@@ -29,7 +29,7 @@ class RetrievedDatas::DocumentsController < RetrieverController
   def piece
     if @document.piece
       if File.exist?(@document.piece.cloud_content_object.path.to_s)
-        send_file(@document.piece.cloud_content_object.path, type: 'application/pdf', filename: @document.piece.cloud_content_object.filename, x_sendfile: true, disposition: 'inline')
+        send_file(@document.piece.cloud_content_object.path('', true), type: 'application/pdf', filename: @document.piece.cloud_content_object.filename, x_sendfile: true, disposition: 'inline')
       else
         render body: nil, status: 404
       end

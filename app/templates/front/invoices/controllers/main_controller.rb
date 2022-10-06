@@ -15,7 +15,7 @@ class Invoices::MainController < OrganizationController
       # type = invoice.content_content_type || 'application/pdf'
       # find a way to get active storage mime type
       type = 'application/pdf'
-      send_file(invoice.cloud_content_object.path, type: type, filename: filename, x_sendfile: true, disposition: 'inline')
+      send_file(invoice.cloud_content_object.path('', true), type: type, filename: filename, x_sendfile: true, disposition: 'inline')
     else
       render body: nil, status: 404
     end

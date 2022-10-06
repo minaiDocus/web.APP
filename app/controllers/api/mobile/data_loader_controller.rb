@@ -92,16 +92,16 @@ class Api::Mobile::DataLoaderController < MobileApiController
     if params[:force_temp_document] == 'true'
       document = TempDocument.find(params[:id])
       owner    = document.temp_pack.user
-      filepath = document.cloud_content_object.path(style)
+      filepath = document.cloud_content_object.path(style, true)
     else
       begin
         document = Pack::Piece.find(params[:id])
         owner    = document.user
-        filepath = document.cloud_content_object.path(style)
+        filepath = document.cloud_content_object.path(style, true)
       rescue StandardError
         document = TempDocument.find(params[:id])
         owner    = document.temp_pack.user
-        filepath = document.cloud_content_object.path(style)
+        filepath = document.cloud_content_object.path(style, true)
       end
     end
 

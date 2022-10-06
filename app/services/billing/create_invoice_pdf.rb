@@ -161,7 +161,7 @@ class Billing::CreateInvoicePdf
       CustomUtils.mktmpdir('create_invoice') do |dir|
         archive_path = DocumentTools.archive("#{dir}/#{archive_name}", invoices_files_path)
 
-        _archive_invoice      = BillingMod::ArchiveInvoice..new
+        _archive_invoice      = BillingMod::ArchiveInvoice.new
         _archive_invoice.name = archive_name
 
         _archive_invoice.cloud_content_object.attach(File.open(archive_path), archive_name) if _archive_invoice.save

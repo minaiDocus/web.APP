@@ -44,7 +44,7 @@ class DataProcessor::Mcf
 
     if not File.exist?(@file_path.to_s)
       sleep(5)
-      @file_path = @mcf_document.cloud_content_object.reload.path
+      @file_path = @mcf_document.cloud_content_object.path
       if not File.exist?(@file_path.to_s)
         @mcf_document.needs_retake
       else

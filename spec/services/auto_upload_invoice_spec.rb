@@ -83,7 +83,7 @@ describe Billing::CreateInvoicePdf do
 	    it 'archive invoice', :archive_invoice do
 		  	Billing::CreateInvoicePdf.archive_invoice
 
-		  	archive_invoice = BillingMod::ArchiveInvoice..last
+		  	archive_invoice = BillingMod::ArchiveInvoice.last
 
 		  	expect(archive_invoice.name).to eq 'invoices_202003.zip'
 		  	expect(archive_invoice.cloud_content).to be_attached

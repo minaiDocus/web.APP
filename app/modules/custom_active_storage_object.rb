@@ -1,8 +1,8 @@
 class CustomActiveStorageObject
   def initialize(object, attachment)
-    @object    = object
+    @object     = object
     @attachment = attachment
-    @base_url  = @object.class::ATTACHMENTS_URLS[attachment.to_s]
+    @base_url   = @object.class::ATTACHMENTS_URLS[attachment.to_s]
   end
 
   def attach(io, filename)
@@ -19,9 +19,9 @@ class CustomActiveStorageObject
     as_attached.attach(io: io, filename: filename)
   end
 
-  def path(style = '')
+  def path(style = '', to_tmp=false)
     if as_attached.attached?
-      generate_file style
+      generate_file style, to_tmp
       @base_path
     else
       pc_attached.path(style.to_s.to_sym)
@@ -112,10 +112,17 @@ class CustomActiveStorageObject
     @object.class.name.to_s.gsub('::', '_').downcase
   end
 
-  def generate_file(style = '')
+  def generate_file(style = '', to_tmp=false)
     retries = 0
 
     p "========== First ============="
+
+    if to_tmp
+      base_dir = "#{Rails.root}/tmp/#{object_class_name}/#{@object.id}/"
+    else
+      ### TEMP FIX : Move base dir to /nfs
+      base_dir = "/nfs/local_files/#{object_class_name}/#{@object.id}/"
+    end
 
     begin
       if style.to_s == 'medium' || style.to_s == 'thumb'
@@ -126,11 +133,11 @@ class CustomActiveStorageObject
                      end
         #TODO: resize limit doesn't work
         blob = as_attached.preview(resize_to_limit: size_limit).processed.image
-        dir = "#{Rails.root}/tmp/#{object_class_name}/#{Time.now.strftime('%Y%m%d')}/#{@object.id}/#{style.to_s}/"
-        tmp_file_path = File.join(dir, Time.now.strftime('%Y%m%d') + '.png')
+        dir  = "#{base_dir}#{style.to_s}/"
+        tmp_file_path = File.join(dir, @object.id + '.png')
       else
         blob = as_attached
-        dir = "#{Rails.root}/tmp/#{object_class_name}/#{Time.now.strftime('%Y%m%d')}/#{@object.id}/"
+        dir  = base_dir
         tmp_file_path = File.join(dir, filename)
       end
 
@@ -140,7 +147,7 @@ class CustomActiveStorageObject
         FileUtils.makedirs(dir)
         FileUtils.chmod(0755, dir)
 
-        FileUtils.delay_for(12.hours, queue: :high).remove_entry(dir, true)
+        FileUtils.delay_for(48.hours, queue: :high).remove_entry(dir, true)
 
         tmp_file = File.open(tmp_file_path, 'wb')
         tmp_file.write blob.download
