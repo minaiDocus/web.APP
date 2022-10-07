@@ -260,11 +260,13 @@ private
     begin
       FileUtils.remove_dir(file_path, true)
       file_txt           = PreseizureExport::Software::FecAgiris.new(@preseizures).execute('fec_agiris_facnote')
-      final_name_facnote = "#{@preseizures.first.user.code}_#{Time.now.strftime("%Y%m%d")}_#{Time.now.strftime("%H%M%S")}_manual"
+      final_name_facnote = "#{@preseizures.first.user.code.gsub('%', '_')}_#{Time.now.strftime("%Y%m%d")}_#{Time.now.strftime("%H%M%S")}_manual"
       final_file_name    = "#{final_name_facnote}.ecr"
+      final_file_name_txt = "#{final_name_facnote}.txt"
       zip_file_name      = "#{final_name_facnote}.zip"
 
       FileUtils.mv file_txt, "#{file_path}/#{final_file_name}"
+      FileUtils.cp "#{file_path}/#{final_file_name}", "#{file_path}/#{final_file_name_txt}"
 
       if with_file
         @preseizures.each do |preseizure|

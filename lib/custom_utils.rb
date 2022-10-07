@@ -91,7 +91,9 @@ class CustomUtils
       elsif code.match(/^ACC[%]0333/)
         code.gsub('ACC%0333', 'SEL%0333')
       elsif code.match(/^CRE[%]000CAPIO2/)
-        code.gsub('CRE%000CAPIO2', 'ACC%CAPIO2')
+        code.gsub('CRE%000CAPIO2', 'ACC%BYMO2')
+      elsif code.match(/^ACC[%]CAPIO2/)
+        code.gsub('ACC%CAPIO2', 'ACC%BYMO2')
       else
         code
       end

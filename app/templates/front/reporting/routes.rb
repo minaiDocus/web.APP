@@ -12,12 +12,8 @@ Rails.application.routes.draw do
     post '/retrievers_report', to: 'statistics#retrievers_report', as: 'retrievers_report'
 
     get '/export_xls/(:id)', to: 'statistics#export_xls', as: 'export_xls'
-  end
 
-  scope module: 'reporting' do
-    namespace :report do
-      resources :expenses, module: 'reporting', controller: 'expenses'
-      resources :preseizures, module: 'reporting', controller: 'preseizures'
-    end
+    resources :expenses, controller: 'expenses'
+    resources :preseizures, controller: 'preseizures'
   end
 end
