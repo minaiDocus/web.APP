@@ -39,13 +39,13 @@ class BillingMod::Configuration
             },
             ido_micro_plus: {
               human_name: "iDo'Micro",
-              description: "Vous permet de transférer jusqu'à 25 pièces/mois pour un engagement de 12 mois.",
-              hint: "Au-delà de 25 factures, calcul du dépassement simplifié : 0,3€ ht/facture",
+              description: "Vous permet de transférer jusqu'à 20 pièces/mois pour un engagement de 12 mois.",
+              hint: "Au-delà de 20 factures, calcul du dépassement simplifié : 0,3€ ht/facture",
               label: 'Téléchargement + Pré-saisie comptable + Engagement 12 mois',
               price: 10,
               commitment: 12,
               cummulative_excess: true,
-              data_flows: { max: 25, duration: 'month', excess_price: 0.3 },
+              data_flows: { max: 20, duration: 'month', excess_price: 0.3 },
               options: { upload: 'strict', bank: 'optional', scan: 'strict', mail: 'optional', digitize: 'optional', preassignment: 'strict'}
             },
             ido_nano: {
