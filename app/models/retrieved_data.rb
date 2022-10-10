@@ -22,15 +22,20 @@ class RetrievedData < ApplicationRecord
 
   state_machine initial: :not_processed do
     state :not_processed
+    state :processing
     state :processed
     state :error
 
     event :processed do
-      transition :not_processed => :processed
+      transition :processing => :processed
+    end
+
+    event :processing do
+      transition :not_processed => :processing
     end
 
     event :error do
-      transition :not_processed => :error
+      transition [:processing, :not_processed] => :error
     end
 
     event :continue do

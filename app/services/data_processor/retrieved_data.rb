@@ -16,7 +16,11 @@ class DataProcessor::RetrievedData
   end
 
   def initialize(retrieved_data, type_synced=nil, user=nil)
+    return false if not retrieved_data.reload.not_processed?
+
     @retrieved_data = retrieved_data
+    @retrieved_data.processing
+
     @type_synced    = type_synced
     @user           = user.presence || @retrieved_data.try(:user)
   end
