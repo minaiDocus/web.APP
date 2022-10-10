@@ -31,6 +31,7 @@ class UploadedDocument
     @errors << [:journal_unknown, journal: @journal] unless valid_journal?
     @errors << [:invalid_file_extension, extension: extension, valid_extensions: UploadedDocument.valid_extensions] unless valid_extension?
 
+    is_forced = false
     CustomUtils.mktmpdir('uploaded_document') do |dir|
       if @errors.empty?
         @dir            = dir
@@ -90,6 +91,8 @@ class UploadedDocument
             end
           end
         elsif !unique? && force
+          is_forced = true
+
           log_document = {
               subject: "[UploadedDocument] Document already exist - force integration",
               name: "UploadedDocument",
@@ -132,7 +135,8 @@ class UploadedDocument
           original_file_name:    @original_file_name,
           is_content_file_valid: true,
           original_fingerprint:  fingerprint,
-          analytic:              analytic_validator.analytic_params_present? ? analytic : nil
+          analytic:              analytic_validator.analytic_params_present? ? analytic : nil,
+          is_forced:              is_forced
         }
 
         @temp_document = AddTempDocumentToTempPack.execute(temp_pack, @processed_file, options) # Create temp document for temp pack

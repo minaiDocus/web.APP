@@ -421,6 +421,7 @@ class SgiApiServices::GroupDocument
       temp_document.scan_bundling_document_ids  = bundling_document_ids
       temp_document.analytic_reference_id       = original_temp_document.analytic_reference_id
       temp_document.original_fingerprint        = checksum
+      temp_document.is_forced                   = original_temp_document.is_forced
 
       if temp_document.save
         temp_document.ready

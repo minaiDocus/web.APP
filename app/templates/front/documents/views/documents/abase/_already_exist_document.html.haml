@@ -1,12 +1,12 @@
 .row
-  %table.table{ style: "width: 50%"}
+  %table.table.table-striped{ style: "width: 50%"}
     %tbody
       %tr
         %td{ style: "border: none"}
           %b Nom du lot :
         %td{ style: "border: none"}= @already_document.temp_document.temp_pack.basename
       %tr
-        %td{ style: "border: none; width: 25%"}
+        %td{ style: "border: none; width: 50%"}
           %b Date d'insertion :
         %td{ style: "border: none"}= @already_document.temp_document.created_at.strftime('%m/%d/%Y à %I:%M%p ')
       %tr

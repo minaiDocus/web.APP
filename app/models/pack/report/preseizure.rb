@@ -353,6 +353,10 @@ class Pack::Report::Preseizure < ApplicationRecord
     mess
   end
 
+  def is_forced?
+    self.try(:piece).try(:is_forced?)
+  end
+
   def update_entries_amount
     if self.conversion_rate.present? && self.conversion_rate > 0 && self.amount.present? && self.amount > 0
       self.cached_amount = (self.amount / self.conversion_rate).round(2)

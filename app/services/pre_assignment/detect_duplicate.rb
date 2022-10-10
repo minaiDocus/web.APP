@@ -19,7 +19,8 @@ class PreAssignment::DetectDuplicate
   def valid?
     @preseizure.third_party.present? &&
     @preseizure.cached_amount.present? &&
-    @preseizure.piece_number.present?
+    @preseizure.piece_number.present? &&
+    !@preseizure.is_forced?
   end
 
   def clean_txt(string=nil)

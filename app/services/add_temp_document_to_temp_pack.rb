@@ -31,6 +31,8 @@ class AddTempDocumentToTempPack
       temp_document.organization         = organization
       temp_document.original_file_name   = options[:original_file_name]
 
+      temp_document.is_forced             = options[:is_forced]
+
       temp_document.delivered_by        = options[:delivered_by]
       temp_document.delivery_type       = options[:delivery_type]
 

@@ -431,6 +431,10 @@ class Pack::Piece < ApplicationRecord
     _tags.join(" #{separator} ").presence || ''
   end
 
+  def is_forced?
+    self.temp_document.is_forced
+  end
+
   private
 
   def set_number
