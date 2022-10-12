@@ -101,7 +101,7 @@ class Operation < ApplicationRecord
   end
 
   def need_conversion?
-    currency['id'] != bank_account.currency
+    (currency.try(:[], 'id').presence || bank_account.original_currency.try(:[], 'id')) != bank_account.currency
   end
 
   def retrieved?

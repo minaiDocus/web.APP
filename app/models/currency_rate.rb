@@ -22,7 +22,7 @@ class CurrencyRate < ApplicationRecord
   end
 
   def self.get_operation_exchange_rate(operation)
-    get_exchange_rate operation.value_date, operation.bank_account.currency, operation.currency['id']
+    get_exchange_rate operation.value_date, operation.bank_account.currency, ( operation.currency.try(:[], 'id').presence || operation.bank_account.original_currency.try(:[], 'id') )
   end
 
   def self.already_present?(currency, day)
