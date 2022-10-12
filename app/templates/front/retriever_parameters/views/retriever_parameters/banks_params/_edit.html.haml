@@ -14,7 +14,10 @@
           %select.select.form-select.disabled{ disabled: 'disabled' }
           %p
             = render 'shared/ibiza_not_configured_warning'
-  = f.input :currency, collection: journal_currencies, include_blank: false, selected: (@bank_account.currency || "EUR"), hint: "Les écritures seront converties vers cette devise avec le taux de change de la date de valeur", :input_html => { class: "form-select"}
+  - original_currency = @bank_account.original_currency.try(:[], "id")
+  - if original_currency.present?
+    = f.input :original_currency, as: :text, label: 'Devise originale', disabled: true, read_only: true, input_html: { value: original_currency, rows: 1 }
+  = f.input :currency, collection: journal_currencies, include_blank: false, label: 'Devise de conversion', selected: (@bank_account.currency || "EUR"), hint: "Les écritures seront converties vers cette devise avec le taux de change de la date de valeur", :input_html => { class: "form-select"}
   = f.input :accounting_number, required: true
   = f.input :temporary_account, required: true, hint: 'si tiers non identifiable'
   .form-group.clearfix{ class: ('error' if @bank_account.errors.keys.include?(:start_date)) }
