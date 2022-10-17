@@ -155,6 +155,8 @@ class Journals::MainController < OrganizationController
       journal = AccountBookType.find id
 
       #next unless !journal.compta_processable? || is_preassignment_authorized?
+      next if journal.try(:entry_type) == 4 && !@customer.my_package.try(:bank_active)
+      next if journal.try(:entry_type) == 1 && !@customer.my_package.try(:preassignment_active)
 
       copy              = journal.dup
       copy.user         = @customer

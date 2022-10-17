@@ -16,12 +16,12 @@ module Account::AccountBookTypesHelper
       ]
     end
 
-    if customer && !organization.specific_mission
-      if customer.my_package.try(:bank_active)
+    if !organization.specific_mission
+      if !customer || ( customer && customer.my_package.try(:bank_active) )
         options << [t('simple_form.labels.account_book_type.entry_type_4'),4]
       end
 
-      if customer.my_package.try(:preassignment_active)
+      if !customer || ( customer && customer.my_package.try(:preassignment_active) )
         options << [t('simple_form.labels.account_book_type.entry_type_1'),1]
       end
     end

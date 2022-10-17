@@ -1,6 +1,7 @@
 class Journal::AssignDefault
   def initialize(user, collaborator, request = nil)
     @user         = user
+    @package      = @user.my_package
     @request      = request
     @collaborator = collaborator
     @organization = @user.organization
@@ -8,6 +9,9 @@ class Journal::AssignDefault
 
   def execute
     journals.map do |journal|
+      next if journal.try(:entry_type) == 4 && !@package.try(:bank_active)
+      next if journal.try(:entry_type) == 1 && !@package.try(:preassignment_active)
+
       new_journal = copy_journal(journal)
       create_event(new_journal)
       new_journal
