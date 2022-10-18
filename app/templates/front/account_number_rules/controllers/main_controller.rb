@@ -6,7 +6,10 @@ class AccountNumberRules::MainController < OrganizationController
 
   # GET /account/organizations/:organization_id/account_number_rules
   def index
-    @account_number_rules = AccountNumberRule.search_for_collection(@organization.account_number_rules, search_terms(params[:account_number_rule_contains])).order(sort_column => sort_direction)
+    session[:account_number_rule_contains] = params[:account_number_rule_contains] || session[:account_number_rule_contains]
+    session[:account_number_rule_contains] = nil if params[:reinit]
+
+    @account_number_rules = AccountNumberRule.search_for_collection(@organization.account_number_rules, search_terms(session[:account_number_rule_contains])).order(sort_column => sort_direction)
 
     @account_number_rules_count = @account_number_rules.count
 

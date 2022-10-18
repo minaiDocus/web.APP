@@ -84,42 +84,42 @@
             .label-section
               = label_tag 'account_number_rule_contains[name]', t('activerecord.models.account_number_rule.attributes.name'), class: 'semibold'
             .control-section.select-container.no-padding.w-100  
-              = text_field_tag 'account_number_rule_contains[name]', (params[:account_number_rule_contains][:name] rescue '')
+              = text_field_tag 'account_number_rule_contains[name]', (session[:account_number_rule_contains][:name] rescue '')
           .form-group
             .label-section
               = label_tag 'account_number_rule_contains[affect]', t('activerecord.models.account_number_rule.attributes.affect'), class: 'semibold', for: 'filter-affect-to'
             .control-section  
-              = select_tag 'account_number_rule_contains[affect]', options_for_select(affect_options_for_select, (params[:account_number_rule_contains][:affect] rescue nil)), include_blank: true, id: 'filter-affect-to', class: 'form-select' 
+              = select_tag 'account_number_rule_contains[affect]', options_for_select(affect_options_for_select, (session[:account_number_rule_contains][:affect] rescue nil)), include_blank: true, id: 'filter-affect-to', class: 'form-select'
           .form-group
             .label-section
               = label_tag 'account_number_rule_contains[rule_type]', t('activerecord.models.account_number_rule.attributes.rule_type'), class: 'semibold', for: 'filter-rule-type'
             .control-section  
-              = select_tag 'account_number_rule_contains[rule_type]', options_for_select(rule_type_options_for_select, (params[:account_number_rule_contains][:rule_type] rescue nil)), include_blank: true, id: 'filter-rule-type', class: 'form-select' 
+              = select_tag 'account_number_rule_contains[rule_type]', options_for_select(rule_type_options_for_select, (session[:account_number_rule_contains][:rule_type] rescue nil)), include_blank: true, id: 'filter-rule-type', class: 'form-select'
           .form-group
             .label-section
               = label_tag 'account_number_rule_contains[categorization]', t('activerecord.models.account_number_rule.attributes.categorization'), class: 'semibold', for: 'rule-categories'
             .control-section  
-              = select_tag 'account_number_rule_contains[categorization]', options_for_select(@organization.account_number_rules.map(&:categorization).uniq, (params[:account_number_rule_contains][:categorization] rescue '')), include_blank: true, id: 'rule-categories', class: 'form-select'
+              = select_tag 'account_number_rule_contains[categorization]', options_for_select(@organization.account_number_rules.map(&:categorization).uniq, (session[:account_number_rule_contains][:categorization] rescue '')), include_blank: true, id: 'rule-categories', class: 'form-select'
           .form-group
             .label-section
               = label_tag 'account_number_rule_contains[customer_code]', t('activerecord.models.account_number_rule.attributes.customer_code'), class: 'semibold'
             .control-section.select-container.no-padding.w-100
-              = text_field_tag 'account_number_rule_contains[customer_code]', (params[:account_number_rule_contains][:customer_code] rescue '')
+              = text_field_tag 'account_number_rule_contains[customer_code]', (session[:account_number_rule_contains][:customer_code] rescue '')
           .form-group
             .label-section
               = label_tag 'account_number_rule_contains[content]', t('activerecord.models.account_number_rule.attributes.content'), class: 'semibold'
             .control-section.select-container.no-padding.w-100
-              = text_field_tag 'account_number_rule_contains[content]', (params[:account_number_rule_contains][:content] rescue ''), class: 'semibold'
+              = text_field_tag 'account_number_rule_contains[content]', (session[:account_number_rule_contains][:content] rescue ''), class: 'semibold'
           .form-group
             .label-section
               = label_tag 'account_number_rule_contains[third_party_account]', t('activerecord.models.account_number_rule.attributes.third_party_account'), class: 'semibold'
             .control-section.select-container.no-padding.w-100
-              = text_field_tag 'account_number_rule_contains[third_party_account]', (params[:account_number_rule_contains][:third_party_account] rescue '')
+              = text_field_tag 'account_number_rule_contains[third_party_account]', (session[:account_number_rule_contains][:third_party_account] rescue '')
           
         .modal-footer
           .row.w-100
             .col-md-6.text-start
-              = link_to organization_account_number_rules_path(@organization), class: 'btn btn-default' do
+              = link_to organization_account_number_rules_path(@organization, { reinit: 1 }), class: 'btn btn-default' do
                 %span.me-2 Réinitialiser
             .col-md-6.text-end
               %button.btn.btn-light.semibold.cancel{ type: :button, 'aria-label' => 'Close', 'data-bs-dismiss' => 'modal' } Annuler
