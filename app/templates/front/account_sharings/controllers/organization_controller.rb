@@ -88,7 +88,7 @@ class AccountSharings::OrganizationController < OrganizationController
   end
 
   def update_contact
-    @guest_collaborator.update(edit_user_params)
+    @guest_collaborator.update(user_params)
 
     if @guest_collaborator.save
       json_flash[:success] = 'Modifié avec succès.'
@@ -114,10 +114,6 @@ class AccountSharings::OrganizationController < OrganizationController
 
   def user_params
     params[:user] ? params.require(:user).permit(:email, :company, :first_name, :last_name) : {}
-  end
-
-  def edit_user_params
-    params[:user] ? params.require(:user).permit(:company, :first_name, :last_name) : {}
   end
 
   def sort_column

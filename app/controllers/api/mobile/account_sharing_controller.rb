@@ -122,7 +122,7 @@ class Api::Mobile::AccountSharingController < MobileApiController
 
   def edit_shared_contacts
     guest_collaborator = @organization.guest_collaborators.find params[:id]
-    guest_collaborator.update(edit_user_params)
+    guest_collaborator.update(user_params)
 
     if guest_collaborator.save
       render json: { message: 'Modifié avec succès.' }, status: 200
@@ -231,10 +231,6 @@ class Api::Mobile::AccountSharingController < MobileApiController
 
   def user_params
     params.require(:user).permit(:email, :company, :first_name, :last_name)
-  end
-
-  def edit_user_params
-    params.require(:user).permit(:company, :first_name, :last_name)
   end
 
   def account_sharing_request_params_customers
