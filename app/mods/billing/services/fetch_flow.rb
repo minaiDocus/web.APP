@@ -21,7 +21,7 @@ class BillingMod::FetchFlow
       preseizures_piece = preseizures.where('piece_id > 0').count
       preseizures_ope   = preseizures.where('operation_id > 0').count
 
-      operations_count  = customer.operations.where("DATE_FORMAT(created_at, '%Y%m') = #{@period}").count
+      operations_count  = customer.operations.processed.where("DATE_FORMAT(created_at, '%Y%m') = #{@period}").count
       pieces_count      = documents.sum(&:pieces)
       expences_count    = customer.expenses.where("DATE_FORMAT(created_at, '%Y%m') = #{@period}").count
 
@@ -51,7 +51,7 @@ class BillingMod::FetchFlow
     bank_authorized = 2
     bank_authorized = 1 if customer.try(:organization).try(:code) == 'ALM'
 
-    bank_ids             = customer.operations.where("DATE_FORMAT(created_at, '%Y%m') = #{@period}").pluck(:bank_account_id).uniq
+    bank_ids             = customer.operations.processed.where("DATE_FORMAT(created_at, '%Y%m') = #{@period}").pluck(:bank_account_id).uniq
     excess_bank_accounts = customer.bank_accounts.where("DATE_FORMAT(created_at, '%Y%m') <= #{@period}").where(id: bank_ids).size - bank_authorized
 
     return (excess_bank_accounts > 0)? excess_bank_accounts : 0

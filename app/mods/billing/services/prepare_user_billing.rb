@@ -152,7 +152,7 @@ class BillingMod::PrepareUserBilling
   end
 
   def create_resit_operations_billing
-    operations_periods = @user.operations.where.not(processed_at: nil).where("is_locked = false AND DATE_FORMAT(created_at, '%Y%m') = #{@period}").map{ |ope| ope.date.strftime('%Y%m').to_i }.uniq
+    operations_periods = @user.operations.processed.where("is_locked = false AND DATE_FORMAT(created_at, '%Y%m') = #{@period}").map{ |ope| ope.date.strftime('%Y%m').to_i }.uniq
 
     operations_periods.each do |_period|
       next if _period >= @period
