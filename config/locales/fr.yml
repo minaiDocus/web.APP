@@ -262,8 +262,8 @@ fr:
     collaborators: Collaborateurs & Groupes
     customers: Clients
     journals: Journaux comptables
-    bank_assignment: Affectation bancaires
-    bank_assignment_rule: Règle d'affectation bancaires
+    bank_assignment: Affectations bancaires
+    bank_assignment_rule: Règle d'affectations bancaires
     invoices: Factures
     paper_set_order: Kits Courriers
     active_customers: Dossiers actifs

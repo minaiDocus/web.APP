@@ -7,7 +7,16 @@ class AccountNumberRules::MainController < OrganizationController
   # GET /account/organizations/:organization_id/account_number_rules
   def index
     session[:account_number_rule_contains] = params[:account_number_rule_contains] || session[:account_number_rule_contains]
-    session[:account_number_rule_contains] = nil if params[:reinit]
+
+    session[:account_number_rule_contains_page]            = {}                if session[:account_number_rule_contains_page].nil?
+    session[:account_number_rule_contains_page][:page]     = params[:page]     if params[:page]
+    session[:account_number_rule_contains_page][:per_page] = params[:per_page] if params[:per_page]
+
+    session[:account_number_rule_contains]     = nil if params[:reinit]
+    session[:account_number_rule_contains_nil] = nil  if params[:reinit]
+
+    params[:page]     = session[:account_number_rule_contains_page].try(:[], :page)
+    params[:per_page] = session[:account_number_rule_contains_page].try(:[], :per_page)
 
     @account_number_rules = AccountNumberRule.search_for_collection(@organization.account_number_rules, search_terms(session[:account_number_rule_contains])).order(sort_column => sort_direction)
 
