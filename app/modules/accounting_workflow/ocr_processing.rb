@@ -167,6 +167,8 @@ module AccountingWorkflow::OcrProcessing
       files = []
       FileUtils.mkdir_p error_path
       errors.each do |error|
+        next if not File.exist?(error[:file_path])
+
         files <<  {name: File.basename(error[:file_path]), file: File.read(error[:file_path])}
         FileUtils.mv error[:file_path], error_path
         logger.error error[:error]
