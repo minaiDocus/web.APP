@@ -23,7 +23,7 @@ class Documents::OperationsController < Documents::AbaseController
       preseizures = preseizures.joins(:operation).where("operations.label LIKE '%#{@options[:text]}%'")
     end
 
-    @preseizures = preseizures.distinct.order(updated_at: :asc).page(@options[:page]).per(10)
+    @preseizures = preseizures.distinct.order(updated_at: :desc).page(@options[:page]).per(10)
   end
 
   private
