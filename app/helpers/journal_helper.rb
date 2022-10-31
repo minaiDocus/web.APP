@@ -206,20 +206,46 @@ module JournalHelper
 
   def user_and_journal_list(operation=false)
     result = []
+
+    journals = AccountBookType.where(user: accounts)
+    bank_accounts = BankAccount.where(user: accounts)
+
     if operation
-      accounts.each{|account| result << { user: account.id, journals: account.bank_accounts.collect(&:journal).compact  } }
+      accounts.each { |account| result << { user: account.id, journals: bank_accounts.select { |j|j.user_id == account.id }.collect(&:journal).compact  } }
     else
-      accounts.each{|account| result << { user: account.id, journals: account.account_book_types.collect(&:name).compact } }
+      accounts.each { |account| result << { user: account.id, journals: journals.select { |j|j.user_id == account.id }.collect(&:name).compact } }
     end
 
     result.to_json
   end
 
   def accounts_journaux(operation=false)
+    journals = AccountBookType.where(user: accounts)
+    bank_accounts = BankAccount.where(user: accounts)
+
     if operation
-      accounts.map{ |acc| acc.bank_accounts.collect(&:journal).compact }.flatten.uniq
+      bank_accounts.pluck(:journal).uniq
     else
-      accounts.map{ |acc| acc.account_book_types }.map{ |book| book.collect(&:name).compact }.flatten.uniq
+      journals.pluck(:name).uniq
     end
+  end
+
+  def period_list
+    periods  = []
+    time_now = Time.now.strftime('%Y%m').to_i
+
+    2.times.each do |y|
+      year = y.year.ago.year
+
+      12.times.each do |m|
+        month      = m.month.ago.strftime('%m')
+
+        tmp_period = year.to_s + month.to_s
+
+        periods << tmp_period if tmp_period.to_i <= time_now
+      end
+    end
+
+    periods.sort.reverse
   end
 end

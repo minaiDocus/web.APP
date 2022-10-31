@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 
 class Journals::MainController < OrganizationController
+  skip_before_action :verify_if_a_collaborator, only: %w[add_rubric]
+  skip_before_action :load_organization, only: %w[add_rubric]
+  skip_before_action :apply_membership, only: %w[add_rubric]
+  skip_before_action :load_recent_notifications, only: %w[add_rubric]
+  before_action :rubric_initializer, only: %w[add_rubric]
+
+
   before_action :load_customer, except: %w[index]
   before_action :verify_rights
   before_action :verify_if_customer_is_active
@@ -187,12 +194,38 @@ class Journals::MainController < OrganizationController
     render json: { json_flash: json_flash }, status: 200
   end
 
+  def add_rubric
+    if is_max_number_reached?
+      json_flash[:error] = 'Vous avez atteint le nombre maximum de rubrique'
+    else
+      @journal = Journal::Handling.new({ owner: @customer, params: rubric_params, current_user: current_user, request: request }).insert_ged
+      if @journal && !@journal.errors.messages.present?
+        json_flash[:success] = "Rubrique #{ @journal.label } créé avec succès"
+      else
+        if @journal
+          json_flash[:error] = errors_to_list @journal
+        else
+          json_flash[:error] = 'Impossible de créer la rubrique, Veuillez réessayer ultérieurement.'
+        end
+      end
+    end
+
+    render json: { json_flash: json_flash }, status: 200
+  end
+
   private
+
+  def rubric_initializer
+    @customer          = User.find params[:customer_id]
+    @organization      = @customer.organization
+    @can_create_rubric = true
+  end
 
   def verify_rights
     is_ok = false
     if @organization.is_active
-      is_ok = true if @user.leader?
+      is_ok = true if !is_ok && @customer && @can_create_rubric
+      is_ok = true if !is_ok && @user.leader?
       is_ok = true if !is_ok && !@customer && @user.manage_journals
       is_ok = true if !is_ok && @customer && @user.manage_customer_journals
     end
@@ -211,6 +244,7 @@ class Journals::MainController < OrganizationController
 
   def journal_params
     attrs = %i[
+      label
       pseudonym
       use_pseudonym_for_import
       description
@@ -250,8 +284,16 @@ class Journals::MainController < OrganizationController
     attributes
   end
 
+  def rubric_params
+    attrs = %i[label]
+
+    attributes = params.require(:account_book_type).permit(*attrs)
+
+    attributes
+  end
+
   def load_customer
-    if params[:customer_id].present?
+    if !@customer && params[:customer_id].present?
       @customer = customers.find params[:customer_id]
     end
   end

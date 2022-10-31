@@ -14,9 +14,12 @@
             .select-container.p-1.w-100
               = f.input :description, label: false, :placeholder => 'ex: (Achats)', input_html: { class: 'required_field'}
           - else
-            = f.label :name, hint: journal_name_hint, :class => "semibold"
+            = f.label :name, :class => "semibold"
             .select-container.p-1.w-100
-              = f.input :name, label: false, input_html: { class: 'required_field', disabled: is_journal_name_disabled }
+              = f.input :name, label: false, hint: journal_name_hint, input_html: { class: 'required_field', disabled: is_journal_name_disabled }
+            = f.label :label, :class => "semibold"
+            .select-container.p-1.w-100
+              = f.input :label, label: false, hint: 'Libelé visible pour les dossiers clients', input_html: { class: 'required_field' }
             = f.label :description, :class => "semibold"
             .select-container.p-1.w-100
               = f.input :description, label: false, input_html: { class: 'required_field'}

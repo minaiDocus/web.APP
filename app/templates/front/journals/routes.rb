@@ -16,6 +16,7 @@ Rails.application.routes.draw do
 			end
 		end
 
+    post 'customers/:customer_id/journals', to: "main#add_rubric", as: 'customer_rubric_addition'
 		get 'organizations/:organization_id/customers/:customer_id/journals', to: "user#index", as: 'organization_user_journals'
   end
 end

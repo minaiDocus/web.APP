@@ -40,7 +40,7 @@ Idocus::Application.configure do
 
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
-  config.action_mailer.default_url_options = { host: 'staging.idocus.com', protocol: 'https' }
+  config.action_mailer.default_url_options = { host: 'my-staging.idocus.com', protocol: 'https' }
 
   config.action_mailer.delivery_method = :smtp
 
@@ -62,7 +62,7 @@ Idocus::Application.configure do
   # config.assets.digest = true
   config.assets.digest = true
 
-  config.active_storage.service = :openstack_staging
+  config.active_storage.service = :openstack_prod
 
   # Adding js files
   config.assets.precompile += Dir.glob(Rails.root.join('app/assets/javascripts/**/*')).grep(/\.(js|coffee)\z/)

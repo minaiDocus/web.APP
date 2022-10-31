@@ -28,6 +28,22 @@ class Journal::Handling
     @journal
   end
 
+  def insert_ged
+    _pattern = 'GED'
+    _geds  = @owner.account_book_types.where("name LIKE '%#{_pattern}%'").order(name: :desc).select(:name).first
+    _index = _geds.try(:name).to_s.gsub(_pattern, '').strip.to_i
+
+    @params[:name]        = "#{_pattern}#{_index + 1}"
+    @params[:description] = "(#{ @params[:name] })"
+    @params[:entry_type]  = 0
+    @params[:domain]      = ''
+    @params[:currency]    = 'EUR'
+
+    return false if @params[:label].blank?
+
+    insert
+  end
+
   def update
     @journal.assign_attributes(@params)
     changes  = @journal.changes.dup

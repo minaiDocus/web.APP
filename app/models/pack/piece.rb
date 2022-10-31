@@ -15,6 +15,7 @@ class Pack::Piece < ApplicationRecord
 
   has_many   :operations,    class_name: 'Operation', inverse_of: :piece
   has_many   :preseizures,   class_name: 'Pack::Report::Preseizure', inverse_of: :piece
+  has_many   :pre_assignment_deliveries, through: :preseizures
   has_many   :temp_preseizures,  class_name: 'Pack::Report::TempPreseizure', inverse_of: :piece
   has_many   :remote_files,  as: :remotable, dependent: :destroy
 
@@ -142,16 +143,22 @@ class Pack::Piece < ApplicationRecord
     page = options[:page] || 1
     per_page = options[:per_page] || default_per_page
 
-    query = self.joins(:pack)
+    query = self
+
+    query = query.joins(:pack) if options[:pack_id].present? || options[:pack_name].present?
 
     query = query.where(id: options[:id])                                                        if options[:id].present?
     query = query.where(id: options[:ids])                                                       if options[:ids].present?
+    query = query.where(user_id: options[:user_ids])                                             if options[:user_ids].present?
     query = query.where('packs.id = ?', options[:pack_id] )                                      if options[:pack_id].present?
     query = query.where('packs.id IN (?)', options[:pack_ids])                                   if options[:pack_ids].present?
     query = query.where('packs.name LIKE ?', "%#{options[:pack_name]}%")                         if options[:pack_name].present?
     query = query.where('pack_pieces.name LIKE ?', "%#{options[:piece_name]}%")                  if options[:piece_name].present?
     query = query.where('pack_pieces.number LIKE ?', "%#{options[:piece_number]}%")              if options[:piece_number].present?
     query = query.where('pack_pieces.pre_assignment_state = ?', options[:pre_assignment_state])  if options[:pre_assignment_state].present?
+
+    query = query.where( options[:journal].map{ |jl| "pack_pieces.name LIKE '% #{jl} %'" }.join(' OR ') ) if options[:journal].present?
+    query = query.where( options[:period].map{ |pr| "pack_pieces.name LIKE '% #{pr} %'" }.join(' OR ') )  if options[:period].present?
 
     if options[:position_operation].present?
       query = query.where("pack_pieces.position #{options[:position_operation].tr('012', ' ><')}= ?", options[:position]) if options[:position].present?
@@ -327,8 +334,11 @@ class Pack::Piece < ApplicationRecord
   end
 
 
-  def journal
-    name.split[1]
+  def journal(name_only = true)
+    _name = name.split[1]
+
+    return _name if name_only
+    self.user.account_book_types.where(name: _name).first
   end
 
   def is_deleted?

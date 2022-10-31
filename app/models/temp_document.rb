@@ -10,6 +10,8 @@ class TempDocument < ApplicationRecord
   serialize :parents_documents_pages, Array
   serialize :parents_documents_ids, Array
 
+  serialize :tags
+
   validates_inclusion_of :delivery_type, within: %w(scan upload dematbox_scan retriever)
 
   serialize :retrieved_metadata, Hash
@@ -89,6 +91,7 @@ class TempDocument < ApplicationRecord
   scope :wait_selection,    -> { where(state: 'wait_selection') }
   scope :ocr_layer_applied, -> { where(is_ocr_layer_applied: true) }
   scope :from_ibizabox,     -> { where.not(ibizabox_folder_id: nil) }
+  scope :not_deleted,     -> { where.not(original_fingerprint: nil) }
   scope :from_mobile,       -> { where("state='processed' AND delivery_type = 'upload' AND api_name = 'mobile'") }
   scope :by_source, -> (delivery_type) { where('delivery_type = ?', delivery_type) }
   scope :with, -> (period) { where(updated_at: period) }
@@ -149,6 +152,27 @@ class TempDocument < ApplicationRecord
     end
   end
 
+  def self.search(options, text="")
+    page     = options[:page] || 1
+    per_page = options[:per_page] || 20
+
+    query = self.not_deleted
+
+    query = query.where(user_id: options[:user_ids])                                             if options[:user_ids].present?
+    query = query.where(label: options[:label])                                                  if options[:label].present?
+    query = query.where('tags LIKE ?', "%#{options[:tags]}%")                                    if options[:tags].present?
+    query = query.where('original_file_name LIKE ? OR tags LIKE ?', "%#{text}%", "%#{text}%")    if text.present?
+
+    # if options[:position_operation].present?
+    #   query = query.where("pack_pieces.position #{options[:position_operation].tr('012', ' ><')}= ?", options[:position]) if options[:position].present?
+    # else
+    #   query = query.where("pack_pieces.position IN (#{options[:position].join(',')})" ) if options[:position].present?
+    # end
+
+    query.order(position: :asc) if options[:sort] == true
+
+    query.page(page).per(per_page)      
+  end
 
   def self.find_with(options)
     where(options).first
@@ -410,6 +434,9 @@ class TempDocument < ApplicationRecord
     delivered_by == 'ibiza'
   end
 
+  def get_tags(separator='-')
+    tags.join(" #{separator} ").presence || '-'
+  end
 
   def is_a_cover?
     if scanned?
