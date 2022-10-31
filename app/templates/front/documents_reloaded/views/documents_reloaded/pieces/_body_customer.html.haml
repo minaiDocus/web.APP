@@ -4,8 +4,8 @@
       %ul.principal
         - @rubrics.each_with_index do |rubric, index|
           %li.direct_links
-            %a{ href: documents_reloaded_path({ rubric: rubric }) }
-              %span.link_principal{ class: (rubric == params[:rubric] || (!params[:rubric].present? && index == 0)) ? 'active' : ''}= rubric.presence || '-'
+            %a{ href: documents_reloaded_path({ rubric: rubric[0] }) }
+              %span.link_principal{ class: (rubric[0].to_s == params[:rubric] || (!params[:rubric].present? && index == 0)) ? 'active' : ''}= rubric[1].presence || '-'
         
         -#
           %li.direct_links.add-rubric

@@ -158,8 +158,12 @@ class TempDocument < ApplicationRecord
 
     query = self.not_deleted
 
+    if options[:user_ids] && options[:label]
+      ledger_short_name = User.find(options[:user_ids]).account_book_types.find(options[:label]).name
+    end
+
     query = query.where(user_id: options[:user_ids])                                             if options[:user_ids].present?
-    query = query.where(label: options[:label])                                                  if options[:label].present?
+    query = query.where("content_file_name LIKE ?", "%#{ledger_short_name}%")                    if options[:label].present?
     query = query.where('tags LIKE ?', "%#{options[:tags]}%")                                    if options[:tags].present?
     query = query.where('original_file_name LIKE ? OR tags LIKE ?', "%#{text}%", "%#{text}%")    if text.present?
 
