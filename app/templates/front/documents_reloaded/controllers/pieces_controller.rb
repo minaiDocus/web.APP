@@ -166,7 +166,7 @@ class DocumentsReloaded::PiecesController < DocumentsReloaded::AbaseController
     @options[:user_ids] = params[:uid].presence || @user.id
 
     @rubrics         = AccountBookType.where(user_id: @options[:user_ids]).pluck(:id, :label)
-    check_rubric     = params[:rubric] || @rubrics.first
+    check_rubric     = params[:rubric] || @rubrics.first[0]
 
     # debugger
 
