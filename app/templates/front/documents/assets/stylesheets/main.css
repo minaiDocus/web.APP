@@ -57,6 +57,18 @@
   background: rgba(26, 26, 26, 0.04);
 }
 
+.overview-content {
+  margin-top: 8px;
+}
+
+.new-interface {
+  color: #fff;
+  border-radius: 4px;
+  font-size: 16px;
+  padding: 4px 4px;
+  background-color: #0dcaf0;
+}
+
 /*.multi-select-container{
   padding: 0.1em 0.4em;
 }*/
