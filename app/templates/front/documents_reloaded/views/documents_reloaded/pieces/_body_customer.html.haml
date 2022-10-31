@@ -7,18 +7,19 @@
             %a{ href: documents_reloaded_path({ rubric: rubric }) }
               %span.link_principal{ class: (rubric == params[:rubric] || (!params[:rubric].present? && index == 0)) ? 'active' : ''}= rubric.presence || '-'
         
-        %li.direct_links.add-rubric
-          %span.float-end= glyphicon('plus', { color: "#C1D837", size: 10})
-          %span.link_principal.green-label Ajouter une rubrique
-        %li.input-add-rubric.hide
-          %hr
-          = render file: Rails.root.join('app/templates/front/journals/views/journals/main/_rubric_form.html.haml'), locals: { organization_id: @user.organization_id }
-          - ajx_params = param_encode({ url: '#url', form: { id: 'edit-rubric-form', dump_action: true, validate: true }, before_send: 'journal.before_rubric_addition', after_send: 'refresh_customer_view' })
-          .row
-            .col-md-5
-            .col-md-7
-              %button.btn.btn-light.btn-sm.cancel-add-rubric{ idocus: ajx_params } Annuler
-              %button.btn.btn-dark.btn-sm.as_idocus_ajax{ idocus: ajx_params } Valider
+        -#
+          %li.direct_links.add-rubric
+            %span.float-end= glyphicon('plus', { color: "#C1D837", size: 10})
+            %span.link_principal.green-label Ajouter une rubrique
+          %li.input-add-rubric.hide
+            %hr
+            = render file: Rails.root.join('app/templates/front/journals/views/journals/main/_rubric_form.html.haml'), locals: { organization_id: @user.organization_id }
+            - ajx_params = param_encode({ url: '#url', form: { id: 'edit-rubric-form', dump_action: true, validate: true }, before_send: 'journal.before_rubric_addition', after_send: 'refresh_customer_view' })
+            .row
+              .col-md-5
+              .col-md-7
+                %button.btn.btn-light.btn-sm.cancel-add-rubric{ idocus: ajx_params } Annuler
+                %button.btn.btn-dark.btn-sm.as_idocus_ajax{ idocus: ajx_params } Valider
   .col-md-10      
     .box.derivationLeft#table_pieces
       .row

@@ -15,6 +15,7 @@ class Pack::Piece < ApplicationRecord
 
   has_many   :operations,    class_name: 'Operation', inverse_of: :piece
   has_many   :preseizures,   class_name: 'Pack::Report::Preseizure', inverse_of: :piece
+  has_many   :pre_assignment_deliveries, through: :preseizures
   has_many   :temp_preseizures,  class_name: 'Pack::Report::TempPreseizure', inverse_of: :piece
   has_many   :remote_files,  as: :remotable, dependent: :destroy
 
@@ -142,7 +143,9 @@ class Pack::Piece < ApplicationRecord
     page = options[:page] || 1
     per_page = options[:per_page] || default_per_page
 
-    query = self.joins(:pack)
+    query = self
+
+    query = query.joins(:pack) if options[:pack_id].present? || options[:pack_name].present?
 
     query = query.where(id: options[:id])                                                        if options[:id].present?
     query = query.where(id: options[:ids])                                                       if options[:ids].present?
