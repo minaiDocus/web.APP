@@ -6,7 +6,7 @@ class Jedeclare::GetListWorker
     UniqueJobs.for 'GetList' do
       Organization.jedeclare_configured.each do |organization|
         begin 
-          Jedeclare::FetchReceptions.new(organization).get_list
+          Jedeclare::FetchReceptions.new(organization, "00").get_list
         rescue => e
           log_document = {
             subject: "[Jedeclare-GetList] Error connexion",
