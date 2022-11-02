@@ -4,7 +4,7 @@ class Jedeclare::ImportTransactionsWorker
 
   def perform
     UniqueJobs.for 'ImportTransactions' do
-      Jedclare::ImportTransactions.perform
+      Jedeclare::ImportTransactions.perform
     end
   end
 end
