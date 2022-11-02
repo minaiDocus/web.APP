@@ -54,7 +54,7 @@ class BillingMod::PrepareOrganizationBilling
 
     if customers_count > 0 && customers_limit > 0 && customers_count > customers_limit
       excess = customers_count - customers_limit
-      create_billing({ name: 'ido_premium_overcharge', title: "Dossiers iDo'Premium en sus ( #{excess} x #{unit_price} € )", kind: 'excess', price: ( unit_price * excess ), associated_hash: { excess: excess, price: unit_price, limit: customers_limit } })
+      create_billing({ name: 'ido_premium_overcharge', title: "Dossiers iDo'Premium en sus ( #{excess} x #{unit_price.to_f} € )", kind: 'excess', price: ( unit_price.to_f * excess ), associated_hash: { excess: excess, price: unit_price.to_f, limit: customers_limit } })
     end
   end
 
@@ -74,7 +74,7 @@ class BillingMod::PrepareOrganizationBilling
     #   title = "- #{ (discount_version == 1)? '75' : '250' } dossiers"
     # end
 
-    create_billing({ name: 'classic_discount', title: title, price: (price * customers_count), kind: 'discount' }) if price < 0
+    create_billing({ name: 'classic_discount', title: title, price: (price.to_f * customers_count), kind: 'discount' }) if price.to_f < 0
   end
 
   def create_retriever_discount_billing
@@ -86,7 +86,7 @@ class BillingMod::PrepareOrganizationBilling
 
     title = "Automates. : #{price} € X #{customers_count}"
 
-    create_billing({ name: 'retriever_discount', title: title, price: (price * customers_count), kind: 'discount' }) if price < 0
+    create_billing({ name: 'retriever_discount', title: title, price: (price.to_f * customers_count), kind: 'discount' }) if price.to_f < 0
   end
 
   def create_classic_excess_billing
@@ -98,7 +98,7 @@ class BillingMod::PrepareOrganizationBilling
     excess              = total_compta_pieces - all_excess_limit
     price               = BillingMod::Configuration.excess_price_of('ido_classic')
 
-    create_billing({ name: 'ido_classic_excess', title: 'Documents / écritures comptables des dossiers classiques en excès', kind: 'excess', price: ( price * excess ), associated_hash: { excess: excess, price: price, limit: all_excess_limit } }) if excess > 0
+    create_billing({ name: 'ido_classic_excess', title: 'Documents / écritures comptables des dossiers classiques en excès', kind: 'excess', price: ( price.to_f * excess ), associated_hash: { excess: excess, price: price.to_f, limit: all_excess_limit } }) if excess > 0
   end
 
   def create_micro_plus_excess_billing
@@ -110,7 +110,7 @@ class BillingMod::PrepareOrganizationBilling
     excess              = total_compta_pieces - all_excess_limit
     price               = BillingMod::Configuration.excess_price_of('ido_micro_plus')
 
-    create_billing({ name: 'ido_micro_plus_excess', title: 'Documents / écritures comptables des dossiers micro. en excès', kind: 'excess', price: ( price * excess ), associated_hash: { excess: excess, price: price, limit: all_excess_limit } }) if excess > 0
+    create_billing({ name: 'ido_micro_plus_excess', title: 'Documents / écritures comptables des dossiers micro. en excès', kind: 'excess', price: ( price.to_f * excess ), associated_hash: { excess: excess, price: price.to_f, limit: all_excess_limit } }) if excess > 0
   end
 
   def create_extra_order_billing
@@ -121,7 +121,7 @@ class BillingMod::PrepareOrganizationBilling
       extra_order.period = @period
       extra_order.owner  = @organization
       extra_order.name   = option.name
-      extra_order.price  = option.price_in_cents_wo_vat / 100
+      extra_order.price  = option.price_in_cents_wo_vat.to_f / 100
 
       extra_order.save
     end
@@ -140,7 +140,7 @@ class BillingMod::PrepareOrganizationBilling
     billing.title  = params[:title]
     billing.kind   = params[:kind] if params[:kind].present?
     billing.associated_hash = params[:associated_hash]
-    billing.price  = params[:price] * 100
+    billing.price  = params[:price].to_f * 100
 
     billing.is_frozen = false
 

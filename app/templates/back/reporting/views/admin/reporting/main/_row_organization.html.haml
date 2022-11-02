@@ -52,7 +52,8 @@
     - invoice = invoice_at(time, @organization, @invoices)
     - user_ids = @organization.customers.active_at(time.to_date).pluck(:id)
 
-    - centralized_periods =  use_new_billing ? BillingMod::Billing.where(owner_type: "User", owner_id: user_ids, period: period_time).pluck(:owner_id).uniq : Period.where(user_id: user_ids).where("start_date <= ? AND end_date >= ?", time.to_date, time.to_date)
+    - # centralized_periods =  use_new_billing ? BillingMod::Billing.where(owner_type: "User", owner_id: user_ids, period: period_time).pluck(:owner_id).uniq : Period.where(user_id: user_ids).where("start_date <= ? AND end_date >= ?", time.to_date, time.to_date)
+    - centralized_periods =  use_new_billing ? user_ids : Period.where(user_id: user_ids).where("start_date <= ? AND end_date >= ?", time.to_date, time.to_date)
 
     - not_centralized_periods = []
     - price_in_cents_wo_vat = 0
@@ -81,7 +82,7 @@
         %span.df_symbol HT
       - if invoice
         %div
-          != link_to "#{format_price_00(price_in_cents_w_vat)} €", admin_invoices_show_path(invoice), class: 'do-showInvoice', title: "#{invoice.number}.pdf"
+          != link_to "#{format_price_00(price_in_cents_w_vat)} €", admin_invoices_show_path(invoice), class: 'do-showInvoice', target: '_blank', title: "#{invoice.number}.pdf"
           %span.vat_symbol TTC
       - else
         %div

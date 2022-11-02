@@ -61,7 +61,7 @@ describe BillingMod::PrepareUserBilling do
         user.organization = organization
 
         user.build_options if user.options.nil?
-        package = BillingMod::Package.create(period: CustomUtils.period_of(Time.now) - 1, user: user, name: 'ido_classic', upload_active: true, bank_active: true, scan_active: true, mail_active: true, preassignment_active: false)
+        package = BillingMod::Package.create(period: CustomUtils.period_of(Time.now), user: user, name: 'ido_classic', upload_active: true, bank_active: true, scan_active: true, mail_active: true, preassignment_active: false)
 
         package.save
         user.save
@@ -246,11 +246,14 @@ describe BillingMod::PrepareUserBilling do
       Operation.destroy_all
     end
 
-    it 'creates compta piece excess billing - month excess' do
-      allow(BillingMod::FetchFlow).to receive(:execute).and_return(true)
+    it 'creates compta piece excess billing - month excess', :normal_excess do
+      allow_any_instance_of(BillingMod::FetchFlow).to receive(:execute).and_return(true)
 
       period = CustomUtils.period_of(Time.now)
       user = User.last
+
+      package = user.my_package
+      package.update(name: 'ido_mini', upload_active: true, preassignment_active: true, bank_active: false, mail_active: false, scan_active: false)
 
       data_flow               = user.current_flow
       data_flow.compta_pieces = 200
@@ -271,7 +274,7 @@ describe BillingMod::PrepareUserBilling do
     end
 
     it 'creates compta piece excess billing - annual excess' do
-      allow(BillingMod::FetchFlow).to receive(:execute).and_return(true)
+      allow_any_instance_of(BillingMod::FetchFlow).to receive(:execute).and_return(true)
 
       period      = CustomUtils.period_of(Time.now)
       prev_period = CustomUtils.period_of(1.month.ago)
@@ -310,7 +313,7 @@ describe BillingMod::PrepareUserBilling do
     end
 
     it 'creates compta piece excess billing - micro annual excess - (a previous excess_billing exist)', :annual_excess do
-      allow(BillingMod::FetchFlow).to receive(:execute).and_return(true)
+      allow_any_instance_of(BillingMod::FetchFlow).to receive(:execute).and_return(true)
 
       period      = CustomUtils.period_of(Time.now)
       prev_period = CustomUtils.period_of(1.month.ago)
@@ -356,6 +359,28 @@ describe BillingMod::PrepareUserBilling do
       expect(excess_bill.price).to eq excess_price * 100
       expect(user.total_billing_of(period)).to eq (10 + excess_price) * 100
     end
+
+    it 'skip unlimited excess count', :ido_x do
+      allow_any_instance_of(BillingMod::FetchFlow).to receive(:execute).and_return(true)
+
+      period = CustomUtils.period_of(Time.now)
+
+      user = User.last
+
+      package = user.my_package
+      package.update(name: 'ido_x', upload_active: false, preassignment_active: true, bank_active: false, mail_active: false, scan_active: false, period: period)
+
+      data_flow                = user.current_flow
+      data_flow.compta_pieces  = 500
+      data_flow.save
+
+      BillingMod::PrepareUserBilling.new(user, period).execute
+
+      billings = user.billings
+
+      expect(billings.where(name: 'ido_x').size).to eq 1
+      expect(billings.where(kind: 'excess').size).to eq 0
+    end
   end
 
   context 'Service excess billing', :service_excess_billing do
@@ -366,7 +391,7 @@ describe BillingMod::PrepareUserBilling do
     end
 
     it 'creates valid bank and journal excess' do
-      allow(BillingMod::FetchFlow).to receive(:execute).and_return(true)
+      allow_any_instance_of(BillingMod::FetchFlow).to receive(:execute).and_return(true)
 
       period = CustomUtils.period_of(Time.now)
 
@@ -414,7 +439,7 @@ describe BillingMod::PrepareUserBilling do
     end
 
     it 'creates digitize package billing' do
-      allow(BillingMod::FetchFlow).to receive(:execute).and_return(true)
+      allow_any_instance_of(BillingMod::FetchFlow).to receive(:execute).and_return(true)
 
       period = CustomUtils.period_of(Time.now)
 
