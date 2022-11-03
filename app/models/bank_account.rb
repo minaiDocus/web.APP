@@ -15,7 +15,7 @@ class BankAccount < ApplicationRecord
 
   validates :api_id, presence: true, :if => :not_manually_created?
   validates_presence_of :bank_name, :name, :number
-  validate :uniqueness_of_number_and_bank_name
+  validate :uniqueness_of_used_number_and_bank_name
   validates :permitted_late_days, numericality: { greater_than: 0, less_than_or_equal_to: 365 }
   validates_uniqueness_of :api_id, scope: :api_name, :if => :not_manually_created?
 
@@ -92,12 +92,10 @@ private
   end
 
 
-  def uniqueness_of_number_and_bank_name
-    bank_account = user.bank_accounts.where(number: number, bank_name: bank_name).first
+  def uniqueness_of_used_number_and_bank_name
+    bank_account  = user.bank_accounts.where(number: number, bank_name: bank_name).first
 
-    if number
-      errors.add(:number, :taken) if bank_account && bank_account != self
-    end
+    errors.add(:number, :taken) if number && bank_account && bank_account != self && (bank_account.retriever_id.to_i == self.retriever_id.to_i || bank_account.is_used)
   end
 
 

@@ -10,7 +10,9 @@ class Retriever::DestroyBudgeaConnection
 
       if retriever.bank_accounts.any?
         # Operation.where(bank_account_id: retriever.bank_accounts.map(&:id)).update_all(api_id: nil) if retriever.uniq?
-        Transaction::DestroyBankAccountsWorker.perform_in(1.day, retriever.bank_accounts.map(&:id), "Destroying retriever #{retriever_id} - #{retriever.user.try(:code)}")
+        # Transaction::DestroyBankAccountsWorker.perform_in(1.day, retriever.bank_accounts.map(&:id), "Destroying retriever #{retriever_id} - #{retriever.user.try(:code)}")
+
+        Transaction::DestroyBankAccounts.new(retriever.bank_accounts).execute("Destroying retriever #{retriever_id} - #{retriever.user.try(:code)}")
       end
       retriever.destroy_budgea_connection
     end
@@ -18,7 +20,7 @@ class Retriever::DestroyBudgeaConnection
 
   def initialize(retriever)
     @retriever = retriever
-    @user = @retriever.user
+    @user      = @retriever.user
   end
 
   def destroy
