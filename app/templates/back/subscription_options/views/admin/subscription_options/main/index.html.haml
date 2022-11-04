@@ -10,7 +10,7 @@
           %span Nouveau
 
   .row.derivationRight
-    .col-md-12
+    .col-md-12#table-subscription
       .box
         %table.table.table-condensed.table-striped
           %thead
@@ -44,6 +44,7 @@
                         = link_to admin_subscription_option_path(option), { data: { method: 'DELETE', confirm: t('actions.confirm') } }  do
                           %span.me-2= glyphicon('trash', size: 12, color: 'red')
                           %span Supprimé
+        = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: admin_subscription_options_path, target: '#table-subscription', total_pages: @subscription_options.total_pages}
 
 .modal#create-new-subscription-option
   .modal-dialog

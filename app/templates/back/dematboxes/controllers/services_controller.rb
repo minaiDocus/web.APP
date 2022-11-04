@@ -7,6 +7,7 @@ class Admin::Dematboxes::ServicesController < BackController
   # GET /admin/dematbox_services
   def index
     @dematbox_services = DematboxService.order(type: :desc).order(name: :asc)
+    @dematbox_services = @dematbox_services.page(params[:page]).per(params[:per_page])
   end
 
   # POST /admin/dematbox_services/load_from_external

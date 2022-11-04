@@ -29,6 +29,8 @@ class Admin::EmailedDocuments::MainController < BackController
   # GET /admin/emailed_documents/:id/show_errors
   def show_errors
     @email = Email.find(params[:id])
+
+    render partial: 'show_errors'
   end
 
   private

@@ -73,11 +73,8 @@ class Email < ApplicationRecord
       emailed_documents = emailed_documents.where("to_user_id IN (?) OR from_user_id IN (?)", user.id, user.id) if user
     end
 
-    if contains[:created_at]
-      contains[:created_at].each do |operator, value|
-        emailed_documents = emailed_documents.where("created_at #{operator} ?", value) if operator.in?(['>=', '<='])
-      end
-    end
+    emailed_documents = emailed_documents.where("created_at BETWEEN '#{CustomUtils.parse_date_range_of(contains[:created_at]).join("' AND '")}'")     if contains[:created_at].present?
+
 
     emailed_documents = emailed_documents.where(state: contains[:state])                      unless contains[:state].blank?
     emailed_documents = emailed_documents.where("`from` LIKE ?", "%#{contains[:from]}%")      unless contains[:from].blank?

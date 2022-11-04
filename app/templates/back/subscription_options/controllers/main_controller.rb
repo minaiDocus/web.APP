@@ -7,6 +7,7 @@ class Admin::SubscriptionOptions::MainController < BackController
   # GET /admin/subscription_options
   def index
     @subscription_options = SubscriptionOption.by_position
+    @subscription_options = @subscription_options.page(params[:page]).per(params[:per_page])
   end
 
   # GET /admin/subscription_options/new

@@ -7,6 +7,7 @@ class Admin::Dematboxes::MainController < BackController
   # GET /admin/dematboxes
   def index
     @dematboxes = Dematbox.order(created_at: :desc).includes(:user)
+    @dematboxes = @dematboxes.page(params[:page]).per(params[:per_page])
   end
 
   # GET /admin/dematboxes/:id

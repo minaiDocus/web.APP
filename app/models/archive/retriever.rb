@@ -20,17 +20,9 @@ class Archive::Retriever < ApplicationRecord
     def search(contains)
       archive_budgea_retrievers = Archive::Retriever.all
 
-      if contains[:created]
-        contains[:created].each do |operator, value|
-          archive_budgea_retrievers = archive_budgea_retrievers.where("created #{operator} ?", value) if operator.in?(['>=', '<='])
-        end
-      end
-
-      if contains[:deleted_date]
-        contains[:deleted_date].each do |operator, value|
-          archive_budgea_retrievers = archive_budgea_retrievers.where("deleted_date #{operator} ?", value) if operator.in?(['>=', '<='])
-        end
-      end
+      archive_budgea_retrievers = archive_budgea_retrievers.where("created_at BETWEEN '#{CustomUtils.parse_date_range_of(contains[:created_at]).join("' AND '")}'")     if contains[:created_at].present?
+      archive_budgea_retrievers = archive_budgea_retrievers.where("deleted_date BETWEEN '#{CustomUtils.parse_date_range_of(contains[:deleted_date]).join("' AND '")}'")     if contains[:deleted_date].present?
+    
 
       archive_budgea_retrievers = archive_budgea_retrievers.where(owner_id:           contains[:owner_id])  if contains[:owner_id].present?
       archive_budgea_retrievers = archive_budgea_retrievers.where(budgea_id:          contains[:budgea_id]) if contains[:budgea_id].present?

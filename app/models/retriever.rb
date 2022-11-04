@@ -168,17 +168,9 @@ class Retriever < ApplicationRecord
         user_ids = User.where("code LIKE ?", "%#{contains[:user_code]}%").pluck(:id)
       end
 
-      if contains[:created_at]
-        contains[:created_at].each do |operator, value|
-          retrievers = retrievers.where("created_at #{operator} ?", value) if operator.in?(['>=', '<='])
-        end
-      end
-
-      if contains[:updated_at]
-        contains[:updated_at].each do |operator, value|
-          retrievers = retrievers.where("updated_at #{operator} ?", value) if operator.in?(['>=', '<='])
-        end
-      end
+      retrievers = retrievers.where("created_at BETWEEN '#{CustomUtils.parse_date_range_of(contains[:created_at]).join("' AND '")}'")     if contains[:created_at].present?
+      retrievers = retrievers.where("updated_at BETWEEN '#{CustomUtils.parse_date_range_of(contains[:updated_at]).join("' AND '")}'")     if contains[:updated_at].present?
+    
 
       retrievers = retrievers.where(user_id:               user_ids)                       if user_ids.any?
       retrievers = retrievers.where(is_sane:               contains[:is_sane])             if contains[:is_sane].present?

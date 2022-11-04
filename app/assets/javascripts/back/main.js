@@ -10,6 +10,8 @@ function bind_globals_events(){
   iDocus_ajax_links();
   iDocus_dynamic_modals();
   iDocus_pagination();
+
+  AppEmit('window.application_auto_rebind');
 }
 
 jQuery(function () {

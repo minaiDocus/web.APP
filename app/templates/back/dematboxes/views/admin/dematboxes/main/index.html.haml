@@ -6,7 +6,7 @@
         %span.badge.bg-dark= @dematboxes.count
 
   .row.box.derivationRight
-    .col-md-112
+    .col-md-112#table-dematboxes
       %table.table.table-striped.table-condensed
         %thead
           %tr
@@ -31,3 +31,4 @@
                       = link_to admin_dematbox_path(dematbox), data: { method: 'delete', confirm: t('actions.confirm') }, class: 'no-style black-label' do
                         %span.me-2= glyphicon('trash', size: 12)
                         %span Supprimer
+      = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: admin_dematboxes_path, target: '#table-dematboxes', total_pages: @dematboxes.total_pages, filter: 'form-filter' }

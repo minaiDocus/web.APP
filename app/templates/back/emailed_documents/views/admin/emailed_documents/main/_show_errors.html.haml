@@ -1,8 +1,6 @@
 #email.errors_list
   .row
-    .col-12.panel
-      %h3 Liste des erreurs
-      %br
+    .col-12.tsypanel
       %ul
         - @email.errors_list.each do |error|
           %li
@@ -13,5 +11,3 @@
               %ul
                 - error[1..-1].each do |attachment_error|
                   %li= attachment_error
-      %br
-      = link_to t('actions.return'), admin_emailed_documents_path, class: 'btn'
