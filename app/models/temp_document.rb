@@ -389,6 +389,7 @@ class TempDocument < ApplicationRecord
   def name_with_position
     name = File.basename self.cloud_content_object.filename, '.*'
     name.sub!(/_\d+\z/, '') if scanned?
+    name = name.gsub('%', '_')
 
     "#{name}_%0#{DataProcessor::TempPack::POSITION_SIZE}d" % position
   end
