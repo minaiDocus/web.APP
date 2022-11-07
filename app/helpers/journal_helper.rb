@@ -43,23 +43,27 @@ module JournalHelper
   def sage_gec_journals
     if @customer.sage_gec.try(:used?)
       Rails.cache.fetch [:sage_gec, :user, @customer.sage_gec.id, :journals], expires_in: 1.minutes do
-        client   = SageGecLib::Api::Client.new
-        periods  = client.get_periods_list(@customer.organization.sage_gec.sage_private_api_uuid, @customer.sage_gec.sage_private_api_uuid)
+        begin
+          client   = SageGecLib::Api::Client.new
+          periods  = client.get_periods_list(@customer.organization.sage_gec.sage_private_api_uuid, @customer.sage_gec.sage_private_api_uuid)
 
-        period = periods[:body].select { |p| Date.parse(p["startDate"]).to_date <= Date.today.to_date && Date.parse(p["endDate"]).to_date >= Date.today.to_date }.first
+          period = periods[:body].select { |p| Date.parse(p["startDate"]).to_date <= Date.today.to_date && Date.parse(p["endDate"]).to_date >= Date.today.to_date }.first
 
-        journals = client.get_ledgers_list(@customer.organization.sage_gec.sage_private_api_uuid, @customer.sage_gec.sage_private_api_uuid, period.try(:[], "$uuid"))
+          journals = client.get_ledgers_list(@customer.organization.sage_gec.sage_private_api_uuid, @customer.sage_gec.sage_private_api_uuid, period.try(:[], "$uuid"))
 
-        if journals[:status] == "success"
-          journals[:body].map do |j|
-            {
-              closed:      0,
-              name:        j['shortName'],
-              description: j['name'],
-              type:        j['originalJournalType']
-            }
+          if journals[:status] == "success"
+            journals[:body].map do |j|
+              {
+                closed:      0,
+                name:        j['shortName'],
+                description: j['name'],
+                type:        j['originalJournalType']
+              }
+            end
+          else
+            []
           end
-        else
+        rescue => e
           []
         end
       end
