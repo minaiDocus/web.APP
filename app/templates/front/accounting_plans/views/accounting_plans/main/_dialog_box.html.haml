@@ -36,10 +36,34 @@
           %label Sélectionner la colonne pour la référence des pièces          
           %select.piece.form-select{name: "piece_ref"}
             %option{ value: '' } -----------------
-            - indexation = 0
-            - params_fec[:head_list_fec].each do |head|
+            - params_fec[:head_list_fec].each_with_index do |head, indexation|
               %option{ value: "#{indexation}", selected: ('selected' if indexation == 2)}= head
-              - indexation += 1
+        %hr
+        .form-group.piece_reference_choise
+          %label Sélectionner la colonne pour le compte générale
+          %select.piece.form-select{name: "general_account"}
+            %option{ value: '' } -----------------
+            - params_fec[:head_list_fec].each_with_index do |head, indexation|
+              %option{ value: "#{indexation}", selected: ('selected' if indexation == 4)}= head
+        .form-group.piece_reference_choise
+          %label Sélectionner la colonne pour le libellé du compte générale
+          %select.piece.form-select{name: "general_name"}
+            %option{ value: '' } -----------------
+            - params_fec[:head_list_fec].each_with_index do |head, indexation|
+              %option{ value: "#{indexation}", selected: ('selected' if indexation == 5)}= head
+        %hr
+        .form-group.piece_reference_choise
+          %label Sélectionner la colonne pour le compte de tiers
+          %select.piece.form-select{name: "third_party_account"}
+            %option{ value: '' } -----------------
+            - params_fec[:head_list_fec].each_with_index do |head, indexation|
+              %option{ value: "#{indexation}", selected: ('selected' if indexation == 6)}= head
+        .form-group.piece_reference_choise
+          %label Sélectionner la colonne pour le libellé du compte de tiers
+          %select.piece.form-select{name: "third_party_name"}
+            %option{ value: '' } -----------------
+            - params_fec[:head_list_fec].each_with_index do |head, indexation|
+              %option{ value: "#{indexation}", selected: ('selected' if indexation == 7)}= head
         %hr
         .form-group
           %label Votre compte client générale débute par : ( 411 par défaut )

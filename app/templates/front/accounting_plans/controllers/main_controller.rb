@@ -151,7 +151,9 @@ class AccountingPlans::MainController < CustomerController
 
   def import_fec
     if params[:fec_file].present?
-      unless DocumentTools.is_utf8(params[:fec_file].path)
+      original_file = params[:fec_file].path
+
+      unless DocumentTools.is_utf8(original_file)
         flash[:error] = 'Format de fichier non supporté. (UTF-8 sans bom recommandé)'
       else
         return false if params[:fec_file].content_type != "text/plain"
@@ -165,7 +167,7 @@ class AccountingPlans::MainController < CustomerController
         @file   = File.join(@dir, "file_#{Time.now.strftime('%Y%m%d%H%M%S')}.txt")
         journal = []
 
-        txt_file = File.read(params[:fec_file].path)
+        txt_file = File.read(original_file)
         txt_file.encode!('UTF-8')
 
         begin

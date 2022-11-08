@@ -64,10 +64,10 @@ class FecImport
       next if !@params[:journal].select{|j| j[column[0]].present? }.present?
 
       journal     = column[0]
-      compauxnum  = column[6]
-      compauxlib  = column[7]
-      comptenum   = column[4]
-      comptelib   = column[5]
+      compauxnum  = column[@params[:third_party_account].to_i]
+      compauxlib  = column[@params[:third_party_name].to_i]
+      comptenum   = column[@params[:general_account].to_i]
+      comptelib   = column[@params[:general_name].to_i]
       debit       = column[11]
       credit      = column[12]
       pieceref    = column[@params[:piece_ref].to_i]
@@ -91,15 +91,15 @@ class FecImport
     _account_provider = (@account_provider.to_s.length <= 3)? @account_provider.to_s + '00000' : @account_provider
     _account_customer = (@account_customer.to_s.length <= 3)? @account_customer.to_s + '00000' : @account_customer
 
-    compaux_is_empty        = column[6].blank? && column[7].blank?
-    is_provider_or_customer = column[4].to_s.match(/^(#{@account_provider.to_s}|#{@account_customer.to_s})/)
-    is_general_account      = column[4].to_s.in?([_account_provider, _account_customer]) || column[4].to_s.in?([@account_provider, @account_customer])
+    compaux_is_empty        = column[@params[:third_party_account].to_i].blank? && column[@params[:third_party_name].to_i].blank?
+    is_provider_or_customer = column[@params[:general_account].to_i].to_s.match(/^(#{@account_provider.to_s}|#{@account_customer.to_s})/)
+    is_general_account      = column[@params[:general_account].to_i].to_s.in?([_account_provider, _account_customer]) || column[@params[:general_account].to_i].to_s.in?([@account_provider, @account_customer])
 
     if compaux_is_empty && is_provider_or_customer && !is_general_account
-      column[6] = column[4]
-      column[7] = column[5]
-      column[4] = ( column[4].to_s.match(/^(#{@account_provider.to_s})/) ) ?  _account_provider : _account_customer
-      column[5] = ( column[4].to_s.match(/^(#{@account_provider.to_s})/) ) ? 'FOURNISSEUR' : 'CLIENT'
+      column[@params[:third_party_account].to_i] = column[@params[:general_account].to_i]
+      column[@params[:third_party_name].to_i]    = column[@params[:general_name].to_i]
+      column[@params[:general_account].to_i]     = ( column[@params[:general_account].to_i].to_s.match(/^(#{@account_provider.to_s})/) ) ?  _account_provider : _account_customer
+      column[@params[:general_name].to_i]        = ( column[@params[:general_account].to_i].to_s.match(/^(#{@account_provider.to_s})/) ) ? 'FOURNISSEUR' : 'CLIENT'
     end
 
     column
