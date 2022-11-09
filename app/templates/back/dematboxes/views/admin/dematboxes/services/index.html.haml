@@ -4,9 +4,9 @@
       %h3
         Services et Groupes
         %span.badge.bg-dark= @dematbox_services.count
-    %span.readonly-container
-      .col-md-2.text-end
-        = link_to 'Mettre à jour', load_from_external_admin_dematbox_services_path, class: 'btn btn-primary w-50', data: { method: :post }
+    .col-md-2.text-end.mt-2
+      %span.readonly-container
+        = link_to 'Mettre à jour', load_from_external_admin_dematbox_services_path, class: 'btn btn-dark w-50', data: { method: :post }
 
   .row.box.derivationRight
     .col-md-12

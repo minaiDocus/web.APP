@@ -17,25 +17,22 @@ function event(){
   });
 }
 
-function load_resources(resources) {
-  for(i=0;i<12;i++){
-    (function(counter) {
-      var resource = resources[counter];
-      $.ajax({
-        url: '/admin/dashboard/' + resource,
-        dataType: 'html',
-        type: 'GET',
-        success: function (data) {
-          $('.content#'+resource).html(data)
-          $('.'+ resource + ' label.count.'+ resource).html($('.content#' + resource + ' table').data('total'));
-          if (resource == 'bundle_needed_temp_packs'){
-            $('.result-flux').html($('#bundle_needed_temp_packs').clone().removeClass('hide'));
-            $('.bundle_needed_temp_packs').find('.indicator').removeClass('hide');
-          }
+function load_resources(resources, init=false) {
+  $.each(resources, function( index, resource ) {
+    $.ajax({
+      url: '/admin/dashboard/' + resource,
+      dataType: 'html',
+      type: 'GET',
+      success: function (data) {
+        $('.content#'+resource).html(data)
+        $('.'+ resource + ' label.count.'+ resource).html($('.content#' + resource + ' table').data('total'));
+        if (init){
+          $('.result-flux').html($('#bundle_needed_temp_packs').clone().removeClass('hide'));
+          $('.bundle_needed_temp_packs').find('.indicator').removeClass('hide');
         }
-      });
-    })(i);
-  }
+      }
+    });
+  });
   event();
 }
 
@@ -122,7 +119,7 @@ $(document).ready(function() {
   event();
 
   var res_index = 0;
-  load_resources(resources[res_index]);
+  load_resources(resources[res_index], true);
 
   var interval_id = setInterval(function(){
     res_index = res_index + 1;

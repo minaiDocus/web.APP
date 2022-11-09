@@ -18,7 +18,10 @@
   .form-group
     %label.semibold Contenu :
     .select-container.no-padding.w-100
-      = f.input :content, label: false, disabled: @ticket.persisted?
+      - if @ticket.persisted?
+        %textarea{ disabled: true }= @ticket.content
+      - else
+        = f.input :content, label: false, as: :ckeditor
   - if @ticket.persisted?
     .form-group
       %label.semibold Nouvelle échange :

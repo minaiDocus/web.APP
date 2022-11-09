@@ -104,7 +104,7 @@
       %li.nav-item{ class: ('active' if controller_path == 'admin/tickets/main') }
         = link_to admin_tickets_path do
           %span.me-2= glyphicon('print', size: 12, color: "white")
-          %span Tickets Informatique
+          %span Tickets informatiques
 
     %hr
       %li.nav-item.dropdown{ class: ('active' if ['admin/news/main', 'admin/emailed_documents/main', 'admin/cms_images/main', 'admin/scanning_providers/main', 'admin/account_sharings/main', 'admin/notifications/main', 'admin/pre_assignment_blocked_duplicates/main', 'admin/notification_settings/main', 'admin/zoho_crms/main'].include?controller_path ) } 
