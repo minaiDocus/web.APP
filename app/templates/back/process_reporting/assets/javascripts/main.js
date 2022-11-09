@@ -61,16 +61,6 @@ class AdminProcessReporting {
   }  
 }
 
-request.onload = function(e){
-  $('#reporting #loadingPage').addClass('hide')
-  if(this.status == 200)
-    blob = this.response
-    download_link = document.createElement('a')
-    download_link.href = window.URL.createObjectURL(new Blob([ blob ], {type: 'application/vnd.ms-excel; charset=utf-8'}))
-    download_link.download = `reporting_iDocus_${month}_${year}.xls`
-    download_link.click()
-}   
-
 jQuery(function() {
   let admin_pr = new AdminProcessReporting();
   admin_pr.main();

@@ -115,9 +115,10 @@
     %td.months_list
       .content.clearfix
         .i_info= glyphicon('info', { class: 'mr-sm-1', color: '#000', size: 9 })
-        %div= content_for "td_content_#{@organization.id}_#{i}".to_sym
         .i_info_content
           = tooltip_content.html_safe
+        %div= content_for "td_content_#{@organization.id}_#{i}".to_sym
+
   - else
     %td.months_list
       = content_for "td_content_#{@organization.id}_#{i}".to_sym
