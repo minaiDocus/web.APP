@@ -181,7 +181,7 @@ class DocumentsReloaded::PiecesController < DocumentsReloaded::AbaseController
 
     @filter_active = @options[:pre_assignment_state].present? || @options[:position].present? || params[:text].present?
 
-    @temp_documents = TempDocument.where.not(state: ['bundeled', 'unreadable']).search(@options, text).page(@options[:page]).per(@options[:per_page])
+    @temp_documents = TempDocument.where.not(state: ['bundeled', 'unreadable']).search(@options, text).order(id: :desc).page(@options[:page]).per(@options[:per_page])
   end
 
   private

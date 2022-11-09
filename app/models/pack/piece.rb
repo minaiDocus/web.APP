@@ -153,6 +153,7 @@ class Pack::Piece < ApplicationRecord
     query = query.where('packs.id = ?', options[:pack_id] )                                      if options[:pack_id].present?
     query = query.where('packs.id IN (?)', options[:pack_ids])                                   if options[:pack_ids].present?
     query = query.where('packs.name LIKE ?', "%#{options[:pack_name]}%")                         if options[:pack_name].present?
+    query = query.where('pack_pieces.tags LIKE ?', "%#{options[:tags]}%")                        if options[:tags].present?
     query = query.where('pack_pieces.name LIKE ?', "%#{options[:piece_name]}%")                  if options[:piece_name].present?
     query = query.where('pack_pieces.number LIKE ?', "%#{options[:piece_number]}%")              if options[:piece_number].present?
     query = query.where('pack_pieces.pre_assignment_state = ?', options[:pre_assignment_state])  if options[:pre_assignment_state].present?
