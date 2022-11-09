@@ -15,7 +15,7 @@ class Admin::Organizations::MainController < OrganizationController
 
   # GET /admin/organizations
   def index
-    @organizations = ::Organization.search(search_terms(params[:organization_contains])).order(sort_column => sort_direction).page(params[:page]).per(params[:per_page])
+    @organizations = ::Organization.search(search_terms(params[:organization_contains])).order(sort_column => sort_direction).page(params[:page]).per(100)
     @without_address_count = Organization.joins(:addresses).where('addresses.is_for_billing =  ?', true).count
     @debit_mandate_not_configured_count = DebitMandate.not_configured.count
   end

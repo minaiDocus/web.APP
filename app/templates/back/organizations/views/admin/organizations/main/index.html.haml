@@ -72,7 +72,7 @@
                                   %span.red-label Clôturer                            
                       - else
                         %label.red-label.semibold Clôturé
-            = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: admin_organizations_path, target: '#table_organizations', total_pages: @organizations.total_pages, filter: 'form-organizations-filter' }
+            = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: admin_organizations_path, target: '#table_organizations', total_pages: @organizations.total_pages, filter: 'form-organizations-filter', no_per_page: true }
 
 .modal#filter-organizations
   .modal-dialog
@@ -103,19 +103,19 @@
               = label_tag 'organization_contains[is_test]', t('activerecord.models.organization.attributes.is_test')
               %span.badge.badge-info.ml-md-2{ style: "font-size: 10px" }
                 = Organization.not_billed.count            
-            = select_tag 'organization_contains[is_test]', options_for_select([['Oui', 1], ['Non', 0]], (params[:organization_contains][:is_test] rescue 0)), include_blank: true, class: 'select form-select'
+            = select_tag 'organization_contains[is_test]', options_for_select([['Oui', 1], ['Non', 0]], (params[:organization_contains][:is_test] rescue nil)), include_blank: true, class: 'select form-select'
           .form-group
             %label.semibold
               = label_tag 'organization_contains[is_for_admin]', 'Est client ?'
               %span.badge.badge-info.ml-md-2{ style: "font-size: 10px" }
                 = Organization.client.count            
-            = select_tag 'organization_contains[is_for_admin]', options_for_select([['Oui', 0], ['Non', 1]], (params[:organization_contains][:is_for_admin] rescue 0)), include_blank: true, class: 'select form-select'
+            = select_tag 'organization_contains[is_for_admin]', options_for_select([['Oui', 0], ['Non', 1]], (params[:organization_contains][:is_for_admin] rescue nil)), include_blank: true, class: 'select form-select'
           .form-group
             %label.semibold
               = label_tag 'organization_contains[is_active]', 'Est inactif ?'
               %span.badge.badge-info.ml-md-2{ style: "font-size: 10px" }
                 = Organization.inactive.count            
-            = select_tag 'organization_contains[is_active]', options_for_select([['Oui', 0], ['Non', 1]], (params[:organization_contains][:is_active] rescue 1)), include_blank: true, class: 'select form-select'
+            = select_tag 'organization_contains[is_active]', options_for_select([['Oui', 0], ['Non', 1]], (params[:organization_contains][:is_active] rescue nil)), include_blank: true, class: 'select form-select'
           .form-group
             %label.semibold
               = label_tag 'organization_contains[is_suspended]', t('activerecord.models.organization.attributes.is_suspended')

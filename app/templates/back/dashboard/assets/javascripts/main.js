@@ -118,9 +118,14 @@ $(document).ready(function() {
 
   event();
 
-  var res_index = 0;
-  load_resources(resources[res_index], true);
+  load_resources(resources[0], true);
+  load_resources(resources[1], false);
+  load_resources(resources[2], false);
+  load_resources(resources[3], false);
+  load_resources(resources[4], false);
+  load_resources(resources[5], false);
 
+  var res_index = 0;
   var interval_id = setInterval(function(){
     res_index = res_index + 1;
     if(res_index > 5)

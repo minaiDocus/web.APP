@@ -146,10 +146,10 @@ class DocumentsReloaded::PiecesController < DocumentsReloaded::AbaseController
     #@options[:piece_created_at] = @options[:by_piece].try(:[], :created_at)
     #@options[:piece_created_at_operation] = @options[:by_piece].try(:[], :created_at_operation)
 
-    @pieces = Pack::Piece.search(@options[:text] , @options).distinct.order(id: :desc).page(@options[:page]).per(@options[:per_page])
+    @pieces = Pack::Piece.search(@options[:text] , @options).where("DATE_FORMAT(updated_at, '%Y%m') >= #{2.years.ago.strftime('%Y%m')}").distinct.order(updated_at: :desc).page(@options[:page]).per(@options[:per_page])
 
-    @pieces_deleted = Pack::Piece.unscoped.where(user_id: @options[:user_ids]).deleted
-    @temp_documents = TempDocument.where(user_id: @options[:user_ids]).not_published
+    @pieces_deleted = Pack::Piece.unscoped.where(user_id: @options[:user_ids]).where("DATE_FORMAT(updated_at, '%Y%m') >= #{6.month.ago.strftime('%Y%m')}").deleted
+    @temp_documents = TempDocument.where(user_id: @options[:user_ids]).where("DATE_FORMAT(updated_at, '%Y%m') >= #{6.month.ago.strftime('%Y%m')}").not_published
 
     if @options[:user_ids].size > 2
       @pieces_deleted = @pieces_deleted.limit(20)
@@ -181,7 +181,7 @@ class DocumentsReloaded::PiecesController < DocumentsReloaded::AbaseController
 
     @filter_active = @options[:pre_assignment_state].present? || @options[:position].present? || params[:text].present?
 
-    @temp_documents = TempDocument.where.not(state: ['bundeled', 'unreadable']).search(@options, text).order(id: :desc).page(@options[:page]).per(@options[:per_page])
+    @temp_documents = TempDocument.where.not(state: ['bundeled', 'unreadable']).where("DATE_FORMAT(updated_at, '%Y%m') >= #{2.years.ago.strftime('%Y%m')}").search(@options, text).order(updated_at: :desc).page(@options[:page]).per(@options[:per_page])
   end
 
   private
