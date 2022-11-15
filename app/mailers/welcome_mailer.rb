@@ -32,8 +32,8 @@ class WelcomeMailer < BaseMailer
 
     if @guest.organization&.code == "ALM"
       mail(to: @guest.email, subject: '[Axelium] Création de compte Axelium')
-    elsif @user.organization&.code == "DK"
-      mail(to: @user.email, subject: '[DK Partners] Création de compte DK Partners')
+    elsif @guest.organization&.code == "DK"
+      mail(to: @guest.email, subject: '[DK Partners] Création de compte DK Partners')
     else
       mail(to: @guest.email, subject: '[iDocus] Création de compte iDocus')
     end
