@@ -520,3 +520,27 @@ function scrool_on_top(){
     }
   });
 }
+
+function iDocus_sortable(){
+  $('.as_idocus_sortable').unbind('click').bind('click', function(e){
+    e.preventDefault();
+    let url    = $(this).attr('href');
+    let target = $(this).parents('table:first').attr('id');
+    let app    = new ApplicationJS();
+
+    let ajax_params = {
+                        url: url,
+                        type: 'GET',
+                        dataType: 'html',
+                        target: `#${target}`
+                      };
+
+    if(target == '' || target == undefined || target == null){
+      console.log('The sortable link doesn t have a valid target (table id is missing)');
+    }
+    else{
+      if(url != '' && url != '#' && url != undefined && url != null)
+        app.sendRequest(ajax_params,'', bind_all_events);
+    }
+  });
+}

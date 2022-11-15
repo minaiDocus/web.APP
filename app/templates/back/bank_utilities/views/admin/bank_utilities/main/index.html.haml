@@ -1,0 +1,95 @@
+.container-fluid
+  .mb-3
+  .m-2.derivationLeft
+    %h3 Support-Tech 
+
+  .mb-4
+
+  .box.m-2.derivationRight
+    %h5.semibold Banque
+    %hr 
+    .row
+      .col-md-3
+        .select-container.w-100.no-padding
+          %input.user_code{ type: :text, placeholder: "CODE DOSSIER"}
+      .col-md-9
+        %button.btn.btn-dark#get_retriever Récup Automates
+        %button.btn.btn-primary.switch{ data: { action: "budgea_to_bridge"} } Switch Budgea to Bridge
+        %button.btn.btn-warning.switch{ data: { action: "bridge_to_budgea"} } Switch Bridge to Budgea
+        %button.btn.btn-outline-dark#user_reset_password Reset Mot de passe
+        %span.ms-2.alert.alert-success.semibold.result.switch.user_reset_password.resume_me.hide
+    .row
+      %div
+        .m-0.px-2.btn-default.float-end.toggle{ data: { action: "get_retriever"} }= glyphicon('chevron-right', { size: 14, color: "#72AA42" })
+      .result.get_retriever.hide
+        .alert.alert-warning.semibold Chargement . . .
+
+  .mb-4
+
+  .box.m-2.derivationLeft
+    %h5.semibold Opération bancaire
+    %hr    
+    %form#operation-filter
+      .row
+        .col-md-2
+          .select-container.w-100.no-padding
+            %input.ope_label{ type: :text, name: "ope_label", placeholder: "LABEL OPERATION"}
+        .col-md-2
+          .select-container.w-100.no-padding
+            %input.ope_user_code{ type: :text, name: "ope_user_code", placeholder: "CODE DOSSIER"}
+        .col-md-1
+          .select-container.w-100.no-padding
+            %input.ope_bank_id{ type: :text, name: "ope_bank_id", placeholder: "BANK ID"}
+        .col-md-2
+          .select-container.w-100.no-padding
+            %input.ope_date.daterange{ type: :text, name: "ope_date", placeholder: "DATE ENTRE"}
+        .col-md-5
+          %button.btn.btn-dark#get_operations{ type: :button } Récup opération
+          %button.btn.btn-warning.hide#force_locked{ type: :button } Forcer livraison
+    .row
+      %div
+        .m-0.px-2.btn-default.float-end.toggle{ data: { action: "get_operations"} }= glyphicon('chevron-right', { size: 14, color: "#72AA42" })
+      .result.get_operations.hide
+        .alert.alert-warning.semibold Chargement . . .
+
+  .mb-4
+
+  .box.m-2.derivationLeft
+    %h5.semibold Bridge opération
+    %hr    
+    %form#bridge-filter
+      .row
+        .col-md-2          
+          %select.form-select.w-100#bridge_type{ name: "bridge_type"}
+            %option{ value: "operation" } Opération
+            %option{ value: "document" } Document
+        .col-md-2
+          .select-container.w-100.no-padding
+            %input.bridge_code_user{ type: :text, name: "bridge_code_user", placeholder: "CODE CLIENT"}
+        .col-md-2
+          .select-container.w-100.no-padding
+            %input.bridge_bank_ids{ type: :text, name: "bridge_bank_ids", placeholder: "COMPTE BANCAIRE ids"}
+        .col-md-2
+          .select-container.w-100.no-padding
+            %input.bridge_date.daterange{ type: :text, name: "ope_date", placeholder: "DATE ENTRE"}
+        .col-md-4
+          %button.btn.btn-dark#get_bank_accounts_bridge{ type: :button } Récup comptes bancaires
+          %button.btn.btn-warning.hide#get_transaction_bridge{ type: :button } Transactions disponnible
+    .row
+      %div
+        .m-0.px-2.btn-default.float-end.toggle{ data: { action: "get_operations"} }= glyphicon('chevron-right', { size: 14, color: "#72AA42" })
+      .result.bridge.hide
+        .alert.alert-warning.semibold Chargement . . .
+
+
+#bank_utlities.modal.fade.in{'aria-hidden' => 'true', :role => 'dialog', :tabindex => '-1'}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.modal-title.bold Voir plus    
+        %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+      .modal-body
+        
+      .modal-footer
+
+= javascript_include_tag 'back/bank_utilities/assets/javascripts/main'
