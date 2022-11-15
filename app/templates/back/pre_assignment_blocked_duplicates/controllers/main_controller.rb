@@ -4,12 +4,7 @@ class Admin::PreAssignmentBlockedDuplicates::MainController < BackController
 
   # GET /admin/pre_assignment_blocked_duplicates
   def index
-    @duplicates = Pack::Report::Preseizure
-                  .blocked_duplicates
-                  .search(search_terms(params[:duplicate_contains]))
-                  .order("#{sort_real_column} #{sort_direction}")
-                  .page(params[:page])
-                  .per(params[:per_page])
+    @duplicates = Pack::Report::Preseizure.unscoped.blocked_duplicates.search(search_terms(params[:duplicate_contains])).order("#{sort_real_column} #{sort_direction}").page(params[:page]).per(params[:per_page])
   end
 
   private
