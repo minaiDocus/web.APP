@@ -375,6 +375,14 @@ function bind_all_events(){
     let current_code = $(this).val();
 
     if(current_code !== null && current_code !== undefined && current_code.length > 0){
+      if( current_code.length == 1 )
+      {
+        var opt_text = $('#collaborator_document_filter').find(`option[value="${current_code[0]}"]`).text();
+        var code     = opt_text.split(' ')[0].trim()
+        $('select#file_code').val(code).trigger("chosen:updated");
+        $('select#file_code').change();
+      }
+
       $('#collaborator_journal_document_filter option').addClass('hide');
       $('#collaborator_journal_document_filter').parent().find('.multi-select-container .multi-select-menuitem').addClass('hide');
       current_code.forEach((code)=>{

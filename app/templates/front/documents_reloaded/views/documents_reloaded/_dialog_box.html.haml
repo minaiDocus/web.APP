@@ -38,9 +38,17 @@
                 %label N° de pièce
                 .select-container.no-padding.w-100
                   %input{ name: 'by_preseizure[piece_number]', value: (@options[:by_preseizure][:piece_number] rescue nil) }
-              .form-group
-                %label Livraison/Export écriture comptable
-                = select_tag 'by_preseizure[is_delivered]', options_for_select([['Livrée', 1], ['Non livrée', 2], ['Avec erreur',3], ['Téléchargée', 4], ['Non récupérée', 5]], (@options[:by_preseizure][:is_delivered] rescue nil)), include_blank: true, class: 'form-select', id: 'delivery'
+
+              - options = []
+              - if @user.organization.try(:uses_api_softwares?)
+                - options << ['Livrée', 1]; options << ['Non livrée', 2]; options << ['Avec erreur',3]
+              - if @user.organization.try(:uses_non_api_softwares?)
+                - options << ['Téléchargée', 4]; options << ['Non récupérée', 5]
+
+              - if not options.empty?
+                .form-group
+                  %label Livraison/Export écriture comptable
+                  = select_tag 'by_preseizure[is_delivered]', options_for_select(options, (@options[:by_preseizure][:is_delivered] rescue nil)), include_blank: true, class: 'form-select', id: 'delivery'
               .form-group
                 %label Date de livraison              
                 .input-group.mb-3

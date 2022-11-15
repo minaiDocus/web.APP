@@ -78,10 +78,11 @@
                 .semibold Dossier
               .col-md-10
                 .form-group.no-margin.hide_on_load.hide
-                  - if accounts_options.size == (@options.try(:[], :owner_ids).try(:size) rescue 0)
-                    = select_tag 'collaborator_document_filter', options_for_select(accounts_options), id: 'collaborator_document_filter', multiple: true
+                  - __accounts = accounts_options
+                  - if __accounts.size == (@options.try(:[], :owner_ids).try(:size) rescue 0)
+                    = select_tag 'collaborator_document_filter', options_for_select(__accounts), id: 'collaborator_document_filter', multiple: true
                   - else
-                    = select_tag 'collaborator_document_filter', options_for_select(accounts_options, @options.try(:[], :owner_ids)), id: 'collaborator_document_filter', multiple: true
+                    = select_tag 'collaborator_document_filter', options_for_select(__accounts, @options.try(:[], :owner_ids)), id: 'collaborator_document_filter', multiple: true
             .result-sol-customer.result-sol-container
           .col-md-2
             .row
