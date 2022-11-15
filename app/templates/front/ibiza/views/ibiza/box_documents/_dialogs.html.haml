@@ -27,5 +27,5 @@
       .modal-footer
         .w-100.text-end
           %button.btn.btn-light.semibold{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'} Annuler
-          - idocus_params = param_encode({ url: path, form: "form_filter_#{action_name}", html: { target: "#ibizabox_#{action_name}" }, modal: { id: "filter_#{action_name}", close_after_error: true } })
+          - idocus_params = param_encode({ url: '#url', form: { id: "form_filter_#{action_name}", dump_action: true }, html: { target: "#ibizabox_#{action_name}" }, modal: { id: "filter_#{action_name}", close_after_error: true } })
           %button.btn.btn-primary.as_idocus_ajax{ type: 'button', idocus: idocus_params }= t('filters.action')

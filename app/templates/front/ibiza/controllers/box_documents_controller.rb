@@ -40,8 +40,9 @@ class Ibiza::BoxDocumentsController < CustomerController
 
   def validate
     documents = @customer.temp_documents.wait_selection.from_ibizabox.find(params[:document_ids] || [])
+
     if documents.count == 0
-      flash[:notice] = 'Aucun document sélectionné.'
+      json_flash[:error] = 'Aucun document sélectionné.'
     else
       documents.map(&:ibizabox_folder).compact.uniq.each do |ibizabox_folder|
         ibizabox_folder.ready if ibizabox_folder.waiting_selection?
@@ -54,12 +55,13 @@ class Ibiza::BoxDocumentsController < CustomerController
         end
       end
       if documents.count > 1
-        flash[:success] = "Les #{documents.count} documents sélectionnés seront intégrés."
+        json_flash[:success] = "Les #{documents.count} documents sélectionnés seront intégrés."
       else
-        flash[:success] = 'Le document sélectionné sera intégré.'
+        json_flash[:success] = 'Le document sélectionné sera intégré.'
       end
     end
-    redirect_to select_organization_customer_ibizabox_documents_path(@organization, @customer, document_contains: params[:document_contains].permit!)
+
+    render json: { json_flash: json_flash }, status: 200
   end
 
   private
