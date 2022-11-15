@@ -23,7 +23,7 @@ class RetrieverPresenter < BasePresenter
         end
       end
     elsif retriever.waiting_additionnal_info?
-      h.content_tag :span, "Information manquante : #{retriever.error_message}", class: 'badge bg-warning'
+      h.content_tag :span, "Information manquante : #{retriever.error_message.length < 40 ? "#{retriever.error_message}" : "#{retriever.error_message.slice(0..40)} ..."}", class: 'badge bg-warning'
     elsif retriever.configuring? || retriever.running?
       h.content_tag :span, 'Synchronisation en cours', class: 'badge bg-secondary'
     elsif retriever.destroying?
@@ -73,7 +73,7 @@ private
       if retriever.error_message.present?
         full_str = "#{str}: #{retriever.error_message}"
 
-        str += retriever.error_message.length < 40 || retriever.budgea_error_message == 'decoupled' ? ": #{retriever.error_message}" : ": #{retriever.error_message.slice(0..40)} ..."
+        str += retriever.error_message.length < 40 ? ": #{retriever.error_message}" : ": #{retriever.error_message.slice(0..40)} ..."
       end
     else
       full_str  = ''

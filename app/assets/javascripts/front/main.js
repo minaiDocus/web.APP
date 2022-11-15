@@ -2,19 +2,6 @@
 //= require '../dynamic_events'
 //= require '../dynamic_hide_menu'
 
-function calculate_footer_marginer(){
-  let window_h = $(window).outerHeight();
-  let margin     = parseFloat($('.body_content').css('margin-top').replace('px', ''));
-  let footer_h   = $('footer').outerHeight();
-  let customer_h = 0;
-
-  if( $('.customer_header').length > 0 ){
-    customer_h = $('.customer_header').outerHeight();
-  }
-
-  $('.body_content').css('height', (window_h - margin - footer_h) + customer_h);
-}
-
 function init_menu_animation(){
   let to_animate = GetCache('menu_animation');
 
@@ -146,22 +133,5 @@ jQuery(function () {
   })
 
   /* SCROLLING TO THE BOTTOM */
-  var end_reached_main = true;
-  $('.body_content').scroll(function() {
-    let content_h  = $('.body_content').outerHeight();
-    let content    = document.getElementsByClassName("body_content")[0];
-    let c_position = content.scrollHeight - content.scrollTop
-
-    if(content.scrollTop > 200)
-      $('.scroll-on-top').show('slow');
-    else
-      $('.scroll-on-top').hide('slow');
-
-    if( c_position >= (content_h + 75) ){
-      end_reached_main = false
-    }else if(!end_reached_main){
-      end_reached_main = true;
-      AppEmit('on_scroll_end');
-    }
-  });
+  scrool_on_top();
 });

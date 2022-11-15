@@ -14,4 +14,7 @@ function bind_globals_events(){
 
 jQuery(function () {
   bind_globals_events();
+
+  calculate_footer_marginer();
+  scrool_on_top();
 });
