@@ -321,6 +321,7 @@ class Pack::Report::Preseizure < ApplicationRecord
     # softwares << software
     # self.is_delivered_to = softwares.sort.join(',')
     self.is_delivered_to = software
+    self.delivery_state  = software
     save
   end
 
@@ -340,6 +341,7 @@ class Pack::Report::Preseizure < ApplicationRecord
     else
       mess.except!(software.to_s)
     end
+
     self.delivery_message = mess.to_json.to_s
     save
   end

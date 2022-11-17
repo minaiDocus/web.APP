@@ -52,5 +52,7 @@ class PreAssignmentExport < ApplicationRecord
     self.generated
     self.file_name = file_name
     self.save
+
+    Pack::Report::Preseizure.unscoped.where(id: self.preseizures.collect(&:id)).update_all(export_state: self.for.to_s)
   end
 end

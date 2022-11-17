@@ -38,7 +38,7 @@ module Interfaces::User::Customer
 
 
   def uses_non_api_softwares?
-    uses?(:coala) || uses?(:quadratus) || uses?(:cegid) || uses?(:csv_descriptor) || use_to(:fec_agiris)
+    uses?(:coala) || uses?(:quadratus) || uses?(:cegid) || uses?(:csv_descriptor) || uses?(:fec_agiris)
   end
 
 

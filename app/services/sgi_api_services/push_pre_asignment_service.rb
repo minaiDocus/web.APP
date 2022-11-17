@@ -78,11 +78,13 @@ class SgiApiServices::PushPreAsignmentService
     end
 
     def create_preseizure(piece, report, data)
-      preseizure = Pack::Report::Preseizure.new
+      user = piece.user
+
+      preseizure                  = Pack::Report::Preseizure.new
       preseizure.report           = report
       preseizure.piece            = piece
-      preseizure.user             = piece.user
-      preseizure.organization     = piece.user.organization
+      preseizure.user             = user
+      preseizure.organization     = user.organization
       preseizure.piece_number     = data['piece_number']
       preseizure.amount           = data['amount'].try(:to_f)
       preseizure.currency         = data['currency']
@@ -94,6 +96,8 @@ class SgiApiServices::PushPreAsignmentService
       preseizure.observation      = data['observation']
       preseizure.position         = piece.position
       preseizure.is_made_by_abbyy = data['is_made_by_abbyy']
+      preseizure.delivery_state   = 'not_delivered' if user.uses_api_softwares?
+      preseizure.export_state     = 'not_exported'  if user.uses_non_api_softwares?
       preseizure.save
 
       data['accounts'].each do |data_account|
