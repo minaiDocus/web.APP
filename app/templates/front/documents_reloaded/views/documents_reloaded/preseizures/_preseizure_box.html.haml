@@ -156,7 +156,7 @@
                     -if analysis[:axis3].present?
                       %li.semibold= analysis[:axis3]
                 %td.text-center= analysis[:ventilation].to_f.to_s + " %"
-                %td.text-center= pre_tax_amount.to_f * (analysis[:ventilation].to_f / 100)
+                %td.text-center= ( pre_tax_amount.to_f * (analysis[:ventilation].to_f / 100) ).to_f.round(3)
 
 %hr.no-margin.w-100
 .row
