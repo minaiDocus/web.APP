@@ -318,6 +318,25 @@ class TempDocument < ApplicationRecord
     original_fingerprint.blank? && content_fingerprint.blank? && raw_content_fingerprint.blank?
   end
 
+  def recreate_pdf
+    raw_path = self.cloud_raw_content_object.reload.path
+
+    if File.exist?(raw_path.to_s)
+      self.cloud_content_object.attach(File.open(raw_path), "#{self.content_file_name}.pdf")
+
+      if not ['bundled', 'processed'].include?(self.state)
+        self.state = 'ocr_needed'
+        self.save
+
+        AccountingWorkflow::OcrProcessing.delay_for(10.seconds, queue: :high).send_document(self.id)
+      end
+
+      self.cloud_content_object.reload.path
+    else
+      return false
+    end
+  end
+
   def recreate_grouped_document
     _parents_documents_pages = self.parents_documents_pages
     if parents_documents.any? && _parents_documents_pages.present? && _parents_documents_pages.any?
