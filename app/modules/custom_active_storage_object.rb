@@ -30,6 +30,7 @@ class CustomActiveStorageObject
 
   def reload
     FileUtils.remove_entry(path, true)
+    FileUtils.remove_entry(path('', true), true)
     self
   end
 
