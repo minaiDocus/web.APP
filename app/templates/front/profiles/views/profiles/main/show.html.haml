@@ -45,50 +45,9 @@
 
         - if @user.my_package.try(:upload_active) && !(@user.is_admin || @user.is_prescriber || @user.inactive?)
           - period_service = Billing::Period.new user: @user, current_time: Time.now.beginning_of_month
-          #emailed_documents.row
+          #emailed_documents_view
             %h3 Adresse email d'envoi de documents
-            .box
-              .row
-                .col-md-6
-                  %label Vous pouvez envoyer vos pièces comptables par mail.                  
-                  %label La plateforme iDocus intégrera les pièces jointes 
-                  %label.semibold= UploadedDocument.valid_extensions 
-                  %label de votre mail.
-                  %br
-                  %br
-                  %h6 Règles d'utilisation :
-                  %ul
-                    %li
-                      %label Format de l’objet du mail : [libellé court du journal comptable] [période]
-                      - if @user.account_book_types.first && period_service.names.first
-                        %br
-                        %label exemple :
-                        %b
-                          %i #{@user.account_book_types.first.name} #{period_service.names.first}
-                    %li
-                      %label La somme des tailles des pièces jointes de votre mail ne doit pas dépasser
-                      %b 10 Mo
-                      \.
-                .col-md-6
-                  %h6 Vos journaux comptables accessibles :
-                  %ul
-                    - @user.account_book_types.each do |journal|
-                      %li
-                        %b= journal.name
-                        = "(#{journal.description.sub(/\A\s*\(/,'').sub(/\)\s*\z/,'')})"
-                  %h6 Vos périodes actuellement accessibles :
-                  %ul
-                    - period_service.names.each do |name|
-                      %li
-                        %b= name
-              .mb-3
-              .row
-                .col-md-12.text-center
-                  %label Voici votre adresse personnalisée à laquelle vous devez envoyer vos pièces :
-                  %b{ style: 'font-size: 16px;' }
-                    = "#{@user.email_code}@fw.idocus.com"
-                  - idocus_params = param_encode({ url: email_code_profiles_path, method: 'post', confirm: 'Voulez vous vraiment générer une nouvelle adresse?', redirect_to: { url: profiles_path, method: 'get', html: { target: '#emailed_documents' } } })
-                  %button.btn.btn-light.semibold.ms-2.as_idocus_ajax{ type: 'button', idocus: idocus_params } Générer une nouvelle adresse
+            = render file: Rails.root.join('app/templates/front/customers/views/customers/main/upload_by_email.html.haml'), locals: { view_from_profile: true }
 
     - if !@user.organization.is_active && @user.leader?
       #active_organization.row

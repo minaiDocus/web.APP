@@ -288,18 +288,27 @@ class EmailedDocument
 
   def get_journal
     if user && @mail.subject.present?
-      user.account_book_types.where(name: @mail.subject.split(' ')[0]).first.try(:name)
+      full_subject = @mail.subject
+      pattern      = full_subject.split(' ')[0]
+
+      journal   = user.account_book_types.where(name: pattern)
+      journal ||= user.account_book_types.where("label LIKE '%#{pattern}%'")
+      journal ||= user.account_book_types.where("description LIKE '%#{pattern}%'")
+
+      journal = user.account_book_types.where("label LIKE '%#{full_subject}%'")       if journal.size != 1
+      journal = user.account_book_types.where("description LIKE '%#{full_subject}%'") if journal.size != 1
+
+      return nil if journal.size != 1
+      journal.first.try(:name)
     end
   end
 
   def get_period
     if @mail.subject.present?
-      name = @mail.subject.split(' ')[1]
-      if name.present?
-        period_service.include?(name) ? name : nil
-      else
-        Period.period_name(period_service.period_duration)
-      end
+      _period = @mail.subject.split(' ')[1]
+      _period = Time.now.strftime('%Y%m') if _period.to_i == 0
+
+      period_service.include?(_period) ? _period : nil
     end
   end
 
