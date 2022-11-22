@@ -197,7 +197,7 @@ class CustomUtils
 
       final_dir = specific_dir || default_tmp_dir
 
-      final_dir = default_tmp_dir if specific_dir.present? && specific_dir.match(/nfs/).present? && Rails.env != "production"
+      final_dir = default_tmp_dir if specific_dir.present? && specific_dir.to_s.match(/nfs/).present? && Rails.env != "production"
 
       begin
         add_chmod_access_into(final_dir)

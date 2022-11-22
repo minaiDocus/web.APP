@@ -4,28 +4,20 @@ class BillingMod::PrepareBillingsWorker
 
   def perform
     UniqueJobs.for 'BillingMod::PrepareBillings' do
-      organizations = Organization.billed.order(code: :asc)
+      sunday = Time.now.strftime('%w')
 
-      time = 10
-      organizations.each do |organization|
-        BillingMod::PrepareBillingsWorker::Launcher.delay_for(time.minutes, queue: :low).process(organization.id)
-        time += 10 #Step every 10 minutes
-      end
-    end
-  end
+      if sunday
+        organizations = Organization.client.active
 
-  class Launcher
-    def self.process(organization_id)
-      UniqueJobs.for "BillingMod::PrepareBilling-#{organization_id}" do
-        organization = Organization.find organization_id
+        organizations.each_with_index do |organization, _index|
+          organization.customers.active_at(Time.now.end_of_month + 1.day).each do |customer|
+            BillingMod::PrepareUserBilling.new(customer).execute
+          end
 
-        next if not organization.can_be_billed?
+          BillingMod::PrepareOrganizationBilling.new(organization).execute
 
-        organization.customers.active_at(Time.now.end_of_month + 1.day).each do |customer|
-          BillingMod::PrepareUserBilling.new(customer).execute
+          sleep 10 if (_index % 30) == 0
         end
-
-        BillingMod::PrepareOrganizationBilling.new(organization).execute
       end
     end
   end
