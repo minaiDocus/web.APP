@@ -1,8 +1,9 @@
 class DocumentsReloadedUploader{
   constructor(){
-    this.input_user = $('#add-document #file_code');
+    this.input_user = $('#add-document #file_code, #file_code_customer');
     this.input_period = $('#add-document #file_prev_period_offset');
     this.input_journal = $('#add-document #file_account_book_type');
+    this.input_journal_customer = $('#add-document #l_journal');
     this.start_button = $('#add-document .btn-add');
     this.base_modal = $('#add-document');
     this.load_counter = 0;
@@ -50,12 +51,17 @@ class DocumentsReloadedUploader{
     if ((this.load_counter > 0) && (VARIABLES.get('is_loaded')) == true)
       return
 
-    this.fill_journals();
-    this.fill_periods();
+    if ($('#for_customer').length > 0){
+      this.fill_journals_customers();
+    }
+    else{
+      this.fill_journals();
+      this.fill_periods();
+    }
   }
 
   fill_periods(){
-    this.fetch_url(`/documents/uploader/periods/${ encodeURIComponent(this.input_user.val()) }`)
+    this.fetch_url(`/documents_reloaded/uploader/periods/${ encodeURIComponent(this.input_user.val()) }`)
         .then((result)=>{
           let options = '';
           result.forEach((opt)=>{ options += `<option value="${opt[1]}">${opt[0]}</option>` });
@@ -85,6 +91,16 @@ class DocumentsReloadedUploader{
             me.input_journal.change();
         })
   }
+
+  fill_journals_customers(){
+    let me = this
+    this.fetch_url(`/documents_reloaded/uploader/journals/${ encodeURIComponent(this.input_user.val()) }/true`)
+        .then((result)=>{
+          let options = '';
+          result.forEach((opt)=>{ options += `<option value="${opt[1]}">${opt[0]}</option>` });
+          me.input_journal_customer.html(options);
+        })
+  }
 }
 
 jQuery(function() {
@@ -92,7 +108,7 @@ jQuery(function() {
   if (typeof(VARIABLES.get('is_loaded')) == "undefined" || VARIABLES.get('is_loaded') == null)
     VARIABLES.set('is_loaded', false);
 
-  uploader.input_user.unbind('change').on('change', function(e){ 
+  uploader.input_user.unbind('change').on('change', function(e){
     uploader.load_counter = 0;
     uploader.fill_journals_and_periods();
   });

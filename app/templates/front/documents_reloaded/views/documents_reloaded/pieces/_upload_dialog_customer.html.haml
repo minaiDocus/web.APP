@@ -7,9 +7,19 @@
           %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
         .modal-body
           = hidden_field_tag :for_customer, 1
+          - if @users.size > 1
+            .form-group
+              %label.semibold Code client
+              = select_tag :file_code, options_for_select(@users.map{ |e| [e.short_info, e.code] }, @user.code), include_blank: true, data: { placeholder: 'Choisir un client'}, id: :file_code_customer, class: 'chosen-list w-100'
+          - else
+            = hidden_field_tag :file_code, @user.code
           .form-group
             %label.semibold Type de document
-            = select_tag :l_journal, options_for_select(AccountBookType.where(user_id: file_upload_users_list.collect(&:id)).map { |journal| [(journal.label.presence || journal.description.presence || journal.name), journal.id] }), id: :l_journal, class: 'form-select'
+            - if @users.size > 1
+              %label.semibold
+              = select_tag :l_journal, '', id: :l_journal, class: 'form-select w-100'
+            - else
+              = select_tag :l_journal, options_for_select(AccountBookType.where(user_id: file_upload_users_list.collect(&:id)).map { |journal| [(journal.label.presence || journal.description.presence || journal.name), journal.id] }), id: :l_journal, class: 'form-select w-100'
             %span#compta_processable.hide
               %span.badge.bg-warning.mt-2
                 Ce journal n'est pas paramétré pour une pré-saisie comptable.

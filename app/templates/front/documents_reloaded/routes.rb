@@ -19,7 +19,7 @@ Rails.application.routes.draw do
 
     resource :uploader, controller: 'uploader' do
       get 'periods/:upload_user',  to: 'uploader#periods',  on: :collection
-      get 'journals/:upload_user', to: 'uploader#journals', on: :collection
+      get 'journals/:upload_user(/:is_customer)', to: 'uploader#journals', on: :collection
     end
   end
 end

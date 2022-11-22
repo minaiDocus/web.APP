@@ -10,6 +10,8 @@ class DocumentsReloaded::PiecesController < DocumentsReloaded::AbaseController
 
   # GET /documents_reloaded
   def index
+    # PENDING DEVELOPPMENT
+    # if @user.collaborator? || @user.try(:pre_assignement_displayed?)
     if @user.collaborator?
       @collaborator_view  = true
       index_collaborators      
@@ -180,6 +182,8 @@ class DocumentsReloaded::PiecesController < DocumentsReloaded::AbaseController
     @options[:temp_pack_ids] = TempPack.where(user_id: @options[:user_ids]).where("temp_packs.name LIKE '% #{@journal} %'").pluck(:id)
 
     @filter_active = @options[:pre_assignment_state].present? || @options[:position].present? || params[:text].present?
+
+    @users << @user if !@users.select { |u| u.id == @user.id }.any?
 
     @temp_documents = TempDocument.where.not(state: 'unreadable').where(is_an_original: true).where("DATE_FORMAT(temp_documents.updated_at, '%Y%m') >= #{2.years.ago.strftime('%Y%m')}").search(@options, text).order(updated_at: :desc).page(@options[:page]).per(@options[:per_page])
   end

@@ -1,5 +1,6 @@
 //= require './events'
 //= require './tags'
+//= require './uploader'
 
 class DocumentsReloadedCustomer{
   constructor(){
@@ -47,6 +48,9 @@ class DocumentsReloadedCustomer{
 
                             $("#hidden-journal-id").val($('.rubric').first().data('journal-id'));
                             $("#hidden-customer-id").val($('#customers').val());
+
+                            $('select#file_code_customer').val($('#customer_code').val()).trigger("chosen:updated");
+                            $('select#file_code_customer').change();
                           }
                           else{
                             $('.box#table_pieces').html($(e).find(".box#table_pieces").html());

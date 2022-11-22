@@ -79,23 +79,30 @@ class DocumentsReloaded::UploaderController < DocumentsReloaded::AbaseController
   def journals
     account_book_types = []
 
-    if @upload_user.organization.try(:specific_mission)
-      account_book_types = @upload_user.account_book_types.specific_mission.by_position
-    elsif @upload_user.authorized_upload?
-      account_book_types_all      = @upload_user.account_book_types.by_position
-      account_book_types_bank     = @upload_user.account_book_types.bank_processable.by_position
+    if params[:is_customer].present?
+      account_book_types = @upload_user.account_book_types
 
-      account_book_types = account_book_types_all
-
-      if not @upload_user.authorized_bank_upload?
-        account_book_types = account_book_types_all - account_book_types_bank
-      elsif not @upload_user.authorized_basic_upload?
-        account_book_types = account_book_types_bank
+      options = account_book_types.map do |j|
+        [j.label.presence || j.description.presence || j.name, j.id, '0']
       end
-    end
+    else
+      if @upload_user.organization.try(:specific_mission)
+        account_book_types = @upload_user.account_book_types.specific_mission.by_position
+      elsif @upload_user.authorized_upload?
+        account_book_types_all      = @upload_user.account_book_types.by_position
+        account_book_types_bank     = @upload_user.account_book_types.bank_processable.by_position
 
-    options = account_book_types.map do |j|
-      [j.name + ' ' + j.description, j.name, (j.compta_processable? ? '1' : '0')]
+        account_book_types = account_book_types_all
+
+        if not @upload_user.authorized_bank_upload?
+          account_book_types = account_book_types_all - account_book_types_bank
+        elsif not @upload_user.authorized_basic_upload?
+          account_book_types = account_book_types_bank
+        end
+      end
+      options = account_book_types.map do |j|
+        [j.name + ' ' + j.description, j.name, (j.compta_processable? ? '1' : '0')]
+      end
     end
 
     render json: options, status: 200

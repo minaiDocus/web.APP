@@ -1,3 +1,5 @@
+- customer_selected = User.find(params[:uid].present? ? params[:uid] : @user.id)
+= hidden_field_tag :customer_code, customer_selected.code
 .row
   .col-md-2
     .lefter.mt-5

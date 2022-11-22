@@ -23,8 +23,8 @@
         .col-md-3.pt-2
           .semibold Dossier
         .col-md-9
-          - @users << @user if !@users.select { |u| u.id == @user.id }.any?
           = select_tag 'customers', options_for_select(@users.reverse.map{ |e| [e.short_info, e.id] }, params[:uid].present? ? params[:uid] : @user.id), id: 'customers', class: 'form-select', include_blank: false
+
     .col-md-3
     .col-md-3
       .search-content
