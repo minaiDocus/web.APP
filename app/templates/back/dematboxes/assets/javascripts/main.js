@@ -1,7 +1,6 @@
 class AdminDematbox {
   constructor(){
-    this.applicationJS    = new ApplicationJS;    
-    this.dematbox_modal  = $('#filter-demat-file.modal');    
+    this.dematbox_modal  = $('#filter-demat-file.modal');
   }
 
   load_events(){
@@ -13,17 +12,12 @@ class AdminDematbox {
       self.dematbox_modal.modal('show');
     }); 
   }
-
-  main() {
-    this.load_events();    
-  }  
+ 
 }
 
 jQuery(function() {
   let dematbox = new AdminDematbox();
-  dematbox.main();
 
-  bind_globals_events();
-
-  AppListenTo('show_dematbox', (e)=>{ if (e.detail.response.success) { window.location.href = e.detail.response.url } });
+  dematbox.load_events();
+  AppListenTo('window.application_auto_rebind', (e)=>{  dematbox.load_events(); });
 });

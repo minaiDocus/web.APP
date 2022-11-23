@@ -1,6 +1,5 @@
 class AdminRetriever {
   constructor(){
-    this.applicationJS      = new ApplicationJS;    
     this.retriever_filter_modal  = $('#filter-retriever');
   }
 
@@ -15,15 +14,12 @@ class AdminRetriever {
 
   }
 
-  main() {
-    this.load_events();    
-  }
 }
 
 jQuery(function() {
   let retriever = new AdminRetriever();
-  retriever.main();
-
-  bind_globals_events();
+  
+  retriever.load_events();
+  AppListenTo('window.application_auto_rebind', (e)=>{  retriever.load_events(); });
 });
 
