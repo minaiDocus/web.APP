@@ -23,7 +23,7 @@
       .col-md-8
         - if report.created_at >= 1.days.ago
           %span.badge.badge-success.semibold Nouveau
-        - if @user.pre_assignement_displayed? && report.has_not_delivered_preseizures?
+        - if @user.pre_assignement_displayed? && report.has_no_delivered_preseizures?
           %span.badge.badge-danger.semibold Ecritures non livrées
         - if report.expenses.size > 0
           %span.badge.bg-dark.semibold Notes de frais

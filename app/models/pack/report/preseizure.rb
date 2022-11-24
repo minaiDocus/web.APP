@@ -19,14 +19,18 @@ class Pack::Report::Preseizure < ApplicationRecord
   belongs_to :similar_preseizure, class_name: 'Pack::Report::Preseizure', optional: true
 
   scope :locked,                        -> { where(is_locked: true) }
-  scope :failed_delivery,               -> { where(is_delivered_to: [nil, '']).where.not(delivery_message: [nil, '', '{}']).where.not(delivery_tried_at: nil).where('pack_report_preseizures.delivery_message NOT LIKE "%already sent%"') }
+
+  scope :failed_delivery,               -> { where(delivery_state: 'failed') }
+  scope :not_delivered,                 -> (software = nil) { where(delivery_state: 'not_delivered') } #The paramater prevent bug from previous system
+  scope :delivered,                     -> (software = nil) { where.not(delivery_state: ['not_configured', 'not_delivered', 'failed']) } #The paramater prevent bug from previous system
+
   scope :recent,                        -> (time = 6.months.ago) { where('pack_report_preseizures.updated_at >= ?', time.try(:to_date)) }
   scope :not_locked,                    -> { where(is_locked: false) }
   scope :by_position,                   -> { order(position: :asc) }
   scope :not_deleted,                   -> { joins('LEFT JOIN pack_pieces ON pack_report_preseizures.piece_id = pack_pieces.id').where('pack_pieces.id IS NULL OR pack_pieces.delete_at is NULL') }
-  scope :exported,                      -> { joins('INNER JOIN pack_report_preseizures_pre_assignment_exports ON pack_report_preseizures.id = pack_report_preseizures_pre_assignment_exports.preseizure_id').where('pack_report_preseizures_pre_assignment_exports.id > 0').distinct }
-  scope :not_exported,                  -> { joins('LEFT JOIN pack_report_preseizures_pre_assignment_exports ON pack_report_preseizures.id = pack_report_preseizures_pre_assignment_exports.preseizure_id').where('pack_report_preseizures_pre_assignment_exports.id IS NULL').distinct }
 
+  scope :exported,                      -> { where.not(export_state: ['not_exported', 'not_configured', 'failed']) }
+  scope :not_exported,                  -> { where(export_state: 'not_exported') }
 
   scope :blocked_duplicates,            -> { where(is_blocked_for_duplication: true, marked_as_duplicate_at: nil) }
   scope :potential_duplicates,          -> { where.not(duplicate_detected_at: nil) }
@@ -59,6 +63,7 @@ class Pack::Report::Preseizure < ApplicationRecord
     preseizures = preseizures.delivered           if options[:is_delivered].present? && options[:is_delivered].to_i == 1
     preseizures = preseizures.not_delivered       if options[:is_delivered].present? && options[:is_delivered].to_i == 2
     preseizures = preseizures.failed_delivery     if options[:is_delivered].present? && options[:is_delivered].to_i == 3
+
     preseizures = preseizures.exported            if options[:is_delivered].present? && options[:is_delivered].to_i == 4
     preseizures = preseizures.not_exported        if options[:is_delivered].present? && options[:is_delivered].to_i == 5
 
@@ -75,44 +80,44 @@ class Pack::Report::Preseizure < ApplicationRecord
     preseizures.distinct
   end
 
-  def self.not_delivered(software=nil)
-    preseizures = self.all
+  # def self.not_delivered(software=nil)
+  #   preseizures = self.all
 
-    if software.nil?
-      user_ids = []
+  #   if software.nil?
+  #     user_ids = []
 
-      ['ibiza', 'sage_gec', 'acd'].each do |software_name|
-        model_software = Interfaces::Software::Configuration.softwares[software_name.to_sym]
-        user_ids = user_ids + model_software.where(is_used: true, owner_type: 'User').pluck(:owner_id)
-      end
+  #     ['ibiza', 'sage_gec', 'acd'].each do |software_name|
+  #       model_software = Interfaces::Software::Configuration.softwares[software_name.to_sym]
+  #       user_ids = user_ids + model_software.where(is_used: true, owner_type: 'User').pluck(:owner_id)
+  #     end
 
-      user_ids = user_ids.flatten.compact.uniq
+  #     user_ids = user_ids.flatten.compact.uniq
 
-      preseizures = preseizures.where(user_id: user_ids).where(is_delivered_to: [nil, ''])
-    else
-      return preseizures.where(id: -1) if not software.in? Interfaces::Software::Configuration::SOFTWARES #IMPORTANT : we return an empty active record not an Array
+  #     preseizures = preseizures.where(user_id: user_ids).where(is_delivered_to: [nil, ''])
+  #   else
+  #     return preseizures.where(id: -1) if not software.in? Interfaces::Software::Configuration::SOFTWARES #IMPORTANT : we return an empty active record not an Array
 
-      model_software = Interfaces::Software::Configuration.softwares[software.to_sym]
+  #     model_software = Interfaces::Software::Configuration.softwares[software.to_sym]
 
-      user_ids = model_software.where(is_used: true, owner_type: 'User').pluck(:owner_id)
+  #     user_ids = model_software.where(is_used: true, owner_type: 'User').pluck(:owner_id)
 
-      preseizures = preseizures.where(user_id: user_ids).where.not(is_delivered_to: software)
-    end
+  #     preseizures = preseizures.where(user_id: user_ids).where.not(is_delivered_to: software)
+  #   end
 
-    preseizures.distinct
-  end
+  #   preseizures.distinct
+  # end
 
-  def self.delivered(software=nil)
-    preseizures = self.all
+  # def self.delivered(software=nil)
+  #   preseizures = self.all
 
-    if software.nil?
-      preseizures = preseizures.where.not(is_delivered_to: [nil, ''])
-    else
-      preseizures = preseizures.where("is_delivered_to = '#{software}'")
-    end
+  #   if software.nil?
+  #     preseizures = preseizures.where.not(is_delivered_to: [nil, ''])
+  #   else
+  #     preseizures = preseizures.where("is_delivered_to = '#{software}'")
+  #   end
 
-    preseizures
-  end
+  #   preseizures
+  # end
 
   #Override belong_to piece getter because of default scope
   def piece
@@ -283,6 +288,10 @@ class Pack::Report::Preseizure < ApplicationRecord
     ( self.user.try(:uses?, :acd) && is_delivered_to?('acd') )
   end
 
+  def is_delivered_to?(software='ibiza')
+    self.delivery_state == software.to_s
+  end
+
   def is_not_delivered?
     ( self.user.try(:uses?, :ibiza) && !is_delivered_to?('ibiza') ) ||
     ( self.user.try(:uses?, :exact_online) && !is_delivered_to?('exact_online') ) ||
@@ -291,11 +300,23 @@ class Pack::Report::Preseizure < ApplicationRecord
   end
 
   def is_exported?
-    pre_assignment_exports.count > 0
+    not ['not_configured', 'not_exported', 'failed'].include?(self.export_state.to_s)
   end
 
   def delivery_failed?
-    is_not_delivered? && delivery_message != '' && delivery_message != '{}'
+    self.delivery_state == 'failed'
+  end
+
+  def delivered_to(software)
+    return true if is_delivered_to?(software)
+
+    # softwares = self.is_delivered_to.split(',') || []
+    # softwares << software
+    # self.is_delivered_to = softwares.sort.join(',')
+    self.is_delivered_to = software
+    self.delivery_state  = software
+
+    save
   end
 
   def is_not_blocked_for_duplication
@@ -312,21 +333,6 @@ class Pack::Report::Preseizure < ApplicationRecord
 
   def has_deleted_piece?
     self.piece.try(:delete_at).try(:present?) ? true : false
-  end
-
-  def delivered_to(software)
-    return true if is_delivered_to?(software)
-
-    # softwares = self.is_delivered_to.split(',') || []
-    # softwares << software
-    # self.is_delivered_to = softwares.sort.join(',')
-    self.is_delivered_to = software
-    self.delivery_state  = software
-    save
-  end
-
-  def is_delivered_to?(software='ibiza')
-    self.is_delivered_to.to_s.match(/#{software}/) ? true : false
   end
 
   def set_delivery_message_for(software='ibiza', message="can t open connection")

@@ -160,8 +160,8 @@ class Pack < ApplicationRecord
     documents.count > 0
   end
 
-  def has_not_delivered_preseizures?
-    self.preseizures.not_delivered('ibiza').count > 0 #JUST IBIZA FOR NOW
+  def has_no_delivered_preseizures?
+    self.preseizures.not_delivered.count > 0
   end
 
   def set_tags
