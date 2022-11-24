@@ -1,10 +1,12 @@
 class PreAssignment::Delivery::Ibiza < PreAssignment::Delivery::DataService
-  RETRYABLE_ERRORS = ['The fog cant be created', 'The fog is not checked', 'La connexion sous-jacente a été', 'An error occured', "can t open connection", "can not establish connection", "undefined method", "authentification (ibiza) a échoué", "(404) Introuvable", "The remote server returned an error", "Erreur inconnu", 'stream data is not valid', 'operation has timed out', 'impossible de se connecter', 'unable to connect', 'element is missing']
+  RETRYABLE_ERRORS     = ['The fog cant be created', 'The fog is not checked', 'La connexion sous-jacente a été', 'An error occured', "can t open connection", "can not establish connection", "undefined method", "authentification (ibiza) a échoué", "(404) Introuvable", "The remote server returned an error", "Erreur inconnu", 'stream data is not valid', 'operation has timed out', 'impossible de se connecter', 'unable to connect', 'element is missing']
+  NOT_RETRYABLE_ERRORS = ['journal est inconnu']
+
 
   def self.retry_delivery(delivery_id)
     delivery = PreAssignmentDelivery.find delivery_id
 
-    delivery.update(state: 'pending', error_message: 'retry sending') if delivery.state == 'error'
+    delivery.update(state: 'pending', error_message: "retry_sending_#{retry_count}") if delivery.state == 'error'
   end
 
   def self.execute(delivery)
@@ -22,6 +24,8 @@ class PreAssignment::Delivery::Ibiza < PreAssignment::Delivery::DataService
   def execute
     @delivery.sending
 
+    @previous_error = @delivery.error_message
+
     ibiza_client.request.clear
 
     begin
@@ -34,23 +38,21 @@ class PreAssignment::Delivery::Ibiza < PreAssignment::Delivery::DataService
       if ibiza_client.response.success?
         handle_delivery_success
       else
-        error_message = ibiza_client.response.message.to_s.presence
-        previous_error = @delivery.error_message
+        error_message = ibiza_client.response.message.to_s
+        handle_delivery_error error_message.presence || ibiza_client.response.status.to_s
 
         is_retryable_error = false
         RETRYABLE_ERRORS.each do |c_error|
-          is_retryable_error = true if !is_retryable_error && error_message.match(c_error)
+          is_retryable_error = true if !is_retryable_error && error_message.match(/#{c_error}/i)
         end
 
-        handle_delivery_error error_message || ibiza_client.response.status.to_s
-
-        if is_retryable_error && previous_error != 'retry sending'
-          PreAssignment::Delivery::Ibiza.delay_for(1.hours, queue: :default).retry_delivery(@delivery.id)
+        if is_retryable_error
+          retry_sending
         else
           retry_delivery = true
 
-          ['Le journal est inconnu'].each do |message|
-            retry_delivery = false if ibiza_client.response.message.to_s.match /#{message}/
+          NOT_RETRYABLE_ERRORS.each do |message|
+            retry_delivery = false if error_message.match(/#{message}/i)
           end
 
           if retry_delivery && @preseizures.size > 1
@@ -76,11 +78,9 @@ class PreAssignment::Delivery::Ibiza < PreAssignment::Delivery::DataService
 
       ErrorScriptMailer.error_notification(log_document).deliver
 
-      if pending_message == 'limit pending reached'
-        handle_delivery_error pending_message
-      else
-        @delivery.update(state: 'pending', error_message: pending_message)
-      end
+      handle_delivery_error 'Internal service error!'
+
+      retry_sending
     end
 
     @delivery.sent?
@@ -88,5 +88,12 @@ class PreAssignment::Delivery::Ibiza < PreAssignment::Delivery::DataService
 
   def ibiza_client
     @ibiza_client ||= IbizaLib::Api::Client.new(@delivery.ibiza_access_token, @software.specific_url_options, IbizaLib::ClientCallback.new(@software, @delivery.ibiza_access_token))
+  end
+
+  def retry_sending
+    retry_count  = @previous_error.gsub('retry_sending_', '').to_i
+    retry_count += 1
+
+    PreAssignment::Delivery::Ibiza.delay_for(1.hours, queue: :default).retry_delivery(@delivery.id, retry_count) if retry_count <= 3
   end
 end
