@@ -2,6 +2,8 @@
   = stylesheet_link_tag 'front/organizations/assets/stylesheets/show_axelium'
 - elsif request.env["SERVER_NAME"].include?("dkpartners")
   = stylesheet_link_tag 'front/organizations/assets/stylesheets/show_dk_partners'
+- elsif request.env["SERVER_NAME"].include?("censial")
+  = stylesheet_link_tag 'front/organizations/assets/stylesheets/show_censial'
 - else
   = stylesheet_link_tag 'front/organizations/assets/stylesheets/show'
 

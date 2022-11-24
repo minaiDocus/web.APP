@@ -4,6 +4,8 @@ module BrandHelper
       'Axelium'
     elsif request.env["SERVER_NAME"].include?('dkpartners')
       'DK Partners'
+    elsif request.env["SERVER_NAME"].include?('censial')
+      'Censial Online'
     else
       'iDocus'
     end

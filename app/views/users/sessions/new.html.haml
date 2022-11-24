@@ -2,7 +2,15 @@
 %html
   %head
     %title
-      Idocus | Connexion
+      - if request.env["SERVER_NAME"].include?("axelium")
+        Axelium | Connexion
+      - elsif request.env["SERVER_NAME"].include?("dkpartners")
+        DK Partners | Connexion
+      - elsif request.env["SERVER_NAME"].include?("censial")
+        Censial Online | Connexion
+      - else
+        Idocus | Connexion
+      
     %meta{ :content => "text/html; charset=UTF-8", "http-equiv" => "Content-type" }
     %meta{ name: "viewport", content: "width=device-width, initial-scale=1" }
 
@@ -11,6 +19,8 @@
       = stylesheet_link_tag 'front/main_axelium'
     - elsif request.env["SERVER_NAME"].include?("dkpartners")
       = stylesheet_link_tag 'front/main_dk_partners'
+    - elsif request.env["SERVER_NAME"].include?("censial")
+      = stylesheet_link_tag 'front/main_censial'
     - else
       = stylesheet_link_tag 'front/main'
 
@@ -23,6 +33,8 @@
             %span.semibold.label_idocus Axelium
           - elsif request.env["SERVER_NAME"].include?("dkpartners")
             %span.semibold.label_idocus DK Partners
+          - elsif request.env["SERVER_NAME"].include?("censial")
+            %span.semibold.label_idocus Censial Online
           - else
             %span.semibold.label_idocus iDocus
 

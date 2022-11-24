@@ -4,6 +4,9 @@
 - elsif @user.organization.try(:code) == 'DK'
   - url = 'https://demat.dkpartners.fr/'
   - team = 'DK Partners'
+- elsif @user.organization.try(:code) == 'CEN'
+  - url = 'https://www.censial-online.fr/'
+  - team = 'Censial Online'
 - else
   - url = @url
   - team = 'iDocus'

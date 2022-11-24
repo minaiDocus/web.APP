@@ -1,5 +1,9 @@
 - if request.env["SERVER_NAME"].include?("axelium")
   = stylesheet_link_tag 'front/organization_lefter_axelium'
+- elsif request.env["SERVER_NAME"].include?("censial")
+  = stylesheet_link_tag 'front/organization_lefter_censial'
+- elsif request.env["SERVER_NAME"].include?("dkpartners")
+  = stylesheet_link_tag 'front/organization_lefter_dkpartners'
 - else
   = stylesheet_link_tag 'front/organization_lefter'
 

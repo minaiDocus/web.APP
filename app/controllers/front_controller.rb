@@ -35,6 +35,8 @@ class FrontController < ApplicationController
       'front/layout_axelium'
     elsif request.env["SERVER_NAME"].include?('dkpartners')
       'front/layout_dk_partners'
+    elsif request.env["SERVER_NAME"].include?('censial')
+      'front/layout_censial'
     else
       'front/layout'
     end

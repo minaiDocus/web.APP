@@ -8,6 +8,8 @@ class WelcomeMailer < BaseMailer
       mail(to: @user.email, subject: '[Axelium] Création de compte Axelium')
     elsif @user.organization&.code == "DK"
       mail(to: @user.email, subject: '[DK Partners] Création de compte DK Partners')
+    elsif @user.organization&.code == "CEN"
+      mail(to: @user.email, subject: '[Censial Online] Création de compte Censial Online')
     else
       mail(to: @user.email, subject: '[iDocus] Création de compte iDocus')
     end
@@ -21,6 +23,8 @@ class WelcomeMailer < BaseMailer
       mail(to: @collaborator.email, subject: '[Axelium] Création de compte Axelium')
     elsif "DK".in?(@collaborator.organizations.pluck(:code))
       mail(to: @user.email, subject: '[DK Partners] Création de compte DK Partners')
+    elsif "CEN".in?(@collaborator.organizations.pluck(:code))
+      mail(to: @user.email, subject: '[Censial Online] Création de compte Censial Online')
     else
       mail(to: @collaborator.email, subject: '[iDocus] Création de compte iDocus')
     end
@@ -34,6 +38,8 @@ class WelcomeMailer < BaseMailer
       mail(to: @guest.email, subject: '[Axelium] Création de compte Axelium')
     elsif @guest.organization&.code == "DK"
       mail(to: @guest.email, subject: '[DK Partners] Création de compte DK Partners')
+    elsif @guest.organization&.code == "CEN"
+      mail(to: @guest.email, subject: '[Censial Online] Création de compte Censial Online')
     else
       mail(to: @guest.email, subject: '[iDocus] Création de compte iDocus')
     end

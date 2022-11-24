@@ -20,6 +20,12 @@
           = "Copyright DK Partners"
           &copy;
           %span.semibold= Time.now.strftime('%Y')
+    - elsif request.env["SERVER_NAME"].include?("censial")
+      .col-md-12.text-center
+        %p.m-0.text-white
+          = "Copyright Censial"
+          &copy;
+          %span.semibold= Time.now.strftime('%Y')
     - else
       .col-md-6.text-start.text-white
         .contact-number
