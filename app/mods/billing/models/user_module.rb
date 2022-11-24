@@ -5,6 +5,7 @@ module BillingMod::UserModule
     has_many :data_flows, class_name: 'BillingMod::DataFlow', dependent: :destroy
     has_many :packages, class_name: 'BillingMod::Package', dependent: :destroy
     has_many :billings, class_name: 'BillingMod::Billing', as: :owner
+    has_many :billing_simulations, class_name: 'BillingMod::BillingSimulation', as: :owner
     has_many :extra_orders, class_name: 'BillingMod::ExtraOrder', as: :owner
   end
 

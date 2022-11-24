@@ -3,6 +3,7 @@ module BillingMod::OrganizationModule
 
   included do
     has_many :billings, class_name: 'BillingMod::Billing', as: :owner
+    has_many :billing_simulations, class_name: 'BillingMod::BillingSimulation', as: :owner
     has_many :extra_orders, class_name: 'BillingMod::ExtraOrder', as: :owner
   end
 

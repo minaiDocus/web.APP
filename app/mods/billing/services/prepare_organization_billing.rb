@@ -1,14 +1,17 @@
 class BillingMod::PrepareOrganizationBilling
-  def initialize(organization, period=nil)
+  def initialize(organization, period=nil, simulation=false)
     @organization = organization
     @period       = period.presence || CustomUtils.period_of(Time.now)
     @time_end     = Date.parse("#{@period.to_s[0..3]}-#{@period.to_s[4..5]}-15")
+
+    @simulation   = simulation
   end
 
   def execute(force=false)
     return false if !force && !@organization.can_be_billed?
 
-    @organization.billings.of_period(@period).update_all(is_frozen: true)
+    @simulation ? @organization.billing_simulations.of_period(@period).update_all(is_frozen: true) : @organization.billings.of_period(@period).update_all(is_frozen: true)
+    
     @customers_ids = []
     @organization.customers.active_at(@time_end).each do |customer|
       next if not customer.can_be_billed_at?(@period)
@@ -27,7 +30,7 @@ class BillingMod::PrepareOrganizationBilling
 
     create_extra_order_billing
 
-    @organization.billings.of_period(@period).is_frozen.destroy_all
+    @simulation ? @organization.billing_simulations.of_period(@period).is_frozen.destroy_all : @organization.billings.of_period(@period).is_frozen.destroy_all
   end
 
   private
@@ -117,6 +120,8 @@ class BillingMod::PrepareOrganizationBilling
     #TODO : Find a way to remove SubscriptionOption, instead use direclty ExtraOrder
     options = @organization.subscription.options.where(period_duration: 0)
     options.each do |option|
+      next if @simulation && !@organization.extra_orders.where(name: option.name).any?
+
       extra_order        = @organization.extra_orders.where(name: option.name).first || BillingMod::ExtraOrder.new
       extra_order.period = @period
       extra_order.owner  = @organization
@@ -132,7 +137,11 @@ class BillingMod::PrepareOrganizationBilling
   end
 
   def create_billing(params)
-    billing        = @organization.billings.where(period: @period, name: params[:name], title: params[:title], kind: (params[:kind] || 'normal' )).first || BillingMod::Billing.new
+    if @simulation
+      billing = @organization.billing_simulations.where(period: @period, name: params[:name], title: params[:title], kind: (params[:kind] || 'normal' )).first || BillingMod::BillingSimulation.new
+    else
+      billing = @organization.billings.where(period: @period, name: params[:name], title: params[:title], kind: (params[:kind] || 'normal' )).first || BillingMod::Billing.new
+    end
 
     billing.owner  = @organization
     billing.period = @period
