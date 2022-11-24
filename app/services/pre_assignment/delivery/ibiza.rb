@@ -1,5 +1,5 @@
 class PreAssignment::Delivery::Ibiza < PreAssignment::Delivery::DataService
-  RETRYABLE_ERRORS = ['The fog cant be created', 'The fog is not checked', 'La connexion sous-jacente a été', 'An error occured', "can t open connection", "can not establish connection", "undefined method `each", "authentification (ibiza) a échoué", "(404) Introuvable", "The remote server returned an error", "Erreur inconnu"]
+  RETRYABLE_ERRORS = ['The fog cant be created', 'The fog is not checked', 'La connexion sous-jacente a été', 'An error occured', "can t open connection", "can not establish connection", "undefined method", "authentification (ibiza) a échoué", "(404) Introuvable", "The remote server returned an error", "Erreur inconnu", 'stream data is not valid', 'operation has timed out', 'impossible de se connecter', 'unable to connect', 'element is missing']
 
   def self.retry_delivery(delivery_id)
     delivery = PreAssignmentDelivery.find delivery_id
