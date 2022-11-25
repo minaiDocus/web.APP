@@ -6,7 +6,7 @@ $(document).ready(function() {
 
   finalize_table_loading = function(){
     $('#reporting #loadingPage').addClass('hide')
-    footer_table_data = [[0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0]]
+    footer_table_data = [[0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0], [0,0,0,0,0,0,0,0,0,0,0,0]]
     with_params_year  = $('input[type=hidden].total-span-3').val()
 
     $('#reporting .organization_list tr.row_organizations').each(function(){
@@ -14,6 +14,7 @@ $(document).ready(function() {
         total_0 = $(val).find('input[type=hidden].total-span-0').val()
         total_1 = $(val).find('input[type=hidden].total-span-1').val()
         total_2 = $(val).find('input[type=hidden].total-span-2').val()
+        total_3 = $(val).find('input[type=hidden].total-span-3').val()
 
         if(!(total_0 == 'undefined' || total_0 == undefined || total_0 == '' || total_0 == null))
           footer_table_data[0][index] += parseFloat(total_0)
@@ -21,6 +22,8 @@ $(document).ready(function() {
           footer_table_data[1][index] += parseFloat(total_1)
         if(!(total_2 == 'undefined' || total_2 == undefined || total_2 == '' || total_2 == null))
           footer_table_data[2][index] += parseInt(total_2)
+        if(!(total_3 == 'undefined' || total_3 == undefined || total_3 == '' || total_3 == null))
+          footer_table_data[3][index] += parseInt(total_3)
       });
     });
 
