@@ -187,6 +187,6 @@ class Pack::Report < ApplicationRecord
 
 
   def has_no_delivered_preseizures?
-    self.preseizures.not_delivered.count > 0
+    self.preseizures.failed_delivery.count > 0
   end
 end
