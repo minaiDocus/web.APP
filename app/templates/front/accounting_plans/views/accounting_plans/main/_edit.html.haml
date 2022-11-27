@@ -13,13 +13,12 @@
       = select_tag 'accounting_plan_item[conterpart_accounts][]', options_for_select(@conterpart_accounts, @accounting_plan_item.conterpart_accounts.map(&:id)), include_blank: false,  class: 'w-100 searchable-option-list', multiple: true
 
   - if params[:type] == 'provider'
-    .hide
-      = f.input :vat_autoliquidation_debit_account
-      = f.input :vat_autoliquidation_credit_account
-      .row
-        .col-md-10.form-group.no-margin
-          = f.label :vat_autoliquidation, class: 'control-label semibold form-check-label'
-        .col-md-2
-          .form-check.form-switch.idocus-custom-form-check
-            = f.input :vat_autoliquidation, as: :boolean, label: false, input_html: { class: 'form-check-input input_switch input_check_field check-vat-autoliquidation', id: 'check-vat-autoliquidation' }
-            %label.semibold{class: 'form-check-label label_check_field', for: 'check-vat-autoliquidation'} Non
+    = f.input :vat_autoliquidation_debit_account
+    = f.input :vat_autoliquidation_credit_account
+    .row
+      .col-md-10.form-group.no-margin
+        = f.label :vat_autoliquidation, class: 'control-label semibold form-check-label'
+      .col-md-2
+        .form-check.form-switch.idocus-custom-form-check
+          = f.input :vat_autoliquidation, as: :boolean, label: false, input_html: { class: 'input_check_field check-vat-autoliquidation', id: 'check-vat-autoliquidation' }
+          / #%label.semibold{class: 'form-check-label label_check_field', for: 'check-vat-autoliquidation'} Non
