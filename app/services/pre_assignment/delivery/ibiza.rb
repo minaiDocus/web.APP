@@ -3,7 +3,7 @@ class PreAssignment::Delivery::Ibiza < PreAssignment::Delivery::DataService
   NOT_RETRYABLE_ERRORS = ['journal est inconnu']
 
 
-  def self.retry_delivery(delivery_id)
+  def self.retry_delivery(delivery_id, retry_count)
     delivery = PreAssignmentDelivery.find delivery_id
 
     delivery.update(state: 'pending', error_message: "retry_sending_#{retry_count}") if delivery.state == 'error'
