@@ -175,7 +175,7 @@ class Pack::Report < ApplicationRecord
     mess = ''
     if self.delivery_message.present?
       mess = JSON.parse(self.delivery_message) rescue { "#{software.to_s}" => self.delivery_message }
-      mess = mess[software.to_s] || ''
+      mess = mess[software.to_s] || '' rescue self.delivery_message
     end
     mess
   end
