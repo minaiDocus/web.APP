@@ -8,7 +8,8 @@ class BillingMod::PrepareUserBilling
   end
 
   def execute
-    return false if !@user.still_active? || @user.is_prescriber
+    return false if !@user.active_at?(@period) || @user.is_prescriber
+    # return false if !@user.still_active? || @user.is_prescriber
 
     @package = @user.package_of(@period)
     @package = clone_existing_package if not @package

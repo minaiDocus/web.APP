@@ -39,15 +39,24 @@ class PonctualScripts::ExportExtentisCsv < PonctualScripts::PonctualScript
     customers.each_with_index do |customer, index|
       data = []
       periods.each do |period|
+        next if not customer.active_at?(period)
+
         saved_package = customer.package_of period
 
-        period_package = customer.package_simulations.of_period(period) || BillingMod::PackageSimulation.new
+        period_package = customer.package_simulations.of_period(period).first
 
-        period_package.name                 = 'ido_nano'
-        period_package.scan_active          = true
-        period_package.preassignment_active = true
+        if not period_package
+          period_package                      = BillingMod::PackageSimulation.new
+          period_package.name                 = 'ido_nano'
+          period_package.period               = period
+          period_package.mail_active          = saved_package.try(:mail_active)
+          period_package.bank_active          = saved_package.try(:bank_active)
+          period_package.scan_active          = true
+          period_package.preassignment_active = true
+          period_package.user                 = customer
 
-        period_package.save
+          period_package.save
+        end
 
         BillingMod::PrepareUserBilling.new(customer, period, true).execute
 
