@@ -39,9 +39,9 @@ class PonctualScripts::ExportExtentisCsv < PonctualScripts::PonctualScript
     customers.each_with_index do |customer, index|
       data = []
       periods.each do |period|
-        period_package = customer.package_of period
+        saved_package = customer.package_of period
 
-        save_package = period_package.dup
+        period_package = customer.package_simulations.of_period(period) || BillingMod::PackageSimulation.new
 
         period_package.name                 = 'ido_nano'
         period_package.scan_active          = true
@@ -51,21 +51,14 @@ class PonctualScripts::ExportExtentisCsv < PonctualScripts::PonctualScript
 
         BillingMod::PrepareUserBilling.new(customer, period, true).execute
 
-        period_package.reload
+        customer.deactivate_simulation
+        total_customers_price_old[period] += CustomUtils.format_price(customer.total_billing_of(period)).to_f
 
-        period_package.name                 = save_package.name
-        period_package.scan_active          = save_package.scan_active
-        period_package.preassignment_active = save_package.preassignment_active
+        customer.activate_simulation
+        total_billing_customer_period  = CustomUtils.format_price(customer.total_billing_of(period)).to_f
+        total_customers_price[period] += total_billing_customer_period
 
-        period_package.save
-
-        total_billing_customer_period = customer.billing_simulations.of_period(period).select("SUM(price) as price").first.price.to_f
-
-        total_customers_price_old[period] += CustomUtils.format_price(customer.total_billing_of(period)).to_f || 0
-
-        total_customers_price[period] += CustomUtils.format_price(total_billing_customer_period).to_f || 0
-
-        data << CustomUtils.format_price(total_billing_customer_period)
+        data << total_billing_customer_period
       end
 
       datas << [customer.code] + data
@@ -74,12 +67,14 @@ class PonctualScripts::ExportExtentisCsv < PonctualScripts::PonctualScript
     periods.each do |period|
       BillingMod::PrepareOrganizationBilling.new(organization, period, true).execute
 
-      total_organization_price_new = organization.billing_simulations.of_period(period).select("SUM(price) as price").first.price.to_i
-
-      data_organization << CustomUtils.format_price(total_organization_price_new)
-
+      organization.deactivate_simulation
       data_old_amount  << total_customers_price_old[period] + CustomUtils.format_price(organization.total_billing_of(period)).to_f
-      data_new_amount  << total_customers_price[period] + CustomUtils.format_price(total_organization_price_new).to_f
+
+      organization.activate_simulation
+      total_organization_price_new = CustomUtils.format_price(organization.total_billing_of(period)).to_f
+
+      data_organization << total_organization_price_new
+      data_new_amount  << total_customers_price[period] + total_organization_price_new
     end
 
     datas << ["Autres"] + data_organization
