@@ -90,7 +90,7 @@ class BillingMod::PrepareUserBilling
       package_name    = @package.try(:human_name)
     end
 
-    if remaining_month > 0 && w > 0
+    if remaining_month > 0 && base_price > 0
       create_billing({ name: 'remaining_month', title: "#{package_name} : engagement #{remaining_month} mois restant(s)", kind: 'normal', price: base_price * remaining_month, associated_hash: { remaining_month: remaining_month, price: base_price } })
     end
   end
