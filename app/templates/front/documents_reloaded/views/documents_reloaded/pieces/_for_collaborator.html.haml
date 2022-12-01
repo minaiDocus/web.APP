@@ -150,8 +150,7 @@
                     %td.pointer.as_idocus_ajax{ title: 'Voir détail', idocus: ajx_params, datas: { piece_id: piece.id } }
                       = preseizure.try(:third_party).to_s + ' - ' + preseizure.try(:piece_number).to_s
                     %td.pointer.as_idocus_ajax{ title: 'Voir détail', idocus: ajx_params, datas: { piece_id: piece.id } }
-                      - if preseizure.try(:amount).present?
-                        = preseizure.try(:amount).to_s + ' €'
+                      = preseizure.try(:amount_ttc).to_s + ' €'
                     %td.pointer.as_idocus_ajax{ title: 'Voir détail', idocus: ajx_params, datas: { piece_id: piece.id } }
                       - delivery_state = 'none'
                       - if !preseizure.is_exported?

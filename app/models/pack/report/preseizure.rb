@@ -281,6 +281,10 @@ class Pack::Report::Preseizure < ApplicationRecord
     nil
   end
 
+  def amount_ttc
+    ( self.amount.presence || self.cached_amount ).to_f.round(2)
+  end
+
   def is_delivered?
     ( self.user.try(:uses?, :ibiza) && is_delivered_to?('ibiza') ) ||
     ( self.user.try(:uses?, :exact_online) && is_delivered_to?('exact_online') ) ||
