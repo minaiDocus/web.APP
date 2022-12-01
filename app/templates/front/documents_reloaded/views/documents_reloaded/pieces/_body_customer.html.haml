@@ -21,6 +21,43 @@
             .col-md-7
               %button.btn.btn-light.btn-sm.cancel-add-rubric{ idocus: ajx_params } Annuler
               %button.btn.btn-dark.btn-sm.as_idocus_ajax{ idocus: ajx_params } Valider
+
+    %hr
+    %h3.semibild Recherche
+    .search-container
+      .search-content
+        .row.no-margin
+          .col-md-1.no-padding.text-center.glass
+            = glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })
+          .col-md-11.no-padding.no-margin
+            %input#search_input{ name:'pack_name', placeholder: 'Contenu . . .', value: @options.try(:[], :text) }
+
+      .mb-3
+
+      %form#pack_filter_form.simple_form.form-horizontal
+        .form-group
+          %label.semibold Nom de tiers
+          .select-container.no-padding
+            %input{ name: 'by_all[third_party]', value: (@options[:third_party] rescue '' ) }
+        .form-group
+          %label.semibold Date facture
+          .select-container.no-padding
+            %input.daterange{ name: 'by_all[date]', value: (@options[:date] rescue '' ) }
+        .form-group
+          %label.semibold Tags
+          .select-container.no-padding
+            %input{ name: 'by_all[tags]', value: (@options[:tags] rescue '' ) }
+        .form-group
+          %label.semibold Montant
+          .select-container.no-padding
+            %input{ type: :range, name: 'by_all[amount]', value: (@options[:amount] rescue '' ) }
+
+        .row.w-100.text-center
+          .col-md-6
+            %button.btn.btn-light.btn-sm.w-75.semibold.btn-reinit{:type => 'button', id: 'launch-reinit2', :type => 'button'} Effacer tout
+          .col-md-6
+            %button.btn.btn-dark.btn-sm.w-75.semibold.btn-add{:type => 'button', id: 'launch-filter'} Lancer
+
   .col-md-10      
     .box.derivationLeft#table_pieces
       .row
