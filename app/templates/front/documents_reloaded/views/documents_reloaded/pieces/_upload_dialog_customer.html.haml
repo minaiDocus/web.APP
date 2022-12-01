@@ -19,7 +19,7 @@
               %label.semibold
               = select_tag :l_journal, '', id: :l_journal, class: 'form-select w-100'
             - else
-              = select_tag :l_journal, options_for_select(AccountBookType.where(user_id: file_upload_users_list.collect(&:id)).map { |journal| [(journal.label.presence || journal.description.presence || journal.name), journal.id] }), id: :l_journal, class: 'form-select w-100'
+              = select_tag :l_journal, options_for_select(AccountBookType.where(user_id: file_upload_users_list.collect(&:id)).map { |journal| [journal.full_name, journal.id] }), id: :l_journal, class: 'form-select w-100'
             %span#compta_processable.hide
               %span.badge.bg-warning.mt-2
                 Ce journal n'est pas paramétré pour une pré-saisie comptable.

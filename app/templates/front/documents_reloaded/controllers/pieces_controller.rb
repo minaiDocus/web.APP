@@ -177,15 +177,17 @@ class DocumentsReloaded::PiecesController < DocumentsReloaded::AbaseController
     @options[:pre_assignment_state] = params[:by_piece][:state_piece]       if params[:by_piece].present? && params[:by_piece][:state_piece].present?
     @options[:position]             = params[:by_all][:position]            if params[:by_all].present? && params[:by_all][:position].present?
     @options[:position_operation]   = params[:by_all][:position_operation]  if params[:by_all].present? && params[:by_all][:position_operation].present?
-    text                            = params[:text]                         if params[:text].present?
+    @options[:text]                 = params[:text]                         if params[:text].present?
 
     @options[:temp_pack_ids] = TempPack.where(user_id: @options[:user_ids]).where("temp_packs.name LIKE '% #{@journal} %'").pluck(:id)
 
-    @filter_active = @options[:pre_assignment_state].present? || @options[:position].present? || params[:text].present?
+    @filter_active = @options[:pre_assignment_state].present? || @options[:position].present? || @options[:text].present?
 
     @users << @user if !@users.select { |u| u.id == @user.id }.any?
 
-    @temp_documents = TempDocument.where.not(state: 'unreadable').where(is_an_original: true).where("DATE_FORMAT(temp_documents.updated_at, '%Y%m') >= #{2.years.ago.strftime('%Y%m')}").search(@options, text).order(updated_at: :desc).page(@options[:page]).per(@options[:per_page])
+    # @temp_documents = TempDocument.where.not(state: 'unreadable').where(is_an_original: true).where("DATE_FORMAT(temp_documents.updated_at, '%Y%m') >= #{2.years.ago.strftime('%Y%m')}").search(@options, text).order(updated_at: :desc).page(@options[:page]).per(@options[:per_page])
+
+    @pieces = Pack::Piece.search(@options[:text] , @options).where("DATE_FORMAT(pack_pieces.updated_at, '%Y%m') >= #{2.years.ago.strftime('%Y%m')}").distinct.order(updated_at: :desc).page(@options[:page]).per(@options[:per_page])
   end
 
   private

@@ -3,7 +3,7 @@
     .col-md-10.derivationLeft
       %h3.bold
         %span.me-2 Mes Documents
-        %span.badge.badge-secondary.regular.datas_size= @temp_documents.total_count
+        %span.badge.badge-secondary.regular.datas_size= @pieces.total_count
         %span.filter-info.badge.bg-info.regular.datas_size.blink.hide Filtre actif
     - if @user.still_active?
       .col-md-2.derivationRight

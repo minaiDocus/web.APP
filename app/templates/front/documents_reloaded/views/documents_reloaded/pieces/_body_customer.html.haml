@@ -6,9 +6,9 @@
       %ul.principal.p-0
         - @journals.each_with_index do |journal, index|
           %li.direct_links
-            %a.rubric{ href: "#", data: { journal: { id: journal.id } } }              
-              %span.link_principal{ class: (journal.name == params[:journal] || (!params[:journal].present? && index == 0)) ? 'active' : ''}= journal.label.presence || journal.description.presence || journal.name || '-'
-        
+            %a.rubric{ href: "#", data: { journal: { id: journal.id } } }
+              %span.link_principal{ class: (journal.name == params[:journal] || (!params[:journal].present? && index == 0)) ? 'active' : ''}= journal.full_name
+
         %li.direct_links.add-rubric
           %span.float-end= glyphicon('plus', { color: "#C1D837", size: 10})
           %span.link_principal.green-label Ajouter une rubrique
@@ -29,21 +29,20 @@
             .filter_active.hide Filter
           %table.table.table-striped.list_customers
             %thead
-              %th Nom du fichier
-              %th Date envoi
-              %th Libellé personnalisé
-              %th Etiquettes
+              %th Nom du tiers
+              %th Date
+              %th Montant TTC
+              %th Tags
               %th.text-end Action
             %tbody
-              - @temp_documents.each do |temp_document|
+              - @pieces.each do |piece|
                 %tr
-                  %td.pointer.show-detail{ title: 'Voir détail', data: { content_url: temp_document.get_access_url, temp_document_id: temp_document.id }}
-                    .name.text-table-green= temp_document.original_file_name
+                  %td.pointer.show-detail{ title: 'Voir détail', data: { content_url: piece.get_access_url, piece_id: piece.id }}
+                    .name.text-table-green= piece.name
                   %td
-                    %span.info= temp_document.created_at.strftime('%d/%m/%Y')                  
-                  %td= temp_document.try(:label).presence || '-'
+                    %span.info= piece.created_at.strftime('%d/%m/%Y')
                   %td 
-                    - temp_document.tags&.each do |tag|
+                    - piece.tags&.each do |tag|
                       %span.badge.bg-dark= tag.strip
                   %td.text-end.pointer.align-middle
                     .action.sub_edit_delete.list-collaborators
@@ -51,8 +50,8 @@
                     .sub_menu.text-start.hide
                       %ul.no-margin.no-padding.regular
                         %li.edit-tags
-                          = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Editer les tags', '#', class: 'link update_tags', data: { id: temp_document.id, type: 'temp_documents' }
+                          = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Editer les tags', '#', class: 'link update_tags', data: { id: piece.id, type: 'piece' }
                         / %li
                         /   = link_to glyphicon('trash', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Supprimer', delete_temp_document_path({ id: temp_document.id, rubric: temp_document.label }), method: :delete, data: { confirm: t('actions.confirm') }
 
-          = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: documents_reloaded_path, target: '#table_pieces', total_pages: @temp_documents.total_pages, filter: 'pack_filter_form' }
+          = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: documents_reloaded_path, target: '#table_pieces', total_pages: @pieces.total_pages, filter: 'pack_filter_form' }
