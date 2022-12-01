@@ -18,7 +18,7 @@ describe Transaction::AccountNumberFinder do
       ]
     end
 
-    context 'without rules and without accounting plan' do
+    context 'without rules and without accounting plan', :first do
       it 'returns 0TEMP' do
         allow_any_instance_of(Transaction::AccountNumberFinder).to receive(:accounting_plan).and_return([])
 
@@ -28,7 +28,7 @@ describe Transaction::AccountNumberFinder do
       end
     end
 
-    context 'with accounting plan' do
+    context 'with accounting plan', :second do
       it 'returns 0GOO' do
         allow_any_instance_of(Transaction::AccountNumberFinder).to receive(:accounting_plan).and_return(@accounting_plan)
 
@@ -139,7 +139,7 @@ describe Transaction::AccountNumberFinder do
         rule1.affect = 'organization'
         rule1.rule_type = 'match'
         rule1.rule_target = 'both'
-        rule1.content = "*RUEM DISTRIBU*"
+        rule1.content = "*DISTRIBU*"
         rule1.priority = 1
         rule1.third_party_account = 'distribu'
         rule1.save
@@ -173,6 +173,64 @@ describe Transaction::AccountNumberFinder do
 
         expect(result).to eq('distribu')
         expect(result2).to eq('carteX')
+      end
+
+      it 'returns prior matched rule with 3 rules', :priority2 do
+        allow_any_instance_of(Transaction::AccountNumberFinder).to receive(:accounting_plan).and_return([])
+
+        rule1 = AccountNumberRule.new
+        rule1.organization = @organization
+        rule1.name = 'Priority 1'
+        rule1.affect = 'organization'
+        rule1.rule_type = 'match'
+        rule1.rule_target = 'both'
+        rule1.content = "*RUEM DISTRIBU*"
+        rule1.priority = 1
+        rule1.third_party_account = 'distribu'
+        rule1.save
+
+        rule2 = AccountNumberRule.new
+        rule2.organization = @organization
+        rule2.name = 'Priority 2'
+        rule2.affect = 'organization'
+        rule2.rule_type = 'match'
+        rule2.rule_target = 'both'
+        rule2.content = "*CARTE X*"
+        rule2.priority = 2
+        rule2.third_party_account = 'carteX'
+        rule2.save
+
+        rule3 = AccountNumberRule.new
+        rule3.organization = @organization
+        rule3.name = 'Priority 3'
+        rule3.affect = 'organization'
+        rule3.rule_type = 'match'
+        rule3.rule_target = 'both'
+        rule3.content = "*RUEM*"
+        rule3.priority = 1
+        rule3.third_party_account = 'ruem'
+        rule3.save
+
+        @operation.label = 'CARTE X2978 04/11 RUEM DISTRIBU'
+        @operation.amount = -200
+        @operation.save
+        allow(@operation).to receive('credit?').and_return(true)
+
+        result = Transaction::AccountNumberFinder.new(@user, '0TEMP').execute(@operation)
+
+        rule1.priority = 2
+        rule1.save
+
+        rule2.priority = 1
+        rule2.save
+
+        rule3.priority = 0
+        rule3.save
+
+        result2 = Transaction::AccountNumberFinder.new(@user.reload, '0TEMP').execute(@operation)
+
+        expect(result).to eq('distribu')
+        expect(result2).to eq('ruem')
       end
     end
 

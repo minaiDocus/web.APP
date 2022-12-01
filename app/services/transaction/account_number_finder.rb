@@ -1,8 +1,8 @@
 class Transaction::AccountNumberFinder
   class << self
-    def get_the_highest_match(label, names)
-      scores = names.map do |name|
-        [clean_txt(name), 0]
+    def get_the_highest_match(label, rules)
+      scores = rules.map do |rule|
+        [clean_txt(rule[:content]), 100 - (rule[:priority] * 20)]
       end
 
       words = clean_txt(label, true).split(/\s+/)
@@ -10,9 +10,9 @@ class Transaction::AccountNumberFinder
       words.each do |word|
         scores.each_with_index do |(name, _), index|
           if name == '*.*'
-            scores[index][1] = 1
+            scores[index][1] += 1 if scores[index][1].to_s.last == '0'
           else
-            pattern = name.gsub('*', ' ').strip
+            pattern  = name.gsub('*', ' ').strip
             patterns = pattern.split(/\s+/)
 
             patterns.each{ |pt| scores[index][1] += 1 if word =~ /#{Regexp.quote(pt)}/i }
@@ -46,7 +46,7 @@ class Transaction::AccountNumberFinder
       p "==================== First matched ========="
       p match_rules.collect(&:content)
 
-      name = get_the_highest_match(label, match_rules.map(&:content))
+      name = get_the_highest_match(label, match_rules.map{ |rl| { content: rl.content, priority: rl.priority } })
 
       result = match_rules.select { |match| clean_txt(match.content) == clean_txt(name) }.first
 
@@ -80,7 +80,7 @@ class Transaction::AccountNumberFinder
       p "==================== Third matched ========="
       p matches
 
-      name = get_the_highest_match(label, matches.map(&:first))
+      name = get_the_highest_match(label, matches.map{|mtc| { content: mtc.first, priority: 0 } })
 
       result = matches.select { |match| clean_txt(match[0]) == clean_txt(name) }.first
 
