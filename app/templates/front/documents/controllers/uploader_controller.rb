@@ -86,7 +86,7 @@ class Documents::UploaderController < Documents::AbaseController
     end
 
     options = account_book_types.map do |j|
-      [j.name + ' ' + j.description, j.name, (j.compta_processable? ? '1' : '0')]
+      [j.name + ' ' + j.full_name(true), j.name, (j.compta_processable? ? '1' : '0')]
     end
 
     render json: options, status: 200

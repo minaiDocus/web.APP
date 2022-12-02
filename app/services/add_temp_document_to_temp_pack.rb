@@ -46,7 +46,6 @@ class AddTempDocumentToTempPack
       temp_document.retrieved_metadata     = options[:retrieved_metadata]     if options[:retrieved_metadata]
       temp_document.retriever_service_name = options[:retriever_service_name] if options[:retriever_service_name]
       temp_document.retriever_name         = options[:retriever_name]         if options[:retriever_name]
-      temp_document.label                  = options[:label]                  if options[:label]
       temp_document.tags                   = options[:tags].split(' ')        if options[:tags]
 
       temp_document.cloud_content_object.attach(File.open(file.path), File.basename(file.path)) if temp_document.save
