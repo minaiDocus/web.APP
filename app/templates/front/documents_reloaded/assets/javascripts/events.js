@@ -110,7 +110,7 @@ function bind_all_events(){
     e.preventDefault();
     $('li.direct_links .rubric .link_principal').removeClass('active');
     $(this).find('.link_principal').addClass('active');
-    $('#hidden-journal-id').val($(this).data('journal-id'));
+    $('#hidden-journal-id').val($(this).data('id'));
 
     AppEmit('load_rubric');
   });
@@ -203,7 +203,7 @@ function bind_all_events(){
 
 
 
-  $('#more-filter .modal-footer .btn-add').unbind('click').bind('click', function(){ $('#more-filter').modal('hide'); AppEmit('documents_load_datas'); });
+  $('#more-filter .modal-footer .btn-add, #customer_filter_form .btn-search').unbind('click').bind('click', function(){ $('#more-filter').modal('hide'); AppEmit('documents_load_datas'); });
   $('.btn-reinit').unbind('click').bind('click', function(){ $('#more-filter').modal('hide'); AppEmit('documents_reinit_datas'); });
 
   //prevent form submition

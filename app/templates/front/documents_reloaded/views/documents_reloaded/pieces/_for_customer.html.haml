@@ -1,16 +1,5 @@
 .container-fluid.main-content
   .row
-    .col-md-10.derivationLeft
-      %h3.bold
-        %span.me-2 Mes Documents
-        %span.badge.badge-secondary.regular.datas_size= @pieces.total_count
-        %span.filter-info.badge.bg-info.regular.datas_size.blink.hide Filtre actif
-    - if @user.still_active?
-      .col-md-2.derivationRight
-        
-  .mb-4
-
-  .row
     .col-md-2
       - if @user.still_active?
         %button.btn.btn-dark.add-document.w-100.semibold
@@ -18,7 +7,8 @@
           %span.blink Ajouter des documents
       
     .col-md-4
-    .col-md-3
+    .col-md-3.text-end.mt-2
+      %span.filter-info.badge.bg-danger.p-2.regular.datas_size.hide Recherche par filtre activé
     .col-md-3
       .row
         .col-md-3.pt-2
@@ -27,6 +17,7 @@
           = select_tag 'customers', options_for_select(@users.reverse.map{ |e| [e.short_info, e.id] }, params[:uid].present? ? params[:uid] : @user.id), id: 'customers', class: 'form-select', include_blank: false
 
   .customer-document-content
+    %input{ type: :hidden, id: "hidden-journal-id", name: "hidden-journal-id", value: @journals.first.id }
     = render partial: 'body_customer' 
 
 = render partial: 'upload_dialog_customer' if @render_upload

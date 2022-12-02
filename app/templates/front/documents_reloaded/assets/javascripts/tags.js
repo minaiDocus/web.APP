@@ -42,7 +42,14 @@ class DocumentsReloadedTags{
                     'dataType': 'json'
                   }
 
-    this.applicationJS.sendRequest(params).then((e)=>{ window.location.replace(window.location.href); this.applicationJS.noticeSuccessMessageFrom(null, e.message);  });
+    this.applicationJS.sendRequest(params).then((e)=>{
+      if ($('#hidden-journal-id').length > 0){
+        AppEmit('load_rubric');
+      }
+      else{
+        window.location.replace(window.location.href);
+      }
+      this.applicationJS.noticeSuccessMessageFrom(null, e.message);  });
 
     this.tags_modal.modal('hide');
   }

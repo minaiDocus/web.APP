@@ -145,7 +145,7 @@ class Pack::Piece < ApplicationRecord
 
     query = self
 
-    query = query.joins(:pack) if options[:pack_id].present? || options[:pack_name].present?
+    query = query.joins(:pack) if options[:pack_id].present? || options[:pack_name].present? || options[:pack_ids].present? || options[:pack_name].present?
 
     query = query.where(id: options[:id])                                                        if options[:id].present?
     query = query.where(id: options[:ids])                                                       if options[:ids].present?
@@ -169,7 +169,12 @@ class Pack::Piece < ApplicationRecord
 
     query = query.where("pack_pieces.created_at BETWEEN '#{CustomUtils.parse_date_range_of(options[:created_at]).join("' AND '")}'") if options[:created_at].present?
 
-    query = query.where('pack_pieces.name LIKE ? OR pack_pieces.tags LIKE ? OR pack_pieces.content_text LIKE ?', "%#{text}%", "%#{text}%", "%#{text}%") if text.present?
+    query = query.where('pack_pieces.name LIKE ? OR pack_pieces.content_text LIKE ?', "%#{text}%", "%#{text}%") if text.present?
+
+    query = query.joins(:preseizures) if options[:third_party].present? || options[:date].present?
+
+    query = query.where('pack_report_preseizures.third_party LIKE ?', "%#{options[:third_party]}%" )  if options[:third_party].present?
+    query = query.where("pack_report_preseizures.date BETWEEN '#{CustomUtils.parse_date_range_of(options[:date]).join("' AND '")}'") if options[:date].present?
 
     query.order(position: :asc) if options[:sort] == true
 

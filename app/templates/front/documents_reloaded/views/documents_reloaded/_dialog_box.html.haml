@@ -1,9 +1,7 @@
 #more-filter.modal.fade.in{'aria-hidden' => 'true', :role => 'dialog', :tabindex => '-1'}
   .modal-dialog
     .modal-content
-      %form#pack_filter_form.simple_form.form-horizontal
-        %input{ type: :hidden, id: "hidden-journal-id", name: "journal_id", value: @journals.try(:first).try(:id) }
-        %input{ type: :hidden, id: "hidden-customer-id", name: "uid", value: @user.id }
+      %form#pack_filter_form.simple_form.form-horizontal        
         .modal-header
           %h5.modal-title.bold Filtrer
           %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}

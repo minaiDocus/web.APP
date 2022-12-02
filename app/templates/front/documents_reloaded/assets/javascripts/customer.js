@@ -13,31 +13,32 @@ class DocumentsReloadedCustomer{
                     }
   }
 
-  load_temp_documents(serialize_form=false, load_customer=false){
+  load_temp_documents(serialize_form=false, load_rubric=false, load_customer=false){
     if(this.action_locker)
       return false
 
     this.action_locker = true;
-    let data = [];
-    let search_pattern = $('.search-content #search_input').val();
+    let data       = [];
+    let journal_id = $('#hidden-journal-id').val();
+    let advanced_search = $('#form_' + journal_id);
 
     if(serialize_form){
-      data.push($('#pack_filter_form').serialize().toString());
-
-      data.push(`activate_filter=true`);
+      advanced_search.val(encodeURIComponent($('#customer_filter_form').serialize()));     
     }
     else
     {
-      search_pattern = '';
-      let selector = "#pack_filter_form input, #pack_filter_form select, #customer_document_filter, #journal_document_filter, #search_input";
-      $(selector).not('.operator').val(''); data.push( `reinit=true` );
+      let selector   = "#customer_filter_form input, #search_input";
+      $(selector).not('.operator').val('');      
+      if (!load_rubric)
+        advanced_search.val('');
     }
 
-    if(search_pattern && search_pattern != ''){ data.push(`text=${encodeURIComponent(search_pattern)}`); }
+    data.push(`${decodeURIComponent(advanced_search.val())}`);
 
     if(this.page > 1){ data.push(`page=${this.page}`) }
 
     data.push( 'uid=' + $('#customers').val() );
+    data.push( 'journal_id=' + $('#hidden-journal-id').val() );
 
     this.ajax_params['data'] = data.join('&');
 
@@ -46,7 +47,7 @@ class DocumentsReloadedCustomer{
                           if (load_customer){
                             $(".customer-document-content").html($(e).find(".customer-document-content").html());
 
-                            $("#hidden-journal-id").val($('.rubric').first().data('journal-id'));
+                            $("#hidden-journal-id").val($('.rubric').first().data('id'));
                             $("#hidden-customer-id").val($('#customers').val());
 
                             $('select#file_code_customer').val($('#customer_code').val()).trigger("chosen:updated");
@@ -56,7 +57,15 @@ class DocumentsReloadedCustomer{
                             $('.box#table_pieces').html($(e).find(".box#table_pieces").html());
                           }
 
-                          $(`.search-content #search_input`).val(search_pattern);
+                          $('select#l_journal').val(journal_id).trigger("chosen:updated");
+
+                          let datas = advanced_search.val().split('&');
+
+                          datas.forEach(function(data){
+                            let input = data.split('=');
+
+                            $('#customer_filter_form #' + input[0]).val(input[1]);
+                          })
 
                           if ( $('.filter_active').length > 0 ){
                             $('.filter-info').removeClass('hide');
@@ -88,6 +97,6 @@ jQuery(function() {
   AppListenTo('documents_reinit_datas', (e)=>{ main.load_temp_documents(false); });
 
   AppListenTo('documents_search_text', (e)=>{ main.load_temp_documents(true); });
-  AppListenTo('load_rubric', (e)=>{ main.load_temp_documents(true); });
-  AppListenTo('load_customer', (e)=>{ main.load_temp_documents(false, true); });
+  AppListenTo('load_rubric', (e)=>{ main.load_temp_documents(false, true); });
+  AppListenTo('load_customer', (e)=>{ main.load_temp_documents(false, false ,true); });
 });

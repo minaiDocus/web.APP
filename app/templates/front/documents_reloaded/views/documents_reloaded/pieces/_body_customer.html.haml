@@ -6,7 +6,8 @@
       %ul.principal.p-0
         - @journals.each_with_index do |journal, index|
           %li.direct_links
-            %a.rubric{ href: "#", data: { journal: { id: journal.id } } }
+            %input{ type: :hidden, id: "form_#{journal.id}", value: ""}  
+            %a.rubric{ href: "#", data: { id: journal.id } }
               %span.link_principal{ class: (journal.name == params[:journal] || (!params[:journal].present? && index == 0)) ? 'active' : ''}= journal.full_name
 
         %li.direct_links.add-rubric
@@ -24,39 +25,37 @@
 
     %hr
     %h3.semibild Recherche
-    .search-container
-      .search-content
-        .row.no-margin
-          .col-md-1.no-padding.text-center.glass
-            = glyphicon('magnifying-glass', { size: '16', color: 'background: rgba(26, 26, 26, 0.7)' })
-          .col-md-11.no-padding.no-margin
-            %input#search_input{ name:'pack_name', placeholder: 'Contenu . . .', value: @options.try(:[], :text) }
+    %form#customer_filter_form.simple_form.form-horizontal
+      .form-group
+        %label.semibold Contenu
+        .select-container.no-padding
+          %input#text{ name: 'text', value: (params[:text] rescue '' ) }
 
-      .mb-3
+      .form-group
+        %label.semibold Nom du tiers
+        .select-container.no-padding
+          %input#third_party{ name: 'third_party', value: (params[:third_party] rescue '' ) }
+      .form-group
+        %label.semibold Date facture
+        .select-container.no-padding
+          %input.daterange#date{ name: 'date', value: (params[:date] rescue '' ) }
+      .form-group
+        %label.semibold Tags
+        .select-container.no-padding
+          %input#tags{ name: 'tags', value: (params[:tags] rescue '' ) }
+      .form-group
+        %label.semibold Montant
+        .row.me-0
+          .w-50
+            = select_tag 'amount_operation', options_for_select([['=', 0], ['>=', 1], ['<=', 2]], (@options[:amount_operation] rescue 0)), include_blank: false, class: 'form-select operator'
+          .w-50.select-container.no-padding
+            %input.p-1{ name: 'amount', value: (@options[:amount].join(',') rescue '' ) }
 
-      %form#pack_filter_form.simple_form.form-horizontal
-        .form-group
-          %label.semibold Nom de tiers
-          .select-container.no-padding
-            %input{ name: 'by_all[third_party]', value: (@options[:third_party] rescue '' ) }
-        .form-group
-          %label.semibold Date facture
-          .select-container.no-padding
-            %input.daterange{ name: 'by_all[date]', value: (@options[:date] rescue '' ) }
-        .form-group
-          %label.semibold Tags
-          .select-container.no-padding
-            %input{ name: 'by_all[tags]', value: (@options[:tags] rescue '' ) }
-        .form-group
-          %label.semibold Montant
-          .select-container.no-padding
-            %input{ type: :range, name: 'by_all[amount]', value: (@options[:amount] rescue '' ) }
-
-        .row.w-100.text-center
-          .col-md-6
-            %button.btn.btn-light.btn-sm.w-75.semibold.btn-reinit{:type => 'button', id: 'launch-reinit2', :type => 'button'} Effacer tout
-          .col-md-6
-            %button.btn.btn-dark.btn-sm.w-75.semibold.btn-add{:type => 'button', id: 'launch-filter'} Lancer
+      .row.w-100.text-center
+        .col-md-6
+          %button.btn.btn-light.btn-sm.w-75.semibold.btn-reinit{:type => 'button', id: 'launch-reinit2', :type => 'button'} Reinitialiser
+        .col-md-6
+          %button.btn.btn-dark.btn-sm.w-75.semibold.btn-search{:type => 'button', id: 'launch-filter'} Lancer
 
   .col-md-10      
     .box.derivationLeft#table_pieces
@@ -66,21 +65,24 @@
             .filter_active.hide Filter
           %table.table.table-striped.list_customers
             %thead
-              %th Nom du tiers
-              %th Date
-              %th Montant TTC
+              %th= sortable 'pack_report_preseizures.third_party', "Nom du tiers"
+              %th= sortable 'pack_report_preseizures.date', "Date"
+              %th= sortable 'pack_report_preseizures.cached_amount', "Montant TTC"
               %th Tags
               %th.text-end Action
             %tbody
               - @pieces.each do |piece|
+                - preseizure = piece.preseizures.first
                 %tr
                   %td.pointer.show-detail{ title: 'Voir détail', data: { content_url: piece.get_access_url, piece_id: piece.id }}
-                    .name.text-table-green= piece.name
+                    .name.text-table-green= preseizure&.third_party
                   %td
-                    %span.info= piece.created_at.strftime('%d/%m/%Y')
+                    %span.info= preseizure.try(:date).try(:strftime, '%d/%m/%Y')
                   %td 
-                    - piece.tags&.each do |tag|
-                      %span.badge.bg-dark= tag.to_s.strip
+                    = preseizure.try(:amount_ttc).to_s + ' €'
+                  %td
+                    - piece.get_tags.split('-').each do |tag|              
+                      %span.badge.bg-dark= tag
                   %td.text-end.pointer.align-middle
                     .action.sub_edit_delete.list-collaborators
                       %span.glyph= glyphicon('ellipses', { size: '15', color: 'gba(26, 26, 26, 0.7)', style: 'transform: rotate(90deg)'})
@@ -88,7 +90,5 @@
                       %ul.no-margin.no-padding.regular
                         %li.edit-tags
                           = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Editer les tags', '#', class: 'link update_tags', data: { id: piece.id, type: 'piece' }
-                        / %li
-                        /   = link_to glyphicon('trash', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Supprimer', delete_temp_document_path({ id: temp_document.id, rubric: temp_document.label }), method: :delete, data: { confirm: t('actions.confirm') }
 
-          = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: documents_reloaded_path, target: '#table_pieces', total_pages: @pieces.total_pages, filter: 'pack_filter_form' }
+          = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: documents_reloaded_path, target: '#table_pieces', total_pages: @pieces.total_pages, filter: 'customer_filter_form' }

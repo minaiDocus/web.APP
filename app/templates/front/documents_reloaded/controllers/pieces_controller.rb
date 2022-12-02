@@ -168,6 +168,7 @@ class DocumentsReloaded::PiecesController < DocumentsReloaded::AbaseController
     @journals = AccountBookType.where(user_id: user_ids)
 
     @journal = params[:journal_id].present? ? @journals.where(id: params[:journal_id]).first.name : @journals.first.name
+    @options[:journal] = [@journal]
 
     @filter_active = @options[:pre_assignment_state].present? || @options[:position].present? || @options[:text].present?
 
@@ -216,7 +217,7 @@ class DocumentsReloaded::PiecesController < DocumentsReloaded::AbaseController
     @options[:pre_assignment_state] = params.try(:[], :by_piece).try(:[], :state_piece)
     @options[:piece_number] = params.try(:[], :piece_number).presence || params.try(:[], :by_preseizure).try(:[], :piece_number)
 
-    @options[:amount_operation]  = params.try(:[], :by_preseizure).try(:[], :amount_operation)
+    @options[:amount_operation]  = params.try(:[], :amount_operation).presence || params.try(:[], :by_preseizure).try(:[], :amount_operation)
     @options[:amount]            = params.try(:[], :amount).presence || params.try(:[], :by_preseizure).try(:[], :amount)
 
     @options[:journal]      = params.try(:[], :journal)
