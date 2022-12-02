@@ -7,17 +7,12 @@
       .modal-body
         %form#filter-operations-form
           .form-group
-            %label.semibold Date opération
+            %label.semibold Date
             .select-container.no-padding.w-100
               %input.date.daterange#operation-date{ name: 'banking_operation_contains[date]', type: :text }
 
           .form-group
-            %label.semibold Date valeur
-            .select-container.no-padding.w-100
-              %input.date.daterange#value-date{ name: 'banking_operation_contains[value_date]', type: :text }
-
-          .form-group
-            %label.semibold Service
+            %label.semibold Automate
             .select-container.no-padding.w-100
               %input{ name: 'banking_operation_contains[bank_account][bank_name]', type: :text }
 
@@ -26,11 +21,6 @@
             %label.semibold Compte
             .select-container.no-padding.w-100
               %input{ name: 'banking_operation_contains[bank_account][number]', type: :text }
-
-          .form-group
-            %label.semibold Catégorie
-            .select-container.no-padding.w-100
-              %input{ name: 'banking_operation_contains[category]', type: :text }
 
           .form-group
             %label.semibold Libellé
@@ -59,7 +49,7 @@
       .modal-body
         %form#filter-documents-form
           .form-group
-            %label.semibold Service
+            %label.semibold Banque
             .select-container.no-padding.w-100
               %input{ name: 'document_contains[service_name]', type: :text }
 

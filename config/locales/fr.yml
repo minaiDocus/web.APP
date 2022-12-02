@@ -347,12 +347,12 @@ fr:
     bank_operations: Opérations bancaires
     my_company: Mon organisation
     reporting: Reporting
-    my_retrievers: Mes automates
+    my_retrievers: Banques
     pieces_and_pre_assignment: Pièces / Écritures comptables
     pieces_errors: Pièces en erreur    
     retriever:
       automates: Automates
-      historic: Historique de récupération
+      historic: Opérations
       parameters: Paramètres divers
 
   views:

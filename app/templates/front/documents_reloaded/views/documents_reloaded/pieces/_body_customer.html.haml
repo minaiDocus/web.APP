@@ -43,7 +43,7 @@
                     %span.info= piece.created_at.strftime('%d/%m/%Y')
                   %td 
                     - piece.tags&.each do |tag|
-                      %span.badge.bg-dark= tag.strip
+                      %span.badge.bg-dark= tag.to_s.strip
                   %td.text-end.pointer.align-middle
                     .action.sub_edit_delete.list-collaborators
                       %span.glyph= glyphicon('ellipses', { size: '15', color: 'gba(26, 26, 26, 0.7)', style: 'transform: rotate(90deg)'})
