@@ -285,7 +285,7 @@ class Journals::MainController < OrganizationController
   end
 
   def rubric_params
-    attrs = %i[label]
+    attrs = %i[description]
 
     attributes = params.require(:account_book_type).permit(*attrs)
 

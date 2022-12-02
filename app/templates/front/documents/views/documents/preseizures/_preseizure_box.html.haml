@@ -121,7 +121,7 @@
               - if @user.has_collaborator_action?
                 %input.entry_id_hidden{type: :hidden, value: entry.id}
 
-      - if piece
+      - if piece && @user.has_collaborator_action?
         .mt-2
         .btn-add-content.text-end.me-4
           %button.btn.btn-light.btn-sm.add-entry.py-0
@@ -209,7 +209,8 @@
         %span.ms-2.deliver_preseizures{title: 'Livraison écriture comptable', data: { id: preseizure.id, type: 'preseizure' }}= glyphicon('loop-circular', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
     - if piece      
       %span.ms-2.update_tags{title: 'Taguer la pièce', data: {id: piece.id, type: 'piece'}}= glyphicon('tag', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
-      %span.ms-2.delete_piece{title: 'Supprimer la pièce', data: {id: piece.id}}= glyphicon('trash', { size: '14', color:'#FF4848'})
+      - if @user.has_collaborator_action?
+        %span.ms-2.delete_piece{title: 'Supprimer la pièce', data: {id: piece.id}}= glyphicon('trash', { size: '14', color:'#FF4848'})
 
 
 %template

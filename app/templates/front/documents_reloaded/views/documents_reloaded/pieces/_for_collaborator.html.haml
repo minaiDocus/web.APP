@@ -22,7 +22,7 @@
     .hide.result-sol
     .col-md-2
       .mt-2.w-100.text-center
-        = link_to documents_path, target: "_blank", class: 'no-style btn btn-light' do
+        = link_to documents_path, class: 'no-style btn btn-light' do
           %span.me-2= glyphicon('grid-two-up', {size: 13, color: '#72AA42'})
           %span.semibold Interface classique
       .lefter.mt-5
@@ -31,9 +31,10 @@
             %a{href: documents_reloaded_path }
               %span.float-end.badge.bg-light.black-label.mt-1.me-1.semibold= @pieces.total_count
               %span.link_principal{class: (controller_name == 'pieces') ? 'active' : ''} Tous les documents
-          %li.direct_links{ data: { href: 'pieces_errors' } }
-            %a{href: pieces_errors_path }
-              %span.link_principal{class: (controller_name == 'pieces_errors') ? 'active' : ''} Pièces en erreur
+          - if @user.collaborator?
+            %li.direct_links{ data: { href: 'pieces_errors' } }
+              %a{href: pieces_errors_path }
+                %span.link_principal{class: (controller_name == 'pieces_errors') ? 'active' : ''} Pièces en erreur
           %hr
             %li.direct_links{ data: { href: 'documents_processing' } }
               %span.link_principal.show-list-document.pointer{class: (controller_name == 'documents_processing') ? 'active' : ''} 
@@ -117,36 +118,38 @@
       .box.derivationLeft
         .row#table_pieces
           .col-md-12
-            %table.table.table-striped.table-hover.list_customers
+            %table.table.table-striped.table-hover.list_customers#tbl_pieces
               %thead.verif-fixed-action.action-fixed.table-header-fixed-to-top
                 %tr
-                  %th.table-header{scope: 'col'}
-                    .row
-                      .icon-actions
-                        %span.pointer.form-check.d-inline.ms-2      
-                          %input.form-check-input.pointer.float-none.select-all{ type: :checkbox, value: "", title: 'Sélectionner toutes les pièces' }
-                        - if @user.has_collaborator_action?
-                          %span.pointer.ms-2.action-selected.deliver_preseizures.hide{title: 'Livraison écriture comptable', data: { id:"@pieces.first.pack.id", type: 'special_piece', multi: 'true'}}= glyphicon('loop-circular', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
-                        %span.pointer.ms-2.action-selected.delete_piece.hide{title: 'Supprimer le(s) pièce(s) sélectionnée(s)', multi: 'true'}= glyphicon('trash', { size: '14',  color:'#FF4848'})
-                  %th.table-header{scope: 'col'} Dossier / Ref pièce
-                  %th.table-header{scope: 'col'} Date
-                  %th.table-header{scope: 'col'} Tiers - Numéro de pièce
-                  %th.table-header{scope: 'col'} Montant TTC
+                  - if @user.has_collaborator_action?
+                    %th.table-header{scope: 'col'}
+                      .row
+                        .icon-actions
+                          %span.pointer.form-check.d-inline.ms-2      
+                            %input.form-check-input.pointer.float-none.select-all{ type: :checkbox, value: "", title: 'Sélectionner toutes les pièces' }
+                            %span.pointer.ms-2.action-selected.deliver_preseizures.hide{title: 'Livraison écriture comptable', data: { id:"@pieces.first.pack.id", type: 'special_piece', multi: 'true'}}= glyphicon('loop-circular', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
+                            %span.pointer.ms-2.action-selected.delete_piece.hide{title: 'Supprimer le(s) pièce(s) sélectionnée(s)', multi: 'true'}= glyphicon('trash', { size: '14',  color:'#FF4848'})
+                  %th.table-header{scope: 'col'}= sortable 'pack_pieces.name', "Ref pièce"
+                  %th.table-header{scope: 'col'}= sortable 'pack_report_preseizures.date', "Date"
+                  %th.table-header{scope: 'col'}= sortable 'pack_report_preseizures.third_party', "Tiers - Numéro de pièce"
+                  %th.table-header{scope: 'col'}= sortable 'pack_report_preseizures.cached_amount', "Montant TTC"
                   %th.table-header{scope: 'col'} Etat
-                  %th.table-header.text-end{scope: 'col'}Action
+                  - if @user.has_collaborator_action?
+                    %th.table-header.text-end{scope: 'col'}Action
               %tbody
                 - @pieces.each do |piece|
                   - preseizure   = piece.preseizures.first
                   - preseizure ||= FakeObject.new
                   - ajx_params = param_encode({ url: show_piece_detail_path(piece.id), method: 'GET', events: 'click', html: { target: '.preseizures_box', target_dest: ".detail-piece-#{piece.id}" }, before_send: 'document_reloaded.toggle_piece_detail' })
                   %tr.box.list
-                    %td
-                      %span.form-check          
-                        %input.form-check-input.pointer.float-none.select-document{ data: { id: piece.id, preseizure_ids: piece.preseizures.collect(&:id) }, type: :checkbox, value: "" }
+                    - if @user.has_collaborator_action?
+                      %td
+                        %span.form-check          
+                          %input.form-check-input.pointer.float-none.select-document{ data: { id: piece.id, preseizure_ids: piece.preseizures.collect(&:id) }, type: :checkbox, value: "" }
                     %td.pointer.as_idocus_ajax{ title: 'Voir détail', idocus: ajx_params, datas: { piece_id: piece.id } }
                       .name.text-table-green= piece.name
                     %td.pointer.as_idocus_ajax{ title: 'Voir détail', idocus: ajx_params, datas: { piece_id: piece.id } }
-                      %span.info= piece.created_at.strftime('%d/%m/%Y')
+                      %span.info= (preseizure.date.presence || piece.created_at).strftime('%d/%m/%Y')
                     %td.pointer.as_idocus_ajax{ title: 'Voir détail', idocus: ajx_params, datas: { piece_id: piece.id } }
                       = preseizure.try(:third_party).to_s + ' - ' + preseizure.try(:piece_number).to_s
                     %td.pointer.as_idocus_ajax{ title: 'Voir détail', idocus: ajx_params, datas: { piece_id: piece.id } }
@@ -168,13 +171,14 @@
                           %span.badge.badge-success.semibold Téléchargé
                         - elsif preseizure.id.to_i > 0
                           %span.badge.badge-warning.semibold Non récupéré
-                    %td.text-end.pointer.align-middle
-                      .action.sub_edit_delete.list-collaborators
-                        %span.glyph= glyphicon('ellipses', { size: '15', color: 'gba(26, 26, 26, 0.7)', style: 'transform: rotate(90deg)'})
-                      .row.sub_menu.text-center.hide{style: 'min-height:35px;'}
-                        %ul.no-margin.no-padding.regular.align-self-center
-                          %li.align-self-center
-                            %span.ms-2.delete_piece{title: 'Supprimer la pièce', data: {id: piece.id}}=glyphicon('trash', { size: '15', color: '#FF4848;'}) + ' Supprimer'
+                    - if @user.has_collaborator_action?
+                      %td.text-end.pointer.align-middle
+                        .action.sub_edit_delete.list-collaborators
+                          %span.glyph= glyphicon('ellipses', { size: '15', color: 'gba(26, 26, 26, 0.7)', style: 'transform: rotate(90deg)'})
+                        .row.sub_menu.text-center.hide{style: 'min-height:35px;'}
+                          %ul.no-margin.no-padding.regular.align-self-center
+                            %li.align-self-center
+                              %span.ms-2.delete_piece{title: 'Supprimer la pièce', data: {id: piece.id}}=glyphicon('trash', { size: '15', color: '#FF4848;'}) + ' Supprimer'
                   %tr.box.hide.piece-detail-container{ class: "tr_piece_#{piece.id}" }
                     %td{ colspan: 7 }
                       .detail{ class: "detail-piece-#{piece.id}" }

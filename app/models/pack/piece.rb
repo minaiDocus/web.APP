@@ -176,6 +176,45 @@ class Pack::Piece < ApplicationRecord
     query.page(page).per(per_page)
   end
 
+  def self.with_preseizures(user_ids, options={})
+    query = self.where('pack_pieces.user_id IN (?)', Array(user_ids)).left_joins(:preseizures)
+
+    ###### QUERY BY PIECES ########
+    query = query.where('pack_pieces.tags LIKE ?', "%#{options[:tags]}%")                        if options[:tags].present?
+    query = query.where('pack_pieces.name LIKE ?', "%#{options[:piece_name]}%")                  if options[:piece_name].present?
+    query = query.where('pack_pieces.pre_assignment_state = ?', options[:pre_assignment_state])  if options[:pre_assignment_state].present?
+
+    query = query.where( options[:journal].map{ |jl| "pack_pieces.name LIKE '% #{jl} %'" }.join(' OR ') ) if options[:journal].present?
+    query = query.where( options[:period].map{ |pr| "pack_pieces.name LIKE '% #{pr} %'" }.join(' OR ') )  if options[:period].present?
+
+    if options[:position_operation].present?
+      query = query.where("pack_pieces.position #{options[:position_operation].tr('012', ' ><')}= ?", options[:position]) if options[:position].present?
+    else
+      query = query.where("pack_pieces.position IN (#{Array(options[:position]).join(',')})" ) if options[:position].present?
+    end
+
+    query = query.where("pack_pieces.created_at BETWEEN '#{CustomUtils.parse_date_range_of(options[:created_at]).join("' AND '")}'") if options[:created_at].present?
+    query = query.where('pack_pieces.name LIKE ? OR  OR pack_pieces.content_text LIKE ?', "%#{options[:content]}%", "%#{options[:content]}%") if options[:content].present?
+
+    ##### QUERY BY PRESEIZURES ######
+    query = query.where('pack_report_preseizures.piece_number LIKE ?', "%#{options[:piece_number]}%")              if options[:piece_number].present?
+    query = query.where('pack_report_preseizures.third_party LIKE ?', "%#{options[:third_party]}%" )                                 if options[:third_party].present?
+    query = query.where("pack_report_preseizures.date BETWEEN '#{CustomUtils.parse_date_range_of(options[:date]).join("' AND '")}'") if options[:date].present?
+
+    query = query.merge(Pack::Report::Preseizure.delivered)          if options[:is_delivered].present? && options[:is_delivered].to_i == 1
+    query = query.merge(Pack::Report::Preseizure.not_delivered)      if options[:is_delivered].present? && options[:is_delivered].to_i == 2
+    query = query.merge(Pack::Report::Preseizure.failed_delivery)    if options[:is_delivered].present? && options[:is_delivered].to_i == 3
+
+    query = query.merge(Pack::Report::Preseizure.exported)           if options[:is_delivered].present? && options[:is_delivered].to_i == 4
+    query = query.merge(Pack::Report::Preseizure.not_exported)       if options[:is_delivered].present? && options[:is_delivered].to_i == 5
+
+    query = query.where("pack_report_preseizures.cached_amount #{options[:amount_operation].tr('012', ' ><')}= ?", options[:amount]) if options[:amount].present?
+    query = query.where("pack_report_preseizures.delivery_tried_at BETWEEN '#{CustomUtils.parse_date_range_of(options[:delivery_tried_at]).join("' AND '")}'")  if options[:delivery_tried_at].present?
+
+
+    query.page(options[:page].presence || 1).per(options[:per_page].presence || 20)
+  end
+
   def self.finalize_piece(id)
     piece = Pack::Piece.find(id)
 

@@ -87,7 +87,8 @@
                     - if piece
                       .col-md-3.icon-actions.text-end.pe-4
                         %span.ms-2.update_tags{title: 'Taguer la pièce', data: {id: piece.id, type: 'piece'}}= glyphicon('tag', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
-                        %span.ms-2.delete_piece{title: 'Supprimer la pièce', data: {id: piece.id}}= glyphicon('trash', { size: '14', color:'#FF4848'})
+                        - if @user.has_collaborator_action?
+                          %span.ms-2.delete_piece{title: 'Supprimer la pièce', data: {id: piece.id}}= glyphicon('trash', { size: '14', color:'#FF4848'})
 
             - else
               .w-75.text-center{ id: "document_#{piece.id}" }
@@ -115,7 +116,8 @@
                     - if piece
                       .col-md-3.icon-actions.text-end.pe-4
                         %span.ms-2.update_tags{title: 'Taguer la pièce', data: {id: piece.id, type: 'piece'}}= glyphicon('tag', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
-                        %span.ms-2.delete_piece{title: 'Supprimer la pièce', data: {id: piece.id}}= glyphicon('trash', { size: '14', color:'#FF4848'})
+                        - if @user.has_collaborator_action?
+                          %span.ms-2.delete_piece{title: 'Supprimer la pièce', data: {id: piece.id}}= glyphicon('trash', { size: '14', color:'#FF4848'})
   - else
     .preseizures_box.hide.animatedChild.toLeft
       .p-5 Ecriture comptable non disponible

@@ -4,15 +4,13 @@ class DocumentsReloaded::PiecesController < DocumentsReloaded::AbaseController
   skip_before_action :login_user!, only: %w[download get_piece_file get_temp_document_file handle_bad_url temp_document get_tag already_exist_document], raise: false
   skip_before_action :verify_if_active, only: %w[index show]
   before_action :set_is_document
-  before_action :load_params, only: %w[index show]
+  before_action :purify_params, only: %w[index show]
 
   prepend_view_path('app/templates/front/documents_reloaded/views')
 
   # GET /documents_reloaded
   def index
-    # PENDING DEVELOPPMENT
-    # if @user.collaborator? || @user.try(:pre_assignement_displayed?)
-    if @user.collaborator?
+    if @user.pre_assignement_displayed?
       @collaborator_view  = true
       index_collaborators      
     else
@@ -139,58 +137,91 @@ class DocumentsReloaded::PiecesController < DocumentsReloaded::AbaseController
   end
 
   def index_collaborators
-    @options[:page]     = params[:page]
-    @options[:per_page] = params[:per_page]
+    user_ids =  if (params[:view].present? && params[:view] != 'all')
+                  params[:view].try(:split, ',') || params[:view] || account_ids
+                else
+                  account_ids
+                end
 
-    @options[:ids]      = @options[:piece_ids] if @options[:piece_ids].present?
+    user_ids  = user_ids.presence || [-1]
 
-    # TODO : optimize created_at search
-    #@options[:piece_created_at] = @options[:by_piece].try(:[], :created_at)
-    #@options[:piece_created_at_operation] = @options[:by_piece].try(:[], :created_at_operation)
+    @render_upload = request.xhr? ? false : true
 
-    @pieces = Pack::Piece.search(@options[:text] , @options).where("DATE_FORMAT(pack_pieces.updated_at, '%Y%m') >= #{2.years.ago.strftime('%Y%m')}").distinct.order(updated_at: :desc).page(@options[:page]).per(@options[:per_page])
+    @pieces = Pack::Piece.with_preseizures(user_ids, @options).where("DATE_FORMAT(pack_pieces.updated_at, '%Y%m') >= #{2.years.ago.strftime('%Y%m')}").distinct.order("#{sort_column} #{sort_direction}")
 
-    @pieces_deleted = Pack::Piece.unscoped.where(user_id: @options[:user_ids]).where("DATE_FORMAT(pack_pieces.updated_at, '%Y%m') >= #{6.month.ago.strftime('%Y%m')}").deleted
-    @temp_documents = TempDocument.where(user_id: @options[:user_ids]).where("DATE_FORMAT(temp_documents.updated_at, '%Y%m') >= #{6.month.ago.strftime('%Y%m')}").not_published
+    @pieces_deleted = Pack::Piece.unscoped.where(user_id: user_ids).where("DATE_FORMAT(pack_pieces.updated_at, '%Y%m') >= #{6.month.ago.strftime('%Y%m')}").deleted
+    @temp_documents = TempDocument.where(user_id: user_ids).where("DATE_FORMAT(temp_documents.updated_at, '%Y%m') >= #{6.month.ago.strftime('%Y%m')}").not_published
 
-    if @options[:user_ids].size > 2
+    if user_ids.size > 2
       @pieces_deleted = @pieces_deleted.limit(20)
       @temp_documents = @temp_documents.order(id: :desc).limit(20)
     end
-
-    @render_upload = request.xhr? ? false : true
   end
 
   def index_customers
-    @options[:page]     = params[:page]
-    @options[:per_page] = params[:per_page]
+    user_ids = params[:uid].presence || @user.id
 
     @render_upload = request.xhr? ? false : true
 
     @users = accounts.includes(:options, :ibiza, :subscription, organization: [:ibiza, :exact_online, :my_unisoft, :coala, :cogilog, :sage_gec, :acd, :quadratus, :cegid, :csv_descriptor, :fec_agiris]).active.order(code: :asc).select { |user| user.authorized_upload? }    
 
-    @options[:user_ids] = params[:uid].presence || @user.id
-    @journals = AccountBookType.where(user_id: @options[:user_ids])
+    @journals = AccountBookType.where(user_id: user_ids)
 
     @journal = params[:journal_id].present? ? @journals.where(id: params[:journal_id]).first.name : @journals.first.name
-
-    @options[:pre_assignment_state] = params[:by_piece][:state_piece]       if params[:by_piece].present? && params[:by_piece][:state_piece].present?
-    @options[:position]             = params[:by_all][:position]            if params[:by_all].present? && params[:by_all][:position].present?
-    @options[:position_operation]   = params[:by_all][:position_operation]  if params[:by_all].present? && params[:by_all][:position_operation].present?
-    @options[:text]                 = params[:text]                         if params[:text].present?
-
-    @options[:temp_pack_ids] = TempPack.where(user_id: @options[:user_ids]).where("temp_packs.name LIKE '% #{@journal} %'").pluck(:id)
 
     @filter_active = @options[:pre_assignment_state].present? || @options[:position].present? || @options[:text].present?
 
     @users << @user if !@users.select { |u| u.id == @user.id }.any?
 
-    # @temp_documents = TempDocument.where.not(state: 'unreadable').where(is_an_original: true).where("DATE_FORMAT(temp_documents.updated_at, '%Y%m') >= #{2.years.ago.strftime('%Y%m')}").search(@options, text).order(updated_at: :desc).page(@options[:page]).per(@options[:per_page])
-
-    @pieces = Pack::Piece.search(@options[:text] , @options).where("DATE_FORMAT(pack_pieces.updated_at, '%Y%m') >= #{2.years.ago.strftime('%Y%m')}").distinct.order(updated_at: :desc).page(@options[:page]).per(@options[:per_page])
+    @pieces = Pack::Piece.with_preseizures(user_ids, @options).where("DATE_FORMAT(pack_pieces.updated_at, '%Y%m') >= #{2.years.ago.strftime('%Y%m')}").distinct.order(updated_at: :desc)
   end
 
+  def sort_column
+    if params[:sort].present?
+      params[:sort]
+    else
+      'pack_pieces.updated_at'
+    end
+  end
+  helper_method :sort_column
+
+  def sort_direction
+    if params[:direction].present?
+      params[:direction]
+    else
+      'desc'
+    end
+  end
+  helper_method :sort_direction
+
   private
+
+  def purify_params
+    @options = {}
+
+    @options[:page]     = params[:page]
+    @options[:per_page] = params[:per_page]
+
+    @options[:content]     = params.try(:[], :text)
+
+    @options[:third_party]  = params.try(:[], :third_party).presence || params.try(:[], :by_preseizure).try(:[], :third_party)
+    @options[:date]         = params.try(:[], :date).presence || params.try(:[], :by_preseizure).try(:[], :date)
+    @options[:delivery_tried_at] = params.try(:[], :by_preseizure).try(:[], :delivery_tried_at)
+    @options[:tags]         = params.try(:[], :tags).presence || params.try(:[], :by_all).try(:[], :tags)
+    @options[:is_delivered] = params.try(:[], :by_preseizure).try(:[], :is_delivered)
+
+    @options[:position_operation]     = params.try(:[], :by_all).try(:[], :position_operation)
+    @options[:position]     = params.try(:[], :by_all).try(:[], :position)
+
+    @options[:pre_assignment_state] = params.try(:[], :by_piece).try(:[], :state_piece)
+    @options[:piece_number] = params.try(:[], :piece_number).presence || params.try(:[], :by_preseizure).try(:[], :piece_number)
+
+    @options[:amount_operation]  = params.try(:[], :by_preseizure).try(:[], :amount_operation)
+    @options[:amount]            = params.try(:[], :amount).presence || params.try(:[], :by_preseizure).try(:[], :amount)
+
+    @options[:journal]      = params.try(:[], :journal)
+    @options[:period]       = params.try(:[], :period)
+  end
 
   def processed_to_delete(temp_document, piece=nil)
     if piece 

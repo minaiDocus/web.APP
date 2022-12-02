@@ -34,12 +34,12 @@ class Journal::Handling
     _index = _geds.try(:name).to_s.gsub(_pattern, '').strip.to_i
 
     @params[:name]        = "#{_pattern}#{_index + 1}"
-    @params[:description] = "(#{ @params[:name] })"
+    @params[:description] = "#{ @params[:description] }"
     @params[:entry_type]  = 0
     @params[:domain]      = ''
     @params[:currency]    = 'EUR'
 
-    return false if @params[:label].blank?
+    return false if @params[:description].blank?
 
     insert
   end
