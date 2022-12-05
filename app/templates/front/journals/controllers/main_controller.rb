@@ -200,7 +200,7 @@ class Journals::MainController < OrganizationController
     else
       @journal = Journal::Handling.new({ owner: @customer, params: rubric_params, current_user: current_user, request: request }).insert_ged
       if @journal && !@journal.errors.messages.present?
-        json_flash[:success] = "Rubrique #{ @journal.label } créé avec succès"
+        json_flash[:success] = "Rubrique #{ @journal.description } créé avec succès"
       else
         if @journal
           json_flash[:error] = errors_to_list @journal

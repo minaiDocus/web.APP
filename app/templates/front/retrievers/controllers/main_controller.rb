@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 class Retrievers::MainController < RetrieverController
-  before_action :verif_account, except: %w[index edit export_connector_to_xls get_connector_xls new_internal api_config]
-  before_action :get_banking_provider
-  before_action :load_retriever, except: %w[index list new export_connector_to_xls get_connector_xls new_internal create api_config]
-  before_action :verify_retriever_state, except: %w[index list new export_connector_to_xls get_connector_xls new_internal edit_internal create api_config]
+  skip_before_action :verify_rights, only: %w[subscription]
+  before_action :verif_account, except: %w[index subscription edit export_connector_to_xls get_connector_xls new_internal api_config]
+  before_action :get_banking_provider, except: %w[subscription]
+  before_action :load_retriever, except: %w[index subscription list new export_connector_to_xls get_connector_xls new_internal create api_config]
+  before_action :verify_retriever_state, except: %w[index subscription list new export_connector_to_xls get_connector_xls new_internal edit_internal create api_config]
   before_action :load_retriever_edition, only: %w[new edit]
   before_action :load_params, only: %w[index]
 
@@ -24,6 +25,8 @@ class Retrievers::MainController < RetrieverController
 
     @retrievers.last.try(:created_at) #WORKAROUND: @retrievers bugs if this line is not present
   end
+
+  def subscription;  end
 
   def list; end
 

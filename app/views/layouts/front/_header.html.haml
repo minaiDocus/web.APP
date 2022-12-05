@@ -66,6 +66,9 @@
 
               - if @user.collaborator?
                 =link_to t('layouts.retriever.parameters'), retriever_parameters_path, class: (controller_path == 'retriever_parameters/main')? 'dropdown-item active' : 'dropdown-item'
+        - elsif not @user.collaborator?
+          %li.nav-item{ class: (controller_path == 'documents/operations')? 'active' : '' }
+            =link_to t('layouts.my_retrievers'), subscription_retrievers_path, class: 'nav-link bold'
 
     .col-md-2.user-menu
       %ul.navbar-nav.float-end
