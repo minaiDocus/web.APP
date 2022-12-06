@@ -20,10 +20,23 @@ class DocumentsReloadedCustomer{
     this.action_locker = true;
     let data       = [];
     let journal_id = $('#hidden-journal-id').val();
-    let advanced_search = $('#form_' + journal_id);
+    let advanced_search    = $('#form_' + journal_id);
+    let form_serialization = '';
 
-    if(serialize_form){
-      advanced_search.val(encodeURIComponent($('#customer_filter_form').serialize()));     
+    //PARSE PREVIOUS SEARCH
+    if(load_rubric)
+    {
+      $('#customer_filter_form')[0].reset();
+      let datas = JSON.parse(advanced_search.val() || '[]');
+
+      datas.forEach(function(data){
+        $('#customer_filter_form #' + data['name']).val(data['value']);
+      });
+    }
+
+    if(serialize_form || load_rubric){
+      form_serialization = encodeURIComponent($('#customer_filter_form').serialize());
+      advanced_search.val(JSON.stringify($('#customer_filter_form').serializeArray()));
     }
     else
     {
@@ -33,7 +46,7 @@ class DocumentsReloadedCustomer{
         advanced_search.val('');
     }
 
-    data.push(`${decodeURIComponent(advanced_search.val())}`);
+    data.push(`${decodeURIComponent(form_serialization)}`);
 
     if(this.page > 1){ data.push(`page=${this.page}`) }
 
@@ -58,14 +71,6 @@ class DocumentsReloadedCustomer{
                           }
 
                           $('select#l_journal').val(journal_id).trigger("chosen:updated");
-
-                          let datas = advanced_search.val().split('&');
-
-                          datas.forEach(function(data){
-                            let input = data.split('=');
-
-                            $('#customer_filter_form #' + input[0]).val(input[1]);
-                          })
 
                           if ( $('.filter_active').length > 0 ){
                             $('.filter-info').removeClass('hide');

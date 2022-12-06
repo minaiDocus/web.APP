@@ -199,7 +199,7 @@ class Pack::Piece < ApplicationRecord
     end
 
     query = query.where("pack_pieces.created_at BETWEEN '#{CustomUtils.parse_date_range_of(options[:created_at]).join("' AND '")}'") if options[:created_at].present?
-    query = query.where('pack_pieces.name LIKE ? OR  OR pack_pieces.content_text LIKE ?', "%#{options[:content]}%", "%#{options[:content]}%") if options[:content].present?
+    query = query.where('pack_pieces.name LIKE ? OR pack_pieces.content_text LIKE ?', "%#{options[:content]}%", "%#{options[:content]}%") if options[:content].present?
 
     ##### QUERY BY PRESEIZURES ######
     query = query.where('pack_report_preseizures.piece_number LIKE ?', "%#{options[:piece_number]}%")              if options[:piece_number].present?
