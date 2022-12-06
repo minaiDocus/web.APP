@@ -153,7 +153,7 @@ class DocumentsReloaded::AbaseController < FrontController #Must be loaded first
   end
 
   def update_tags
-    UpdateMultipleTags.execute(@user, params[:tags], Array(params[:ids]), params[:type])
+    UpdateMultipleTags.execute(params[:user_id] || @user.id, params[:tags], Array(params[:ids]), params[:type])
 
     render json: {message: 'Tag mis à jours avec succès'}, status: :ok
   end

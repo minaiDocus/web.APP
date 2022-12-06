@@ -35,10 +35,12 @@ class DocumentsReloadedTags{
   update_tags(elem){
     let new_tags = this.tags_modal.find('.tag_reloaded_content #selectionsTags').val();
 
+    let user_id = $('select#customers').val();
+
     let params =  {
                     'url': '/documents_reloaded/tags/update',
                     'type': 'POST',
-                    'data': { type: this.type, ids: this.ids, tags: new_tags },
+                    'data': { type: this.type, ids: this.ids, tags: new_tags, user_id: user_id },
                     'dataType': 'json'
                   }
 

@@ -1,8 +1,9 @@
 # Update Document tags
 module UpdateMultipleTags
-  def self.execute(user, tags, document_ids, type = 'piece')
+  def self.execute(user_id, tags, document_ids, type = 'piece')
     sub = []
     add = []
+    user = User.find user_id
 
     tags.downcase.split.each do |tag|
       next unless tag =~ /-*\w*/
