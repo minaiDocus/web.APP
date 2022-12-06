@@ -51,7 +51,9 @@ class DocumentsReloadedCustomer{
     if(this.page > 1){ data.push(`page=${this.page}`) }
 
     data.push( 'uid=' + $('#customers').val() );
-    data.push( 'journal_id=' + $('#hidden-journal-id').val() );
+
+    if (!load_customer)
+      data.push( 'journal_id=' + $('#hidden-journal-id').val() );
 
     this.ajax_params['data'] = data.join('&');
 
