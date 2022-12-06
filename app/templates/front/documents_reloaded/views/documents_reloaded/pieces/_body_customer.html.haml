@@ -63,7 +63,7 @@
         .col-md-12
           - if @filter_active
             .filter_active.hide Filter
-          %table.table.table-striped.list_customers
+          %table.table.table-striped.list_customers#tbl_pieces
             %thead
               %th= sortable 'pack_report_preseizures.third_party', "Nom du tiers"
               %th= sortable 'pack_report_preseizures.date', "Date"

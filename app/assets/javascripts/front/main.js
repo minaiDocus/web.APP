@@ -59,7 +59,7 @@ function bind_globals_events(){
                         };
 
       if(target == '' || target == undefined || target == null){
-        console.log('The sortable link doesn t have a valid target (table id is missing)');
+        console.error('The sortable link doesn t have a valid target (table id is missing ...)');
       }
       else{
         if(url != '' && url != '#' && url != undefined && url != null)
