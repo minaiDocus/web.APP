@@ -164,7 +164,7 @@ class DocumentsReloaded::PiecesController < DocumentsReloaded::AbaseController
     @render_upload = request.xhr? ? false : true
 
     @users = accounts.includes(:options, :ibiza, :subscription, organization: [:ibiza, :exact_online, :my_unisoft, :coala, :cogilog, :sage_gec, :acd, :quadratus, :cegid, :csv_descriptor, :fec_agiris]).active.order(code: :asc).select { |user| user.authorized_upload? }    
-    @journals = AccountBookType.where(user_id: user_ids)
+    @journals = AccountBookType.where(user_id: user_ids).order(name: :asc)
 
     @journal = params[:journal_id].present? ? @journals.where(id: params[:journal_id]).first.try(:name) : @journals.first.try(:name)
     @options[:journal] = [@journal]
