@@ -70,6 +70,7 @@
         %span.pointer.ms-2.preseizures_export{title: 'Export écriture', data:{ id: @pack.id, type: 'special_piece', multi: 'true' }}= glyphicon('external-link', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
         %span.pointer.ms-2.deliver_preseizures{title: 'Livraison écriture comptable', data: { id: @pack.id, type: 'special_piece', multi: 'true'}}= glyphicon('loop-circular', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
         %span.pointer.ms-2.action-selected.edit_selected_preseizures.hide{ title: 'Edition multiple', data: { type: 'piece' } }= glyphicon('pencil', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
+      %span.pointer.ms-2.action-selected.download_pieces.hide{title: 'Télécharger la séléction',multi: 'true'}= glyphicon('data-transfer-download', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
       %span.pointer.ms-2.action-selected.update_tags.hide{title: 'Tagger', multi: 'true'}= glyphicon('tag', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
       %span.pointer.ms-2.action-selected.delete_piece.hide{title: 'Supprimer', multi: 'true'}= glyphicon('trash', { size: '14',  color:'#FF4848'})
       %span.pointer.form-check.d-inline.ms-2      

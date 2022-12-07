@@ -224,6 +224,7 @@ function bind_all_events(){
 
   $('.edit_compta_analysis').unbind('click').bind('click', function(){ AppEmit('documents_edit_analysis', { 'code': $(this).data('code'), is_used: $(this).data('is-used') }); });
 
+  $('.download_pieces').unbind('click').bind('click', function(){ AppEmit('documents_download_pieces', {'obj': this}); });
   $('.delete_piece').unbind('click').bind('click', function(){ AppEmit('documents_delete_piece', {'obj': this}); });
   $(".restore").unbind('click').bind('click', function(e){ e.stopPropagation(); AppEmit('documents_restore_piece', { id: $(this).attr('data-piece-id') }); });
 
