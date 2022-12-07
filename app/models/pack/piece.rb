@@ -361,6 +361,10 @@ class Pack::Piece < ApplicationRecord
     self.tags = pack.name.downcase.sub(' all', '').split
 
     tags << position if position
+
+    self.temp_document.tags.each do |tg|
+      tags << tg
+    end
   end
 
   def get_token

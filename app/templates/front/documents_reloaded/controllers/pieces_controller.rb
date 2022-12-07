@@ -173,14 +173,14 @@ class DocumentsReloaded::PiecesController < DocumentsReloaded::AbaseController
 
     @users << @user if !@users.select { |u| u.id == @user.id }.any?
 
-    @pieces = Pack::Piece.with_preseizures(user_ids, @options).where("DATE_FORMAT(pack_pieces.updated_at, '%Y%m') >= #{2.years.ago.strftime('%Y%m')}").distinct.order(updated_at: :desc)
+    @pieces = Pack::Piece.with_preseizures(user_ids, @options).where("DATE_FORMAT(pack_pieces.updated_at, '%Y%m') >= #{2.years.ago.strftime('%Y%m')}").distinct.order("#{sort_column} #{sort_direction}")
   end
 
   def sort_column
     if params[:sort].present?
       params[:sort]
     else
-      'pack_pieces.updated_at'
+      'pack_pieces.created_at'
     end
   end
   helper_method :sort_column

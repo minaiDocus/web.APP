@@ -6,7 +6,7 @@
       = select_tag 'account_id', options_for_select(customers_active, @account.try(:id)), include_blank: false, class: 'chosen-list w-100'
     .col-md-1.text-start.p-1
       %button.btn.btn-light.semibold.retriever-filter-historic.w-100{ disabled: false }
-        %span.me-2 Filtrer
+        %span.me-2 Recherche
         %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})  
 
   .mb-4

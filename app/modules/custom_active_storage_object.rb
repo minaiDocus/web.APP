@@ -118,7 +118,7 @@ class CustomActiveStorageObject
 
     p "========== First ============="
 
-    if to_tmp
+    if to_tmp || Rails.env != 'production'
       base_dir = "#{Rails.root}/tmp/#{object_class_name}/#{@object.id}/"
     else
       ### TEMP FIX : Move base dir to /nfs

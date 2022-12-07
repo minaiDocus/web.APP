@@ -30,6 +30,7 @@ class DocumentsReloadedCustomer{
       let datas = JSON.parse(advanced_search.val() || '[]');
 
       datas.forEach(function(data){
+        console.log(data);
         $('#customer_filter_form #' + data['name']).val(data['value']);
       });
     }

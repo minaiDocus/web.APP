@@ -24,7 +24,7 @@
               %button.btn.btn-dark.btn-sm.as_idocus_ajax{ idocus: ajx_params } Valider
 
     %hr
-    %h3.semibild Recherche
+    %h3.semibild.text-center Recherche
     %form#customer_filter_form.simple_form.form-horizontal
       .form-group
         %label.semibold Contenu
@@ -49,7 +49,7 @@
           .w-50
             = select_tag 'amount_operation', options_for_select([['=', 0], ['>=', 1], ['<=', 2]], (@options[:amount_operation] rescue 0)), include_blank: false, class: 'form-select operator'
           .w-50.select-container.no-padding
-            %input.p-1{ name: 'amount', value: (@options[:amount].join(',') rescue '' ) }
+            %input#amount.p-1{ name: 'amount', value: (@options[:amount].join(',') rescue '' ) }
 
       .row.w-100.text-center
         .col-md-6
