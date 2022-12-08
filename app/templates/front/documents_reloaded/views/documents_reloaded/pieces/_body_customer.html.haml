@@ -16,9 +16,11 @@
             %a.rubric{ href: "#", data: { id: journal.id } }
               %span.link_principal{ class: (journal.name == params[:journal] || (!params[:journal].present? && index == 0)) ? 'active' : ''}= journal.full_name
 
-        %li.direct_links.add-rubric
-          %span.float-end= glyphicon('plus', { color: "#C1D837", size: 10})
-          %span.link_principal.green-label Ajouter une rubrique
+        - if !@user.has_maximum_journal?
+          %li.direct_links.add-rubric
+            %span.float-end= glyphicon('plus', { color: "#C1D837", size: 10})
+            %span.link_principal.green-label Ajouter une rubrique
+
         %li.input-add-rubric.hide
           %hr
           = render file: Rails.root.join('app/templates/front/journals/views/journals/main/_rubric_form.html.haml'), locals: { organization_id: @user.organization_id }

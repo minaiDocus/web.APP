@@ -18,7 +18,7 @@ class Journals::MainController < OrganizationController
 
   # GET /organizations/:organization_id/journals
   def index
-    @journals = @organization.account_book_types.order(is_default: :desc, name: :asc).page(params[:page]).per(params[:per_page])
+    @journals = @organization.account_book_types.order('FIELD(entry_type, 0, 5, 1, 4, 3, 2) DESC', description: :asc).page(params[:page]).per(params[:per_page])
   end
 
   # GET /organizations/:organization_id/journals/new
@@ -157,7 +157,7 @@ class Journals::MainController < OrganizationController
     copied_ids = []
 
     ids.each do |id|
-      next if is_max_number_reached?
+      next if @customer.has_maximum_journal?
 
       journal = AccountBookType.find id
 
@@ -195,7 +195,7 @@ class Journals::MainController < OrganizationController
   end
 
   def add_rubric
-    if is_max_number_reached?
+    if @customer.has_maximum_journal?
       json_flash[:error] = 'Vous avez atteint le nombre maximum de rubrique'
     else
       @journal = Journal::Handling.new({ owner: @customer, params: rubric_params, current_user: current_user, request: request }).insert_ged
@@ -302,20 +302,13 @@ class Journals::MainController < OrganizationController
     @journal = (@customer || @organization).account_book_types.find params[:id]
   end
 
-  def is_max_number_reached?
-    return false if @customer.organization.specific_mission
-
-    @customer.account_book_types.count >= @customer.my_package.try(:journal_size).to_i
-  end
-  helper_method :is_max_number_reached?
-
   def is_preassignment_authorized?
     @customer.nil? || @customer.my_package.try(:preassignment_active) || @organization.specific_mission || @customer.my_package.try(:bank_active)
   end
   helper_method :is_preassignment_authorized?
 
   def verify_max_number
-    if @customer && is_max_number_reached?
+    if @customer && @customer.has_maximum_journal?
       text = "Nombre maximum de journaux comptables atteint : #{@customer.account_book_types.count}/#{@customer.my_package.try(:journal_size).to_i}."
       if params[:new_create_book_type].present?
         render json: { success: true, response: text }, status: 200

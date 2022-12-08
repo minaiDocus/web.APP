@@ -8,7 +8,7 @@ class Journals::UserController < CustomerController
   prepend_view_path('app/templates/front/journals/views')
 
   def index
-    @journals         = @customer.account_book_types.order(name: :asc)
+    @journals         = @customer.account_book_types.order('FIELD(entry_type, 0, 5, 1, 4, 3, 2) DESC', description: :asc)
     @pending_journals = @customer.retrievers.where(journal_id: nil).where.not(journal_name: [nil]).distinct.pluck(:journal_name)
     
     build_softwares
