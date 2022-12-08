@@ -5,36 +5,8 @@
         %h5.modal-title.bold Recherche : opération bancaire
         %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
       .modal-body
-        %form#filter-operations-form
-          .form-group
-            %label.semibold Date
-            .select-container.no-padding.w-100
-              %input.date.daterange#operation-date{ name: 'banking_operation_contains[date]', type: :text }
-
-          .form-group
-            %label.semibold Automate
-            .select-container.no-padding.w-100
-              %input{ name: 'banking_operation_contains[bank_account][bank_name]', type: :text }
-
-
-          .form-group
-            %label.semibold Compte
-            .select-container.no-padding.w-100
-              %input{ name: 'banking_operation_contains[bank_account][number]', type: :text }
-
-          .form-group
-            %label.semibold Libellé
-            .select-container.no-padding.w-100
-              %input{ name: 'banking_operation_contains[label]', type: :text }
-
-          - if @user.pre_assignement_displayed?
-            .form-group
-              %label.semibold Pré-affectation
-              %select.form-select#preseizure{ name: 'banking_operation_contains[pre_assigned]', "aria-label" => "Default select"  }
-                %option{value: ''}
-                %option{value: 'pre_assigned'} Oui
-                %option{value: 'not_pre_assigned'} Non
-                %option{value: 'is_waiting'} En attente
+        - if @user.collaborator?
+          = render partial: 'search_form'
 
       .modal-footer
         %button.btn.btn-light.semibold.cancel.reset-filter{ data: { target: 'operations' }, type: :button } Annuler

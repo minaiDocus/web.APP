@@ -62,7 +62,7 @@
             =link_to t('layouts.my_retrievers'), '', class: 'nav-link dropdown-toggle bold', id: 'navbardropdownmenuretriever', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-bs-toggle' => "dropdown", 'role' => "button"
             .dropdown-menu.semibold{"aria-labelledby" => "navbardropdownmenuretriever"}
               =link_to  glyphicon('cog', {size: '13', color: '#212529'}) + ' ' + t('layouts.retriever.automates'), retrievers_path, class: (controller_path == 'retrievers/main')? 'dropdown-item active' : 'dropdown-item'
-              =link_to t('layouts.retriever.historic'), retrievers_historics_path, class: (controller_path == 'retrieved_datas/main')? 'dropdown-item active' : 'dropdown-item'
+              =link_to glyphicon('transfer', {size: '13', color: '#212529'}) + ' ' + t('layouts.retriever.historic'), retrievers_historics_path, class: (controller_path == 'retrieved_datas/main')? 'dropdown-item active' : 'dropdown-item'
 
               - if @user.collaborator?
                 =link_to t('layouts.retriever.parameters'), retriever_parameters_path, class: (controller_path == 'retriever_parameters/main')? 'dropdown-item active' : 'dropdown-item'

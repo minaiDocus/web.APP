@@ -51,6 +51,7 @@ class RetrievedDatas::OperationsController < RetrieverController
         Operation.arel_table[:processed_at].not_eq(nil)
       )
     )
+
     @operations = Operation.search_for_collection(operations,
                                                   search_terms(params[:banking_operation_contains]))
                                                   .order("#{sort_column} #{sort_direction}")

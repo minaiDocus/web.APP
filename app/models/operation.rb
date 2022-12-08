@@ -57,7 +57,8 @@ class Operation < ApplicationRecord
 
     collection = collection.where("date BETWEEN '#{CustomUtils.parse_date_range_of(contains[:date]).join("' AND '")}'") if contains[:date].present?
     collection = collection.where("value_date BETWEEN '#{CustomUtils.parse_date_range_of(contains[:value_date]).join("' AND '")}'") if contains[:value_date].present?
-
+    collection = collection.where("amount #{contains[:amount_operation].tr('012', ' ><')}= ?", contains[:amount]) if contains[:amount].present?
+    
     if contains[:bank_account].present? && (contains[:bank_account][:number].present? || contains[:bank_account][:bank_name].present?)
       collection = collection.joins(:bank_account)
       collection = collection.where("bank_accounts.number LIKE ?",    "%#{contains[:bank_account][:number]}%")    if contains[:bank_account][:number].present?

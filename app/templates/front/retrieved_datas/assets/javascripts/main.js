@@ -29,7 +29,7 @@ class RetrievedDatasMain{
 
     if(this.per_page_of[type] > 0){ params.push(`per_page=${ this.per_page_of[type] }`); }
 
-    params.push($(`.modal #filter-${type}-form`).serialize().toString());
+    params.push($(`#filter-${type}-form`).serialize().toString());
 
     let ajax_params =   {
                           'url': `/retrieved/${type}?${params.join('&')}`,
@@ -57,7 +57,7 @@ jQuery(function() {
   AppListenTo('retrieved_datas_reload_operations', (e)=>{ this.load_datas('operations'); });
 
   AppListenTo('retrieved_datas_filter', (e)=>{ $(`.modal#filter-${e.detail.type}`).modal('hide'); main.load_datas(e.detail.type); });
-  AppListenTo('retrieved_datas_reset_filter', (e)=>{ $(`.modal#filter-${e.detail.type}`).modal('hide'); $(`.modal #filter-${e.detail.type}-form`)[0].reset(); main.load_datas(e.detail.type); });
+  AppListenTo('retrieved_datas_reset_filter', (e)=>{ $(`.modal#filter-${e.detail.type}`).modal('hide'); $(`#filter-${e.detail.type}-form`)[0].reset(); main.load_datas(e.detail.type); });
 
   AppListenTo('window.change-per-page.retrieved_data', (e)=>{ main.load_datas(e.detail.name, 1, e.detail.per_page); });
   AppListenTo('window.change-page.retrieved_data', (e)=>{ main.load_datas(e.detail.name, e.detail.page); });
