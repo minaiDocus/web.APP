@@ -16,35 +16,40 @@
 
   .mb-4
 
-  .derivationRight
-    .row
-      - if !@user.collaborator?
-        .col-md-2#search-form
-          .my-3
-          %h6.semibold.search-title Recherche : opération bancaire
-          %hr
-          = render partial: 'search_form'
-          .mb-3
-          .row.w-100.text-center
-            .col-md-6
-              %button.btn.btn-light.btn-sm.w-75.semibold.reset-filter{ data: { target: 'operations' }, type: :button } Effacer
-            .col-md-6
-              %button.btn.btn-dark.btn-sm.w-75.semibold.btn-search{ data: { target: 'operations' }, type: :button } Lancer
-      %div{ class: "col-md-#{@user.collaborator? ? 12 : 10 }"}
-        %ul.nav.nav-tabs.ms-3{ "role" => "tablist" }
+  .row
+    - if !@user.collaborator?
+      .col-md-2#search-form.derivationLeft
+        .my-3
+        %h6.semibold.search-title
+          %span Recherche :
+          %span#search-action opération bancaire
+        %hr
+        %input{ type: :hidden, id: "search-type", value: "operations" }
+        #search-operations.content-search-form
+          = render partial: 'search_form_operation'
+        #search-documents.content-search-form.hide
+          = render partial: 'search_form_document'
+        .mb-3
+        .row.w-100.text-center
+          .col-md-6
+            %button.btn.btn-light.btn-sm.w-75.semibold.btn-reset{ type: :button } Effacer
+          .col-md-6
+            %button.btn.btn-dark.btn-sm.w-75.semibold.btn-search{ type: :button } Lancer
+    %div.derivationRight{ class: "col-md-#{@user.collaborator? ? 12 : 10 }"}
+      %ul.nav.nav-tabs.ms-3{ "role" => "tablist" }
+        %li.nav-item.no-margin{ "role" => "presentation" }
+          %button.semibold.nav-link.check-filter-form-view#operations-tab{ class: (params[:tab] != 'documents')? 'active' : '',"data-bs-toggle" => "tab", "data-bs-target" => "#operations", "data-bs-title" => "opérations bancaires", type: :button, "role" => "tab", "aria-controls" => "operations", "aria-selected" => "true" }
+            Opérations bancaires
+            %span.ms-1.badge.badge-secondary.regular#total-operations 0
+        - if @account.retrievers.where('budgea_id > 0').size > 0
           %li.nav-item.no-margin{ "role" => "presentation" }
-            %button.semibold.nav-link#operations-tab{ class: (params[:tab] != 'documents')? 'active' : '',"data-bs-toggle" => "tab", "data-bs-target" => "#operations", type: :button, "role" => "tab", "aria-controls" => "operations", "aria-selected" => "true" } 
-              Opérations bancaires 
-              %span.ms-1.badge.badge-secondary.regular#total-operations 0
-          - if @account.retrievers.where('budgea_id > 0').size > 0
-            %li.nav-item.no-margin{ "role" => "presentation" }
-              %button.semibold.nav-link#documents-tab{ class: (params[:tab] == 'documents')? 'active' : '', "data-bs-toggle" => "tab", "data-bs-target" => "#documents", type: :button, "role" => "tab", "aria-controls" => "documents", "aria-selected" => "false"} 
-                Documents
-                %span.ms-1.badge.badge-secondary.regular#total-documents 0
-        .tab-content
-          .tab-pane.box.no-margin#operations{ class: (params[:tab] != 'documents')? 'active' : '',"role" => "tabpanel", "aria-labelledby" => "operations-tab" }
-          - if @account.retrievers.where('budgea_id > 0').size > 0
-            .tab-pane.box.no-margin#documents{ class: (params[:tab] == 'documents')? 'active' : '', "role" => "tabpanel", "aria-labelledby" => "documents-tab" }
+            %button.semibold.nav-link.check-filter-form-view#documents-tab{ class: (params[:tab] == 'documents')? 'active' : '', "data-bs-toggle" => "tab", "data-bs-target" => "#documents", "data-bs-title" => "documents", type: :button, "role" => "tab", "aria-controls" => "documents", "aria-selected" => "false"}
+              Documents
+              %span.ms-1.badge.badge-secondary.regular#total-documents 0
+      .tab-content
+        .tab-pane.box.no-margin#operations{ class: (params[:tab] != 'documents')? 'active' : '',"role" => "tabpanel", "aria-labelledby" => "operations-tab" }
+        - if @account.retrievers.where('budgea_id > 0').size > 0
+          .tab-pane.box.no-margin#documents{ class: (params[:tab] == 'documents')? 'active' : '', "role" => "tabpanel", "aria-labelledby" => "documents-tab" }
 
   = render partial: 'dialogs'
       

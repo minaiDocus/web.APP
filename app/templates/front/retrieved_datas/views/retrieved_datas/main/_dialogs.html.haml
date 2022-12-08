@@ -6,7 +6,7 @@
         %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
       .modal-body
         - if @user.collaborator?
-          = render partial: 'search_form'
+          = render partial: 'search_form_operation'
 
       .modal-footer
         %button.btn.btn-light.semibold.cancel.reset-filter{ data: { target: 'operations' }, type: :button } Annuler
@@ -19,21 +19,8 @@
         %h5.modal-title.bold Filtre documents
         %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
       .modal-body
-        %form#filter-documents-form
-          .form-group
-            %label.semibold Banque
-            .select-container.no-padding.w-100
-              %input{ name: 'document_contains[service_name]', type: :text }
-
-          .form-group
-            %label.semibold Date
-            .select-container.no-padding.w-100
-              %input.date.daterange#document-date{ name: 'document_contains[date]', type: :text }
-
-          .form-group
-            %label.semibold Nom original
-            .select-container.no-padding.w-100
-              %input{ name: 'document_contains[name]', type: :text }
+        - if @user.collaborator?
+          = render partial: 'search_form_document'
 
       .modal-footer
         %button.btn.btn-light.semibold.cancel.reset-filter{ data: { target: 'documents' }, type: :button } Annuler
