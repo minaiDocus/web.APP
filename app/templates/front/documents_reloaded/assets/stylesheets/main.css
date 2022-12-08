@@ -574,3 +574,12 @@ img{
   }
 
 }
+
+  .calendar-field-customer{
+    display: flex;
+    background: rgba(26, 26, 26, 0.04);
+    border-radius: 0px;
+    border: none;
+    padding: 1%;
+    line-height: inherit;
+  }

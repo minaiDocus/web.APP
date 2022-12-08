@@ -2,7 +2,13 @@
 = hidden_field_tag :customer_code, customer_selected.code
 .row
   .col-md-2
-    .lefter.mt-5
+    .row
+      .w-25.text-end
+        = glyphicon('magnifying-glass', { size: '18', color: 'background: rgba(26, 26, 26, 0.7)'})
+      .w-75
+        %h3.semibild Recherche
+    %hr
+    .lefter.mt-3
       %ul.principal.p-0
         - @journals.each_with_index do |journal, index|
           %li.direct_links
@@ -24,10 +30,9 @@
               %button.btn.btn-dark.btn-sm.as_idocus_ajax{ idocus: ajx_params } Valider
 
     %hr
-    %h3.semibild.text-center Recherche
     %form#customer_filter_form.simple_form.form-horizontal
       .form-group
-        %label.semibold Contenu
+        %label.semibold Plein texte
         .select-container.no-padding
           %input#text{ name: 'text', value: (params[:text] rescue '' ) }
 
@@ -35,25 +40,34 @@
         %label.semibold Nom du tiers
         .select-container.no-padding
           %input#third_party{ name: 'third_party', value: (params[:third_party] rescue '' ) }
+
       .form-group
-        %label.semibold Date facture
+        %label.semibold Numéro de pièce
         .select-container.no-padding
-          %input.daterange#date{ name: 'date', value: (params[:date] rescue '' ) }
+          %input#third_party{ name: 'piece_number', value: (params[:piece_number] rescue '' ) }
+
       .form-group
-        %label.semibold Tags
-        .select-container.no-padding
-          %input#tags{ name: 'tags', value: (params[:tags] rescue '' ) }
+        %label Date
+        .input-group.mb-3
+          %span.show-calendar.input-group-text.calendar-field-customer.p-2{ data: { ref: 'date-val' }}= glyphicon('calendar', { size: '14', color: 'background: rgba(26, 26, 26, 0.7)' })
+          %input.form-control.value-content.date.daterange.calendar-field-customer#date-val{ type: :text, name: 'date', value: (params[:date] rescue '')}
+          %span.show-calendar.input-group-text-right.calendar-field-customer.p-2{ data: { ref: 'date-val' } }= glyphicon('chevron-bottom', { size: '12', color: 'background: rgba(26, 26, 26, 0.7)' })
+
       .form-group
-        %label.semibold Montant
+        %label.semibold Montant TTC
         .row.me-0
           .w-50
             = select_tag 'amount_operation', options_for_select([['=', 0], ['>=', 1], ['<=', 2]], (@options[:amount_operation] rescue 0)), include_blank: false, class: 'form-select operator'
           .w-50.select-container.no-padding
             %input#amount.p-1{ name: 'amount', value: (@options[:amount].join(',') rescue '' ) }
+      .form-group
+        %label.semibold Tags
+        .select-container.no-padding
+          %input#tags{ name: 'tags', value: (params[:tags] rescue '' ) }
 
       .row.w-100.text-center
         .col-md-6
-          %button.btn.btn-light.btn-sm.w-75.semibold.btn-reinit{:type => 'button', id: 'launch-reinit2', :type => 'button'} Reinitialiser
+          %button.btn.btn-light.btn-sm.w-75.semibold.btn-reinit{:type => 'button', id: 'launch-reinit2', :type => 'button'} &Eacute;ffacer
         .col-md-6
           %button.btn.btn-dark.btn-sm.w-75.semibold.btn-search{:type => 'button', id: 'launch-filter'} Lancer
 
@@ -65,7 +79,14 @@
             .filter_active.hide Filter
           %table.table.table-striped.list_customers#tbl_pieces
             %thead
+              %th
+                .row
+                  .icon-actions
+                    %span.pointer.form-check.d-inline.ms-2
+                      %input.form-check-input.pointer.float-none.select-all{ type: :checkbox, value: "", title: 'Sélectionner toutes les pièces' }
+                      %span.pointer.ms-2.action-selected.deliver_preseizures.hide{title: 'Télécharger une archive zip'}= glyphicon('cloud-download', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
               %th= sortable 'pack_report_preseizures.third_party', "Nom du tiers"
+              %th= sortable 'pack_report_preseizures.piece_number', "N° de pièce"
               %th= sortable 'pack_report_preseizures.date', "Date"
               %th= sortable 'pack_report_preseizures.cached_amount', "Montant TTC"
               %th Tags
@@ -73,9 +94,14 @@
             %tbody
               - @pieces.each do |piece|
                 - preseizure = piece.preseizures.first
-                %tr
+                %tr.box.list
+                  %td
+                    %span.form-check
+                      %input.form-check-input.pointer.float-none.select-document{ data: { id: piece.id, preseizure_ids: piece.preseizures.collect(&:id) }, type: :checkbox, value: "" }
                   %td.pointer.show-detail{ title: 'Voir détail', data: { content_url: piece.get_access_url, piece_id: piece.id }}
-                    .name.text-table-green= preseizure&.third_party
+                    .name.text-table-green= preseizure.try(:third_party)
+                  %td
+                    = preseizure.try(:piece_number)
                   %td
                     %span.info= preseizure.try(:date).try(:strftime, '%d/%m/%Y')
                   %td 

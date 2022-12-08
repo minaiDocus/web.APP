@@ -2,8 +2,8 @@
   .row
     .col-md-2
       - if @user.still_active? && @user.authorized_upload?
-        %button.btn.btn-dark.add-document.w-100.semibold
-          %span.me-3.blink= glyphicon('plus', { size: '12', color: '#FFFF'})
+        %button.btn.btn-dark.add-document.w-100.semibold.mb-5
+          %span.me-3.blink= glyphicon('plus', { size: '30', color: '#fff', style: "background-color:#C1D837; border-radius:50%; padding:5px;"})
           %span.blink Ajouter des documents
       
     .col-md-4

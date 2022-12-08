@@ -172,7 +172,7 @@ class DocumentsReloadedMain{
   }
 
   download_pack_archive(pack_id){
-    window.location.href = `/documents/download_archive/${pack_id}`;
+    window.location.href = `/documents_reloaded/download_archive/${pack_id}`;
   }
 
   download_pack_bundle(pack_id){
