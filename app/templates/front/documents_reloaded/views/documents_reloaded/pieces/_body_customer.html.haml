@@ -14,8 +14,15 @@
 
         - if !@user.has_maximum_journal?
           %li.direct_links.add-rubric
-            %span.float-end= glyphicon('plus', { color: "#C1D837", size: 10})
-            %span.link_principal.green-label Ajouter une rubrique
+            .info-rubric
+              %span.float-start.popup-info-rubric= glyphicon('info', { color: 'white', size: 20 , style: "background-color: #000; border-radius:50%; padding: 4px;"})
+              .info-rubric-content.hide
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+
+            .action-rubric       
+              %span.float-end= glyphicon('plus', { color: "#C1D837", size: 10})            
+              %span.link_principal.green-label Créer une rubrique
+            
 
         %li.input-add-rubric.hide
           %hr
@@ -65,9 +72,9 @@
 
       .row.w-100.text-center
         .col-md-6
-          %button.btn.btn-light.btn-sm.w-75.semibold.btn-reinit{:type => 'button', id: 'launch-reinit2', :type => 'button'} &Eacute;ffacer
+          %button.btn.btn-light.btn-sm.no-border-radius.w-100.semibold.btn-reinit{:type => 'button', id: 'launch-reinit2', :type => 'button'} &Eacute;ffacer
         .col-md-6
-          %button.btn.btn-dark.btn-sm.w-75.semibold.btn-search{:type => 'button', id: 'launch-filter'} Lancer
+          %button.btn.btn-dark.btn-sm.no-border-radius.w-100.semibold.btn-search{:type => 'button', id: 'launch-filter'} Lancer
 
   .col-md-10      
     .box.derivationLeft#table_pieces

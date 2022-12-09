@@ -18,6 +18,13 @@ function bind_all_events(){
     "noneText": "Choix",
   });
 
+  $('.popup-info-rubric').mouseover(function(e) {
+    console.log('QKHSJKHQSdfqdf')
+    $('.info-rubric-content').removeClass('hide') 
+  }).mouseout(function(e) {
+    $('.info-rubric-content').addClass('hide') 
+  });
+
   $('#customer_document_filter').unbind('change.mix_journal').bind('change.mix_journal', function(e){
     if ($('.user_and_journals').length > 0){
       let lists = JSON.parse( $('.user_and_journals').val() );
