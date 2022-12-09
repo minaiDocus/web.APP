@@ -86,6 +86,10 @@ class DocumentsReloadedCustomer{
                         })
                        .catch(()=>{ this.action_locker = false; });
   }
+
+  download_document(piece_ids){
+    window.location.href = `download_selected_zip/${piece_ids.join('_')}`;
+  }
 }
 
 jQuery(function() {
@@ -107,4 +111,5 @@ jQuery(function() {
   AppListenTo('documents_search_text', (e)=>{ main.load_temp_documents(true); });
   AppListenTo('load_rubric', (e)=>{ main.load_temp_documents(false, true); });
   AppListenTo('load_customer', (e)=>{ main.load_temp_documents(false, false ,true); });
+  AppListenTo('download_piece_zip', (e)=>{ main.download_document(e.detail.ids) });
 });

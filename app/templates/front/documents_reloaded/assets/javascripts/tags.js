@@ -1,3 +1,5 @@
+//= require './events'
+
 class DocumentsReloadedTags{
   constructor(){
     this.applicationJS = new ApplicationJS;

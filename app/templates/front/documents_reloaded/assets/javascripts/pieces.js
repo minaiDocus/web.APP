@@ -2,6 +2,7 @@
 //= require './tags'
 //= require './uploader'
 //= require './preseizures'
+//= require './events'
 
 class DocumentsReloadedPieces extends DocumentsReloadedMain{
   constructor(){

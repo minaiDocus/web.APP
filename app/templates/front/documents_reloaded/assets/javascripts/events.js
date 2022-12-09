@@ -1,3 +1,24 @@
+function get_all_selected(obj = 'piece', get_preseizure_ids=false){
+  let array_ids = [];
+  let type      = (obj == 'operation')? 'operation' : 'document';
+
+  $(`.form-check-input.select-${type}`).each(function(e){
+    if($(this).is(':checked')){
+      if(get_preseizure_ids && obj == 'piece'){
+        let ids = JSON.parse($(this).attr('data-preseizure-ids') || '[]');
+        ids.forEach((t)=>{
+          if( t && t > 0 ){ array_ids.push(t) }
+        });
+      }else{
+        let id = parseInt($(this).attr('data-id'));
+        if(id > 0){ array_ids.push(id); }
+      }
+    }
+  });
+
+  return array_ids;
+}
+
 function bind_all_events(){
   $('#delivery-date.daterange, #invoice-date.daterange').val('');
 
@@ -128,6 +149,17 @@ function bind_all_events(){
   });
   
   $('.filter-customer-journal').unbind('click').bind('click', function(e){ AppEmit('document_customer_filter'); });
+
+  $('.download_piece_zip').unbind('click').bind('click', function(e){ 
+    let ids = get_all_selected($(this).data('type'), true)
+
+    if (ids.length > 20){
+      $('.modal#alert-info').modal('show');
+    }
+    else{
+      AppEmit('download_piece_zip', { ids: ids });
+    }    
+  });
 
   $('.to-filter').unbind('click').bind('click', function(e){ $('#badge-filter').val($(this).attr('id')); AppEmit('filter_pack_badge'); });
 

@@ -12,7 +12,10 @@ Rails.application.routes.draw do
     post 'documents_reloaded/update_tag_temp_documents', to: 'pieces#update_tag_temp_documents', as: 'update_tag_temp_documents'
     get 'preseizures_reloaded/infos', to: 'preseizures#index', as: 'preseizures_reloaded_infos'
     post 'documents_reloaded/deliver_preseizures', to: 'abase#deliver_preseizures', as: 'documents_reloaded_deliver_preseizures'
+    get 'documents_reloaded/download_selected_zip/:ids', to: 'abase#download_selected_zip', as: 'documents_reloaded_download_selected_zip'
   end
+
+  
 
   namespace :documents_reloaded do
     resource :upload, controller: 'uploads'

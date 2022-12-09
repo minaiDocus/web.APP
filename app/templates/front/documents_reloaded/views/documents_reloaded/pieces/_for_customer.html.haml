@@ -1,9 +1,9 @@
 .container-fluid.main-content
-  .row
+  .row.derivationLeft
     .col-md-2
       - if @user.still_active? && @user.authorized_upload?
         %button.btn.btn-dark.add-document.w-100.semibold.mb-5
-          %span.me-2.blink= glyphicon('plus', { size: '40', color: '#fff', style: "background-color:#C1D837; border-radius:50%; padding: 10px;"})
+          %span.me-2.blink= glyphicon('plus', { size: '40', color: '#fff', style: "background-color:#C0E133; border-radius:50%; padding: 10px;"})
           %span.blink Ajouter des documents
       
     .col-md-4
@@ -11,12 +11,12 @@
       %span.filter-info.badge.bg-danger.p-2.regular.datas_size.hide Recherche par filtre activé
     .col-md-3
       .row
-        .col-md-3.pt-2
+        .col-md-3.pt-1
           .semibold Dossier
         .col-md-9
-          = select_tag 'customers', options_for_select(@users.reverse.map{ |e| [e.short_info, e.id] }, params[:uid].present? ? params[:uid] : @user.id), id: 'customers', class: 'form-select', include_blank: false
+          = select_tag 'customers', options_for_select(@users.reverse.map{ |e| [e.short_info, e.id] }, params[:uid].present? ? params[:uid] : @user.id), id: 'customers', class: 'chosen-list w-100', include_blank: false
 
-  .customer-document-content
+  .customer-document-content.derivationLeft
     %input{ type: :hidden, id: "hidden-journal-id", name: "hidden-journal-id", value: @journals.first.id }
     = render partial: 'body_customer' 
 

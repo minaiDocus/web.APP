@@ -77,19 +77,18 @@
           %button.btn.btn-dark.btn-sm.no-border-radius.w-100.semibold.btn-search{:type => 'button', id: 'launch-filter'} Lancer
 
   .col-md-10      
-    .box.derivationLeft#table_pieces
+    .box.derivationRight#table_pieces
       .row
         .col-md-12
           - if @filter_active
             .filter_active.hide Filter
           %table.table.table-striped.list_customers#tbl_pieces
             %thead
-              %th
-                .row
-                  .icon-actions
-                    %span.pointer.form-check.d-inline.ms-2
-                      %input.form-check-input.pointer.float-none.select-all{ type: :checkbox, value: "", title: 'Sélectionner toutes les pièces' }
-                      %span.pointer.ms-2.action-selected.deliver_preseizures.hide{title: 'Télécharger une archive zip'}= glyphicon('cloud-download', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
+              %th.text-center
+                .icon-actions
+                  %span.pointer.form-check.d-inline
+                    %input.form-check-input.pointer.float-none.select-all{ type: :checkbox, value: "", title: 'Sélectionner toutes les pièces' }
+                    %span.pointer.ms-2.action-selected.download_piece_zip.hide{title: 'Télécharger une archive zip'}= glyphicon('cloud-download', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
               %th= sortable 'pack_report_preseizures.third_party', "Nom du tiers"
               %th= sortable 'pack_report_preseizures.date', "Date"
               %th= sortable 'pack_report_preseizures.piece_number', "N° de pièce"
@@ -100,9 +99,9 @@
               - @pieces.each do |piece|
                 - preseizure = piece.preseizures.first
                 %tr.box.list
-                  %td
+                  %td.text-center
                     %span.form-check
-                      %input.form-check-input.pointer.float-none.select-document{ data: { id: piece.id, preseizure_ids: piece.preseizures.collect(&:id) }, type: :checkbox, value: "" }
+                      %input.form-check-input.pointer.float-none.select-document{ data: { id: piece.id, preseizure_ids: [piece.id] }, type: :checkbox, value: "" }
                   %td.pointer.show-detail{ title: 'Voir détail', data: { content_url: piece.get_access_url, piece_id: piece.id }}
                     .name.text-table-green= preseizure.try(:third_party)
                   %td
@@ -123,3 +122,14 @@
                           = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Editer les tags', '#', class: 'link update_tags', data: { id: piece.id, type: 'piece' }
 
           = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: documents_reloaded_path, target: '#table_pieces', total_pages: @pieces.total_pages, filter: 'customer_filter_form' }
+
+#alert-info.modal.fade.in{'aria-hidden' => 'true', :role => 'dialog', :tabindex => '-1'}
+  .modal-dialog.modal-dialog-centered
+    .modal-content
+      .modal-header
+        %h5.modal-title.bold Information
+      .modal-body
+        .alert.alert-warning.semibold
+          Votre séléction est au-delà de 20 pièces, veuiller contacter le support si vous voulez télécharger plus de 20 pèces svp !
+      .modal-footer
+        %button.btn.btn-dark.btn-sm{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'} Fermer
