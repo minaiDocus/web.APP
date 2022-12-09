@@ -36,9 +36,11 @@
         .form-group{ class: (['acd'].include? software)? '' : 'hide' }
           .to_change_box
             .select-container.no-padding.w-100
-              = sf.input :username, input_html: { value: @organization.acd&.username }, label_html: { class: 'semibold' }, hint: "Pour connecter ACD à iDocus, veuillez indiquer votre identifiant de connexion."
+              = sf.label :username, t("activerecord.models.software_#{software}.attributes.username"), class: 'semibold'
+              = sf.input :username, input_html: { value: @organization.acd&.username }, label: false, hint: "Pour connecter ACD à iDocus, veuillez indiquer votre identifiant de connexion iSuiteExpert"
             .select-container.no-padding.w-100
-              = sf.input :password, label_html: { class: 'semibold' }, hint: "Pour connecter ACD à iDocus, veuillez indiquer votre mot de passe."
+              = sf.label :password, t("activerecord.models.software_#{software}.attributes.password"), class: 'semibold'
+              = sf.input :password, label_html: { class: 'semibold' }, label: false, hint: "Pour connecter ACD à iDocus, veuillez indiquer votre mot de passe iSuiteExpert"
 
 
 
