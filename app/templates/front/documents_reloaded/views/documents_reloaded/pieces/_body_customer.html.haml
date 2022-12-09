@@ -2,11 +2,7 @@
 = hidden_field_tag :customer_code, customer_selected.code
 .row
   .col-md-2
-    .row
-      .w-25.text-end
-        = glyphicon('magnifying-glass', { size: '18', color: 'background: rgba(26, 26, 26, 0.7)'})
-      .w-75
-        %h3.semibild Recherche
+    %h3.semibild.text-center Rechercher un document
     %hr
     .lefter.mt-3
       %ul.principal.p-0
@@ -44,16 +40,16 @@
           %input#third_party{ name: 'third_party', value: (params[:third_party] rescue '' ) }
 
       .form-group
-        %label.semibold Numéro de pièce
-        .select-container.no-padding
-          %input#third_party{ name: 'piece_number', value: (params[:piece_number] rescue '' ) }
-
-      .form-group
         %label Date
         .input-group.mb-3
           %span.show-calendar.input-group-text.calendar-field-customer.p-2{ data: { ref: 'date-val' }}= glyphicon('calendar', { size: '14', color: 'background: rgba(26, 26, 26, 0.7)' })
           %input.form-control.value-content.date.daterange.calendar-field-customer#date-val{ type: :text, name: 'date', value: (params[:date] rescue '')}
           %span.show-calendar.input-group-text-right.calendar-field-customer.p-2{ data: { ref: 'date-val' } }= glyphicon('chevron-bottom', { size: '12', color: 'background: rgba(26, 26, 26, 0.7)' })
+
+      .form-group
+        %label.semibold N° de pièce
+        .select-container.no-padding
+          %input#third_party{ name: 'piece_number', value: (params[:piece_number] rescue '' ) }
 
       .form-group
         %label.semibold Montant TTC
@@ -88,8 +84,8 @@
                       %input.form-check-input.pointer.float-none.select-all{ type: :checkbox, value: "", title: 'Sélectionner toutes les pièces' }
                       %span.pointer.ms-2.action-selected.deliver_preseizures.hide{title: 'Télécharger une archive zip'}= glyphicon('cloud-download', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
               %th= sortable 'pack_report_preseizures.third_party', "Nom du tiers"
-              %th= sortable 'pack_report_preseizures.piece_number', "N° de pièce"
               %th= sortable 'pack_report_preseizures.date', "Date"
+              %th= sortable 'pack_report_preseizures.piece_number', "N° de pièce"
               %th= sortable 'pack_report_preseizures.cached_amount', "Montant TTC"
               %th Tags
               %th.text-end Action
@@ -103,9 +99,9 @@
                   %td.pointer.show-detail{ title: 'Voir détail', data: { content_url: piece.get_access_url, piece_id: piece.id }}
                     .name.text-table-green= preseizure.try(:third_party)
                   %td
-                    = preseizure.try(:piece_number)
-                  %td
                     %span.info= preseizure.try(:date).try(:strftime, '%d/%m/%Y')
+                  %td
+                    = preseizure.try(:piece_number)
                   %td 
                     = preseizure.try(:amount_ttc).to_s + ' €'
                   %td
