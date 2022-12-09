@@ -9,6 +9,10 @@
         = link_to content_tag(:b, "#{format_price_00(@total[i][1])} €"), admin_invoices_archive_path(file_name: BillingMod::ArchiveInvoice.archive_name(Time.local(@year, i+1, 1)))
         %span.vat_symbol TTC
       %div
-        %b= @total[i][2]
+        %span.billed.pointer{ title: 'Dossiers facturés', style: 'color: #970404' }
+          %b= @total[i][2]
+        = " / "
+        %span.actives.pointer{ title: 'Dossiers actifs' }
+          %b= @total[i][3]
     - else
       \-

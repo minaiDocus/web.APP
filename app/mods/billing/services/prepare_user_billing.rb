@@ -1,11 +1,15 @@
 class BillingMod::PrepareUserBilling
-  def initialize(user, period=nil)
+  def initialize(user, period=nil, simulation=false)
     @user   = user
     @period = period || CustomUtils.period_of(Time.now)
+
+    @simulation = simulation
+    @user.activate_simulation if @simulation
   end
 
   def execute
-    return false if !@user.still_active? || @user.is_prescriber
+    return false if !@user.active_at?(@period) || @user.is_prescriber
+    # return false if !@user.still_active? || @user.is_prescriber
 
     @package = @user.package_of(@period)
     @package = clone_existing_package if not @package
@@ -17,7 +21,7 @@ class BillingMod::PrepareUserBilling
 
     return false if not @data_flow
 
-    @user.billings.of_period(@period).update_all(is_frozen: true)
+    @user.evaluated_billings.of_period(@period).update_all(is_frozen: true)
 
     if @user.can_be_billed_at?(@period)
       if @user.code == 'NEAT%ARAPL'
@@ -42,7 +46,7 @@ class BillingMod::PrepareUserBilling
       create_null_billing
     end
 
-    @user.billings.of_period(@period).is_frozen.destroy_all
+    @user.evaluated_billings.of_period(@period).is_frozen.destroy_all
   end
 
   private
@@ -159,8 +163,8 @@ class BillingMod::PrepareUserBilling
 
       title     = "Opérations bancaires mois de #{I18n.l(Date.new(_period.to_s[0..3].to_i, _period.to_s[4..-1].to_i), format: '%B')} #{_period.to_s[0..3].to_i}"
 
-      billing   = @user.billings.is_not_frozen.of_period(_period).count > 0
-      billing ||= @user.billings.is_not_frozen.where(name: 'operations_billing', kind: 're-sit', title: title).count > 0
+      billing   = @user.evaluated_billings.is_not_frozen.of_period(_period).count > 0
+      billing ||= @user.evaluated_billings.is_not_frozen.where(name: 'operations_billing', kind: 're-sit', title: title).count > 0
 
       if !billing && _period <= 202204
         title_2 = "Opérations bancaires mois de #{I18n.l(Date.new(_period.to_s[0..3].to_i, _period.to_s[4..-1].to_i), format: '%B')} #{_period.to_s[0..3].to_i}" #WARNING: keep this variable this is the previous title of previous system
@@ -200,7 +204,7 @@ class BillingMod::PrepareUserBilling
   end
 
   def create_billing(params)
-    billing        = @user.billings.where(period: @period, name: params[:name], title: params[:title], kind: (params[:kind] || 'normal' )).first || BillingMod::Billing.new
+    billing = @user.evaluated_billings.where(period: @period, name: params[:name], title: params[:title], kind: (params[:kind] || 'normal' )).first || new_billings
 
     billing.owner  = @user
     billing.period = @period
@@ -243,7 +247,7 @@ class BillingMod::PrepareUserBilling
     else
       if Time.now.strftime('%Y%m').to_i <= 202305 && ['ido_nano', 'ido_micro'].include?(@package.name.to_s)
         ##This code will be deprecated at 202305
-        concerened_periods = @user.packages.where(name: @package.name).order(period: :asc).pluck(:period)
+        concerened_periods = @user.evaluated_packages.where(name: @package.name).order(period: :asc).pluck(:period)
 
         concerened_periods.each_slice(12) do |periods_12|
           next if not periods_12.include?(@period.to_i)
@@ -252,7 +256,7 @@ class BillingMod::PrepareUserBilling
           data_flow    = nil
 
           if periods_12.include?(prev_period.to_i)
-            billing = @user.billings.where(period: periods_12, name: 'excess_billing').where('period <= ?', prev_period).count > 0
+            billing = @user.evaluated_billings.where(period: periods_12, name: 'excess_billing').where('period <= ?', prev_period).count > 0
 
             if not billing
               billing = @user.periods.where('DATE_FORMAT(start_date, "%Y%m") IN (?) AND DATE_FORMAT(start_date, "%Y%m") <= ? AND excesses_price_in_cents_wo_vat > 0', periods_12, prev_period).count > 0
@@ -275,7 +279,8 @@ class BillingMod::PrepareUserBilling
         current_flow = @user.flow_of(@package.period)
         data_flows   = @user.data_flows.where(period_version: current_flow.period_version).where('period <= ?', @package.period)
 
-        billings     = @user.billings.where(period: data_flows.pluck(:period), name: 'excess_billing')
+        billings     = @user.evaluated_billings.where(period: data_flows.pluck(:period), name: 'excess_billing')
+
         total_billed = 0
         billings.each do |billing|
           total_billed += billing.associated_hash[:excess]
@@ -293,5 +298,9 @@ class BillingMod::PrepareUserBilling
     @excess_data[:price] = @package.excess_price.to_f * @excess_data[:count] if @package.flow_limit > 0 && @excess_data[:count] > 0
 
     @excess_data
+  end
+
+  def new_billings
+    @simulation ? BillingMod::BillingSimulation.new : BillingMod::Billing.new
   end
 end

@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     get 'documents/export_preseizures/:q', to: 'abase#export_preseizures', as: 'documents_export_preseizures'
     get 'documents/download_archive/:id', to: 'abase#download_archive', as: 'documents_download_archive'
     get 'documents/download_bundle/:id', to: 'abase#download_bundle', as: 'documents_download_bundle'
+    get 'documents/download_selected/:ids', to: 'abase#download_selected', as: 'documents_download_selected'
 
     get 'documents', to: 'pieces#index', as: 'documents'
     post 'documents/delete', to: 'pieces#delete', as: 'delete_documents'

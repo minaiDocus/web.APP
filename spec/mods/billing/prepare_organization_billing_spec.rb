@@ -2,7 +2,9 @@
 require 'spec_helper'
 
 describe BillingMod::PrepareOrganizationBilling do
-  def create_users(number=1, _package='ido_classic')
+  def create_users(number=1, _package='ido_classic', simulation = true)
+    __package = simulation ? BillingMod::PackageSimulation : BillingMod::Package
+
     organization = Organization.first
 
     number.times do |i|
@@ -13,18 +15,20 @@ describe BillingMod::PrepareOrganizationBilling do
 
       user.build_options if user.options.nil?
 
+      user.save
+      user.reload
+
       if _package == 'ido_premium'
-        package = BillingMod::Package.create(period: CustomUtils.period_of(Time.now), user: user, name: 'ido_premium', journal_size: 5, upload_active: true, bank_active: true, scan_active: true, mail_active: false, preassignment_active: true)
+        package = __package.create(period: CustomUtils.period_of(Time.now), user: user, name: 'ido_premium', journal_size: 5, upload_active: true, bank_active: true, scan_active: true, mail_active: false, preassignment_active: true)
       elsif _package == 'ido_classic'
-        package = BillingMod::Package.create(period: CustomUtils.period_of(Time.now), user: user, name: 'ido_classic', journal_size: 5, upload_active: true, bank_active: true, scan_active: true, mail_active: true, preassignment_active: false)
+        package = __package.create(period: CustomUtils.period_of(Time.now), user: user, name: 'ido_classic', journal_size: 5, upload_active: true, bank_active: true, scan_active: true, mail_active: true, preassignment_active: false)
       else
-        package = BillingMod::Package.create(period: CustomUtils.period_of(Time.now), user: user, name: 'ido_micro_plus', journal_size: 5, upload_active: true, bank_active: false, scan_active: true, mail_active: true, preassignment_active: true)
+        package = __package.create(period: CustomUtils.period_of(Time.now), user: user, name: 'ido_micro_plus', journal_size: 5, upload_active: true, bank_active: false, scan_active: true, mail_active: true, preassignment_active: true)
       end
 
       package.save
-      user.save
 
-      FactoryBot.create(:piece, user_id: user.reload.id)
+      FactoryBot.create(:piece, user_id: user.id)
 
       user.account_book_types.create(name: "AC", description: "AC (Achats)", position: 1, entry_type: 2, currency: "EUR", domain: "AC - Achats", account_number: "0ACC", charge_account: "471000", vat_accounts: {'20':'445660', '8.5':'153141', '13':'754213'}.to_json, anomaly_account: "471000", is_default: true, is_expense_categories_editable: true, organization_id: organization.id)
     end
@@ -178,6 +182,29 @@ describe BillingMod::PrepareOrganizationBilling do
       create_users(2, 'ido_premium')
 
       BillingMod::PrepareOrganizationBilling.new(organization, period).execute
+
+      billing = organization.billings_of(period).where(name: 'ido_premium').first
+
+      expect(billing.price).to eq (3000)
+    end
+  end
+
+  context 'Simulation', :simulation do
+    before(:each) do
+      BillingMod::Billing.destroy_all
+      BillingMod::BillingSimulation.destroy_all
+    end
+
+    it 'creates billing to simulation table instead of real table' do
+      period            = CustomUtils.period_of(Time.now)
+
+      organization      = Organization.first
+      organization.code = 'IDOC'
+      organization.save
+
+      create_users(2, 'ido_premium')
+
+      BillingMod::PrepareOrganizationBilling.new(organization, period, true).execute
 
       billing = organization.billings_of(period).where(name: 'ido_premium').first
 

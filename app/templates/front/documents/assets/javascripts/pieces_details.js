@@ -42,6 +42,15 @@ class DocumentsDetails extends DocumentsMain{
     }
   }
 
+  download_pieces(elem){
+    let ids   = []
+    ids = get_all_selected('piece');
+
+    if(ids.length > 0){
+      window.location.href = `/documents/download_selected/${ids.join('_')}`;
+    }
+  }
+
   restore_piece(id){
      if(confirm('Voulez vous vraiment restaurer cette pièce')){
         let params =  {
@@ -105,6 +114,7 @@ jQuery(function() {
   AppListenTo('documents_load_datas', (e)=>{ main.load_pieces(true) });
   AppListenTo('documents_reinit_datas', (e)=>{ main.load_pieces(false) });
 
+  AppListenTo('documents_download_pieces', (e)=>{ main.download_pieces($(e.detail.obj)) });
   AppListenTo('documents_delete_piece', (e)=>{ main.delete_piece($(e.detail.obj)) });
   AppListenTo('documents_restore_piece', (e)=>{ main.restore_piece(e.detail.id) });
 

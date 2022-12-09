@@ -63,8 +63,8 @@
                 %label.form-check-label Non
                 = check_box_tag 'user[software]', true, software_value, info: "#{@organization.id}-#{@customer.id}-#{software}", class: 'form-check-input input_switch auto-update-accounting-plan', id: 'auto-update-accounting-plan'
     
-  - # autoliquidation_exist = @accounting_plan.active_providers.select{ |prov| prov.vat_autoliquidation }.size > 0
-  - autoliquidation_exist = false
+  - autoliquidation_exist = @accounting_plan.active_providers.select{ |prov| prov.vat_autoliquidation }.size > 0
+  - # autoliquidation_exist = false
   .mb-4
   %hr
   .fadein

@@ -61,9 +61,11 @@ describe BillingMod::PrepareUserBilling do
         user.organization = organization
 
         user.build_options if user.options.nil?
-        package = BillingMod::Package.create(period: CustomUtils.period_of(Time.now), user: user, name: 'ido_classic', upload_active: true, bank_active: true, scan_active: true, mail_active: true, preassignment_active: false)
+        package   = BillingMod::Package.create(period: CustomUtils.period_of(Time.now), user: user, name: 'ido_classic', upload_active: true, bank_active: true, scan_active: true, mail_active: true, preassignment_active: false)
+        package_s = BillingMod::PackageSimulation.create(period: CustomUtils.period_of(Time.now), user: user, name: 'ido_classic', upload_active: true, bank_active: true, scan_active: true, mail_active: true, preassignment_active: false)
 
         package.save
+        package_s.save
         user.save
 
         user.account_book_types.create(name: "AC", description: "AC (Achats)", position: 1, entry_type: 2, currency: "EUR", domain: "AC - Achats", account_number: "0ACC", charge_account: "471000", vat_accounts: {'20':'445660', '8.5':'153141', '13':'754213'}.to_json, anomaly_account: "471000", is_default: true, is_expense_categories_editable: true, organization_id: organization.id)
@@ -90,14 +92,32 @@ describe BillingMod::PrepareUserBilling do
   it 'create basic package', :basic_package do
     user = User.last
     
+    user.deactivate_simulation
     package = user.my_package
 
+    user.activate_simulation
+    package_s = user.my_package
+
+    expect(package.is_a?(BillingMod::Package)).to eq true
+    expect(package_s.is_a?(BillingMod::PackageSimulation)).to eq true
+
     expect(package.name).to eq 'ido_classic'
+    expect(package_s.name).to eq 'ido_classic'
+
     expect(package.period).to eq CustomUtils.period_of(Time.now)
+    expect(package_s.period).to eq CustomUtils.period_of(Time.now)
+
     expect(package.base_price).to eq 20
+    expect(package_s.base_price).to eq 20
+
     expect(package.excess_price).to eq 0.25
+    expect(package_s.excess_price).to eq 0.25
+
     expect(package.flow_limit).to eq 100
+    expect(package_s.flow_limit).to eq 100
+
     expect(package.excess_duration).to eq 'month'
+    expect(package_s.excess_duration).to eq 'month'
   end
 
   it 'collect data flow', :data_flow do
@@ -178,9 +198,11 @@ describe BillingMod::PrepareUserBilling do
       package    = user.my_package
 
       expect(billings.size).to be > 0
+
+      expect(first_bill.is_a?(BillingMod::Billing)).to be true
       expect(first_bill.period).to eq CustomUtils.period_of(Time.now)
       expect(first_bill.name).to eq "ido_classic"
-      expect(first_bill.title).to eq package.human_name
+      expect(first_bill.title).to eq BillingMod::Configuration::LISTS[package.name.to_sym][:label]
       expect(first_bill.price).to eq 20 * 100
     end
 
@@ -471,6 +493,41 @@ describe BillingMod::PrepareUserBilling do
       expect(paper_processes_bill.price).to eq paper_processes_price * 100
 
       expect(user.total_billing_of(period)).to eq (scanned_sheets_price + paper_processes_price) * 100
+    end
+  end
+
+  context 'Simulation billing', :simulation do
+    before(:each) do
+      BillingMod::Billing.destroy_all
+      BillingMod::BillingSimulation.destroy_all
+      BillingMod::Invoice.destroy_all
+      Operation.destroy_all
+    end
+
+    it 'create data to simulation table instead of real table' do
+      user = User.last
+
+      BillingMod::PrepareUserBilling.new(user, CustomUtils.period_of(Time.now), true).execute
+
+      user.activate_simulation
+      billings   = user.reload.evaluated_billings
+      first_bill = billings.first
+
+      package    = user.my_package
+
+      expect(first_bill.is_a?(BillingMod::BillingSimulation)).to be true
+      expect(package.is_a?(BillingMod::PackageSimulation)).to be true      
+
+      expect(billings.size).to be > 0
+      expect(first_bill.period).to eq CustomUtils.period_of(Time.now)
+      expect(first_bill.name).to eq "ido_classic"
+      expect(first_bill.title).to eq BillingMod::Configuration::LISTS[package.name.to_sym][:label]
+      expect(first_bill.price).to eq 20 * 100
+
+      user.deactivate_simulation
+      real_billings = user.reload.evaluated_billings
+
+      expect(real_billings.size).to eq 0
     end
   end
 end

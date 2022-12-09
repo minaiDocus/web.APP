@@ -34,7 +34,7 @@
 
               - options = []
               - if @user.organization.try(:uses_api_softwares?)
-                - options << ['Livrée', 1]; options << ['Non livrée', 2]; options << ['Avec erreur',3]
+                - options << ['Livrée', 1]; options << ['En attente livraison', 2]; options << ['Non livrée',3]
               - if @user.organization.try(:uses_non_api_softwares?)
                 - options << ['Téléchargée', 4]; options << ['Non récupérée', 5]
 

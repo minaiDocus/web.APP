@@ -221,12 +221,11 @@ class DocumentsReloaded::PiecesController < DocumentsReloaded::AbaseController
   end
 
   def packs_with_failed_delivery
-    reports = Pack::Report.where(pack_id: @packs.map(&:id))
-    # preseizures = Pack::Report::Preseizure.failed_delivery.where(report_id: reports.pluck(:id))
-    preseizures = Pack::Report::Preseizure.not_delivered('ibiza').where(report_id: reports.pluck(:id)) #JUST IBIZA FOR NOW
-    reports_with_failed_delivery = Pack::Report.where(id: preseizures.not_deleted.pluck(:report_id))
+    __reports   = Pack::Report.where(pack_id: @packs.map(&:id)).pluck(:id)
+    report_ids  = Pack::Report::Preseizure.not_deleted.failed_delivery.where(report_id: __reports).pluck(:report_id)
+    pack_ids    = Pack::Report.where(id: report_ids).pluck(:pack_id)
 
-    Pack.where(id: reports_with_failed_delivery.pluck(:pack_id)).pluck(:id)
+    Pack.where(id: pack_ids).pluck(:id)
   end
 
   def set_is_document

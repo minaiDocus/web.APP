@@ -64,12 +64,13 @@
     .col-md-3.icon-actions.text-end      
       - if @pack.owner.uses_ibiza_analytics?
         %span.pointer.ms-2.action-selected.edit_compta_analysis.hide{ title: 'Édition compta. analytiques', data: { code: @pack.owner.code, is_used: @pack.owner.uses_ibiza_analytics?.to_s } }= glyphicon('brush', { size: '18', color:'rgba(26, 26, 26, 0.32);'})
-      %span.pointer.ms-2.download_pack_bundle{title: 'Télécharger', data: {id: @pack.id}}= glyphicon('data-transfer-download', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
+      / %span.pointer.ms-2.download_pack_bundle{title: 'Télécharger', data: {id: @pack.id}}= glyphicon('data-transfer-download', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
       %span.pointer.ms-2.download_pack_archive{title: 'Télécharger une archive zip', data: {id: @pack.id}}= glyphicon('cloud-download', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
       - if @user.has_collaborator_action?
         %span.pointer.ms-2.preseizures_export{title: 'Export écriture', data:{ id: @pack.id, type: 'special_piece', multi: 'true' }}= glyphicon('external-link', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
         %span.pointer.ms-2.deliver_preseizures{title: 'Livraison écriture comptable', data: { id: @pack.id, type: 'special_piece', multi: 'true'}}= glyphicon('loop-circular', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
         %span.pointer.ms-2.action-selected.edit_selected_preseizures.hide{ title: 'Edition multiple', data: { type: 'piece' } }= glyphicon('pencil', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
+      %span.pointer.ms-2.action-selected.download_pieces.hide{title: 'Télécharger la séléction',multi: 'true'}= glyphicon('data-transfer-download', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
       %span.pointer.ms-2.action-selected.update_tags.hide{title: 'Tagger', multi: 'true'}= glyphicon('tag', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
       %span.pointer.ms-2.action-selected.delete_piece.hide{title: 'Supprimer', multi: 'true'}= glyphicon('trash', { size: '14',  color:'#FF4848'})
       %span.pointer.form-check.d-inline.ms-2      

@@ -1,14 +1,18 @@
 class BillingMod::PrepareOrganizationBilling
-  def initialize(organization, period=nil)
+  def initialize(organization, period=nil, simulation=false)
     @organization = organization
     @period       = period.presence || CustomUtils.period_of(Time.now)
     @time_end     = Date.parse("#{@period.to_s[0..3]}-#{@period.to_s[4..5]}-15")
+
+    @simulation   = simulation
+    @organization.activate_simulation if @simulation
   end
 
   def execute(force=false)
     return false if !force && !@organization.can_be_billed?
 
-    @organization.billings.of_period(@period).update_all(is_frozen: true)
+    @organization.evaluated_billings.of_period(@period).update_all(is_frozen: true)
+    
     @customers_ids = []
     @organization.customers.active_at(@time_end).each do |customer|
       next if not customer.can_be_billed_at?(@period)
@@ -27,7 +31,7 @@ class BillingMod::PrepareOrganizationBilling
 
     create_extra_order_billing
 
-    @organization.billings.of_period(@period).is_frozen.destroy_all
+    @organization.evaluated_billings.of_period(@period).is_frozen.destroy_all
   end
 
   private
@@ -35,7 +39,7 @@ class BillingMod::PrepareOrganizationBilling
   def create_premium_billing
     return false if not CustomUtils.is_ido_premium?(@organization.code)
 
-    customers_count = BillingMod::Package.of_period(@period).where(user_id: @customers_ids).where(name: 'ido_premium').count
+    customers_count = evaluated_packages.of_period(@period).where(user_id: @customers_ids).where(name: 'ido_premium').count
 
     if customers_count > 0
       price           = BillingMod::Configuration.premium_price_of(@organization.code)
@@ -48,7 +52,7 @@ class BillingMod::PrepareOrganizationBilling
   def create_premium_overcharge_billing
     return false if not CustomUtils.is_ido_premium?(@organization.code)
 
-    customers_count = BillingMod::Package.of_period(@period).where(user_id: @customers_ids).where(name: 'ido_premium').count
+    customers_count = evaluated_packages.of_period(@period).where(user_id: @customers_ids).where(name: 'ido_premium').count
     customers_limit = BillingMod::Configuration.premium_customers_limit_of(@organization.code)
     unit_price      = BillingMod::Configuration.premium_unit_customer_price_of(@organization.code)
 
@@ -59,7 +63,7 @@ class BillingMod::PrepareOrganizationBilling
   end
 
   def create_classic_discount_billing
-    customers_count = BillingMod::Package.of_period(@period).where(user_id: @customers_ids).where(name: 'ido_classic').count
+    customers_count = evaluated_packages.of_period(@period).where(user_id: @customers_ids).where(name: 'ido_classic').count
 
     price = BillingMod::Configuration.discount_price(:ido_classic, customers_count, discount_version)
 
@@ -80,7 +84,7 @@ class BillingMod::PrepareOrganizationBilling
   def create_retriever_discount_billing
     packages_name_out_list = ['ido_premium', 'ido_micro']
 
-    customers_count = BillingMod::Package.of_period(@period).where.not(name: packages_name_out_list).where(user_id: @customers_ids).where(bank_active: true).count
+    customers_count = evaluated_packages.of_period(@period).where.not(name: packages_name_out_list).where(user_id: @customers_ids).where(bank_active: true).count
 
     price = BillingMod::Configuration.discount_price(:bank_option, customers_count, discount_version)
 
@@ -90,7 +94,7 @@ class BillingMod::PrepareOrganizationBilling
   end
 
   def create_classic_excess_billing
-    customers_id = BillingMod::Package.of_period(@period).where(user_id: @customers_ids).where(name: 'ido_classic').pluck(:user_id)
+    customers_id = evaluated_packages.of_period(@period).where(user_id: @customers_ids).where(name: 'ido_classic').pluck(:user_id)
 
     excess_limit        = BillingMod::Configuration.flow_limit_of('ido_classic')
     all_excess_limit    = excess_limit * customers_id.size
@@ -102,7 +106,7 @@ class BillingMod::PrepareOrganizationBilling
   end
 
   def create_micro_plus_excess_billing
-    customers_id = BillingMod::Package.of_period(@period).where(user_id: @customers_ids).where(name: 'ido_micro_plus').pluck(:user_id)
+    customers_id = evaluated_packages.of_period(@period).where(user_id: @customers_ids).where(name: 'ido_micro_plus').pluck(:user_id)
 
     excess_limit        = BillingMod::Configuration.flow_limit_of('ido_micro_plus')
     all_excess_limit    = excess_limit * customers_id.size
@@ -117,6 +121,8 @@ class BillingMod::PrepareOrganizationBilling
     #TODO : Find a way to remove SubscriptionOption, instead use direclty ExtraOrder
     options = @organization.subscription.options.where(period_duration: 0)
     options.each do |option|
+      next if @simulation && !@organization.extra_orders.where(name: option.name).any?
+
       extra_order        = @organization.extra_orders.where(name: option.name).first || BillingMod::ExtraOrder.new
       extra_order.period = @period
       extra_order.owner  = @organization
@@ -126,13 +132,16 @@ class BillingMod::PrepareOrganizationBilling
       extra_order.save
     end
 
-    @organization.reload.extra_orders.of_period(@period).map do |extra_order|
+    @organization.reload
+    @organization.activate_simulation if @simulation
+
+    @organization.extra_orders.of_period(@period).map do |extra_order|
       create_billing({ name: 'extra_order', title: extra_order.name, kind: 'extra', price: extra_order.price })
     end
   end
 
   def create_billing(params)
-    billing        = @organization.billings.where(period: @period, name: params[:name], title: params[:title], kind: (params[:kind] || 'normal' )).first || BillingMod::Billing.new
+    billing = @organization.evaluated_billings.where(period: @period, name: params[:name], title: params[:title], kind: (params[:kind] || 'normal' )).first || new_billing
 
     billing.owner  = @organization
     billing.period = @period
@@ -153,5 +162,13 @@ class BillingMod::PrepareOrganizationBilling
     else
       1
     end
+  end
+
+  def new_billing
+    @simulation ? BillingMod::BillingSimulation.new : BillingMod::Billing.new
+  end
+
+  def evaluated_packages
+    @simulation ? BillingMod::PackageSimulation : BillingMod::Package
   end
 end

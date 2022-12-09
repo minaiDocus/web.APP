@@ -4,7 +4,9 @@ module BillingMod::UserModule
   included do
     has_many :data_flows, class_name: 'BillingMod::DataFlow', dependent: :destroy
     has_many :packages, class_name: 'BillingMod::Package', dependent: :destroy
+    has_many :package_simulations, class_name: 'BillingMod::PackageSimulation', dependent: :destroy
     has_many :billings, class_name: 'BillingMod::Billing', as: :owner
+    has_many :billing_simulations, class_name: 'BillingMod::BillingSimulation', as: :owner
     has_many :extra_orders, class_name: 'BillingMod::ExtraOrder', as: :owner
   end
 
@@ -24,12 +26,20 @@ module BillingMod::UserModule
     end
   end
 
+  def activate_simulation
+    @p_simulation = true
+  end
+
+  def deactivate_simulation
+    @p_simulation = false
+  end
+
   def current_flow
     self.flow_of CustomUtils.period_of(Time.now)
   end
 
   def my_package
-    self.packages.where('period <= ?', CustomUtils.period_of(Time.now)).order(period: :desc).limit(1).first
+    evaluated_packages.where('period <= ?', CustomUtils.period_of(Time.now)).order(period: :desc).limit(1).first
   end
 
   def next_package
@@ -45,7 +55,7 @@ module BillingMod::UserModule
   end
 
   def package_of(period)
-    self.packages.of_period(period).first
+    evaluated_packages.of_period(period).first
   end
 
   def flow_of(period)
@@ -61,7 +71,7 @@ module BillingMod::UserModule
     if package.excess_duration == 'annual' && !data_flow.persisted?
       max_version  = self.data_flows.select('MAX(period_version) as max_version').first.max_version.to_i
       data_flows   = self.data_flows.version(max_version).order(period: :desc)
-      prev_package = self.packages.of_period(data_flows.first.try(:period)).first
+      prev_package = evaluated_packages.of_period(data_flows.first.try(:period)).first
 
       data_flow.period_version = (max_version > 0 && prev_package.try(:name) == package.name && data_flows.count < 12) ? max_version : (max_version + 1)
     end
@@ -72,6 +82,14 @@ module BillingMod::UserModule
   end
 
   def total_billing_of(period)
-    self.billings.of_period(period).select("SUM(price) as price").first.price.to_f
+    evaluated_billings.of_period(period).select("SUM(price) as price").first.price.to_f
+  end
+
+  def evaluated_billings
+    @p_simulation ? self.billing_simulations : self.billings
+  end
+
+  def evaluated_packages
+    @p_simulation ? self.package_simulations : self.packages
   end
 end

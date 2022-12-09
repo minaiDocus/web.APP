@@ -92,7 +92,7 @@ class PreAssignment::Delivery::DataService
     @report.is_locked         = false
     @report.save
 
-    @report.delivered_to(@software_name) if @report.preseizures.reload.not_deleted.not_delivered(@software_name).count == 0
+    @report.delivered_to(@software_name) if @report.preseizures.reload.not_deleted.not_delivered.count == 0
 
     @report.set_delivery_message_for(@software_name, '')
   end
