@@ -1312,6 +1312,12 @@ fr:
         attributes: 
           is_used: Utilise My Unisoft ?
           auto_deliver: Livrer automatiquement les écritures ?
+      software_acd:
+        attributes: 
+          is_used: Utilise ACD ?
+          auto_deliver: Livrer automatiquement les écritures ?
+          username: Identifiant iSuite Expert
+          password: Mot de passe iSuite Expert
       software_sage_gec:
         attributes: 
           is_used: Utilise Sage GEC ?

@@ -23,6 +23,11 @@
         - software       = "Sage GEC"
         - software_value = @customer.sage_gec.try(:auto_update_accounting_plan?)
         - software_id    = @customer.sage_gec.sage_private_api_uuid
+      - elsif @customer.uses?(:acd)
+        - to_show        = true
+        - software       = "ACD"
+        - software_value = @customer.acd.try(:auto_update_accounting_plan?)
+        - software_id    = @customer.acd.code
 
       .col-md-12
         = form_tag import_fec_organization_customer_accounting_plan_path(@organization, @customer), method: 'patch', multipart: true, class: 'form-horizontal clearfix label-auto' do
