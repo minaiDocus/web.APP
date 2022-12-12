@@ -30,13 +30,13 @@
               %td.field.date_field
                 .input-group
                   .input-group-prepend
-                    %span.input-group-text= glyphicon('calendar', size: 20)
-                  = text_field_tag 'budgea_fetcher_contains[min_date]', (params[:budgea_fetcher_contains][:min_date] rescue ''), class: 'form-control date datepicker'
+                    %span.input-group-text.h-100.rounded-start{ style: "border-radius: 0;"}= glyphicon('calendar', size: 20)
+                  = text_field_tag 'budgea_fetcher_contains[min_date]', (params[:budgea_fetcher_contains][:min_date] rescue ''), class: 'form-control singledate'
               %td.field.date_field
                 .input-group
                   .input-group-prepend
-                    %span.input-group-text= glyphicon('calendar', size: 20)
-                  = text_field_tag 'budgea_fetcher_contains[max_date]', (params[:budgea_fetcher_contains][:max_date] rescue ''), class: 'form-control date datepicker'
+                    %span.input-group-text.h-100.rounded-start{ style: "border-radius: 0;"}= glyphicon('calendar', size: 20)
+                  = text_field_tag 'budgea_fetcher_contains[max_date]', (params[:budgea_fetcher_contains][:max_date] rescue ''), class: 'form-control singledate'
               %td
                 = submit_tag 'Lancer la récupération', name: nil, class: 'btn btn-dark'
 
