@@ -33,6 +33,11 @@ function bind_all_events(){
     $('.search-title #search-action').text($(this).data('bs-title').toLowerCase())
   })
 
+  $('.show-calendar').unbind('click').bind('click',function(e) {
+    e.stopPropagation();
+    $('#'+$(this).attr('data-ref')).click();
+  });
+
 }
 
 jQuery(function() {
