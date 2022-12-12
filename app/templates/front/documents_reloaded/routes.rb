@@ -15,8 +15,6 @@ Rails.application.routes.draw do
     get 'documents_reloaded/download_selected_zip/:ids', to: 'abase#download_selected_zip', as: 'documents_reloaded_download_selected_zip'
   end
 
-  
-
   namespace :documents_reloaded do
     resource :upload, controller: 'uploads'
 

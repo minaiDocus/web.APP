@@ -2,9 +2,9 @@
   .form-group
     %label.semibold Date
     .input-group.mb-3
-      %span.show-calendar.input-group-text{ data: { ref: 'operation-date' } }= glyphicon('calendar', { size: '14', color: 'background: rgba(26, 26, 26, 0.7)' })    
-      %input.form-control.date.daterange#operation-date{ name: 'banking_operation_contains[date]', type: :text }
-      %span.show-calendar.input-group-text-right{ data: { ref: 'operation-date' } }= glyphicon('chevron-bottom', { size: '12', color: 'background: rgba(26, 26, 26, 0.7)' })
+      %span.show-calendar.calendar-field-customer.input-group-text{ data: { ref: 'operation-date' } }= glyphicon('calendar', { size: '14', color: 'background: rgba(26, 26, 26, 0.7)' })
+      %input.form-control.calendar-field-customer.date.daterange#operation-date{ name: 'banking_operation_contains[date]', type: :text }
+      %span.show-calendar.calendar-field-customer.input-group-text-right{ data: { ref: 'operation-date' } }= glyphicon('chevron-bottom', { size: '12', color: 'background: rgba(26, 26, 26, 0.7)' })
 
   .form-group
     %label.semibold Automate

@@ -88,7 +88,9 @@ class DocumentsReloadedCustomer{
   }
 
   download_document(piece_ids){
-    window.location.href = `download_selected_zip/${piece_ids.join('_')}`;
+    let url_download = window.location.href + `/download_selected_zip/${piece_ids.join('_')}`
+
+    window.location.replace(url_download);
   }
 }
 

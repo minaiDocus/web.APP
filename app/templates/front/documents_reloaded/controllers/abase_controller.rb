@@ -144,40 +144,44 @@ class DocumentsReloaded::AbaseController < FrontController #Must be loaded first
   def download_selected_zip
     pieces_ids = params[:ids].split('_')
 
-    if Pack::Piece.unscoped.where(id: pieces_ids.first).try(:user).in?(accounts) || current_user.try(:is_admin)
-      tmp_dir = CustomUtils.mktmpdir('download_selected', nil, false)
+    if pieces_ids.size > 20
+      render body: 'Votre séléction est au-delà de 20 pièces, veuiller contacter le support si vous voulez télécharger plus de 20 pièces svp !', status: 404
+    else
+      if Pack::Piece.unscoped.where(id: pieces_ids.first).try(:user).in?(accounts) || current_user.try(:is_admin)
+        tmp_dir = CustomUtils.mktmpdir('download_selected', nil, false)
 
-      pieces_ids.each do |piece_id|
-        piece           = Pack::Piece.unscoped.find(piece_id)
-        piece_file_name = DocumentTools.file_name piece.name
+        pieces_ids.each do |piece_id|
+          piece           = Pack::Piece.unscoped.find(piece_id)
+          piece_file_name = DocumentTools.file_name piece.name
 
-        file_path = piece.cloud_content_object.path(params[:style].presence || :original, true)
+          file_path = piece.cloud_content_object.path(params[:style].presence || :original, true)
 
-        if !File.exist?(file_path.to_s) && !piece.cloud_content.attached?
-          sleep 1
-          piece.try(:recreate_pdf)
-          file_path = piece.cloud_content_object.reload.path(params[:style].presence || :original, true)
+          if !File.exist?(file_path.to_s) && !piece.cloud_content.attached?
+            sleep 1
+            piece.try(:recreate_pdf)
+            file_path = piece.cloud_content_object.reload.path(params[:style].presence || :original, true)
+          end
+
+          FileUtils.cp file_path, "#{tmp_dir}/#{piece_file_name}" if File.exist?(file_path.to_s)
         end
 
-        FileUtils.cp file_path, "#{tmp_dir}/#{piece_file_name}" if File.exist?(file_path.to_s)
-      end
+         # Finaly zip the temp
+        zip_file_name      = "pieces_#{Time.now.strftime('%Y%m%d_%H%M')}.zip"
+        zip_path           = "#{tmp_dir}/#{zip_file_name}"
+        Dir.chdir tmp_dir
+        POSIX::Spawn.system "zip #{zip_file_name} *"
 
-       # Finaly zip the temp
-      zip_file_name      = "pieces_#{Time.now.strftime('%Y%m%d_%H%M')}.zip"
-      zip_path           = "#{tmp_dir}/#{zip_file_name}"
-      Dir.chdir tmp_dir
-      POSIX::Spawn.system "zip #{zip_file_name} *"
+        FileUtils.delay_for(30.minutes, queue: :high).remove_entry(tmp_dir, true)
 
-      FileUtils.delay_for(30.minutes, queue: :high).remove_entry(tmp_dir, true)
-
-      if File.exist?(zip_path.to_s)
-        mime_type = 'application/zip'
-        send_file(zip_path, type: mime_type, filename: File.basename(zip_path), x_sendfile: true, disposition: 'inline')
+        if File.exist?(zip_path.to_s)
+          mime_type = 'application/zip'
+          send_file(zip_path, type: mime_type, filename: File.basename(zip_path), x_sendfile: true, disposition: 'inline')
+        else
+          render body: 'Aucun fichier à télécharger', status: 404
+        end
       else
         render body: 'Aucun fichier à télécharger', status: 404
       end
-    else
-      render body: 'Aucun fichier à télécharger', status: 404
     end
   end
 

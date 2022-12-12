@@ -56,7 +56,7 @@
       .form-group
         %label.semibold N° de pièce
         .select-container.no-padding
-          %input#third_party{ name: 'piece_number', value: (params[:piece_number] rescue '' ) }
+          %input#piece_number{ name: 'piece_number', value: (params[:piece_number] rescue '' ) }
 
       .form-group
         %label.semibold Montant TTC
@@ -88,7 +88,7 @@
                 .icon-actions
                   %span.pointer.form-check.d-inline
                     %input.form-check-input.pointer.float-none.select-all{ type: :checkbox, value: "", title: 'Sélectionner toutes les pièces' }
-                    %span.pointer.ms-2.action-selected.download_piece_zip.hide{title: 'Télécharger une archive zip'}= glyphicon('cloud-download', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
+                    %span.pointer.ms-2.action-selected.download_piece_zip.hide{title: 'Télécharger une archive zip'}= glyphicon('data-transfer-download', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
               %th= sortable 'pack_report_preseizures.third_party', "Nom du tiers"
               %th= sortable 'pack_report_preseizures.date', "Date"
               %th= sortable 'pack_report_preseizures.piece_number', "N° de pièce"
@@ -130,6 +130,6 @@
         %h5.modal-title.bold Information
       .modal-body
         .alert.alert-warning.semibold
-          Votre séléction est au-delà de 20 pièces, veuiller contacter le support si vous voulez télécharger plus de 20 pèces svp !
+          Votre séléction est au-delà de 20 pièces, veuiller contacter le support si vous voulez télécharger plus de 20 pièces svp !
       .modal-footer
         %button.btn.btn-dark.btn-sm{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'} Fermer
