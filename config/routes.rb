@@ -62,6 +62,7 @@ Rails.application.routes.draw do
   front_draw('preseizures')
   front_draw('documents')
   front_draw('documents_reloaded')
+  front_draw('my_documents')
   front_draw('pieces_errors')
   front_draw('organizations')
   front_draw('reporting')
