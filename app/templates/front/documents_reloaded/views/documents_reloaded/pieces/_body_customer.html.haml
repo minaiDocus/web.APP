@@ -15,7 +15,7 @@
         - if !@user.has_maximum_journal?
           %li.direct_links.add-rubric
             .info-rubric
-              %span.float-start.popup-info-rubric= glyphicon('info', { color: 'white', size: 20 , style: "background-color: #000; border-radius:50%; padding: 4px;"})
+              %span.float-start.popup-info-rubric= glyphicon('info', { color: 'white', size: 16 , style: "background-color: rgba(26,26,26,0.52); border-radius:50%; padding: 4px;"})
               .info-rubric-content.hide
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 
@@ -88,7 +88,7 @@
                 .icon-actions
                   %span.pointer.form-check.d-inline
                     %input.form-check-input.pointer.float-none.select-all{ type: :checkbox, value: "", title: 'Sélectionner toutes les pièces' }
-                    %span.pointer.ms-2.action-selected.download_piece_zip.hide{title: 'Télécharger une archive zip'}= glyphicon('data-transfer-download', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
+                    %span.pointer.ms-3.action-selected.download_piece_zip.hide{title: 'Télécharger une archive zip'}= glyphicon('data-transfer-download', { size: '20', color:'rgba(26, 26, 26, 0.75);'})
               %th= sortable 'pack_report_preseizures.third_party', "Nom du tiers"
               %th= sortable 'pack_report_preseizures.date', "Date"
               %th= sortable 'pack_report_preseizures.piece_number', "N° de pièce"
