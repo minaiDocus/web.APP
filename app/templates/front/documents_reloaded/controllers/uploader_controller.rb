@@ -28,7 +28,6 @@ class DocumentsReloaded::UploaderController < DocumentsReloaded::AbaseController
       journal = AccountBookType.find params[:l_journal]
 
       params[:file_account_book_type] = journal.name
-      params[:label]                  = journal.label
     end
 
     if customer && !customer.inactive? && ( (customer.authorized_upload? && to_upload) || customer.organization.specific_mission )
@@ -42,7 +41,6 @@ class DocumentsReloaded::UploaderController < DocumentsReloaded::AbaseController
                                                params[:analytic],
                                                nil,
                                                params[:force],
-                                               params[:label],
                                                params[:tags])
 
       data = present(uploaded_document).to_json
@@ -83,7 +81,7 @@ class DocumentsReloaded::UploaderController < DocumentsReloaded::AbaseController
       account_book_types = @upload_user.account_book_types
 
       options = account_book_types.map do |j|
-        [j.label.presence || j.description.presence || j.name, j.id, '0']
+        [j.full_name, j.id, '0']
       end
     else
       if @upload_user.organization.try(:specific_mission)

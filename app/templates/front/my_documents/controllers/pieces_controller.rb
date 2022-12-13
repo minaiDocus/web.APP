@@ -166,7 +166,9 @@ class MyDocuments::PiecesController < MyDocuments::AbaseController
     @users = accounts.includes(:options, :ibiza, :subscription, organization: [:ibiza, :exact_online, :my_unisoft, :coala, :cogilog, :sage_gec, :acd, :quadratus, :cegid, :csv_descriptor, :fec_agiris]).active.order(code: :asc).select { |user| user.authorized_upload? }    
     @journals = AccountBookType.where(user_id: user_ids).order('FIELD(entry_type, 0, 5, 1, 4, 3, 2) DESC', description: :asc)
 
-    @journal = params[:journal_id].present? ? @journals.where(id: params[:journal_id]).first.try(:name) : @journals.first.try(:name)
+    __journal   = params[:journal_id].present? ? @journals.where(id: params[:journal_id]).first : @journals.first
+    @entry_type = __journal.entry_type.to_i
+    @journal    = params[:journal_id].present? ? __journal.try(:name) : __journal.try(:name)
     @options[:journal] = [@journal]
 
     @filter_active = @options[:pre_assignment_state].present? || @options[:position].present? || @options[:text].present?

@@ -240,6 +240,11 @@ class CustomUtils
       BillingMod::Configuration::PREMIUM[organization_code.to_sym].present?
     end
 
+    def use_final_documents?(user)
+      return true if ['MCN'].include?(user.organization.code)
+      return false
+    end
+
     def can_create_budgea_documents(customer)
       return true if ["ACC%0336"].include?(customer.try(:my_code).to_s)
       return true if ["IDOC", "AFH", "AGEC"].include?(customer.try(:organization).try(:code).to_s)

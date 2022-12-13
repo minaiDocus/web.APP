@@ -14,7 +14,7 @@ class DocumentsReloaded::PiecesController < DocumentsReloaded::AbaseController
       @collaborator_view  = true
       index_collaborators      
     else
-      if @user.organization.code == "MCN"
+      if CustomUtils.use_final_documents?(@user)
         redirect_to my_documents_path
       else
         @collaborator_view = false

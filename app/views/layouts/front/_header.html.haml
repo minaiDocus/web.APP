@@ -60,7 +60,7 @@
           - is_retriever_active = controller_path == 'retrievers/main' || controller_path == 'retrieved_datas/main' || controller_path == 'retriever_parameters/main'
           %li.nav-item.dropdown{ class: (is_retriever_active)? 'active' : '' }
             - if @user.collaborator?
-              =link_to t('layouts.retriever.automates'), '', class: 'nav-link dropdown-toggle bold', id: 'navbardropdownmenuretriever', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-bs-toggle' => "dropdown", 'role' => "button"
+              =link_to 'Mes automates', '', class: 'nav-link dropdown-toggle bold', id: 'navbardropdownmenuretriever', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-bs-toggle' => "dropdown", 'role' => "button"
             - else
               =link_to t('layouts.my_retrievers'), '', class: 'nav-link dropdown-toggle bold', id: 'navbardropdownmenuretriever', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-bs-toggle' => "dropdown", 'role' => "button"
             .dropdown-menu.semibold{"aria-labelledby" => "navbardropdownmenuretriever"}

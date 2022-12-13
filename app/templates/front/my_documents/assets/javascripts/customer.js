@@ -81,6 +81,15 @@ class MyDocumentsCustomer{
                           else{
                             $('.filter-info').addClass('hide');
                           }
+
+                          //Show or hide amount search
+                          let entry_type = parseInt($('input#glb_entry_type').val());
+                          if(entry_type > 0){
+                            $('.form-group.amount_search').removeClass('hide')
+                          }else{
+                            $('.form-group.amount_search').addClass('hide')
+                          }
+
                           bind_all_events();
                           this.action_locker = false;
                         })

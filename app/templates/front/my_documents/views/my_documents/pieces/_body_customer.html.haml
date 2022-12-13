@@ -17,7 +17,7 @@
             .info-rubric
               %span.float-start.popup-info-rubric= glyphicon('info', { color: 'black', size: 10 })
               .info-rubric-content.hide
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                Créer une rubrique vous permet de classer et ranger éfficacement vos pièces et documents.
 
             .action-rubric       
               %span.float-end= glyphicon('plus', { color: "#C1D837", size: 10})            
@@ -58,13 +58,14 @@
         .select-container.no-padding
           %input#piece_number{ name: 'piece_number', value: (params[:piece_number] rescue '' ) }
 
-      .form-group
+      .form-group.amount_search{ class: (@entry_type > 0)? '' : 'hide' }
         %label.semibold Montant TTC
         .row.me-0
           .w-50
             = select_tag 'amount_operation', options_for_select([['=', 0], ['>=', 1], ['<=', 2]], (@options[:amount_operation] rescue 0)), include_blank: false, class: 'form-select operator'
           .w-50.select-container.no-padding
             %input#amount.p-1{ name: 'amount', value: (@options[:amount].join(',') rescue '' ) }
+
       .form-group
         %label.semibold Tags
         .select-container.no-padding
@@ -80,8 +81,7 @@
     .box.derivationRight#table_pieces
       .row
         .col-md-12
-          - if @filter_active
-            .filter_active.hide Filter
+          %input#glb_entry_type{ type: 'hidden', value: @entry_type }
           %table.table.table-striped.list_customers#tbl_pieces
             %thead
               %th.text-center
@@ -89,12 +89,19 @@
                   %span.pointer.form-check.d-inline
                     %input.form-check-input.pointer.float-none.select-all{ type: :checkbox, value: "", title: 'Sélectionner toutes les pièces' }
                     %span.pointer.ms-3.action-selected.download_piece_zip.hide{title: 'Télécharger une archive zip'}= glyphicon('data-transfer-download', { size: '20', color:'rgba(26, 26, 26, 0.75);'})
-              %th= sortable 'pack_report_preseizures.third_party', "Nom du tiers"
-              %th= sortable 'pack_report_preseizures.date', "Date"
-              %th= sortable 'pack_report_preseizures.piece_number', "N° de pièce"
-              %th= sortable 'pack_report_preseizures.cached_amount', "Montant TTC"
-              %th Tags
-              %th.text-end Action
+              - if @entry_type > 0
+                %th= sortable 'pack_report_preseizures.third_party', "Nom du tiers"
+                %th= sortable 'pack_report_preseizures.date', "Date"
+                %th= sortable 'pack_report_preseizures.piece_number', "N° de pièce"
+                %th= sortable 'pack_report_preseizures.cached_amount', "Montant TTC"
+                %th Tags
+                %th.text-end Action
+              - else
+                %th= sortable 'pack_pieces.name', "Nom de la pièce"
+                %th= sortable 'pack_pieces.created_at', "Date"
+                %th= sortable 'pack_pieces.position', "N° de pièce"
+                %th Tags
+                %th.text-end Action
             %tbody
               - @pieces.each do |piece|
                 - preseizure = piece.preseizures.first
@@ -103,13 +110,14 @@
                     %span.form-check
                       %input.form-check-input.pointer.float-none.select-document{ data: { id: piece.id, preseizure_ids: [piece.id] }, type: :checkbox, value: "" }
                   %td.pointer.show-detail{ title: 'Voir détail', data: { content_url: piece.get_access_url, piece_id: piece.id }}
-                    .name.text-table-green= preseizure.try(:third_party)
+                    .name.text-table-green= preseizure.try(:third_party) || piece.try(:name)
                   %td
-                    %span.info= preseizure.try(:date).try(:strftime, '%d/%m/%Y')
+                    %span.info= preseizure.try(:date).try(:strftime, '%d/%m/%Y') || piece.try(:created_at).try(:strftime, '%d/%m/%Y')
                   %td
-                    = preseizure.try(:piece_number)
-                  %td 
-                    = preseizure.try(:amount_ttc).to_s + ' €'
+                    = preseizure.try(:piece_number) || (sprintf '%03d', piece.try(:position).to_i)
+                  - if @entry_type > 0
+                    %td 
+                      = preseizure.try(:amount_ttc).to_s + ' €'
                   %td
                     - piece.get_tags.split('-').each do |tag|              
                       %span.badge.bg-dark= tag

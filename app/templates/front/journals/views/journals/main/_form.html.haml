@@ -12,14 +12,14 @@
               = f.input :name, label: false, :placeholder => 'ex: AC', input_html: { class: 'required_field'}
             = f.label :description, label: 'Nom du dossier iDocus', hint: 'Inscrivez ici un nom familier pour votre dossier.', :class => "semibold"
             .select-container.p-1.w-100
-              = f.input :description, label: false, :placeholder => 'ex: (Achats)', input_html: { class: 'required_field'}
+              = f.input :description, label: false, :placeholder => 'ex: Achats', hint: 'Libellé qui sera visible pour les clients', input_html: { class: 'required_field'}
           - else
             = f.label :name, :class => "semibold"
             .select-container.p-1.w-100
               = f.input :name, label: false, hint: journal_name_hint, input_html: { class: 'required_field', disabled: is_journal_name_disabled }
             = f.label :description, :class => "semibold"
             .select-container.p-1.w-100
-              = f.input :description, label: false, input_html: { class: 'required_field'}
+              = f.input :description, label: false, hint: 'Libellé visible pour les dossiers clients',  input_html: { class: 'required_field'}
 
           - unless @organization.specific_mission
             - if @customer && @customer.uses?(:ibiza)
