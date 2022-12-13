@@ -5,7 +5,7 @@
       %table.table.table-striped.table_integration#tbl_documents
         %thead            
           %th= sortable :created_at, 'Date de la récupération'
-          %th= sortable :retriever_id, 'Service'
+          %th= sortable :retriever_id, "#{@user.collaborator? ? 'Service' : 'Banque' }"
           %th= sortable :date, 'Date'
           %th= sortable :name, 'Nom original'
           %th= 'Nom iDocus'

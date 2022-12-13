@@ -76,6 +76,7 @@ Rails.application.routes.draw do
   front_draw('dematboxes')
   front_draw('retrievers')
   front_draw('retrieved_datas')
+  front_draw('retrieved_datas_v2')
   front_draw('retriever_parameters')
   front_draw('exact_online')
   front_draw('paper_processes')
