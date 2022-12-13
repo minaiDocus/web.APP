@@ -1,24 +1,3 @@
-function get_all_selected(obj = 'piece', get_preseizure_ids=false){
-  let array_ids = [];
-  let type      = (obj == 'operation')? 'operation' : 'document';
-
-  $(`.form-check-input.select-${type}`).each(function(e){
-    if($(this).is(':checked')){
-      if(get_preseizure_ids && obj == 'piece'){
-        let ids = JSON.parse($(this).attr('data-preseizure-ids') || '[]');
-        ids.forEach((t)=>{
-          if( t && t > 0 ){ array_ids.push(t) }
-        });
-      }else{
-        let id = parseInt($(this).attr('data-id'));
-        if(id > 0){ array_ids.push(id); }
-      }
-    }
-  });
-
-  return array_ids;
-}
-
 function bind_all_events(){
   $('#delivery-date.daterange, #invoice-date.daterange').val('');
 
@@ -37,13 +16,6 @@ function bind_all_events(){
 
   $('#period_document_filter').asMultiSelect({
     "noneText": "Choix",
-  });
-
-  $('.popup-info-rubric').mouseover(function(e) {
-    console.log('QKHSJKHQSdfqdf')
-    $('.info-rubric-content').removeClass('hide') 
-  }).mouseout(function(e) {
-    $('.info-rubric-content').addClass('hide') 
   });
 
   $('#customer_document_filter').unbind('change.mix_journal').bind('change.mix_journal', function(e){
@@ -138,7 +110,7 @@ function bind_all_events(){
     e.preventDefault();
     $('li.direct_links .rubric .link_principal').removeClass('active');
     $(this).find('.link_principal').addClass('active');
-    $('#hidden-journal-id').val($(this).data('id'));
+    $('#hidden-journal-id').val($(this).data('journal-id'));
 
     AppEmit('load_rubric');
   });
@@ -149,17 +121,6 @@ function bind_all_events(){
   });
   
   $('.filter-customer-journal').unbind('click').bind('click', function(e){ AppEmit('document_customer_filter'); });
-
-  $('.download_piece_zip').unbind('click').bind('click', function(e){ 
-    let ids = get_all_selected($(this).data('type'), true)
-
-    if (ids.length > 20){
-      $('.modal#alert-info').modal('show');
-    }
-    else{
-      AppEmit('download_piece_zip', { ids: ids });
-    }    
-  });
 
   $('.to-filter').unbind('click').bind('click', function(e){ $('#badge-filter').val($(this).attr('id')); AppEmit('filter_pack_badge'); });
 
@@ -242,7 +203,7 @@ function bind_all_events(){
 
 
 
-  $('#more-filter .modal-footer .btn-add, #customer_filter_form .btn-search').unbind('click').bind('click', function(){ $('#more-filter').modal('hide'); AppEmit('documents_load_datas'); });
+  $('#more-filter .modal-footer .btn-add').unbind('click').bind('click', function(){ $('#more-filter').modal('hide'); AppEmit('documents_load_datas'); });
   $('.btn-reinit').unbind('click').bind('click', function(){ $('#more-filter').modal('hide'); AppEmit('documents_reinit_datas'); });
 
   //prevent form submition

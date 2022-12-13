@@ -13,48 +13,31 @@ class DocumentsReloadedCustomer{
                     }
   }
 
-  load_temp_documents(serialize_form=false, load_rubric=false, load_customer=false){
+  load_temp_documents(serialize_form=false, load_customer=false){
     if(this.action_locker)
       return false
 
     this.action_locker = true;
-    let data       = [];
-    let journal_id = $('#hidden-journal-id').val();
-    let advanced_search    = $('#form_' + journal_id);
-    let form_serialization = '';
+    let data = [];
+    let search_pattern = $('.search-content #search_input').val();
 
-    //PARSE PREVIOUS SEARCH
-    if(load_rubric)
-    {
-      $('#customer_filter_form')[0].reset();
-      let datas = JSON.parse(advanced_search.val() || '[]');
+    if(serialize_form){
+      data.push($('#pack_filter_form').serialize().toString());
 
-      datas.forEach(function(data){
-        console.log(data);
-        $('#customer_filter_form #' + data['name']).val(data['value']);
-      });
-    }
-
-    if(serialize_form || load_rubric){
-      form_serialization = encodeURIComponent($('#customer_filter_form').serialize());
-      advanced_search.val(JSON.stringify($('#customer_filter_form').serializeArray()));
+      data.push(`activate_filter=true`);
     }
     else
     {
-      let selector   = "#customer_filter_form input, #search_input";
-      $(selector).not('.operator').val('');      
-      if (!load_rubric)
-        advanced_search.val('');
+      search_pattern = '';
+      let selector = "#pack_filter_form input, #pack_filter_form select, #customer_document_filter, #journal_document_filter, #search_input";
+      $(selector).not('.operator').val(''); data.push( `reinit=true` );
     }
 
-    data.push(`${decodeURIComponent(form_serialization)}`);
+    if(search_pattern && search_pattern != ''){ data.push(`text=${encodeURIComponent(search_pattern)}`); }
 
     if(this.page > 1){ data.push(`page=${this.page}`) }
 
     data.push( 'uid=' + $('#customers').val() );
-
-    if (!load_customer)
-      data.push( 'journal_id=' + $('#hidden-journal-id').val() );
 
     this.ajax_params['data'] = data.join('&');
 
@@ -63,7 +46,7 @@ class DocumentsReloadedCustomer{
                           if (load_customer){
                             $(".customer-document-content").html($(e).find(".customer-document-content").html());
 
-                            $("#hidden-journal-id").val($('.rubric').first().data('id'));
+                            $("#hidden-journal-id").val($('.rubric').first().data('journal-id'));
                             $("#hidden-customer-id").val($('#customers').val());
 
                             $('select#file_code_customer').val($('#customer_code').val()).trigger("chosen:updated");
@@ -73,7 +56,7 @@ class DocumentsReloadedCustomer{
                             $('.box#table_pieces').html($(e).find(".box#table_pieces").html());
                           }
 
-                          $('select#l_journal').val(journal_id).trigger("chosen:updated");
+                          $(`.search-content #search_input`).val(search_pattern);
 
                           if ( $('.filter_active').length > 0 ){
                             $('.filter-info').removeClass('hide');
@@ -85,12 +68,6 @@ class DocumentsReloadedCustomer{
                           this.action_locker = false;
                         })
                        .catch(()=>{ this.action_locker = false; });
-  }
-
-  download_document(piece_ids){
-    let url_download = window.location.href + `/download_selected_zip/${piece_ids.join('_')}`
-
-    window.location.replace(url_download);
   }
 }
 
@@ -111,7 +88,6 @@ jQuery(function() {
   AppListenTo('documents_reinit_datas', (e)=>{ main.load_temp_documents(false); });
 
   AppListenTo('documents_search_text', (e)=>{ main.load_temp_documents(true); });
-  AppListenTo('load_rubric', (e)=>{ main.load_temp_documents(false, true); });
-  AppListenTo('load_customer', (e)=>{ main.load_temp_documents(false, false ,true); });
-  AppListenTo('download_piece_zip', (e)=>{ main.download_document(e.detail.ids) });
+  AppListenTo('load_rubric', (e)=>{ main.load_temp_documents(true); });
+  AppListenTo('load_customer', (e)=>{ main.load_temp_documents(false, true); });
 });

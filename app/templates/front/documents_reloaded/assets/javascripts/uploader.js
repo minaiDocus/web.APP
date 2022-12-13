@@ -11,6 +11,7 @@ class DocumentsReloadedUploader{
 
   initialize_params(){
     this.upload_params = JSON.parse($('#fileupload').attr('data-params'));
+    
   }
 
   fetch_url(url, data, method = 'GET'){
@@ -98,9 +99,6 @@ class DocumentsReloadedUploader{
           let options = '';
           result.forEach((opt)=>{ options += `<option value="${opt[1]}">${opt[0]}</option>` });
           me.input_journal_customer.html(options);
-
-          var selected_journal = $('#hidden-journal-id').val();
-          me.input_journal_customer.val(selected_journal);
         })
   }
 }
@@ -119,7 +117,7 @@ jQuery(function() {
     $('#add-document .btn-add').unbind('click.addition').bind('click.addition', function(e){ VARIABLES.set('can_reload_packs', true); });
   });
 
-  uploader.base_modal.on('shown.bs.modal', function(e){
+  uploader.base_modal.on('shown.bs.modal', function(e){ 
     uploader.initialize_params();
 
     //first loading

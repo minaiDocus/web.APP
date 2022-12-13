@@ -4,11 +4,6 @@
   border-radius: 4px;
 }
 
-.btn.add-document{
-  padding: 10% 3%;
-  box-shadow: 0px 2px 6px 3px #a1aeb9;
-}
-
 .bank-content {
   margin: 2% 0;
 }
@@ -33,25 +28,6 @@
 
 .action-group {
   margin: 0 4%;
-}
-
-.info-rubric{
-  position: relative;
-}
-
-.info-rubric-content{
-  position: absolute;
-  z-index: 20;
-  border: 1px solid #b3a8bb;
-  margin-top: 2.5em;
-  padding: 1em;
-  background-color: #ffaa80;
-  color: #392828;
-  font-weight: normal;
-  width: 100%;
-
-  -webkit-box-shadow: 0px 10px 13px -7px #000000, -2px 0px 15px -4px rgba(0,0,0,0); 
-  box-shadow: 0px 10px 13px -7px #000000, -2px 0px 15px -4px rgba(0,0,0,0);
 }
 
 .search-content {
