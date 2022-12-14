@@ -116,8 +116,8 @@
                   %td
                     = preseizure.try(:piece_number) || (sprintf '%03d', piece.try(:position).to_i)
                   - if @entry_type > 0
-                    %td 
-                      = preseizure.try(:amount_ttc).to_s + ' €'
+                    %td
+                      = [preseizure.try(:amount_ttc).to_s, ''].uniq.join(' €')
                   %td
                     - piece.get_tags.split('-').each do |tag|              
                       %span.badge.bg-dark= tag
