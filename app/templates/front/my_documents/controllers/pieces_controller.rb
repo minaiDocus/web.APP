@@ -171,7 +171,17 @@ class MyDocuments::PiecesController < MyDocuments::AbaseController
     @journal    = params[:journal_id].present? ? __journal.try(:name) : __journal.try(:name)
     @options[:journal] = [@journal]
 
-    @filter_active = @options[:pre_assignment_state].present? || @options[:position].present? || @options[:text].present?
+    ##Optimize search according to entry_type [ TO DO : find better way to make hybrid search ]
+    if(@entry_type == 0)
+      @options[:piece_name]  = @options[:third_party] if @options[:third_party].present?
+      @options[:third_party] = nil
+
+      @options[:created_at] = @options[:date] if @options[:date].present?
+      @options[:date] = nil
+
+      @options[:position]     = @options[:piece_number].to_i if @options[:piece_number].present?
+      @options[:piece_number] = nil
+    end
 
     @users << @user if !@users.select { |u| u.id == @user.id }.any?
 

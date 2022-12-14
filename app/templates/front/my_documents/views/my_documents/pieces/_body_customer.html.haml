@@ -15,7 +15,7 @@
         - if !@user.has_maximum_journal?
           %li.direct_links.add-rubric
             .info-rubric
-              %span.float-start.popup-info-rubric= glyphicon('info', { color: 'black', size: 10 })
+              %span.float-start.popup-info-rubric= glyphicon('info', { color: '#C1D837', size: 10 })
               .info-rubric-content.hide
                 Créer une rubrique vous permet de classer et ranger éfficacement vos pièces et documents.
 
@@ -105,19 +105,20 @@
             %tbody
               - @pieces.each do |piece|
                 - preseizure = piece.preseizures.first
+                - expense    = piece.expense
                 %tr.box.list
                   %td.text-center
                     %span.form-check
                       %input.form-check-input.pointer.float-none.select-document{ data: { id: piece.id, preseizure_ids: [piece.id] }, type: :checkbox, value: "" }
                   %td.pointer.show-detail{ title: 'Voir détail', data: { content_url: piece.get_access_url, piece_id: piece.id }}
-                    .name.text-table-green= preseizure.try(:third_party) || piece.try(:name)
+                    .name.text-table-green= preseizure.try(:third_party) || "#{[expense.try(:type).to_s, expense.try(:origin).to_s].uniq.join(' - ')}".presence || piece.try(:name)
                   %td
-                    %span.info= preseizure.try(:date).try(:strftime, '%d/%m/%Y') || piece.try(:created_at).try(:strftime, '%d/%m/%Y')
+                    %span.info= preseizure.try(:date).try(:strftime, '%d/%m/%Y') || expense.try(:date).try(:strftime, '%d/%m/%Y') || piece.try(:created_at).try(:strftime, '%d/%m/%Y')
                   %td
                     = preseizure.try(:piece_number) || (sprintf '%03d', piece.try(:position).to_i)
                   - if @entry_type > 0
                     %td
-                      = [preseizure.try(:amount_ttc).to_s, ''].uniq.join(' €')
+                      = [preseizure.try(:amount_ttc).to_s, ''].uniq.join(' €').presence || [expense.try(:amount_in_cents_w_vat).to_s, ''].uniq.join(' €').presence
                   %td
                     - piece.get_tags.split('-').each do |tag|              
                       %span.badge.bg-dark= tag

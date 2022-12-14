@@ -34,7 +34,8 @@ class Documents::UploaderController < Documents::AbaseController
                                                'web',
                                                params[:analytic],
                                                nil,
-                                               params[:force])
+                                               params[:force],
+                                               params[:tags])
 
       data = present(uploaded_document).to_json
     else

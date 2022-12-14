@@ -36,12 +36,6 @@ class Pack::Piece < ApplicationRecord
     attachment.instance.mongo_id || attachment.instance.id
   end
 
-  after_create_commit do |piece|
-    unless Rails.env.test?
-      Pack::Piece.delay_for(10.seconds, queue: :high).finalize_piece(piece.id)
-    end
-  end
-
   before_destroy do |piece|
     piece.cloud_content.purge
 
