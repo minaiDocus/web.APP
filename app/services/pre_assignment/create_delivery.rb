@@ -69,9 +69,9 @@ class PreAssignment::CreateDelivery
     exact_online_deliveries = @deliver_to.include?('exact_online') ? deliver_to_exact_online : []
     my_unisoft_deliveries   = @deliver_to.include?('my_unisoft') ? deliver_to_my_unisoft : []
     sage_gec_deliveries   = @deliver_to.include?('sage_gec') ? deliver_to_sage_gec : []
-    sage_acd_deliveries   = @deliver_to.include?('acd') ? deliver_to_acd : []
+    acd_deliveries   = @deliver_to.include?('acd') ? deliver_to_acd : []
 
-    @deliveries = ibiza_deliveries + exact_online_deliveries + my_unisoft_deliveries
+    @deliveries = ibiza_deliveries + exact_online_deliveries + my_unisoft_deliveries + sage_gec_deliveries + acd_deliveries
     @report.update_attribute(:is_locked, (@report.preseizures.reload.not_deleted.not_locked.count == 0)) if @preseizures.any?
 
     if @deliveries.any?
