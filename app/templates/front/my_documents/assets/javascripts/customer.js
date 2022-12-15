@@ -13,7 +13,7 @@ class MyDocumentsCustomer{
                     }
   }
 
-  load_temp_documents(serialize_form=false, load_rubric=false, load_customer=false){
+  load_pieces(serialize_form=false, load_rubric=false, load_customer=false, all=false){
     if(this.action_locker)
       return false
 
@@ -23,37 +23,20 @@ class MyDocumentsCustomer{
     let advanced_search    = $('#form_' + journal_id);
     let form_serialization = '';
 
-    //PARSE PREVIOUS SEARCH
-    if(load_rubric)
-    {
-      $('#customer_filter_form')[0].reset();
-      let datas = JSON.parse(advanced_search.val() || '[]');
-
-      datas.forEach(function(data){
-        console.log(data);
-        $('#customer_filter_form #' + data['name']).val(data['value']);
-      });
-    }
-
-    if(serialize_form || load_rubric){
-      form_serialization = encodeURIComponent($('#customer_filter_form').serialize());
-      advanced_search.val(JSON.stringify($('#customer_filter_form').serializeArray()));
+    if(serialize_form){
+      data.push($('#customer_filter_form').serialize().toString());
     }
     else
     {
       let selector   = "#customer_filter_form input, #search_input";
       $(selector).not('.operator').val('');      
-      if (!load_rubric)
-        advanced_search.val('');
     }
-
-    data.push(`${decodeURIComponent(form_serialization)}`);
 
     if(this.page > 1){ data.push(`page=${this.page}`) }
 
     data.push( 'uid=' + $('#customers').val() );
 
-    if (!load_customer)
+    if (!all && !load_customer )
       data.push( 'journal_id=' + $('#hidden-journal-id').val() );
 
     this.ajax_params['data'] = data.join('&');
@@ -74,21 +57,6 @@ class MyDocumentsCustomer{
                           }
 
                           $('select#l_journal').val(journal_id).trigger("chosen:updated");
-
-                          if ( $('.filter_active').length > 0 ){
-                            $('.filter-info').removeClass('hide');
-                          }
-                          else{
-                            $('.filter-info').addClass('hide');
-                          }
-
-                          //Show or hide amount search
-                          let entry_type = parseInt($('input#glb_entry_type').val());
-                          if(entry_type > 0){
-                            $('.form-group.amount_search').removeClass('hide')
-                          }else{
-                            $('.form-group.amount_search').addClass('hide')
-                          }
 
                           bind_all_events();
                           this.action_locker = false;
@@ -116,11 +84,12 @@ jQuery(function() {
 
   AppListenTo('refresh_customer_view', (e)=>{ setTimeout(()=>{ window.location.reload(true) }, 2000);    });
 
-  AppListenTo('documents_load_datas', (e)=>{ main.load_temp_documents(true); });
-  AppListenTo('documents_reinit_datas', (e)=>{ main.load_temp_documents(false); });
+  AppListenTo('documents_load_datas', (e)=>{ main.load_pieces(true); });
+  AppListenTo('documents_reinit_datas', (e)=>{ main.load_pieces(false); });
+  AppListenTo('load_all_documents', (e)=>{ main.load_pieces(false, false, false, true); });
 
-  AppListenTo('documents_search_text', (e)=>{ main.load_temp_documents(true); });
-  AppListenTo('load_rubric', (e)=>{ main.load_temp_documents(false, true); });
-  AppListenTo('load_customer', (e)=>{ main.load_temp_documents(false, false ,true); });
+  AppListenTo('documents_search_text', (e)=>{ main.load_pieces(true); });
+  AppListenTo('load_rubric', (e)=>{ main.load_pieces(false, true); });
+  AppListenTo('load_customer', (e)=>{ main.load_pieces(false, false ,true); });
   AppListenTo('download_piece_zip', (e)=>{ main.download_document(e.detail.ids) });
 });
