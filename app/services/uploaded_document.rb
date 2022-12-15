@@ -12,7 +12,7 @@ class UploadedDocument
   end
 
 
-  def initialize(file, original_file_name, user, journal, prev_period_offset, uploader = nil, api_name=nil, analytic=nil, api_id=nil, force=false, label=nil, tags=nil)
+  def initialize(file, original_file_name, user, journal, prev_period_offset, uploader = nil, api_name=nil, analytic=nil, api_id=nil, force=false, tags=nil)
     @file     = file
     @user     = user
     @code     = @user.code
@@ -20,7 +20,6 @@ class UploadedDocument
     @api_id   = api_id
     @api_name = api_name
     @uploader = uploader || user
-    @label    = label
     @tags     = tags
 
     @original_file_name  = original_file_name.gsub(/\0/, '')
@@ -140,7 +139,6 @@ class UploadedDocument
           original_fingerprint:  fingerprint,
           analytic:              analytic_validator.analytic_params_present? ? analytic : nil,
           is_forced:             is_forced,
-          label:                 @label,
           tags:                  @tags
         }
 

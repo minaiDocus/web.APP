@@ -227,6 +227,8 @@ class DataProcessor::TempPack
 
       begin
         @piece_file_path = @inserted_piece.reload.recreate_pdf(@dir)
+
+        Pack::Piece.delay_for(30.seconds, queue: :high).finalize_piece(piece.id)
         true
       rescue => e
         log_document = {

@@ -4,9 +4,9 @@ class BillingMod::PrepareBillingsWorker
 
   def perform
     UniqueJobs.for 'BillingMod::PrepareBillings' do
-      sunday = Time.now.strftime('%w')
+      sunday = Time.now.strftime('%w').to_i
 
-      if sunday
+      if sunday == 7
         organizations = Organization.client.active
 
         organizations.each_with_index do |organization, _index|

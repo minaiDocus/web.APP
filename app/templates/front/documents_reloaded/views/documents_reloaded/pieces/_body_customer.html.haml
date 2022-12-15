@@ -7,7 +7,7 @@
         - @journals.each_with_index do |journal, index|
           %li.direct_links
             %a.rubric{ href: "#", data: { journal: { id: journal.id } } }              
-              %span.link_principal{ class: (journal.name == params[:journal] || (!params[:journal].present? && index == 0)) ? 'active' : ''}= journal.label.presence || journal.description.presence || journal.name || '-'
+              %span.link_principal{ class: (journal.name == params[:journal] || (!params[:journal].present? && index == 0)) ? 'active' : ''}= journal.full_name
         
         %li.direct_links.add-rubric
           %span.float-end= glyphicon('plus', { color: "#C1D837", size: 10})

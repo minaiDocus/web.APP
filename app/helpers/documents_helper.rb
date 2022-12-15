@@ -256,8 +256,8 @@ module DocumentsHelper
       journals_compta_processable = []
 
       if user.authorized_upload?
-        journals_bank = user_bank_processable_account_book_types.map{|j| j.name + ' ' + j.description}
-        journals_all  = user_account_book_types.map{|j| j.name + ' ' + j.description }
+        journals_bank = user_bank_processable_account_book_types.map{|j| j.name + ' ' + j.full_name(true)}
+        journals_all  = user_account_book_types.map{|j| j.name + ' ' + j.full_name(true) }
 
         journals_compta_processable_bank = user_bank_processable_account_book_types.map{|j| j.name if j.compta_processable? }.compact
         journals_compta_processable_all  = user_account_book_types.map{|j| j.name if j.compta_processable? }.compact

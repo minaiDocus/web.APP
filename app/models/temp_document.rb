@@ -258,7 +258,12 @@ class TempDocument < ApplicationRecord
     collection = collection.where("temp_document_metadata.date BETWEEN '#{CustomUtils.parse_date_range_of(contains[:date]).join("' AND '")}'")  if contains[:date].present?
 
     collection = collection.where("temp_document_metadata.name LIKE ?", "%#{contains[:name]}%") if contains[:name].present?
-    collection = collection.where("temp_document_metadata.amount = ?", contains[:amount].to_f) if contains[:amount].present?
+
+    if contains[:amount_operation].present?
+      collection = collection.where("temp_document_metadata.amount #{contains[:amount_operation].tr('012', ' ><')}= ?", contains[:amount].to_f) if contains[:amount].present?
+    else
+      collection = collection.where("temp_document_metadata.amount = ?", contains[:amount].to_f) if contains[:amount].present?
+    end
 
     collection
   end

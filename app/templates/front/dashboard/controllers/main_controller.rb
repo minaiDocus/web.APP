@@ -6,6 +6,8 @@ class Dashboard::MainController < FrontController
   prepend_view_path('app/templates/front/dashboard/views')
 
   def index
+    redirect_to documents_path if !@user.collaborator?
+
     @favorites = @user.favorite_customers.try(:customer_ids) || []
   end
 

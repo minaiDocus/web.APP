@@ -2,7 +2,7 @@ class Transaction::AccountNumberFinder
   class << self
     def get_the_highest_match(label, rules)
       scores = rules.map do |rule|
-        [clean_txt(rule[:content]), 100 - (rule[:priority] * 20)]
+        [clean_txt(rule[:content]), 1000 - (rule[:priority] * 20)]
       end
 
       words = clean_txt(label, true).split(/\s+/)

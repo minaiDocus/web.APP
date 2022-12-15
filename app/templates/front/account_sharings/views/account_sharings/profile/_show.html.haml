@@ -71,7 +71,7 @@
                                 - account_sharing.account.account_book_types.each do |journal|
                                   %li
                                     %b= journal.name
-                                    = "(#{journal.description.sub(/\A\s*\(/,'').sub(/\)\s*\z/,'')})"
+                                    = "(#{journal.full_name.sub(/\A\s*\(/,'').sub(/\)\s*\z/,'')})"
                               %h4 Vos périodes actuellement accessibles :
                               %hr
                               %ul

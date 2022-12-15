@@ -10,14 +10,16 @@ class DocumentsReloaded::PiecesController < DocumentsReloaded::AbaseController
 
   # GET /documents_reloaded
   def index
-    # PENDING DEVELOPPMENT
-    # if @user.collaborator? || @user.try(:pre_assignement_displayed?)
-    if @user.collaborator?
+    if @user.pre_assignement_displayed?
       @collaborator_view  = true
       index_collaborators      
     else
-      @collaborator_view = false
-      index_customers
+      if CustomUtils.use_final_documents?(@user)
+        redirect_to my_documents_path
+      else
+        @collaborator_view = false
+        index_customers
+      end
     end
   end
 

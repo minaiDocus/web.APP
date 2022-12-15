@@ -39,7 +39,7 @@
           - @journals.each do |journal|
             %tr
               %td= journal.name
-              %td= journal.description
+              %td= journal.full_name
               %td= journal.retrievers.count
               - if (@user.leader? || @user.organization_rights_is_customer_journals_management_authorized) && @customer.active?
                 %td.text-end.pointer
@@ -70,7 +70,7 @@
         %tbody
           - @journals.each do |journal|
             %tr
-              %td= journal.description
+              %td= journal.full_name
               %td= journal.name
               %td= journal.is_default ? 'Oui' : 'Non'
               %td= t("activerecord.models.account_book_type.attributes.entry_type_#{journal.entry_type}")

@@ -187,9 +187,14 @@ class AccountBookType < ApplicationRecord
     save
   end
 
+  def full_name(result_with_parenthesis = false)
+    f_name = self.description.to_s.gsub('(', '').gsub(')', '').strip.presence || self.name
+    f_name = "(#{f_name})" if result_with_parenthesis
+
+    f_name
+  end
 
   private
-
 
   def upcase_name
     self.name = self.name.upcase

@@ -168,4 +168,10 @@ module Interfaces::User::Customer
     return 'budget_insight' if is_budgea
     return 'bridge'         if is_bridge
   end
+
+  def has_maximum_journal?
+    return false if self.organization.specific_mission
+
+    self.account_book_types.count >= self.my_package.try(:journal_size).to_i
+  end
 end

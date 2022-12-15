@@ -22,7 +22,7 @@
         Voici les journaux comptables assignés au dossier :
         %ul
           - @journals.each do |journal|
-            %li= journal.name + journal.description
+            %li= journal.name + ' ' + journal.full_name(true)
       = link_to icon_new + 'Créer un journal comptable', new_organization_customer_journal_path(@organization, @customer), class: 'btn btn-primary'
     .card-footer
       = link_to t('actions.previous_step'), previous_organization_customer_setup_path(@organization, @customer), class: 'btn btn-secondary'
