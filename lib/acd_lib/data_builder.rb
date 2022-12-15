@@ -62,10 +62,12 @@ module AcdLib
                       "libelle" => label,
                       "modeReglement" => "",
                       "referenceGed" => "" }
-        end     
+        end
+
+        data = {'journal' => ledger_code, 'mois' => preseizure.date.month, 'annee' => preseizure.date.year, "referenceGed" => nil, 'lignesEcriture' => __data }.to_json
       end
 
-      {'journal' => ledger_code, 'mois' => preseizure.date.month, 'annee' => preseizure.date.year, "referenceGed" => nil, 'lignesEcriture' => __data }.to_json
+      data
     end
 
     def full_error_messages
