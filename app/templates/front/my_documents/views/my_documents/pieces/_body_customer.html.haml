@@ -12,7 +12,7 @@
           %li.direct_links
             %a.rubric{ href: "#", data: { id: journal.id } }
               %span.badge.bg-secondary.float-end.count_journal{ data: { jl_name: journal.try(:name) }}= @result_per_journal[journal.try(:name).to_sym].presence || 0
-              %span.link_principal{ class: (journal.id.to_i == params[:journal_id].to_i || (!params[:journal_id].present? && index == 0)) ? 'active' : ''}= journal.full_name
+              %span.link_principal{ class: (journal.id.to_i == params[:journal_id].to_i) ? 'active' : ''}= journal.full_name
                           
 
         %li.input-add-rubric.hide
@@ -95,11 +95,11 @@
                       %input.form-check-input.pointer.float-none.select-document{ data: { id: piece.id, preseizure_ids: [piece.id] }, type: :checkbox, value: "" }
                   %td.pointer.show-detail{ title: 'Voir détail', data: { content_url: piece.get_access_url, piece_id: piece.id }}
                     .name.text-table-green= preseizure.try(:third_party)
-                  %td
+                  %td.pointer.show-detail{ title: 'Voir détail', data: { content_url: piece.get_access_url, piece_id: piece.id }}
                     %span.info= preseizure.try(:date).try(:strftime, '%d/%m/%Y') || piece.try(:created_at).try(:strftime, '%d/%m/%Y')
-                  %td
+                  %td.pointer.show-detail{ title: 'Voir détail', data: { content_url: piece.get_access_url, piece_id: piece.id }}
                     = preseizure.try(:piece_number)
-                  %td
+                  %td.pointer.show-detail{ title: 'Voir détail', data: { content_url: piece.get_access_url, piece_id: piece.id }}
                     = [preseizure.try(:amount_ttc).to_s, ''].uniq.join(' €').presence || ""
                   %td
                     - piece.get_tags.split('-').each do |tag|              
