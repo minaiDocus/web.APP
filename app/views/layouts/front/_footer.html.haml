@@ -29,11 +29,12 @@
     - else
       .col-md-6.text-start.text-white
         .contact-number
-          .commercial-contact.d-inline
-            %span.semibold Service Commercial :
-            %span.open-time.semibold 01 84 250 251
+          -if @user.pre_assignement_displayed?
+            .commercial-contact.d-inline
+              %span.semibold Service Commercial :
+              %span.open-time.semibold 01 84 250 251
+              &#124;
           .client-contact.d-inline
-            &#124;
             %span.semibold.mt-2.d-inline  Support Client :
             .number.d-inline
               = image_tag('application/contact_number.png', alt: 'contact', class: 'contact_number')
