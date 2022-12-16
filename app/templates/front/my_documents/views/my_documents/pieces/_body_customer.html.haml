@@ -11,7 +11,7 @@
         - @journals.each_with_index do |journal, index|
           %li.direct_links
             %a.rubric{ href: "#", data: { id: journal.id } }
-              %span.badge.bg-secondary.float-end.mt-1.me-2{ data: { jl_name: journal.try(:name) }}= @result_per_journal[journal.try(:name).to_sym].presence || 0
+              %span.badge.bg-secondary.float-end.count_journal{ data: { jl_name: journal.try(:name) }}= @result_per_journal[journal.try(:name).to_sym].presence || 0
               %span.link_principal{ class: (journal.id.to_i == params[:journal_id].to_i || (!params[:journal_id].present? && index == 0)) ? 'active' : ''}= journal.full_name
                           
 

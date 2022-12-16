@@ -159,6 +159,9 @@ class MyDocuments::PiecesController < MyDocuments::AbaseController
   end
 
   def index_customers
+    @options[:page]     = nil
+    @options[:per_page] = nil
+
     user_ids = params[:uid].presence || @user.id
 
     @render_upload = request.xhr? ? false : true
@@ -170,11 +173,16 @@ class MyDocuments::PiecesController < MyDocuments::AbaseController
 
     @pieces = Pack::Piece.with_preseizures(user_ids, @options).where("DATE_FORMAT(pack_pieces.updated_at, '%Y%m') >= #{2.years.ago.strftime('%Y%m')}").distinct.order("#{sort_column} #{sort_direction}")
 
-    @total_pieces = @pieces.total_count
+    @total_pieces = @pieces.size
+
     @result_per_journal = {}
     @pieces.collect(&:journal).each  { |jl| @result_per_journal[jl.to_sym] = @result_per_journal[jl.to_sym].to_i + 1 }
 
-    @pieces = @pieces.where("pack_pieces.name LIKE '% #{@journals.where(id: params[:journal_id]).first.try(:name)} %'") if params[:journal_id].present?
+    if params[:journal_id].present?
+      @pieces = @pieces.where("pack_pieces.name LIKE '% #{@journals.where(id: params[:journal_id]).first.try(:name)} %'")
+    end
+
+    @pieces = @pieces.page(params[:page].presence || 1).per(params[:per_page])
   end
 
   def sort_column
@@ -200,8 +208,8 @@ class MyDocuments::PiecesController < MyDocuments::AbaseController
   def purify_params
     @options = {}
 
-    @options[:page]     = params[:page]
-    @options[:per_page] = params[:per_page]
+    @options[:page]     = params[:page].presence || 1
+    @options[:per_page] = params[:per_page].presence || 20
 
     @options[:content]     = params.try(:[], :text)
 
