@@ -23,7 +23,7 @@ class MyDocumentsCustomer{
     let advanced_search    = $('#form_' + journal_id);
     let form_serialization = '';
 
-    if(serialize_form){
+    if(serialize_form || load_rubric){
       data.push($('#customer_filter_form').serialize().toString());
     }
     else
@@ -53,7 +53,7 @@ class MyDocumentsCustomer{
                             $('select#file_code_customer').change();
                           }
                           else{
-                            $('.box#table_pieces').html($(e).find(".box#table_pieces").html());
+                            $('#table_pieces').html($(e).find("#table_pieces").html());
                           }
 
                           $('select#l_journal').val(journal_id).trigger("chosen:updated");

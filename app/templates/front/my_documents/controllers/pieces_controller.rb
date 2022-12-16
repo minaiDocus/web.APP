@@ -166,11 +166,15 @@ class MyDocuments::PiecesController < MyDocuments::AbaseController
     @users = accounts.includes(:options, :ibiza, :subscription, organization: [:ibiza, :exact_online, :my_unisoft, :coala, :cogilog, :sage_gec, :acd, :quadratus, :cegid, :csv_descriptor, :fec_agiris]).active.order(code: :asc).select { |user| user.authorized_upload? }    
     @journals = AccountBookType.where(user_id: user_ids).order('FIELD(entry_type, 0, 5, 1, 4, 3, 2) DESC', description: :asc)
 
-    @options[:journal] = [@journals.where(id: params[:journal_id]).first.try(:name)] if params[:journal_id].present?
-
     @users << @user if !@users.select { |u| u.id == @user.id }.any?
 
     @pieces = Pack::Piece.with_preseizures(user_ids, @options).where("DATE_FORMAT(pack_pieces.updated_at, '%Y%m') >= #{2.years.ago.strftime('%Y%m')}").distinct.order("#{sort_column} #{sort_direction}")
+
+    @total_pieces = @pieces.total_count
+    @result_per_journal = {}
+    @pieces.collect(&:journal).each  { |jl| @result_per_journal[jl.to_sym] = @result_per_journal[jl.to_sym].to_i + 1 }
+
+    @pieces = @pieces.where("pack_pieces.name LIKE '% #{@journals.where(id: params[:journal_id]).first.try(:name)} %'") if params[:journal_id].present?
   end
 
   def sort_column
