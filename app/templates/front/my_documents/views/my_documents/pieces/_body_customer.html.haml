@@ -88,13 +88,17 @@
               %th.text-end Action
             %tbody
               - @pieces.each do |piece|
-                - preseizure = piece.preseizures.first
+                - preseizure             = piece.preseizures.first
+                - awaiting_preassignment = piece.created_at.strftime('%Y%m%d') >= 3.month.ago.strftime('%Y%m%d') && (%w(waiting force_processing).include?(piece.pre_assignment_state) || (piece.pre_assignment_state == 'supplier_recognition' && detected_third_party_id > 0))
                 %tr.box.list
                   %td.text-center
                     %span.form-check
                       %input.form-check-input.pointer.float-none.select-document{ data: { id: piece.id, preseizure_ids: [piece.id] }, type: :checkbox, value: "" }
                   %td.pointer.show-detail{ title: 'Voir détail', data: { content_url: piece.get_access_url, piece_id: piece.id }}
-                    .name.text-table-green= preseizure.try(:third_party)
+                    - if preseizure
+                      .name.text-table-green= preseizure.try(:third_party)
+                    - else
+                      %span.badge.bg-warning.text-dark= (awaiting_preassignment ? "En cours de traitement . . ." : '') 
                   %td.pointer.show-detail{ title: 'Voir détail', data: { content_url: piece.get_access_url, piece_id: piece.id }}
                     %span.info= preseizure.try(:date).try(:strftime, '%d/%m/%Y') || piece.try(:created_at).try(:strftime, '%d/%m/%Y')
                   %td.pointer.show-detail{ title: 'Voir détail', data: { content_url: piece.get_access_url, piece_id: piece.id }}
