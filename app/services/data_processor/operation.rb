@@ -32,6 +32,9 @@ class DataProcessor::Operation
               preseizure.type            = 'FLUX'
               preseizure.date            = user.options.get_preseizure_date_option == 'operation_date' ? operation.date : operation.value_date
               preseizure.position        = counter
+              preseizure.delivery_state   = 'not_delivered' if user.uses_api_softwares?
+              preseizure.export_state     = 'not_exported'  if user.uses_non_api_softwares?
+
               if user.options.operation_value_date_needed? && operation.retrieved? && operation.date != operation.value_date
                 preseizure.operation_label = "#{operation.label} - #{operation.value_date}"
               else

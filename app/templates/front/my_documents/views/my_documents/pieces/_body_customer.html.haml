@@ -1,28 +1,19 @@
 - customer_selected = User.find(params[:uid].present? ? params[:uid] : @user.id)
 = hidden_field_tag :customer_code, customer_selected.code
-.row
+.row#table_pieces
   .col-md-2
-    %h3.semibild.text-center Rechercher un document
+    %button.btn.btn-outline-dark.black-label.w-100.semibold.btn-all-documents{ :type => 'button' } 
+      %span.float-start Mes documents
+      %span.float-end.badge.bg-dark.mt-1= @total_pieces
     %hr
     .lefter.mt-3
       %ul.principal.p-0
         - @journals.each_with_index do |journal, index|
           %li.direct_links
-            %input{ type: :hidden, id: "form_#{journal.id}", value: ""}  
             %a.rubric{ href: "#", data: { id: journal.id } }
-              %span.link_principal{ class: (journal.name == params[:journal] || (!params[:journal].present? && index == 0)) ? 'active' : ''}= journal.full_name
-
-        - if !@user.has_maximum_journal?
-          %li.direct_links.add-rubric
-            .info-rubric
-              %span.float-start.popup-info-rubric= glyphicon('info', { color: '#C1D837', size: 10 })
-              .info-rubric-content.hide
-                Créer une rubrique vous permet de classer et ranger éfficacement vos pièces et documents.
-
-            .action-rubric       
-              %span.float-end= glyphicon('plus', { color: "#C1D837", size: 10})            
-              %span.link_principal.green-label Créer une rubrique
-            
+              %span.badge.bg-secondary.float-end.count_journal{ data: { jl_name: journal.try(:name) }}= @result_per_journal[journal.try(:name).to_sym].presence || 0
+              %span.link_principal{ class: (journal.id.to_i == params[:journal_id].to_i) ? 'active' : ''}= journal.full_name
+                          
 
         %li.input-add-rubric.hide
           %hr
@@ -33,11 +24,12 @@
             .col-md-7
               %button.btn.btn-light.btn-sm.cancel-add-rubric{ idocus: ajx_params } Annuler
               %button.btn.btn-dark.btn-sm.as_idocus_ajax{ idocus: ajx_params } Valider
-
+    .mb-4
+    %h5.semibold.text-center Recherche
     %hr
     %form#customer_filter_form.simple_form.form-horizontal
       .form-group
-        %label.semibold Plein texte
+        %label.semibold Mot(s) clé(s)
         .select-container.no-padding
           %input#text{ name: 'text', value: (params[:text] rescue '' ) }
 
@@ -58,13 +50,13 @@
         .select-container.no-padding
           %input#piece_number{ name: 'piece_number', value: (params[:piece_number] rescue '' ) }
 
-      .form-group.amount_search{ class: (@entry_type > 0)? '' : 'hide' }
+      .form-group.amount_search
         %label.semibold Montant TTC
         .row.me-0
           .w-50
             = select_tag 'amount_operation', options_for_select([['=', 0], ['>=', 1], ['<=', 2]], (@options[:amount_operation] rescue 0)), include_blank: false, class: 'form-select operator'
           .w-50.select-container.no-padding
-            %input#amount.p-1{ name: 'amount', value: (@options[:amount].join(',') rescue '' ) }
+            %input#amount.p-1{ name: 'amount', value: (@options[:amount] rescue '' ) }
 
       .form-group
         %label.semibold Tags
@@ -78,10 +70,9 @@
           %button.btn.btn-dark.btn-sm.no-border-radius.w-100.semibold.btn-search{:type => 'button', id: 'launch-filter'} Lancer
 
   .col-md-10      
-    .box.derivationRight#table_pieces
+    .box.derivationRight
       .row
         .col-md-12
-          %input#glb_entry_type{ type: 'hidden', value: @entry_type }
           %table.table.table-striped.list_customers#tbl_pieces
             %thead
               %th.text-center
@@ -89,36 +80,31 @@
                   %span.pointer.form-check.d-inline
                     %input.form-check-input.pointer.float-none.select-all{ type: :checkbox, value: "", title: 'Sélectionner toutes les pièces' }
                     %span.pointer.ms-3.action-selected.download_piece_zip.hide{title: 'Télécharger une archive zip'}= glyphicon('data-transfer-download', { size: '20', color:'rgba(26, 26, 26, 0.75);'})
-              - if @entry_type > 0
-                %th= sortable 'pack_report_preseizures.third_party', "Nom du tiers"
-                %th= sortable 'pack_report_preseizures.date', "Date"
-                %th= sortable 'pack_report_preseizures.piece_number', "N° de pièce"
-                %th= sortable 'pack_report_preseizures.cached_amount', "Montant TTC"
-                %th Tags
-                %th.text-end Action
-              - else
-                %th= sortable 'pack_pieces.name', "Nom de la pièce"
-                %th= sortable 'pack_pieces.created_at', "Date"
-                %th= sortable 'pack_pieces.position', "N° de pièce"
-                %th Tags
-                %th.text-end Action
+              %th= sortable 'pack_report_preseizures.third_party', "Nom du tiers"
+              %th= sortable 'pack_report_preseizures.date', "Date"
+              %th= sortable 'pack_report_preseizures.piece_number', "N° de pièce"
+              %th= sortable 'pack_report_preseizures.cached_amount', "Montant TTC"
+              %th Tags
+              %th.text-end Action
             %tbody
               - @pieces.each do |piece|
-                - preseizure = piece.preseizures.first
-                - expense    = piece.expense
+                - preseizure             = piece.preseizures.first
+                - awaiting_preassignment = piece.created_at.strftime('%Y%m%d') >= 3.month.ago.strftime('%Y%m%d') && (%w(waiting force_processing).include?(piece.pre_assignment_state) || (piece.pre_assignment_state == 'supplier_recognition' && detected_third_party_id > 0))
                 %tr.box.list
                   %td.text-center
                     %span.form-check
                       %input.form-check-input.pointer.float-none.select-document{ data: { id: piece.id, preseizure_ids: [piece.id] }, type: :checkbox, value: "" }
                   %td.pointer.show-detail{ title: 'Voir détail', data: { content_url: piece.get_access_url, piece_id: piece.id }}
-                    .name.text-table-green= preseizure.try(:third_party) || "#{[expense.try(:type).to_s, expense.try(:origin).to_s].uniq.join(' - ')}".presence || piece.try(:name)
-                  %td
-                    %span.info= preseizure.try(:date).try(:strftime, '%d/%m/%Y') || expense.try(:date).try(:strftime, '%d/%m/%Y') || piece.try(:created_at).try(:strftime, '%d/%m/%Y')
-                  %td
-                    = preseizure.try(:piece_number) || (sprintf '%03d', piece.try(:position).to_i)
-                  - if @entry_type > 0
-                    %td
-                      = [preseizure.try(:amount_ttc).to_s, ''].uniq.join(' €').presence || [expense.try(:amount_in_cents_w_vat).to_s, ''].uniq.join(' €').presence
+                    - if preseizure
+                      .name.text-table-green= preseizure.try(:third_party)
+                    - else
+                      %span.badge.bg-warning.text-dark= (awaiting_preassignment ? "En cours de traitement . . ." : '') 
+                  %td.pointer.show-detail{ title: 'Voir détail', data: { content_url: piece.get_access_url, piece_id: piece.id }}
+                    %span.info= preseizure.try(:date).try(:strftime, '%d/%m/%Y') || piece.try(:created_at).try(:strftime, '%d/%m/%Y')
+                  %td.pointer.show-detail{ title: 'Voir détail', data: { content_url: piece.get_access_url, piece_id: piece.id }}
+                    = preseizure.try(:piece_number)
+                  %td.pointer.show-detail{ title: 'Voir détail', data: { content_url: piece.get_access_url, piece_id: piece.id }}
+                    = [preseizure.try(:amount_ttc).to_s, ''].uniq.join(' €').presence || ""
                   %td
                     - piece.get_tags.split('-').each do |tag|              
                       %span.badge.bg-dark= tag

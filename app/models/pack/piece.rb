@@ -210,8 +210,7 @@ class Pack::Piece < ApplicationRecord
     query = query.where("pack_report_preseizures.cached_amount #{options[:amount_operation].tr('012', ' ><')}= ?", options[:amount]) if options[:amount].present?
     query = query.where("pack_report_preseizures.delivery_tried_at BETWEEN '#{CustomUtils.parse_date_range_of(options[:delivery_tried_at]).join("' AND '")}'")  if options[:delivery_tried_at].present?
 
-
-    query.page(options[:page].presence || 1).per(options[:per_page].presence || 20)
+    options[:per_page].present? ? query.page(options[:page].presence || 1).per(options[:per_page]) : query
   end
 
   def self.finalize_piece(id)
@@ -356,7 +355,9 @@ class Pack::Piece < ApplicationRecord
 
     tags << position if position
 
-    self.temp_document.tags.each do |tg|
+    td_tags = self.temp_document.tags.presence || []
+
+    td_tags.each do |tg|
       tags << tg
     end
   end

@@ -18,7 +18,7 @@ class PonctualScripts::ListDropboxFolders < PonctualScripts::PonctualScript
   private 
 
   def execute
-    user     = User.find_by_code @options[:user]
+    user     = User.get_by_code @options[:user]
     @dropbox = user.external_file_storage.dropbox_basic
 
     return false if not @dropbox

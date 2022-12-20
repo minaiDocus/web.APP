@@ -75,6 +75,7 @@ function bind_all_events(){
 
     AppEmit('load_customer');
   });
+
   setTimeout(()=>{ $('.hide_on_load').removeClass('hide'); $('#customer_document_filter').change() }, 1000); //TODO: find a better way to change the user selector
 
   $('.more-filter').unbind('click').bind('click',function(e) {
@@ -141,6 +142,13 @@ function bind_all_events(){
     $('#hidden-journal-id').val($(this).data('id'));
 
     AppEmit('load_rubric');
+  });
+
+  
+  $('.btn-all-documents').unbind('click').bind('click',function(e) {
+    e.preventDefault();
+
+    AppEmit('load_all_documents');
   });
 
   $('.more-filter').unbind('click').bind('click',function(e) {

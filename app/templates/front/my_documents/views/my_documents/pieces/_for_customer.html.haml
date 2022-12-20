@@ -17,7 +17,7 @@
           = select_tag 'customers', options_for_select(@users.reverse.map{ |e| [e.short_info, e.id] }, params[:uid].present? ? params[:uid] : @user.id), id: 'customers', class: 'chosen-list w-100', include_blank: false
 
   .customer-document-content.derivationLeft
-    %input{ type: :hidden, id: "hidden-journal-id", name: "hidden-journal-id", value: @journals.first.id }
+    %input{ type: :hidden, id: "hidden-journal-id", name: "hidden-journal-id", value: @journals.first&.id }
     = render partial: 'body_customer' 
 
 = render partial: 'upload_dialog_customer' if @render_upload

@@ -241,7 +241,7 @@ class CustomUtils
     end
 
     def use_final_documents?(user)
-      return true if ['MCN'].include?(user.organization.code)
+      return true if ['IDOC', 'MCN'].include?(user.organization.code)
       return false
     end
 

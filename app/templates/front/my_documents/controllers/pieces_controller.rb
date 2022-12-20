@@ -159,6 +159,9 @@ class MyDocuments::PiecesController < MyDocuments::AbaseController
   end
 
   def index_customers
+    @options[:page]     = nil
+    @options[:per_page] = nil
+
     user_ids = params[:uid].presence || @user.id
 
     @render_upload = request.xhr? ? false : true
@@ -166,26 +169,20 @@ class MyDocuments::PiecesController < MyDocuments::AbaseController
     @users = accounts.includes(:options, :ibiza, :subscription, organization: [:ibiza, :exact_online, :my_unisoft, :coala, :cogilog, :sage_gec, :acd, :quadratus, :cegid, :csv_descriptor, :fec_agiris]).active.order(code: :asc).select { |user| user.authorized_upload? }    
     @journals = AccountBookType.where(user_id: user_ids).order('FIELD(entry_type, 0, 5, 1, 4, 3, 2) DESC', description: :asc)
 
-    __journal   = params[:journal_id].present? ? @journals.where(id: params[:journal_id]).first : @journals.first
-    @entry_type = __journal.entry_type.to_i
-    @journal    = params[:journal_id].present? ? __journal.try(:name) : __journal.try(:name)
-    @options[:journal] = [@journal]
-
-    ##Optimize search according to entry_type [ TO DO : find better way to make hybrid search ]
-    if(@entry_type == 0)
-      @options[:piece_name]  = @options[:third_party] if @options[:third_party].present?
-      @options[:third_party] = nil
-
-      @options[:created_at] = @options[:date] if @options[:date].present?
-      @options[:date] = nil
-
-      @options[:position]     = @options[:piece_number].to_i if @options[:piece_number].present?
-      @options[:piece_number] = nil
-    end
-
     @users << @user if !@users.select { |u| u.id == @user.id }.any?
 
     @pieces = Pack::Piece.with_preseizures(user_ids, @options).where("DATE_FORMAT(pack_pieces.updated_at, '%Y%m') >= #{2.years.ago.strftime('%Y%m')}").distinct.order("#{sort_column} #{sort_direction}")
+
+    @total_pieces = @pieces.size
+
+    @result_per_journal = {}
+    @pieces.collect(&:journal).each  { |jl| @result_per_journal[jl.to_sym] = @result_per_journal[jl.to_sym].to_i + 1 }
+
+    if params[:journal_id].present?
+      @pieces = @pieces.where("pack_pieces.name LIKE '% #{@journals.where(id: params[:journal_id]).first.try(:name)} %'")
+    end
+
+    @pieces = @pieces.page(params[:page].presence || 1).per(params[:per_page])
   end
 
   def sort_column
@@ -211,8 +208,8 @@ class MyDocuments::PiecesController < MyDocuments::AbaseController
   def purify_params
     @options = {}
 
-    @options[:page]     = params[:page]
-    @options[:per_page] = params[:per_page]
+    @options[:page]     = params[:page].presence || 1
+    @options[:per_page] = params[:per_page].presence || 20
 
     @options[:content]     = params.try(:[], :text)
 
