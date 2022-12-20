@@ -119,6 +119,13 @@ class SgiApiServices::PushPreAsignmentService
 
       preseizure.update(cached_amount: preseizure.entries.map(&:amount).max)
 
+      begin
+        generate_autoliquidated_entries(preseizure)
+      rescue => e
+        Rails.logger.debug("unable to generate autoliquidated vat entries")
+        Rails.logger.debug(e.inspect)
+      end
+
       unless PreAssignment::DetectDuplicate.new(preseizure).execute
         Notifications::PreAssignments.new({pre_assignment: preseizure}).notify_new_pre_assignment_available unless preseizure.has_deleted_piece?
       end
@@ -183,5 +190,46 @@ class SgiApiServices::PushPreAsignmentService
     end
 
     { id: @data_preassignment["piece_id"], name: piece.try(:name), errors: errors}
+  end
+
+  private
+
+  def generate_autoliquidated_entries(preseizure)
+    supplier_account = user.accounting_plan.providers.where(third_party_account: preseizure.accounts.where(entry_type: 1)).first
+
+    return unless supplier_account.vat_autoliquidation && supplier_account.vat_autoliquidation_credit_account && supplier_account.vat_autoliquidation_debit_account
+
+    amount = preseizure.cached_amount / 100 * 20
+
+    credit_account           = Pack::Report::Preseizure::Account.new
+    credit_account.type      = 3
+    credit_account.number    = supplier_account.vat_autoliquidation_credit_account
+    credit_account.lettering = ""
+    credit_account.save
+    credit_account.accounts << account
+
+    credit_entry = Pack::Report::Preseizure::Entry.new
+    credit_entry.type   = Pack::Report::Preseizure::Entry::CREDIT
+    credit_entry.number = 0
+    credit_entry.amount = amount
+    credit_entry.save
+    credit_account.entries << entry
+    preseizure.entries << entry
+
+
+    debit_account           = Pack::Report::Preseizure::Account.new
+    debit_account.type      = 3
+    debit_account.number    = supplier_account.vat_autoliquidation_debit_account
+    debit_account.lettering = ""
+    debit_account.save
+    debit_account.accounts << account
+
+    debit_entry = Pack::Report::Preseizure::Entry.new
+    debit_entry.type   = Pack::Report::Preseizure::Entry::DEBIT
+    debit_entry.number = 0
+    debit_entry.amount = amount
+    debit_entry.save
+    debit_account.entries << entry
+    preseizure.entries << entry
   end
 end
