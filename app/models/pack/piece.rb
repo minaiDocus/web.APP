@@ -355,7 +355,9 @@ class Pack::Piece < ApplicationRecord
 
     tags << position if position
 
-    self.temp_document.tags.each do |tg|
+    td_tags = self.temp_document.tags.presence || []
+
+    td_tags.each do |tg|
       tags << tg
     end
   end
