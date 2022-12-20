@@ -16,6 +16,8 @@ class PreseizureExport::PreseizureToTxt
         export_fec_acd
       when "cogilog"
         export_cogilog
+      when "ciel"
+        export_ciel
       when "fec_agiris"
         export_fec_agiris
       when "fec_agiris_facnote"
@@ -587,5 +589,52 @@ class PreseizureExport::PreseizureToTxt
     end
 
     data.join("\n")
+  end
+
+  def export_ciel
+    data = []
+
+    if @preseizures.any?
+      ### HEADERS ####
+        data << "##Transfert"
+        data << "##Section Dos"
+        data << "EUR"
+        data << "##Section Mvt"
+      ### HEADERS ####
+
+      accounting_plan = @preseizures.first.user.accounting_plan
+
+      @preseizures.each_with_index do |preseizure, index|
+        user          = preseizure.user
+        journal_name  = preseizure.report.journal({name_only: false}).try(:name) || preseizure.journal_name
+        piece         = preseizure.piece
+
+        preseizure.accounts.each do |account|
+          entry   = account.entries.first
+
+          label   = preseizure.piece_number
+          label   = preseizure.operation_label[0..34].gsub("\t", ' ') if preseizure.operation_label.present?
+
+          line = []
+
+          third_party_name   = accounting_plan.customers.where(third_party_account: account.number)
+          third_party_name ||= accounting_plan.providers.where(third_party_account: account.number)
+
+          line << "\"#{index.to_s}\""
+          line << "\"#{journal_name.to_s}\""
+          line << "\"#{preseizure.date.strftime('%d/%m/%Y')}\""
+          line << "\"#{account.number.to_s}\""
+          line << "\"#{third_party_name.to_s}\""
+          line << "\"#{entry.amount.to_s}\""
+          line << "#{entry.debit? ? 'D' : 'C'}"
+          line << "B"
+          line << "\"#{preseizure.third_party.to_s}\""
+          line << "\"#{label.to_s}\""
+          line << "\"10\""
+
+          data << line.join("\t")
+        end
+      end
+    end
   end
 end
