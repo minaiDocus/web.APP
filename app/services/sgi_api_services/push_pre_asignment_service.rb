@@ -199,22 +199,24 @@ class SgiApiServices::PushPreAsignmentService
 
     return unless supplier_account.vat_autoliquidation && supplier_account.vat_autoliquidation_credit_account && supplier_account.vat_autoliquidation_debit_account
 
-    amount = preseizure.cached_amount / 100 * 20
+    amount = (preseizure.cached_amount / 100) * 20
 
     credit_account           = Pack::Report::Preseizure::Account.new
     credit_account.type      = 3
     credit_account.number    = supplier_account.vat_autoliquidation_credit_account
     credit_account.lettering = ""
     credit_account.save
-    credit_account.accounts << account
 
-    credit_entry = Pack::Report::Preseizure::Entry.new
+    preseizure.accounts << credit_account
+
+    credit_entry        = Pack::Report::Preseizure::Entry.new
     credit_entry.type   = Pack::Report::Preseizure::Entry::CREDIT
     credit_entry.number = 0
     credit_entry.amount = amount
     credit_entry.save
-    credit_account.entries << entry
-    preseizure.entries << entry
+
+    credit_account.entries << credit_entry
+    preseizure.entries << credit_entry
 
 
     debit_account           = Pack::Report::Preseizure::Account.new
@@ -222,14 +224,18 @@ class SgiApiServices::PushPreAsignmentService
     debit_account.number    = supplier_account.vat_autoliquidation_debit_account
     debit_account.lettering = ""
     debit_account.save
-    debit_account.accounts << account
 
-    debit_entry = Pack::Report::Preseizure::Entry.new
+    preseizure.accounts << debit_account
+
+    debit_entry        = Pack::Report::Preseizure::Entry.new
     debit_entry.type   = Pack::Report::Preseizure::Entry::DEBIT
     debit_entry.number = 0
     debit_entry.amount = amount
     debit_entry.save
-    debit_account.entries << entry
-    preseizure.entries << entry
+
+    debit_account.entries << debit_entry
+    preseizure.entries << debit_entry
+
+    preseizure.save
   end
 end
