@@ -46,23 +46,33 @@ span.count_journal{
   margin: 0 4%;
 }
 
-.info-rubric{
+.info-tag{
   position: relative;
 }
 
-.info-rubric-content{
+
+.info-tag-content, .info-tag-content-second{
   position: absolute;
-  z-index: 20;
+  z-index: 100 !important;
   border: 1px solid #b3a8bb;
-  margin-top: 2.5em;
+  border-radius: 8px;
+  margin-top: 0.5em;
+  margin-left: -4%;
   padding: 1em;
+  /*background-color: rgba(192, 225, 51, 0.5);*/
   background-color: #ffaa80;
   color: #392828;
   font-weight: normal;
-  width: 100%;
+  text-align: justify;
 
   -webkit-box-shadow: 0px 10px 13px -7px #000000, -2px 0px 15px -4px rgba(0,0,0,0); 
   box-shadow: 0px 10px 13px -7px #000000, -2px 0px 15px -4px rgba(0,0,0,0);
+}
+
+.tag-exemple{
+  background-color: #fff;
+  padding: 2px;
+  border: 1px inset rgba(26,26,26, 0.5);
 }
 
 .search-content {

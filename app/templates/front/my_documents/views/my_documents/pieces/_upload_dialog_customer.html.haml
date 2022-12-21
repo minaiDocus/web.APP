@@ -26,8 +26,14 @@
           .form-group
             %label.semibold Créer des tags
             .select-container.no-padding.no-margin.w-100
-              = text_field_tag :tags, '', id: :tags, class: 'text_field'
-            %i Pour ajouter plusieurs tags à ce(s) document(s), separer les tags avec des espaces.
+              = text_field_tag :tags, '', id: :tags, class: 'text_field', placeholder: "#tag"
+            .bg-white.text-center.m-3.p-2
+              %span.popup-info-tag.second
+                = glyphicon('info', { color: 'black', size: 10 })
+              %i Pour ajouter plusieurs tags à ce(s) document(s), separez les par des #.
+              .info-tag-content-second.hide
+                Vous pouvez taguer les documents en prennant comme modèle l'exemple ci-après :
+                .text-muted.tag-exemple.mt-3 #idocus #facture octobre #carburant moto
 
           .hidden_analytic_fields
           .analytic_resume_box

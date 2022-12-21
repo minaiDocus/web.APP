@@ -6,13 +6,14 @@ module UpdateMultipleTags
     user = User.find user_id
     user = Collaborator.new(user) if user.is_prescriber
 
-    tags.downcase.split.each do |tag|
+    tags.downcase.split("#").each do |tag|
       next unless tag =~ /-*\w*/
 
-      if tag[0] == '-'
-        sub << tag.sub('-', '').sub('*', '.*')
+      if tag.strip[0] == '-'
+        sub << tag.strip.sub('-', '').sub('*', '.*')
+      elsif tag == ""
       else
-        add << tag
+        add << tag.strip
       end
     end
 
@@ -42,7 +43,6 @@ module UpdateMultipleTags
       end
 
       document.tags = (document.tags || []) + add if add.any?
-
       document.save
     end
   end

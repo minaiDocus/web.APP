@@ -2,11 +2,16 @@
 = hidden_field_tag :customer_code, customer_selected.code
 .row#table_pieces
   .col-md-2
+    - if @user.still_active? && @user.authorized_upload?
+      .mb-3.bg-white.text-center.text-muted.p-1
+        %i
+          Uploadez vos documents directement sur notre plateforme ou les envoyer par email au
+          %a.mailto.text-muted.semibold{:href=>"mailto:#{@user.email_code}@fw.idocus.com", style:"text-decoration:none;"} "#{@user.email_code}@fw.idocus.com".
     %button.btn.btn-outline-dark.black-label.w-100.semibold.btn-all-documents{ :type => 'button' } 
       %span.float-start Mes documents
       %span.float-end.badge.bg-dark.mt-1= @total_pieces
     %hr
-    .lefter.mt-3
+    .lefter
       %ul.principal.p-0
         - @journals.each_with_index do |journal, index|
           %li.direct_links
@@ -24,8 +29,8 @@
             .col-md-7
               %button.btn.btn-light.btn-sm.cancel-add-rubric{ idocus: ajx_params } Annuler
               %button.btn.btn-dark.btn-sm.as_idocus_ajax{ idocus: ajx_params } Valider
-    .mb-4
-    %h5.semibold.text-center Recherche
+
+    %h6.semibold.text-center Recherche
     %hr
     %form#customer_filter_form.simple_form.form-horizontal
       .form-group
@@ -46,7 +51,7 @@
           %span.show-calendar.input-group-text-right.calendar-field-customer.p-2{ data: { ref: 'date-val' } }= glyphicon('chevron-bottom', { size: '12', color: 'background: rgba(26, 26, 26, 0.7)' })
 
       .form-group
-        %label.semibold N° de pièce
+        %label.semibold N° de facture
         .select-container.no-padding
           %input#piece_number{ name: 'piece_number', value: (params[:piece_number] rescue '' ) }
 
@@ -74,7 +79,7 @@
       .row
         .col-md-12
           %table.table.table-striped.list_customers#tbl_pieces
-            %thead
+            %thead.action-fixed.table-header-fixed-to-top
               %th.text-center
                 .icon-actions
                   %span.pointer.form-check.d-inline
@@ -82,9 +87,15 @@
                     %span.pointer.ms-3.action-selected.download_piece_zip.hide{title: 'Télécharger une archive zip'}= glyphicon('data-transfer-download', { size: '20', color:'rgba(26, 26, 26, 0.75);'})
               %th= sortable 'pack_report_preseizures.third_party', "Nom du tiers"
               %th= sortable 'pack_report_preseizures.date', "Date"
-              %th= sortable 'pack_report_preseizures.piece_number', "N° de pièce"
+              %th= sortable 'pack_report_preseizures.piece_number', "N° de facture"
               %th= sortable 'pack_report_preseizures.cached_amount', "Montant TTC"
-              %th Tags
+              %th
+                %span.popup-info-tag
+                  = glyphicon('info', { color: 'black', size: 10 })
+                %span Tags
+                .info-tag-content.hide
+                  Vous pouvez taguer les documents en prennant comme modèle l'exemple ci-après :
+                  .text-muted.tag-exemple.mt-3 #idocus #facture octobre #carburant moto
               %th.text-end Action
             %tbody
               - @pieces.each do |piece|
