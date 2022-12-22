@@ -64,9 +64,10 @@ class MyDocumentsTags{
     let input = this.tags_modal.find('#selectionsTags');
     let c_value = input.val();
 
-    c_value += ` -${d_value}`;
+    c_value += `#-${d_value} `;
     input.val(c_value);
 
+    parent.removeClass('d-inline')
     parent.addClass('hide');
   }
 }
