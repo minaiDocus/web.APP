@@ -177,9 +177,14 @@
       - elsif delivery_state != 'none'
         %span.badge.badge-success.semibold= t("pieces.delivery_state.#{delivery_state}")
 
-      - piece.get_tags.split(' - ').each_slice(3).first.try(:each) do |tag|
-        - if tag != '-'
-          %span.badge.bg-dark.semibold= tag
+      /- piece.get_tags.split('-').each_slice(3).first.try(:each) do |tag|
+      /  - if tag != '-'
+      /    %span.badge.bg-dark.semibold= tag
+
+      - tags = piece.get_tags.split('-')
+      - tags.each do |tag|
+        %span.badge.bg-dark.semibold= tag
+
 
     - elsif operation && !preseizure.is_exported?
       - delivery_state = preseizure.get_state_to('text')

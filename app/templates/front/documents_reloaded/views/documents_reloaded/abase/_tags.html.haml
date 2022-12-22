@@ -1,10 +1,12 @@
 .tag_reloaded_content
   %p
-    Pour ajouter plusieurs tags à ce(s) document(s), separer les tags avec des espaces.
+    Pour ajouter plusieurs tags à ce(s) document(s), separer les par des
+    %span.semibold #
+    %span .
   .form-group
     %label Nom du tags
     .select-container.no-padding.w-100       
-      != text_field_tag :tags, nil, :id => "selectionsTags", :class => ""
+      != text_field_tag :tags, nil, placeholder: "#tag", :id => "selectionsTags", :class => ""
       %input.tag_type{ type: :hidden, value: "#{@models.first.class.name.downcase}"}  
   .tag.d-block
     - list_tags = []

@@ -27,6 +27,7 @@
             %label.semibold Créer des tags
             .select-container.no-padding.no-margin.w-100
               = text_field_tag :tags, '', id: :tags, class: 'text_field', placeholder: "#tag"
+
             .bg-white
               %span.popup-info-tag.second
                 = glyphicon('info', { color: 'black', size: 10 })
@@ -34,6 +35,7 @@
               .info-tag-content-second.hide.ms-1
                 Utilisez l'exemple ci-dessous pour taguer vos documents :
                 .text-muted.tag-exemple.mt-3 #idocus #factures fournisseurs #Voyage à Paris
+
 
           .hidden_analytic_fields
           .analytic_resume_box
