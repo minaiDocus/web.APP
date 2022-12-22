@@ -3,10 +3,10 @@
 .row#table_pieces
   .col-md-2
     - if @user.still_active? && @user.authorized_upload?
-      .mb-3.bg-white.text-center.text-muted.p-1
+      .mb-4.bg-white.text-center.text-muted.p-1
         %i
-          Uploadez vos documents directement sur notre plateforme ou les envoyer par email au
-          %a.mailto.text-muted.semibold{:href=>"mailto:#{@user.email_code}@fw.idocus.com", style:"text-decoration:none;"} "#{@user.email_code}@fw.idocus.com".
+          ou envoyer vos documents par mail à : 
+          %a.mailto.text-muted.semibold{:href=>"mailto:#{@user.email_code}@fw.idocus.com", style:"text-decoration:none;"} "#{@user.email_code}@fw.idocus.com"
     %button.btn.btn-outline-dark.black-label.w-100.semibold.btn-all-documents{ :type => 'button' } 
       %span.float-start Mes documents
       %span.float-end.badge.bg-dark.mt-1= @total_pieces
@@ -75,7 +75,7 @@
           %button.btn.btn-dark.btn-sm.no-border-radius.w-100.semibold.btn-search{:type => 'button', id: 'launch-filter'} Lancer
 
   .col-md-10      
-    .box.derivationRight
+    .box.derivationRight{ style: 'margin-top: 0' }
       .row
         .col-md-12
           %table.table.table-striped.list_customers#tbl_pieces
@@ -94,8 +94,8 @@
                   = glyphicon('info', { color: 'black', size: 10 })
                 %span Tags
                 .info-tag-content.hide
-                  Vous pouvez taguer les documents en prennant comme modèle l'exemple ci-après :
-                  .text-muted.tag-exemple.mt-3 #idocus #facture octobre #carburant moto
+                  Utilisez l'exemple ci-dessous pour taguer vos documents :
+                  .text-muted.tag-exemple.mt-3 #idocus #factures fournisseurs #Voyage à Paris
               %th.text-end Action
             %tbody
               - @pieces.each do |piece|
