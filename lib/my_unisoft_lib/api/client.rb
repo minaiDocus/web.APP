@@ -36,7 +36,7 @@ module MyUnisoftLib
       def get_account(id)
         @response = connection.get do |request|
           request.url "api/v1/account"
-          request.headers = { "Authorization" => "Bearer #{@access_token}", "X-Third-Party-Secret" => "#{@settings[:x_third_party_secret]}" }
+          request.headers = { "Authorization" => "Bearer #{@access_token}", "X-Third-Party-Secret" => "#{@settings[:x_third_party_secret]}", "society-id" => "#{id}" }
           request.params = { "mode" => "2" }
         end
 
