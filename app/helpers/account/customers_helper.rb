@@ -26,6 +26,16 @@ module Account::CustomersHelper
     end
   end
 
+  def my_unisoft_companies_list_options_for_select(organization)
+    companies = MyUnisoftLib::Api::Client.new(organization.my_unisoft&.firm_id).get_societies_list
+
+    if companies[:status] == "success"
+      companies[:body]["society_array"].map { |c| [c['name'], c['society_id']] }
+    else
+      []
+    end
+  end
+
   def acd_companies_list_options_for_select(organization)
     companies = AcdLib::Api::Client.new(organization.acd.username, organization.acd.password).get_companies_list
 

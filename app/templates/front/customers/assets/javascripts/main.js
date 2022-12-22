@@ -231,7 +231,7 @@ class Customer{
 
   show_my_unisoft_customer(){
     if ($('#my-unisoft-form').length > 0 ) {
-      $('.key-my-unisoft').change(function() {        
+      $('#society-id').change(function() {        
         if ($(this).val() != ''){
           $('button[type=button].my_unisoft_validation').removeAttr('disabled');
         }

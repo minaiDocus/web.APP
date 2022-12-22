@@ -14,8 +14,6 @@ module MyUnisoftLib
 
       @owner      = nil
 
-      @api_token = @params[:api_token]
-
       unless @customer
         @owner = @organization
         update_and_save
@@ -36,18 +34,8 @@ module MyUnisoftLib
             @my_unisoft.auto_deliver  = -1
 
             return true if @my_unisoft.save
-          elsif @api_token.present?
-            list_keys                 = get_list_key
-
-            @my_unisoft.api_token     = @api_token if @api_token.present?
-            @my_unisoft.access_routes = list_keys.join(',')
-
-            info_societe              = client.get_society_info
-
-            if info_societe[:status] == "success"
-              @my_unisoft.society_id = info_societe[:body]['society_id']
-              @my_unisoft.name       = info_societe[:body]['name']
-            end
+          elsif @society_id.present?
+            @my_unisoft.society_id = @society_id
 
             update_and_save
           end
@@ -59,33 +47,19 @@ module MyUnisoftLib
 
     private
 
-    def get_list_key
-      keys = []
-
-      response = client.get_routes
-
-      if response[:status] == "success"
-        routes = response[:body]
-
-        routes.each do |route|
-          keys << route['path'] if route['path'].match(/account/) || route['path'].match(/entry/)
-        end
-      end
-
-      keys
-    end
 
     def update_and_save
       @my_unisoft.owner           = @owner
       @my_unisoft.auto_deliver    = @params[:auto_deliver]  if @params[:auto_deliver].present?
       @my_unisoft.is_used         = @params[:is_used]       if @params[:is_used].to_s.present?
+      @my_unisoft.firm_id         = @params[:firm_id] if @params[:firm_id].present?
 
       @my_unisoft.save
     end
 
 
     def client
-      @client ||= MyUnisoftLib::Api::Client.new(@api_token)
+      @client ||= MyUnisoftLib::Api::Client.new(@customer.organization.my_unisoft.firm_id)
     end
   end
 

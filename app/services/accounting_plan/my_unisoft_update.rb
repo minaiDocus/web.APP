@@ -27,7 +27,7 @@ class AccountingPlan::MyUnisoftUpdate < AccountingPlan::UpdateService
   end
 
   def my_unisoft_client
-    @my_unisoft_client ||= MyUnisoftLib::Api::Client.new(@user.my_unisoft.api_token)
+    @my_unisoft_client ||= MyUnisoftLib::Api::Client.new(@user.organization.my_unisoft.firm_id)
   end
 
   def my_unisoft_accounts

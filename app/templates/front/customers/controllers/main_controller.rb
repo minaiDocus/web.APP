@@ -189,11 +189,11 @@ class Customers::MainController < CustomerController
 
     if @customer.save
       if @customer.configured?
-          api_token       = my_unisoft_params["my_unisoft_attributes"]["encrypted_api_token"]
-          remove_customer = my_unisoft_params["my_unisoft_attributes"]['encrypted_api_token'].blank? && my_unisoft_params["my_unisoft_attributes"]['check_api_token'] == "true"
+          society_id      = my_unisoft_params["my_unisoft_attributes"]["society_id"]
+          remove_customer = my_unisoft_params["my_unisoft_attributes"]['society_id'].blank?
           auto_deliver    = my_unisoft_params["my_unisoft_attributes"]['auto_deliver']
 
-          MyUnisoftLib::Setup.new({organization: @organization, customer: @customer, columns: {api_token: api_token, remove_customer: remove_customer, auto_deliver: auto_deliver}}).execute
+          MyUnisoftLib::Setup.new({organization: @organization, customer: @customer, columns: {society_id: society_id, remove_customer: remove_customer, auto_deliver: auto_deliver}}).execute
 
         flash[:success] = 'Modifié avec succès'
       end
@@ -384,7 +384,7 @@ class Customers::MainController < CustomerController
       { options_attributes: %i[id is_taxable is_pre_assignment_date_computed] },
       { ibiza_attributes: %i[id is_used ibiza_id auto_deliver is_analysis_activated is_analysis_to_validate] },
       { exact_online_attributes: %i[id is_used auto_deliver client_id client_secret] },
-      { my_unisoft_attributes: %i[id is_used auto_deliver encrypted_api_token check_api_token] },
+      { my_unisoft_attributes: %i[id is_used auto_deliver society_id] },
       { sage_gec_attributes: %i[id is_used auto_deliver sage_private_api_uuid] },
       { acd_attributes: %i[id is_used auto_deliver code] },
       { coala_attributes: %i[id is_used auto_deliver internal_id] },
@@ -414,7 +414,7 @@ class Customers::MainController < CustomerController
   end
 
   def my_unisoft_params
-    params.require(:user).permit(my_unisoft_attributes: %i[id is_used auto_deliver encrypted_api_token check_api_token])
+    params.require(:user).permit(my_unisoft_attributes: %i[id is_used auto_deliver society_id])
   end
 
   def sage_gec_params

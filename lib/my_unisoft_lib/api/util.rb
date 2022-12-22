@@ -17,6 +17,8 @@ module MyUnisoftLib
         config.base_user_url         = new_config['base_user_url']        if new_config['base_user_url']
         config.base_api_url          = new_config['base_api_url']         if new_config['base_api_url']
         config.user_token            = new_config['user_token']           if new_config['user_token']
+        config.username              = new_config['username']             if new_config['username']
+        config.password              = new_config['password']             if new_config['password']
       end
     end
   end

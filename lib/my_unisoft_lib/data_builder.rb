@@ -65,7 +65,7 @@ module MyUnisoftLib
     end
 
     def client
-      @client ||= MyUnisoftLib::Api::Client.new(@preseizures.first.user.my_unisoft.api_token)
+      @client ||= MyUnisoftLib::Api::Client.new(@preseizures.first.user.organization.my_unisoft.firm_id)
     end
 
     def get_diary

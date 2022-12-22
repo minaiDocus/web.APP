@@ -158,26 +158,28 @@
                 %tr
                   %th ID société
                   %td{colspan: 2}= @customer.my_unisoft.society_id
-                %tr
-                  %th Nom de la société
-                  %td{colspan: 2}= @customer.my_unisoft.name
+                -#
+                  %tr
+                    %th Nom de la société
+                    %td{colspan: 2}= @customer.my_unisoft.name
           - else
             %label.badge.bg-warning.bold.mt-3 Ce dossier n'est pas lié à celui de My Unisoft
 
-          - if @customer.my_unisoft.society_id.present? && @customer.uses?(:my_unisoft)
-            %hr
-            .box.no-margin.accept_my_unisoft
-              %h5.semibold Vos accès API            
-              %table.table.table-condensed.with_custom_controls
-                %tbody
-                  %tr
-                    %th Plan Comptable
-                    %td
-                      = (@customer.my_unisoft.access_routes.present? && @customer.my_unisoft.access_routes.match(/account/)) ? "Oui" : "Non"
-                  %tr
-                    %th Ecriture Comptable
-                    %td
-                      = (@customer.my_unisoft.access_routes.present? && @customer.my_unisoft.access_routes.match(/entry/)) ? "Oui" : "Non"
+          -#
+            - if @customer.my_unisoft.society_id.present? && @customer.uses?(:my_unisoft)
+              %hr
+              .box.no-margin.accept_my_unisoft
+                %h5.semibold Vos accès API            
+                %table.table.table-condensed.with_custom_controls
+                  %tbody
+                    %tr
+                      %th Plan Comptable
+                      %td
+                        = (@customer.my_unisoft.access_routes.present? && @customer.my_unisoft.access_routes.match(/account/)) ? "Oui" : "Non"
+                    %tr
+                      %th Ecriture Comptable
+                      %td
+                        = (@customer.my_unisoft.access_routes.present? && @customer.my_unisoft.access_routes.match(/entry/)) ? "Oui" : "Non"
           %hr
           .form-group.no-margin
             .w-100.text-end

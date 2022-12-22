@@ -6,7 +6,7 @@ module MyUnisoftLib
     end
 
     def execute(data)
-      client = MyUnisoftLib::Api::Client.new(@user.my_unisoft.api_token)
+      client = MyUnisoftLib::Api::Client.new(@user.organization.my_unisoft.firm_id)
 
       response = client.send_pre_assignment(data)
 
