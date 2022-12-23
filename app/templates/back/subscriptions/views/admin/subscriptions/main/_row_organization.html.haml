@@ -5,7 +5,7 @@
   %td.information.name= @organization.name
 
   %td.subscription.ido_classic= link_to @counts[:ido_classic].to_i, "#", class: 'do-showAccounts', title: "iDo Classique", type: "basic_package", org_id: @organization.id
-  %td.subscription.ido_micro= link_to @counts[:ido_micro].to_i + @counts[:ido_micro_plus].to_i, "#", class: 'do-showAccounts', title: "iDo Micro", type: "micro_package", org_id: @organization.id
+  %td.subscription.ido_micro= link_to @counts[:ido_micro].to_i, "#", class: 'do-showAccounts', title: "iDo Micro", type: "micro_package", org_id: @organization.id
   %td.subscription.ido_nano= link_to @counts[:ido_nano].to_i, "#", class: 'do-showAccounts', title: "iDo Nano", type: "nano_package", org_id: @organization.id
   %td.subscription.ido_x= link_to @counts[:ido_x].to_i, "#", class: 'do-showAccounts', title: "iDo X", type: "idox_package", org_id: @organization.id
   %td.subscription.ido_retriever= link_to @counts[:ido_retriever].to_i, "#", class: 'do-showAccounts', title: "Automate uniquement", type: "retriever_only_package", org_id: @organization.id

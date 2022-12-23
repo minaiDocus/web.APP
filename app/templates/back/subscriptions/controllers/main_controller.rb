@@ -40,7 +40,8 @@ class Admin::Subscriptions::MainController < BackController
   end
 
   def packages_list
-    ['ido_premium', 'ido_classic', 'ido_micro', 'ido_micro_plus', 'ido_nano', 'ido_x', 'ido_retriever', 'ido_digitize']
+    # IMPORTANT : don't user ido_micro_plus (merge it with ido_micro)
+    ['ido_premium', 'ido_classic', 'ido_micro', 'ido_nano', 'ido_x', 'ido_retriever', 'ido_digitize']
   end
 
   def options_list
@@ -60,7 +61,11 @@ class Admin::Subscriptions::MainController < BackController
     packages_list.each do |package|
       next if type && package != type
 
-      _pkg = packages.where(name: package)
+      if package == 'ido_micro'
+        _pkg = packages.where(name: ['ido_micro', 'ido_micro_plus'])
+      else
+        _pkg = packages.where(name: package)
+      end
 
       if type
         result = _pkg
@@ -91,7 +96,11 @@ class Admin::Subscriptions::MainController < BackController
     packages      = BillingMod::Package.where(user_id: @accounts_ids, period: @period)
 
     packages_list.each do |package|
-      @counts[package.to_sym] = packages.where(name: package).count
+      if package == 'ido_micro'
+        @counts[:ido_micro] = packages.where(name: ['ido_micro', 'ido_micro_plus']).count
+      else
+        @counts[package.to_sym] = packages.where(name: package).count
+      end
     end
 
     options_list.each do |option|

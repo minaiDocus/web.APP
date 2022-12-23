@@ -20,12 +20,9 @@ class Subscription::Export
       line << organization.code
       line << organization.name
 
-      micro_total = 0
       packages_list.each do |package|
         if package == 'ido_micro'
-          micro_total = packages.where(name: package).count
-        elsif package == 'ido_micro_plus'
-          line << micro_total + packages.where(name: package).count
+          line << packages.where(name: ['ido_micro', 'ido_micro_plus']).count
         else
           line << packages.where(name: package).count
         end
@@ -53,7 +50,7 @@ class Subscription::Export
 
   def packages_list
     #IMPORTANT : must be arrange accourding to the header
-    ['ido_classic', 'ido_micro', 'ido_micro_plus', 'ido_nano', 'ido_x', 'ido_retriever', 'ido_digitize', 'ido_premium']
+    ['ido_classic', 'ido_micro', 'ido_nano', 'ido_x', 'ido_retriever', 'ido_digitize', 'ido_premium']
   end
 
   def options_list

@@ -28,7 +28,7 @@
             %tr.text-center.recapitulation_data
               %th Abonnés
               %td.ido_classic= link_to @counts[:ido_classic].to_i, "#", class: 'do-showAccounts', title: "iDo Classique", type: "basic_package"
-              %td.ido_micro= link_to @counts[:ido_micro].to_i + @counts[:ido_micro_plus].to_i, "#", class: 'do-showAccounts', title: "iDo Micro", type: "micro_package"
+              %td.ido_micro= link_to @counts[:ido_micro].to_i, "#", class: 'do-showAccounts', title: "iDo Micro", type: "micro_package"
               %td.ido_nano= link_to @counts[:ido_nano].to_i, "#", class: 'do-showAccounts', title: "iDo Nano", type: "nano_package"
               %td.ido_x= link_to @counts[:ido_x].to_i, "#", class: 'do-showAccounts', title: "iDo X", type: "idox_package"
               %td.ido_premium= link_to @counts[:ido_premium].to_i, "#", class: 'do-showAccounts', title: "iDo Premium", type: "premium_package"
@@ -36,7 +36,7 @@
               %td.ido_retriever= link_to @counts[:ido_retriever].to_i, "#", class: 'do-showAccounts', title: "Automate uniquement", type: "retriever_only_package"
               %td.ido_digitize= link_to @counts[:ido_digitize].to_i, "#", class: 'do-showAccounts', title: "Numérisation uniquement", type: "digitize_only_package"
               %td.total
-                = @counts[:ido_classic].to_i + @counts[:ido_micro].to_i + @counts[:ido_micro_plus].to_i + @counts[:ido_nano].to_i + @counts[:ido_x].to_i + @counts[:ido_premium].to_i + @counts[:ido_retriever].to_i + @counts[:ido_digitize].to_i
+                = @counts[:ido_classic].to_i + @counts[:ido_micro].to_i + @counts[:ido_nano].to_i + @counts[:ido_x].to_i + @counts[:ido_premium].to_i + @counts[:ido_retriever].to_i + @counts[:ido_digitize].to_i
 
               %td.mail_active= link_to @counts[:mail_active].to_i, "#", class: 'do-showAccounts', title: "Fofait Courrier", type: "mail_package"
               %td.scan_active= link_to @counts[:scan_active].to_i, "#", class: 'do-showAccounts', title: "Numériser", type: "digitize_package"
