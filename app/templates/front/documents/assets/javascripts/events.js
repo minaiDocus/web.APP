@@ -220,7 +220,7 @@ function bind_all_events(){
 
   $('.preseizures_export').unbind('click').bind('click',function(e) { AppEmit('documents_export_preseizures', {'obj': this}) });
 
-  $('.update_tags').unbind('click').bind('click', function(){ AppEmit('documents_update_tags', {'obj': this}); });
+  $('.update_tags').unbind('click').bind('click', function(e){ e.preventDefault(); AppEmit('documents_update_tags', {'obj': this}); });
 
   $('.edit_compta_analysis').unbind('click').bind('click', function(){ AppEmit('documents_edit_analysis', { 'code': $(this).data('code'), is_used: $(this).data('is-used') }); });
 
