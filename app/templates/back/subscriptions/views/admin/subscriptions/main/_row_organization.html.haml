@@ -18,4 +18,4 @@
 
   %td.clients.active= @accounts_ids.size
   %td.clients.new= @organization.customers.active_at(@date.end_of_month).where("DATE_FORMAT(created_at, '%Y%m') = #{@period}").count
-  %td.clients.closed= @organization.customers.closed.count
+  %td.clients.closed= @organization.customers.closed.where('created_at < ?', @date.end_of_month).count

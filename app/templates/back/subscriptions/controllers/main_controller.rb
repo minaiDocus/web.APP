@@ -36,7 +36,7 @@ class Admin::Subscriptions::MainController < BackController
   private
 
   def concerned_organization_ids
-    Organization.client.active.pluck(:id)
+    Organization.client.active.order(code: :asc).pluck(:id)
   end
 
   def packages_list

@@ -34,7 +34,7 @@ class Subscription::Export
 
       line << accounts_ids.size
       line << organization.customers.active_at(@date.end_of_month).where("DATE_FORMAT(created_at, '%Y%m') = #{@period}").count
-      line << organization.customers.closed.count
+      line << organization.customers.closed.where('created_at < ?', @date.end_of_month).count
 
       datas << line.join(';')
     end
@@ -45,7 +45,7 @@ class Subscription::Export
   private
 
   def concerned_organization
-    Organization.client.active
+    Organization.client.active.order(code: :asc)
   end
 
   def packages_list
