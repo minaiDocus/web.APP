@@ -19,4 +19,9 @@ jQuery(function () {
 
   calculate_footer_marginer();
   scrool_on_top();
+
+  $('.back-notice-flush a.close').unbind('click').bind('click', function(e){
+    let alerts = $('.back-notice-flush .alert');
+    alerts.remove();
+  });
 });
