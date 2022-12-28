@@ -236,6 +236,12 @@ class CustomUtils
       ['ADV', 'ALM'].include?(organization_code)
     end
 
+    def list_vat_of(organization_code)
+      return { "-1" => "0", "0" => "22", "11" => "11", "6" => "6", "3" => "3" } if ['IDOC'].include?(organization_code)
+
+      return { "-1" => "0", "0" => "20", "10" => "10", "8.5" => "8.5", "5.5" => "5.5", "2.1" => "2.1" }
+    end
+
     def is_ido_premium?(organization_code)
       BillingMod::Configuration::PREMIUM[organization_code.to_sym].present?
     end
