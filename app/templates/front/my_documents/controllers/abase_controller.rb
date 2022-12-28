@@ -24,7 +24,7 @@ class MyDocuments::AbaseController < FrontController #Must be loaded first that'
       if current_user.is_admin && user.organization.ibiza.try(:configured?) && user.uses?(:ibiza)
         options << ['XML (Ibiza)', 'xml_ibiza']
       end
-      options << ['TXT (Ciel)', 'txt_ciel']                    if user.uses?(:ciel)
+      options << ['TXT (Ciel)', 'txt_ciel']                    if user.uses?(:ciel) && ['IDOC', 'MCN'].include?( user.organization.try(:code) )
       options << ['TXT (Quadratus)', 'txt_quadratus']          if user.uses?(:quadratus)
       options << ['ZIP (Quadratus)', 'zip_quadratus']          if user.uses?(:quadratus)
       options << ['ZIP (Coala)', 'zip_coala']                  if user.uses?(:coala)
