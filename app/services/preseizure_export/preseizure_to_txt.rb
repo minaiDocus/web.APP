@@ -617,8 +617,8 @@ class PreseizureExport::PreseizureToTxt
 
           line = []
 
-          third_party_name   = accounting_plan.customers.where(third_party_account: account.number)
-          third_party_name ||= accounting_plan.providers.where(third_party_account: account.number)
+          third_party_name   = accounting_plan.customers.where(third_party_account: account.number).first.try(:third_party_name)
+          third_party_name ||= accounting_plan.providers.where(third_party_account: account.number).first.try(:third_party_name)
 
           line << "\"#{index.to_s}\""
           line << "\"#{journal_name.to_s}\""
@@ -636,5 +636,7 @@ class PreseizureExport::PreseizureToTxt
         end
       end
     end
+
+    data.join("\n")
   end
 end
