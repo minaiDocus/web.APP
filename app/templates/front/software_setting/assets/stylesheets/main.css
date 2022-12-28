@@ -89,7 +89,6 @@
   margin: 0 25%;
 }
 
-
 #sage_gec img{
   margin: 16% 26%;
 }
@@ -124,6 +123,11 @@
 
 #cogilog img{
   margin: 13% 24%;
+  width: 200px;
+}
+
+#ciel img{
+  margin: 2% 19%;
   width: 200px;
 }
 

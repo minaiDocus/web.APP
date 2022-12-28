@@ -37,7 +37,7 @@
 
       .tab-pane.box.no-margin#other-software{ "role" => "tabpanel", "aria-labelledby" => "other-software-tab", class: (!first_active)? 'active' : '' }
         %label.semibold.derivationLeft Activer l'option d'export des écritures comptables en cliquant sur le logo et pièces pour :
-        - img_list = { ibiza: '/assets/logo/ibiza-logo.png', quadratus: '/assets/logo/quadratus-logo.png', cegid: '/assets/logo/cegid-logo.png', sage_gec: '/assets/logo/sage-gec-logo.png', acd: '/assets/logo/suite-expert-logo.png', fec_agiris: '/assets/logo/agiris-logo.png', fec_acd: '/assets/logo/acd-logo.png', exact_online: '/assets/logo/exact-logo.png', my_unisoft: '/assets/logo/my-unisoft-logo.png', coala: '/assets/logo/coala-logo.png', csv_descriptor: '/assets/logo/csv-logo.png', cogilog: '/assets/logo/cogilog-logo.png' }
+        - img_list = { ibiza: '/assets/logo/ibiza-logo.png', quadratus: '/assets/logo/quadratus-logo.png', cegid: '/assets/logo/cegid-logo.png', sage_gec: '/assets/logo/sage-gec-logo.png', acd: '/assets/logo/suite-expert-logo.png', fec_agiris: '/assets/logo/agiris-logo.png', fec_acd: '/assets/logo/acd-logo.png', exact_online: '/assets/logo/exact-logo.png', my_unisoft: '/assets/logo/my-unisoft-logo.png', coala: '/assets/logo/coala-logo.png', csv_descriptor: '/assets/logo/csv-logo.png', cogilog: '/assets/logo/cogilog-logo.png', ciel: '/assets/logo/ciel-logo.png' }
         - softwares_list.each_slice(3) do |group|
           .row.derivationRight
             - group.each do |software|
@@ -51,7 +51,7 @@
               .col-md-4.box-software.pointer.animated-pointer{ id: software, class: is_used ? 'selected' : '' }
                 %a.no-style.w-100{ href: url, data: { confirm: confirm, method: 'post' } }
                   - if img_list[software.to_sym].present?
-                    %img{ class: "image-software #{software}", alt: 'logo-quadratus', src: img_list[software.to_sym] }
+                    %img{ class: "image-software #{software}", alt: "logo-#{software.to_s}", src: img_list[software.to_sym] }
                   - else
                     %span.use-software.bold{ class: software }= Interfaces::Software::Configuration::SOFTWARES_HUMAN_NAME[software.to_sym]
 
