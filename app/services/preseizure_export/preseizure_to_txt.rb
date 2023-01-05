@@ -66,7 +66,7 @@ class PreseizureExport::PreseizureToTxt
         line[69..73]   = entry.account.lettering[0..4] if entry.account.lettering.present?
         line[74..78]   = preseizure.piece_number[0..4] if preseizure.piece_number.present?
         line[99..106]  = preseizure.piece_number[0..7] if preseizure.piece_number.present?
-        line[107..109] = 'EUR'
+        line[107..109] = CustomUtils.use_vats_2?(preseizure.organization.code) ? 'XPF' : 'EUR'
         line[110..112] = preseizure.journal_name[0..2] if preseizure.journal_name.size > 2
 
         if label.size > 20
