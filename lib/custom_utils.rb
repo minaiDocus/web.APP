@@ -241,7 +241,7 @@ class CustomUtils
     end
 
     def list_vat_of(organization_code)
-      return { "-1" => "0", "0" => "22", "11" => "11", "6" => "6", "3" => "3" } if user_vats_2?(organization_code)
+      return { "-1" => "0", "0" => "22", "11" => "11", "6" => "6", "3" => "3" } if use_vats_2?(organization_code)
 
       return { "-1" => "0", "0" => "20", "10" => "10", "8.5" => "8.5", "5.5" => "5.5", "2.1" => "2.1" }
     end
