@@ -195,46 +195,41 @@ class SgiApiServices::PushPreAsignmentService
   private
 
   def generate_autoliquidated_entries(preseizure)
-    supplier_account = user.accounting_plan.providers.where(third_party_account: preseizure.accounts.where(entry_type: 1)).first
+    supplier_account = user.accounting_plan.providers.where(third_party_account: preseizure.accounts.where(type: 1).first.try(:number)).first
 
     return unless supplier_account.vat_autoliquidation && supplier_account.vat_autoliquidation_credit_account && supplier_account.vat_autoliquidation_debit_account
 
     amount = (preseizure.cached_amount / 100) * 20
 
-    credit_account           = Pack::Report::Preseizure::Account.new
-    credit_account.type      = 3
-    credit_account.number    = supplier_account.vat_autoliquidation_credit_account
-    credit_account.lettering = ""
+    credit_account            = Pack::Report::Preseizure::Account.new
+    credit_account.type       = 3
+    credit_account.number     = supplier_account.vat_autoliquidation_credit_account
+    credit_account.lettering  = ""
+    credit_account.preseizure = preseizure
     credit_account.save
 
-    preseizure.accounts << credit_account
-
-    credit_entry        = Pack::Report::Preseizure::Entry.new
-    credit_entry.type   = Pack::Report::Preseizure::Entry::CREDIT
-    credit_entry.number = 0
-    credit_entry.amount = amount
+    credit_entry            = Pack::Report::Preseizure::Entry.new
+    credit_entry.type       = Pack::Report::Preseizure::Entry::CREDIT
+    credit_entry.number     = 0
+    credit_entry.amount     = amount
+    credit_entry.account    = credit_account
+    credit_entry.preseizure = preseizure
     credit_entry.save
-
-    credit_account.entries << credit_entry
-    preseizure.entries << credit_entry
-
 
     debit_account           = Pack::Report::Preseizure::Account.new
     debit_account.type      = 3
     debit_account.number    = supplier_account.vat_autoliquidation_debit_account
     debit_account.lettering = ""
+    debit_account.preseizure = preseizure
     debit_account.save
 
-    preseizure.accounts << debit_account
-
-    debit_entry        = Pack::Report::Preseizure::Entry.new
-    debit_entry.type   = Pack::Report::Preseizure::Entry::DEBIT
-    debit_entry.number = 0
-    debit_entry.amount = amount
+    debit_entry             = Pack::Report::Preseizure::Entry.new
+    debit_entry.type        = Pack::Report::Preseizure::Entry::DEBIT
+    debit_entry.number      = 0
+    debit_entry.amount      = amount
+    debit_entry.account     = debit_account
+    debit_entry.preseizure  = preseizure
     debit_entry.save
-
-    debit_account.entries << debit_entry
-    preseizure.entries << debit_entry
 
     preseizure.save
   end
