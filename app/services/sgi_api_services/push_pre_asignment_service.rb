@@ -120,10 +120,9 @@ class SgiApiServices::PushPreAsignmentService
       preseizure.update(cached_amount: preseizure.entries.map(&:amount).max)
 
       begin
-        generate_autoliquidated_entries(preseizure)
+        generate_autoliquidated_entries(preseizure.reload)
       rescue => e
-        Rails.logger.debug("unable to generate autoliquidated vat entries")
-        Rails.logger.debug(e.inspect)
+        System::Log.info('debugger', "[autoliquidation] - #{e.to_s}")
       end
 
       unless PreAssignment::DetectDuplicate.new(preseizure).execute
@@ -232,5 +231,7 @@ class SgiApiServices::PushPreAsignmentService
     debit_entry.save
 
     preseizure.save
+
+    System::Log.info('debugger', "[autoliquidation] - Accounts : #{preseizure.reload.accounts.size}")
   end
 end
