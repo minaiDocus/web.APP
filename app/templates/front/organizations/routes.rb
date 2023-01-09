@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       get   :edit_options,          on: :collection
       get   :edit_software_users,   on: :member
       get   :close_confirm,         on: :member
+      get   :statistic,         on: :member
       patch :update_options,        on: :collection
       patch :update_software_users, on: :member
 
