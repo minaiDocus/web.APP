@@ -78,7 +78,7 @@ class Organizations::MainController < OrganizationController
 
   def statistic
     date      = Time.now.beginning_of_month
-    customers = @organization.can_be_billed? ? @organization.customers.active : []
+    customers = @organization.customers.active_at(date)
 
     @organization_statistic = { micro_package: 0, nano_package: 0, basic_package: 0, mail_package: 0, scan_box_package: 0, retriever_package: 0, mini_package: 0, idox_package: 0, digitize_package: 0, premium_package: 0 }
 
@@ -139,7 +139,7 @@ class Organizations::MainController < OrganizationController
       authorized = false
       if current_user.is_admin && action_name.in?(%w[index edit_options update_options edit_software_users update_software_users new create suspend unsuspend])
         authorized = true
-      elsif action_name.in?(%w[show]) && @user.is_prescriber
+      elsif action_name.in?(%w[show statistic]) && @user.is_prescriber
         authorized = true
       elsif action_name.in?(%w[edit update edit_software_users update_software_users]) && @user.leader?
         authorized = true

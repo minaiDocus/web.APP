@@ -7,6 +7,8 @@
 - else
   = stylesheet_link_tag 'front/organizations/assets/stylesheets/show'
 
+- is_premium = CustomUtils.is_ido_premium?(@organization.code)
+
 .acceuil_organizations.container-fluid
   .row.derivationRight
     .col-md-12.title
@@ -16,7 +18,7 @@
       %input#organization_id{ type: :hidden, value: @organization.id }
   .row
     .col-md-12.statistic_board
-      .col-md-8.left_section.derivationLeft
+      .left_section.derivationLeft{ class: is_premium ? 'col-md-12' : 'col-md-8' }
         .row.no-padding.no-margin
           .col-md-12.collab_customer.no-margin
             .col-md-6.collaborator.box.no-margin
@@ -31,10 +33,11 @@
 
             %input#stat_customers_labels{ type: :hidden, value: @stat_customers_labels.reverse.to_json }
             %input#stat_customers_values{ type: :hidden, value: @stat_customers_values.reverse.to_json }
-            %canvas#chart_dossiers          
-      .col-md-4.right_section.derivationRight
-        .box
-          .repartition
-            %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}
+            %canvas#chart_dossiers
+      - if not is_premium    
+        .col-md-4.right_section.derivationRight
+          .box
+            .repartition
+              %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}
 
 = javascript_include_tag 'front/organizations/assets/javascripts/show'
