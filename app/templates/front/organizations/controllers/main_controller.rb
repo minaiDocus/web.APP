@@ -28,7 +28,7 @@ class Organizations::MainController < OrganizationController
       date = date - 1.month
 
       @stat_customers_labels << date.strftime('%m/%Y')
-      @stat_customers_values << @organization.customers.active.where("DATE_FORMAT(created_at, '%Y%m') = #{date.strftime('%Y%m')}").size
+      @stat_customers_values << @organization.customers.active_at(date).size
     end
     # @members = @organization.customers.page(params[:page]).per(params[:per])
     # @periods = Period.where(user_id: @organization.customers.pluck(:id)).where('start_date < ? AND end_date > ?', Date.today, Date.today).includes(:billings)
