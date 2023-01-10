@@ -11,6 +11,9 @@ function elements_initializer(){
     defaultBlank: true,
     "autoApply": true,
     singleDatePicker: true,
+    showDropdowns: true,
+    minDate: '06/01/2010',
+    maxDate: '31/12/'+ new Date().getFullYear(),
     linkedCalendars: false,
     locale: {
       format: 'YYYY-MM-DD'
@@ -20,6 +23,9 @@ function elements_initializer(){
   $('.daterange').asDateRange({
     defaultBlank: true,
     "autoApply": true,
+    showDropdowns: true,
+    minDate: '06/01/2010',
+    maxDate: '31/12/'+ new Date().getFullYear(),
     linkedCalendars: false,
     locale: {
       format: 'DD/MM/YYYY'

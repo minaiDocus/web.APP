@@ -118,7 +118,7 @@
                     = [preseizure.try(:amount_ttc).to_s, ''].uniq.join(' €').presence || ""
                   %td
                     - piece.get_tags.split('-').each do |tag|              
-                      %span.badge.bg-dark= tag
+                      %span.badge.bg-dark= '#' + tag.strip
                   %td.text-end.pointer.align-middle
                     .action.sub_edit_delete.list-collaborators
                       %span.glyph= glyphicon('ellipses', { size: '15', color: 'gba(26, 26, 26, 0.7)', style: 'transform: rotate(90deg)'})
