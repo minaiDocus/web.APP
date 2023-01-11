@@ -41,7 +41,7 @@
           %hr
           .form-group.text-center
             - idoc_params = param_encode({ url: '/profiles', method: 'put', form:{ id: 'subscription_options' } })
-            %button.btn.btn-primary.semibold.w-25.as_idocus_ajax{ type: 'button', idocus: idoc_params } Mettre à jours
+            %button.btn.btn-primary.semibold.w-25.as_idocus_ajax{ type: 'button', idocus: idoc_params } Mettre à jour
 
         - if @user.my_package.try(:upload_active) && !(@user.is_admin || @user.is_prescriber || @user.inactive?)
           - period_service = Billing::Period.new user: @user, current_time: Time.now.beginning_of_month
