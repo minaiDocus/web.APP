@@ -1347,6 +1347,10 @@ fr:
         attributes:
           is_used: Activer l'option d'export des écritures comptables et pièces pour Fec ACD ?
           auto_deliver: Activer la génération automatique de l'export des écritures comptables et pièces pour Fec Agiris?
+      software_ciel:
+        attributes:
+          is_used: Activer l'option d'export des écritures comptables et pièces pour Ciel (.txt)?
+          auto_deliver: Générer automatiquement le fichier d'export (zip) des écritures et pièces ?
     state_machines:
       retriever:
         states:

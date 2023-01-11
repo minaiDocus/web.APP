@@ -453,7 +453,7 @@ class Pack::Piece < ApplicationRecord
     elsif self.preseizures.delivered.count > 0
       text    = 'delivered'
       img_url = 'application/preaff_deliv.png'
-    elsif self.preseizures.where(is_delivered_to: [nil, ''], delivery_tried_at: [nil, '']).count > 0 && self.user.uses_api_softwares?
+    elsif self.preseizures.not_delivered.count > 0 && self.user.uses_api_softwares?
       text    = 'delivery_pending'
       img_url = 'application/preaff_deliv_pending.png'
     elsif self.preseizures.failed_delivery.count > 0

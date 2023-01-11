@@ -159,6 +159,15 @@
                           .form-check.idocus-custom-form-check
                             = software.input :is_used, as: :boolean, label: false, input_html: { disabled: !@organization.try(:acd).try(:used?), class: 'form-check-input pointer float-none softwares_setting check-acd m-1', id: 'check-acd' }
                             %label.ms-2.semibold{class: 'form-check-label', for: 'check-acd'} ACD
+                    .row
+                      .col-md-6
+                        = f.simple_fields_for :ciel do |software|
+                          = software.hidden_field :id
+                          .form-check.idocus-custom-form-check
+                            = software.input :is_used, as: :boolean, label: false, input_html: { disabled: !@organization.try(:ciel).try(:used?), class: 'form-check-input pointer float-none softwares_setting check-sage-gec m-1', id: 'check-sage-gec' }
+                            %label.ms-2.semibold{class: 'form-check-label', for: 'check-sage-gec'} Ciel
+                      .col-md-6
+                        // Free dock for software
 
                 - if !@organization.specific_mission && params[:action].in?(%w(show edit update))
                   %hr

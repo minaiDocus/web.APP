@@ -307,6 +307,10 @@ class Pack::Report::Preseizure < ApplicationRecord
     not ['not_configured', 'not_exported', 'failed'].include?(self.export_state.to_s)
   end
 
+  def is_not_exported?
+    ['not_exported', 'failed'].include?(self.export_state.to_s)
+  end
+
   def delivery_failed?
     self.delivery_state == 'failed'
   end

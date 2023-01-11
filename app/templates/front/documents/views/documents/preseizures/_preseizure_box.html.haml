@@ -177,9 +177,13 @@
       - elsif delivery_state != 'none'
         %span.badge.badge-success.semibold= t("pieces.delivery_state.#{delivery_state}")
 
-      - piece.get_tags.split(' - ').each_slice(3).first.try(:each) do |tag|
-        - if tag != '-'
-          %span.badge.bg-dark.semibold= tag
+      /- piece.get_tags.split(' - ').each_slice(3).first.try(:each) do |tag|
+      /  - if tag != '-'
+      /    %span.badge.bg-dark.semibold= tag
+
+      - tags = piece.get_tags.split('-')
+      - tags.each do |tag|
+        %span.badge.bg-dark.semibold= tag
 
     - elsif operation && !preseizure.is_exported?
       - delivery_state = preseizure.get_state_to('text')
@@ -195,7 +199,7 @@
     - if delivery_state == 'none'
       - if preseizure.is_exported?
         %span.badge.badge-success.semibold Téléchargé
-      - else
+      - elsif preseizure.is_not_exported?
         %span.badge.badge-warning.semibold Non récupéré
 
     - if preseizure.third_party.present?
@@ -205,7 +209,7 @@
     %span.ms-2.edit_preseizures{title: 'Édition écriture comptable', data:{ id: preseizure.id }}= glyphicon('pencil', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
     - if @user.has_collaborator_action?
       %span.ms-2.preseizures_export{title: 'Export écriture comptable', data:{ id: preseizure.id, type: 'preseizure' }}= glyphicon('external-link', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
-      - if preseizure.user.uses_api_softwares? && preseizure.is_not_delivered? && !preseizure.is_exported?
+      - if preseizure.user.uses_api_softwares? && preseizure.is_not_delivered? && preseizure.is_not_exported?
         %span.ms-2.deliver_preseizures{title: 'Livraison écriture comptable', data: { id: preseizure.id, type: 'preseizure' }}= glyphicon('loop-circular', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
     - if piece      
       %span.ms-2.update_tags{title: 'Taguer la pièce', data: {id: piece.id, type: 'piece'}}= glyphicon('tag', { size: '14', color:'rgba(26, 26, 26, 0.32);'})

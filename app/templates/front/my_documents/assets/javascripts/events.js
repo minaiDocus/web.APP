@@ -379,6 +379,27 @@ function bind_all_events(){
     $('.btn.add-entry').prop('disabled', false);
   });
 
+
+  $('.popup-info-tag').mouseover(function(e) {
+    if ($(this).hasClass('second'))
+    {
+      $('.info-tag-content-second').removeClass('hide')
+    }
+    else{
+      $('.info-tag-content').removeClass('hide')
+    }
+
+  }).mouseout(function(e) {
+    if ($(this).hasClass('second'))
+    {
+      $('.info-tag-content-second').addClass('hide')
+    }
+    else{
+      $('.info-tag-content').addClass('hide')
+    } 
+  });
+
+
   $('.entry .remove').unbind('click').bind('click', function(e){
     let tr = $(this).closest('tr');
     if (confirm('Voulez-vous vraiment supprimer cette ligne ? ')){

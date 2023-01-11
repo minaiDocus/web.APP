@@ -246,4 +246,8 @@ module JournalHelper
 
     periods.sort.reverse
   end
+
+  def list_vat_accounts_for(organization_code)
+    CustomUtils.list_vat_of(organization_code).map { |ke, vat| [vat, ke] if ke.to_i != 0 }.compact
+  end
 end

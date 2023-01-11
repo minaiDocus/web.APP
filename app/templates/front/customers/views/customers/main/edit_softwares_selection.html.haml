@@ -61,6 +61,12 @@
                       %td
                         = hidden_field_tag :part, 'quadratus'
                         = f.check_box :is_used, style: "position:unset"
+                  -if software.to_s == 'ciel' && @organization.try(:ciel).try(:used?)
+                    %tr
+                      %td Ce dossier utilise Ciel ?
+                      %td
+                        = hidden_field_tag :part, 'ciel'
+                        = f.check_box :is_used, style: "position:unset"
                   -if software.to_s == 'cegid' && @organization.try(:cegid).try(:used?)
                     %tr
                       %td Ce dossier utilise Cegid ?

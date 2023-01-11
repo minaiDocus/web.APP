@@ -76,6 +76,7 @@ class SoftwareSetting::MainController < OrganizationController
       { :quadratus_attributes => %i[id is_used auto_deliver] },
       { :cogilog_attributes => %i[id is_used auto_deliver] },
       { :coala_attributes => %i[id is_used auto_deliver] },
+      { :ciel_attributes => %i[id is_used auto_deliver] },
       { :cegid_attributes => %i[id is_used auto_deliver] },
       { :fec_agiris_attributes => %i[id is_used auto_deliver] },
       { :fec_acd_attributes => %i[id is_used auto_deliver] },

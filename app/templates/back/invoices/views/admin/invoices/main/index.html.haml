@@ -61,7 +61,7 @@
               .text-start
                 = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: admin_invoices_index_path, target: '#table_invoices', total_pages: @invoices.total_pages, filter: 'form-filter' }
             .col-md-3
-              .text-end.readonly-container        
+              .text-end.readonly-container
                 = submit_tag 'Télécharger les fichiers sélectionnés', class: 'btn btn-primary'
 
     / # = render partial: '/admin/invoices/main/sidebar'

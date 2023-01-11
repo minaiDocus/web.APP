@@ -14,14 +14,12 @@ class Billing::InvoicesToZip
 
       @invoice_ids.each do |invoice_id|
         invoice = BillingMod::Invoice.find invoice_id
-        filepath = invoice.cloud_content_object.path
+        filepath = invoice.cloud_content_object.reload.path
 
         next unless File.exist?(filepath)
 
         if invoice.organization
-          filename = invoice.organization.name + ' - ' + invoice.period.start_date.strftime('%Y%m') + '.pdf'
-        elsif invoice.user
-          filename =  invoice.user.code + ' - ' + invoice.period.start_date.strftime('%Y%m') + '.pdf'
+          filename = invoice.organization.name.to_s + ' - ' + invoice.period_v2.to_s + '.pdf'
         else
           filename = File.basename(filepath)
         end
@@ -31,9 +29,11 @@ class Billing::InvoicesToZip
         FileUtils.cp(filepath, new_filepath)
       end
 
-      zip_path = File.join(dir, 'factures.zip')
-
-      system "zip -j #{zip_path} #{dir}/*"
+      # Finaly zip the temp
+      zip_file_name      = "factures.zip"
+      zip_path           = "#{dir}/#{zip_file_name}"
+      Dir.chdir dir
+      POSIX::Spawn.system "zip #{zip_file_name} *"
     end
 
     zip_path

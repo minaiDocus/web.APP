@@ -24,6 +24,7 @@ class DocumentsReloaded::AbaseController < FrontController #Must be loaded first
       if current_user.is_admin && user.organization.ibiza.try(:configured?) && user.uses?(:ibiza)
         options << ['XML (Ibiza)', 'xml_ibiza']
       end
+      options << ['TXT (Ciel)', 'txt_ciel']                    if user.uses?(:ciel) && ['IDOC', 'MCN'].include?( user.organization.try(:code) )
       options << ['TXT (Quadratus)', 'txt_quadratus']          if user.uses?(:quadratus)
       options << ['ZIP (Quadratus)', 'zip_quadratus']          if user.uses?(:quadratus)
       options << ['ZIP (Coala)', 'zip_coala']                  if user.uses?(:coala)
@@ -85,7 +86,7 @@ class DocumentsReloaded::AbaseController < FrontController #Must be loaded first
       end
     end
 
-    supported_format = %w[csv xml_ibiza txt_quadratus txt_cogilog zip_quadratus zip_coala xls_coala txt_fec_agiris txt_fec_acd csv_cegid tra_cegid]
+    supported_format = %w[csv xml_ibiza txt_quadratus txt_cogilog zip_quadratus zip_coala xls_coala txt_fec_agiris txt_fec_acd csv_cegid tra_cegid txt_ciel]
 
     if preseizures.any? && export_format.in?(supported_format)
       preseizures = preseizures.sort_by{|e| e.position }
@@ -153,7 +154,7 @@ class DocumentsReloaded::AbaseController < FrontController #Must be loaded first
   end
 
   def update_tags
-    UpdateMultipleTags.execute(@user, params[:tags], Array(params[:ids]), params[:type])
+    UpdateMultipleTags.execute(params[:user_id] || @user.id, params[:tags], Array(params[:ids]), params[:type])
 
     render json: {message: 'Tag mis à jours avec succès'}, status: :ok
   end

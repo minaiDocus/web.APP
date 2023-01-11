@@ -25,4 +25,18 @@ module Admin::SubscriptionsHelper
                                                        "popover_active #{css_class}"
                                                      end), data: { toggle: 'popover', placement: 'top', title: "#{customers&.size.to_i} dossier(s)", content: customers.try(:join, ' - ') })
   end
+
+  def period_list_options
+    periods = []
+
+    __period = CustomUtils.period_of(Time.now)
+    periods << ["#{__period.to_s[0..3]} - #{__period.to_s[4..5]}", __period]
+
+    11.times do |i|
+      __period = CustomUtils.period_operation(__period, -1)
+      periods << ["#{__period.to_s[0..3]} - #{__period.to_s[4..5]}", __period]
+    end
+
+    periods
+  end
 end

@@ -26,15 +26,20 @@ class Admin::Invoices::MainController < BackController
 
   # GET /admin/invoices/:id/download
   def download
-    if params['invoice_ids'].present?
+    if params['invoice_ids'].present? && params['invoice_ids'].size <= 20
       zip_path = Billing::InvoicesToZip.new(params['invoice_ids']).execute
 
       if File.exist?(zip_path)
-        send_file(zip_path, type: 'application/zip', filename: 'factures.zip', x_sendfile: true)
+        send_data(File.read(zip_path), type: 'application/zip', filename: 'factures.zip', x_sendfile: true, disposition: 'inline')
       else
+        flash[:error] = 'Aucune facture générée'
         redirect_to admin_invoices_index_path
       end
+    elsif params['invoice_ids'].size > 20
+      flash[:error] = 'Votre sélection dépasse le nombre maximum de fichiers téléchargeables recommandé (20 factures maximum).'
+      redirect_to admin_invoices_index_path
     else
+      flash[:error] = 'Aucune facture séléctionnée'
       redirect_to admin_invoices_index_path
     end
   end

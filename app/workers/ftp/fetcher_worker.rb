@@ -49,7 +49,7 @@ class Ftp::FetcherWorker
 
         ErrorScriptMailer.error_notification(log_document, { unlimited: true }).deliver
 
-        Ftp::Fetcher.delay_for(1.minute, queue: :high).prepare_dir
+        Ftp::Fetcher.prepare_dir
       else
         p "============ No new documents=================="
       end

@@ -335,6 +335,8 @@ fr:
         is_used: Activer l'option d'export des écritures comptables et pièces pour Fec Agiris?
       software_cogilog:
         is_used: Activer l'option d'export des écritures comptables et pièces pour Cogilog (.txt)?
+      software_cogilog:
+        is_used: Activer l'option d'export des écritures comptables et pièces pour Ciel (.txt)?
 
       account_number_rule:
         rule_target: Appliqué à

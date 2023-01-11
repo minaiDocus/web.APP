@@ -16,6 +16,8 @@ class PreseizureExport::PreseizureToTxt
         export_fec_acd
       when "cogilog"
         export_cogilog
+      when "ciel"
+        export_ciel
       when "fec_agiris"
         export_fec_agiris
       when "fec_agiris_facnote"
@@ -64,7 +66,7 @@ class PreseizureExport::PreseizureToTxt
         line[69..73]   = entry.account.lettering[0..4] if entry.account.lettering.present?
         line[74..78]   = preseizure.piece_number[0..4] if preseizure.piece_number.present?
         line[99..106]  = preseizure.piece_number[0..7] if preseizure.piece_number.present?
-        line[107..109] = 'EUR'
+        line[107..109] = CustomUtils.use_vats_2?(preseizure.organization.code) ? 'FRF' : 'EUR'
         line[110..112] = preseizure.journal_name[0..2] if preseizure.journal_name.size > 2
 
         if label.size > 20
@@ -582,6 +584,55 @@ class PreseizureExport::PreseizureToTxt
           if entry.amount
             data << [[journal_code, journal_lib, ecriture_num, ecriture_date, compte_num, compte_lib, comp_aux, comp_aux_lib, piece_ref, piece_date, ecriture_libc, debit_credit, ecriture_let, date_let, valid_date, montant_devise, idevise, mouvement_ecriture].join("|")]
           end
+        end
+      end
+    end
+
+    data.join("\n")
+  end
+
+  def export_ciel
+    data = []
+
+    if @preseizures.any?
+      ### HEADERS ####
+        data << "##Transfert"
+        data << "##Section\tDos"
+        data << "EUR"
+        data << "##Section\tMvt"
+      ### HEADERS ####
+
+      accounting_plan = @preseizures.first.user.accounting_plan
+
+      @preseizures.each_with_index do |preseizure, index|
+        user          = preseizure.user
+        journal_name  = preseizure.report.journal({name_only: false}).try(:name) || preseizure.journal_name
+        piece         = preseizure.piece
+
+        preseizure.accounts.each do |account|
+          entry   = account.entries.first
+
+          label   = preseizure.piece_number
+          label   = preseizure.operation_label[0..34].gsub("\t", ' ') if preseizure.operation_label.present?
+
+          line = []
+
+          third_party_name   = accounting_plan.customers.where(third_party_account: account.number).first.try(:third_party_name)
+          third_party_name ||= accounting_plan.providers.where(third_party_account: account.number).first.try(:third_party_name)
+
+          line << "\"#{index.to_s[0..4]}\""
+          line << "\"#{journal_name.to_s[0..1]}\""
+          line << "\"#{preseizure.date.strftime('%d/%m/%Y')}\""
+          line << "\"#{account.number.to_s[0..5]}\""
+          line << "\"#{third_party_name.to_s[0..10]}\""
+          line << "\"#{entry.amount.to_s[0..12]}\""
+          line << "#{entry.debit? ? 'D' : 'C'}"
+          line << "B"
+          line << "\"#{preseizure.third_party.to_s[0..10]}\""
+          line << "\"#{label.to_s[0..11]}\""
+          line << "\"10\""
+
+          data << line.join("\t")
         end
       end
     end

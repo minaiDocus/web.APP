@@ -20,17 +20,15 @@ class Organizations::MainController < OrganizationController
 
   # GET /account/organizations/:id/
   def show
-    @organization_statistic = SubscriptionStatistic.where(organization_id: @organization.id).last
-
+    date                   = Time.now.beginning_of_month
     @stat_customers_labels = []
     @stat_customers_values = []
-
-    date = Time.now.beginning_of_month
+    
     6.times do |i|
       date = date - 1.month
 
       @stat_customers_labels << date.strftime('%m/%Y')
-      @stat_customers_values << @organization.customers.active.where("DATE_FORMAT(created_at, '%Y%m') <= #{date.strftime('%Y%m')}").size
+      @stat_customers_values << @organization.customers.active_at(date).size
     end
     # @members = @organization.customers.page(params[:page]).per(params[:per])
     # @periods = Period.where(user_id: @organization.customers.pluck(:id)).where('start_date < ? AND end_date > ?', Date.today, Date.today).includes(:billings)
@@ -78,6 +76,44 @@ class Organizations::MainController < OrganizationController
     render json: { json_flash: json_flash }, status: 200
   end
 
+  def statistic
+    date      = Time.now.beginning_of_month
+    customers = @organization.customers.active_at(date)
+
+    @organization_statistic = { micro_package: 0, nano_package: 0, basic_package: 0, mail_package: 0, scan_box_package: 0, retriever_package: 0, mini_package: 0, idox_package: 0, digitize_package: 0, premium_package: 0 }
+
+    customers.each do |customer|
+      package = customer.my_package
+      next if not package
+
+      case package.name
+        when 'ido_classic'
+          @organization_statistic[:basic_package] += 1
+        when 'ido_nano'
+          @organization_statistic[:nano_package] += 1
+        when 'ido_x'
+          @organization_statistic[:idox_package] += 1
+        when 'ido_micro'
+          @organization_statistic[:micro_package] += 1
+        when 'ido_micro_plus'
+          @organization_statistic[:micro_package] += 1
+        when 'ido_retriever'
+          @organization_statistic[:retriever_package] += 1
+        when 'ido_digitize'
+          @organization_statistic[:digitize_package] += 1
+        when 'ido_premium'
+          @organization_statistic[:premium_package] += 1
+        end
+
+        @organization_statistic[:mail_package] += 1       if package.mail_active
+        @organization_statistic[:retriever_package] += 1  if package.bank_active && package.name != 'ido_retriever'
+        @organization_statistic[:digitize_package] += 1   if package.digitize_active && package.name != 'ido_digitize'
+    end
+
+
+    render partial: 'statistic'
+  end
+
   # PUT /account/organizations/:id/activate
   def activate
     @organization.update_attribute(:is_active, true)
@@ -103,7 +139,7 @@ class Organizations::MainController < OrganizationController
       authorized = false
       if current_user.is_admin && action_name.in?(%w[index edit_options update_options edit_software_users update_software_users new create suspend unsuspend])
         authorized = true
-      elsif action_name.in?(%w[show]) && @user.is_prescriber
+      elsif action_name.in?(%w[show statistic]) && @user.is_prescriber
         authorized = true
       elsif action_name.in?(%w[edit update edit_software_users update_software_users]) && @user.leader?
         authorized = true

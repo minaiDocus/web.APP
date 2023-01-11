@@ -388,6 +388,7 @@ class Customers::MainController < CustomerController
       { sage_gec_attributes: %i[id is_used auto_deliver sage_private_api_uuid] },
       { acd_attributes: %i[id is_used auto_deliver code] },
       { coala_attributes: %i[id is_used auto_deliver internal_id] },
+      { ciel_attributes: %i[id is_used auto_deliver] },
       { fec_agiris_attributes: %i[id is_used auto_deliver] },
       { fec_acd_attributes: %i[id is_used auto_deliver] },
       { cegid_attributes: %i[id is_used auto_deliver] },

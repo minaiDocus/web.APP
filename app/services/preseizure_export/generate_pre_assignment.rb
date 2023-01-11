@@ -37,6 +37,10 @@ class PreseizureExport::GeneratePreAssignment
     @report.user.uses?(:cogilog) && @report.user.try(:cogilog).try(:auto_deliver?)
   end
 
+  def valid_ciel?
+    @report.user.uses?(:ciel) && @report.user.try(:ciel).try(:auto_deliver?)
+  end
+
   def execute
     ##NOTE : There is no need to generate export automaticly from now
     return false
@@ -167,6 +171,12 @@ class PreseizureExport::GeneratePreAssignment
 
         generate_cogilog_export
       end
+    when 'txt_ciel'
+      if user.uses?(:ciel)
+        create_pre_assignment_export_for('ciel')
+
+        generate_ciel_export
+      end
     end
 
     @export
@@ -221,7 +231,6 @@ private
       @export.got_error e
     end
   end
-
 
   # NO TIMESTAMPS FOR CEGID TRA
   def generate_cegid_tra_export(with_file = true)
@@ -323,6 +332,18 @@ private
       FileUtils.mv file_txt, "#{file_path}/#{final_file_name}"
       @export.got_success "#{final_file_name}"
 
+    rescue => e
+      @export.got_error e
+    end
+  end
+
+  def generate_ciel_export
+    begin
+      file_txt = PreseizureExport::Software::Ciel.new(@preseizures).execute
+
+      final_file_name = "#{file_real_name}.txt"
+      FileUtils.mv file_txt, "#{file_path}/#{final_file_name}"
+      @export.got_success "#{final_file_name}"
     rescue => e
       @export.got_error e
     end

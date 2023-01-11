@@ -1,18 +1,19 @@
 # Update Document tags
 module UpdateMultipleTags
   def self.execute(user_id, tags, document_ids, type = 'piece')
-    sub = []
+    substract = []
     add = []
     user = User.find user_id
     user = Collaborator.new(user) if user.is_prescriber
 
-    tags.downcase.split.each do |tag|
+    tags.downcase.split("#").each do |tag|
       next unless tag =~ /-*\w*/
 
-      if tag[0] == '-'
-        sub << tag.sub('-', '').sub('*', '.*')
+      if tag.strip[0] == '-'
+        substract << tag.strip.sub('-', '').sub('*', '.*')
+      elsif tag == ""
       else
-        add << tag
+        add << tag.strip
       end
     end
 
@@ -31,7 +32,7 @@ module UpdateMultipleTags
       next unless document && (doc_user == user ||
                   (user.is_prescriber && user.customers.include?(doc_user)) || user.is_admin)
 
-      sub.each do |s|
+      substract.each do |s|
         tags = document.tags || []
 
         document.tags.each do |tag|
@@ -40,7 +41,6 @@ module UpdateMultipleTags
 
         document.tags = tags
       end
-
       document.tags = (document.tags || []) + add if add.any?
 
       document.save

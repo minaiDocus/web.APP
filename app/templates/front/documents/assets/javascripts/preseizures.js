@@ -111,8 +111,8 @@ class DocumentsPreseizures{
 
   edit_entry_account(elem){
     let me = this;
-    let id = elem.parents('table.entries').attr('data-preseizure-id');
-    let account_id = elem.parents("tr").find('.account_id_hidden').val();
+    let id = elem.closest('table.entries').attr('data-preseizure-id');
+    let account_id = elem.closest("tr").find('.account_id_hidden').val();
     let edit_content     = elem.parent('td').find('.edit_account');    
     let content_account  = elem;
     let input            = edit_content.find('.edit_account_number');
@@ -148,7 +148,7 @@ class DocumentsPreseizures{
 
   edit_entry_amount(elem){
     let me = this;
-    let id = elem.parents('table.entries').attr('data-preseizure-id');
+    let id = elem.closest('table.entries').attr('data-preseizure-id');
     let edit_content    = elem.parent().find('.edit_amount');
     let content_amount  = elem;
     let input           = edit_content.find('input').first();
@@ -163,7 +163,7 @@ class DocumentsPreseizures{
 
         if(current_value != new_value)
         {
-          var account_id = $(el).parents("tr").find('.entry_id_hidden').val();          
+          var account_id = $(el).closest("tr").find('.entry_id_hidden').val();          
           me.update_entry_amount(account_id, new_value, "entry", id);
         }
       }
@@ -177,9 +177,9 @@ class DocumentsPreseizures{
   }
 
   change_entry_type(elem){
-    let id = elem.parents('table.entries').attr('data-preseizure-id');
-    let entry_type = elem.parents('td').find('.entry_type').val();
-    let account_id = elem.parents("tr").find('.entry_id_hidden').val();    
+    let id = elem.closest('table.entries').attr('data-preseizure-id');
+    let entry_type = elem.closest('td').find('.entry_type').val();
+    let account_id = elem.closest("tr").find('.entry_id_hidden').val();    
 
     this.update_entry_amount(account_id, (entry_type == 1)? 2 : 1, "change_type", id);
   }

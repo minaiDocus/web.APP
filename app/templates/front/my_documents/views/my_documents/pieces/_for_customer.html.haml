@@ -1,8 +1,8 @@
 .container-fluid.main-content
-  .row.derivationLeft
+  .row.derivationLeft.pb-0
     .col-md-2
       - if @user.still_active? && @user.authorized_upload?
-        %button.btn.btn-dark.add-document.w-100.semibold.mb-5
+        %button.btn.btn-dark.add-document.w-100.semibold.mb-3
           %span.me-2.blink= glyphicon('plus', { size: '40', color: '#fff', style: "background-color:#C0E133; border-radius:50%; padding: 10px;"})
           %span.blink Ajouter des documents
       
