@@ -53,13 +53,9 @@ module AcdLib
       @acd.code            = @params[:code] if @params[:code].present?
       @acd.username        = @params[:username] if @params[:username].present?
       @acd.password        = @params[:password] if @params[:password].present?
+      @acd.url              = @params[:url] if @params[:url].present?
 
       @acd.save!
-    end
-
-
-    def client
-      @client ||= AcdLib::Api::Client.new(@api_token)
     end
   end
 

@@ -12,7 +12,7 @@ module AcdLib
 
       company_code = @delivery.user.acd&.code
 
-      client = AcdLib::Api::Client.new(organization_acd.username, organization_acd.password)
+      client = AcdLib::Api::Client.new(organization_acd.username, organization_acd.password, organization_acd.url)
 
       retry_count = 0
       preseizure = @delivery.preseizures.first

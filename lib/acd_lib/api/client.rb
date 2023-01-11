@@ -1,13 +1,10 @@
 module AcdLib
   module Api
     class Client
-      attr_accessor :request, :settings
+      attr_accessor :request
 
-      def initialize(username, password)
-        @settings = {
-                      base_url: AcdLib::Api::Util.config.base_url,
-                    }
-
+      def initialize(username, password, url)
+        @url      = url
         @username = username
         @password = password
         @token = access_token
@@ -44,7 +41,7 @@ module AcdLib
 
         path = "#{base_path}/ged/documents"
 
-        connection = Faraday.new(@settings[:base_url]) do |faraday|
+        connection = Faraday.new(@url) do |faraday|
           faraday.request :multipart
           faraday.response :logger
           faraday.adapter Faraday.default_adapter
@@ -79,7 +76,7 @@ module AcdLib
       private
 
       def access_token
-        connection = Faraday.new(@settings[:base_url]) do |faraday|
+        connection = Faraday.new(@url) do |faraday|
           faraday.response :logger
           faraday.adapter Faraday.default_adapter
           faraday.headers['Accept'] = "application/json"
@@ -113,7 +110,7 @@ module AcdLib
       end
 
       def connection
-        @connection = Faraday.new(@settings[:base_url]) do |faraday|
+        @connection = Faraday.new(@url) do |faraday|
           faraday.response :logger
           faraday.adapter Faraday.default_adapter
           faraday.headers['UUID'] = @token

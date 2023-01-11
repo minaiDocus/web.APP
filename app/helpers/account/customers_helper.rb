@@ -37,7 +37,7 @@ module Account::CustomersHelper
   end
 
   def acd_companies_list_options_for_select(organization)
-    companies = AcdLib::Api::Client.new(organization.acd.username, organization.acd.password).get_companies_list
+    companies = AcdLib::Api::Client.new(organization.acd.username, organization.acd.password, organization.acd.url).get_companies_list
 
     if companies[:status] == "success"
       companies[:body].map { |c| [c['Nom'], c['Code']] }
