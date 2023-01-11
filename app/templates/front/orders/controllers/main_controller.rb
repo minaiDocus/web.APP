@@ -120,9 +120,9 @@ class Orders::MainController < CustomerController
     authorized = true
     authorized = false unless @user.leader? || @user.manage_customers
     authorized = false unless @customer.active?
-    unless @customer.is_package?('mail_active') || @customer.my_package.try(:scan_active)
-      authorized = false
-    end
+    # unless @customer.is_package?('mail_active') || @customer.my_package.try(:scan_active)
+    #   authorized = false
+    # end
 
     if action_name.in?(%w[new create])
       if !params[:order].present?
