@@ -620,16 +620,16 @@ class PreseizureExport::PreseizureToTxt
           third_party_name   = accounting_plan.customers.where(third_party_account: account.number).first.try(:third_party_name)
           third_party_name ||= accounting_plan.providers.where(third_party_account: account.number).first.try(:third_party_name)
 
-          line << "\"#{index.to_s}\""
-          line << "\"#{journal_name.to_s}\""
+          line << "\"#{index.to_s[0..4]}\""
+          line << "\"#{journal_name.to_s[0..1]}\""
           line << "\"#{preseizure.date.strftime('%d/%m/%Y')}\""
-          line << "\"#{account.number.to_s}\""
-          line << "\"#{third_party_name.to_s}\""
-          line << "\"#{entry.amount.to_s}\""
+          line << "\"#{account.number.to_s[0..5]}\""
+          line << "\"#{third_party_name.to_s[0..10]}\""
+          line << "\"#{entry.amount.to_s[0..12]}\""
           line << "#{entry.debit? ? 'D' : 'C'}"
           line << "B"
-          line << "\"#{preseizure.third_party.to_s}\""
-          line << "\"#{label.to_s}\""
+          line << "\"#{preseizure.third_party.to_s[0..10]}\""
+          line << "\"#{label.to_s[0..11]}\""
           line << "\"10\""
 
           data << line.join("\t")
