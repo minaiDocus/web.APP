@@ -24,29 +24,41 @@ module AcdLib
       end
 
       def select_company(code)
-        path = "#{base_path}/sessions/dossier"
-
-        data = {
-          code: code,
-          UUID: @token,
-          CNX: 'CNX'
-        }.to_json
+        path = "#{base_path}/sessions/dossier/#{code}"
 
         @response = connection.post do |request|
           request.url path
-          request.body data
         end
 
         json_parse
       end
 
-      def store_file(payload)
+      def store_file(code, payload)
+        company_path = "#{base_path}/sessions/dossier/#{code}"
+
+        @company_response = connection.post do |request|
+          request.url company_path
+        end
+
+        Rails.logger.debug(@company_response.body)
+
         path = "#{base_path}/ged/documents"
+
+        connection = Faraday.new(@settings[:base_url]) do |faraday|
+          faraday.request :multipart
+          faraday.response :logger
+          faraday.adapter Faraday.default_adapter
+          faraday.headers['UUID'] = @token
+          faraday.headers['CNX'] = 'CNX'
+        end
 
         @response = connection.post do |request|
           request.url path
-          request.body payload.to_json
+          request.headers["Content-Type"] = "multipart/form-data"
+          request.body = payload
         end
+
+        Rails.logger.debug(@response.body)
 
         json_parse
       end
@@ -56,8 +68,10 @@ module AcdLib
 
         @response = connection.post do |request|
           request.url path
-          request.body payload.to_json
+          request.body = payload.to_json
         end
+
+        Rails.logger.debug(@response.body)
 
         json_parse
       end

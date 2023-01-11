@@ -8,11 +8,11 @@ module AcdLib
     def execute(json_data)
       data = JSON.parse(json_data)
 
-      client = AcdLib::Api::Client.new
+      organization_acd = @delivery.user.organization.acd
 
       company_code = @delivery.user.acd&.code
 
-      client.set_company(company_code)
+      client = AcdLib::Api::Client.new(organization_acd.username, organization_acd.password)
 
       retry_count = 0
       preseizure = @delivery.preseizures.first
@@ -29,7 +29,7 @@ module AcdLib
           attachment_data["idArboged"] = 0
           attachment_data["file"] = Faraday::UploadIO.new(StringIO.new(File.read(file_path)), preseizure.piece.cloud_content.content_type, "#{preseizure.coala_piece_name}.pdf")
 
-          file = client.store_file(attachment_data)
+          file = client.store_file(company_code, attachment_data)
           data["referenceGED"] = file[:body]["id"]
         else
           data["referenceGED"] = ""
@@ -43,18 +43,15 @@ module AcdLib
           raise e
         end
       end
-      
 
-      if period
-        response = client.send_pre_assignment(data)
+      client.select_company(company_code)
 
-        if response[:status] == "error"
-          { success: false, error: response[:body].try(:[], 'listeErreurs') || 'Unknown error ...' }
-        else
-          { success: true, response: response }
-        end
+      response = client.send_pre_assignment(data)
+
+      if response[:status] == "error"
+        { success: false, error: response[:body].try(:[], 'listeErreurs') || 'Unknown error ...' }
       else
-        { error: "Erreur de communication avec l'API ACD" }
+        { success: true, response: response }
       end
     end
   end

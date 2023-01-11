@@ -64,10 +64,10 @@ module AcdLib
                       "referenceGed" => "" }
         end
 
-        data = {'journal' => ledger_code, 'mois' => preseizure.date.month, 'annee' => preseizure.date.year, "referenceGed" => nil, 'lignesEcriture' => __data }.to_json
+        @data = {'journal' => ledger_code, 'mois' => preseizure.date.month, 'annee' => preseizure.date.year, "referenceGed" => nil, 'lignesEcriture' => __data }.to_json
       end
 
-      data
+      @data
     end
 
     def full_error_messages
