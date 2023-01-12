@@ -449,6 +449,9 @@ module BillingMod
       if @invoice.organization.vat_identifier && !@invoice.organization.subject_to_vat
         @pdf.move_down 7
         @pdf.text 'Auto-liquidation par le preneur - Art 283-2 du CGI'
+      elsif !@invoice.organization.vat_identifier && !@invoice.organization.subject_to_vat
+        @pdf.move_down 7
+        @pdf.text 'Exonération de TVA - Art 262-I du CGI'
       end
 
       @pdf.move_down 7
