@@ -7,6 +7,7 @@
         Reporting de l'année
         %span.badge.bg-dark= @year
     .col-md-6.text-end
+      #show-export-xls-link
       = link_to image_tag('application/icon-xls-admin.png', alt: 'Export xls', class: 'generate-export-xls', style: 'position:relative;top:-2px;') + ' Export XLS', "/admin/reporting/#{@year}.xls", class: "btn btn-primary download-export_xls"
       = link_to image_tag('application/icon-xls-admin.png', alt: 'Export xls simplifié', class: 'generate-export-xls', style: 'position:relative;top:-2px;') + ' Export XLS simplifié', "/admin/reporting/#{@year}.xls?simplified=1", class: "btn btn-dark download-export_xls simplified_xls"
 

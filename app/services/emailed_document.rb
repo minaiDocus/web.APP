@@ -292,10 +292,8 @@ class EmailedDocument
       pattern      = full_subject.split(' ')[0]
 
       journal   = user.account_book_types.where(name: pattern)
-      journal ||= user.account_book_types.where("label LIKE '%#{pattern}%'")
       journal ||= user.account_book_types.where("description LIKE '%#{pattern}%'")
 
-      journal = user.account_book_types.where("label LIKE '%#{full_subject}%'")       if journal.size != 1
       journal = user.account_book_types.where("description LIKE '%#{full_subject}%'") if journal.size != 1
 
       return nil if journal.size != 1

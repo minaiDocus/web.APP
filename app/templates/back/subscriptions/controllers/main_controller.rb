@@ -36,7 +36,7 @@ class Admin::Subscriptions::MainController < BackController
   private
 
   def concerned_organization_ids
-    Organization.client.active.order(code: :asc).pluck(:id)
+    Organization.billed.order(code: :asc).pluck(:id)
   end
 
   def packages_list
@@ -93,18 +93,18 @@ class Admin::Subscriptions::MainController < BackController
     @counts       = {}
 
     @accounts_ids = @organization.customers.active_at(@date.end_of_month).pluck(:id)
-    packages      = BillingMod::Package.where(user_id: @accounts_ids, period: @period)
+    @packages     = BillingMod::Package.where(user_id: @accounts_ids, period: @period)
 
     packages_list.each do |package|
       if package == 'ido_micro'
-        @counts[:ido_micro] = packages.where(name: ['ido_micro', 'ido_micro_plus']).count
+        @counts[:ido_micro] = @packages.where(name: ['ido_micro', 'ido_micro_plus']).count
       else
-        @counts[package.to_sym] = packages.where(name: package).count
+        @counts[package.to_sym] = @packages.where(name: package).count
       end
     end
 
     options_list.each do |option|
-      @counts[option.to_sym] = packages.where("#{option} = true").count
+      @counts[option.to_sym] = @packages.where("#{option} = true").count
     end
   end
 end

@@ -16,6 +16,6 @@
   %td.options.scan_active= link_to @counts[:scan_active].to_i, "#", class: 'do-showAccounts', title: "Numériser", type: "digitize_package", org_id: @organization.id
   %td.options.bank_active= link_to @counts[:bank_active].to_i, "#", class: 'do-showAccounts', title: "Forfait automates", type: "retriever_package", org_id: @organization.id
 
-  %td.clients.active= @accounts_ids.size
+  %td.clients.active= @packages.size
   %td.clients.new= @organization.customers.active_at(@date.end_of_month).where("DATE_FORMAT(created_at, '%Y%m') = #{@period}").count
   %td.clients.closed= @organization.customers.closed.where('created_at < ?', @date.end_of_month).count
