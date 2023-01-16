@@ -51,13 +51,19 @@ class MyDocumentsCustomer{
 
                             $('select#file_code_customer').val($('#customer_code').val()).trigger("chosen:updated");
                             $('select#file_code_customer').change();
+
+                            $('input.input-tag').tagsinput('refresh');
                           }
                           else{
                             $('#table_pieces').html($(e).find("#table_pieces").html());
+
+                            $('input.input-tag').tagsinput('refresh');
+                            if (serialize_form){
+                              $('.trigge').first().trigger();
+                            }
                           }
 
                           $('select#l_journal').val(journal_id).trigger("chosen:updated");
-
                           bind_all_events();
                           this.action_locker = false;
                         })

@@ -207,7 +207,7 @@ class Pack::Piece < ApplicationRecord
     query = query.merge(Pack::Report::Preseizure.exported)           if options[:is_delivered].present? && options[:is_delivered].to_i == 4
     query = query.merge(Pack::Report::Preseizure.not_exported)       if options[:is_delivered].present? && options[:is_delivered].to_i == 5
 
-    query = query.where("pack_report_preseizures.cached_amount #{options[:amount_operation].tr('012', ' ><')}= ?", options[:amount]) if options[:amount].present?
+    query = query.where("pack_report_preseizures.cached_amount #{options[:amount_operation].tr('012', ' ><')}= ?", options[:amount].tr(',','.')) if options[:amount].present?
     query = query.where("pack_report_preseizures.delivery_tried_at BETWEEN '#{CustomUtils.parse_date_range_of(options[:delivery_tried_at]).join("' AND '")}'")  if options[:delivery_tried_at].present?
 
     options[:per_page].present? ? query.page(options[:page].presence || 1).per(options[:per_page]) : query

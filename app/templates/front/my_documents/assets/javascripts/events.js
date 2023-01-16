@@ -40,11 +40,36 @@ function bind_all_events(){
   });
 
   $('.popup-info-rubric').mouseover(function(e) {
-    console.log('QKHSJKHQSdfqdf')
     $('.info-rubric-content').removeClass('hide') 
   }).mouseout(function(e) {
     $('.info-rubric-content').addClass('hide') 
   });
+
+
+  $('input.input-tag').on('beforeItemAdd', function(event) {
+    event.stopPropagation();
+    AppEmit('new_update_tags', { piece_id: $(this).data('id'), tags: event.item, type: "piece" });
+  });
+
+  $('input.input-tag').on('beforeItemRemove', function(event) {
+    event.stopPropagation();
+    AppEmit('new_update_tags', { piece_id: $(this).data('id'), tags: '-' + event.item, type: "piece" });
+  });
+
+
+  $('#add-document.modal .btn-close.upload').unbind('click').bind('click',function(e) {
+    e.stopPropagation();
+
+    if ($('.template-upload').length > 0){
+      $('#add-document.modal .info').show('');
+
+      setTimeout(function(){ $('#add-document.modal .info').hide(''); }, 5000);
+    }else{
+      $('#add-document.modal').modal('hide');
+    }
+  });
+
+
 
   $('#customer_document_filter').unbind('change.mix_journal').bind('change.mix_journal', function(e){
     if ($('.user_and_journals').length > 0){

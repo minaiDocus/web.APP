@@ -173,6 +173,7 @@ class MyDocuments::PiecesController < MyDocuments::AbaseController
 
     @pieces = Pack::Piece.with_preseizures(user_ids, @options).where("DATE_FORMAT(pack_pieces.updated_at, '%Y%m') >= #{2.years.ago.strftime('%Y%m')}").distinct.order("#{sort_column} #{sort_direction}")
 
+    @temp_documents = TempDocument.where(user_id: user_ids).where("DATE_FORMAT(temp_documents.updated_at, '%Y%m') >= #{6.month.ago.strftime('%Y%m')}").not_published
     @total_pieces = @pieces.size
 
     @result_per_journal = {}

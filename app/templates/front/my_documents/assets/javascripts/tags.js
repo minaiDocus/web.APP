@@ -34,28 +34,22 @@ class MyDocumentsTags{
     });
   }
 
-  update_tags(elem){
-    let new_tags = this.tags_modal.find('.tag_reloaded_content #selectionsTags').val();
+  update_tags(ids_tag, tags, type_tags){
+    let new_tags = tags || this.tags_modal.find('.tag_reloaded_content #selectionsTags').val();
 
     let user_id = $('select#customers').val();
+
+    let type = type_tags || this.type
+    let ids  = ids_tag || this.ids
 
     let params =  {
                     'url': '/my_documents/tags/update',
                     'type': 'POST',
-                    'data': { type: this.type, ids: this.ids, tags: new_tags, user_id: user_id },
+                    'data': { type: type, ids: ids, tags: new_tags, user_id: user_id },
                     'dataType': 'json'
                   }
 
-    this.applicationJS.sendRequest(params).then((e)=>{
-      if ($('#hidden-journal-id').length > 0){
-        AppEmit('load_rubric');
-      }
-      else{
-        window.location.replace(window.location.href);
-      }
-      this.applicationJS.noticeSuccessMessageFrom(null, e.message);  });
-
-    this.tags_modal.modal('hide');
+    this.applicationJS.sendRequest(params);
   }
 
   delete_tag(elem){
@@ -76,6 +70,8 @@ jQuery(function() {
   let main = new MyDocumentsTags();
 
   AppListenTo('documents_update_tags', (e)=>{ main.show_tags($(e.detail.obj)); });
+
+  AppListenTo('new_update_tags', (e)=>{ main.update_tags(e.detail.piece_id, e.detail.tags, e.detail.type) });
 
   $('#tags.modal #add_tags').unbind('click').bind('click', function(e){ main.update_tags() });
 

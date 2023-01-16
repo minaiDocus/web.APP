@@ -3,6 +3,11 @@
 .row#table_pieces
   .col-md-2
     - if @user.still_active? && @user.authorized_upload?
+      %button.btn.btn-dark.add-document.w-100.semibold.mb-3
+        %span.me-2= glyphicon('plus', { size: '40', color: '#fff', style: "background-color:#C0E133; border-radius:50%; padding: 10px;"})
+        %span Ajouter des documents
+
+    - if @user.still_active? && @user.authorized_upload?
       .mb-4.bg-white.text-center.text-muted.p-1
         %i
           ou envoyer vos documents par mail à : 
@@ -15,11 +20,14 @@
       %ul.principal.p-0
         - @journals.each_with_index do |journal, index|
           %li.direct_links
-            %a.rubric{ href: "#", data: { id: journal.id } }
+            %a.rubric{ href: "#", class: "#{@result_per_journal[journal.try(:name).to_sym].to_i > 0 ? 'trigge' : ''}" , data: { id: journal.id } }
               %span.badge.bg-secondary.float-end.count_journal{ data: { jl_name: journal.try(:name) }}= @result_per_journal[journal.try(:name).to_sym].presence || 0
               %span.link_principal{ class: (journal.id.to_i == params[:journal_id].to_i) ? 'active' : ''}= journal.full_name
                           
-
+        %hr
+        %li.processing-piece
+          %span.badge.bg-dark.float-end= @temp_documents.count || 0
+          %span Piece en cours de traitement
         %li.input-add-rubric.hide
           %hr
           = render file: Rails.root.join('app/templates/front/journals/views/journals/main/_rubric_form.html.haml'), locals: { organization_id: @user.organization_id }
@@ -89,14 +97,7 @@
               %th= sortable 'pack_report_preseizures.date', "Date"
               %th= sortable 'pack_report_preseizures.piece_number', "N° de facture"
               %th= sortable 'pack_report_preseizures.cached_amount', "Montant TTC"
-              %th
-                %span.popup-info-tag
-                  = glyphicon('info', { color: 'black', size: 10 })
-                %span Tags
-                .info-tag-content.hide
-                  Utilisez l'exemple ci-dessous pour taguer vos documents :
-                  .text-muted.tag-exemple.mt-3 #idocus #factures fournisseurs #Voyage à Paris
-              %th.text-end Action
+              %th.text-center Tags
             %tbody
               - @pieces.each do |piece|
                 - preseizure             = piece.preseizures.first
@@ -117,15 +118,7 @@
                   %td.pointer.show-detail{ title: 'Voir détail', data: { content_url: piece.get_access_url, piece_id: piece.id }}
                     = [preseizure.try(:amount_ttc).to_s, ''].uniq.join(' €').presence || ""
                   %td
-                    - piece.get_tags.split('-').each do |tag|              
-                      %span.badge.bg-dark= '#' + tag.strip
-                  %td.text-end.pointer.align-middle
-                    .action.sub_edit_delete.list-collaborators
-                      %span.glyph= glyphicon('ellipses', { size: '15', color: 'gba(26, 26, 26, 0.7)', style: 'transform: rotate(90deg)'})
-                    .sub_menu.text-start.hide
-                      %ul.no-margin.no-padding.regular
-                        %li.edit-tags
-                          = link_to glyphicon('pencil', { size: '15', color: 'rgba(26, 26, 26, 0.7);'}) + ' Editer les tags', '#', class: 'link update_tags', data: { id: piece.id, type: 'piece' }
+                    %input.form-control.input-tag.w-100{ value: piece.get_tags.split(' - ').join(','), data: { id: "#{piece.id}", role: "tagsinput"},  "aria-describedby" => "basic-addon1"}
 
           = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: my_documents_path, target: '#table_pieces', total_pages: @pieces.total_pages, filter: 'customer_filter_form' }
 

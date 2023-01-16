@@ -104,6 +104,19 @@ span.count_journal{
   font-size: 13px;
 }
 
+.bootstrap-tagsinput{
+  width: 100%;
+}
+
+.tag.label {
+  padding: 0.2rem;
+  font-size: 11px;
+  border-radius: 3px;
+  color: white;
+  background-color: #000;
+  font-weight: bold;
+}
+
 .striped{
   background: rgba(26, 26, 26, 0.04);
 }

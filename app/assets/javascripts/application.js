@@ -33,6 +33,7 @@
 //= require daterangepicker
 //= require custom_popover
 //= require app_listener
+//= require bootstrap-tagsinput
 
 /********** GLOBAL VARIABLES ********/
   var GLOBAL = {}

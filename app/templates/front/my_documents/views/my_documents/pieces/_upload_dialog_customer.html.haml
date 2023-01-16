@@ -1,11 +1,15 @@
-#add-document.modal.fade.in{'aria-hidden' => 'true', :role => 'dialog', :tabindex => '-1'}
+#add-document.modal.fade.in{'aria-hidden' => 'true', :role => 'dialog', :tabindex => '-1', data: { 'bs-backdrop': "static" } }
   .modal-dialog
     .modal-content
       %form#fileupload{ action: '/my_documents/uploader', method: 'POST', enctype: 'multipart/form-data', data: { params: file_upload_params.to_json } }
         .modal-header
           %h5.modal-title.bold Ajouter des documents
-          %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
+          %button.btn-close.upload{'aria-label' => 'Close', :type => 'button'}
         .modal-body
+          .alert.alert-danger.info.hide
+            %label.semibold La fenêtre ne peut pas être fermer car il y a des fichiers encours de téléversement. 
+            %br
+            %label.semibold Veuillez annuler les téléversements si vous voulez vraiment fermer. 
           = hidden_field_tag :for_customer, 1
           - if @users.size > 1
             .form-group
@@ -26,14 +30,7 @@
           .form-group
             %label.italic Créer des tags
             .select-container.no-padding.no-margin.w-100
-              = text_field_tag :tags, '', id: :tags, class: 'text_field', placeholder: "#tag"
-
-            .bg-white
-              .mt-2            
-              %i
-                Pour ajouter plusieurs tags à ce(s) document(s), separez les par des #.
-                %br
-                Exemple: #idocus #factures fournisseurs #Voyage à Paris
+              = text_field_tag :tags, '', id: :tags, data: { role: "tagsinput"}
 
           .hidden_analytic_fields
           .analytic_resume_box
@@ -60,7 +57,7 @@
               %table.table.table-striped{ role: "presentation" }
                 %tbody.files{ data: { toggle: "modal-gallery", target: "#modal-gallery" } }
             .modal-footer
-              %button.btn.btn-light.semibold.cancel{:type => 'button', 'data-bs-dismiss' => 'modal'} Annuler
+              %button.btn.btn-light.semibold.cancel{ :type => 'button' } Effacer les fichiers
               %button.btn.btn-primary.semibold.btn-add.start{:type => 'button', id: 'launch-filter'} Démarrer
 
         :plain

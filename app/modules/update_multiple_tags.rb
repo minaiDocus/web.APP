@@ -41,7 +41,9 @@ module UpdateMultipleTags
 
         document.tags = tags
       end
-      document.tags = (document.tags || []) + add if add.any?
+
+      add_tags      = add.any? ? (document.tags || []) + add : (document.tags || [])
+      document.tags = add_tags.uniq
 
       document.save
     end
