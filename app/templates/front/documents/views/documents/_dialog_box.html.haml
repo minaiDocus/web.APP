@@ -55,6 +55,10 @@
                   %input.form-control.value-content.date.daterange#invoice-date{ type: :text, name: 'by_preseizure[date]', value: (@options[:by_preseizure][:pre_assignment_date] rescue nil)}
                   %span.show-calendar.input-group-text-right{ data: { ref: 'invoice-date' } }= glyphicon('chevron-bottom', { size: '12', color: 'background: rgba(26, 26, 26, 0.7)' })
               .form-group
+                %label Devise original
+                = select_tag 'by_preseizure[devise_original]', options_for_select([['Oui', 1], ['Non', 0]]), include_blank: true, class: 'form-select', id: 'devise'
+
+              .form-group
                 %label Montant
                 .row
                   .col-md-4.compare-choice

@@ -52,6 +52,9 @@ class Pack::Report::Preseizure < ApplicationRecord
     preseizures = preseizures.where("pack_report_preseizures.created_at BETWEEN '#{CustomUtils.parse_date_range_of(contains[:created_at]).join("' AND '")}'") if contains[:created_at].present?
     preseizures = preseizures.where("pack_report_preseizures.date BETWEEN '#{CustomUtils.parse_date_range_of(contains[:date]).join("' AND '")}'")             if contains[:date].present?
 
+    preseizures = preseizures.where("pack_report_preseizures.currency = pack_report_preseizures.unit") if options[:devise_original].present? && options[:devise_original].to_i == 1
+    preseizures = preseizures.where("pack_report_preseizures.currency <> pack_report_preseizures.unit") if options[:devise_original].present? && options[:devise_original].to_i == 0
+    
     preseizures.distinct
   end
 
@@ -76,6 +79,9 @@ class Pack::Report::Preseizure < ApplicationRecord
 
     preseizures = preseizures.where(piece_number: options[:piece_number])                                       if options[:piece_number].present?
     preseizures = preseizures.where('pack_report_preseizures.third_party LIKE ?', "%#{options[:third_party]}%") if options[:third_party].present?
+
+    preseizures = preseizures.where("pack_report_preseizures.currency = pack_report_preseizures.unit") if options[:devise_original].present? && options[:devise_original].to_i == 1
+    preseizures = preseizures.where("pack_report_preseizures.currency <> pack_report_preseizures.unit") if options[:devise_original].present? && options[:devise_original].to_i == 0
 
     preseizures.distinct
   end
