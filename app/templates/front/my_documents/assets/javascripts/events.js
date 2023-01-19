@@ -161,6 +161,7 @@ function bind_all_events(){
 
   $('li.direct_links .rubric').unbind('click').bind('click',function(e) {
     e.preventDefault();
+
     $('li.direct_links .rubric .link_principal').removeClass('active');
     $(this).find('.link_principal').addClass('active');
     $('#hidden-journal-id').val($(this).data('id'));

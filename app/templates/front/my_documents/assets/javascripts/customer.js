@@ -44,7 +44,8 @@ class MyDocumentsCustomer{
 
     this.applicationJS.sendRequest(this.ajax_params, function(){ $('#more-filter.modal').modal('hide'); })
                        .then((e)=>{
-                          if (load_customer){
+                          if (load_customer)
+                          {
                             $(".customer-document-content").html($(e).find(".customer-document-content").html());
 
                             $("#hidden-journal-id").val($('.rubric').first().data('id'));
@@ -53,16 +54,19 @@ class MyDocumentsCustomer{
                             $('select#file_code_customer').val($('#customer_code').val()).trigger("chosen:updated");
                             $('select#file_code_customer').change();
                           }
-                          else{
+                          else
+                          {
                             $('#table_pieces').html($(e).find("#table_pieces").html());
-
-                            if (serialize_form){
-                              $('.trigge').first().trigger();
-                            }
                           }
 
                           $('select#l_journal').val(journal_id).trigger("chosen:updated");
                           bind_all_events();
+
+                          if(serialize_form && $('.rubric.trigge span.link_principal.active').length == 0)
+                          {
+                            setTimeout((e)=>{ $('.rubric.trigge:first').click(); }, 500);
+                          }
+
                           this.action_locker = false;
                         })
                        .catch(()=>{ this.action_locker = false; });
