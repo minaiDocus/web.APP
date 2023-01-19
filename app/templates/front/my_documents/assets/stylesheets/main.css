@@ -92,6 +92,9 @@ span.count_journal{
   margin-top: 1.5%;
 }
 
+.neg-mt-2{
+  margin-top: -50px;
+}
 
 .result-sol-container{
   max-height: 90px;

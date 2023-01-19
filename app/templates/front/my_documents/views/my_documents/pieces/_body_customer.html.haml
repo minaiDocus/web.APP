@@ -82,7 +82,7 @@
         .col-md-6
           %button.btn.btn-dark.btn-sm.no-border-radius.w-100.semibold.btn-search{:type => 'button', id: 'launch-filter'} Lancer
 
-  .col-md-10      
+  .col-md-10.neg-mt-2
     .box.derivationRight{ style: 'margin-top: 0' }
       .row
         .col-md-12
@@ -97,7 +97,11 @@
               %th= sortable 'pack_report_preseizures.date', "Date"
               %th= sortable 'pack_report_preseizures.piece_number', "N° de facture"
               %th= sortable 'pack_report_preseizures.cached_amount', "Montant TTC"
-              %th.text-center.w-25 Tags
+              %th.text-center.w-25
+                %span.popup-info-tag= glyphicon('info', { color: 'black', size: 10 })
+                %span Tags
+                .info-tag-content.hide
+                  Ajouter des tags pour retrouver facilement vos documents
             %tbody
               - @pieces.each do |piece|
                 - preseizure             = piece.preseizures.first
