@@ -41,6 +41,8 @@
     %h6.semibold.text-center Recherche
     %hr
     %form#customer_filter_form.simple_form.form-horizontal
+      %input#hidden-journal-id{ type: :hidden, name: "journal_id", value: params[:journal_id].presence }
+
       .form-group
         %label.semibold Mot(s) clé(s)
         .select-container.no-padding

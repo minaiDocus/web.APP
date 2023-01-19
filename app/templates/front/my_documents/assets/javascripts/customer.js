@@ -24,6 +24,7 @@ class MyDocumentsCustomer{
     let form_serialization = '';
 
     if(serialize_form || load_rubric){
+      $('#hidden-journal-id').val('');
       data.push($('#customer_filter_form').serialize().toString());
     }
     else
@@ -37,7 +38,7 @@ class MyDocumentsCustomer{
     data.push( 'uid=' + $('#customers').val() );
 
     if (!all && !load_customer )
-      data.push( 'journal_id=' + $('#hidden-journal-id').val() );
+      data.push( 'journal_id=' + journal_id );
 
     this.ajax_params['data'] = data.join('&');
 
