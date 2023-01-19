@@ -56,6 +56,7 @@ function bind_all_events(){
     AppEmit('new_update_tags', { piece_id: $(this).data('id'), tags: '-' + event.item, type: "piece" });
   });
 
+  $('input.input-tag').tagsinput('refresh');
 
   $('#add-document.modal .btn-close.upload').unbind('click').bind('click',function(e) {
     e.stopPropagation();
@@ -68,8 +69,6 @@ function bind_all_events(){
       $('#add-document.modal').modal('hide');
     }
   });
-
-
 
   $('#customer_document_filter').unbind('change.mix_journal').bind('change.mix_journal', function(e){
     if ($('.user_and_journals').length > 0){
