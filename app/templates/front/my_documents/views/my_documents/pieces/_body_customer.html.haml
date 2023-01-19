@@ -97,7 +97,7 @@
               %th= sortable 'pack_report_preseizures.date', "Date"
               %th= sortable 'pack_report_preseizures.piece_number', "N° de facture"
               %th= sortable 'pack_report_preseizures.cached_amount', "Montant TTC"
-              %th.text-center Tags
+              %th.text-center.w-25 Tags
             %tbody
               - @pieces.each do |piece|
                 - preseizure             = piece.preseizures.first
@@ -117,8 +117,8 @@
                     = preseizure.try(:piece_number)
                   %td.pointer.show-detail{ title: 'Voir détail', data: { content_url: piece.get_access_url, piece_id: piece.id }}
                     = [preseizure.try(:amount_ttc).to_s, ''].uniq.join(' €').presence || ""
-                  %td
-                    %input.form-control.input-tag.w-100{ value: piece.get_tags.split(' - ').join(','), data: { id: "#{piece.id}", role: "tagsinput"},  "aria-describedby" => "basic-addon1"}
+                  %td.w-25
+                    %input.form-control.input-tag{ value: piece.get_tags.split(' - ').join(','), data: { id: "#{piece.id}", role: "tagsinput"},  "aria-describedby" => "basic-addon1"}
 
           = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: my_documents_path, target: '#table_pieces', total_pages: @pieces.total_pages, filter: 'customer_filter_form' }
 

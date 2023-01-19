@@ -119,6 +119,16 @@ jQuery(function() {
     $('#add-document .btn-add').unbind('click.addition').bind('click.addition', function(e){ VARIABLES.set('can_reload_packs', true); });
   });
 
+  $('#fileupload').on('fileuploadstart', function(){ 
+    $('.modal-footer .cancel').hide('');
+  });
+
+  $('#fileupload').on('fileuploaddone', function(){
+    if ($('.template-upload.fade.in').length == 1){
+      $('.modal-footer .cancel').show();
+    }
+  });
+
   uploader.base_modal.on('shown.bs.modal', function(e){
     uploader.initialize_params();
 

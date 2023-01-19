@@ -12,7 +12,7 @@ function elements_initializer(){
     "autoApply": true,
     singleDatePicker: true,
     showDropdowns: true,
-    minDate: '06/01/2010',
+    minDate: '06/01/'+ new Date().getFullYear() - 10,
     maxDate: '31/12/'+ new Date().getFullYear(),
     linkedCalendars: false,
     locale: {
@@ -24,7 +24,7 @@ function elements_initializer(){
     defaultBlank: true,
     "autoApply": true,
     showDropdowns: true,
-    minDate: '06/01/2010',
+    minDate: '06/01/' + new Date().getFullYear() - 10,
     maxDate: '31/12/'+ new Date().getFullYear(),
     linkedCalendars: false,
     locale: {

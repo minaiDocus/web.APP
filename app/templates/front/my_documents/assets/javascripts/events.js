@@ -60,7 +60,7 @@ function bind_all_events(){
   $('#add-document.modal .btn-close.upload').unbind('click').bind('click',function(e) {
     e.stopPropagation();
 
-    if ($('.template-upload').length > 0){
+    if ($('.template-upload.fade.in').length > 0 ){
       $('#add-document.modal .info').show('');
 
       setTimeout(function(){ $('#add-document.modal .info').hide(''); }, 5000);
