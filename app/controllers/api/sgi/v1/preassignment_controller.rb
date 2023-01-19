@@ -90,7 +90,8 @@ class Api::Sgi::V1::PreassignmentController < SgiApiController
                          detected_invoice_amount_without_taxes: piece.detected_invoice_amount_without_taxes,
                          detected_invoice_taxes_amount: piece.detected_invoice_taxes_amount,
                          detected_invoice_amount_with_taxes: piece.detected_invoice_amount_with_taxes,
-                         recycle: piece.pre_assignment_force_processing? }
+                         recycle: piece.pre_assignment_force_processing?
+                       }
     end
   end
 

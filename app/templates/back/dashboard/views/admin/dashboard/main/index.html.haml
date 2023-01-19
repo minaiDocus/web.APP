@@ -89,22 +89,22 @@
                 %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}            
             .hide.content#awaiting_adr
         .col-sm-4
-          .badge-content.back-green.for-badge= glyphicon('media-play', size: 14, color: "white")
+          .badge-content.back-green.for-badge= glyphicon('media-pause', size: 14, color: "white")
           .my-3
           .box.mb-2.blocked_pre_assignments.flux.animated-pointer{ data: { ref: 'blocked_pre_assignments' }}
             .my-3
-            %label.ms-3.semibold.no-padding Pré-aff - En cours
+            %label.ms-3.semibold.no-padding Pré-aff - Ignorées
             .text-end
               %label.count.blocked_pre_assignments.me-2
                 %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}            
             .hide.content#blocked_pre_assignments
       .row.mb-4.animatedChild.toBottom
         .col-sm-4
-          .badge-content.back-green.for-badge= glyphicon('media-pause', size: 14, color: "white")
+          .badge-content.back-green.for-badge= glyphicon('media-play', size: 14, color: "white")
           .my-3
           .box.mb-2.awaiting_pre_assignments.flux.animated-pointer{ data: { ref: 'awaiting_pre_assignments' }}
             .my-3
-            %label.ms-3.semibold.no-padding Pré-aff - En attente
+            %label.ms-3.semibold.no-padding Pré-aff - En cours
             .text-end
               %label.count.awaiting_pre_assignments.me-2
                 %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}            
@@ -124,7 +124,7 @@
           .my-3
           .box.mb-2.failed_reports_delivery.flux.animated-pointer{ data: { ref: 'failed_reports_delivery' }}
             .my-3
-            %label.ms-3.semibold.no-padding Livraison Pré-aff - En attente
+            %label.ms-3.semibold.no-padding Livraison Pré-aff - En erreur
             .text-end
               %label.count.failed_reports_delivery.me-2
                 %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}            
