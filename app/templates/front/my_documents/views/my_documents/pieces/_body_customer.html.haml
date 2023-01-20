@@ -1,17 +1,16 @@
-- customer_selected = User.find(params[:uid].present? ? params[:uid] : @user.id)
-= hidden_field_tag :customer_code, customer_selected.code
+= hidden_field_tag :customer_code, @user_selected.code
 .row#table_pieces
   .col-md-2
-    - if @user.still_active? && @user.authorized_upload?
+    - if @user_selected.still_active? && @user_selected.authorized_upload?
       %button.btn.btn-dark.add-document.w-100.semibold.mb-3
         %span.me-2= glyphicon('plus', { size: '40', color: '#fff', style: "background-color:#C0E133; border-radius:50%; padding: 10px;"})
         %span Ajouter des documents
 
-    - if @user.still_active? && @user.authorized_upload?
+    - if @user_selected.still_active? && @user_selected.authorized_upload?
       .mb-4.bg-white.text-center.text-muted.p-1
         %i
           ou envoyer vos documents par mail à : 
-          %a.mailto.text-muted.semibold{:href=>"mailto:#{@user.email_code}@fw.idocus.com", style:"text-decoration:none;"} "#{@user.email_code}@fw.idocus.com"
+          %a.mailto.text-muted.semibold{:href=>"mailto:#{@user_selected.email_code}@fw.idocus.com", style:"text-decoration:none;"} "#{@user_selected.email_code}@fw.idocus.com"
 
     .processing-piece.mb-2
       %label.ms-3 Pièce en cours de traitement
@@ -44,6 +43,7 @@
     %hr
     %form#customer_filter_form.simple_form.form-horizontal
       %input#hidden-journal-id{ type: :hidden, name: "journal_id", value: params[:journal_id].presence }
+      %input{ type: :hidden, name: "uid", value: params[:uid].presence }
 
       .form-group
         %label.semibold Mot(s) clé(s)

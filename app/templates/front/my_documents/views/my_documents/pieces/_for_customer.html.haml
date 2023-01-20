@@ -2,7 +2,7 @@
   .row
     .col-md-2
       %label.semibold Dossier
-      = select_tag 'customers', options_for_select(@users.reverse.map{ |e| [e.short_info, e.id] }, params[:uid].present? ? params[:uid] : @user.id), id: 'customers', class: 'chosen-list w-100', include_blank: false
+      = select_tag 'customers', options_for_select(@users.reverse.map{ |e| [e.short_info, e.id] }, @user_selected.id), id: 'customers', class: 'chosen-list w-100', include_blank: false
     
   .mb-4
 

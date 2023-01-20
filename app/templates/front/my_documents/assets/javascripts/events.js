@@ -97,7 +97,7 @@ function bind_all_events(){
   $('#customers').unbind('change.mix_customer').bind('change.mix_customer', function(e){
     $('#hidden-customer-id').val($(this).val());
 
-    AppEmit('load_customer');
+    window.location.href = window.location.href.split('?')[0] + "?uid=" + btoa($(this).val());
   });
 
   setTimeout(()=>{ $('.hide_on_load').removeClass('hide'); $('#customer_document_filter').change() }, 1000); //TODO: find a better way to change the user selector

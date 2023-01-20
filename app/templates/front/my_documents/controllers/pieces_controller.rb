@@ -162,18 +162,20 @@ class MyDocuments::PiecesController < MyDocuments::AbaseController
     @options[:page]     = nil
     @options[:per_page] = nil
 
-    user_ids = params[:uid].presence || @user.id
-
     @render_upload = request.xhr? ? false : true
 
-    @users = accounts.includes(:options, :ibiza, :subscription, organization: [:ibiza, :exact_online, :my_unisoft, :coala, :cogilog, :sage_gec, :acd, :quadratus, :cegid, :csv_descriptor, :fec_agiris]).active.order(code: :asc).select { |user| user.authorized_upload? }    
-    @journals = AccountBookType.where(user_id: user_ids).order('FIELD(entry_type, 0, 5, 1, 4, 3, 2) DESC', description: :asc)
+    @users = accounts.includes(:options, :ibiza, :subscription, organization: [:ibiza, :exact_online, :my_unisoft, :coala, :cogilog, :sage_gec, :acd, :quadratus, :cegid, :csv_descriptor, :fec_agiris]).active.order(code: :asc).select { |user| user.authorized_upload? }
 
     @users << @user if !@users.select { |u| u.id == @user.id }.any?
 
-    @pieces = Pack::Piece.with_preseizures(user_ids, @options).where("DATE_FORMAT(pack_pieces.updated_at, '%Y%m') >= #{2.years.ago.strftime('%Y%m')}").distinct.order("#{sort_column} #{sort_direction}")
+    uid_user       = User.where(id: Base64.decode64(params[:uid])).try(:first) if params[:uid].present?
+    @user_selected = (uid_user && @users.collect(&:id).include?(uid_user.id)) ? uid_user : @user
 
-    @temp_documents = TempDocument.where(user_id: user_ids).where("DATE_FORMAT(temp_documents.updated_at, '%Y%m') >= #{6.month.ago.strftime('%Y%m')}").not_published
+    @journals = AccountBookType.where(user_id: @user_selected.id).order('FIELD(entry_type, 0, 5, 1, 4, 3, 2) DESC', description: :asc)
+
+    @pieces = Pack::Piece.with_preseizures(@user_selected.id, @options).where("DATE_FORMAT(pack_pieces.updated_at, '%Y%m') >= #{2.years.ago.strftime('%Y%m')}").distinct.order("#{sort_column} #{sort_direction}")
+
+    @temp_documents = TempDocument.where(user_id: @user_selected.id).where("DATE_FORMAT(temp_documents.updated_at, '%Y%m') >= #{6.month.ago.strftime('%Y%m')}").not_published
     @total_pieces = @pieces.size
 
     @result_per_journal = {}

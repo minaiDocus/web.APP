@@ -35,7 +35,7 @@ class MyDocumentsCustomer{
 
     if(this.page > 1){ data.push(`page=${this.page}`) }
 
-    data.push( 'uid=' + $('#customers').val() );
+    data.push( 'uid=' + btoa($('#customers').val()) );
 
     if (!all && !load_customer )
       data.push( 'journal_id=' + journal_id );
@@ -44,20 +44,7 @@ class MyDocumentsCustomer{
 
     this.applicationJS.sendRequest(this.ajax_params, function(){ $('#more-filter.modal').modal('hide'); })
                        .then((e)=>{
-                          if (load_customer)
-                          {
-                            $(".customer-document-content").html($(e).find(".customer-document-content").html());
-
-                            $("#hidden-journal-id").val($('.rubric').first().data('id'));
-                            $("#hidden-customer-id").val($('#customers').val());
-
-                            $('select#file_code_customer').val($('#customer_code').val()).trigger("chosen:updated");
-                            $('select#file_code_customer').change();
-                          }
-                          else
-                          {
-                            $('#table_pieces').html($(e).find("#table_pieces").html());
-                          }
+                          $('#table_pieces').html($(e).find("#table_pieces").html());
 
                           $('select#l_journal').val(journal_id).trigger("chosen:updated");
                           bind_all_events();
