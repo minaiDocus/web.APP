@@ -7,7 +7,7 @@
         %span Ajouter des documents
 
     - if @user_selected.still_active? && @user_selected.authorized_upload?
-      .mb-4.bg-white.text-center.text-muted.p-1
+      .mb-4.bg-white.text-center.text-muted.p-1{ title: "Pour transférer vos documents via email, envoyez simplement un email à cette adresse en mettant en objet le nom du dossier choisi", data: { toggle: 'tooltip', placement: 'right' }} 
         %i
           ou envoyer vos documents par mail à : 
           %a.mailto.text-muted.semibold{:href=>"mailto:#{@user_selected.email_code}@fw.idocus.com", style:"text-decoration:none;"} "#{@user_selected.email_code}@fw.idocus.com"
