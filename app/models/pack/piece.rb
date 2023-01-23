@@ -171,9 +171,7 @@ class Pack::Piece < ApplicationRecord
     query = query.where("pack_report_preseizures.date BETWEEN '#{CustomUtils.parse_date_range_of(options[:date]).join("' AND '")}'") if options[:date].present?
 
     query.order(position: :asc) if options[:sort] == true
-   
-    query = query.where("pack_report_preseizures.currency <> pack_report_preseizures.unit") if options[:devise_original].present? && options[:devise_original].to_i == 0
-    query = query.where("pack_report_preseizures.currency = pack_report_preseizures.unit") if options[:devise_original].present? && options[:devise_original].to_i == 1
+
 
     query.page(page).per(per_page)
   end
@@ -212,10 +210,6 @@ class Pack::Piece < ApplicationRecord
 
     query = query.where("pack_report_preseizures.cached_amount #{options[:amount_operation].tr('012', ' ><')}= ?", options[:amount].tr(',','.')) if options[:amount].present?
     query = query.where("pack_report_preseizures.delivery_tried_at BETWEEN '#{CustomUtils.parse_date_range_of(options[:delivery_tried_at]).join("' AND '")}'")  if options[:delivery_tried_at].present?
-
-    query = query.where("pack_report_preseizures.currency <> pack_report_preseizures.unit") if options[:devise_original].present? && options[:devise_original].to_i == 0
-    query = query.where("pack_report_preseizures.currency = pack_report_preseizures.unit") if options[:devise_original].present? && options[:devise_original].to_i == 1
-
 
     options[:per_page].present? ? query.page(options[:page].presence || 1).per(options[:per_page]) : query
     
