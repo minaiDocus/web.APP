@@ -100,6 +100,11 @@ function bind_all_events(){
     window.location.href = window.location.href.split('?')[0] + "?uid=" + btoa($(this).val());
   });
 
+  $('#customers').chosen({
+    search_contains: true,
+    no_results_text: 'Aucun résultat correspondant à'
+  });
+
   setTimeout(()=>{ $('.hide_on_load').removeClass('hide'); $('#customer_document_filter').change() }, 1000); //TODO: find a better way to change the user selector
 
   $('.more-filter').unbind('click').bind('click',function(e) {
