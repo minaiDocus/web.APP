@@ -484,7 +484,7 @@ module BillingMod
         @pdf = pdf
 
         @pdf.repeat [1] do
-          @pdf.image "#{Rails.root}/app/assets/images/application/bandeau_dematbox.jpg", width: 272, height: 120, align: :center, :at => [142, 1]
+          @pdf.image "#{Rails.root}/app/assets/images/application/bandeau_bonne_annee.png", width: 480, height: 175, align: :center, :at => [35, 20]
         end
 
         make_header
