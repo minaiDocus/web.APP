@@ -55,6 +55,7 @@ class PreseizureExport::PreseizureToTxt
         line[9..10]    = preseizure.journal_name[0..1]
         line[11..13]   = '000'
         line[14..19]   = preseizure.computed_date.strftime('%d%m%y') if preseizure.date
+        line[20]       = 'F' if CustomUtils.use_vats_2?(preseizure.organization.code)
 
         e = 21 + label[0..19].size - 1
 
@@ -63,11 +64,11 @@ class PreseizureExport::PreseizureToTxt
         line[42]       = entry.amount.to_f >= 0.0 ? '+' : '-'
         line[43..54]   = '%012d' % entry.amount_in_cents.to_f
         line[63..68]   = preseizure.deadline_date.strftime('%d%m%y') if preseizure.deadline_date
-        line[69..73]   = entry.account.lettering.strip[0..4] if entry.account.lettering.present?
-        line[74..78]   = preseizure.piece_number.strip[0..4] if preseizure.piece_number.present?
-        line[99..106]  = preseizure.piece_number.strip[0..7] if preseizure.piece_number.present?
+        line[69..73]   = entry.account.lettering.strip[0..4]         if entry.account.lettering.present?
+        line[74..78]   = preseizure.piece_number.strip[0..4]         if preseizure.piece_number.present?
+        line[99..106]  = preseizure.piece_number.strip[0..7]         if preseizure.piece_number.present?
         line[107..109] = CustomUtils.use_vats_2?(preseizure.organization.code) ? 'FRF' : 'EUR'
-        line[110..112] = preseizure.journal_name.strip[0..2] if preseizure.journal_name.strip.size > 2
+        line[110..112] = preseizure.journal_name.strip[0..2]         if preseizure.journal_name.strip.size > 2
 
         if label.size > 20
           e = 116 + label.size - 1
