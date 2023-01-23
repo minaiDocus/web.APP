@@ -35,11 +35,11 @@
             - if !CustomUtils.is_ido_premium?(@organization.code) && @customer.active? && !@organization.specific_mission
               %li.nav-item.no-margin
                 %a.head_customer_link.semibold.nav-link#customer_subscription{ class: ('active' if (controller_path == 'subscriptions/main' && action_name == 'edit')), href: edit_organization_customer_subscription_path(@organization, @customer) } Forfait
-              - if !@customer.is_package?('ido_x') && ( @customer.is_package?(:mail_active) || @customer.is_package?(:scan_active) || @customer.is_package?(:digitize_active) )
-                %li.nav-item.no-margin
-                  %a.head_customer_link.semibold.nav-link#orders-tab{ class: ('active' if (controller_path == 'orders/main' && action_name == 'index')), href: organization_customer_orders_path(@organization, @customer) } Commandes Kits/Scan
+            - if !@customer.is_package?('ido_x') && ( @customer.is_package?(:mail_active) || @customer.is_package?(:scan_active) || @customer.is_package?(:digitize_active) )
               %li.nav-item.no-margin
-                %a.head_customer_link.semibold.nav-link#adresses-tab{ class: ('active' if (controller_path == 'addresses/user' && action_name == 'index')), href: organization_user_addresses_path(@organization, @customer) } Adresses
+                %a.head_customer_link.semibold.nav-link#orders-tab{ class: ('active' if (controller_path == 'orders/main' && action_name == 'index')), href: organization_customer_orders_path(@organization, @customer) } Commandes Kits/Scan
+            %li.nav-item.no-margin
+              %a.head_customer_link.semibold.nav-link#adresses-tab{ class: ('active' if (controller_path == 'addresses/user' && action_name == 'index')), href: organization_user_addresses_path(@organization, @customer) } Adresses
             - if @organization.specific_mission
               %li.nav-item.no-margin
                 %a.head_customer_link.semibold.nav-link#journals-tab{ class: ('active' if (controller_path == 'journals/user' && action_name == 'index')), href: organization_user_journals_path(@organization, @customer) } Dossiers
