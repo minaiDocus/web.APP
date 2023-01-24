@@ -331,4 +331,10 @@ module DocumentsHelper
 
     data_analytics
   end
+
+  def currencies_of(organization_id)
+    Rails.cache.fetch "preseizures_currencies_of_#{organization_id}", expires_in: 24.hours do
+      (Pack::Report::Preseizure.where(organization_id: organization_id).pluck(:currency) + ['EUR']).uniq.select{|q| q.present? && q.size >= 2}
+    end
+  end
 end
