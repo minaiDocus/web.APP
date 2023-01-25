@@ -6,7 +6,7 @@
         %tr.text-center
           %th.text-center
             .form-check
-              = check_box_tag 'master_checkbox', 0, false, class: 'form-check-input pointer float-none check-all-operation'
+              = check_box_tag 'master_checkbox', 0, false, class: 'form-check-input pointer float-none check-all', data: { action: 'operation'}
           %th= sortable :created_at,   'Créé le'
           %th= sortable :date,   'Date'        
           %th Value date
@@ -23,7 +23,7 @@
           %tr.text-center
             %th.text-center
               .form-check
-                = check_box_tag 'operations[ids][]', operation.id, false, id: "rule_#{operation.id}", class: 'form-check-input pointer float-none check-operation checkbox'
+                = check_box_tag 'operations[ids][]', operation.id, false, id: "rule_#{operation.id}", class: 'form-check-input pointer float-none check check-operation checkbox', data: { action: 'operation'}
             %td= l(operation.created_at, format: '%d %b %Y %H:%M')
             %td= l(operation.date, format: '%d %b %Y')
             %td= l(operation.value_date, format: '%d %b %Y')
@@ -39,8 +39,8 @@
                 %span.glyph= glyphicon('ellipses', { size: '12', style: 'transform: rotate(90deg)'})
               .sub_menu.text-start.hide
                 %ul.no-margin.no-padding.regular
-                  %li.view_operation{ data: { operation_id: operation.id, title: "Compte bancaire" } }
+                  %li.resend_operation{ data: { operation_id: operation.id, title: "Re-envoyer" } }
                     = link_to '#' do
                       %span.me-2= glyphicon('media-record', size: 12)
-                      %span Force
-    = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: get_operations_admin_bank_utilities_path, target: '#table_operations', total_pages: @operations.total_pages, filter: 'operation-filter' }
+                      %span Relivrer
+    = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: get_operations_admin_supports_path, target: '#table_operations', total_pages: @operations.total_pages, filter: 'operation-filter' }

@@ -2,7 +2,7 @@
 
 %label.semibold
   %span Access token :
-  %span.ms-3= @user.budgea_account.try(:access_token)
+  %span.ms-3= @user.budgea_account.try(:access_token).presence || "Non configuré"
 
 .mb-3
 .row
@@ -13,7 +13,7 @@
           %th Créé le
           %th Modifié le          
           %th Budgea ID
-          %th= t('activerecord.models.retriever.attributes.service_name')
+          %th Banque
           %th= t('activerecord.models.retriever.attributes.name')
           %th Type
           %th Action
@@ -40,6 +40,6 @@
                       %li.resume_me{ data: { retriever_id: retriever.id } }
                         = link_to '#' do
                           %span.me-2= glyphicon('bug', size: 12)
-                          %span Resume
+                          %span Synchroniser
                     
 

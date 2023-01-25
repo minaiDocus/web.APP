@@ -117,7 +117,7 @@ Rails.application.routes.draw do
   back_draw('reset')
   back_draw('package_setting')
   back_draw('tickets')
-  back_draw('bank_utilities')
+  back_draw('supports')
 
   #### -------------------------------- native resources -----------------------------###
 
