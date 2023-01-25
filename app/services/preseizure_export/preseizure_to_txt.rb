@@ -190,109 +190,112 @@ class PreseizureExport::PreseizureToTxt
         label = [preseizure.third_party.presence, preseizure.piece_number.presence].compact.join(' - ')[0..29]
       end
 
-      if preseizure.piece
-        journal = preseizure.report.pack.journal
-        nature = case journal.compta_type
-                 when 'AC'
-                  if preseizure.entries.where(type: 2).count > 1
-                    'AF'
-                  else
-                    'FF'
-                  end
-                 when 'VT'
-                  if preseizure.entries.where(type: 1).count > 1
-                    'FC'
-                  else
-                    'AC'
-                  end
-                 when 'NDF'
-                  'OD'
-                 end
+      journal = preseizure.report.journal({ name_only: false })
+      nature = case journal.compta_type
+               when 'AC'
+                if preseizure.entries.where(type: 2).count > 1
+                  'AF'
+                else
+                  'FF'
+                end
+               when 'VT'
+                if preseizure.entries.where(type: 1).count > 1
+                  'FC'
+                else
+                  'AC'
+                end
+               when 'NDF'
+                'OD'
+               else
+                'BQ'
+               end
 
-        preseizure.entries.each do |entry|
-          account = case nature
-                    when 'AF'
-                      if entry.account.type == Pack::Report::Preseizure::Account::TTC
-                        user.accounting_plan.general_account_providers.to_s.presence || '401000'
-                      else
-                        entry.account.try(:number)
-                      end
-                    when 'FF'
-                      if entry.account.type == Pack::Report::Preseizure::Account::TTC
-                        user.accounting_plan.general_account_providers.to_s.presence || '401000'
-                      else
-                        entry.account.try(:number)
-                      end
-                    when 'AC'
-                      if entry.account.type == Pack::Report::Preseizure::Account::TTC
-                        user.accounting_plan.general_account_customers.to_s.presence || '411000'
-                      else
-                        entry.account.try(:number)
-                      end
-                    when 'FC'
-                      if entry.account.type == Pack::Report::Preseizure::Account::TTC
-                        user.accounting_plan.general_account_customers.to_s.presence || '411000'
-                      else
-                        entry.account.try(:number)
-                      end
+      preseizure.entries.each do |entry|
+        account = case nature
+                  when 'AF'
+                    if entry.account.type == Pack::Report::Preseizure::Account::TTC
+                      user.accounting_plan.general_account_providers.to_s.presence || '401000'
+                    else
+                      entry.account.try(:number)
                     end
+                  when 'FF'
+                    if entry.account.type == Pack::Report::Preseizure::Account::TTC
+                      user.accounting_plan.general_account_providers.to_s.presence || '401000'
+                    else
+                      entry.account.try(:number)
+                    end
+                  when 'AC'
+                    if entry.account.type == Pack::Report::Preseizure::Account::TTC
+                      user.accounting_plan.general_account_customers.to_s.presence || '411000'
+                    else
+                      entry.account.try(:number)
+                    end
+                  when 'FC'
+                    if entry.account.type == Pack::Report::Preseizure::Account::TTC
+                      user.accounting_plan.general_account_customers.to_s.presence || '411000'
+                    else
+                      entry.account.try(:number)
+                    end
+                  else
+                    entry.account.try(:number)
+                  end
 
 
-            label = ' ' unless label.present?
-            line = ' ' * 222
+          label = ' ' unless label.present?
+          line = ' ' * 222
+          line[0] = preseizure.journal_name[0..2]
+          line[3..11] = preseizure.computed_date.strftime('%d%m%Y') if preseizure.date
+          line[11] = nature
+          line[13] = account
+
+          line[30] = 'X' if entry.account.type == Pack::Report::Preseizure::Account::TTC
+
+          account_number = entry.account.try(:number) || ''
+          line[31] = account_number if entry.account.type == Pack::Report::Preseizure::Account::TTC
+
+          line[48] = preseizure.piece_number? ? I18n.transliterate(preseizure.piece_number.to_s) : I18n.transliterate(preseizure.third_party.to_s)
+
+          line[83] = I18n.transliterate(label.to_s)
+
+          line[129] = entry.type == 1 ? 'D' : 'C'
+
+          amount = sprintf("%.2f", entry.amount.to_f).to_s.gsub('.', ',')
+          window = 150 - amount.size
+
+          line[window..150] = amount
+
+          line[150] = 'N'
+          line[151] = preseizure.piece ? preseizure.piece.number.to_s : ' '
+          line[172] = 'E--'
+
+          data << line
+
+          file_name = preseizure.piece ? preseizure.piece.name.tr(' ', '_').tr('%', '_') + '.pdf' : ' '
+
+          line = ' ' * 222
+
+          if entry.account.type == Pack::Report::Preseizure::Account::TTC
             line[0] = preseizure.journal_name[0..2]
             line[3..11] = preseizure.computed_date.strftime('%d%m%Y') if preseizure.date
             line[11] = nature
-            line[13] = account
+            line[13] = case journal.compta_type
+                       when 'AC'
+                        user.accounting_plan.general_account_providers.to_s.presence || '401000'
+                       when 'VT'
+                        user.accounting_plan.general_account_customers.to_s.presence || '411000'
+                       when 'NDF'
+                        '471000'
+                       else
+                        '512000'
+                       end
 
-            line[30] = 'X' if entry.account.type == Pack::Report::Preseizure::Account::TTC
-
-            account_number = entry.account.try(:number) || ''
-            line[31] = account_number if entry.account.type == Pack::Report::Preseizure::Account::TTC
-
-            line[48] = preseizure.piece_number? ? I18n.transliterate(preseizure.piece_number) : I18n.transliterate(preseizure.third_party)
-
-            line[83] = I18n.transliterate(label)
-
-            line[129] = entry.type == 1 ? 'D' : 'C'
-
-            amount = sprintf("%.2f", entry.amount.to_f).to_s.gsub('.', ',')
-            window = 150 - amount.size
-
-            line[window..150] = amount
-
-            line[150] = 'N'
-            line[151] = preseizure.piece.number.to_s
-            line[172] = 'E--'
+            line[30] = 'G'
+            line[31] = Pack::Report::Preseizure::Account.where(id: preseizure.entries.pluck(:account_id)).where(type: Pack::Report::Preseizure::Account::TTC).first.try(:number)
+            line[48] = preseizure.piece_number? ? I18n.transliterate(preseizure.piece_number.to_s) : I18n.transliterate(preseizure.third_party.to_s)
+            line[83] = I18n.transliterate(file_name.to_s)
 
             data << line
-
-            file_name = preseizure.piece.name.tr(' ', '_').tr('%', '_') + '.pdf'
-
-            line = ' ' * 222
-
-            if entry.account.type == Pack::Report::Preseizure::Account::TTC
-              line[0] = preseizure.journal_name[0..2]
-              line[3..11] = preseizure.computed_date.strftime('%d%m%Y') if preseizure.date
-              line[11] = nature
-              line[13] = case journal.compta_type
-                         when 'AC'
-                          user.accounting_plan.general_account_providers.to_s.presence || '401000'
-                         when 'VT'
-                          user.accounting_plan.general_account_customers.to_s.presence || '411000'
-                         when 'NDF'
-                          '471000'
-                         end
-
-              line[30] = 'G'
-              line[31] = Pack::Report::Preseizure::Account.where(id: preseizure.entries.pluck(:account_id)).where(type: Pack::Report::Preseizure::Account::TTC).first.try(:number)
-              line[48] = preseizure.piece_number? ? I18n.transliterate(preseizure.piece_number) : I18n.transliterate(preseizure.third_party)
-              line[83] = I18n.transliterate(file_name)
-
-              data << line
-            end
-
-        end
+          end
       end
     end
 
