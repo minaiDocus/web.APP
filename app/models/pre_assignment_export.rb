@@ -42,9 +42,9 @@ class PreAssignmentExport < ApplicationRecord
     "#{path}/#{self.file_name}"
   end
 
-  def got_error(error, airbrake_notify = true)
+  def got_error(error)
     self.error
-    self.error_message = error.message.to_s
+    self.error_message = error.is_a?(String) ? error : error.message.to_s
     self.save
   end
 
