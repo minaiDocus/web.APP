@@ -80,14 +80,23 @@
   .modal-dialog
     .modal-content
       .modal-header
-        %h5.modal-title.bold Téléchargement d'écritures comptables        
+        %h5.modal-title.bold Téléchargement d'écritures comptables
         %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
       .modal-body
         %p.information
         .mb-4
         %form.form-group#preseizures_export_form{ action: '/documents/export', method: 'POST' }
-          %label Format d'export
-          = select_tag :export_type, '', id: :export_type, class: 'form-select'
+          .mb-3
+            %label Logiciel cible :
+            = select_tag :export_type, '', id: :export_type, class: 'form-select'
+          .mb-2
+            .form-group
+              %label.semibold.label_check_field Inclure les fichiers pdf
+              .form-check.form-switch.idocus-custom-form-check
+                %input.input_check_field.pointer.input_switch.form-check-input.pointer.float-none#is_pdf_included{ type: :checkbox, as: :boolean, value: true, label_html: { class: 'semibold form-check-label' }, input_html: { class: 'form-check-input input_switch input_check_field', id: 'is_detail_authorized'} }
+                %label.semibold{class: 'form-check-label label_check_field', for: 'is_pdf_included'} Non
+
+
       .modal-footer
         %button.btn.btn-primary.semibold#export_button{:type => 'button'} Exporter
 
