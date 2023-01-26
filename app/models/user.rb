@@ -3,6 +3,9 @@ class User < ApplicationRecord
   include Interfaces::User::Customer
   include Interfaces::User::Collaborator
   include BillingMod::UserModule
+  
+  include SoftwareMod::UserModule
+  include SoftwareMod::OwnedSoftwares
 
   devise :database_authenticatable, :recoverable, :rememberable, :validatable, :trackable, :lockable
 
@@ -32,7 +35,6 @@ class User < ApplicationRecord
 
   has_one :options, class_name: 'UserOptions', inverse_of: 'user', autosave: true
 
-  include OwnedSoftwares
 
   has_one :dematbox
   has_one :composition
@@ -133,6 +135,7 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :external_file_storage
   accepts_nested_attributes_for :notify
 
+
   before_validation do |user|
     if user.email_code.blank? && !user.is_prescriber
       user.email_code = user.get_new_email_code
@@ -143,37 +146,7 @@ class User < ApplicationRecord
     user.format_name
   end
 
-  def self.using_by_software(software)
-    if software.in? Interfaces::Software::Configuration::SOFTWARES
-      self.all.joins(software.to_sym).where("#{Interfaces::Software::Configuration.softwares_table_name[software.to_sym]}".to_sym => { is_used: true } )
-    end
-  end
 
-  def self.filter_by_software(software=nil)
-    response = self.all
-
-    response.map do |user|
-      next if user.collaborator?
-
-      case software
-        when 'ibiza'
-          skip_user = user.uses?(:exact_online) || user.uses?(:my_unisoft) || user.uses?(:sage_gec) || user.uses?(:acd)
-        when 'exact_online'
-          skip_user = user.uses?(:ibiza) || user.uses?(:my_unisoft) || user.uses?(:sage_gec) || user.uses?(:acd)
-        when 'my_unisoft'
-          skip_user = user.uses?(:ibiza) || user.uses?(:exact_online) || user.uses?(:sage_gec) || user.uses?(:acd)
-        when 'sage_gec'
-          skip_user = user.uses?(:ibiza) || user.uses?(:exact_online) || user.uses?(:my_unisoft) || user.uses?(:acd)
-        when 'acd'
-          skip_user = user.uses?(:ibiza) || user.uses?(:exact_online) || user.uses?(:my_unisoft) || user.uses?(:sage_gec)
-        else
-          skip_user = false
-      end
-
-      next if skip_user
-      user
-    end
-  end
 
   #login can be email or code
   def self.find_by_mail_or_code(login)
@@ -316,11 +289,6 @@ class User < ApplicationRecord
 
   def find_or_create_external_file_storage
     self.external_file_storage ||= ExternalFileStorage.create(user_id: id)
-  end
-
-
-  def csv_descriptor!
-    self.csv_descriptor ||= Software::CsvDescriptor.create(owner_id: id)
   end
 
 

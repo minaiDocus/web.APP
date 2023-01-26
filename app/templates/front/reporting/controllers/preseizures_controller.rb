@@ -22,7 +22,8 @@ class Reporting::PreseizuresController < FrontController
     respond_to do |format|
       format.html {}
       format.csv do
-        data = PreseizureExport::PreseizuresToCsv.new(@report.user, @report.preseizures).execute
+        data = SoftwareMod::Export::CsvDescriptor.new(@report.preseizures).execute(true)
+
         send_data(data, type: 'text/csv', filename: "#{@report.name.tr(' ', '_')}.csv")
       end
     end

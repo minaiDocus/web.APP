@@ -17,6 +17,7 @@
               .dropdown-menu.semibold{"aria-labelledby" => "navbardropdownmenudocuments"}
                 =link_to t('layouts.pieces_and_pre_assignment'), documents_path, class: (controller_path == 'documents/pieces')? 'dropdown-item active' : 'dropdown-item'
                 =link_to t('layouts.pieces_errors'), pieces_errors_path, class: (controller_path == 'pieces_errors/main')? 'dropdown-item active' : 'dropdown-item'
+                =link_to t('layouts.export_preseizures_list'), export_preseizures_list_path, class: (controller_path == 'abase/export_preseizures')? 'dropdown-item active' : 'dropdown-item'
           - else
             %li.nav-item{ class: (is_document_active) ? 'active' : '' }
               =link_to t('layouts.my_documents'), documents_path, class: 'nav-link bold'

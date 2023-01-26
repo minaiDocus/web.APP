@@ -52,7 +52,7 @@ module FileDelivery::RemoteReport
   def generate_csv_files(receiver, service_name, pres = preseizures)
     number = csv_delivery_number(receiver, service_name)
 
-    data = PreseizureExport::PreseizuresToCsv.new(user, pres).execute
+    data = SoftwareMod::Export::CsvDescriptor.new(pres).execute(true)
 
     basename = "#{name.tr('%', '_').tr(' ', '_')}-L#{number}"
 

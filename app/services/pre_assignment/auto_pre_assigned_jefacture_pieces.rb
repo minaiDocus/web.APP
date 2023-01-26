@@ -62,7 +62,6 @@ class PreAssignment::AutoPreAssignedJefacturePieces
 
         unless PreAssignment::DetectDuplicate.new(preseizure).execute
           PreAssignment::CreateDelivery.new(preseizure, ['ibiza', 'exact_online', 'my_unisoft', 'sage_gec', 'acd'], is_auto: true).execute
-          PreseizureExport::GeneratePreAssignment.new(preseizure).execute
 
           Notifications::PreAssignments.new({pre_assignment: preseizure}).notify_new_pre_assignment_available
         end

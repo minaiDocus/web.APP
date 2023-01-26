@@ -2,7 +2,7 @@
 - ibiza = ibiza rescue @ibiza
 
 %input#organization_id{ type: 'hidden', value: @organization.id }
-= simple_form_for (ibiza || Software::Ibiza.new), url: organization_ibiza_path(@organization), html: { class: 'form-horizontal', id: 'ibiza_form_edition' } do |f|
+= simple_form_for (ibiza || SoftwareMod::Ibiza.new), url: organization_ibiza_path(@organization), html: { class: 'form-horizontal', id: 'ibiza_form_edition' } do |f|
   #ibiza_software_box.box.no-margin
     #ibiza.edit.derivationRight
       .row

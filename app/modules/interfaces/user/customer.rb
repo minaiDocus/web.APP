@@ -78,7 +78,7 @@ module Interfaces::User::Customer
     elsif attributes[:software].to_s == "acd"
       AcdLib::Setup.new({organization: @organization, customer: self, columns: {is_used: attributes[:columns][:is_used], action: "update"}}).execute
     else
-      software = self.send(attributes[:software].to_sym) || Interfaces::Software::Configuration.softwares[attributes[:software].to_sym].new
+      software = self.send(attributes[:software].to_sym) || SoftwareMod::Configuration.softwares[attributes[:software].to_sym].new
       begin
         software.assign_attributes(attributes[:columns])
       rescue
@@ -93,7 +93,7 @@ module Interfaces::User::Customer
       counter += 1 if software.try(:exact_online).try(:used?)
 
       if counter <= 1
-        if software.is_a?(Software::Ibiza) # Assign default value to avoid validation exception
+        if software.is_a?(SoftwareMod::Ibiza) # Assign default value to avoid validation exception
           software.state                            = 'none'
           software.state_2                          = 'none'
           software.voucher_ref_target               = 'piece_number'

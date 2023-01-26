@@ -20,21 +20,25 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
     options = []
 
     if user
-      options << %w[CSV csv] if user.uses?(:csv_descriptor)
+      options << ['CSV', 'csv@csv_descriptor'] if user.uses?(:csv_descriptor)
       if current_user.is_admin && user.organization.ibiza.try(:configured?) && user.uses?(:ibiza)
-        options << ['XML (Ibiza)', 'xml_ibiza']
+        options << ['Ibiza - XML', 'xml@ibiza']
       end
-      options << ['TXT (Ciel)', 'txt_ciel']                    if user.uses?(:ciel)
-      options << ['TXT (Quadratus)', 'txt_quadratus']          if user.uses?(:quadratus)
-      options << ['ZIP (Quadratus)', 'zip_quadratus']          if user.uses?(:quadratus)
-      options << ['ZIP (Coala)', 'zip_coala']                  if user.uses?(:coala)
-      options << ['XLS (Coala)', 'xls_coala']                  if user.uses?(:coala)
-      options << ['CSV (Cegid)', 'csv_cegid']                  if user.uses?(:cegid)
-      options << ['TRA + pièces jointes (Cegid)', 'tra_cegid'] if user.uses?(:cegid)
-      options << ['TXT (Fec Agiris)', 'txt_fec_agiris']        if user.uses?(:fec_agiris)
-      options << ['ECR (Fec Agiris ECR zip)', 'ecr_fec_agiris_facnote']        if user.uses?(:fec_agiris) && ['IDOC', 'MCN'].include?( user.organization.try(:code) )
-      options << ['TXT (Fec ACD)', 'txt_fec_acd']              if user.uses?(:fec_acd)
-      options << ['TXT (Cogilog)', 'txt_cogilog']              if user.uses?(:cogilog)
+
+      options << ['Ciel - TXT ', 'txt@ciel']                   if user.uses?(:ciel)
+      options << ['Quadratus - TXT', 'txt@quadratus']          if user.uses?(:quadratus)
+
+      options << ['Coala - XLS', 'xls@coala']                  if user.uses?(:coala)
+      options << ['Coala - CSV', 'csv@coala']                  if user.uses?(:coala)
+
+      options << ['Cegid - CSV', 'csv@cegid']                  if user.uses?(:cegid)
+      options << ['Cegid - TRA', 'tra@cegid']                  if user.uses?(:cegid)
+
+      options << ['Fec Agiris - TXT', 'txt@fec_agiris']        if user.uses?(:fec_agiris)
+      options << ['Fec Agiris - ECR', 'ecr@fec_agiris']        if user.uses?(:fec_agiris) && ['IDOC', 'MCN'].include?( user.organization.try(:code) )
+
+      options << ['Fec ACD - TXT', 'txt@fec_acd']              if user.uses?(:fec_acd)
+      options << ['Cogilog - TXT', 'txt@cogilog']              if user.uses?(:cogilog)
     end
 
     options << ['Aucun logiciel comptable paramètré', ''] if options.empty?
@@ -46,12 +50,15 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
     params64 = Base64.decode64(params[:q])
     params64 = JSON.parse(params64)
 
-    export_type = params64['type']
-    export_ids  = Array(params64['ids'] || [])
-    export_format = params64['format']
-    @is_operations = (params64['is_operations'].to_s == 'true')? true : false
-    @is_documents  = !@is_operations
-    @pluck_preseizures = true
+    export_type         = params64['type']
+    export_ids          = Array(params64['ids'] || [])
+    include_pieces      = params64['is_pieces_included'].present?
+    @is_operations      = (params64['is_operations'].to_s == 'true')? true : false
+    @is_documents       = !@is_operations
+    @pluck_preseizures  = true
+    export_format       = params64['format']
+    software            = export_format.split('@').last
+    export_format       = export_format.split('@').first
 
     load_params if export_type == 'pack' || export_type == 'report'
 
@@ -87,23 +94,23 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
       end
     end
 
-    supported_format = %w[csv xml_ibiza txt_quadratus txt_cogilog zip_quadratus zip_coala xls_coala txt_fec_agiris ecr_fec_agiris_facnote txt_fec_acd csv_cegid tra_cegid txt_ciel]
+    supported_format = %w[csv xml txt tra ecr xls zip]
 
     if preseizures.any? && export_format.in?(supported_format)
-      preseizures = preseizures.sort_by{|e| e.position }
-
-      export = PreseizureExport::GeneratePreAssignment.new(preseizures, export_format).generate_on_demand
-      if export && export.file_name.present? && export.file_path.present?
-        contents = File.read(export.file_path.to_s)
-
-        send_data(contents, filename: File.basename(export.file_name.to_s), disposition: 'attachment')
+      if Rails.env == 'production'
+        SoftwareMod::Export::Preseizures.delay_for(1.minutes).execute(software, preseizures.collect(&:id), include_pieces, export_format , 0, current_user.try(:id))
       else
-        render plain: 'Aucun résultat'
+        SoftwareMod::Export::Preseizures.execute(software, preseizures.collect(&:id), include_pieces, export_format , 0, current_user.try(:id))
       end
+
+      json_flash[:success] = "Préparation en cours, Votre export sera disponible dans la page 'Exports écritures comptables' dans quelques instants ..."
+      render json: { success: true, json_flash: json_flash }, status: 200
     elsif !export_format.in?(supported_format)
-      render plain: 'Traitement impossible : le format est incorrect.'
+      json_flash[:error] = 'Traitement impossible : le format est incorrect.'
+      render json: { success: false, json_flash: json_flash }, status: 200
     else
-      render plain: 'Aucun résultat'
+      json_flash[:error] = 'Aucun résultat'
+      render json: { success: false, json_flash: json_flash }, status: 200
     end
   end
 

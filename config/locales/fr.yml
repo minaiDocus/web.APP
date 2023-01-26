@@ -349,7 +349,8 @@ fr:
     reporting: Reporting
     my_retrievers: Banques
     pieces_and_pre_assignment: Pièces / Écritures comptables
-    pieces_errors: Pièces en erreur    
+    pieces_errors: Pièces en erreur
+    export_preseizures_list: Exports écritures comptables
     retriever:
       automates: Automates
       historic: Opérations

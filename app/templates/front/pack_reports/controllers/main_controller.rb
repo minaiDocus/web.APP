@@ -56,7 +56,7 @@ class PackReports::MainController < OrganizationController
     case params[:download].try(:[], :format)
     when 'csv'
       if preseizures.any? && @report.user.uses?(:csv_descriptor)
-        data = PreseizureExport::PreseizuresToCsv.new(@report.user, preseizures).execute
+        data = SoftwareMod::Export::CsvDescriptor.new(preseizures).execute
 
         send_data(data, type: 'text/csv', filename: "#{@report.name.tr(' ', '_').tr('%', '_')}.csv", x_sendfile: true, disposition: 'inline')
       else
