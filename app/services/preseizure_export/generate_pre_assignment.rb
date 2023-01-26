@@ -377,7 +377,7 @@ private
         File.open("#{file_path}/#{file_real_name}.xml", 'w') { |file| file.write(data[:data_built]) }
         @export.got_success "#{file_real_name}.xml"
       else
-        @export.got_error "Exercise ibiza not found", false
+        @export.got_error "Exercise ibiza not found"
       end
     rescue => e
       @export.got_error e
