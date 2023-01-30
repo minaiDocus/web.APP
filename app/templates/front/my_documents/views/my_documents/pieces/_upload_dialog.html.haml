@@ -8,7 +8,7 @@
         .modal-body
           - if has_multiple_accounts?
             .form-group
-              %label.semibold Code client
+              %label.semibold Dossier client
               = select_tag :file_code, options_for_select(file_upload_users_list.map{ |e| [e.short_info, e.code] }), include_blank: true, data: { placeholder: 'Choisir un client'}, id: :file_code, class: 'chosen-list w-100'
           - else
             = hidden_field_tag :file_code, @user.code
@@ -26,15 +26,15 @@
                 %span.fs-origin.badge.badge-warning.margin1right
                   Attention :
                 Pour des raisons de clôture de période comptable, vous ne pouvez plus affecter de documents à la période #{period_option_label(@period_service.period_duration, Time.now - @period_service.period_duration.month)} après le #{l(@period_service.prev_expires_at, format: '%d %B %Y à %H:%M')}.
-            - else
-              %span.help-block{ style: 'display:none; margin-left: 0' }
-                %span.fs-origin.badge.badge-warning.margin1right
-                  Attention :
-                Pour des raisons de clôture de période comptable, vous ne pouvez plus affecter de documents à la période
-                %span.period
-                après le
-                %span.date
-                \.
+            / - else
+            /   %span.help-block{ style: 'display:none; margin-left: 0' }
+            /     %span.fs-origin.badge.badge-warning.margin1right
+            /       Attention :
+            /     Pour des raisons de clôture de période comptable, vous ne pouvez plus affecter de documents à la période
+            /     %span.period
+            /     après le
+            /     %span.date
+            /     \.
           - if @user.organization.ibiza.try(:configured?) && (has_multiple_accounts? || @user.uses_ibiza_analytics?)
             #analytic_user_fields.clearfix
               .with_compta_analysis.hide

@@ -9,7 +9,7 @@
           = hidden_field_tag :for_customer, 1
           - if @users.size > 1
             .form-group
-              %label.semibold Code client
+              %label.semibold Dossier client
               = select_tag :file_code, options_for_select(@users.map{ |e| [e.short_info, e.code] }, @user.code), include_blank: true, data: { placeholder: 'Choisir un client'}, id: :file_code_customer, class: 'chosen-list w-100'
           - else
             = hidden_field_tag :file_code, @user.code
