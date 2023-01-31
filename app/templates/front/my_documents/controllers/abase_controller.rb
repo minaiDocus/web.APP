@@ -148,7 +148,7 @@ class MyDocuments::AbaseController < FrontController #Must be loaded first that'
     if pieces_ids.size > 20
       render body: 'Votre séléction est au-delà de 20 pièces, veuiller contacter le support si vous voulez télécharger plus de 20 pièces svp !', status: 404
     else
-      if Pack::Piece.unscoped.where(id: pieces_ids.first).try(:user).in?(accounts) || current_user.try(:is_admin)
+      if Pack::Piece.unscoped.where(id: pieces_ids.first).try(:first).try(:user).in?(accounts) || current_user.try(:is_admin)
         tmp_dir = CustomUtils.mktmpdir('download_selected', nil, false)
 
         pieces_ids.each do |piece_id|
