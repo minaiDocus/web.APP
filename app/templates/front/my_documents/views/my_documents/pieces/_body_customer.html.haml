@@ -17,7 +17,7 @@
 
     %hr
     .processing-piece.mb-2
-      %label.ms-3 Pièce en cours de traitement
+      %label.ms-3 Document en cours ...
       %span.badge.bg-dark.float-end.me-3= @temp_documents.count || 0
 
     %hr.mt-0
@@ -87,12 +87,12 @@
       .my-4
       .row.w-100.text-center
         .col-md-6
-          %button.btn.btn-light.btn-sm.no-border-radius.w-100.semibold.btn-reinit{:type => 'button', id: 'launch-reinit2', :type => 'button'} &Eacute;ffacer
+          %a.btn.btn-light.btn-sm.no-border-radius.w-100.semibold.btn-reinit{ href: '#main-customer', id: 'launch-reinit2' } &Eacute;ffacer
         .col-md-6
-          %button.btn.btn-dark.btn-sm.no-border-radius.w-100.semibold.btn-search{:type => 'button', id: 'launch-filter'} Lancer
+          %a.btn.btn-dark.btn-sm.no-border-radius.w-100.semibold.btn-search{ href: '#main-customer', id: 'launch-filter'} Lancer
 
   .col-md-10
-    .box.derivationRight{ style: 'margin-top: 0' }
+    #customer-result.box.derivationRight{ style: 'margin-top: 0' }
       .row
         .col-md-12
           %table.table.table-striped.list_customers#tbl_pieces
