@@ -20,6 +20,7 @@
               %th= sortable :created_at, t('activerecord.models.common.attributes.created_at'), { user_contains: @user_contains }
               %th= sortable :updated_at, t('activerecord.models.common.attributes.updated_at'), { user_contains: @user_contains }
               %th= sortable :code, t('activerecord.models.user.attributes.formatted_identifier'), { user_contains: @user_contains }
+              %th Email
               %th.text-end= t('actions.name').singularize
           %tbody
             - @users.each do |user|
@@ -28,6 +29,7 @@
                 %td= l(user.created_at)
                 %td= l(user.updated_at)
                 %td= user.info
+                %td= user.email
                 %td.text-end.pointer.align-middle                      
                   .action
                     %span.glyph= glyphicon('ellipses', { size: '12', style: 'transform: rotate(90deg)'})
@@ -37,6 +39,10 @@
                         = link_to admin_user_path(user), target: '_blank' do
                           %span.me-2= glyphicon('eye', size: 12)
                           %span Voir
+                      %li
+                        = link_to send_reset_password_instructions_admin_user_path(user), method: :post, data: { confirm: t('actions.confirm') }, title: 'Envoie un email' do
+                          %span.me-2= glyphicon('reload', size: 12)
+                          %span Réinitialiser le mot de passe
         = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: admin_users_path, target: '#table_users', total_pages: @users.total_pages, filter: 'filter-organizations' }               
 
         .modal#filter-organizations
