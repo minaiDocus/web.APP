@@ -15,7 +15,6 @@ Rails.application.routes.draw do
       post  'get_retriever', on: :collection
       post  'get_bank_accounts', on: :collection      
       post 'switch', on: :collection
-      post 'user_reset_password', on: :collection
       post 'resume_me', on: :collection
       post 'resend_operation', on: :collection  
       post 'resend_to_preassignment', on: :collection

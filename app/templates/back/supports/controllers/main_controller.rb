@@ -49,19 +49,6 @@ class Admin::Supports::MainController < BackController
     end   
   end
 
-  def user_reset_password
-    @user = User.find_by_code(params[:user_code]) if not params[:user_code].blank?
-
-    new_password   = SecureRandom.hex(10)
-    @user.password = new_password
-
-    if @user.save
-      render plain: "Nouveau MDP : #{new_password}"
-    else
-      render plain: 'Action avorté'
-    end    
-  end
-
   def get_flux_bridge    
     if params[:bridge_code_user].present? && params[:bridge_bank_ids].present? && params[:ope_date].present?
       date       = params[:ope_date].split('-')
@@ -119,7 +106,7 @@ class Admin::Supports::MainController < BackController
 
         begin
           bank_account = user.bank_accounts.find params[:bridge_bank_ids]
-          transactions = BridgeBankin::Transaction.list_by_account(account_id: bank_account.api_id, access_token: access_token, since: start_time)
+          @transactions = BridgeBankin::Transaction.list_by_account(account_id: bank_account.api_id, access_token: access_token, since: start_time)
 
 
           render partial: "get_transaction_free"
@@ -164,7 +151,7 @@ class Admin::Supports::MainController < BackController
     operations = Operation.where(id: params[:ids]) 
 
     operations.each do |operation|      
-      operation.update(is_locked: false) if operation.to_lock?     
+      operation.update(is_locked: false) if not operation.to_lock?     
     end
 
     render plain: "Modifié avec succès"
@@ -173,9 +160,11 @@ class Admin::Supports::MainController < BackController
   def resend_to_preassignment
     pieces = Pack::Piece.where(id: params[:ids])
 
-    pieces.each do |piece|      
+    pieces.each do |piece|
+      piece.preseizures.destroy_all
+
       piece.pre_assignment_state = "waiting"
-      piece.created_at           = Time.now if piece.created_at > 3.month.ago
+      piece.created_at           = Time.now if piece.created_at < 3.month.ago
 
       piece.save 
     end
@@ -184,23 +173,16 @@ class Admin::Supports::MainController < BackController
   end
 
   def resend_delivery
-    preseizures = Pack::Report::Preseizure.where(id: params[:ids])
+    # report_preseizures = Pack::Report::Preseizure.where(id: params[:ids]).group_by(&:report)
+    # report_preseizures = Pack::Report::Preseizure.last(10).group_by(&:report)
 
-    preseizures.each do |preseizure|
-      deliveries = preseizure.pre_assignment_deliveries
-
-      if deliveries.any?
-        deliveries.each do |deliverie|
-          delivery.error_message = 'force sending'
-          delivery.state         = 'pending'
-
-          delivery.save
-        end
-      else
-        preseizure.is_locked = false
-        PreAssignment::CreateDelivery.new(preseizure).execute
-      end
-    end
+    # report_preseizures.each do |report_preseizure|
+    #   debugger
+      
+    #   # preseizure.is_locked = false
+    #   # PreAssignment::CreateDelivery.new(grouped_preseizures, ['ibiza', 'exact_online', 'my_unisoft', 'sage_gec', 'acd'], {force: true}).execute
+    #   # PreAssignment::CreateDelivery.new(preseizure).execute
+    # end
 
     render plain: "Modifié avec succès"
   end
@@ -224,8 +206,10 @@ class Admin::Supports::MainController < BackController
   def get_preseizures
     if params[:preseizure_date].present?
       @preseizures = Pack::Report::Preseizure.where("pack_report_preseizures.date BETWEEN '#{CustomUtils.parse_date_range_of(params[:preseizure_date]).join("' AND '")}'")
+    elsif params[:pack_piece_name].present?
+      @preseizures = Pack.find_by_name(params[:pack_piece_name].strip + ' all')&.preseizures.presence || []
     else
-      @preseizures = params[:piece_name].present? ? Pack::Piece.find_by_name(params[:piece_name].strip).preseizures : []
+      @preseizures = params[:piece_name].present? ? Pack::Piece.find_by_name(params[:piece_name].strip)&.preseizures : []
     end
 
     if @preseizures.try(:any?)
@@ -256,7 +240,11 @@ class Admin::Supports::MainController < BackController
   def destroy_temp_document
     temp_documents = TempDocument.where(id: params[:ids])
 
-    if temp_documents.destroy_all
+    if temp_documents
+      temp_documents.each do |temp_document|
+        temp_documents.destroy if %(created ocr_needed unreadable wait_selection).include?(temp_document.state)
+      end
+      
       render plain: "Temp Document supprimé"
     else
       render plain: "Erreur lors de suppression : #{temp_documents.errors.messages}"

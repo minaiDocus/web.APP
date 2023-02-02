@@ -13,7 +13,8 @@
           %th Type          
           %th Piece number          
           %th Label          
-          %th Etat          
+          %th Etat
+          %th Software
           %th Erreur message          
           %th.text-end Action
       %tbody
@@ -28,7 +29,9 @@
             %td= preseizure.piece.present? ? 'Piece' : 'Opération'
             %td= preseizure.piece_number
             %td= preseizure.operation_label
-            %td= preseizure.operation_label
+            %td= preseizure.is_delivered_to
+            %td= preseizure.export_state
+            %td= preseizure.delivery_message
             %td.text-end.pointer
               .action.sub_edit_delete.list-collaborators
                 %span.glyph= glyphicon('ellipses', { size: '12', style: 'transform: rotate(90deg)'})

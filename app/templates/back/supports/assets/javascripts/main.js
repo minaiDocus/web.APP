@@ -7,16 +7,6 @@ function bind_all_events(){
     AppEmit('get_retriever', { 'action': action, "type": type, "datas": datas });
   });
 
-  $('#user_reset_password').unbind('click').bind('click', function(e){
-    let action = "user_reset_password";
-    let type   = "POST";
-    let datas  = { user_code: $('input.user_code').val() };
-
-    if (confirm('Voulez-vous vraiment efféctuer cette action ? ')){
-      AppEmit('user_reset_password', { 'action': action, "type": type, "datas": datas });
-    }
-  });
-
   $('.resume_me').unbind('click').bind('click', function(e){
     let action = "resume_me";
     let type   = "POST";
@@ -296,7 +286,6 @@ jQuery(function() {
   bind_all_events();
 
   AppListenTo('get_retriever', (e)=>{ abu.supports( $(e.detail.action), $(e.detail.type), $(e.detail.datas) ); });
-  AppListenTo('user_reset_password', (e)=>{ abu.supports( $(e.detail.action), $(e.detail.type), $(e.detail.datas) ); });
   AppListenTo('resume_me', (e)=>{ abu.supports( $(e.detail.action), $(e.detail.type), $(e.detail.datas) ); });
   AppListenTo('get_bank_accounts', (e)=>{ abu.supports( $(e.detail.action), $(e.detail.type), $(e.detail.datas), $(e.detail.title) ); });
   AppListenTo('get_operations', (e)=>{ abu.supports( $(e.detail.action), $(e.detail.type), $(e.detail.datas) ); });
