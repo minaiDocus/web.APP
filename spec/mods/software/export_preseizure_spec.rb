@@ -15,8 +15,8 @@ describe PreseizureExport::ExportPreseizures do
     @report       = FactoryBot.create :report, user: @user, organization: @organization
     pack          = FactoryBot.create :pack, owner: @user, organization: @organization , name: (@report.name + ' all')
     @piece        = FactoryBot.create :piece, pack: pack, user: @user, organization: @organization, name: (@report.name + ' 001')
-
-    @accounting_plan = AccountBookType
+    @journal      = FactoryBot.create :account_book_type, :journal_with_preassignment, name: 'AC', description: 'Achat', user: @user
+    @accounting_plan = AccountingPlan.create(user_id: @user.id)
 
     @piece.cloud_content_object.attach(File.open("#{Rails.root}/spec/support/files/2019090001.pdf"), '2019090001.pdf')
     @piece.save
@@ -39,7 +39,7 @@ describe PreseizureExport::ExportPreseizures do
       it 'generate normal coala csv file' do
         allow_any_softwares
 
-        result = PreseizureExport::ExportPreseizures.new('coala').execute(@preseizures)
+        p result = PreseizureExport::ExportPreseizures.new('coala').execute(@preseizures)
 
         expect(result.present?).to be true
         expect(File.exist?(result.to_s)).to be true
@@ -49,7 +49,7 @@ describe PreseizureExport::ExportPreseizures do
       it 'generate normal coala xls file' do
         allow_any_softwares
 
-        result = PreseizureExport::ExportPreseizures.new('coala', 'xls').execute(@preseizures)
+        p result = PreseizureExport::ExportPreseizures.new('coala', 'xls').execute(@preseizures)
 
         expect(result.present?).to be true
         expect(File.exist?(result.to_s)).to be true
@@ -59,7 +59,7 @@ describe PreseizureExport::ExportPreseizures do
       it 'generate normal coala xls with piece file', :zip do
         allow_any_softwares
 
-        result = PreseizureExport::ExportPreseizures.new('coala', 'xls').execute(@preseizures, true)
+        p result = PreseizureExport::ExportPreseizures.new('coala', 'xls').execute(@preseizures, true)
 
         expect(result.present?).to be true
         expect(File.exist?(result.to_s)).to be true
@@ -68,10 +68,42 @@ describe PreseizureExport::ExportPreseizures do
     end
 
     context 'cegid', :cegid do
-      it 'generate normal cegid txt file' do
+      it 'generate normal cegid csv file' do
         allow_any_softwares
 
-        result = PreseizureExport::ExportPreseizures.new('cegid').execute(@preseizures)
+        p result = PreseizureExport::ExportPreseizures.new('cegid').execute(@preseizures)
+
+        expect(result.present?).to be true
+        expect(File.exist?(result.to_s)).to be true
+        expect(result.to_s.split('.')[1]).to eq 'csv'
+      end
+
+      it 'generate normal cegid tra file' do
+        allow_any_softwares
+
+        p result = PreseizureExport::ExportPreseizures.new('cegid', 'tra').execute(@preseizures)
+
+        expect(result.present?).to be true
+        expect(File.exist?(result.to_s)).to be true
+        expect(result.to_s.split('.')[1]).to eq 'tra'
+      end
+
+      it 'generate normal cegid tra with piece file' do
+        allow_any_softwares
+
+        p result = PreseizureExport::ExportPreseizures.new('cegid', 'tra').execute(@preseizures, true)
+
+        expect(result.present?).to be true
+        expect(File.exist?(result.to_s)).to be true
+        expect(result.to_s.split('.')[1]).to eq 'zip'
+      end
+    end
+
+    context 'quadratus', :quadratus do
+      it 'generate normal quadratus txt file' do
+        allow_any_softwares
+
+        p result = PreseizureExport::ExportPreseizures.new('quadratus').execute(@preseizures)
 
         expect(result.present?).to be true
         expect(File.exist?(result.to_s)).to be true
