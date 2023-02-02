@@ -1,6 +1,8 @@
 class SoftwareMod::ExactOnline < ApplicationRecord
   include Interfaces::Software::Configuration
 
+  self.table_name = "software_exact_onlines"
+
   belongs_to :owner, polymorphic: true
 
   attr_encrypted :client_id,       random_iv: true

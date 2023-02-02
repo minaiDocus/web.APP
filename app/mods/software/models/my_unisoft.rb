@@ -2,6 +2,8 @@
 class SoftwareMod::MyUnisoft < ApplicationRecord
   include Interfaces::Software::Configuration
 
+  self.table_name = "software_my_unisofts"
+
   belongs_to :owner, polymorphic: true
 
   attr_encrypted :api_token, random_iv: true
