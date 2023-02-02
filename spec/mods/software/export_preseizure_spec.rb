@@ -1,7 +1,7 @@
 # -*- encoding : UTF-8 -*-
 require 'spec_helper'
 
-describe PreseizureExport::ExportPreseizures do
+describe SoftwareMod::ExportPreseizures do
   def allow_any_softwares
     allow_any_instance_of(Pack::Report::Preseizure).to receive('computed_date').and_return(Time.now)
     allow_any_instance_of(User).to receive('uses?').and_return(true)
@@ -39,7 +39,7 @@ describe PreseizureExport::ExportPreseizures do
       it 'generate normal coala csv file' do
         allow_any_softwares
 
-        p result = PreseizureExport::ExportPreseizures.new('coala').execute(@preseizures)
+        p result = SoftwareMod::ExportPreseizures.new('coala').execute(@preseizures)
 
         expect(result.present?).to be true
         expect(File.exist?(result.to_s)).to be true
@@ -49,7 +49,7 @@ describe PreseizureExport::ExportPreseizures do
       it 'generate normal coala xls file' do
         allow_any_softwares
 
-        p result = PreseizureExport::ExportPreseizures.new('coala', 'xls').execute(@preseizures)
+        p result = SoftwareMod::ExportPreseizures.new('coala', 'xls').execute(@preseizures)
 
         expect(result.present?).to be true
         expect(File.exist?(result.to_s)).to be true
@@ -59,7 +59,7 @@ describe PreseizureExport::ExportPreseizures do
       it 'generate normal coala xls with piece file', :zip do
         allow_any_softwares
 
-        p result = PreseizureExport::ExportPreseizures.new('coala', 'xls').execute(@preseizures, true)
+        p result = SoftwareMod::ExportPreseizures.new('coala', 'xls').execute(@preseizures, true)
 
         expect(result.present?).to be true
         expect(File.exist?(result.to_s)).to be true
@@ -71,7 +71,7 @@ describe PreseizureExport::ExportPreseizures do
       it 'generate normal cegid csv file' do
         allow_any_softwares
 
-        p result = PreseizureExport::ExportPreseizures.new('cegid').execute(@preseizures)
+        p result = SoftwareMod::ExportPreseizures.new('cegid').execute(@preseizures)
 
         expect(result.present?).to be true
         expect(File.exist?(result.to_s)).to be true
@@ -81,7 +81,7 @@ describe PreseizureExport::ExportPreseizures do
       it 'generate normal cegid tra file' do
         allow_any_softwares
 
-        p result = PreseizureExport::ExportPreseizures.new('cegid', 'tra').execute(@preseizures)
+        p result = SoftwareMod::ExportPreseizures.new('cegid', 'tra').execute(@preseizures)
 
         expect(result.present?).to be true
         expect(File.exist?(result.to_s)).to be true
@@ -91,7 +91,7 @@ describe PreseizureExport::ExportPreseizures do
       it 'generate normal cegid tra with piece file' do
         allow_any_softwares
 
-        p result = PreseizureExport::ExportPreseizures.new('cegid', 'tra').execute(@preseizures, true)
+        p result = SoftwareMod::ExportPreseizures.new('cegid', 'tra').execute(@preseizures, true)
 
         expect(result.present?).to be true
         expect(File.exist?(result.to_s)).to be true
@@ -103,7 +103,7 @@ describe PreseizureExport::ExportPreseizures do
       it 'generate normal quadratus txt file' do
         allow_any_softwares
 
-        p result = PreseizureExport::ExportPreseizures.new('quadratus').execute(@preseizures)
+        p result = SoftwareMod::ExportPreseizures.new('quadratus').execute(@preseizures)
 
         expect(result.present?).to be true
         expect(File.exist?(result.to_s)).to be true

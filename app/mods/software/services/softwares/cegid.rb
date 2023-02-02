@@ -1,5 +1,5 @@
 # -*- encoding : UTF-8 -*-
-class PreseizureExport::Software::Cegid
+class SoftwareMod::Service::Cegid
   def self.file_name_format(piece)
     piece.name.tr(' ', '_').tr('%', '_') + '.pdf'
   end
@@ -240,7 +240,7 @@ class PreseizureExport::Software::Cegid
 
           data << line
 
-          file_name = preseizure.piece ? PreseizureExport::Software::Cegid.file_name_format(preseizure.piece) : ' '
+          file_name = preseizure.piece ? SoftwareMod::Service::Cegid.file_name_format(preseizure.piece) : ' '
 
           line = ' ' * 222
 

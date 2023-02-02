@@ -1,5 +1,5 @@
 # -*- encoding : UTF-8 -*-
-class PreseizureExport::Software::FecAgiris
+class SoftwareMod::Service::FecAgiris
   def self.file_name_format(piece)
     "#{piece.position.to_s[0..25]}.pdf"
   end
@@ -164,7 +164,7 @@ class PreseizureExport::Software::FecAgiris
           line[78..93]  = '1'
           line[94..122] = Time.now.strftime("0%d%m%Y%d%m%Y")
           line[123..152]= "0EUR"
-          line[153]     = PreseizureExport::Software::FecAgiris.file_name_format(piece)
+          line[153]     = SoftwareMod::Service::FecAgiris.file_name_format(piece)
 
           data << line
         end

@@ -1,5 +1,5 @@
 # -*- encoding : UTF-8 -*-
-class PreseizureExport::Software::Quadratus
+class SoftwareMod::Service::Quadratus
   def self.file_name_format(piece)
     piece.position.to_s + '.pdf'
   end
@@ -75,7 +75,7 @@ class PreseizureExport::Software::Quadratus
         line[148..157] = preseizure.piece_number.strip[0..9].rjust(10, '0') if preseizure.piece_number.present?
 
         if preseizure.piece
-          file_name = PreseizureExport::Software::Quadratus.file_name_format(preseizure.piece)
+          file_name = SoftwareMod::Service::Quadratus.file_name_format(preseizure.piece)
           e = 181 + file_name.size - 1
           line[181..e] = file_name
         end

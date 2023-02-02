@@ -1,5 +1,5 @@
 # -*- encoding : UTF-8 -*-
-class PreseizureExport::Software::Ciel
+class SoftwareMod::Service::Ciel
   def initialize(preseizures, tmp_dir=nil, _format='txt')
     @preseizures = preseizures
     @user        = preseizures.first.user
