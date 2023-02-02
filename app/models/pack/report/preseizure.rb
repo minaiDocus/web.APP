@@ -291,10 +291,11 @@ class Pack::Report::Preseizure < ApplicationRecord
   end
 
   def is_delivered?
-    ( self.user.try(:uses?, :ibiza) && is_delivered_to?('ibiza') ) ||
-    ( self.user.try(:uses?, :exact_online) && is_delivered_to?('exact_online') ) ||
-    ( self.user.try(:uses?, :sage_gec) && is_delivered_to?('sage_gec') ) ||
-    ( self.user.try(:uses?, :acd) && is_delivered_to?('acd') )
+    # ( self.user.try(:uses?, :ibiza) && is_delivered_to?('ibiza') ) ||
+    # ( self.user.try(:uses?, :exact_online) && is_delivered_to?('exact_online') ) ||
+    # ( self.user.try(:uses?, :sage_gec) && is_delivered_to?('sage_gec') ) ||
+    # ( self.user.try(:uses?, :acd) && is_delivered_to?('acd') )
+    not ['not_configured', 'not_delivered', 'failed'].include?(self.delivery_state)
   end
 
   def is_delivered_to?(software='ibiza')
@@ -302,10 +303,11 @@ class Pack::Report::Preseizure < ApplicationRecord
   end
 
   def is_not_delivered?
-    ( self.user.try(:uses?, :ibiza) && !is_delivered_to?('ibiza') ) ||
-    ( self.user.try(:uses?, :exact_online) && !is_delivered_to?('exact_online') ) ||
-    ( self.user.try(:uses?, :sage_gec) && !is_delivered_to?('sage_gec') ) ||
-    ( self.user.try(:uses?, :acd) && !is_delivered_to?('acd') )
+    # ( self.user.try(:uses?, :ibiza) && !is_delivered_to?('ibiza') ) ||
+    # ( self.user.try(:uses?, :exact_online) && !is_delivered_to?('exact_online') ) ||
+    # ( self.user.try(:uses?, :sage_gec) && !is_delivered_to?('sage_gec') ) ||
+    # ( self.user.try(:uses?, :acd) && !is_delivered_to?('acd') )
+    self.delivery_state == 'not_delivered'
   end
 
   def is_exported?
