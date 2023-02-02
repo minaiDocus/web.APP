@@ -15,6 +15,18 @@ class DocumentsPieces extends DocumentsMain{
   load_packs(serialize_form=false, append=false){
     this.load_datas(serialize_form, append);
   }
+
+  delete_pack_pieces(pack_id){
+    let params =  {
+                    url: '/documents/delete',
+                    type: 'POST',
+                    data: { pack_id: pack_id },
+                    dataType: 'json'
+                  }
+    if (confirm('Voulez-vous vraiment supprimer toutes les pièces ? ')){
+      this.applicationJS.sendRequest(params).then((e)=>{ this.load_datas(true); });
+    }
+  }
 }
 
 jQuery(function() {
@@ -29,4 +41,6 @@ jQuery(function() {
 
   AppListenTo('document_customer_filter', (e)=>{ main.load_packs(true); });
   AppListenTo('filter_pack_badge', (e)=>{ main.load_packs(true); });
+
+  AppListenTo('delete_all_pieces', (e)=>{ main.delete_pack_pieces(e.detail.pack_id)});
 });

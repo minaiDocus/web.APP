@@ -226,6 +226,7 @@ class DocumentsMain{
     if(confirm(information))
       this.applicationJS.sendRequest(ajax_params).then((e)=>{ this.applicationJS.noticeSuccessMessageFrom(null, `${e.size} livraison(s) en cours ...`); });
   }
+
 }
 
 jQuery(function() {

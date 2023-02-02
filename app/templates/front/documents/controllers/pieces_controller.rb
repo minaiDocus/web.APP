@@ -43,8 +43,13 @@ class Documents::PiecesController < Documents::AbaseController
   end
 
   def delete
-    pieces_ids  = Array(params[:ids] || [])
-    pack        = nil
+    if params[:pack_id].present?
+      pack       = Pack.find params[:pack_id]
+      pieces_ids = pack.pieces.pluck(:id)
+    else
+      pieces_ids  = Array(params[:ids] || [])
+      pack        = nil
+    end
 
     pieces_ids.each do |piece_id|
       piece           = Pack::Piece.find piece_id

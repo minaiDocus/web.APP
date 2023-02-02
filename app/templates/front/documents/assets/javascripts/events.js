@@ -142,6 +142,7 @@ function bind_all_events(){
   });
 
   $('.filter-customer-journal').unbind('click').bind('click', function(e){ AppEmit('document_customer_filter'); });
+  $('.delete-all-pieces').unbind('click').bind('click', function(e){ AppEmit('delete_all_pieces', { 'pack_id': $(this).data('pack-id') }); });
 
   $('.to-filter').unbind('click').bind('click', function(e){ $('#badge-filter').val($(this).attr('id')); AppEmit('filter_pack_badge'); });
 
