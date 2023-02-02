@@ -13,16 +13,16 @@ class PonctualScripts::MergeOrganizations < PonctualScripts::PonctualScript
 
   def execute
     #[IMPORTANT] : account number rules must be migrate before customer migration
-    migrate_accounts_rules  unless @options[:rules_only]
-    migrate_collaborators   unless @options[:collaborators_only]
+    # migrate_accounts_rules  unless @options[:rules_only]
+    # migrate_collaborators   unless @options[:collaborators_only]
     migrate_customers       unless @options[:customers_only]
 
     # migrate_mcf             unless @options[:mcf_only]
   end
 
   def backup
-    migrate_accounts_rules(true)  unless @options[:rules_only]
-    migrate_collaborators(true)   unless @options[:collaborators_only]
+    # migrate_accounts_rules(true)  unless @options[:rules_only]
+    # migrate_collaborators(true)   unless @options[:collaborators_only]
     migrate_customers(true)       unless @options[:customers_only]
 
     # migrate_mcf(true)             unless @options[:mcf_only]
@@ -35,7 +35,7 @@ class PonctualScripts::MergeOrganizations < PonctualScripts::PonctualScript
   end
 
   def organizations_hash
-    return @organizations_hash unless @organizations_hash
+    return @organizations_hash if @organizations_hash.present?
 
     @organizations_hash = {
                             'BIN' => Organization.find_by_code('BIN').id,
@@ -197,7 +197,7 @@ class PonctualScripts::MergeOrganizations < PonctualScripts::PonctualScript
     c_group = user.groups.where(id: new_group.id).first
     return false if c_group
 
-    new_group.members << user
+    new_group.customers << user
   end
 
   # def migrate_mcf(rollback = false)
