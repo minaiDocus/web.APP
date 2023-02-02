@@ -1,5 +1,5 @@
 ###IMPORTANT : FOR NOW, EXPORT ONLY SUPPORT PRESEIZURES OF SAME REPORT.
-class PreseizureExport::ExportPreseizures
+class SoftwareMod::ExportPreseizures
   def self.execute(software, preseizures_ids, include_pieces=false, _format=nil, retry_count=0)
     if retry_count <= 3
       preseizures = Pack::Report::Preseizure.where(id: preseizures_ids)
@@ -25,25 +25,25 @@ class PreseizureExport::ExportPreseizures
     @report         = @preseizures.first.report
 
     sub_pieces_dir  = nil
-    result          = 'not_authorized' 
+    result          = 'not_authorized'
 
     case @software
     when 'csv_descriptor'
-      @software_class =  PreseizureExport::Software::CsvDescriptor
+      @software_class = SoftwareMod::Service::CsvDescriptor
     when 'coala'
-      @software_class = PreseizureExport::Software::Coala
+      @software_class = SoftwareMod::Service::Coala
     when 'cegid'
-      @software_class = PreseizureExport::Software::Cegid
+      @software_class = SoftwareMod::Service::Cegid
     when 'quadratus'
-      @software_class = PreseizureExport::Software::Quadratus
+      @software_class = SoftwareMod::Service::Quadratus
     when 'fec_acd'
-      @software_class = PreseizureExport::Software::FecAcd
+      @software_class = SoftwareMod::Service::FecAcd
     when 'cogilog'
-      @software_class = PreseizureExport::Software::Cogilog
+      @software_class = SoftwareMod::Service::Cogilog
     when 'ciel'
-      @software_class = PreseizureExport::Software::Ciel
+      @software_class = SoftwareMod::Service::Ciel
     when 'fec_agiris'
-      @software_class = PreseizureExport::Software::FecAgiris
+      @software_class = SoftwareMod::Service::FecAgiris
     end
 
     begin
@@ -68,6 +68,7 @@ class PreseizureExport::ExportPreseizures
       create_preassignment_export
 
       if File.exist?(@file_path.to_s)
+        send_success_email
         @export.got_success(@file_path)
       else
         @export.got_error(@file_path.presence || 'Internal server error')
@@ -131,6 +132,18 @@ class PreseizureExport::ExportPreseizures
   end
 
   def retry_later
-    PreseizureExport::ExportPreseizures.delay_for(1.hours).execute(@software, @preseizures.collect(&:id), @include_pieces, @format, (@retry_count + 1))
+    if @retry_count <= 3
+      SoftwareMod::ExportPreseizures.delay_for(1.hours).execute(@software, @preseizures.collect(&:id), @include_pieces, @format, (@retry_count + 1))
+    else
+      send_error_email
+    end
+  end
+
+  def send_error_email
+    #TODO : send failed export email
+  end
+
+  def send_success_email
+    #TODO : send success email
   end
 end
