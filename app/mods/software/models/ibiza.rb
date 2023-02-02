@@ -1,6 +1,8 @@
 class SoftwareMod::Ibiza < ApplicationRecord
   include Interfaces::Software::Configuration
 
+  self.table_name = "software_ibizas"
+
   audited
 
   serialize :description, Hash

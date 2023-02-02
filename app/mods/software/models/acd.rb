@@ -1,6 +1,8 @@
 class SoftwareMod::Acd < ApplicationRecord
   include Interfaces::Software::Configuration
 
+  self.table_name = "software_acds"
+
   belongs_to :owner, polymorphic: true
 
   attr_encrypted :password, random_iv: true
