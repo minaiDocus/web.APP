@@ -50,7 +50,7 @@ module IbizaLib
           exercises
         else
           client.request.clear
-          client.company(id).exercices?
+          # client.company(id).exercices?
           if client.response.success?
             exercises = Array(client.response.data).map do |exercise_data|
               exercise = OpenStruct.new

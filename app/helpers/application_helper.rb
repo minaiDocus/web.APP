@@ -317,28 +317,6 @@ module ApplicationHelper
   end
 
 
-  def knowings_visibility_options
-    [
-      [t('activerecord.models.user.attributes.knowings_visibility_options.private'),    KnowingsApi::PRIVATE],
-      [t('activerecord.models.user.attributes.knowings_visibility_options.restricted'), KnowingsApi::RESTRICTED],
-      [t('activerecord.models.user.attributes.knowings_visibility_options.visible'),    KnowingsApi::VISIBLE]
-    ]
-  end
-
-
-  def knowings_visibility(value)
-    if value == KnowingsApi::PRIVATE
-      t('activerecord.models.user.attributes.knowings_visibility_options.private')
-    elsif value == KnowingsApi::RESTRICTED
-      t('activerecord.models.user.attributes.knowings_visibility_options.restricted')
-    elsif value == KnowingsApi::VISIBLE
-      t('activerecord.models.user.attributes.knowings_visibility_options.visible')
-    else
-      ''
-    end
-  end
-
-
   def pre_assignment_date_computed_options
     [
       ["Paramètres du cabinet (appliquer la règle définie dans les paramètres du cabinet)", -1],

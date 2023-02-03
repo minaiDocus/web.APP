@@ -6,11 +6,6 @@ Rails.application.routes.draw do
       get 'fetcher',  on: :collection
     end
 
-    resources :retrievers, only: :index, module: 'retrievers', controller: 'archives' do
-      get 'archives/budgea_users',      on: :collection
-      get 'archives/budgea_retrievers', on: :collection
-    end
-
     namespace :retrievers do
       get  '/services', to: 'services#index', as: 'services'
     end

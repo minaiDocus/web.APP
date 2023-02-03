@@ -45,12 +45,6 @@
                 - else
                   = link_to @user.code, organization_customer_path(@user.organization, @user)
             %tr
-              %th.first= t('activerecord.models.user.attributes.knowings_code')
-              %td= render partial: 'text_field', locals: { value: @user.knowings_code, name: 'user[knowings_code]' }
-            %tr
-              %th.first= t('activerecord.models.user.attributes.knowings_visibility')
-              %td= render partial: 'text_field', locals: { value: @user.knowings_visibility, name: 'user[knowings_visibility]' }
-            %tr
               %th.first= t('activerecord.models.organization.name')
               %td
                 - if @user.collaborator?

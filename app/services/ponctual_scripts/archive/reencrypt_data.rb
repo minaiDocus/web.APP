@@ -10,8 +10,7 @@ class PonctualScripts::Archive::ReencryptData
       [GoogleDoc,          [:refresh_token, :access_token, :access_token_expires_at]],
       [Box,                [:refresh_token, :access_token]],
       [Ftp,                [:host, :port, :login, :password]],
-      [Ibiza,              [:access_token, :access_token_2]],
-      [Knowings,           [:url, :username, :password, :pole_name]]
+      [Ibiza,              [:access_token, :access_token_2]]
     ]
 
     # NOTE: Disable update_states for Ibiza to avoid reverifying all the tokens

@@ -89,18 +89,10 @@
         = link_to(admin_events_path) do
           %span.me-2= glyphicon('target', size: 12, color: "white")
           %span Visites      
-      %li.nav-item.dropdown{ class: ('active' if controller_path == 'admin/retrievers/main' || controller_path == 'admin/retrievers/archives') } 
-        = link_to '#', class: 'dropdown-toggle', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-bs-toggle' => "dropdown", 'role' => "button" do
-          %span.me-2= glyphicon('audio-spectrum', size: 12, color: "white")
-          %span Automates
-          %span.float-end= glyphicon('chevron-right', size: 12, color: "white")
-        .dropdown-menu.fadein
-          = link_to admin_retrievers_path, class: 'dropdown-item' do
-            %span.me-2= glyphicon('calendar', size: 12, color: "rgba(26, 26, 26, 0.7)")
-            %span.text-dark Automates de récupération          
-          = link_to(archives_budgea_users_admin_retrievers_path(tab: 'budgea_users'), class: 'dropdown-item') do
-            %span.me-2= glyphicon('grid-three-up', size: 12, color: "rgba(26, 26, 26, 0.7)")
-            %span.text-dark Archives
+      %li.nav-item{ class: ('active' if controller_path == 'admin/retrievers/main') }
+        = link_to admin_retrievers_path, class: 'dropdown-item' do
+          %span.me-2= glyphicon('calendar', size: 12, color: "rgba(26, 26, 26, 0.7)")
+          %span.text-dark Automates
       %li.nav-item{ class: ('active' if controller_path == 'admin/tickets/main') }
         = link_to admin_tickets_path do
           %span.me-2= glyphicon('print', size: 12, color: "white")

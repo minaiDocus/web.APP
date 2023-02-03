@@ -70,11 +70,6 @@ describe Api::Sgi::V1::JefactureController, :type => :controller do
         detected_third_party_id: (@piece.detected_third_party_id.presence || 6930)
       }.with_indifferent_access
 
-    Pack::Report::TempPreseizure.create(
-      raw_preseizure: @raw_preseizure,
-      is_made_by_abbyy: true,
-      organization_id: organization.id, user_id: @admin.id, report_id: report.id, piece_id: @piece.id, position: @piece.position, state: 'created'
-    )
   end
 
   after(:all) do
