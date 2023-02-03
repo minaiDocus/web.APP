@@ -14,7 +14,6 @@ module FileDelivery::RemotePack
                     elsif object.class == Organization
                       organization_services = []
                       unless type == FileDelivery::RemoteFile::REPORT
-                        organization_services << 'Knowings'         if object.try(:knowings).try(:ready?)
                         organization_services << 'My Company Files' if object.try(:mcf_settings).try(:ready?)
                       end
                       organization_services << 'FTP' if object.try(:ftp).try(:configured?)
@@ -25,7 +24,7 @@ module FileDelivery::RemotePack
 
     service_names.each do |service_name|
       # original
-      if type.in?([FileDelivery::RemoteFile::ALL, FileDelivery::RemoteFile::ORIGINAL_ONLY]) && !service_name.in?(['Knowings', 'My Company Files'])
+      if type.in?([FileDelivery::RemoteFile::ALL, FileDelivery::RemoteFile::ORIGINAL_ONLY]) && !service_name.in?(['My Company Files'])
         document = original_document
         document.extend FileDelivery::RemoteFile
 

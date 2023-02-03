@@ -25,8 +25,6 @@ class FileDelivery::DeliverFile
         :ftp
       when 'sftp'
         :sftp
-      when 'kwg'
-        :knowings
       when 'mcf'
         :my_company_files
       else
@@ -48,8 +46,6 @@ class FileDelivery::DeliverFile
         RemoteFile::FTP
       when 'sftp'
         RemoteFile::SFTP
-      when 'kwg'
-        RemoteFile::KNOWINGS
       when 'mcf'
         RemoteFile::MY_COMPANY_FILES
       else
@@ -132,7 +128,6 @@ class FileDelivery::DeliverFile
 
         @services_name = efs.active_services_name
       elsif @receiver.class.name == Organization.name
-        @services_name << RemoteFile::KNOWINGS if @receiver.knowings.try(:is_configured?)
         @services_name << RemoteFile::FTP if @receiver.ftp.try(:configured?)
         @services_name << RemoteFile::SFTP if @receiver.sftp.try(:configured?)
         @services_name << RemoteFile::MY_COMPANY_FILES if @receiver.mcf_settings.try(:ready?)
@@ -173,8 +168,6 @@ class FileDelivery::DeliverFile
         FileDelivery::Storage::Dropbox.new(DropboxExtended, remote_files, path_pattern: @receiver.dropbox_delivery_folder).execute
       else
         case @service_class
-        when :knowings
-          FileDelivery::Storage::Knowings.new(remote_files).execute
         when :my_company_files
           push_to_mcf
         when :dropbox_basic

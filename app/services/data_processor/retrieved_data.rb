@@ -158,7 +158,6 @@ class DataProcessor::RetrievedData
       System::Log.info('webhook', "[#{@type_synced}] =========== User_id [#{@user.id}] =================== #{json_content} ============================ BudgeaName [#{retriever.service_name}] =====================") if retriever
       @connection_id    = json_content['id']
 
-      add_webhook(retriever, json_content)
       Retriever::DestroyBudgeaConnection.execute(retriever) if retriever && retriever.try(:destroy_connection)
     elsif @type_synced == 'USER_DELETED' && @user.budgea_account
       retrievers = @user.retrievers
@@ -167,7 +166,6 @@ class DataProcessor::RetrievedData
         System::Log.info('webhook', "[#{@type_synced}] =========== User_id [#{@user.id}] =================== RetID [#{retr.id}] ============================ BudgeaName [#{retr.service_name}] =====================") if retr
         Retriever::DestroyBudgeaConnection.execute(retr) if retr && retr.try(:destroy_connection)
 
-        add_webhook(retr, json_content)
       end
 
       @user.budgea_account.destroy
@@ -214,8 +212,6 @@ class DataProcessor::RetrievedData
     end
 
     notify connection
-
-    add_webhook(retriever, connection)
 
     if retriever.is_selection_needed && (@is_new_document_present || @is_new_transaction_present)
       retriever.update(is_selection_needed: false) if retriever.wait_selection
@@ -456,16 +452,5 @@ class DataProcessor::RetrievedData
 
   def get_bank_account_of(account)
     @user.bank_accounts.where('api_id = ? OR (bank_name = ? AND name = ? AND number = ? AND api_name = "budgea")', account['id'], retriever.service_name, account['name'], account['number']).first
-  end
-
-  def add_webhook(retriever, contents)
-    whook              = Archive::WebhookContent.new
-
-    whook.synced_date  = Time.now
-    whook.synced_type  = @type_synced
-    whook.json_content = contents
-    whook.retriever    = retriever
-
-    whook.save
   end
 end

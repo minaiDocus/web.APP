@@ -196,8 +196,6 @@ fr:
             password_confirmation:
               confirmation: Les champs "mot de passe" doivent être identiques
 
-  composition: Composition
-
   dashboard:
     welcome_to: Bienvenue sur
     folder_text_info: Vous pouvez voir l’état de vos dossiers ici ou directement accéder à vos documents.

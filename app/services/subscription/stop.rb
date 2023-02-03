@@ -60,24 +60,11 @@ class Subscription::Stop
     # Disable external services
     Retriever::Remove.delay(queue: :high).execute(@user.id.to_s)
 
-    new_provider_requests = @user.new_provider_requests.not_processed
-    if new_provider_requests.any?
-      new_provider_requests.each(&:reject)
-      new_provider_requests.update_all(notified_at: Time.now)
-    end
-
     @user.dematbox.try(:unsubscribe)
 
     @user.external_file_storage.try(:destroy)
 
     FileImport::Dropbox.changed(@user.reload)
-
-
-    # Remove composition
-    if @user.composition.present? && File.exist?("#{Rails.root}/files/compositions/#{@user.composition.id}")
-      system("rm -r #{Rails.root}/files/compositions/#{@user.composition.id}")
-    end
-    @user.composition.try(:destroy)
 
     true
   end
