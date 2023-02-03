@@ -1,6 +1,6 @@
 # -*- encoding : UTF-8 -*-
 class SoftwareMod::MyUnisoft < ApplicationRecord
-  include Interfaces::Software::Configuration
+  include SoftwareMod::Configuration
 
   self.table_name = "software_my_unisofts"
 

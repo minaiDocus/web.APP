@@ -37,8 +37,8 @@ class PonctualScripts::MigrateSoftware < PonctualScripts::PonctualScript
   end
 
   def migrate_software_of(organization)
-    Interfaces::Software::Configuration::SOFTWARES.each do |software_name|
-      software  = organization.send(software_name.to_sym) || Interfaces::Software::Configuration.softwares[software_name.to_sym].new
+    SoftwareMod::Configuration::SOFTWARES.each do |software_name|
+      software  = organization.send(software_name.to_sym) || SoftwareMod::Configuration.softwares[software_name.to_sym].new
 
       next if software.persisted? || software_name == 'my_unisoft' || software_name == 'sage_gec'
 
@@ -85,8 +85,8 @@ class PonctualScripts::MigrateSoftware < PonctualScripts::PonctualScript
   def migrate_softwares_setting_of(user)
     softwares_setting     = SoftwaresSetting.find_by_user_id(user.id)
 
-    Interfaces::Software::Configuration::SOFTWARES.each do |software_name|
-      software     = user.send(software_name) || Interfaces::Software::Configuration.softwares[software_name.to_sym].new
+    SoftwareMod::Configuration::SOFTWARES.each do |software_name|
+      software     = user.send(software_name) || SoftwareMod::Configuration.softwares[software_name.to_sym].new
       org_software = user.organization.send(software_name)
 
       next if software.persisted? || software_name == 'my_unisoft' || !softwares_setting.present? || !org_software || software_name == 'sage_gec'

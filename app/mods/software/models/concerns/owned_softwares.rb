@@ -1,4 +1,4 @@
-module OwnedSoftwares
+module SoftwareMod::OwnedSoftwares
   extend ActiveSupport::Concern
 
   included do

@@ -160,9 +160,10 @@ class DocumentsMain{
   }
 
   launch_export(){
-    let params = this.export_params;
-    params['format']       = $('#preseizures_export #export_type').val();
-    params['is_operations'] = VARIABLES.get('is_from_operation_page');
+    let params                    = this.export_params;
+    params['format']              = $('#preseizures_export #export_type').val();
+    params['is_pieces_included']  = $('#is_pieces_included').val();
+    params['is_operations']       = VARIABLES.get('is_from_operation_page');
 
     let str_params = JSON.stringify(params);
 

@@ -1,5 +1,5 @@
 class SoftwareMod::FecAgiris < ApplicationRecord
-  include Interfaces::Software::Configuration
+  include SoftwareMod::Configuration
 
   self.table_name = "software_fec_agiris"
 

@@ -1,5 +1,5 @@
 class SoftwareMod::SageGec < ApplicationRecord
-  include Interfaces::Software::Configuration
+  include SoftwareMod::Configuration
 
   self.table_name = "software_sage_gecs"
 

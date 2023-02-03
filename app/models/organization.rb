@@ -1,5 +1,8 @@
 class Organization < ApplicationRecord
   include BillingMod::OrganizationModule
+  
+  include SoftwareMod::OrganizationModule
+  include SoftwareMod::OwnedSoftwares
 
   attr_encrypted :cedricom_password, random_iv: true
   attr_encrypted :jedeclare_password, random_iv: true
@@ -21,7 +24,6 @@ class Organization < ApplicationRecord
   has_many :guest_collaborators, -> { guest_collaborators }, class_name: 'User'
   has_many :users, -> { where(is_prescriber: false, is_operator: [false, nil]) }
 
-  include OwnedSoftwares
 
   has_one  :knowings
   has_one  :subscription
@@ -128,10 +130,6 @@ class Organization < ApplicationRecord
   end
   alias foc_file_naming_policy find_or_create_file_naming_policy
 
-  def create_csv_descriptor
-    Software::CsvDescriptor.create(owner_id: id)
-  end
-
   def billing_address
     addresses.for_billing.first
   end
@@ -190,39 +188,11 @@ class Organization < ApplicationRecord
     UserOptions::PRESEIZURE_DATE_OPTIONS[preseizure_date_option]
   end
 
-  def uses_softwares?
-    uses_api_softwares? || uses_non_api_softwares?
-  end
-
-  def uses_api_softwares?
-    exact_online.try(:used?) || ibiza.try(:configured?) || my_unisoft.try(:used?) || sage_gec.try(:used?) || acd.try(:used?)
-  end
-
-  def uses_non_api_softwares?
-    coala.try(:used?) || quadratus.try(:used?) || cegid.try(:used?) || csv_descriptor.try(:used?) || fec_agiris.try(:used?) || fec_acd.try(:used?)
-  end
-
-  def auto_deliver?(_software)
-    @software = _software
-
-    self.try(software.to_sym).auto_deliver == 1
-  end
-
   def banking_provider
     default_banking_provider.present? ? default_banking_provider : 'budget_insight'
   end
 
-  def compta_analysis_activated?(_software)
-    @software = _software
 
-    self.try(software.to_sym).is_analysis_activated == 1
-  end
-
-  def analysis_to_validate?(_software)
-    @software = _software
-
-    self.try(software.to_sym).is_analysis_to_validate == 1
-  end
 
   def get_associated_organization(oid)
     organization_groups.each do |organization_group|
@@ -250,14 +220,5 @@ class Organization < ApplicationRecord
     true
   end
 
-  private
 
-  def software
-    if Interfaces::Software::Configuration::SOFTWARES_OBJECTS.include?(@software) || @software.is_a?(ActiveRecord::Base)
-      @software = @software.to_s.split('<')[1].split(':0x')[0]
-      @software = Interfaces::Software::Configuration.software_object_name[@software]
-    end
-
-    @software
-  end
 end
