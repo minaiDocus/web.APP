@@ -1,6 +1,6 @@
 # -*- encoding : UTF-8 -*-
 class ExternalFileStorage < ApplicationRecord
-  SERVICES = ['Dropbox', 'Dropbox Extended', 'Google Drive', 'FTP', 'SFTP', 'Box', 'Knowings', 'My Company Files'].freeze
+  SERVICES = ['Dropbox', 'Dropbox Extended', 'Google Drive', 'FTP', 'SFTP', 'Box', 'My Company Files'].freeze
 
   F_DROPBOX     = 2
   F_GOOGLE_DOCS = 4

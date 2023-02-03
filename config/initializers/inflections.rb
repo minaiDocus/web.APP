@@ -17,7 +17,6 @@ ActiveSupport::Inflector.inflections do |inflect|
     compta
     return_labels
     dematbox
-    knowings
     user_options
     suspended
     retrieved_data

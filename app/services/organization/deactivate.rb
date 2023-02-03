@@ -15,7 +15,6 @@ class Organization::Deactivate
 
     @organization.reminder_emails.destroy_all
     @organization.ibiza.try(:destroy)
-    @organization.knowings.try(:destroy)
     @organization.mcf_settings.try(:destroy)
     @organization.file_sending_kit.try(:destroy)
     @organization.file_naming_policy.try(:destroy)

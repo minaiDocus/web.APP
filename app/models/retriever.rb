@@ -7,10 +7,8 @@ class Retriever < ApplicationRecord
 
   belongs_to :user
   belongs_to :journal, class_name: 'AccountBookType', optional: true
-  belongs_to :connector, optional: true
   has_many   :temp_documents
   has_many   :bank_accounts
-  has_many   :webhook_contents, class_name: 'Archive::WebhookContent'
 
   serialize :capabilities
 
@@ -46,7 +44,6 @@ class Retriever < ApplicationRecord
   scope :error,                    -> { where(state: 'error') }
   scope :unavailable,              -> { where(state: 'unavailable') }
   scope :not_processed,            -> { where(state: %w(configuring destroying running)) }
-  scope :insane,                   -> { where(state: 'ready', is_sane: false) }
   scope :linked,                   -> { where('budgea_id IS NOT NULL AND budgea_id != ""') }
 
   scope :providers,           -> { where("capabilities LIKE '%document%'") }
@@ -173,7 +170,6 @@ class Retriever < ApplicationRecord
     
 
       retrievers = retrievers.where(user_id:               user_ids)                       if user_ids.any?
-      retrievers = retrievers.where(is_sane:               contains[:is_sane])             if contains[:is_sane].present?
       retrievers = retrievers.where("name LIKE ?",         "%#{contains[:name]}%")         if contains[:name].present?
       retrievers = retrievers.where("state LIKE ?",        "%#{contains[:state]}%")        if contains[:state].present?
       retrievers = retrievers.where("service_name LIKE ?", "%#{contains[:service_name]}%") if contains[:service_name].present?

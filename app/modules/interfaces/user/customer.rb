@@ -19,7 +19,7 @@ module Interfaces::User::Customer
   end
 
   def configured?
-    current_configuration_step.nil?
+    true
   end
 
   def uses_many_exportable_softwares?

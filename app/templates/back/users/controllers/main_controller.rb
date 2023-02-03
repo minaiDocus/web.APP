@@ -90,8 +90,6 @@ class Admin::Users::MainController < BackController
       :first_name,
       :last_name,
       :company,
-      :knowings_code,
-      :knowings_visibility,
       :is_fake_prescriber,
       :is_access_by_token_active,
       :stamp_name,

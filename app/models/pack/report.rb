@@ -4,7 +4,6 @@ class Pack::Report < ApplicationRecord
 
   has_many   :expenses,     class_name: 'Pack::Report::Expense',    inverse_of: :report, dependent: :destroy
   has_many   :preseizures,  class_name: 'Pack::Report::Preseizure', inverse_of: :report, dependent: :destroy
-  has_many   :temp_preseizures,  class_name: 'Pack::Report::TempPreseizure', inverse_of: :report, dependent: :destroy
   has_many   :remote_files, as: :remotable, dependent: :destroy
   has_many   :pre_assignment_deliveries
   has_many   :pre_assignment_exports
@@ -58,22 +57,10 @@ class Pack::Report < ApplicationRecord
 
   def is_delivered?
     self.preseizures.not_deleted.delivered.first.present?
-
-    # self.preseizures.not_deleted.delivered('ibiza').first.present? ||
-    # self.preseizures.not_deleted.delivered('exact_online').first.present? ||
-    # self.preseizures.not_deleted.delivered('my_unisoft').first.present? ||
-    # self.preseizures.not_deleted.delivered('sage_gec').first.present? ||
-    # self.preseizures.not_deleted.delivered('acd').first.present? 
   end
 
   def is_not_delivered?
     self.preseizures.not_deleted.not_delivered.first.present?
-
-    # self.preseizures.not_deleted.not_delivered('ibiza').first.present? ||
-    # self.preseizures.not_deleted.not_delivered('exact_online').first.present? ||
-    # self.preseizures.not_deleted.not_delivered('my_unisoft').first.present? ||
-    # self.preseizures.not_deleted.not_delivered('sage_gec').first.present? ||
-    # self.preseizures.not_deleted.not_delivered('acd').first.present?
   end
 
   def self.failed_delivery(user_ids = [], limit = 50)
@@ -125,33 +112,17 @@ class Pack::Report < ApplicationRecord
     report.order('max_date DESC')
   end
 
+  ###TODO: cleanup code
   def delivered_to(software)
-    return true if is_delivered_to?(software)
-
-    # softwares = self.is_delivered_to.split(',') || []
-    # softwares << software
-    # self.is_delivered_to = softwares.sort.join(',')
-    self.is_delivered_to = software
-
-    save
+    return true
   end
 
+  ###TODO: cleanup code
   def remove_delivered_to
-    # temp_delivered_to = self.is_delivered_to
-    # temp_delivered_to = temp_delivered_to.gsub('ibiza', '') if self.user.uses?(:ibiza)
-    # temp_delivered_to = temp_delivered_to.gsub('exact_online', '') if self.user.uses?(:exact_online)
-    # temp_delivered_to = temp_delivered_to.gsub('my_unisoft', '') if self.user.uses?(:my_unisoft)
-    # temp_delivered_to = temp_delivered_to.gsub('sage_gec', '') if self.user.uses?(:sage_gec)
-    # temp_delivered_to = temp_delivered_to.gsub('acd', '') if self.user.uses?(:acd)
-    # temp_delivered_to = temp_delivered_to.gsub(/^[,]+/, '')
-    # temp_delivered_to = temp_delivered_to.gsub(/[,]+$/, '')
-    # temp_delivered_to = temp_delivered_to.gsub(/(,)+/, ',')
-
-    update_attribute(:is_delivered_to, '')
+    return true
   end
 
   def is_delivered_to?(software='ibiza')
-    # self.is_delivered_to.to_s.match(/#{software}/) ? true : false
     self.preseizures.not_deleted.where(delivery_state: software).first.present?
   end
 

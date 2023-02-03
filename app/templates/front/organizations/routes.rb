@@ -25,7 +25,6 @@ Rails.application.routes.draw do
       resource :csv_descriptor, only: %w(edit update), controller: 'csv_descriptors'
 
       resources :customers, only: [] do
-        resources :new_provider_requests, only: %w(index new create edit update), controller: 'new_provider_requests'
         resources :bank_accounts, only: %w(index edit update), controller: 'bank_accounts'
         resources :retrieved_banking_operations, only: :index, controller: 'retrieved_banking_operations' do
           post 'force_processing', on: :collection

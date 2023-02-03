@@ -6,9 +6,8 @@ class RemoteFile < ApplicationRecord
   FTP              = 'FTP'.freeze
   SFTP             = 'SFTP'.freeze
   BOX              = 'Box'.freeze
-  KNOWINGS         = 'Knowings'.freeze
   MY_COMPANY_FILES = 'My Company Files'.freeze
-  SERVICE_NAMES    = [DROPBOX, DROPBOX_EXTENDED, GOOGLE_DRIVE, FTP, SFTP, BOX, KNOWINGS, MY_COMPANY_FILES].freeze
+  SERVICE_NAMES    = [DROPBOX, DROPBOX_EXTENDED, GOOGLE_DRIVE, FTP, SFTP, BOX, MY_COMPANY_FILES].freeze
 
   belongs_to :user, optional: true
   belongs_to :pack, optional: true
@@ -84,10 +83,6 @@ class RemoteFile < ApplicationRecord
 
   def synced!
     if temp_path.present? && File.exist?(temp_path)
-      if extension == KnowingsApi::File::EXTENSION
-        dir = File.dirname(temp_path)
-        FileUtils.remove_entry File.join(dir, 'meta.xml')
-      end
       FileUtils.remove_entry temp_path
     end
 

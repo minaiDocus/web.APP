@@ -1002,9 +1002,6 @@ describe DataProcessor::RetrievedData do
 
       DataProcessor::RetrievedData.new(params, "USER_SYNCED", retriever.user).execute
 
-      archive_webhook = Archive::WebhookContent.last
-      
-      expect(archive_webhook.synced_type).to eq "USER_SYNCED"
       expect(@user_webhook.operations.count).to eq 1
       expect(@user_webhook.operations.first.amount).to eq -0.83795e3
       expect(@user_webhook.operations.first.label).to eq 'Virement Internet'
@@ -1017,10 +1014,8 @@ describe DataProcessor::RetrievedData do
 
       DataProcessor::RetrievedData.new(json_content, "USER_DELETED", budgea_account_before.user).execute
 
-      archive_webhook       = Archive::WebhookContent.last
       budgea_account_after  = BudgeaAccount.where(identifier: json_content["id"]).first
 
-      expect(archive_webhook.synced_type).to eq "USER_DELETED"
       expect(@user_webhook.retrievers.last.state).to eq "destroying"
       expect(archive_webhook.retriever).to eq nil 
       expect(budgea_account_after).to eq nil 
@@ -1031,9 +1026,6 @@ describe DataProcessor::RetrievedData do
 
       DataProcessor::RetrievedData.new(json_content, "CONNECTION_SYNCED", @user_webhook).execute
 
-      archive_webhook = Archive::WebhookContent.last
-
-      expect(archive_webhook.synced_type).to eq "CONNECTION_SYNCED"
       expect(@user_webhook.operations.count).to eq 1
       expect(@user_webhook.operations.first.amount).to eq -0.83795e3
       expect(@user_webhook.operations.first.label).to eq 'DEBIT MENSUEL CARTE'
@@ -1044,9 +1036,6 @@ describe DataProcessor::RetrievedData do
 
       DataProcessor::RetrievedData.new(json_content, "CONNECTION_DELETED", @user_webhook).execute      
       
-      archive_webhook = Archive::WebhookContent.last
-
-      expect(archive_webhook.synced_type).to eq "CONNECTION_DELETED"
       expect(@retriever_webhook.reload.state).to eq "destroying"
     end
 
@@ -1064,9 +1053,6 @@ describe DataProcessor::RetrievedData do
         DataProcessor::RetrievedData.new(json_content, "ACCOUNTS_FETCHED", @user_webhook).execute
       end
 
-      archive_webhook = Archive::WebhookContent.last
-
-      expect(archive_webhook.synced_type).to eq "ACCOUNTS_FETCHED"
       expect(@retriever_webhook.temp_documents.count).to eq 1
       expect(@retriever_webhook.temp_documents.last.retriever_name).to eq @retriever_webhook.name
     end

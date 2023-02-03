@@ -33,7 +33,7 @@
           = link_to 'Commandes', admin_orders_index_path, class: 'nav-link'
         %li.nav-item{ class: ('active' if controller_name == 'events') }
           = link_to 'Visites', admin_events_path, class: 'nav-link'
-        %li.nav-item{ class: ('active' if controller_name.in?(%w(retrievers new_provider_requests))) }
+        %li.nav-item{ class: ('active' if controller_name.in?(%w(retrievers))) }
           = link_to 'Automates', admin_retrievers_path, class: 'nav-link'
         %li.nav-item.dropdown
           = link_to '#', class: 'nav-link dropdown-toggle', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-bs-toggle' => "dropdown", 'role' => "button" do

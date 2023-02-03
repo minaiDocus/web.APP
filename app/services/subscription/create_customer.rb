@@ -24,7 +24,6 @@ class Subscription::CreateCustomer
       end
       @customer.build_options   if @customer.options.nil?
       @customer.create_notify
-      @customer.current_configuration_step = nil
 
       @customer.save
 

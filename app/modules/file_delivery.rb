@@ -30,8 +30,8 @@ module FileDelivery
         # Owner
         pack.init_delivery_for(owner, options) if options[:type] != FileDelivery::RemoteFile::REPORT
 
-        # Organization (Knowings, FTP, My Company Files)
-        if owner.organization.try(:knowings).try(:ready?) || owner.organization.try(:mcf_settings).try(:ready?) || owner.organization.try(:ftp).try(:configured?)
+        # Organization (FTP, My Company Files)
+        if owner.organization.try(:mcf_settings).try(:ready?) || owner.organization.try(:ftp).try(:configured?)
           pack.init_delivery_for(owner.organization, options)
         end
 

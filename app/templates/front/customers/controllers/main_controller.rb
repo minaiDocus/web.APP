@@ -4,7 +4,7 @@ class Customers::MainController < CustomerController
 
   before_action :load_customer, except: %w[index info new create search]
   before_action :verify_rights, except: 'index'
-  before_action :verify_if_customer_is_active, only: %w[edit update edit_setting_options update_setting_options edit_knowings_options update_knowings_options]
+  before_action :verify_if_customer_is_active, only: %w[edit update edit_setting_options update_setting_options]
   before_action :verify_if_account_can_be_closed, only: %w[account_close_confirm close_account]
 
   prepend_view_path('app/templates/front/customers/views')
@@ -279,22 +279,6 @@ class Customers::MainController < CustomerController
     redirect_to edit_setting_options_organization_customer_path(@organization, @customer)
   end
 
-  # GET /account/organizations/:organization_id/customers/:id/edit_knowings_options
-  def edit_knowings_options; end
-
-  # PUT /account/organizations/:organization_id/customers/:id/update_knowings_options
-  def update_knowings_options
-    if @customer.update(knowings_options_params)
-      if @customer.configured?
-        flash[:success] = 'Modifié avec succès.'
-
-        redirect_to organization_customer_path(@organization, @customer, tab: 'ged')
-      end
-    else
-      render 'edit_knowings_options'
-    end
-  end
-
   def upload_email_infos
     if @customer.authorized_upload? && @customer.active?
       render :upload_by_email
@@ -439,10 +423,6 @@ class Customers::MainController < CustomerController
         :auth_prev_period_until_day
       )
     end
-  end
-
-  def knowings_options_params
-    params.require(:user).permit(:knowings_code, :knowings_visibility)
   end
 
   def compta_options_params
