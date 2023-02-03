@@ -5,7 +5,7 @@ module AccountingWorkflow::OcrProcessing
       if temp_document && temp_document.ocr_needed?
         begin
           FileUtils.cp temp_document.cloud_content_object.path, input_path.join(temp_document.file_name_with_position)
-          AccountingWorkflow::OcrProcessing.delay_for(2.hours, queue: :high).release_document(temp_document.id)
+          AccountingWorkflow::OcrProcessing.delay_for(30.minutes, queue: :high).release_document(temp_document.id)
         rescue => e
           if retry_count < 3
             AccountingWorkflow::OcrProcessing.delay_for(30.minutes, queue: :high).send_document(temp_document.id, (retry_count+1))
