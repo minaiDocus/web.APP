@@ -241,7 +241,7 @@ class MyDocuments::AbaseController < FrontController #Must be loaded first that'
       end
 
 
-      preseizures = preseizures.select{ |preseizure| preseizure.is_not_delivered? }
+      preseizures = preseizures.select{ |preseizure| preseizure.need_delivery? }
 
       if preseizures.any?
         preseizures.group_by(&:report_id).each do |_report_id, preseizures_by_report|

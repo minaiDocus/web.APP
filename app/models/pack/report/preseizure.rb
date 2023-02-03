@@ -322,6 +322,10 @@ class Pack::Report::Preseizure < ApplicationRecord
     self.delivery_state == 'failed'
   end
 
+  def need_delivery?
+    delivery_failed? || is_not_delivered?
+  end
+
   def delivered_to(software)
     return true if is_delivered_to?(software)
 
