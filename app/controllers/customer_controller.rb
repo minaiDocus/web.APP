@@ -55,7 +55,8 @@ class CustomerController < OrganizationController
   end
 
   def build_softwares
-    Interfaces::Software::Configuration::SOFTWARES.each do |software|
+    #Interfaces::Software::Configuration::SOFTWARES.each do |software|
+    SoftwareMod::Configuration::SOFTWARES.each do |software|
       @customer.send("build_#{software}".to_sym) if @customer.send(software.to_sym).nil?
     end
   end

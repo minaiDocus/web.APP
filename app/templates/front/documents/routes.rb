@@ -41,6 +41,7 @@ Rails.application.routes.draw do
     post 'pieces/update_analytics', to: 'pieces#update_analytics', as: 'update_pieces_analytics'
     get 'account/documents/pieces/:id/download/(:style)', to: 'pieces#get_piece_file', as: 'get_piece_file'
     get 'account/documents/temp_documents/:id/download/(:style)', to: 'pieces#get_temp_document_file', as: 'get_temp_document_file'
+
   end
   
   namespace :documents do

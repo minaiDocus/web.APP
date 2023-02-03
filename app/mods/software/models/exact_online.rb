@@ -1,7 +1,7 @@
 class SoftwareMod::ExactOnline < ApplicationRecord
-  include Interfaces::Software::Configuration
+  include SoftwareMod::Configuration
 
-  self.table_name = "software_exact_onlines"
+  self.table_name = "software_exact_online"
 
   belongs_to :owner, polymorphic: true
 

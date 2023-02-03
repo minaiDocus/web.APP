@@ -83,6 +83,7 @@ Rails.application.routes.draw do
   front_draw('suspended')
   front_draw('profiles')
   front_draw('software_setting')
+  front_draw('export_preseizures')
 
   ### --------------------------- admin ---------------------------- ###
 

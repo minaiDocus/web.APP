@@ -105,9 +105,9 @@ private
   def self.calculate_software_owner_statistics
     software_infos  = []
 
-    Interfaces::Software::Configuration::SOFTWARES.each do |software_name|
-      organizations  = Interfaces::Software::Configuration.softwares[software_name.to_sym].where(owner_type: 'Organization', is_used: true)
-      customers      = Interfaces::Software::Configuration.softwares[software_name.to_sym].where(owner_type: 'User', is_used: true)
+    SoftwareMod::Configuration::SOFTWARES.each do |software_name|
+      organizations  = SoftwareMod::Configuration.softwares[software_name.to_sym].where(owner_type: 'Organization', is_used: true)
+      customers      = SoftwareMod::Configuration.softwares[software_name.to_sym].where(owner_type: 'User', is_used: true)
 
       software_infos << [ "#{software_name}_organizations_count", organizations.size ]
       software_infos << [ "#{software_name}_users_count", customers.size ]

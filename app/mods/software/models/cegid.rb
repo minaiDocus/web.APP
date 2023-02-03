@@ -1,5 +1,5 @@
 class SoftwareMod::Cegid < ApplicationRecord
-  include Interfaces::Software::Configuration
+  include SoftwareMod::Configuration
 
   self.table_name = "software_cegids"
 

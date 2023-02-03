@@ -77,7 +77,7 @@ class Customers::MainController < CustomerController
 
   # PUT /account/organizations/:organization_id/customers/:id
   def update
-    if params[:part].present? && params[:part] == Interfaces::Software::Configuration.h_softwares[params[:part]] && user_params[softwares_attributes.to_sym].present?
+    if params[:part].present? && params[:part] == SoftwareMod::Configuration.h_softwares[params[:part]] && user_params[softwares_attributes.to_sym].present?
       if params[:part] == 'my_unisoft'
         result = MyUnisoftLib::Setup.new({organization: @organization, customer: @customer, columns: {is_used: user_params[softwares_attributes.to_sym]['is_used'] == "1", action: params[:action]}}).execute
       elsif params[:part] == 'sage_gec'
@@ -457,7 +457,7 @@ class Customers::MainController < CustomerController
   end
 
   def softwares_attributes
-    "#{Interfaces::Software::Configuration.h_softwares[params[:part]]}_attributes"
+    "#{SoftwareMod::Configuration.h_softwares[params[:part]]}_attributes"
   end
 
   def update_package

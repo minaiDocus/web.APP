@@ -1,0 +1,24 @@
+.container-fluid.main-content
+  .row
+    %h3.bold Liste des exports d'écriture comptable
+    .box
+      %table.table.table-striped
+        %thead
+          %th Pack
+          %th Créée le
+          %th Nom du fichier
+          %th Logiciel
+          %th Nombre d'écritures
+          %th Action
+        %tbody
+        - @preassignment_exports.each do |preassignment_export|
+          %tr
+            %td= preassignment_export.pack_name
+            %td= preassignment_export.created_at.strftime('%d/%m/%Y')
+            %td= preassignment_export.file_name
+            %td= preassignment_export.for
+            %td= preassignment_export.total_item
+            %td 
+              %span.ms-2
+                %span.download_pack_archive{title: 'Télécharger le fichier', data: {id: 'preassignment_export.id'}}= glyphicon('data-transfer-download', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
+                %a.pointer télécharger

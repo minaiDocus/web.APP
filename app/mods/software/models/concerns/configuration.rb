@@ -1,24 +1,30 @@
-module Interfaces::Software::Configuration
+module SoftwareMod::Configuration
+  extend ActiveSupport::Concern
+
   SOFTWARES = ['acd', 'ibiza', 'exact_online', 'my_unisoft', 'coala', 'sage_gec', 'quadratus', 'cegid', 'fec_agiris', 'fec_acd', 'csv_descriptor', 'cogilog', 'ciel']
   SOFTWARES_HUMAN_NAME = { acd: 'ACD', ibiza: 'iBiza', exact_online: 'Exact Online', my_unisoft: 'My Unisoft', coala: 'Coala', sage_gec: 'Sage GEC - Privé', quadratus: 'Quadratus', cegid: 'Cegid', fec_agiris: 'Agiris', fec_acd: 'FEC ACD', csv_descriptor: 'CSV', cogilog: 'Cogilog', ciel: 'Ciel' }
   TABLE_NAME_WITH_SOFTWARES_USING_API = ['software_ibizas', 'software_exact_online', 'software_my_unisofts', 'software_sage_gec', 'software_acd']
-  SOFTWARES_OBJECTS = [::Software::Ibiza, ::Software::ExactOnline, ::Software::Cegid, ::Software::Coala, ::Software::SageGec, ::Software::FecAgiris, ::Software::FecAcd, ::Software::Quadratus, ::Software::CsvDescriptor, ::Software::MyUnisoft, ::Software::Cogilog, ::Software::Ciel]
+  #SOFTWARES_OBJECTS = [::SoftwareMod::Ibiza, ::SoftwareMod::ExactOnline, ::SoftwareMod::Cegid, ::SoftwareMod::Coala, ::SoftwareMod::SageGec, ::SoftwareMod::FecAgiris, ::SoftwareMod::FecAcd, ::SoftwareMod::Quadratus, ::SoftwareMod::CsvDescriptor, ::SoftwareMod::MyUnisoft, ::SoftwareMod::Cogilog, ::SoftwareMod::Ciel]
+
+  def self.softwares_objects
+    return [::SoftwareMod::Ibiza, ::SoftwareMod::ExactOnline, ::SoftwareMod::Cegid, ::SoftwareMod::Coala, ::SoftwareMod::SageGec, ::SoftwareMod::FecAgiris, ::SoftwareMod::FecAcd, ::SoftwareMod::Quadratus, ::SoftwareMod::CsvDescriptor, ::SoftwareMod::MyUnisoft, ::SoftwareMod::Cogilog, ::SoftwareMod::Ciel]
+  end
 
   def self.softwares
     {
-      ibiza:          Software::Ibiza,
-      exact_online:   Software::ExactOnline,
-      cegid:          Software::Cegid,
-      coala:          Software::Coala,
-      sage_gec:       Software::SageGec,
-      fec_agiris:     Software::FecAgiris,
-      acd:            Software::Acd,
-      fec_acd:        Software::FecAcd,
-      quadratus:      Software::Quadratus,
-      csv_descriptor: Software::CsvDescriptor,
-      my_unisoft:     Software::MyUnisoft,
-      cogilog:        Software::Cogilog,
-      ciel:           Software::Ciel,
+      ibiza:          SoftwareMod::Ibiza,
+      exact_online:   SoftwareMod::ExactOnline,
+      cegid:          SoftwareMod::Cegid,
+      coala:          SoftwareMod::Coala,
+      sage_gec:       SoftwareMod::SageGec,
+      fec_agiris:     SoftwareMod::FecAgiris,
+      acd:            SoftwareMod::Acd,
+      fec_acd:        SoftwareMod::FecAcd,
+      quadratus:      SoftwareMod::Quadratus,
+      csv_descriptor: SoftwareMod::CsvDescriptor,
+      my_unisoft:     SoftwareMod::MyUnisoft,
+      cogilog:        SoftwareMod::Cogilog,
+      ciel:           SoftwareMod::Ciel,
     }
   end
 
@@ -78,19 +84,19 @@ module Interfaces::Software::Configuration
 
   def self.software_object_name
     {
-      'Software::Ibiza'         => 'ibiza',
-      'Software::ExactOnline'   => 'exact_online',
-      'Software::Cegid'         => 'cegid',
-      'Software::Coala'         => 'coala',
-      'Software::SageGec'       => 'sage_gec',
-      'Software::FecAgiris'     => 'fec_agiris',
-      'Software::Acd'           => 'acd',
-      'Software::FecAcd'        => 'fec_acd',
-      'Software::Quadratus'     => 'quadratus',
-      'Software::CsvDescriptor' => 'csv_descriptor',
-      'Software::MyUnisoft'     => 'my_unisoft',
-      'Software::Cogilog'       => 'cogilog',
-      'Software::Ciel'          => 'ciel',
+      'SoftwareMod::Ibiza'         => 'ibiza',
+      'SoftwareMod::ExactOnline'   => 'exact_online',
+      'SoftwareMod::Cegid'         => 'cegid',
+      'SoftwareMod::Coala'         => 'coala',
+      'SoftwareMod::SageGec'       => 'sage_gec',
+      'SoftwareMod::FecAgiris'     => 'fec_agiris',
+      'SoftwareMod::Acd'           => 'acd',
+      'SoftwareMod::FecAcd'        => 'fec_acd',
+      'SoftwareMod::Quadratus'     => 'quadratus',
+      'SoftwareMod::CsvDescriptor' => 'csv_descriptor',
+      'SoftwareMod::MyUnisoft'     => 'my_unisoft',
+      'SoftwareMod::Cogilog'       => 'cogilog',
+      'SoftwareMod::Ciel'          => 'ciel',
     }
   end
 
@@ -102,7 +108,7 @@ module Interfaces::Software::Configuration
   end
 
   def used?
-    if self.is_a?(Software::Ibiza)
+    if self.is_a?(SoftwareMod::Ibiza)
       if owner_type == 'User'
         is_used
       else
