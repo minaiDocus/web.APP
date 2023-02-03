@@ -94,6 +94,7 @@ class SoftwareMod::ExportPreseizures
         next
       end
 
+      ############# PIECE FILENAME STRUCTURE IS DEFINE IN SOFTWARE CLASS TARGET (width : self.file_name_format) #########################
       file_name = @software_class.respond_to?(:file_name_format) ? @software_class.file_name_format(piece) : File.basename(piece_path)
       final_dir = @dir_path
 

@@ -9,6 +9,7 @@ class SoftwareMod::Service::CsvDescriptor
   end
 
   def execute
+    debugger
     return 'not_authorized' if not @user.uses?(:csv_descriptor)
 
     @base_name = @preseizures.first.report.name.tr(' ', '_').tr('%', '_')

@@ -2,6 +2,10 @@
 require 'spec_helper'
 
 describe SoftwareMod::ExportPreseizures do
+  def all_softwares
+    ['cegid', 'ciel', 'coala', 'cogilog', 'fec_acd', 'fec_agiris', 'quadratus']
+  end
+
   def allow_any_softwares
     allow_any_instance_of(Pack::Report::Preseizure).to receive('computed_date').and_return(Time.now)
     allow_any_instance_of(User).to receive('uses?').and_return(true)
@@ -14,7 +18,7 @@ describe SoftwareMod::ExportPreseizures do
     @user         = FactoryBot.create :user, code: 'IDO%LEAD', organization_id: @organization.id
     @report       = FactoryBot.create :report, user: @user, organization: @organization
     pack          = FactoryBot.create :pack, owner: @user, organization: @organization , name: (@report.name + ' all')
-    @piece        = FactoryBot.create :piece, pack: pack, user: @user, organization: @organization, name: (@report.name + ' 001')
+    @piece        = FactoryBot.create :piece, pack: pack, user: @user, organization: @organization, name: (@report.name + ' 001'), position: 1
     @journal      = FactoryBot.create :account_book_type, :journal_with_preassignment, name: 'AC', description: 'Achat', user: @user
     @accounting_plan = AccountingPlan.create(user_id: @user.id)
 
@@ -35,80 +39,78 @@ describe SoftwareMod::ExportPreseizures do
   end
 
   context 'generate file path', :generate do
-    context 'coala', :coala do
-      it 'generate normal coala csv file' do
-        allow_any_softwares
+    it 'generate normal file', :generation do
+      allow_any_softwares
 
-        p result = SoftwareMod::ExportPreseizures.new('coala').execute(@preseizures)
+      all_softwares.each do |software_name|
+        p "=== #{software_name} ==="
+        p result = SoftwareMod::ExportPreseizures.new(software_name).execute(@preseizures)
 
-        expect(result.present?).to be true
-        expect(File.exist?(result.to_s)).to be true
-        expect(result.to_s.split('.')[1]).to eq 'csv'
-      end
-
-      it 'generate normal coala xls file' do
-        allow_any_softwares
-
-        p result = SoftwareMod::ExportPreseizures.new('coala', 'xls').execute(@preseizures)
+        export = PreAssignmentExport.where(for: software_name).last
 
         expect(result.present?).to be true
         expect(File.exist?(result.to_s)).to be true
-        expect(result.to_s.split('.')[1]).to eq 'xls'
-      end
 
-      it 'generate normal coala xls with piece file', :zip do
-        allow_any_softwares
-
-        p result = SoftwareMod::ExportPreseizures.new('coala', 'xls').execute(@preseizures, true)
-
-        expect(result.present?).to be true
-        expect(File.exist?(result.to_s)).to be true
-        expect(result.to_s.split('.')[1]).to eq 'zip'
+        expect(export.present?).to be true
+        expect(export.state).to eq 'generated'
+        expect(File.exist?(export.cloud_content_object.reload.path)).to be true
+        expect(export.preseizures.collect(&:id)).to eq Array(@preseizures).collect(&:id)
       end
     end
 
-    context 'cegid', :cegid do
-      it 'generate normal cegid csv file' do
-        allow_any_softwares
+    it 'generate normal coala xls with piece file', :zip do
+      allow_any_softwares
 
-        p result = SoftwareMod::ExportPreseizures.new('cegid').execute(@preseizures)
+      p result = SoftwareMod::ExportPreseizures.new('coala', 'xls').execute(@preseizures, true)
 
-        expect(result.present?).to be true
-        expect(File.exist?(result.to_s)).to be true
-        expect(result.to_s.split('.')[1]).to eq 'csv'
-      end
+      export = PreAssignmentExport.where(for: 'coala').last
 
-      it 'generate normal cegid tra file' do
-        allow_any_softwares
+      dir        = File.dirname(result)
+      piece_name = File.basename(@piece.cloud_content_object.reload.path)
+      piece_path = "#{dir}/#{piece_name}"
 
-        p result = SoftwareMod::ExportPreseizures.new('cegid', 'tra').execute(@preseizures)
+      expect(result.present?).to be true
+      expect(File.exist?(result.to_s)).to be true
+      expect(result.to_s.split('.')[1]).to eq 'zip'
 
-        expect(result.present?).to be true
-        expect(File.exist?(result.to_s)).to be true
-        expect(result.to_s.split('.')[1]).to eq 'tra'
-      end
+      expect(export.present?).to be true
+      expect(export.state).to eq 'generated'
+      expect(File.exist?(export.cloud_content_object.reload.path)).to be true
+      expect(export.preseizures.collect(&:id)).to eq Array(@preseizures).collect(&:id)
 
-      it 'generate normal cegid tra with piece file' do
-        allow_any_softwares
-
-        p result = SoftwareMod::ExportPreseizures.new('cegid', 'tra').execute(@preseizures, true)
-
-        expect(result.present?).to be true
-        expect(File.exist?(result.to_s)).to be true
-        expect(result.to_s.split('.')[1]).to eq 'zip'
-      end
+      expect(File.exist?(piece_path)).to be true
     end
 
-    context 'quadratus', :quadratus do
-      it 'generate normal quadratus txt file' do
-        allow_any_softwares
+    it 'generate normal cegid tra with piece file' do
+      allow_any_softwares
 
-        p result = SoftwareMod::ExportPreseizures.new('quadratus').execute(@preseizures)
+      p result = SoftwareMod::ExportPreseizures.new('cegid', 'tra').execute(@preseizures, true)
 
-        expect(result.present?).to be true
-        expect(File.exist?(result.to_s)).to be true
-        expect(result.to_s.split('.')[1]).to eq 'txt'
-      end
+      dir        = File.dirname(result)
+      piece_name = SoftwareMod::Service::Cegid.file_name_format(@piece)
+      piece_path = "#{dir}/#{piece_name}"
+
+      expect(result.present?).to be true
+      expect(File.exist?(result.to_s)).to be true
+      expect(result.to_s.split('.')[1]).to eq 'zip'
+
+      expect(File.exist?(piece_path)).to be true
+    end
+
+    it 'generate normal quadratus txt with piece file' do
+      allow_any_softwares
+
+      p result = SoftwareMod::ExportPreseizures.new('quadratus').execute(@preseizures, true)
+
+      dir        = File.dirname(result)
+      piece_name = SoftwareMod::Service::Quadratus.file_name_format(@piece)
+      piece_path = "#{dir}/#{piece_name}"
+
+      expect(result.present?).to be true
+      expect(File.exist?(result.to_s)).to be true
+      expect(result.to_s.split('.')[1]).to eq 'zip'
+
+      expect(File.exist?(piece_path)).to be true
     end
   end
 end
