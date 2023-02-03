@@ -219,19 +219,11 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
         elsif export_type == 'preseizure'
           preseizures = Pack::Report::Preseizure.where(id: export_ids)
         elsif export_type == 'pack'
-          pack = Pack.where(id: export_ids).first
-          reports = pack.present? ? assign_report_with(pack) : []
-          if @options[:by_preseizure].present?
-            preseizures = Pack::Report::Preseizure.not_deleted.where(report_id: reports.collect(&:id)).where(id: @options[:preseizure_ids])
-          else
-            preseizures = Pack::Report::Preseizure.not_deleted.where(report_id: reports.collect(&:id))
-          end
+          pack        = Pack.where(id: export_ids).first
+          reports     = pack.present? ? assign_report_with(pack) : []
+          preseizures = Pack::Report::Preseizure.not_deleted.where(report_id: reports.collect(&:id)).filter_by(@options[:by_preseizure])
         elsif export_type == 'report'
-          if @options[:by_preseizure].present?
-            preseizures = Pack::Report.where(id: export_ids).first.preseizures.where(id: @options[:preseizure_ids])
-          else
-            preseizures = Pack::Report.where(id: export_ids).first.preseizures
-          end
+          preseizures = Pack::Report.where(id: export_ids).first.preseizures.filter_by(@options[:by_preseizure])
         end
       end
 
@@ -252,7 +244,6 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
     @already_document = Archive::AlreadyExist.where(id: params[:id]).first
     render partial: 'already_exist_document'
   end
-
 
   # GET /account/documents/exist_document/:id/download
   def exist_document
@@ -519,7 +510,6 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
 
     @options
   end
-
 
   def deep_compact(hsh)
     res_hash = hsh.map do |key, value|

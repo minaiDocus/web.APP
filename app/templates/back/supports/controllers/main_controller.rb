@@ -173,18 +173,16 @@ class Admin::Supports::MainController < BackController
   end
 
   def resend_delivery
-    # report_preseizures = Pack::Report::Preseizure.where(id: params[:ids]).group_by(&:report)
-    # report_preseizures = Pack::Report::Preseizure.last(10).group_by(&:report)
+    preseizures = Pack::Report::Preseizure.where(id: params[:ids])
+    preseizures.update_all(is_locked: false)
 
-    # report_preseizures.each do |report_preseizure|
-    #   debugger
-      
-    #   # preseizure.is_locked = false
-    #   # PreAssignment::CreateDelivery.new(grouped_preseizures, ['ibiza', 'exact_online', 'my_unisoft', 'sage_gec', 'acd'], {force: true}).execute
-    #   # PreAssignment::CreateDelivery.new(preseizure).execute
-    # end
+    if preseizures.any?
+      preseizures.group_by(&:report_id).each do |_report_id, preseizures_by_report|
+        PreAssignment::CreateDelivery.new(preseizures_by_report, %w[ibiza exact_online my_unisoft sage_gec acd], {force: true}).execute
+      end
+    end
 
-    render plain: "Modifié avec succès"
+    render plain: "Livraison de #{preseizures.size} écriture(s) comptable(s) en cours ..."
   end
 
   def get_pieces
@@ -238,17 +236,11 @@ class Admin::Supports::MainController < BackController
   end
 
   def destroy_temp_document
-    temp_documents = TempDocument.where(id: params[:ids])
+    temp_documents = TempDocument.where(id: params[:ids]).where(state: ['created','ocr_needed','unreadable','wait_selection'])
 
-    if temp_documents
-      temp_documents.each do |temp_document|
-        temp_documents.destroy if %(created ocr_needed unreadable wait_selection).include?(temp_document.state)
-      end
-      
-      render plain: "Temp Document supprimé"
-    else
-      render plain: "Erreur lors de suppression : #{temp_documents.errors.messages}"
-    end    
+    temp_documents.destroy_all if temp_documents.any?
+
+    render plain: "#{temp_documents.size} temp_document(s) supprimé(s)"  
   end
 
   def delete_fingerprint_temp_document
