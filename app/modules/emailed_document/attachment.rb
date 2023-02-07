@@ -20,7 +20,7 @@ class EmailedDocument::Attachment
 
 
   def valid_size?
-    size <= 5.megabytes
+    size <= 50.megabytes
   end
 
 

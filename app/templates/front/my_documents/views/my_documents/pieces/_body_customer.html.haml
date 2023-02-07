@@ -111,6 +111,8 @@
                 %span Tags
                 .info-tag-content.hide
                   Ajouter des tags pour retrouver facilement vos documents
+                  %br
+                  Appuyez sur "Entrée" pour valider chaque enregistrement
             %tbody
               - @pieces.each do |piece|
                 - preseizure             = piece.preseizures.first
