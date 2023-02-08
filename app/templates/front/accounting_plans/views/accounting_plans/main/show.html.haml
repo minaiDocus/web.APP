@@ -114,14 +114,14 @@
                   %button.btn.btn-dark.import_accounting#import_providers_account.w-100
                     %span.me-2= glyphicon('cloud-download', { size: '16', color: 'white'})
                     %span Importer un CSV
-        .mb-3
-        - if @organization.code == 'IDOC'
-          .row.derivationRight
-            .col-md-12
-              .float-end
-                %button.btn.btn-warning.manage-conterpart-accounts.w-100.provider
-                  %span.me-2= glyphicon('plus', { size: '10', color: 'white'})
-                  %span.text-white Gestion des comptes associés par catégorie
+
+        .row.mb-3.derivationRight
+          .col-md-12
+            .float-end
+              %button.btn.btn-warning.manage-conterpart-accounts.w-100.provider
+                %span.me-2= glyphicon('plus', { size: '10', color: 'white'})
+                %span.text-white Gestion des comptes associés par catégorie
+
         .row.derivationRight
           .col-md-12
             %table.table.table-striped
@@ -180,14 +180,13 @@
                     %span.me-2= glyphicon('cloud-download', { size: '16', color: 'white'})
                     %span Importer un CSV
 
-        .mb-3
-        - if @organization.code == 'IDOC'
-          .row.derivationRight
-            .col-md-12
-              .float-end
-                %button.btn.btn-warning.manage-conterpart-accounts.w-100.customer
-                  %span.me-2= glyphicon('plus', { size: '10', color: 'white'})
-                  %span.text-white Gestion de comptes associés par catégorie
+        .row.mb-3.derivationRight
+          .col-md-12
+            .float-end
+              %button.btn.btn-warning.manage-conterpart-accounts.w-100.customer
+                %span.me-2= glyphicon('plus', { size: '10', color: 'white'})
+                %span.text-white Gestion de comptes associés par catégorie
+
         .row.derivationLeft
           .col-md-12
             %table.table.table-striped.table_integration
