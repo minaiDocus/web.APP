@@ -41,7 +41,7 @@
           - idocus_params = param_encode({ name: 'ca.delete-conterpart-account', events: 'click' })
           %button.btn.btn-danger.as_idocus_emit{ type: 'button', idocus: idocus_params }= glyphicon('chevron-left', {size: '10', color: '#FF4848'}) + "  Supprimer les catégories séléctionnés "
         .col-sm-5
-          %label.semibold Comptes de tièrs
+          %label.semibold Comptes de tiers
           - ajax_emit = param_encode({ name: 'ca.select-third-part' , events: 'dblclick'})
           .select-container.no-padding.w-100
             = select_tag 'conterpart_account[accounting_plan_items][]', options_for_select(@accounting_plan_items), include_blank: false,  class: 'as_idocus_emit multiple', id: 'account-third-part-selector', multiple: true, idocus: ajax_emit

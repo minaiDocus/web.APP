@@ -27,7 +27,7 @@ fr:
       ftp:
         root_path: "C'est dans ce dossier qu'iDocus importera ou expotera des documents."
       conterpart_account:
-        is_default: 'Si par défaut : cette catégorie sera assignée automatiquement à tous les comptes de tièrs'
+        is_default: 'Si par défaut : cette catégorie sera assignée automatiquement à tous les comptes de tiers'
     labels:
       doc_group:
         leader: 'Prescripteur'
