@@ -245,9 +245,19 @@ function bind_all_events(){
 
   $(".zoom.pdf-viewer").unbind('click').bind('click', function(){ 
     var url = $(this).attr('data-content-url');
-    
-    $("#PdfViewerDialog .modal-body .view-content iframe.src-piece").attr("src", url);
+
+    //needed to avoid showing the last document before loading the next one
+    let iframe = $("#PdfViewerDialog .modal-body .view-content iframe.src-piece");
+    $("#PdfViewerDialog .modal-body .view-content span.loading").removeClass('hide');
+    iframe.addClass('hide');
+
+    iframe.attr("src", url);
     $("#PdfViewerDialog").modal('show');
+
+    iframe[0].onload = ()=>{ 
+      $("#PdfViewerDialog .modal-body .view-content span.loading").addClass('hide')
+      iframe.removeClass('hide');
+    }
   });
 
   $('.icon-actions .t-info').mouseover(function(){ 

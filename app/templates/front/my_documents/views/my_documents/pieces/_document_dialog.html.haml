@@ -15,7 +15,9 @@
         %button.btn-close{'aria-label' => 'Close', 'data-bs-dismiss' => 'modal', :type => 'button'}
       .modal-body{style: "max-height: none !important; padding:0;"}
         .view-content
-          %iframe.src-piece{ src: "", style: "height: 700px" }
+          .content{ style: "height: 700px" }
+            %span.p-5.loading Chargement en cours ...
+            %iframe.src-piece{ src: "", style: "height: 100%" }
 
 #DeletedPiece.modal.fade.in{'aria-hidden' => 'true', :role => 'dialog', :tabindex => '-1'}
   .modal-dialog{ style: 'min-width: 1180px;' }

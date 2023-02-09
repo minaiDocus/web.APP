@@ -99,7 +99,12 @@
           = link_to glyphicon('cog', color: "rgba(26, 26, 26, 0.7);", size: '22'), '#configure-profile', class: 'nav-link dropdown-toggle bold', id: 'navbardropdownmenusetting', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-bs-toggle' => 'dropdown'
           .dropdown-menu.dropdown-menu-end.semibold.box.parameters_notifications{"aria-labelledby" => "navbardropdownmenusetting"}
             = link_to glyphicon('person', {size: '13', color: '#212529'}) + ' Mon compte', '/profiles', class: 'dropdown-item', target: '_blank'
-            = link_to glyphicon('comment-square', {size: '13', color: '#212529'}) + " Centre d'aide", 'https://idocus.zendesk.com/hc/fr', class: 'dropdown-item', target: '_blank'
+
+            - if @user.pre_assignement_displayed?
+              = link_to glyphicon('comment-square', {size: '13', color: '#212529'}) + " Centre d'aide", 'https://idocus.zendesk.com/hc/fr', class: 'dropdown-item', target: '_blank'
+            -else
+              = link_to glyphicon('document', {size: '13', color: '#212529'}) + " Documentation", download_document_path(name: 'doc_final_users.pdf'), class: 'dropdown-item', target: '_blank'
+
             - if @user.pre_assignement_displayed?
               = link_to glyphicon('document', {size: '13', color: '#212529'}) + " CGU #{Time.now.strftime("%Y")}", download_document_path(name: 'CGU_iDocus_201805.pdf'), class: 'dropdown-item', target: '_blank'
             = link_to glyphicon('power-standby', {size: '13', color: '#FF4848'}) + ' Se déconnecter', destroy_user_session_path, method: 'delete', class: 'dropdown-item red-label account-log-out'

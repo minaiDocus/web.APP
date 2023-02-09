@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Documentations::MainController < FrontController
   def download
-    raise_not_found unless @user.is_prescriber
+    raise_not_found unless @user
 
     dir = Rails.root.join('files', 'miscellaneous_docs')
     list = Dir.entries(dir).reject { |f| File.directory? f }
