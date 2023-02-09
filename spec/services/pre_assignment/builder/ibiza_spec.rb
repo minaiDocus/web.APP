@@ -65,7 +65,7 @@ describe PreAssignment::Builder::Ibiza do
     @piece        = FactoryBot.create :piece, pack: pack, user: @user, organization: @organization, name: (@report.name + ' 001'), analytic_reference: analytic
     @piece_2      = FactoryBot.create :piece, pack: pack, user: @user, organization: @organization, name: (@report.name + ' 002')
 
-    client_ibiza =  Software::Ibiza.create(
+    client_ibiza =  SoftwareMod::Ibiza.create(
                                         state: 'valid',
                                         state_2: 'none',
                                         owner_type: 'User',
@@ -78,7 +78,7 @@ describe PreAssignment::Builder::Ibiza do
                                         is_used: true,
                                       )
 
-    org_ibiza = Software::Ibiza.create(
+    org_ibiza = SoftwareMod::Ibiza.create(
                                         state: 'valid',
                                         state_2: 'none',
                                         description: JSON.parse('{"operation_label":{"is_used":"1", "position":"1"}, "date":{"is_used":"1", "position":"1"}, "third_party":{"is_used":"1", "position":"1"}, "amount":{"is_used":"1", "position":"1"}, "currency":{"is_used":"1", "position":"1"}, "conversion_rate":{"is_used":"1", "position":"1"}, "observation":{"is_used":"1", "position":"1"}, "journal":{"is_used":"1", "position":"1"}, "piece_name":{"is_used":"1", "position":"1"}, "piece_number":{"position":"1"}}'),

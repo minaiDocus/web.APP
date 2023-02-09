@@ -9,7 +9,7 @@ describe AccountingPlan::IbizaUpdate do
     @user = create(:user, ibiza_id: "{IDENTIFIER}")
     @user.build_softwares
     organization.customers << @user
-    ibiza = Software::Ibiza.new(access_token: "xxxtokenxxx")
+    ibiza = SoftwareMod::Ibiza.new(access_token: "xxxtokenxxx")
     ibiza.owner = organization
     ibiza.save
     ibiza.update state: 'valid'
