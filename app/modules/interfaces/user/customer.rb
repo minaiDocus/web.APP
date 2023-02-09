@@ -93,7 +93,7 @@ module Interfaces::User::Customer
       counter += 1 if software.try(:exact_online).try(:used?)
 
       if counter <= 1
-        if software.is_a?(Software::Ibiza) # Assign default value to avoid validation exception
+        if software.is_a?(SoftwareMod::Ibiza) # Assign default value to avoid validation exception
           software.state                            = 'none'
           software.state_2                          = 'none'
           software.voucher_ref_target               = 'piece_number'
