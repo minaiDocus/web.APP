@@ -590,8 +590,8 @@ class PreseizureExport::PreseizureToTxt
         preseizure.accounts.each do |account|
           entry   = account.entries.first
 
-          label   = preseizure.piece_number
-          label   = preseizure.operation_label[0..34].gsub("\t", ' ') if preseizure.operation_label.present?
+          label   = preseizure.third_party.to_s
+          label   = preseizure.operation_label.gsub("\t", ' ') if preseizure.operation_label.present?
 
           line = []
 
@@ -606,8 +606,8 @@ class PreseizureExport::PreseizureToTxt
           line << "\"#{entry.amount.to_s[0..12]}\""
           line << "#{entry.debit? ? 'D' : 'C'}"
           line << "B"
-          line << "\"#{preseizure.third_party.to_s[0..10]}\""
-          line << "\"#{label.to_s[0..11]}\""
+          line << "\"#{label}\""
+          line << "\"#{preseizure.piece_number.to_s[0..11]}\""
           line << "\"10\""
 
           data << line.join("\t")
