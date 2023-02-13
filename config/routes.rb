@@ -66,7 +66,6 @@ Rails.application.routes.draw do
   front_draw('reporting')
   front_draw('customers')
   front_draw('periods')
-  front_draw('boxes')
   front_draw('external_file_storages')
   front_draw('ftps_setting')
   front_draw('payments')

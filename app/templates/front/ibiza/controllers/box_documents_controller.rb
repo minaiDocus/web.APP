@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 class Ibiza::BoxDocumentsController < CustomerController
   before_action :load_customer
   before_action :load_document, except: %w[index select validate]

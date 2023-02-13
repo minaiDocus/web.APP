@@ -33,7 +33,6 @@
             %th= sortable :name,         t('activerecord.models.retriever.attributes.name')
             %th Journal
             %th= t('activerecord.models.retriever.attributes.state')
-            %th= sortable :is_sane,      t('activerecord.models.retriever.attributes.is_sane')
             %th.text-end Action
         %tbody
           - @retrievers.each do |retriever,|
@@ -47,7 +46,6 @@
                 %td= retriever_presenter.name
                 %td= retriever_presenter.journal.try(:name) || '-'
                 %td!= retriever_presenter.state(:admin)
-                %td= retriever.is_sane ? t('yes_value') : t('no_value')
                 %td.text-end.pointer.readonly-container
                   .action.sub_edit_delete.list-collaborators
                     %span.glyph= glyphicon('ellipses', { size: '12', style: 'transform: rotate(90deg)'})
@@ -106,12 +104,7 @@
                       .label-section
                         = label_tag 'retriever_contains[state]', t('activerecord.models.retriever.attributes.state')
                       .control-section
-                        = select_tag 'retriever_contains[state]', options_for_select(Retriever.state_machine.states.map { |e| [e.human_name, e.name] }, (params[:retriever_contains][:state] rescue '')), include_blank: true, class: 'input-small'
-                    .form-group
-                      .label-section
-                        = label_tag 'retriever_contains[is_sane]', t('activerecord.models.retriever.attributes.is_sane')
-                      .control-section
-                        = select_tag 'retriever_contains[is_sane]', options_for_select([['Oui', 1], ['Non', 0]], (params[:retriever_contains][:is_sane] rescue '')), include_blank: true, class: 'input-small'
+                        = select_tag 'retriever_contains[state]', options_for_select(Retriever.state_machine.states.map { |e| [e.human_name, e.name] }, (params[:retriever_contains][:state] rescue '')), include_blank: true, class: 'input-small'                    
               .modal-footer
                 .form-actions
                   = link_to "Réinitialiser", admin_retrievers_path, class: 'btn btn-light', title: t('filters.reset')

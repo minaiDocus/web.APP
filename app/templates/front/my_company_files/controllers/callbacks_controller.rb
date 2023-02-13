@@ -7,7 +7,6 @@ class MyCompanyFiles::CallbacksController < ApplicationController
       mcf_document = McfDocument.create_or_initialize_with(
         code: params[:IdBaseClient],
         journal: params[:Type].upcase,
-        file64: params[:ByteResponse],
         original_file_name: params[:Name],
         access_token: params[:Token]
       )
