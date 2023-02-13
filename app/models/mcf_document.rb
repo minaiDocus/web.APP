@@ -64,7 +64,6 @@ class McfDocument < ApplicationRecord
       new_params      = {
                           code: params[:code],
                           journal: params[:journal].upcase,
-                          file64: nil,
                           original_file_name: params[:original_file_name],
                           access_token: params[:access_token]
                         }

@@ -125,6 +125,7 @@ class Software::Ibiza < ApplicationRecord
   # end
 
   def ibiza_id?
+    debugger
     ibiza_id.present?
   end
 

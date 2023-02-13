@@ -95,6 +95,7 @@ module JournalHelper
   end
 
   def ibiza_journals
+    debugger
     if @customer.try(:ibiza).ibiza_id? && @customer.uses?(:ibiza)
       Rails.cache.fetch [:ibiza, :user, @customer.try(:ibiza).try(:ibiza_id).gsub(/({|})/, ''), :journals], expires_in: 5.minutes do
         service = IbizaLib::Journals.new(@customer)
