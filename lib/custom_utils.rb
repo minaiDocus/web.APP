@@ -251,8 +251,10 @@ class CustomUtils
     end
 
     def use_final_documents?(user)
-      return true if ['IDOC', 'MCN'].include?(user.organization.code)
-      return false
+      return true #Everybody uses final doc now
+
+      # return true if ['IDOC', 'MCN'].include?(user.organization.code)
+      # return false
     end
 
     def can_create_budgea_documents(customer)
