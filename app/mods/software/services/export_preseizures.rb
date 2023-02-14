@@ -142,9 +142,11 @@ class SoftwareMod::ExportPreseizures
 
   def send_error_email
     #TODO : send failed export email
+    ExportPreseizuresMailer.notify_failure
   end
 
   def send_success_email
     #TODO : send success email
+    ExportPreseizuresMailer.notify_success
   end
 end

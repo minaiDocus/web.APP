@@ -94,7 +94,7 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
     end
 
     #supported_format = %w[csv xml_ibiza txt_quadratus txt_cogilog zip_quadratus zip_coala xls_coala txt_fec_agiris ecr_fec_agiris_facnote txt_fec_acd csv_cegid tra_cegid txt_ciel]
-    supported_format = %w[csv xml txt xls]
+    supported_format = %w[csv xml txt xls zip]
 
     if preseizures.any? && export_format.in?(supported_format)
       preseizures = preseizures.sort_by{|e| e.position }
@@ -105,13 +105,21 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
 
         #send_data(contents, filename: File.basename(export.file_name.to_s), disposition: 'attachment')
         SoftwareMod::ExportPreseizures.delay_for(1.minutes).execute(software, preseizures.collect(&:id), is_pieces_included.to, export_format , 0)
+        flash[:success] = "Préparation en cours, un lien de téléchargement vous sera envoyé par mail une fois disponible."
+        render json: { success: true }, status: 200
       else
-        render plain: 'Aucun résultat'
+        #render plain: 'Aucun résultat'
+        flash[:error] = 'Aucun résultat'
+        redirect_to documents_path
       end
     elsif !export_format.in?(supported_format)
-      render plain: 'Traitement impossible : le format est incorrect.'
+      #render plain: 'Traitement impossible : le format est incorrect.'
+      flash[:error] = 'Traitement impossible : le format est incorrect.'
+      redirect_to documents_path
     else
-      render plain: 'Aucun résultat'
+      #render plain: 'Aucun résultat'
+      flash[:error] = 'Aucun résultat'
+      redirect_to documents_path
     end
   end
 
