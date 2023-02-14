@@ -176,7 +176,8 @@ class AccountingPlan < ApplicationRecord
         'conterpart_accounts': object.conterpart_accounts.map{ |account| { name: account.name, number: account.number } },
         'name':        object.third_party_name,
         'number':      object.third_party_account,
-        'vat_account': vat_accounts.any? ? (vat_accounts.find_by_code(object.code).try(:account_number)).presence : object.code.presence
+        'vat_account': vat_accounts.any? ? (vat_accounts.find_by_code(object.code).try(:account_number)).presence : object.code.presence,
+        'vat_not_recoverable': object.vat_not_recoverable
       }
 
       data_content << content

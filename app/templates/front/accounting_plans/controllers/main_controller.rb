@@ -34,7 +34,7 @@ class AccountingPlans::MainController < CustomerController
   def update
     accounting_plan_item = params[:accounting_plan_item][:type] == 'provider' ? @accounting_plan.providers.find(params[:accounting_plan_item][:id]) : @accounting_plan.customers.find(params[:accounting_plan_item][:id])
 
-    accounting_plan_item.assign_attributes params[:accounting_plan_item].except(:id, :type).permit(:third_party_account, :third_party_name, :conterpart_account, :code, :vat_autoliquidation_debit_account, :vat_autoliquidation_credit_account, :vat_autoliquidation)
+    accounting_plan_item.assign_attributes items_params
 
     if accounting_plan_item.save
       update_conterpart_accounts(accounting_plan_item)
@@ -51,7 +51,7 @@ class AccountingPlans::MainController < CustomerController
   def create
     accounting_plan_item = AccountingPlanItem.new
 
-    accounting_plan_item.assign_attributes params[:accounting_plan_item].except(:id, :type).permit(:third_party_account, :third_party_name, :conterpart_account, :code, :vat_autoliquidation_debit_account, :vat_autoliquidation_credit_account, :vat_autoliquidation)
+    accounting_plan_item.assign_attributes items_params
 
     accounting_plan_item.accounting_plan_itemable_id   = @accounting_plan.id
     accounting_plan_item.accounting_plan_itemable_type = "AccountingPlan"
@@ -283,6 +283,10 @@ class AccountingPlans::MainController < CustomerController
       flash[:error] = t('authorization.unessessary_rights')
       redirect_to organization_path(@organization)
     end
+  end
+
+  def items_params
+    params[:accounting_plan_item].except(:id, :type).permit(:third_party_account, :third_party_name, :conterpart_account, :code, :vat_autoliquidation_debit_account, :vat_autoliquidation_credit_account, :vat_autoliquidation, :vat_not_recoverable)
   end
 
   def accounting_plan_params

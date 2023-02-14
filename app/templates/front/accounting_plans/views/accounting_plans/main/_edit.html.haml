@@ -5,6 +5,12 @@
   = f.input :third_party_name
   = f.input :conterpart_account, label: 'Compte de contrepartie par défaut'
   = f.input :code
+  .row.my-4
+    .col-md-10.form-group.no-margin
+      = f.label :vat_not_recoverable, class: 'control-label semibold form-check-label'
+    .col-md-2
+      .form-check.form-switch.idocus-custom-form-check
+        = f.input :vat_not_recoverable, as: :boolean, label: false, input_html: { class: 'input_check_field check-vat-recoverable', id: 'check-vat-recoverable' }
 
   .mb-3.form-group.string.required
     = label_tag 'accounting_plan_item[conterpart_accounts][]', 'Comptes associés par catégorie'

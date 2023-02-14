@@ -170,6 +170,8 @@ class SgiApiServices::PushPreAsignmentService
     def generate_autoliquidated_entries(preseizure)
       supplier_account = preseizure.user.accounting_plan.providers.where(third_party_account: preseizure.accounts.where(type: 1).first.try(:number)).first
 
+      return false if supplier_account.try(:vat_not_recoverable)
+
       return unless supplier_account.try(:vat_autoliquidation) && supplier_account.vat_autoliquidation_credit_account && supplier_account.vat_autoliquidation_debit_account
 
       amount = (preseizure.cached_amount / 100) * 20
@@ -205,8 +207,6 @@ class SgiApiServices::PushPreAsignmentService
       debit_entry.save
 
       preseizure.save
-
-      System::Log.info('debugger', "[autoliquidation] - Accounts : #{preseizure.reload.accounts.size}")
     end
   end
 
