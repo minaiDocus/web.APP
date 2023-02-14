@@ -15,6 +15,11 @@ class SoftwareMod::ExportPreseizures
   end
 
   def execute(preseizures=[], include_pieces=false, retry_count = 0)
+    #TO DO: Add ibiza export
+    return 'not_authorized' if @software == 'ibiza'
+
+    preseizures = preseizures.sort_by{|e| e.position }
+
     @abort_and_retry_later = false
     @retry_count           = retry_count
 
@@ -141,12 +146,10 @@ class SoftwareMod::ExportPreseizures
   end
 
   def send_error_email
-    #TODO : send failed export email
-    ExportPreseizuresMailer.notify_failure
+    ExportPreseizuresMailer.notify_failure.deliver
   end
 
   def send_success_email
-    #TODO : send success email
-    ExportPreseizuresMailer.notify_success
+    ExportPreseizuresMailer.notify_success.deliver
   end
 end

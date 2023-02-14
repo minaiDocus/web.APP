@@ -167,7 +167,15 @@ class DocumentsMain{
 
     let str_params = JSON.stringify(params);
 
-    window.location.href = `/documents/export_preseizures/${btoa(str_params)}`;
+    $('#preseizures_export.modal').modal('hide');
+
+    let ajax_params =   {
+                          'url': `/documents/export_preseizures/${btoa(str_params)}`,
+                          'type': 'GET',
+                          'dataType': 'json'
+                        }
+
+    this.applicationJS.sendRequest(ajax_params);
   }
 
   download_pack_archive(pack_id){
