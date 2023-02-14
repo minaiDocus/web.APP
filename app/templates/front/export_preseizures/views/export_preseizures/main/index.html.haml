@@ -19,6 +19,9 @@
             %td= preassignment_export.for
             %td= preassignment_export.total_item
             %td 
-              %span.ms-2
-                %span.download_pack_archive{title: 'Télécharger le fichier', data: {id: 'preassignment_export.id'}}= glyphicon('data-transfer-download', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
+              %span.ms-2.download_export{title: 'Télécharger le fichier', "data-preassignment-export-id" =>  preassignment_export.id}
+                %span= glyphicon('data-transfer-download', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
                 %a.pointer télécharger
+
+
+= javascript_include_tag 'front/export_preseizures/assets/javascripts/main'
