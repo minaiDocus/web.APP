@@ -14,7 +14,7 @@ Rails.application.config.assets.paths << Rails.root.join("app/templates")
 Rails.application.config.assets.paths << Rails.root.join('node_modules')
 
 Rails.application.config.assets.precompile += %w( ckeditor/* )
-Rails.application.config.assets.precompile += %w( front/main.css front/main_axelium.css front/organization_lefter.css front/organization_lefter_axelium.css back/main.css front/organization_lefter_dk_partners.css front/main_dk_partners.css front/main_censial.css front/organization_lefter_censial.css )
+Rails.application.config.assets.precompile += %w( front/main.css front/organization_lefter_orial.css front/main_orial.css front/main_axelium.css front/organization_lefter.css front/organization_lefter_axelium.css back/main.css front/organization_lefter_dk_partners.css front/main_dk_partners.css front/main_censial.css front/organization_lefter_censial.css )
 Rails.application.config.assets.precompile += %w( front/router.js front/main.js front/organization_lefter.js back/main.js )
 
 Dir[Rails.root.join("app/templates/front/*/assets/javascripts/*")].each do |f|

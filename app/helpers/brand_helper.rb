@@ -6,6 +6,8 @@ module BrandHelper
       'DK Partners'
     elsif request.env["SERVER_NAME"].include?('censial')
       'Censial Online'
+    elsif request.env["SERVER_NAME"].include?('orial')
+      'My Orial'
     else
       'iDocus'
     end

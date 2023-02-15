@@ -6,6 +6,7 @@
 //= link logo/tiny_logo.png
 //= link logo/tiny_logo_axelium.png
 //= link logo/tiny_logo_censial.png
+//= link logo/tiny_logo_orial.png
 //= link logo/tiny_logo_dk_partners.png
 //= link logo/tiny_logo_2.png
 //= link icons/icon-facebook.png

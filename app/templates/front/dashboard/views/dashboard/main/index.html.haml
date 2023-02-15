@@ -4,6 +4,8 @@
   = stylesheet_link_tag 'front/dashboard/assets/stylesheets/main_dk_partners'
 - elsif request.env["SERVER_NAME"].include?("censial")
   = stylesheet_link_tag 'front/dashboard/assets/stylesheets/main_censial'
+- elsif request.env["SERVER_NAME"].include?("orial")
+  = stylesheet_link_tag 'front/dashboard/assets/stylesheets/main_orial'
 - else
   = stylesheet_link_tag 'front/dashboard/assets/stylesheets/main'
 
@@ -33,6 +35,8 @@
             %span.me-2= glyphicon('plus', {size: '12', color: '#fa8e2e'})
           - elsif request.env["SERVER_NAME"].include?("dkpartners")
             %span.me-2= glyphicon('plus', {size: '12', color: '#051077'})
+          - elsif request.env["SERVER_NAME"].include?("orial")
+            %span.me-2= glyphicon('plus', {size: '12', color: '#BC183A'})
           - else
             %span.me-2= glyphicon('plus', {size: '12', color: '#72AA42'})
           %span= t('dashboard.add_folder_to_favorite')    

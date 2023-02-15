@@ -7,6 +7,9 @@
 - elsif @user.organization.try(:code) == 'CEN'
   - url = 'https://www.censial-online.fr/'
   - team = 'Censial Online'
+- elsif @user.organization.try(:code) == 'OR'
+  - url = 'https://my.orial.fr/'
+  - team = 'My Orial'
 - else
   - url = @url
   - team = 'iDocus'
@@ -42,6 +45,6 @@
     Cordialement,
     %br
     = "L'équipe #{team}"
-    - if @user.organization.try(:code) != 'ALM'
+    - if @user.organization.try(:code).in?(%w(ALM DK CEN OR)) 
       %br
       = link_to 'support@idocus.com', 'mailto:support@idocus.com'

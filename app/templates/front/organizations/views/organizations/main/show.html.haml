@@ -4,6 +4,8 @@
   = stylesheet_link_tag 'front/organizations/assets/stylesheets/show_dk_partners'
 - elsif request.env["SERVER_NAME"].include?("censial")
   = stylesheet_link_tag 'front/organizations/assets/stylesheets/show_censial'
+- elsif request.env["SERVER_NAME"].include?("orial")
+  = stylesheet_link_tag 'front/organizations/assets/stylesheets/show_orial'
 - else
   = stylesheet_link_tag 'front/organizations/assets/stylesheets/show'
 

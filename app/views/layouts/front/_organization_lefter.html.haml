@@ -4,6 +4,8 @@
   = stylesheet_link_tag 'front/organization_lefter_censial'
 - elsif request.env["SERVER_NAME"].include?("dkpartners")
   = stylesheet_link_tag 'front/organization_lefter_dk_partners'
+- elsif request.env["SERVER_NAME"].include?("orial")
+  = stylesheet_link_tag 'front/organization_lefter_orial'
 - else
   = stylesheet_link_tag 'front/organization_lefter'
 

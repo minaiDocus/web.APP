@@ -26,6 +26,12 @@
           = "Copyright Censial"
           &copy;
           %span.semibold= Time.now.strftime('%Y')
+    - elsif request.env["SERVER_NAME"].include?("orial")
+      .col-md-12.text-center
+        %p.m-0.text-white
+          = "Copyright Orial"
+          &copy;
+          %span.semibold= Time.now.strftime('%Y')
     - else
       .col-md-6.text-start.text-white
         .contact-number

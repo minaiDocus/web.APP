@@ -10,6 +10,8 @@ class WelcomeMailer < BaseMailer
       mail(to: @user.email, subject: '[DK Partners] Création de compte DK Partners')
     elsif @user.organization&.code == "CEN"
       mail(to: @user.email, subject: '[Censial Online] Création de compte Censial Online')
+    elsif @user.organization&.code == "OR"
+      mail(to: @user.email, subject: '[My Orial] Création de compte My Orial')
     else
       mail(to: @user.email, subject: '[iDocus] Création de compte iDocus')
     end
@@ -25,6 +27,8 @@ class WelcomeMailer < BaseMailer
       mail(to: @user.email, subject: '[DK Partners] Création de compte DK Partners')
     elsif "CEN".in?(@collaborator.organizations.pluck(:code))
       mail(to: @user.email, subject: '[Censial Online] Création de compte Censial Online')
+    elsif "OR".in?(@collaborator.organizations.pluck(:code))
+      mail(to: @user.email, subject: '[My Orial] Création de compte My Orial')
     else
       mail(to: @collaborator.email, subject: '[iDocus] Création de compte iDocus')
     end
@@ -40,6 +44,8 @@ class WelcomeMailer < BaseMailer
       mail(to: @guest.email, subject: '[DK Partners] Création de compte DK Partners')
     elsif @guest.organization&.code == "CEN"
       mail(to: @guest.email, subject: '[Censial Online] Création de compte Censial Online')
+    elsif @guest.organization&.code == "OR"
+      mail(to: @guest.email, subject: '[My Orial] Création de compte My Orial')
     else
       mail(to: @guest.email, subject: '[iDocus] Création de compte iDocus')
     end

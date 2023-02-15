@@ -8,6 +8,8 @@
         DK Partners | Connexion
       - elsif request.env["SERVER_NAME"].include?("censial")
         Censial Online | Connexion
+      - elsif request.env["SERVER_NAME"].include?("orial")
+        My Orial | Connexion
       - else
         Idocus | Connexion
       
@@ -21,6 +23,8 @@
       = stylesheet_link_tag 'front/main_dk_partners'
     - elsif request.env["SERVER_NAME"].include?("censial")
       = stylesheet_link_tag 'front/main_censial'
+    - elsif request.env["SERVER_NAME"].include?("orial")
+      = stylesheet_link_tag 'front/main_orial'
     - else
       = stylesheet_link_tag 'front/main'
 
@@ -35,6 +39,8 @@
             %span.semibold.label_idocus DK Partners
           - elsif request.env["SERVER_NAME"].include?("censial")
             %span.semibold.label_idocus Censial Online
+          - elsif request.env["SERVER_NAME"].include?("orial")
+            %span.semibold.label_idocus My Orial
           - else
             %span.semibold.label_idocus iDocus
 

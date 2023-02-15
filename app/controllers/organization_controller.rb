@@ -21,6 +21,8 @@ class OrganizationController < ApplicationController
       'front/layout_dk_partners'
     elsif request.env["SERVER_NAME"].include?('censial')
       'front/layout_censial'
+    elsif request.env["SERVER_NAME"].include?('orial')
+      'front/layout_orial'
     else
       'front/layout'
     end
