@@ -85,6 +85,6 @@
             - if @user.pre_assignement_displayed?
               = link_to glyphicon('comment-square', {size: '13', color: '#212529'}) + " Centre d'aide", 'https://idocus.zendesk.com/hc/fr', class: 'dropdown-item', target: '_blank'
             -else
-              = link_to glyphicon('document', {size: '13', color: '#212529'}) + " Documentation", download_document_path(name: 'doc_final_users.pdf'), class: 'dropdown-item', target: '_blank'
+              = link_to glyphicon('document', {size: '13', color: '#212529'}) + " Documentation", download_document_path(name: 'doc_final_users_axelium.pdf'), class: 'dropdown-item', target: '_blank'
 
             = link_to glyphicon('power-standby', {size: '13', color: '#FF4848'}) + ' Se déconnecter', destroy_user_session_path, method: 'delete', class: 'dropdown-item red-label account-log-out'
