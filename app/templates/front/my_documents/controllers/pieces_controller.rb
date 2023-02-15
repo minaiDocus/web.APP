@@ -166,10 +166,10 @@ class MyDocuments::PiecesController < MyDocuments::AbaseController
 
     @users = accounts.includes(:options, :ibiza, :subscription, organization: [:ibiza, :exact_online, :my_unisoft, :coala, :cogilog, :sage_gec, :acd, :quadratus, :cegid, :csv_descriptor, :fec_agiris]).active.order(code: :asc).select { |user| user.authorized_upload? }
 
-    @users << @user if !@users.select { |u| u.id == @user.id }.any?
+    @users << @user if !@user.is_guest && !@users.select { |u| u.id == @user.id }.any?
 
     uid_user       = User.where(id: Base64.decode64(params[:uid])).try(:first) if params[:uid].present?
-    @user_selected = (uid_user && @users.collect(&:id).include?(uid_user.id)) ? uid_user : @user
+    @user_selected = (uid_user && @users.collect(&:id).include?(uid_user.id)) ? uid_user : @users.first
 
     @journals = AccountBookType.where(user_id: @user_selected.id).order('FIELD(entry_type, 0, 5, 1, 4, 3, 2) DESC', description: :asc)
 
