@@ -1,9 +1,9 @@
 module SoftwareMod::Configuration
   extend ActiveSupport::Concern
 
-  SOFTWARES = ['acd', 'ibiza', 'exact_online', 'my_unisoft', 'coala', 'sage_gec', 'quadratus', 'cegid', 'fec_agiris', 'fec_acd', 'csv_descriptor', 'cogilog', 'ciel']
-  SOFTWARES_HUMAN_NAME = { acd: 'ACD', ibiza: 'iBiza', exact_online: 'Exact Online', my_unisoft: 'My Unisoft', coala: 'Coala', sage_gec: 'Sage GEC - Privé', quadratus: 'Quadratus', cegid: 'Cegid', fec_agiris: 'Agiris', fec_acd: 'FEC ACD', csv_descriptor: 'CSV', cogilog: 'Cogilog', ciel: 'Ciel' }
-  TABLE_NAME_WITH_SOFTWARES_USING_API = ['software_ibizas', 'software_exact_online', 'software_my_unisofts', 'software_sage_gec', 'software_acd']
+  SOFTWARES ||= ['acd', 'ibiza', 'exact_online', 'my_unisoft', 'coala', 'sage_gec', 'quadratus', 'cegid', 'fec_agiris', 'fec_acd', 'csv_descriptor', 'cogilog', 'ciel']
+  SOFTWARES_HUMAN_NAME ||= { acd: 'ACD', ibiza: 'iBiza', exact_online: 'Exact Online', my_unisoft: 'My Unisoft', coala: 'Coala', sage_gec: 'Sage GEC - Privé', quadratus: 'Quadratus', cegid: 'Cegid', fec_agiris: 'Agiris', fec_acd: 'FEC ACD', csv_descriptor: 'CSV', cogilog: 'Cogilog', ciel: 'Ciel' }
+  TABLE_NAME_WITH_SOFTWARES_USING_API ||= ['software_ibizas', 'software_exact_online', 'software_my_unisofts', 'software_sage_gec', 'software_acd']
   #SOFTWARES_OBJECTS = [::SoftwareMod::Ibiza, ::SoftwareMod::ExactOnline, ::SoftwareMod::Cegid, ::SoftwareMod::Coala, ::SoftwareMod::SageGec, ::SoftwareMod::FecAgiris, ::SoftwareMod::FecAcd, ::SoftwareMod::Quadratus, ::SoftwareMod::CsvDescriptor, ::SoftwareMod::MyUnisoft, ::SoftwareMod::Cogilog, ::SoftwareMod::Ciel]
 
   def self.softwares_objects

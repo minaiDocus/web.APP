@@ -1,7 +1,7 @@
 # -*- encoding : UTF-8 -*-
 require 'spec_helper'
 
-describe SoftwareMod::ExportPreseizures do
+describe SoftwareMod::Export::Preseizures do
   def all_softwares
     ['cegid', 'ciel', 'coala', 'cogilog', 'fec_acd', 'fec_agiris', 'quadratus']
   end
@@ -44,7 +44,7 @@ describe SoftwareMod::ExportPreseizures do
 
       all_softwares.each do |software_name|
         p "=== #{software_name} ==="
-        p result = SoftwareMod::ExportPreseizures.new(software_name).execute(@preseizures)
+        p result = SoftwareMod::Export::Preseizures.new(software_name).execute(@preseizures, false, 0, @user.id)
 
         export = PreAssignmentExport.where(for: software_name).last
 
@@ -61,7 +61,7 @@ describe SoftwareMod::ExportPreseizures do
     it 'generate normal coala xls with piece file', :zip do
       allow_any_softwares
 
-      p result = SoftwareMod::ExportPreseizures.new('coala', 'xls').execute(@preseizures, true)
+      p result = SoftwareMod::Export::Preseizures.new('coala', 'xls').execute(@preseizures, true, 0, @user.id)
 
       export = PreAssignmentExport.where(for: 'coala').last
 
@@ -84,10 +84,10 @@ describe SoftwareMod::ExportPreseizures do
     it 'generate normal cegid tra with piece file' do
       allow_any_softwares
 
-      p result = SoftwareMod::ExportPreseizures.new('cegid', 'tra').execute(@preseizures, true)
+      p result = SoftwareMod::Export::Preseizures.new('cegid', 'tra').execute(@preseizures, true)
 
       dir        = File.dirname(result)
-      piece_name = SoftwareMod::Service::Cegid.file_name_format(@piece)
+      piece_name = SoftwareMod::Export::Cegid.file_name_format(@piece)
       piece_path = "#{dir}/#{piece_name}"
 
       expect(result.present?).to be true
@@ -100,10 +100,10 @@ describe SoftwareMod::ExportPreseizures do
     it 'generate normal quadratus txt with piece file' do
       allow_any_softwares
 
-      p result = SoftwareMod::ExportPreseizures.new('quadratus').execute(@preseizures, true)
+      p result = SoftwareMod::Export::Preseizures.new('quadratus').execute(@preseizures, true)
 
       dir        = File.dirname(result)
-      piece_name = SoftwareMod::Service::Quadratus.file_name_format(@piece)
+      piece_name = SoftwareMod::Export::Quadratus.file_name_format(@piece)
       piece_path = "#{dir}/#{piece_name}"
 
       expect(result.present?).to be true

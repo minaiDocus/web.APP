@@ -1,4 +1,4 @@
-class SoftwareMod::Service::FecAcd
+class SoftwareMod::Export::FecAcd
   def self.file_name_format(piece)
     piece.name.to_s[-10, 10].tr(' ', '_').tr('%', '_') + '.pdf'
   end
@@ -102,7 +102,7 @@ class SoftwareMod::Service::FecAcd
           end
 
           if preseizure.piece
-            piece_ref = SoftwareMod::Service::FecAcd.file_name_format(preseizure.piece).gsub('.pdf', '')
+            piece_ref = SoftwareMod::Export::FecAcd.file_name_format(preseizure.piece).gsub('.pdf', '')
           else
             piece_ref = "#{preseizure.report.name.to_s[-6, 10].tr(' ', '_').tr('%', '_')}_#{("%03d" % preseizure.position)}"
           end

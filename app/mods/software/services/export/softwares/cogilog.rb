@@ -1,6 +1,6 @@
 # -*- encoding : UTF-8 -*-
 # Generates a ZIP to import in Cogiog
-class SoftwareMod::Service::Cogilog
+class SoftwareMod::Export::Cogilog
   def initialize(preseizures, tmp_dir=nil, _format='txt')
     @preseizures = preseizures
     @user        = preseizures.first.user

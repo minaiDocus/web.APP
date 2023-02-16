@@ -1,10 +1,10 @@
 ###IMPORTANT : FOR NOW, EXPORT ONLY SUPPORT PRESEIZURES OF SAME REPORT.
-class SoftwareMod::ExportPreseizures
-  def self.execute(software, preseizures_ids, include_pieces=false, _format=nil, retry_count=0)
+class SoftwareMod::Export::Preseizures
+  def self.execute(software, preseizures_ids, include_pieces=false, _format=nil, retry_count=0, requester_id=0)
     if retry_count <= 3
       preseizures = Pack::Report::Preseizure.where(id: preseizures_ids)
 
-      new(software, _format).execute(preseizures, include_pieces, retry_count) if preseizures.size > 0
+      new(software, _format).execute(preseizures, include_pieces, retry_count, requester_id) if preseizures.size > 0
     end
   end
 
@@ -14,18 +14,19 @@ class SoftwareMod::ExportPreseizures
     @format     = _format
   end
 
-  def execute(preseizures=[], include_pieces=false, retry_count = 0)
+  def execute(preseizures=[], include_pieces=false, retry_count=0, requester_id=0)
     #TO DO: Add ibiza export
     return 'not_authorized' if @software == 'ibiza'
 
-    preseizures = preseizures.sort_by{|e| e.position }
+    @requester  = User.where(id: requester_id).first
+
+    @preseizures = Array(preseizures).sort_by{|e| e.position }
 
     @abort_and_retry_later = false
     @retry_count           = retry_count
 
     @software_class = nil
     @file_path      = ''
-    @preseizures    = Array(preseizures)
     @include_pieces = include_pieces
     @report         = @preseizures.first.report
 
@@ -34,21 +35,21 @@ class SoftwareMod::ExportPreseizures
 
     case @software
     when 'csv_descriptor'
-      @software_class = SoftwareMod::Service::CsvDescriptor
+      @software_class = SoftwareMod::Export::CsvDescriptor
     when 'coala'
-      @software_class = SoftwareMod::Service::Coala
+      @software_class = SoftwareMod::Export::Coala
     when 'cegid'
-      @software_class = SoftwareMod::Service::Cegid
+      @software_class = SoftwareMod::Export::Cegid
     when 'quadratus'
-      @software_class = SoftwareMod::Service::Quadratus
+      @software_class = SoftwareMod::Export::Quadratus
     when 'fec_acd'
-      @software_class = SoftwareMod::Service::FecAcd
+      @software_class = SoftwareMod::Export::FecAcd
     when 'cogilog'
-      @software_class = SoftwareMod::Service::Cogilog
+      @software_class = SoftwareMod::Export::Cogilog
     when 'ciel'
-      @software_class = SoftwareMod::Service::Ciel
+      @software_class = SoftwareMod::Export::Ciel
     when 'fec_agiris'
-      @software_class = SoftwareMod::Service::FecAgiris
+      @software_class = SoftwareMod::Export::FecAgiris
     end
 
     begin
@@ -73,8 +74,9 @@ class SoftwareMod::ExportPreseizures
       create_preassignment_export
 
       if File.exist?(@file_path.to_s)
-        send_success_email
         @export.got_success(@file_path)
+
+        send_success_email
       else
         @export.got_error(@file_path.presence || 'Internal server error')
       end
@@ -139,17 +141,17 @@ class SoftwareMod::ExportPreseizures
 
   def retry_later
     if @retry_count <= 3
-      SoftwareMod::ExportPreseizures.delay_for(1.hours).execute(@software, @preseizures.collect(&:id), @include_pieces, @format, (@retry_count + 1))
+      SoftwareMod::Export::Preseizures.delay_for(1.hours).execute(@software, @preseizures.collect(&:id), @include_pieces, @format, (@retry_count + 1), @requester.try(:id))
     else
       send_error_email
     end
   end
 
   def send_error_email
-    ExportPreseizuresMailer.notify_failure.deliver
+    ExportPreseizuresMailer.notify_failure(@requester).deliver if @requester
   end
 
   def send_success_email
-    ExportPreseizuresMailer.notify_success.deliver
+    ExportPreseizuresMailer.notify_success(@requester).deliver if @requester
   end
 end

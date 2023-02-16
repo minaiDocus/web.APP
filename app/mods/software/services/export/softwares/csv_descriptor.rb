@@ -1,5 +1,5 @@
 # -*- encoding : UTF-8 -*-
-class SoftwareMod::Service::CsvDescriptor
+class SoftwareMod::Export::CsvDescriptor
   def initialize(preseizures, tmp_dir=nil, _format='csv')
     @preseizures = preseizures
     @user        = preseizures.first.user
