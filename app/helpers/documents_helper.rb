@@ -224,21 +224,7 @@ module DocumentsHelper
     if @user.organization.specific_mission
       @user.organization.customers.active.order(code: :asc)
     else
-      @file_upload_users_list ||= accounts.includes(:options, :ibiza, :subscription, organization: [:ibiza,
-                                                                                                    :exact_online,
-                                                                                                    :my_unisoft,
-                                                                                                    :coala,
-                                                                                                    :cogilog,
-                                                                                                    :sage_gec,
-                                                                                                    :acd,
-                                                                                                    :quadratus,
-                                                                                                    :cegid,
-                                                                                                    :csv_descriptor,
-                                                                                                    :fec_agiris]).
-                                active.order(code: :asc).select do |user|
-
-        user.authorized_upload?
-      end
+      @file_upload_users_list ||= accounts.includes(:options, :ibiza, :subscription, organization: [:ibiza, :exact_online, :my_unisoft, :coala, :cogilog, :sage_gec, :acd, :quadratus, :cegid, :csv_descriptor, :fec_agiris]).active.order(code: :asc).select { |user| user.authorized_upload? }
     end
   end
 

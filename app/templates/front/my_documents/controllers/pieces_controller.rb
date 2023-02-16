@@ -164,7 +164,7 @@ class MyDocuments::PiecesController < MyDocuments::AbaseController
 
     @render_upload = request.xhr? ? false : true
 
-    @users = accounts.includes(:options, :ibiza, :subscription, organization: [:ibiza, :exact_online, :my_unisoft, :coala, :cogilog, :sage_gec, :acd, :quadratus, :cegid, :csv_descriptor, :fec_agiris]).active.order(code: :asc).select { |user| user.authorized_upload? }
+    @users = accounts.includes(:options, :ibiza, :subscription, organization: [:ibiza, :exact_online, :my_unisoft, :coala, :cogilog, :sage_gec, :acd, :quadratus, :cegid, :csv_descriptor, :fec_agiris]).active.order(code: :asc)
 
     @users << @user if !@user.is_guest && !@users.select { |u| u.id == @user.id }.any?
 
