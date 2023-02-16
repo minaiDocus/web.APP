@@ -8,12 +8,13 @@ class User < ApplicationRecord
 
   AUTHENTICATION_TOKEN_LENGTH = 20
 
-  # validate :belonging_of_manager, if: proc { |u| u.manager_id_changed? && u.manager_id.present? }
+  validate  :belonging_of_manager, if: proc { |u| u.manager_id_changed? && u.manager_id.present? }
   validates :authd_prev_period,            inclusion: { in: 0..36 }
   validates :auth_prev_period_until_day,   inclusion: { in: 0..28 }
   validates :auth_prev_period_until_month, inclusion: { in: 0..2 }
   validates_length_of :code, within: 3..15, unless: Proc.new { |u| u.collaborator? || u.is_guest }
   validates_length_of :email, maximum: 50
+  validates_length_of :company, :first_name, :last_name, within: 0..50, allow_nil: true
   validates_presence_of :email, :encrypted_password
   validates_presence_of :code, unless: Proc.new { |u| u.collaborator? || u.is_guest }
   validates_presence_of :company
