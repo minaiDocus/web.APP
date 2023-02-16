@@ -8,9 +8,8 @@ class SoftwareMod::Export::CsvDescriptor
     @format      = _format
   end
 
-  def execute
-    debugger
-    return 'not_authorized' if not @user.uses?(:csv_descriptor)
+  def execute(by_pass_validation=false)
+    return 'not_authorized' if !by_pass_validation && !@user.uses?(:csv_descriptor)
 
     @base_name = @preseizures.first.report.name.tr(' ', '_').tr('%', '_')
     @file_path = "#{@dir}/#{@base_name}.csv"

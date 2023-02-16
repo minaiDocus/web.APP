@@ -5,7 +5,6 @@ class ExportPreseizures::MainController < FrontController
     @preassignment_exports = @user.pre_assignment_exports.where('DATE_FORMAT(created_at, "%Y%m%d") >= 20230216').where('created_at >= ?', 4.month.ago)
   end
 
-
   def download_export_preseizures
     preassignment_export_id = params["p"]
     preassignment_export = PreAssignmentExport.where(id: preassignment_export_id).first

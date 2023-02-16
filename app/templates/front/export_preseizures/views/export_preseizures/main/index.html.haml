@@ -1,7 +1,7 @@
 .container-fluid.main-content
   .row
-    %h3.bold Export d'écritures comptables
-    .box
+    %h3.bold.derivationLeft Export d'écritures comptables
+    .box.derivationRight
       %table.table.table-striped
         %thead
           %th Lot
@@ -16,12 +16,12 @@
             %td= preassignment_export.pack_name
             %td= preassignment_export.created_at.strftime('%d/%m/%Y')
             %td= preassignment_export.file_name
-            %td= preassignment_export.for
+            %td= SoftwareMod::Configuration.human_format[preassignment_export.for.to_sym]
             %td= preassignment_export.total_item
             %td 
-              %span.ms-2.download_export{title: 'Télécharger le fichier', "data-preassignment-export-id" =>  preassignment_export.id}
+              %a.ms-2.download_export{ title: "Télécharger le fichier : #{preassignment_export.file_name}", href: download_export_preseizures_path(preassignment_export.id) }
                 %span= glyphicon('data-transfer-download', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
-                %a.pointer télécharger
+                %span.pointer télécharger
 
 
 = javascript_include_tag 'front/export_preseizures/assets/javascripts/main'

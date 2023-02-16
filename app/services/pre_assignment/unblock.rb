@@ -13,7 +13,6 @@ class PreAssignment::Unblock
       preseizure.report
     end.each do |report, pres|
       PreAssignment::CreateDelivery.new(pres, ['ibiza', 'exact_online', 'my_unisoft', 'sage_gec', 'acd'], is_auto: false).execute
-      PreseizureExport::GeneratePreAssignment.new(pres).execute
       FileDelivery.prepare(report)
       FileDelivery.prepare(report.pack) if report.pack
       Notifications::PreAssignments.new({owner: pres.first.user, total: pres.size, unblocker: @unblocker}).notify_unblocked_preseizure

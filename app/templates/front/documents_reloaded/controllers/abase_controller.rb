@@ -91,7 +91,7 @@ class DocumentsReloaded::AbaseController < FrontController #Must be loaded first
     if preseizures.any? && export_format.in?(supported_format)
       preseizures = preseizures.sort_by{|e| e.position }
 
-      export = PreseizureExport::GeneratePreAssignment.new(preseizures, export_format).generate_on_demand
+      export = nil
       if export && export.file_name.present? && export.file_path.present?
         contents = File.read(export.file_path.to_s)
 

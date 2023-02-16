@@ -93,7 +93,7 @@
                 = select_tag :export_type, '', id: :export_type, class: 'form-select'
               .col-md-4
                 .form-group
-                  %label.semibold.label_check_field Inclure les pièces
+                  %label.semibold.label_check_field Inclure les pièces (.pdf)
                   .form-check.form-switch.idocus-custom-form-check
                     %input.input_check_field.pointer.input_switch.form-check-input.pointer.float-none#is_pieces_included{ type: :checkbox, as: :boolean, value: true, label_html: { class: 'semibold form-check-label' }, input_html: { class: 'form-check-input input_switch input_check_field'} }
                     %label.semibold{class: 'form-check-label label_check_field', for: 'is_pieces_included'} Non
