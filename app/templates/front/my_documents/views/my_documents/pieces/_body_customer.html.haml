@@ -16,9 +16,28 @@
     = select_tag 'customers', options_for_select(@users.reverse.map{ |e| [e.short_info, e.id] }, @user_selected.id), id: 'customers', class: 'chosen-list w-100', include_blank: false
 
     %hr
-    .processing-piece.mb-2
-      %label.ms-3 Document(s) en cours de traitement.
-      %span.badge.bg-dark.float-end.me-3= @temp_documents.count || 0
+    .processing-piece.mb-2.show-list-document.pointer
+      .list-document
+        %label.ms-3.pointer Document(s) en cours de traitement.
+        %span.badge.bg-dark.float-end.me-3.pointer= @temp_documents.count || 0
+      - if @temp_documents.count > 0
+        .temp-document-view.text-start.ms-5.regular.hide{style: 'max-width: 500px;'}
+          %ul
+            - _index = 0
+            .temp-document-content
+              - @temp_documents.reverse.each do |document|
+                - _index += 1
+                %li.pointer
+                  .row
+                    .col-md-9
+                      .white-label.p-1.pb-0.document-file-name{ id: "each_"+_index.to_s, "data-content" => html_piece_view(document, true), "data-each-class" => ".temp-document-view .image_piece", "data-index" => _index}
+                        = document.content_file_name
+                      .original-file-name.ps-2
+                        = truncate(document.original_file_name, length: 50)
+                    .col-md-3
+                      %span.text-start.animated-pointer.image_piece.visualise.mr-1{ id: "each_"+_index.to_s, "data-content" => html_piece_view(document, true), "data-each-class" => ".temp-document-view .image_piece", "data-index" => _index, style:'color: #C1D837;'} 
+                        Visualiser
+              .clearfix
 
     %hr.mt-0
     %button.btn.btn-outline-dark.black-label.w-100.semibold.btn-all-documents{ :type => 'button' } 

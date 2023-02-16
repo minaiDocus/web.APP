@@ -277,18 +277,18 @@ img{
   border-radius: 5px;
 }
 
-.suggestion_account_list ul, .content-list-pieces-deleted ul{
+.suggestion_account_list ul, .content-list-pieces-deleted ul, .temp-document-view ul{
   margin: 0 !important;
   padding: 0 !important;
-  max-height: 400px;
+  /*max-height: 400px;*/
   overflow-y: auto;
 }
 
-.suggestion_account_list li, .content-list-pieces-deleted li{
+.suggestion_account_list li, .content-list-pieces-deleted li, .temp-document-view li{
   padding: 2% 3%;
 }
 
-.suggestion_account_list li:hover, .content-list-pieces-deleted li:hover{
+.suggestion_account_list li:hover, .content-list-pieces-deleted li:hover, .temp-document-view li:hover{
   background: rgba(26,26,26,0.05);
 }
 
@@ -301,7 +301,7 @@ img{
   display: block !important
 }
 
-.content-list-pieces-deleted{
+.content-list-pieces-deleted, .temp-document-view{
   position: absolute;
   color: rgba(26,26,26,0.7);
   border: 1px solid rgba(26,26,26,0.2);
@@ -314,9 +314,22 @@ img{
   overflow-y: auto;
 }
 
-.deleted-piece-name{
+.list-document{
+  transition: all .3s ease-out;
+}
+
+.list-document:hover{
+  transform: scale(1.02) !important;
+}
+
+.deleted-piece-name, .document-file-name{
   font-weight: bold;
   font-size: 14px;
+  color: rgba(26,26,26,0.7);
+}
+
+.original-file-name{
+  font-size: 12px;
   color: rgba(26,26,26,0.7);
 }
 
@@ -351,6 +364,18 @@ img{
 
 .image_piece img{
   margin: auto;
+}
+
+.visualise{
+  font-size: 14px;
+  padding: 10px;
+  margin-right: 5px;
+}
+
+.visualise:hover{
+  font-weight: bold;
+  background-color: #fff;
+  border-radius: 3px;
 }
 
 .multi-select-menuitems label{
