@@ -244,17 +244,21 @@ module Cedricom
     end
 
     def save_operation(bank_account, cedricom_operation)
+      user = bank_account&.user
+
+      return nil if !user || !user.still_active?
+
       duplicate_ope = check_duplicated bank_account, cedricom_operation if bank_account
 
       operation = Operation.new
 
-      operation.user         = bank_account&.user
+      operation.user         = user
       operation.date         = cedricom_operation[:date]
       operation.amount       = cedricom_operation[:amount]
       operation.label        = cedricom_operation[:long_label]
       operation.api_name     = 'cedricom'
       operation.value_date   = cedricom_operation[:value_date]
-      operation.organization = bank_account&.user&.organization ? bank_account&.user&.organization : @reception.organization
+      operation.organization = user&.organization ? user&.organization : @reception.organization
       operation.bank_account = bank_account
       operation.unrecognized_iban  = bank_account ? nil : cedricom_operation[:bank_account]
       operation.cedricom_reception = @reception
