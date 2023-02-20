@@ -99,7 +99,7 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
     if preseizures.any? && export_format.in?(supported_format)
       SoftwareMod::Export::Preseizures.delay_for(1.minutes).execute(software, preseizures.collect(&:id), include_pieces, export_format , 0, current_user.try(:id))
 
-      json_flash[:success] = "Préparation en cours, Votre export sera disponible dans la page 'Exports écritures comptables' dans quelques instants ...".
+      json_flash[:success] = "Préparation en cours, Votre export sera disponible dans la page 'Exports écritures comptables' dans quelques instants ..."
       render json: { success: true, json_flash: json_flash }, status: 200
     elsif !export_format.in?(supported_format)
       json_flash[:error] = 'Traitement impossible : le format est incorrect.'
