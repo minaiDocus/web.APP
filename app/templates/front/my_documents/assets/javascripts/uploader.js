@@ -40,6 +40,7 @@ class MyDocumentsUploader{
 
     $('#add-document form#fileupload .hidden_analytic_fields').html('');
     $(".analytic_resume_box").html('');
+    $("span.with_default_analysis").css('display', 'none');
 
     let __journal_input = journal_input || this.input_journal
 

@@ -41,6 +41,7 @@ class DocumentsUploader{
 
     $('#add-document form#fileupload .hidden_analytic_fields').html('');
     $(".analytic_resume_box").html('');
+    $("span.with_default_analysis").css('display', 'none');
 
     AppEmit('compta_analytics.main_loading', { code: this.current_code, pattern: this.input_journal.val(), type: 'journal', is_used: use_analytics });
   }
