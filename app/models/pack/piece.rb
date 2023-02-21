@@ -284,8 +284,12 @@ class Pack::Piece < ApplicationRecord
     CustomActiveStorageObject.new(self, :cloud_content)
   end
 
-  def recreate_pdf(temp_dir = nil)
+  def recreate_pdf(temp_dir = nil, keep_temp_document = false, attempt=0)
     return false unless temp_document
+
+    p "==//////////////////////////////////////////// ATTEMPT : #{attempt} ///////////////////////////////////////////////////=====" 
+
+    return false if attempt > 2
 
     piece_file_path = ''
 
@@ -296,18 +300,26 @@ class Pack::Piece < ApplicationRecord
 
       original_file_path = File.join(dir, 'original.pdf')
 
-      FileUtils.cp temp_document.cloud_content_object.path, original_file_path     
+      FileUtils.cp temp_document.cloud_content_object.reload.path, original_file_path
 
       if temp_document.api_name == 'jefacture'
         self.cloud_content_object.attach(File.open(original_file_path), piece_file_name)
       else
-        DocumentTools.correct_pdf_if_needed original_file_path
+        if keep_temp_document
+          piece_file_path = temp_document.cloud_content_object.reload.path
+        else
+          DocumentTools.correct_pdf_if_needed original_file_path
 
-        DocumentTools.create_stamped_file original_file_path, piece_file_path, user.stamp_name, self.name, {origin: temp_document.delivery_type, is_stamp_background_filled: user.is_stamp_background_filled, dir: dir}
+          DocumentTools.create_stamped_file original_file_path, piece_file_path, user.stamp_name, self.name, {origin: temp_document.delivery_type, is_stamp_background_filled: user.is_stamp_background_filled, dir: dir}
+        end
 
         self.cloud_content_object.attach(File.open(piece_file_path), piece_file_name)
 
-        self.try(:sign_piece)
+        self.try(:sign_piece) if attempt <= 1
+
+        sleep(3)
+
+        self.recreate_pdf(nil, true, (attempt + 1)) if not DocumentTools.modifiable?(self.cloud_content_object.reload.path)
       end
 
       self.get_pages_number
@@ -328,7 +340,7 @@ class Pack::Piece < ApplicationRecord
     return true if self.temp_document.api_name == 'jefacture'
 
     begin
-      content_file_path = self.cloud_content_object.path
+      content_file_path = self.cloud_content_object.reload.path
       to_sign_file = File.dirname(content_file_path) + '/signed.pdf'
 
       DocumentTools.sign_pdf(content_file_path, to_sign_file)
