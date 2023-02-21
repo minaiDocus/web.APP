@@ -33,7 +33,7 @@ class MyDocumentsUploader{
     }
   }
 
-  fetch_analytics(){
+  fetch_analytics(journal_input=null){
     let use_analytics = false;
     if(this.upload_params[this.current_code] != undefined)
       use_analytics = this.upload_params[this.current_code]['is_analytic_used'];
@@ -41,7 +41,9 @@ class MyDocumentsUploader{
     $('#add-document form#fileupload .hidden_analytic_fields').html('');
     $(".analytic_resume_box").html('');
 
-    AppEmit('compta_analytics.main_loading', { code: this.current_code, pattern: this.input_journal.val(), type: 'journal', is_used: use_analytics });
+    let __journal_input = journal_input || this.input_journal
+
+    AppEmit('compta_analytics.main_loading', { code: this.current_code, pattern: __journal_input.val(), type: 'journal', is_used: use_analytics });
   }
 
   fill_journals_and_periods(){
@@ -70,6 +72,7 @@ class MyDocumentsUploader{
 
   fill_journals(){
     let me = this
+
     this.fetch_url(`/my_documents/uploader/journals/${ encodeURIComponent(this.input_user.val()) }`)
         .then((result)=>{
           let options = '';
@@ -87,20 +90,30 @@ class MyDocumentsUploader{
             else
               $('#add-document #compta_processable').css('display', 'inline'); 
           });
-            me.input_journal.change();
+
+          me.input_journal.change();
         })
   }
 
   fill_journals_customers(){
     let me = this
+
     this.fetch_url(`/my_documents/uploader/journals/${ encodeURIComponent(this.input_user.val()) }/true`)
         .then((result)=>{
           let options = '';
           result.forEach((opt)=>{ options += `<option value="${opt[1]}">${opt[0]}</option>` });
           me.input_journal_customer.html(options);
 
+          me.input_journal_customer.unbind('change.analytics').bind('change.analytics', (e)=>{
+            this.load_counter++;
+            let self = e.target;
+            me.fetch_analytics(me.input_journal_customer);
+          });
+
           var selected_journal = $('#hidden-journal-id').val();
           me.input_journal_customer.val(selected_journal);
+
+          me.input_journal_customer.change();
         })
   }
 }
