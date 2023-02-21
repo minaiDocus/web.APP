@@ -61,24 +61,23 @@ class ApplicationController < ActionController::Base
     user = nil
 
     if current_user&.is_admin
-      if params[:user_code].present?
-        session.delete(:params_document_operation)
-        session.delete(:params_document_piece)
-      end
-
-      if params[:user_code].present? || session[:user_code].present?
-        user = User.includes(:options, :acd, :ibiza, :exact_online, :my_unisoft, :coala, :sage_gec, :cegid, :cogilog, :fec_agiris, :quadratus, :csv_descriptor, :organization).get_by_code(params[:user_code].presence || session[:user_code].presence)
-        user ||= current_user
-        prev_user_code = session[:user_code]
-        session[:user_code] = if user == current_user
-                                nil
-                              else
-                                params[:user_code].presence || session[:user_code].presence
+      if request.path.match(%r{^/admin/})
+        user = current_user
+      else
+        if params[:user_code].present?
+          session.delete(:params_document_operation)
+          session.delete(:params_document_piece)
         end
 
-        if user.collaborator? && prev_user_code != session[:user_code] && request.path.match(%r{^/admin/organizations})
-          collab = Collaborator.new(user)
-          redirect_to organization_path(collab.organization)
+        if params[:user_code].present? || session[:user_code].present?
+          user = User.includes(:options, :acd, :ibiza, :exact_online, :my_unisoft, :coala, :sage_gec, :cegid, :cogilog, :fec_agiris, :quadratus, :csv_descriptor, :organization).get_by_code(params[:user_code].presence || session[:user_code].presence)
+          user ||= current_user
+          prev_user_code = session[:user_code]
+          session[:user_code] = if user == current_user
+                                  nil
+                                else
+                                  params[:user_code].presence || session[:user_code].presence
+                                end
         end
       end
     end
