@@ -131,7 +131,7 @@ class Documents::PiecesController < Documents::AbaseController
     @piece = params[:id].length > 20 ? Pack::Piece.find_by_mongo_id(params[:id]) : Pack::Piece.unscoped.find(params[:id])
     filepath = @piece.cloud_content_object.reload.path(params[:style].presence || :original, true)
 
-    p "==========Find me here: #{File.exist?(filepath)}==============="
+    p "==========Find me here: #{File.exist?(filepath.to_s)}==============="
 
     if !File.exist?(filepath.to_s) && !@piece.cloud_content.attached?
       sleep 1
