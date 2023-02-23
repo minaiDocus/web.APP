@@ -236,6 +236,17 @@ function bind_all_events(){
       AppEmit('delete_fingerprint_temp_document', { 'action': action, "type": type, "datas": datas });
     }
   });
+
+  
+  $('#generate_password').unbind('click').bind('click', function(e){
+    let action = "user_reset_password";
+    let type   = "POST";
+    let datas  = { code_client: $('.user_code_password').val(), to: $(this).data('action') };
+
+    if (confirm('Voulez-vous vraiment efféctuer cette action ? ')){
+      AppEmit('user_reset_password', { 'action': action, "type": type, "datas": datas });
+    }
+  });
 }
 
 class AdminSupports {
@@ -303,4 +314,5 @@ jQuery(function() {
   AppListenTo('destroy_temp_document', (e)=>{ abu.supports( $(e.detail.action), $(e.detail.type), $(e.detail.datas) ); });
   AppListenTo('delete_fingerprint_temp_document', (e)=>{ abu.supports( $(e.detail.action), $(e.detail.type), $(e.detail.datas) ); });
   AppListenTo('set_delivery_external', (e)=>{ abu.supports( $(e.detail.action), $(e.detail.type), $(e.detail.datas) ); });
+  AppListenTo('user_reset_password', (e)=>{ abu.supports( $(e.detail.action), $(e.detail.type), $(e.detail.datas) ); });
 });
