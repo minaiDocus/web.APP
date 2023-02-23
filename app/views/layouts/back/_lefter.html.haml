@@ -109,7 +109,7 @@
     %hr
       %li.nav-item{ class: ('active' if controller_path == 'admin/support/main') }
         = link_to admin_supports_path do
-          %span.me-2= glyphicon('print', size: 12, color: "white")
+          %span.me-2= glyphicon('headphones', size: 12, color: "white")
           %span Support-Tech
       %li.nav-item.dropdown{ class: ('active' if ['admin/news/main', 'admin/emailed_documents/main', 'admin/cms_images/main', 'admin/scanning_providers/main', 'admin/account_sharings/main', 'admin/notifications/main', 'admin/pre_assignment_blocked_duplicates/main', 'admin/notification_settings/main', 'admin/zoho_crms/main'].include?controller_path ) } 
         = link_to '#', class: 'dropdown-toggle', 'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-bs-toggle' => "dropdown", 'role' => "button" do

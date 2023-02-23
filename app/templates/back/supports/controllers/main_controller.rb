@@ -272,6 +272,20 @@ class Admin::Supports::MainController < BackController
     end  
   end
 
+  def user_reset_password
+    @user = User.find_by_code(params[:code_client]) if not params[:code_client].blank?
+
+    new_password   = SecureRandom.hex(10)
+    @user.password = new_password
+
+    if @user.save || true
+      render plain: "Nouveau MDP : #{new_password}"
+    else
+      render plain: 'Action avorté'
+    end    
+  end
+
+
   private
 
   def sort_column

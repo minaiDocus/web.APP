@@ -162,6 +162,23 @@
     .row
       .result.set_delivery_external.alert.alert-success.hide
 
+  .mb-4
+
+  .box.m-2.derivationLeft
+    %h5.semibold Utilisateurs
+    %hr    
+    %form#users-filter
+      .row        
+        .col-md-3
+          .select-container.w-100.no-padding
+            %input.user_code_password{ type: :text, name: "user_code_password", placeholder: "CODE CLIENT"}
+        .col-md-3
+          %button.btn.btn-dark#generate_password{ type: :button } Regénérer password
+          %button.btn.btn-dark#set_delivery_external{ type: :button } Relancer livraison
+    .mb-3
+    .row
+      .result.generate_password.alert.alert-success.hide
+
 
 #bank_utlities.modal.fade.in{'aria-hidden' => 'true', :role => 'dialog', :tabindex => '-1'}
   .modal-dialog
