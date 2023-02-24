@@ -14,12 +14,12 @@ class User < ApplicationRecord
   validates :auth_prev_period_until_month, inclusion: { in: 0..2 }
   validates_length_of :code, within: 3..15, unless: Proc.new { |u| u.collaborator? || u.is_guest }
   validates_length_of :email, maximum: 50
-  validates_length_of :company, :first_name, :last_name, :knowings_code, within: 0..50, allow_nil: true
+  validates_length_of :company, :first_name, :last_name, within: 0..50, allow_nil: true
   validates_presence_of :email, :encrypted_password
   validates_presence_of :code, unless: Proc.new { |u| u.collaborator? || u.is_guest }
   validates_presence_of :company
-  validates_inclusion_of :knowings_visibility, in: 0..2
-  validates_inclusion_of :current_configuration_step, :last_configuration_step, in: %w(account subscription softwares_selection compta_options period_options journals ibiza use_csv_descriptor csv_descriptor accounting_plans vat_accounts exercises order_paper_set order_dematbox retrievers ged), allow_blank: true
+  # validates_inclusion_of :knowings_visibility, in: 0..2
+  # validates_inclusion_of :current_configuration_step, :last_configuration_step, in: %w(account subscription softwares_selection compta_options period_options journals ibiza use_csv_descriptor csv_descriptor accounting_plans vat_accounts exercises order_paper_set order_dematbox retrievers ged), allow_blank: true
   validates_uniqueness_of :code, unless: Proc.new { |u| u.collaborator? || u.is_guest }
   validates_uniqueness_of :email_code, unless: Proc.new { |u| u.is_prescriber }
   validate :presence_of_group, if: Proc.new { |u| u.is_group_required }
