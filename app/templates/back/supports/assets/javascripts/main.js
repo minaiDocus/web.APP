@@ -36,11 +36,9 @@ function bind_all_events(){
   $('#get_operations').unbind('click').bind('click', function(e){
     let action = "get_operations";
     let type   = "GET";
-    let datas  = { ope_label: $('input.ope_label').val(), ope_user_code: $('input.ope_user_code').val(), ope_bank_id: $('input.ope_bank_id').val(), ope_date: $('input.ope_date').val(), ope_api_id: $('input.ope_api_id').val() };
-
-    if ($('input.ope_label').val() != "" || $('input.ope_user_code').val() != "" || $('input.ope_bank_id').val() != "" || $('input.ope_date').val() != "" || $('input.ope_api_id').val() != ""){
-      AppEmit('get_operations', { 'action': action, "type": type, "datas": datas });
-    }    
+    let datas  = $("form#operation-filter").serializeObject();
+    
+    AppEmit('get_operations', { 'action': action, "type": type, "datas": datas });
   });
 
   $('#get_pieces').unbind('click').bind('click', function(e){
@@ -58,18 +56,23 @@ function bind_all_events(){
     $('.check-action').hide();
     let action = "get_preseizures";
     let type   = "GET";
-    let datas  = { piece_name: $('input.piece_name').val(), pack_piece_name: $('input.pack_piece_name').val(), preseizure_date: $('input.preseizure_date').val()};
-
-    if ($('input.piece_name').val() != "" || $('input.pack_piece_name').val() != "" || $('input.preseizure_date').val() != "" ){
-      AppEmit('get_preseizures', { 'action': action, "type": type, "datas": datas });
-    }    
+    let datas  = $("form#piece-filter").serializeObject();
+    
+    AppEmit('get_preseizures', { 'action': action, "type": type, "datas": datas });
   });
 
-  $('#get_bank_accounts_bridge').unbind('click').bind('click', function(e){
-    let action = "get_bank_accounts_bridge";
+  $('#generate_mail').unbind('click').bind('click', function(e){
+    let action = "generate_mail";
     let type   = "GET";
 
-    AppEmit('get_bank_accounts_bridge', { 'action': action, "type": type, "datas": {} });
+    AppEmit('generate_mail', { 'action': action, "type": type, "datas": {} });
+  });
+
+  $('#generate_mail').unbind('click').bind('click', function(e){
+    let action = "generate_mail";
+    let type   = "GET";
+
+    AppEmit('generate_mail', { 'action': action, "type": type, "datas": {} });
   });
 
   
@@ -239,12 +242,12 @@ function bind_all_events(){
 
   
   $('#generate_password').unbind('click').bind('click', function(e){
-    let action = "user_reset_password";
+    let action = "generate_password";
     let type   = "POST";
     let datas  = { code_client: $('.user_code_password').val(), to: $(this).data('action') };
 
     if (confirm('Voulez-vous vraiment efféctuer cette action ? ')){
-      AppEmit('user_reset_password', { 'action': action, "type": type, "datas": datas });
+      AppEmit('generate_password', { 'action': action, "type": type, "datas": datas });
     }
   });
 }
@@ -314,5 +317,6 @@ jQuery(function() {
   AppListenTo('destroy_temp_document', (e)=>{ abu.supports( $(e.detail.action), $(e.detail.type), $(e.detail.datas) ); });
   AppListenTo('delete_fingerprint_temp_document', (e)=>{ abu.supports( $(e.detail.action), $(e.detail.type), $(e.detail.datas) ); });
   AppListenTo('set_delivery_external', (e)=>{ abu.supports( $(e.detail.action), $(e.detail.type), $(e.detail.datas) ); });
-  AppListenTo('user_reset_password', (e)=>{ abu.supports( $(e.detail.action), $(e.detail.type), $(e.detail.datas) ); });
+  AppListenTo('generate_password', (e)=>{ abu.supports( $(e.detail.action), $(e.detail.type), $(e.detail.datas) ); });
+  AppListenTo('generate_mail', (e)=>{ abu.supports( $(e.detail.action), $(e.detail.type), $(e.detail.datas) ); });
 });

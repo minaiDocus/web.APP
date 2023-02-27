@@ -40,5 +40,5 @@
                   %li.resend_to_preassignment{ data: { preseizure_id: preseizure.id, title: "Re-envoyer" } }
                     = link_to '#' do
                       %span.me-2= glyphicon('media-record', size: 12)
-                      %span Relivrer
+                      %span Relivrer les écritures
     = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: get_preseizures_admin_supports_path, target: '#table_preseizures', total_pages: @preseizures.total_pages, filter: 'piece-filter' }

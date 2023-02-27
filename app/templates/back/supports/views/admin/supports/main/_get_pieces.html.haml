@@ -28,5 +28,5 @@
                   %li.resend_to_preassignment{ data: { piece_id: piece.id, title: "Re-envoyer" } }
                     = link_to '#' do
                       %span.me-2= glyphicon('media-record', size: 12)
-                      %span Relivrer
+                      %span Re-envoyer en pré-aff
     = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: get_pieces_admin_supports_path, target: '#table_pieces', total_pages: @pieces.total_pages, filter: 'piece-filter' }
