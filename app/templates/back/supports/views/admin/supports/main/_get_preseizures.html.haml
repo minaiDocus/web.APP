@@ -14,7 +14,6 @@
           %th Piece number          
           %th Label          
           %th Etat
-          %th Software
           %th Erreur message          
           %th.text-end Action
       %tbody
@@ -29,8 +28,7 @@
             %td= preseizure.piece.present? ? 'Piece' : 'Opération'
             %td= preseizure.piece_number
             %td= preseizure.operation_label
-            %td= preseizure.is_delivered_to
-            %td= preseizure.export_state
+            %td= preseizure.delivery_state
             %td= preseizure.delivery_message
             %td.text-end.pointer
               .action.sub_edit_delete.list-collaborators
@@ -40,5 +38,5 @@
                   %li.resend_to_preassignment{ data: { preseizure_id: preseizure.id, title: "Re-envoyer" } }
                     = link_to '#' do
                       %span.me-2= glyphicon('media-record', size: 12)
-                      %span Relivrer
+                      %span Relivrer les écritures
     = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: get_preseizures_admin_supports_path, target: '#table_preseizures', total_pages: @preseizures.total_pages, filter: 'piece-filter' }

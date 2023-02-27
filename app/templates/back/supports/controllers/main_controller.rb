@@ -26,7 +26,9 @@ class Admin::Supports::MainController < BackController
   end  
 
   def get_operations
-    @operations = params[:ope_bank_id].present? ? BankAccount.find(params[:ope_bank_id]).operations : Operation.all
+    params[:sort] = 'date' if !params[:sort].present?
+
+    @operations = params[:ope_bank_number].present? ? BankAccount.find_by_number(params[:ope_bank_number]).operations : Operation.all
 
     if !params[:ope_user_code].blank?
       user = User.find_by_code(params[:ope_user_code].strip)
@@ -34,16 +36,27 @@ class Admin::Supports::MainController < BackController
       @operations = @operations.where("user_id = #{user.try(:id)}")
     end
 
-    @operations = @operations.where("label LIKE '%#{params[:ope_label]}%'")                                                     if params[:ope_label].present?
+    @operations = @operations.where('label LIKE "%' + params[:ope_label] + '%"')                                                if params[:ope_label].present?
     @operations = @operations.where("date BETWEEN '#{CustomUtils.parse_date_range_of(options[:created_at]).join("' AND '")}'")  if params[:ope_date].present?
-    @operations = @operations.where("api_id = ?", params[:ope_api_id])                                                          if params[:ope_api_id].present?
+    @operations = @operations.where(api_id: params[:ope_api_id])                    if params[:ope_api_id].present?
+    @operations = @operations.where(is_coming: params[:is_coming] == 'true')        if params[:is_coming].present?
+    @operations = @operations.where(is_locked: params[:is_locked] == 'true')        if params[:is_locked].present?
 
-    # @operations = @operations.where(is_coming: false, deleted_at: nil, processed_at: nil)                                        if @operations.try(:any?)
-
-    @operations = @operations.order(sort_column => sort_direction).page(params[:page]).per(params[:per_page])                   if @operations.try(:any?)
+    if params[:processed_at] == "1"
+      @operations = @operations.where.not(processed_at: nil) 
+    elsif params[:processed_at] == "0"
+      @operations = @operations.where(processed_at: nil)
+    end
 
     if @operations.try(:any?)
-      render partial: "get_operations"
+      @operations = @operations.joins(:bank_account).where("bank_accounts.is_used = true")
+      @operations = @operations.order(sort_column => sort_direction).page(params[:page]).per(params[:per_page])
+
+      if @operations.try(:any?)
+        render partial: "get_operations"
+      else
+        render plain: 'Aucun résultat'
+      end
     else
       render plain: 'Aucun résultat'
     end   
@@ -202,7 +215,9 @@ class Admin::Supports::MainController < BackController
   end
 
   def get_preseizures
-    if params[:preseizure_date].present?
+    if params[:message_error].present?
+      @preseizures = Pack::Report::Preseizure.where('pack_report_preseizures.delivery_message LIKE "%'+ params[:message_error] +'%"')
+    elsif params[:preseizure_date].present?
       @preseizures = Pack::Report::Preseizure.where("pack_report_preseizures.date BETWEEN '#{CustomUtils.parse_date_range_of(params[:preseizure_date]).join("' AND '")}'")
     elsif params[:pack_piece_name].present?
       @preseizures = Pack.find_by_name(params[:pack_piece_name].strip + ' all')&.preseizures.presence || []
@@ -260,7 +275,10 @@ class Admin::Supports::MainController < BackController
       user = User.get_by_code params[:code_client]
 
       if user
-        user.remote_files.not_processed.map(&:waiting!)
+        remote_files = user.remote_files.not_processed
+        remote_files = remote_files.where("remote_files.created_at BETWEEN '#{CustomUtils.parse_date_range_of(params[:external_date]).join("' AND '")}'") if params[:external_date].present?
+
+        remote_files.map(&:waiting!)
 
         render plain: "Livraison relancer"
 
@@ -272,17 +290,40 @@ class Admin::Supports::MainController < BackController
     end  
   end
 
-  def user_reset_password
+  def generate_password
     @user = User.find_by_code(params[:code_client]) if not params[:code_client].blank?
 
-    new_password   = SecureRandom.hex(10)
-    @user.password = new_password
+    if @user
+      new_password   = SecureRandom.hex(10)
+      @user.password = new_password
 
-    if @user.save || true
-      render plain: "Nouveau MDP : #{new_password}"
+      if @user.save
+        render plain: "Nouveau MDP : <b>#{new_password}</b>"
+      else
+        render plain: "Action avorté : #{@user.errors.messages}"
+      end
     else
-      render plain: 'Action avorté'
-    end    
+      render plain: 'Client introuvable'
+    end 
+  end
+
+  def generate_mail
+    organizations = params[:organization_code].blank? ? Organization.all : Organization.where(code: params[:organization_code])
+    @datas        = []
+
+    if organizations
+      organizations.each do |organization|
+        collab_mails    = organization.members.search({role: 'collaborator'}).collect(&:user).pluck(:email).join(',')
+        admin_mails     = organization.members.search({role: 'admin'}).collect(&:user).pluck(:email).join(',')
+        customers_mails = organization.customers.active_at(Time.now).pluck(:email).join(',')
+
+        @datas << { organization: organization.name, collab_mails: collab_mails, admin_mails: admin_mails, customers_mails: customers_mails }
+      end     
+
+      render partial: "organization_mail"
+    else
+      render plain: 'Organisation introuvable'
+    end
   end
 
 

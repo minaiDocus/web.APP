@@ -46,7 +46,7 @@
             %input.ope_user_code{ type: :text, name: "ope_user_code", placeholder: "CODE DOSSIER"}
         .col-md-2
           .select-container.w-100.no-padding
-            %input.ope_bank_id{ type: :text, name: "ope_bank_id", placeholder: "BANK ID"}
+            %input.ope_bank_number{ type: :text, name: "ope_bank_number", placeholder: "BANK NUMBER"}
         .col-md-2
           .select-container.w-100.no-padding
             %input.ope_api_id{ type: :text, name: "ope_api_id", placeholder: "API ID"}
@@ -56,6 +56,20 @@
         .col-md-2
           %button.btn.btn-dark#get_operations{ type: :button } Opération
           %button.btn.btn-warning.hide#operation-check-action{ type: :button } Relivrer
+      .mb-2
+      .row
+        .col-md-1
+          .label.semibold.m-2 is locked?
+        .col-md-2
+          = select_tag 'is_locked', options_for_select([['Oui', true], ['Non', false]]), include_blank: true, class: 'form-select'
+        .col-md-2
+          .label.semibold.m-2 is coming?
+        .col-md-2
+          = select_tag 'is_coming', options_for_select([['Oui', true], ['Non', false]]), include_blank: true, class: 'form-select'
+        .col-md-1
+          .label.semibold.m-2 Processed?
+        .col-md-2
+          = select_tag 'processed_at', options_for_select([['Oui', 1], ['Non', 0]]), include_blank: true, class: 'form-select'
     .mb-3
     .row
       .result.resend_operation.alert.alert-success.hide
@@ -83,8 +97,8 @@
             %input.bridge_date.singledate{ type: :text, name: "ope_date", placeholder: "DATE DEBUT"}
         .col-md-5
           %button.btn.btn-dark#get_flux_bridge{ type: :button } Flux manquant
-          %button.btn.btn-warning#get_ba_free{ type: :button } Compte bancaire dispo
-          %button.btn.btn-primary#get_transaction_free{ type: :button } Transaction disponible
+          %button.btn.btn-warning#get_ba_free{ type: :button, disabled: true } Compte bancaire dispo
+          %button.btn.btn-primary#get_transaction_free{ type: :button, disabled: true } Transaction disponible
     .mb-3
     .row
       .result.resend_operation.alert.alert-success.hide
@@ -100,7 +114,10 @@
     %h5.semibold Pièces et écritures
     %hr    
     %form#piece-filter
-      .row        
+      .row
+        .col-md-2
+          .select-container.w-100.no-padding
+            %input.message_error{ type: :text, name: "message_error", placeholder: "ERREUR MESSAGE"}
         .col-md-3
           .select-container.w-100.no-padding
             %input.piece_name{ type: :text, name: "piece_name", placeholder: "NOM PIECE"}
@@ -110,7 +127,7 @@
         .col-md-2
           .select-container.w-100.no-padding
             %input.preseizure_date.daterange{ type: :text, name: "preseizure_date", placeholder: "DATE ECRITURE"}     
-        .col-md-5
+        .col-md-3
           %button.btn.btn-dark#get_pieces{ type: :button } Pièces
           %button.btn.btn-dark#get_preseizures{ type: :button } Ecritures
           %button.btn.btn-warning.check-action.hide#piece-check-action{ type: :button } Réenvoyer en pré-affectation
@@ -156,6 +173,9 @@
         .col-md-3
           .select-container.w-100.no-padding
             %input.code_client{ type: :text, name: "code_client", placeholder: "CODE CLIENT"}
+        .col-md-2
+          .select-container.w-100.no-padding
+            %input.external_date.daterange{ type: :text, name: "external_date", placeholder: "DATE"} 
         .col-md-3
           %button.btn.btn-dark#set_delivery_external{ type: :button } Relancer livraison
     .mb-3
@@ -173,11 +193,16 @@
           .select-container.w-100.no-padding
             %input.user_code_password{ type: :text, name: "user_code_password", placeholder: "CODE CLIENT"}
         .col-md-3
-          %button.btn.btn-dark#generate_password{ type: :button } Regénérer password
-          %button.btn.btn-dark#set_delivery_external{ type: :button } Relancer livraison
+          %button.btn.btn-dark#generate_password{ type: :button } Générer Mote de passe
+        .col-md-3
+          .select-container.w-100.no-padding
+            %input.organization_code{ type: :text, name: "organization_code", placeholder: "CODE ORGANISATION"}
+        .col-md-3
+          %button.btn.btn-warning#generate_mail{ type: :button } Liste emails
     .mb-3
     .row
       .result.generate_password.alert.alert-success.hide
+      .result.generate_mail
 
 
 #bank_utlities.modal.fade.in{'aria-hidden' => 'true', :role => 'dialog', :tabindex => '-1'}
