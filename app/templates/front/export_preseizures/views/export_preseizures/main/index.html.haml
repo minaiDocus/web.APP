@@ -1,27 +1,65 @@
 .container-fluid.main-content
+  .row.mb-5
+    .col-md-2
+    .col-md-10
+      %form#preseizure-export-filter-form.form-horizontal
+        .row
+          .col-md-3
+            .row
+              .col-md-2.pt-2
+                .semibold Dossier
+              .col-md-10
+
+                .form-group.no-margin.hide_on_load
+                  = select_tag 'document_filter', options_for_select(@filter_datas[:documents]), include_blank: true, id: 'document_filter', multiple: true
+            .result-sol-document.result-sol-container
+          .col-md-3
+            .row
+              .col-md-3.pt-2
+                .semibold Journal
+              .col-md-9
+                .form-group.no-margin.hide_on_load
+                  = select_tag 'journal_filter', options_for_select(@filter_datas[:journals]), include_blank: true, id: 'journal_filter', multiple: true
+            .result-sol-journal.result-sol-container
+          .col-md-3
+            .row
+              .col-md-4.pt-2
+                .semibold Periode
+              .col-md-8
+                .form-group.no-margin.hide_on_load
+                  = select_tag 'period_list', options_for_select(@filter_datas[:periods]), include_blank: true, id: 'period_filter', multiple: true
+
+            .result-sol-period.result-sol-container
+          .col-md-1
+            %button.btn.btn-dark.w-100.semibold#export-filter{ :type => 'button' }
+              %span.semibold Valider
+          .col-md-1
+            %button.btn.btn-default.semibold.btn-reinit{:type => 'button', id: 'launch-reinit'} Réinitialiser
+
   .row
     %h3.bold.derivationLeft Export d'écritures comptables
-    .box.derivationRight
+    .box.derivationRight#table_preseizure_export
       %table.table.table-striped
         %thead
           %th Lot
-          %th Créée le
           %th Nom du fichier
-          %th Logiciel Comptable
+          %th Logiciel comptable
+          %th Créée le
           %th Nombre d'écritures
           %th Action
         %tbody
         - @preassignment_exports.each do |preassignment_export|
           %tr
             %td= preassignment_export.pack_name
-            %td= preassignment_export.created_at.strftime('%d/%m/%Y')
             %td= preassignment_export.file_name
             %td= SoftwareMod::Configuration.human_format[preassignment_export.for.to_sym]
+            %td= preassignment_export.created_at.strftime('%d/%m/%Y')
             %td= preassignment_export.total_item
             %td 
               %a.ms-2.download_export{ title: "Télécharger le fichier : #{preassignment_export.file_name}", href: download_export_preseizures_path(preassignment_export.id) }
                 %span= glyphicon('data-transfer-download', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
                 %span.pointer télécharger
 
+      = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: export_preseizures_list_path, target: '#table_preseizure_export', total_pages: @preassignment_exports.total_pages, filter: 'preseizure-export-filter-form' }
 
 = javascript_include_tag 'front/export_preseizures/assets/javascripts/main'
