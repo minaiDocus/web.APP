@@ -9,7 +9,7 @@ class Admin::Reporting::MainController < BackController
               Time.now.year
             end
     date = params[:month].present? ? Date.parse("#{@year}-#{'%02d' % Integer(params[:month].to_i)}-01") : Date.parse("#{@year}-01-01")
-    @organizations = Organization.billed_for_year(@year).order(code: :asc)
+    @organizations = Organization.billed_for_year(@year).order(name: :asc)
 
     @total = 12.times.map { |e| [0,0,0] }
 
