@@ -37,29 +37,30 @@
             %button.btn.btn-default.semibold.btn-reinit{:type => 'button', id: 'launch-reinit'} Réinitialiser
 
   .row
-    %h3.bold.derivationLeft Export d'écritures comptables
-    .box.derivationRight#table_preseizure_export
-      %table.table.table-striped
-        %thead
-          %th Lot
-          %th Nom du fichier
-          %th Logiciel comptable
-          %th Créée le
-          %th Nombre d'écritures
-          %th Action
-        %tbody
-        - @preassignment_exports.each do |preassignment_export|
-          %tr
-            %td= preassignment_export.pack_name
-            %td= preassignment_export.file_name
-            %td= SoftwareMod::Configuration.human_format[preassignment_export.for.to_sym]
-            %td= preassignment_export.created_at.strftime('%d/%m/%Y')
-            %td= preassignment_export.total_item
-            %td 
-              %a.ms-2.download_export{ title: "Télécharger le fichier : #{preassignment_export.file_name}", href: download_export_preseizures_path(preassignment_export.id) }
-                %span= glyphicon('data-transfer-download', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
-                %span.pointer télécharger
+    .col-md-12#table_preseizure_export
+      %h3.bold.derivationLeft Export d'écritures comptables
+      .box.derivationRight
+        %table.table.table-striped
+          %thead
+            %th Lot
+            %th Nom du fichier
+            %th Logiciel comptable
+            %th Créée le
+            %th Nombre d'écritures
+            %th Action
+          %tbody
+          - @preassignment_exports.each do |preassignment_export|
+            %tr
+              %td= preassignment_export.pack_name
+              %td= preassignment_export.file_name
+              %td= SoftwareMod::Configuration.human_format[preassignment_export.for.to_sym]
+              %td= preassignment_export.created_at.strftime('%d/%m/%Y')
+              %td= preassignment_export.total_item
+              %td 
+                %a.ms-2.download_export{ title: "Télécharger le fichier : #{preassignment_export.file_name}", href: download_export_preseizures_path(preassignment_export.id) }
+                  %span= glyphicon('data-transfer-download', { size: '14', color:'rgba(26, 26, 26, 0.32);'})
+                  %span.pointer télécharger
 
-      = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: export_preseizures_list_path, target: '#table_preseizure_export', total_pages: @preassignment_exports.total_pages, filter: 'preseizure-export-filter-form' }
+        = render file: Rails.root.join('app/views/shared/_pagination.html.haml'), locals: { url: export_preseizures_list_path, target: '#table_preseizure_export', total_pages: @preassignment_exports.total_pages, filter: 'preseizure-export-filter-form' }
 
 = javascript_include_tag 'front/export_preseizures/assets/javascripts/main'

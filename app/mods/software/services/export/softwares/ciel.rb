@@ -3,13 +3,13 @@ class SoftwareMod::Export::Ciel
   def initialize(preseizures, tmp_dir=nil, _format='txt')
     @preseizures = preseizures
     @user        = preseizures.first.user
-    @dir         = tmp_dir.presence || CustomUtils.mktmpdir('quadratus')
+    @dir         = tmp_dir.presence || CustomUtils.mktmpdir('ciel')
 
     @format      = _format
   end
 
   def execute
-    return 'not_authorized' if not @user.uses?(:quadratus)
+    return 'not_authorized' if not @user.uses?(:ciel)
 
     @base_name = @preseizures.first.report.name.tr(' ', '_').tr('%', '_')
     @file_path = "#{@dir}/#{@base_name}.txt"

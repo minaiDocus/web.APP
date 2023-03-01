@@ -148,10 +148,10 @@ class SoftwareMod::Export::Preseizures
   end
 
   def send_error_email
-    ExportPreseizuresMailer.notify_failure(@requester).deliver if @requester
+    ExportPreseizuresMailer.notify_failure(@requester).deliver if @requester && Rails.env == 'production'
   end
 
   def send_success_email
-    ExportPreseizuresMailer.notify_success(@requester).deliver if @requester
+    ExportPreseizuresMailer.notify_success(@requester).deliver if @requester && Rails.env == 'production'
   end
 end

@@ -52,7 +52,7 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
 
     export_type         = params64['type']
     export_ids          = Array(params64['ids'] || [])
-    include_pieces      = params64['is_pieces_included']
+    include_pieces      = params64['is_pieces_included'].present?
     @is_operations      = (params64['is_operations'].to_s == 'true')? true : false
     @is_documents       = !@is_operations
     @pluck_preseizures  = true
@@ -97,7 +97,11 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
     supported_format = %w[csv xml txt tra ecr xls zip]
 
     if preseizures.any? && export_format.in?(supported_format)
-      SoftwareMod::Export::Preseizures.delay_for(1.minutes).execute(software, preseizures.collect(&:id), include_pieces, export_format , 0, current_user.try(:id))
+      if Rails.env == 'production'
+        SoftwareMod::Export::Preseizures.delay_for(1.minutes).execute(software, preseizures.collect(&:id), include_pieces, export_format , 0, current_user.try(:id))
+      else
+        SoftwareMod::Export::Preseizures.execute(software, preseizures.collect(&:id), include_pieces, export_format , 0, current_user.try(:id))
+      end
 
       json_flash[:success] = "Préparation en cours, Votre export sera disponible dans la page 'Exports écritures comptables' dans quelques instants ..."
       render json: { success: true, json_flash: json_flash }, status: 200

@@ -1,7 +1,7 @@
 jQuery(function() {
 
   $('#document_filter').asMultiSelect({
-    "texts" : { "searchplaceholder": "Choix dossiers", "noItemsAvailable": 'Aucun dossier trouvé'},
+    "texts" : { "searchplaceholder": "Choix dossier", "noItemsAvailable": 'Aucun dossier trouvé'},
     "resultsContainer": '.result-sol-document',
     "maxHeight": "500px",
     "noneText": "Choix dossier",
@@ -9,18 +9,18 @@ jQuery(function() {
   });
 
     $('#journal_filter').asMultiSelect({
-    "texts" : { "searchplaceholder": "Choix dossiers", "noItemsAvailable": 'Aucun dossier trouvé'},
+    "texts" : { "searchplaceholder": "Choix journal", "noItemsAvailable": 'Aucun journal trouvé'},
     "resultsContainer": '.result-sol-journal',
     "maxHeight": "500px",
-    "noneText": "Choix dossier",
+    "noneText": "Choix journal",
     "showSelectAll": false
   });
 
     $('#period_filter').asMultiSelect({
-    "texts" : { "searchplaceholder": "Choix dossiers", "noItemsAvailable": 'Aucun dossier trouvé'},
+    "texts" : { "searchplaceholder": "Choix période", "noItemsAvailable": 'Aucune période trouvée'},
     "resultsContainer": '.result-sol-period',
     "maxHeight": "500px",
-    "noneText": "Choix dossier",
+    "noneText": "Choix période",
     "showSelectAll": false
   });
 
