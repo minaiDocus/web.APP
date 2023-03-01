@@ -37,7 +37,7 @@ class Admin::Supports::MainController < BackController
     end
 
     @operations = @operations.where('label LIKE "%' + params[:ope_label] + '%"')                                                if params[:ope_label].present?
-    @operations = @operations.where("date BETWEEN '#{CustomUtils.parse_date_range_of(options[:created_at]).join("' AND '")}'")  if params[:ope_date].present?
+    @operations = @operations.where("date BETWEEN '#{CustomUtils.parse_date_range_of(params[:ope_date]).join("' AND '")}'")  if params[:ope_date].present?
     @operations = @operations.where(api_id: params[:ope_api_id])                    if params[:ope_api_id].present?
     @operations = @operations.where(is_coming: params[:is_coming] == 'true')        if params[:is_coming].present?
     @operations = @operations.where(is_locked: params[:is_locked] == 'true')        if params[:is_locked].present?
