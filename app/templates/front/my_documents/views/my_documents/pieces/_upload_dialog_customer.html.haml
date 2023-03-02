@@ -19,14 +19,18 @@
             = hidden_field_tag :file_code, @users.first.code
           .form-group
             %label.semibold Type de document
-            - if @users.size > 1
-              %label.semibold
-              = select_tag :l_journal, '', id: :l_journal, class: 'form-select w-100'
-            - else
-              = select_tag :l_journal, options_for_select(AccountBookType.where(user_id: file_upload_users_list.collect(&:id)).map { |journal| [journal.full_name, journal.id] }), id: :l_journal, class: 'form-select w-100'
+            = select_tag :l_journal, '', id: :l_journal, class: 'form-select w-100'
             %span#compta_processable.hide
               %span.badge.bg-warning.mt-2
                 Ce journal n'est pas paramétré pour une pré-saisie comptable.
+          .form-group
+            %label.semibold Période
+            = select_tag :file_prev_period_offset, '', id: :file_prev_period_offset, class: 'text_field form-select'
+            - if !@user.is_prescriber && @period_service.try(:prev_expires_at)
+              %span.help-block.hide{ style: 'margin-left: 0' }
+                %span.fs-origin.badge.badge-warning.margin1right
+                  Attention :
+                Pour des raisons de clôture de période comptable, vous ne pouvez plus affecter de documents à la période #{period_option_label(@period_service.period_duration, Time.now - @period_service.period_duration.month)} après le #{l(@period_service.prev_expires_at, format: '%d %B %Y à %H:%M')}.
           .form-group
             %label.italic Créer des tags
             .select-container.no-padding.no-margin.w-100
