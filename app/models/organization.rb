@@ -200,7 +200,7 @@ class Organization < ApplicationRecord
   end
 
   def uses_non_api_softwares?
-    coala.try(:used?) || quadratus.try(:used?) || cegid.try(:used?) || csv_descriptor.try(:used?) || fec_agiris.try(:used?) || fec_acd.try(:used?)
+    coala.try(:used?) || quadratus.try(:used?) || cegid.try(:used?) || csv_descriptor.try(:used?) || fec_agiris.try(:used?) || fec_acd.try(:used?) || cogilog.try(:used?) || ciel.try(:used?)
   end
 
   def auto_deliver?(_software)
