@@ -134,7 +134,7 @@ class PreseizureExport::PreseizureToTxt
             accounting = user.accounting_plan.customers.where(third_party_account: general_account).limit(1)
           end
 
-          general_lib = accounting.try(:first).try(:third_party_name).to_s
+          general_lib = preseizure.third_party
 
 
           journal_code     = journal.name
