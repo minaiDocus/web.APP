@@ -8,6 +8,7 @@ module Cedricom
       token = get_jwt
 
       @connection = Faraday.new(CONFIG['cedricom']['base_url']) do |faraday|
+        faraday.options.timeout = 300
         faraday.response :logger
         faraday.adapter Faraday.default_adapter
         faraday.headers['Content-Type'] = "application/xml"
