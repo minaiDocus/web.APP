@@ -2,7 +2,9 @@ module Cedricom
   class ImportTransactions
     CREDIT_OPERATION_CODES = %w(02 04 05 09 12 13 15 16 17 18 24 25 30 31 32 34 35 37 39 40 45 47 49 55 57 59 63 69 72 73 74 77 78 85 87 97 A1 A2 A3 A4 B5 B6 C2 C3 C5)
 
-    def initialize(reception)
+    def initialize(reception, force = false)
+      return if reception.cedricom_reception_date <= "2022-12-31" && !force
+
       @reception = reception
     end
 
