@@ -12,6 +12,8 @@ class ActionDispatch::Routing::Mapper
 end
 
 Rails.application.routes.draw do
+  mount Rswag::Ui::Engine => '/api-docs'
+  mount Rswag::Api::Engine => '/api-docs'
   mount Ckeditor::Engine => '/ckeditor'
 
   root :to => redirect('/dashboard')
@@ -154,6 +156,21 @@ Rails.application.routes.draw do
   end
 
   namespace :api, defaults: { format: 'json' } do
+    namespace :v3 do
+      resources :users, only: %w(index) do
+        member do
+          resources :ledgers, only: %w(index)
+        end
+      end
+
+      resources :organizations, only: %w() do
+        collection do
+          get :current
+        end
+      end
+
+      resources :inbound_documents, only: %w(create)
+    end
     namespace :v2 do
       resources :users, only: %w() do
         collection do

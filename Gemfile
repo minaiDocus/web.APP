@@ -154,6 +154,12 @@ gem 'fast_jsonapi'
 gem 'redis-rails'
 gem 'activerecord-session_store'
 
+# API DOC
+gem 'rswag-api'
+gem 'rswag-ui'
+gem 'rswag-specs'
+gem 'rspec-rails'
+
 group :development, :test do
   gem 'better_errors'
   gem 'binding_of_caller'
@@ -164,7 +170,6 @@ group :development, :test do
   gem 'meta_request'
   gem 'rack-mini-profiler'
   gem 'rails-i18n'
-  gem 'rspec-rails'
   gem 'spring'
   gem 'spring-commands-rspec'
   gem 'thin'

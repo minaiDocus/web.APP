@@ -157,6 +157,11 @@ class AccountBookType < ApplicationRecord
   end
 
 
+  def kind
+    compta_type
+  end
+
+
   def default_account?
     default_account_number.present?
   end

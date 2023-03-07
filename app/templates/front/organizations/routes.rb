@@ -22,6 +22,8 @@ Rails.application.routes.draw do
         
       end
 
+      resources :api_tokens, only: %w(index create destroy)
+
       resource :csv_descriptor, only: %w(edit update), controller: 'csv_descriptors'
 
       resources :customers, only: [] do
