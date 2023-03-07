@@ -254,6 +254,7 @@ fr:
     general: Général
     pdf_naming: Nommage PDF
     reminder_emails: Emails de rappel
+    api_tokens: Clés API
     address_management: Gestion des Adresses
     software: Logiciels Comptables et .CSV
     efs: Stockages externes

@@ -42,10 +42,9 @@
             %li{ data: { href: "#{@organization.id}/addresses/" } }
               %a{href: organization_addresses_path(@organization) }
                 %span.link_slave{class: (addresses_index ? 'active' : '')}= t('organizations.address_management')
-            - if @user.is_admin
-              %li{ data: { href: "#{@organization.id}/api_tokens/" } }
-                %a{href: organization_api_tokens_path(@organization) }
-                  %span.link_slave{class: (api_tokens_index ? 'active' : '')}= t('organizations.api_tokens')
+            %li{ data: { href: "#{@organization.id}/api_tokens/" } }
+              %a{href: organization_api_tokens_path(@organization) }
+                %span.link_slave{class: (api_tokens_index ? 'active' : '')}= t('organizations.api_tokens')
             - unless @organization.specific_mission
               %li{ data: { href: "#{@organization.id}/file_naming_policy/edit" } }
                 %a{href: edit_organization_file_naming_policy_path(@organization) }
