@@ -370,6 +370,7 @@ class Customers::MainController < CustomerController
       :email,
       :is_pre_assignement_displayed,
       :act_as_a_collaborator_into_pre_assignment,
+      :display_period_upload,
       :phone_number,
       :manager_id,
       :jefacture_account_id,

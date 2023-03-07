@@ -68,6 +68,15 @@
                       .form-check.form-switch.idocus-custom-form-check
                         = f.input :act_as_a_collaborator_into_pre_assignment, as: :boolean, label: false, label_html: { class: 'required semibold form-check-label', id: 'check-collaborator-pre-assignment' }, input_html: { class: 'form-check-input input_switch input_check_field' }
                         %label.semibold{class: 'form-check-label label_check_field', for: 'check-collaborator-pre-assignment'} Non
+
+                  .form-group.row
+                    .col-md-10
+                      = label_tag 'user[display_period_upload]', t('activerecord.models.user.attributes.display_period_upload'), class: 'control-label required semibold'
+                    .col-md-2
+                      .form-check.form-switch.idocus-custom-form-check
+                        = f.input :display_period_upload, as: :boolean, label: false, label_html: { class: 'required semibold form-check-label', id: 'check_display_period_upload' }, input_html: { class: 'form-check-input input_switch input_check_field' }
+                        %label.semibold{class: 'form-check-label label_check_field', for: 'check_display_period_upload'} Non
+
                 = f.input :group_ids, collection: @user.groups.order(name: :asc), label: 'A quel groupe, le dossier doit-il être attribué ?', label_html: { class: 'control-label required semibold' }, input_html: { class: 'select optional searchable-option-list', id: 'select-group-list', include_blank: true, multiple: true } 
                 = f.association :manager, collection: managers_options_for_select, include_blank: true, label: 'Qui est le collaborateur en charge du dossier?', hint: 'IMPORTANT! Indiquer le collaborateur en charge du dossier permettra à iDocus de le contacter en cas de soucis. Autrement tous les mails seront adressés à l’administrateur de l’organisation.', label_html: { class: 'control-label required semibold' }, input_html: { class: 'form-control select form-select optional', id: 'select-customer-list'}
                 - unless @organization.specific_mission
