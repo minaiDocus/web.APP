@@ -244,7 +244,7 @@ class Organization < ApplicationRecord
   end
 
   def can_upload_documents?
-    return true  if ['IDOC', 'TEEO', 'MCN', 'MCA'].include?(self.code) || self.created_at >= 2.days.ago
+    return true  if ['IDOC', 'TEEO', 'MCN', 'MCA', 'MCAC'].include?(self.code) || self.created_at >= 2.days.ago
     return false if not self.is_active
     return false if self.can_be_billed? && !self.debit_mandate.try(:configured?)
 
