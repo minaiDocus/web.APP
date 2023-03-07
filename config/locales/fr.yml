@@ -600,6 +600,7 @@ fr:
           phone_number: N° de téléphone
           is_pre_assignement_displayed: Activer la vue écriture comptable dans l'onglet 'Mes Documents' pour ce compte
           act_as_a_collaborator_into_pre_assignment: Donner les droits collaborateur dans l'onglet 'Mes Documents' pour ce compte
+          display_period_upload: Afficher la date de la période iDocus
           inactive_at: Dossier clôturé au
           is_inactive: Dossier clôturé ?
           is_admin: Est administrateur ?
