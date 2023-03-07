@@ -18,7 +18,7 @@ class PonctualScripts::IdoNanoExtentis < PonctualScripts::PonctualScript
     customers.each do |customer|
       package = customer.my_package
 
-      next if package.name == 'ido_nano'
+      next if not ['ido_micro', 'ido_micro_plus', 'ido_classic'].include?(package.name)
 
       logger_infos "[IdoNanoExtentis] - customers code : #{customer.code.to_s} - Start"
 
@@ -29,7 +29,7 @@ class PonctualScripts::IdoNanoExtentis < PonctualScripts::PonctualScript
       package.name                    = 'ido_nano'
       package.upload_active           = true
       package.scan_active             = true
-      package.preassignment           = true
+      package.preassignment_active    = true
       package.commitment_start_period = period
       package.commitment_end_period   = CustomUtils.period_of(12.month.after)
 
