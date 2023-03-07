@@ -25,15 +25,21 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
         options << ['XML (Ibiza)', 'xml_ibiza']
       end
       options << ['TXT (Ciel)', 'txt_ciel']                    if user.uses?(:ciel)
-      options << ['TXT (Quadratus)', 'txt_quadratus']          if user.uses?(:quadratus)
+
       options << ['ZIP (Quadratus)', 'zip_quadratus']          if user.uses?(:quadratus)
+      options << ['TXT (Quadratus)', 'txt_quadratus']          if user.uses?(:quadratus)
+
       options << ['ZIP (Coala)', 'zip_coala']                  if user.uses?(:coala)
       options << ['XLS (Coala)', 'xls_coala']                  if user.uses?(:coala)
+
       options << ['CSV (Cegid)', 'csv_cegid']                  if user.uses?(:cegid)
       options << ['TRA + pièces jointes (Cegid)', 'tra_cegid'] if user.uses?(:cegid)
+
       options << ['TXT (Fec Agiris)', 'txt_fec_agiris']        if user.uses?(:fec_agiris)
       options << ['ECR (Fec Agiris ECR zip)', 'ecr_fec_agiris_facnote']        if user.uses?(:fec_agiris) && ['IDOC', 'MCN'].include?( user.organization.try(:code) )
+
       options << ['TXT (Fec ACD)', 'txt_fec_acd']              if user.uses?(:fec_acd)
+
       options << ['TXT (Cogilog)', 'txt_cogilog']              if user.uses?(:cogilog)
     end
 
