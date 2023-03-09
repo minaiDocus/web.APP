@@ -56,19 +56,23 @@ class MyDocuments::UploaderController < MyDocuments::AbaseController
   end
 
   def periods
-    period_service = Billing::Period.new user: @upload_user
-    current_time = Time.now
+    if @upload_user.display_period_upload
+      period_service = Billing::Period.new user: @upload_user
+      current_time = Time.now
 
-    period_duration = period_service.period_duration
+      period_duration = period_service.period_duration
 
-    results = [[period_option_label(period_duration, current_time), 0]]
+      results = [[period_option_label(period_duration, current_time), 0]]
 
-    if period_service.prev_expires_at.nil? || period_service.prev_expires_at > Time.now
-      period_service.authd_prev_period.times do |i|
-        current_time -= period_duration.month
+      if period_service.prev_expires_at.nil? || period_service.prev_expires_at > Time.now
+        period_service.authd_prev_period.times do |i|
+          current_time -= period_duration.month
 
-        results << [period_option_label(period_duration, current_time), i + 1]
+          results << [period_option_label(period_duration, current_time), i + 1]
+        end
       end
+    else
+      results = []
     end
 
     render json: results, status: 200

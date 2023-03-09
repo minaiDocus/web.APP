@@ -77,6 +77,12 @@ class MyDocumentsUploader{
           me.input_period.val(blank_selected);
 
           me.input_period.change();
+
+          if(result.length > 0){
+            $('#add-document #customer_period').removeClass('hide');
+          }else{
+            $('#add-document #customer_period').addClass('hide');
+          }
         })
   }
 
