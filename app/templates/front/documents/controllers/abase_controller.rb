@@ -152,7 +152,7 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
   def download_selected
     pieces_ids   = params[:ids].split('_')
 
-    if Pack::Piece.unscoped.where(id: pieces_ids.first).try(:user).in?(accounts) || current_user.try(:is_admin)
+    if Pack::Piece.unscoped.where(id: pieces_ids.first).try(:first).try(:user).in?(accounts) || current_user.try(:is_admin)
       tmp_dir      = CustomUtils.mktmpdir('download_selected', nil, false)
 
       pieces_ids.each do |piece_id|
