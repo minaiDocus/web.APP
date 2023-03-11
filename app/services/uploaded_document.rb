@@ -12,7 +12,7 @@ class UploadedDocument
   end
 
 
-  def initialize(file, original_file_name, user, journal, prev_period_offset, uploader = nil, api_name=nil, analytic=nil, api_id=nil, force=false, tags=nil)
+  def initialize(file, original_file_name, user, journal, prev_period_offset=nil, uploader = nil, api_name=nil, analytic=nil, api_id=nil, force=false, tags=nil)
     @file     = file
     @user     = user
     @code     = @user.code

@@ -24,21 +24,34 @@ module Interfaces::User::Customer
 
   def uses_many_exportable_softwares?
     softwares_count = 0
-    softwares_count += 1 if uses?(:coala)
-    softwares_count += 1 if uses?(:quadratus)
-    softwares_count += 1 if uses?(:csv_descriptor)
+
+    Interfaces::Software::Configuration::SOFTWARES.each do |software|
+      softwares_count += 1 if uses?(software.to_sym)
+    end
 
     softwares_count > 1
   end
 
 
   def uses_api_softwares?
-    uses?(:ibiza) || uses?(:exact_online) || uses?(:my_unisoft) || uses?(:sage_gec) || uses?(:acd)
+    uses_value = false
+
+    Interfaces::Software::Configuration::API_SOFTWARES.each do |software|
+      uses_value = uses_value || uses?(software.to_sym)
+    end
+
+    uses_value
   end
 
 
   def uses_non_api_softwares?
-    uses?(:coala) || uses?(:quadratus) || uses?(:cegid) || uses?(:csv_descriptor) || uses?(:fec_agiris) || uses?(:fec_acd) || uses?(:cogilog) || uses?(:ciel)
+    uses_value = false
+
+    Interfaces::Software::Configuration::NON_API_SOFTWARES.each do |software|
+      uses_value = uses_value || uses?(software.to_sym)
+    end
+
+    uses_value
   end
 
 
@@ -86,11 +99,10 @@ module Interfaces::User::Customer
       end
 
       counter = 0
-      counter += 1 if software.try(:ibiza).try(:used?)
-      counter += 1 if software.try(:my_unisoft).try(:used?)
-      counter += 1 if software.try(:sage_gec).try(:used?)
-      counter += 1 if software.try(:acd).try(:used?)
-      counter += 1 if software.try(:exact_online).try(:used?)
+
+      Interfaces::Software::Configuration::API_SOFTWARES.each do |api_software|
+        counter += 1 if software.try(api_software.to_sym).try(:used?)
+      end
 
       if counter <= 1
         if software.is_a?(Software::Ibiza) # Assign default value to avoid validation exception

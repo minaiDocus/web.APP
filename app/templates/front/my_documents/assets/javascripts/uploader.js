@@ -55,6 +55,7 @@ class MyDocumentsUploader{
 
     if ($('#for_customer').length > 0){
       this.fill_journals_customers();
+      this.fill_periods();
     }
     else{
       this.fill_journals();
@@ -63,11 +64,25 @@ class MyDocumentsUploader{
   }
 
   fill_periods(){
+    let me = this;
+
     this.fetch_url(`/my_documents/uploader/periods/${ encodeURIComponent(this.input_user.val()) }`)
         .then((result)=>{
           let options = '';
           result.forEach((opt)=>{ options += `<option value="${opt[1]}">${opt[0]}</option>` });
-          this.input_period.html(options);
+          me.input_period.html(options);
+
+          // Select blank
+          var blank_selected = '';
+          me.input_period.val(blank_selected);
+
+          me.input_period.change();
+
+          if(result.length > 0){
+            $('#add-document #customer_period').removeClass('hide');
+          }else{
+            $('#add-document #customer_period').addClass('hide');
+          }
         })
   }
 

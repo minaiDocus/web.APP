@@ -58,7 +58,11 @@
               - if _currencies.size > 1
                 .form-group
                   %label Devise facture
-                  = select_tag 'by_preseizure[devise_original]', options_for_select(_currencies, (@options[:by_preseizure][:devise_original] rescue nil)), include_blank: true, class: 'form-select', id: 'devise'
+                  .w-100.row
+                    .w-25
+                      = select_tag 'by_preseizure[devise_operation]', options_for_select([['Diff. de', 0], ['Eg. à', 1]], (@options[:by_preseizure][:devise_operation] rescue 0)), include_blank: false, class: 'form-select operator'
+                    .w-75.select-container.no-padding
+                      = select_tag 'by_preseizure[devise_original]', options_for_select(_currencies, (@options[:by_preseizure][:devise_original] rescue nil)), include_blank: true, class: 'form-select', id: 'devise'
 
               .form-group
                 %label Montant

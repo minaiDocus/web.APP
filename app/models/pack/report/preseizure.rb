@@ -78,8 +78,9 @@ class Pack::Report::Preseizure < ApplicationRecord
     preseizures = preseizures.where('pack_report_preseizures.third_party LIKE ?', "%#{options[:third_party]}%") if options[:third_party].present?
 
     if options[:devise_original].present?
-      _currency = options[:devise_original] != 'EUR' ?  options[:devise_original] : ['', nil, 'EUR']
-      preseizures = preseizures.where(currency: _currency)
+      _currency   = options[:devise_original] != 'EUR' ?  options[:devise_original] : ['', nil, 'EUR']
+      preseizures = preseizures.where(currency: _currency)     if options[:devise_operation].to_i == 1
+      preseizures = preseizures.where.not(currency: _currency) if options[:devise_operation].to_i == 0
     end
 
     preseizures.distinct
