@@ -90,7 +90,7 @@ GEM
       railties (>= 3.0)
     bootstrap-daterangepicker-rails (3.0.4)
       railties (>= 4.0)
-    bridge_bankin (0.1.2)
+    bridge_bankin (0.1.8)
     brpoplpush-redis_script (0.1.2)
       concurrent-ruby (~> 1.0, >= 1.0.5)
       redis (>= 1.0, <= 5.0)
@@ -709,7 +709,7 @@ DEPENDENCIES
   bootstrap (~> 5.0.1)
   bootstrap-datepicker-rails
   bootstrap-daterangepicker-rails
-  bridge_bankin
+  bridge_bankin (= 0.1.8)
   bson
   bullet
   byebug

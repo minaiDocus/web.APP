@@ -126,7 +126,7 @@ gem 'dropbox_api'
 gem 'google-api-client'
 gem 'google_drive'
 gem 'ruby-box'
-gem 'bridge_bankin'
+gem 'bridge_bankin', '0.1.8'
 
 # Lock mechanism
 gem 'remote_lock'
