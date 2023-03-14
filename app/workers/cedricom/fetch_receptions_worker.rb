@@ -1,4 +1,4 @@
-class Cedricom::FetchReceptionstWorker
+class Cedricom::FetchReceptionsWorker
   include Sidekiq::Worker
   sidekiq_options queue: :cedricom, retry: false
 

@@ -1,4 +1,4 @@
-class Jedeclare::FetchReceptionstWorker
+class Jedeclare::FetchReceptionsWorker
   include Sidekiq::Worker
   sidekiq_options queue: :cedricom, retry: false
 
