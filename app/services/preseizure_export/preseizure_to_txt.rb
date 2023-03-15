@@ -75,7 +75,12 @@ class PreseizureExport::PreseizureToTxt
           line[116..e] = label
         end
 
-        line[148..157] = preseizure.piece_number.strip[0..9].rjust(10, '0') if preseizure.piece_number.present?
+        if preseizure.organization.code == 'ESP'
+          __name = preseizure.piece.name.split
+          line[148..157] = __name[2]+__name[3].to_s[0..9]
+        else
+          line[148..157] = preseizure.piece_number.strip[0..9].rjust(10, '0') if preseizure.piece_number.present?
+        end
 
         if preseizure.piece
           file_name = preseizure.piece.position.to_s + '.pdf'
