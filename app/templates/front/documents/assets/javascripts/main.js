@@ -141,6 +141,13 @@ class DocumentsMain{
       }
     }
 
+    let current_uri = window.location.pathname;
+
+    if(current_uri.match(/operations/))
+      params['source'] = 'operations';
+    else
+      params['source'] = 'documents';
+
     this.export_params = params;
 
     this.applicationJS.sendRequest({ 'url': '/documents/export_options', 'type': 'POST', 'data': this.export_params, target: null, dataType: 'json' })
