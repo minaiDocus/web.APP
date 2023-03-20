@@ -62,7 +62,7 @@
   
   = render file: Rails.root.join('app/templates/front/groups/views/groups/main/_dialogs.html.haml')
 
-  .modal.fade.in#add_edit_collaborator
+  .modal.fade.in#add_edit_collaborator{ data: { 'bs-backdrop': "static" } }
     .modal-dialog
       .modal-content
         .modal-header
@@ -76,7 +76,7 @@
           - idocus_params = param_encode({ url: '#url', form: { id: 'collaborator_edition_form', dump_action: true, validate: false }, modal: { id: 'add_edit_collaborator' }, redirect_to: { url: organization_collaborators_path(@organization), html: { target: '.collaborators-content' } } })
           %button.btn.btn-primary.bold.as_idocus_ajax{ type: :button, idocus: idocus_params } Valider
 
-  .modal.fade.in#search_collaborator_filter
+  .modal.fade.in#search_collaborator_filter{ data: { 'bs-backdrop': "static" } }
     .modal-dialog
       .modal-content
         .modal-header
