@@ -10,7 +10,7 @@ class AccountBookType < ApplicationRecord
   attr_writer :account_type
 
 
-  before_validation :upcase_name
+  # before_validation :upcase_name
 
 
   before_save do |journal|
@@ -201,9 +201,9 @@ class AccountBookType < ApplicationRecord
 
   private
 
-  def upcase_name
-    self.name = self.name.upcase
-  end
+  # def upcase_name
+  #   self.name = self.name.upcase
+  # end
 
 
   def format_of_name
