@@ -66,6 +66,7 @@ module Cedricom
 
     def create_mandate
       payload = {
+        "reference" =>  @customer.sanitized_code,
         "raisonSociale" => @customer.company,
         "formeJuridique" => @customer.type_of_entity,
         "villeRcs" => @customer.legal_registration_city,
@@ -84,6 +85,7 @@ module Cedricom
           "telephone" => @customer.phone_number
         },
         "mandats" => [{
+          "reference" => @bank_account.id,
           "bic" => @bank_account.bic,
           "numeroCompte" => @bank_account.number,
           "devise" => @bank_account.currency
