@@ -417,6 +417,17 @@ class PreseizureExport::PreseizureToTxt
     data = []
 
     if @preseizures.any?
+      ## HEADER
+      line          = ' ' * 50
+      line[0..5]    = "VER"
+      line[6..24]   = "export_#{Time.now.strftime("%Y%m%d")}"
+      data << line
+
+      line          = ' ' * 50
+      line[0..5]    = "DOS"
+      line[6..24]   = @preseizures.first.organization.name
+      data << line
+
       @preseizures.each do |preseizure|
         user          = preseizure.user
         journal_name  = preseizure.report.journal({name_only: false}).try(:name) || preseizure.journal_name
