@@ -238,33 +238,33 @@ Bridge::RefreshAllUsersTransactionsWorker:
 
 Cedricom::GetListWorker:
   queue: cedricom
-  cron: 0 12 * * *
+  cron: 0 * * * *
 
 Cedricom::FetchReceptionsWorker:
   queue: cedricom
-  cron: 0 13 * * *
+  cron: 0 * * * *
 
 Cedricom::ImportTransactionsWorker:
   queue: cedricom
-  cron: 0 14 * * *
+  cron: 0 * * * *
 
 Cedricom::ReconciliateOrphansWorker:
   queue: cedricom
-  cron: 0 15 * * *
+  cron: 0 * * * *
 
 ## Jedeclare ##
 
 Jedeclare::GetListWorker:
   queue: cedricom
-  cron: 0 12 * * *
+  cron: 0 * * * *
 
 Jedeclare::FetchReceptionsWorker:
   queue: cedricom
-  cron: 0 13 * * *
+  cron: 0 * * * *
 
 Jedeclare::ImportTransactionsWorker:
   queue: cedricom
-  cron: 0 14 * * *
+  cron: 0 * * * *
 
  ## Budgea ##
 
