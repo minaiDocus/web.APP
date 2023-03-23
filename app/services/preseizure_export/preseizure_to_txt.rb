@@ -40,7 +40,11 @@ class PreseizureExport::PreseizureToTxt
         if preseizure.operation
           label = preseizure.operation_label.strip[0..29]
         else
-          label = [preseizure.third_party.presence, preseizure.piece_number.presence].compact.join(' - ').strip[0..29]
+          if preseizure.organization.code == 'ESP'
+            label = preseizure.third_party.to_s.strip[0..29]
+          else
+            label = [preseizure.third_party.presence, preseizure.piece_number.presence].compact.join(' - ').strip[0..29]
+          end
         end
 
         label = ' ' unless label.present?

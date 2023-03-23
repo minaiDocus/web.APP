@@ -4,21 +4,10 @@ class BillingMod::PrepareBillingsWorker
 
   def perform
     UniqueJobs.for 'BillingMod::PrepareBillings' do
-      sunday = Time.now.strftime('%w').to_i
+      w_day = Time.now.strftime('%w').to_i
+      today = Time.now.strftime('%d').to_i
 
-      if sunday == 7
-        organizations = Organization.client.active
-
-        organizations.each_with_index do |organization, _index|
-          organization.customers.active_at(Time.now.end_of_month + 1.day).each do |customer|
-            BillingMod::PrepareUserBilling.new(customer).execute
-          end
-
-          BillingMod::PrepareOrganizationBilling.new(organization).execute
-
-          sleep 10 if (_index % 30) == 0
-        end
-      end
+      BillingMod::CreateInvoice.launch_test if (w_day % 2) == 0 && ![30,31,1,2].include?(today.to_i)
     end
   end
 end

@@ -33,14 +33,14 @@ class Admin::Supports::MainController < BackController
     if !params[:ope_user_code].blank?
       user = User.find_by_code(params[:ope_user_code].strip)
 
-      @operations = @operations.where("user_id = #{user.try(:id)}")
+      @operations = @operations.where("operations.user_id = #{user.try(:id)}")
     end
 
-    @operations = @operations.where('label LIKE "%' + params[:ope_label] + '%"')                                                if params[:ope_label].present?
-    @operations = @operations.where("date BETWEEN '#{CustomUtils.parse_date_range_of(params[:ope_date]).join("' AND '")}'")  if params[:ope_date].present?
-    @operations = @operations.where(api_id: params[:ope_api_id])                    if params[:ope_api_id].present?
-    @operations = @operations.where(is_coming: params[:is_coming] == 'true')        if params[:is_coming].present?
-    @operations = @operations.where(is_locked: params[:is_locked] == 'true')        if params[:is_locked].present?
+    @operations = @operations.where('operations.label LIKE "%' + params[:ope_label] + '%"')                                                if params[:ope_label].present?
+    @operations = @operations.where("operations.date BETWEEN '#{CustomUtils.parse_date_range_of(params[:ope_date]).join("' AND '")}'")  if params[:ope_date].present?
+    @operations = @operations.where("operations.api_id = #{params[:ope_api_id]}")                    if params[:ope_api_id].present?
+    @operations = @operations.where("operations.is_coming = #{params[:is_coming] == 'true'}")        if params[:is_coming].present?
+    @operations = @operations.where("operations.is_locked = #{params[:is_locked] == 'true'}")        if params[:is_locked].present?
 
     if params[:processed_at] == "1"
       @operations = @operations.where.not(processed_at: nil) 

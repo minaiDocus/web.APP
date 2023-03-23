@@ -43,9 +43,9 @@ class BillingMod::PrepareOrganizationBilling
 
     if customers_count > 0
       price           = BillingMod::Configuration.premium_price_of(@organization.code)
-      customers_limit = BillingMod::Configuration.premium_customers_limit_of(@organization.code)
+      # customers_limit = BillingMod::Configuration.premium_customers_limit_of(@organization.code)
 
-      create_billing({ name: 'ido_premium', title: "Abonnement iDo'Premium (pour #{customers_limit} Dossiers)", kind: 'normal', price: price })
+      create_billing({ name: 'ido_premium', title: "Abonnement iDo'Premium", kind: 'normal', price: price })
     end
   end
 
@@ -56,9 +56,9 @@ class BillingMod::PrepareOrganizationBilling
     customers_limit = BillingMod::Configuration.premium_customers_limit_of(@organization.code)
     unit_price      = BillingMod::Configuration.premium_unit_customer_price_of(@organization.code)
 
-    if customers_count > 0 && customers_limit > 0 && customers_count > customers_limit
+    if customers_count > 0
       excess = customers_count - customers_limit
-      create_billing({ name: 'ido_premium_overcharge', title: "Dossiers iDo'Premium en sus ( #{excess} x #{unit_price.to_f} € )", kind: 'excess', price: ( unit_price.to_f * excess ), associated_hash: { excess: excess, price: unit_price.to_f, limit: customers_limit } })
+      create_billing({ name: 'ido_premium_overcharge', title: "Dossiers iDo'Premium ( #{excess} x #{unit_price.to_f} € )", kind: 'excess', price: ( unit_price.to_f * excess ), associated_hash: { excess: excess, price: unit_price.to_f, limit: customers_limit } })
     end
   end
 

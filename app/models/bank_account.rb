@@ -68,8 +68,6 @@ private
 
   def validate_data
     set_record_value if from_idocus?
-
-    upcase_journal
   end
 
 
@@ -85,12 +83,6 @@ private
   def not_manually_created?
     !from_idocus?
   end
-
-
-  def upcase_journal
-    self.journal = journal.upcase if journal_changed?
-  end
-
 
   def uniqueness_of_used_number_and_bank_name
     bank_account  = user.bank_accounts.where(number: number, bank_name: bank_name).first

@@ -10,9 +10,6 @@ class AccountBookType < ApplicationRecord
   attr_writer :account_type
 
 
-  before_validation :upcase_name
-
-
   before_save do |journal|
     unless journal.is_pre_assignment_processable?
       journal.account_number         = ''
@@ -200,11 +197,6 @@ class AccountBookType < ApplicationRecord
   end
 
   private
-
-  def upcase_name
-    self.name = self.name.upcase
-  end
-
 
   def format_of_name
     errors.add(:name, :invalid) unless name =~ /^[A-Za-z0-9]+$/

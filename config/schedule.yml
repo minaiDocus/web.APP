@@ -30,10 +30,10 @@ Order::RemindToNewKitWorker:
 ## Billing
 BillingMod::CreateInvoiceWorker:
   queue: low
-  cron: '15 0 1 * *'
+  cron: '15 1 1 * *'
 BillingMod::PrepareBillingsWorker:
   queue: low
-  cron: '0 15 * * *'
+  cron: '0 22 * * *'
 
 ## Notifications worker
 Notifications::DocumentWorker:
