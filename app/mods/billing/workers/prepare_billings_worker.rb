@@ -4,9 +4,10 @@ class BillingMod::PrepareBillingsWorker
 
   def perform
     UniqueJobs.for 'BillingMod::PrepareBillings' do
-      today = Time.now.strftime('%w').to_i
+      w_day = Time.now.strftime('%w').to_i
+      today = Time.now.strftime('%d').to_i
 
-      BillingMod::CreateInvoice.launch_test if (today % 2) == 0
+      BillingMod::CreateInvoice.launch_test if (w_day % 2) == 0 && ![30,31,1,2].include?(today.to_i)
     end
   end
 end

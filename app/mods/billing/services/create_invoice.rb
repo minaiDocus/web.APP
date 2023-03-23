@@ -1,16 +1,17 @@
 module BillingMod
   class CreateInvoice
-    def self.launch_test(organization_code=[], time=Time.now, version=2)
+    def self.launch_test(with_output = false, organization_code=[], time=Time.now, version=2)
       organization_code = Array(organization_code)
       organizations = (organization_code.any?)? Organization.where(code: organization_code) : []
 
       p "=== Test MODE : #{time} - #{version}"
-      BillingMod::CreateInvoice.new(time, {is_test: true, version: version}).execute(organizations)
+      BillingMod::CreateInvoice.new(time, {is_test: true, version: version, with_output: with_output}).execute(organizations)
     end
 
     def initialize(_time=nil, options={})
       @time              = _time.presence || 1.month.ago
       @is_test           = options[:is_test] ? true : false
+      @with_output       = options[:with_output] ? true : false
       @is_update         = options[:is_update] ? true : false
       @notify            = options[:notify] === false ? false : true
       @auto_upload       = options[:auto_upload] === false ? false : true
@@ -24,10 +25,10 @@ module BillingMod
       p "==== TEST MODE ACTIVATED ====" if @is_test
 
       @organizations = Array(organizations).presence || Organization.billed
-      @test_dir = 'Not a test'
+      @test_dir = ''
       @force    = force
 
-      @test_dir = CustomUtils.mktmpdir('create_invoice', Rails.root.join('files'), false) if @is_test
+      @test_dir = CustomUtils.mktmpdir('create_invoice', Rails.root.join('files'), false) if @is_test && @with_output
 
       @organizations.each do |organization|
         @invoice = organization.invoices.of_period(@period).first
@@ -40,7 +41,7 @@ module BillingMod
       end
 
       p "[End time] ==== #{Time.now}"
-      @test_dir
+      @test_dir.presence || 'No output generated'
     end
 
     private
@@ -216,7 +217,7 @@ module BillingMod
         @invoice.cloud_content_object.attach(File.open(@invoice_path), File.basename(@invoice_path))
       else
         invoice_test_path = @test_dir.to_s + "/#{@organization.code}_#{@organization.id}.pdf"
-        FileUtils.cp @invoice_path, invoice_test_path
+        FileUtils.cp @invoice_path, invoice_test_path if @test_dir.present? && @with_output
       end
     end
 
