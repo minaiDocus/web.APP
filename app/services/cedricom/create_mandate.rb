@@ -78,13 +78,12 @@ module Cedricom
         },
         "utilisateur" => {
           "email" => @customer.email,
-          "civilite" => "M.",
+          "civilite" => "Mr",
           "nom" => @customer.last_name,
           "prenom" => @customer.first_name,
-          "phone" => @customer.phone_number
+          "telephone" => @customer.phone_number
         },
         "mandats" => [{
-          "reference" => nil,
           "bic" => @bank_account.bic,
           "numeroCompte" => @bank_account.number,
           "devise" => @bank_account.currency
