@@ -104,7 +104,20 @@ class RetrieverParameters::BanksParamsController < RetrieverController
   private
 
   def bank_setting_params
-    params.require(:bank_account).permit(:number, :journal, :currency, :accounting_number, :foreign_journal, :temporary_account, :start_date, :lock_old_operation, :permitted_late_days, :ebics_enabled_starting)
+    params.require(:bank_account).permit(
+      :number,
+      :bic,
+      :journal,
+      :currency,
+      :accounting_number,
+      :foreign_journal,
+      :temporary_account,
+      :start_date,
+      :lock_old_operation,
+      :permitted_late_days,
+      :ebics_enabled_starting,
+      :cedricom_signed_mandate
+    )
   end
 
   def bank_account_params
