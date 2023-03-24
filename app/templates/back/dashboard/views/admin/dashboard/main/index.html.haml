@@ -129,7 +129,7 @@
               %label.count.failed_reports_delivery.me-2
                 %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}            
             .hide.content#failed_reports_delivery
-      .row.animatedChild.toBottom
+      .row.mb-4.animatedChild.toBottom
         .col-sm-4
           .badge-content.back-grey.for-badge= glyphicon('media-play', size: 14, color: "white")
           .my-3
@@ -155,11 +155,46 @@
           .my-3
           .box.mb-2.cedricom_orphans.flux.animated-pointer{ data: { ref: 'cedricom_orphans' }}
             .my-3
-            %label.ms-3.semibold.no-padding Cédricom - Orphelina
+            %label.ms-3.semibold.no-padding Cédricom - Orphelins
             .text-end
               %label.count.cedricom_orphans.me-2
                 %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}            
             .hide.content#cedricom_orphans
+      .row.animatedChild.toBottom
+        .col-sm-4
+          .badge-content.back-magenta.for-badge= glyphicon('aperture', size: 14, color: "white")
+          .my-3
+          .box.mb-2.cedricom_last_check.flux.animated-pointer{ data: { ref: 'cedricom_last_check' }}
+            .my-3
+            %label.ms-3.semibold.no-padding Cedricom - dernier Opé
+            .text-end
+              %label.count.cedricom_last_check.me-2#loading
+                %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}
+              %label.red-label.cedricom_last_check.semibold.hide#no-check
+                Aucun opération Cedricom depuis 7 jours
+              %label.cedricom_last_check.hide#check-ok
+        .col-sm-4
+          .badge-content.back-blue-sky.for-badge= glyphicon('dashboard', size: 14, color: "white")
+          .my-3
+          .box.mb-2.jedeclare_last_check.flux.animated-pointer{ data: { ref: 'jedeclare_last_check' }}
+            .my-3
+            %label.ms-3.semibold.no-padding Jedeclare - dernier Opé
+            .text-end
+              %label.count.jedeclare_last_check.me-2#loading
+                %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}
+              %label.red-label.jedeclare_last_check.semibold.hide#no-check
+                Aucun opération Jedeclare depuis 7 jours
+              %label.jedeclare_last_check.hide#check-ok
+        .col-sm-4
+          .badge-content.back-green.for-badge= glyphicon('fire', size: 14, color: "white")
+          .my-3
+          .box.mb-2.teeo_preassignment.flux.animated-pointer{ data: { ref: 'teeo_preassignment' }}
+            .my-3
+            %label.ms-3.semibold.no-padding Préaf en cours - TEEO
+            .text-end
+              %label.count.teeo_preassignment.me-2
+                %img{ src: '/assets/application/spinner_gray_alpha.gif', alt: 'spin gif'}
+            .hide.content#teeo_preassignment
 
     .col-sm-6.result-flux.animatedChild.toRight
       .box.back-grey

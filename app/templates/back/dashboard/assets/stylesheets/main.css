@@ -17,7 +17,11 @@ label.count{
 }
 
 .result-flux .box{
-  max-height: 515px;
+  max-height: 630px;
   overflow-y: auto;
   scrollbar-width: thin;
+}
+
+.label-warning {
+  color: #e65757;
 }

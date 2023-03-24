@@ -110,7 +110,7 @@ class Admin::Dashboard::MainController < BackController
 
   # GET /admin/awaiting_pre_assignments
   def awaiting_pre_assignments
-    @awaiting_pre_assignments = PreAssignment::Pending.unresolved.select { |e| (e.message.blank? || e.pre_assignment_state == 'force_processing') }
+    @awaiting_pre_assignments = PreAssignment::Pending.unresolved.select { |e| (e.message.blank? || e.pre_assignment_state == 'force_processing') && !e.is_teeo }
 
     render partial: 'result', locals: { collection: @awaiting_pre_assignments, header: {1 => 'Date dernier doc.', 2 => 'Lot', 3 => 'Nb. pièces.', 4 => 'Message'}} 
   end
@@ -299,5 +299,37 @@ class Admin::Dashboard::MainController < BackController
     data['border_color_2'] = "rgb(255, 85, 64)"
 
     render json: { result: data }, status: 200
+  end
+
+  def cedricom_last_check
+    data                    = {}
+    data['check_jedeclare'] = false
+    data['check_cedricom']  = false
+    cedricom_operations = Operation.where('operations.created_at >= ?', 7.days.ago).where(api_name: 'cedricom').order(created_at: :desc)
+    cedricom_operations.each do |operation|
+      break if data['check_jedeclare'] && data['check_cedricom']
+
+      if operation.organization.jedeclare_account_identifier.present?
+        next if data['check_jedeclare']
+
+        data['date_jedeclare']            = operation.created_at.strftime('%d/%m/%Y - %H:%M')
+        data['jedeclare_is_recently']     = operation.created_at > 72.hours.ago
+        data['check_jedeclare']           = true
+      else
+        next if data['check_cedricom']
+
+        data['date_cedricom']         = operation.created_at.strftime('%d/%m/%Y - %H:%M')
+        data['cedricom_is_recently']  = operation.created_at > 72.hours.ago
+        data['check_cedricom']        = true
+      end
+    end
+
+    render json: { result: data }, status: 200
+  end
+
+  def teeo_preassignment
+    @teeo_preassignments = PreAssignment::Pending.unresolved.select { |e| (e.message.blank? || e.pre_assignment_state == 'force_processing') && e.is_teeo }
+
+    render partial: 'result', locals: { collection: @teeo_preassignments, header: {1 => 'Date dernier doc.', 2 => 'Lot', 3 => 'Nb. pièces.', 4 => 'Message'}}
   end
 end

@@ -15,6 +15,7 @@ class PreAssignment::Pending
         o.message        = e.pre_assignment_comment
         o.pre_assignment_state = e.pre_assignment_state
         o.document_count = Pack::Piece.awaiting_preassignment.where(pack_id: e.pack_id).count
+        o.is_teeo        = e.pack.organization.code == 'TEEO'
 
         o
       end
