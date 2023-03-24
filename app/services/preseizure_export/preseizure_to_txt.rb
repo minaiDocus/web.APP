@@ -557,7 +557,7 @@ class PreseizureExport::PreseizureToTxt
             piece_ref = "#{preseizure.report.name.to_s[-6, 10].tr(' ', '_').tr('%', '_')}_#{("%03d" % preseizure.position)}"
           end
 
-          label = preseizure.piece_number
+          label = "#{preseizure.third_party} - #{preseizure.piece_number}"
           label = preseizure.operation_label[0..34].gsub("\t", ' ') if preseizure.operation_label.present?
 
           journal_code   = preseizure.journal_name || ""
