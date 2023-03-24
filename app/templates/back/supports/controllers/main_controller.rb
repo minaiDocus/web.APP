@@ -326,6 +326,54 @@ class Admin::Supports::MainController < BackController
     end
   end
 
+  def check_ocr
+    if params[:pack_piece_name].present?
+      temp_pack = TempPack.find_by_name(params[:pack_piece_name].to_s + ' all')
+      if temp_pack
+        @temp_documents = temp_pack.temp_documents.where(state: 'ocr_needed').order(sort_column => sort_direction).page(params[:page]).per(params[:per_page])
+        if @temp_documents
+          @temp_documents.each do |temp_document|
+            AccountingWorkflow::OcrProcessing.release_document(temp_document.id)
+          end
+        else
+          render plain: "Aucun temp document"
+        end
+
+        render partial: "ocr"
+      else
+        render plain: "Le pack n'existe pas"
+      end
+    else
+      render plain: 'Paramètre manquant'
+    end
+  end
+
+  def check_temp_document
+    if params[:pack_piece_name].present?
+      temp_pack = TempPack.find_by_name(params[:pack_piece_name].to_s + ' all')
+      if temp_pack
+        @unreadable_temp_documents = temp_pack.temp_documents.where(state: 'unreadable').order(sort_column => sort_direction).page(params[:page]).per(params[:per_page])
+        if @unreadable_temp_documents.size > 0
+          @unreadable_temp_documents.each do |temp_document|
+            file_modifiable = DocumentTools.modifiable?(temp_document.cloud_content_object.reload.path)
+            if file_modifiable
+              temp_document.state = 'ready'
+            else
+              temp_document.destroy
+            end
+          end
+        render partial: "temp_document"
+        else
+          render plain: "Aucun temp document"
+        end
+      else
+        render plain: "Le pack n'existe pas"
+      end
+    else
+      render plain: 'Paramètre manquant'
+    end
+  end
+
 
   private
 

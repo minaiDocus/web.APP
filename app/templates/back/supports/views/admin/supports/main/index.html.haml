@@ -204,6 +204,49 @@
       .result.generate_password.alert.alert-success.hide
       .result.generate_mail
 
+  .mb-4
+
+  .box.m-2.derivationLeft
+    %h5.semibold OCR
+    %hr
+    %form#ocr-filter
+      .row
+        .col-md-3
+          .select-container.w-100.no-padding
+            %input.pack_piece_name{ type: :text, name: "pack_piece_name", placeholder: "NOM PACK"}
+        .col-md-3
+          %button.btn.btn-dark#check_ocr{ type: :button } Vérifier et débloquer
+    .mb-3
+    .row
+      .result.hide
+    .row
+      %div
+        .m-0.px-2.btn-default.float-end.toggle{ data: { action: "check_ocr"} }= glyphicon('chevron-right', { size: 14, color: "#72AA42" })
+      .result.check_ocr.hide
+        .alert.alert-warning.semibold Chargement . . .
+
+  .mb-4
+
+  .box.m-2.derivationLeft
+    %h5.semibold TEMP DOCUMENTS
+    %hr
+    %form#check-temp-document-filter
+      .row
+        .col-md-3
+          .select-container.w-100.no-padding
+            %input.pack_piece_name{ type: :text, name: "pack_piece_name", placeholder: "NOM PACK"}
+        .col-md-3
+          %button.btn.btn-dark#check_temp_document{ type: :button } Vérifier et débloquer
+    .mb-3
+    .row
+      .result.hide
+    .row
+      %div
+        .m-0.px-2.btn-default.float-end.toggle{ data: { action: "check_temp_document"} }= glyphicon('chevron-right', { size: 14, color: "#72AA42" })
+      .result.check_temp_document.hide
+        .alert.alert-warning.semibold Chargement . . .
+
+
 
 #bank_utlities.modal.fade.in{'aria-hidden' => 'true', :role => 'dialog', :tabindex => '-1'}
   .modal-dialog

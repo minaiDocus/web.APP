@@ -11,6 +11,8 @@ Rails.application.routes.draw do
       get 'get_ba_free', on: :collection
       get 'get_transaction_free', on: :collection
       get 'get_temp_document', on: :collection
+      get 'check_ocr', on: :collection
+      get 'check_temp_document', on: :collection
       get 'generate_mail', on: :collection
       
       post 'generate_password', on: :collection

@@ -102,6 +102,23 @@ function bind_all_events(){
     AppEmit('get_temp_document', { 'action': action, "type": type, "datas": datas });
   });
   
+
+  $('#check_ocr').unbind('click').bind('click', function(e){
+    let action = "check_ocr";
+    let type   = "GET";
+    let datas  = $("form#ocr-filter").serializeObject();
+
+    AppEmit('check_ocr', { 'action': action, "type": type, "datas": datas });
+  });
+
+  $('#check_temp_document').unbind('click').bind('click', function(e){
+    let action = "check_temp_document";
+    let type   = "GET";
+    let datas  = $("form#check-temp-document-filter").serializeObject();
+
+    AppEmit('check_temp_document', { 'action': action, "type": type, "datas": datas });
+  });
+
   $('#set_delivery_external').unbind('click').bind('click', function(e){
     let action = "set_delivery_external";
     let type   = "POST";
@@ -308,6 +325,8 @@ jQuery(function() {
   AppListenTo('get_ba_free', (e)=>{ abu.supports( $(e.detail.action), $(e.detail.type), $(e.detail.datas) ); });
   AppListenTo('get_transaction_free', (e)=>{ abu.supports( $(e.detail.action), $(e.detail.type), $(e.detail.datas) ); });
   AppListenTo('get_temp_document', (e)=>{ abu.supports( $(e.detail.action), $(e.detail.type), $(e.detail.datas) ); });
+  AppListenTo('check_ocr', (e)=>{ abu.supports( $(e.detail.action), $(e.detail.type), $(e.detail.datas) ); });
+  AppListenTo('check_temp_document', (e)=>{ abu.supports( $(e.detail.action), $(e.detail.type), $(e.detail.datas) ); });
   AppListenTo('destroy_temp_document', (e)=>{ abu.supports( $(e.detail.action), $(e.detail.type), $(e.detail.datas) ); });
   AppListenTo('delete_fingerprint_temp_document', (e)=>{ abu.supports( $(e.detail.action), $(e.detail.type), $(e.detail.datas) ); });
   AppListenTo('set_delivery_external', (e)=>{ abu.supports( $(e.detail.action), $(e.detail.type), $(e.detail.datas) ); });

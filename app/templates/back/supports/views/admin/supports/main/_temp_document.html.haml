@@ -1,0 +1,27 @@
+.row
+  .col-md-12
+    %h3 Liste des temp-documents trouvés et traités
+    %table.table.table-condensed.table-striped#table_temp_document
+      %thead
+        %tr.text-center
+
+          %th= sortable :created_at,   'Créé le'
+          %th Nom original
+          %th Nombre de page
+          %th Delivered by
+          %th Delivered type
+          %th Fingerprint
+          %th Api name
+          %th State
+
+      %tbody
+        - @unreadable_temp_documents.each do |temp_document|          
+          %tr.text-center
+            %td= l(temp_document.created_at, format: '%d %b %Y %H:%M')
+            %td= temp_document.original_file_name
+            %td= temp_document.pages_number
+            %td= temp_document.delivered_by
+            %td= temp_document.delivery_type
+            %td= temp_document.original_fingerprint
+            %td= temp_document.api_name
+            %td= temp_document.state
