@@ -357,7 +357,7 @@ class Admin::Supports::MainController < BackController
           @unreadable_temp_documents.each do |temp_document|
             file_modifiable = DocumentTools.modifiable?(temp_document.cloud_content_object.reload.path)
             if file_modifiable
-              temp_document.state = 'ready'
+              temp_document.ready
             else
               temp_document.destroy
             end
