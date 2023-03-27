@@ -358,11 +358,12 @@ class Admin::Supports::MainController < BackController
             file_modifiable = DocumentTools.modifiable?(temp_document.cloud_content_object.reload.path)
             if file_modifiable
               temp_document.state = 'ready'
+              temp_document.save
             else
               temp_document.destroy
             end
           end
-        render partial: "temp_document"
+          render partial: "temp_document"
         else
           render plain: "Aucun temp document"
         end
