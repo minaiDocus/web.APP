@@ -46,7 +46,9 @@ class AccountSharings::OrganizationController < OrganizationController
     if @account_sharing.persisted?
       json_flash[:success] = 'Dossier partagé avec succès.'
     else
-      json_flash[:error]   = "Une erreur s'est produite lors du partage, Veuillez reéssayer ultérieurement"
+      #json_flash[:error]   = "Une erreur s'est produite lors du partage, Veuillez reéssayer ultérieurement"
+      json_flash[:error] = errors_to_list @account_sharing
+
     end
 
     render json: { json_flash: json_flash }, status: 200
@@ -81,7 +83,8 @@ class AccountSharings::OrganizationController < OrganizationController
     if @guest_collaborator.persisted?
       json_flash[:success] = 'Créé avec succès.'
     else
-      json_flash[:error]   = "Une erreur s'est produite lors de l'ajout, Veuillez reéssayer ultérieurement"
+      #json_flash[:error]   = "Une erreur s'est produite lors de l'ajout, Veuillez reéssayer ultérieurement"
+      json_flash[:error] = errors_to_list @guest_collaborator
     end
 
     render json: { json_flash: json_flash }, status: 200
@@ -93,7 +96,8 @@ class AccountSharings::OrganizationController < OrganizationController
     if @guest_collaborator.save
       json_flash[:success] = 'Modifié avec succès.'
     else
-      json_flash[:error]   = "Une erreur s'est produite lors de l'edition, Veuillez reéssayer ultérieurement"
+      #json_flash[:error]   = "Une erreur s'est produite lors de l'edition, Veuillez reéssayer ultérieurement"
+      json_flash[:error] = errors_to_list @guest_collaborator
     end
 
     render json: { json_flash: json_flash }, status: 200
