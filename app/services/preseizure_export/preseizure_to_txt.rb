@@ -437,12 +437,12 @@ class PreseizureExport::PreseizureToTxt
           #Insert ECR metadata
           line          = ' ' * 270
           line[0..5]    = "ECR"
-          line[6..24]   = "#{journal_name.to_s[0..10]}#{piece.created_at.strftime('%d%m%Y')}" || ""
-          line[25..77]  = preseizure.third_party.to_s[0..51] || ""
-          line[78..93]  = '1'
-          line[94..122] = Time.now.strftime("0%d%m%Y%d%m%Y")
-          line[123..152]= "0EUR"
-          line[153]     = "#{piece.position.to_s[0..25]}.pdf"
+          line[6..23]   = "#{journal_name.to_s[0..10]}#{piece.created_at.strftime('%d%m%Y')}" || ""
+          line[24..75]  = preseizure.third_party.to_s[0..51] || ""
+          line[76..93]  = '1'
+          line[93..122] = Time.now.strftime("0%d%m%Y%d%m%Y")
+          line[119..147]= "0EUR"
+          line[148]     = "#{piece.position.to_s[0..25]}.pdf"
 
           data << line
         end
@@ -461,10 +461,10 @@ class PreseizureExport::PreseizureToTxt
           line          = ' ' * 270
           line[0..5]    = 'MVT'
           line[6..16]   = account.number.to_s[0..10]
-          line[17..47]  = preseizure.third_party.to_s[0..29] || ""
-          line[48..61]  = debit_amount.to_s[0..10]
-          line[62..97]  = credit_amount.to_s[0..10]
-          line[98]      = label.to_s[0..45]
+          line[15..45]  = preseizure.third_party.to_s[0..29] || ""
+          line[46..58]  = debit_amount.to_s[0..12]
+          line[59..97]  = credit_amount.to_s[0..12]
+          line[94]      = label.to_s[0..45]
 
           data << line
         end
