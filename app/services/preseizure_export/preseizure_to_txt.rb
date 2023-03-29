@@ -440,7 +440,7 @@ class PreseizureExport::PreseizureToTxt
           line[6..23]   = "#{journal_name.to_s[0..10]}#{piece.created_at.strftime('%d%m%Y')}" || ""
           line[24..75]  = preseizure.third_party.to_s[0..51] || ""
           line[76..93]  = '1'
-          line[93..122] = Time.now.strftime("0%d%m%Y%d%m%Y")
+          line[91..118] = Time.now.strftime("0%d%m%Y%d%m%Y")
           line[119..147]= "0EUR"
           line[148]     = "#{piece.position.to_s[0..25]}.pdf"
 
