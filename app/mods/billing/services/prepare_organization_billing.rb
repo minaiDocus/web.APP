@@ -98,7 +98,7 @@ class BillingMod::PrepareOrganizationBilling
 
     excess_limit        = BillingMod::Configuration.flow_limit_of('ido_classic')
     all_excess_limit    = excess_limit * customers_id.size
-    total_compta_pieces = BillingMod::DataFlow.of_period(@period).where(user_id: customers_id).select('SUM(compta_pieces) as compta_pieces').first.compta_pieces.to_i
+    total_compta_pieces = BillingMod::DataFlow.of_period(@period).where(user_id: customers_id).select('SUM(compta_pieces) as compta_pieces').first.try(:compta_pieces).to_i
     excess              = total_compta_pieces - all_excess_limit
     price               = BillingMod::Configuration.excess_price_of('ido_classic')
 
@@ -110,7 +110,7 @@ class BillingMod::PrepareOrganizationBilling
 
     excess_limit        = BillingMod::Configuration.flow_limit_of('ido_micro_plus')
     all_excess_limit    = excess_limit * customers_id.size
-    total_compta_pieces = BillingMod::DataFlow.of_period(@period).where(user_id: customers_id).select('SUM(compta_pieces) as compta_pieces').first.compta_pieces.to_i
+    total_compta_pieces = BillingMod::DataFlow.of_period(@period).where(user_id: customers_id).select('SUM(compta_pieces) as compta_pieces').first.try(:compta_pieces).to_i
     excess              = total_compta_pieces - all_excess_limit
     price               = BillingMod::Configuration.excess_price_of('ido_micro_plus')
 
