@@ -32,6 +32,8 @@ class PreAssignment::CreateDelivery
   end
 
   def valid_my_unisoft?
+    return false #Disable My Unisoft sending for now
+
     @preseizures.any? && @report.try(:organization).try(:my_unisoft).try(:used?) &&
     (
       !@is_auto ||
@@ -189,7 +191,7 @@ class PreAssignment::CreateDelivery
         delivery.user         = @report.user
         delivery.organization = @report.organization
         delivery.pack_name    = @report.name
-        delivery.software_id  = @report.user.my_unisoft.society_id
+        delivery.software_id  = @report.user.my_unisoft.try(:society_id)
         delivery.is_auto      = @is_auto
         delivery.grouped_date = date
         delivery.total_item   = preseizures.size
