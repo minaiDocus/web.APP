@@ -42,7 +42,7 @@ class Api::V3::InboundDocumentsController < Api::V3::MainController
     elsif allowed_params[:user_code]
       User.find_by(code: allowed_params[:user_code])
     elsif allowed_params[:user_legal_identifier]
-      User.find_by(legal_identifier: allowed_params[:user_legal_identifier])
+      User.find_by(registration_number: allowed_params[:user_legal_identifier])
     end
   end
 
