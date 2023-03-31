@@ -127,6 +127,7 @@
             %table.table.table-striped
               %thead
                 %tr.header
+                  %th= t('activerecord.models.accounting_plan_item.attributes.created_at')
                   %th= t('activerecord.models.accounting_plan_item.attributes.third_party_name')
                   %th= t('activerecord.models.accounting_plan_item.attributes.third_party_account')
                   %th= t('activerecord.models.accounting_plan_item.attributes.conterpart_account')
@@ -138,6 +139,7 @@
               %tbody
                 - @accounting_plan.active_providers.each do |provider|                  
                   %tr                    
+                    %td.semibold= provider.created_at.try(:strftime, "%d-%m-%Y %H:%M")
                     %td.semibold= provider.third_party_name
                     %td= provider.third_party_account
                     %td= provider.conterpart_account
@@ -192,6 +194,7 @@
             %table.table.table-striped.table_integration
               %thead
                 %tr.header
+                  %th= t('activerecord.models.accounting_plan_item.attributes.created_at')
                   %th= t('activerecord.models.accounting_plan_item.attributes.third_party_name')
                   %th= t('activerecord.models.accounting_plan_item.attributes.third_party_account')
                   %th= t('activerecord.models.accounting_plan_item.attributes.conterpart_account')
@@ -200,6 +203,7 @@
               %tbody
                 - @accounting_plan.active_customers.each do |customer|
                   %tr
+                    %td.semibold= customer.created_at.try(:strftime, "%d-%m-%Y %H:%M")
                     %td.semibold= customer.third_party_name
                     %td= customer.third_party_account
                     %td= customer.conterpart_account

@@ -21,6 +21,8 @@ Rails.application.routes.draw do
       get '/document_api', to: "main#document_api", as: "document_api"
       get '/software_customers', to: "main#software_customers", as: "software_customers"
       get '/bank_operation', to: "main#bank_operation", as: "bank_operation"
+      get '/teeo_preassignment', to: "main#teeo_preassignment", as: "teeo_preassignment"
+      get '/cedricom_last_check', to: "main#cedricom_last_check", as: "cedricom_last_check"
     end
   end
 end

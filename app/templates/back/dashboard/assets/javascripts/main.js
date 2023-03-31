@@ -19,16 +19,47 @@ function event(){
 
 function load_resources(resources, init=false) {
   $.each(resources, function( index, resource ) {
+    let data_type_request = (resource == 'cedricom_last_check') ? 'json' : 'html'
+
     $.ajax({
       url: '/admin/dashboard/' + resource,
-      dataType: 'html',
+      dataType: data_type_request,
       type: 'GET',
       success: function (data) {
-        $('.content#'+resource).html(data)
-        $('.'+ resource + ' label.count.'+ resource).html($('.content#' + resource + ' table').data('total'));
-        if (init){
-          $('.result-flux').html($('#bundle_needed_temp_packs').clone().removeClass('hide'));
-          $('.bundle_needed_temp_packs').find('.indicator').removeClass('hide');
+        if (resources == 'cedricom_last_check'){
+          let result = data.result;
+
+          if (result.check_jedeclare == true){
+            $('.jedeclare_last_check#loading').hide();
+            $('.jedeclare_last_check#check-ok').html(result.date_jedeclare).show('');
+
+            if (result.jedeclare_is_recently == false)
+              $('.jedeclare_last_check#check-ok').css('color','#e65757');
+          }else
+          {
+            $('.jedeclare_last_check#loading').hide();
+            $('.jedeclare_last_check#no-check').show('');
+          }
+
+          if (result.check_cedricom == true){
+            $('.cedricom_last_check#loading').hide();
+            $('.cedricom_last_check#check-ok').html(result.date_cedricom).show('');
+
+            if (result.cedricom_is_recently == false)
+              $('.cedricom_last_check#check-ok').css('color','#e65757');
+          }else
+          {
+            $('.cedricom_last_check#loading').hide();
+            $('.cedricom_last_check#no-check').show('');
+          }
+        }else
+        {
+          $('.content#'+resource).html(data)
+          $('.'+ resource + ' label.count.'+ resource).html($('.content#' + resource + ' table').data('total'));
+          if (init){
+            $('.result-flux').html($('#bundle_needed_temp_packs').clone().removeClass('hide'));
+            $('.bundle_needed_temp_packs').find('.indicator').removeClass('hide');
+          }
         }
       }
     });
@@ -92,6 +123,7 @@ $(document).ready(function() {
     [
       'awaiting_pre_assignments',
       'reports_delivery',
+      'teeo_preassignment',
     ],
     [
       'failed_reports_delivery',
@@ -100,7 +132,10 @@ $(document).ready(function() {
     [
       'awaiting_adr',
       'cedricom_orphans'
-    ]
+    ],
+    [
+      'cedricom_last_check'
+    ],
   ];  
 
   let list_graph_bar = [
@@ -124,6 +159,7 @@ $(document).ready(function() {
   load_resources(resources[3], false);
   load_resources(resources[4], false);
   load_resources(resources[5], false);
+  load_resources(resources[6], false);
 
   var res_index = 0;
   var interval_id = setInterval(function(){

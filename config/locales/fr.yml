@@ -998,6 +998,7 @@ fr:
         other: '%{count} items de plan de compte'
         name: Item de plan de compte
         attributes:
+          created_at: Date de création
           third_party_account: Compte de tiers
           third_party_name: Nom du tiers
           conterpart_account: Compte de contrepartie
