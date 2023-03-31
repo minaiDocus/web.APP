@@ -23,6 +23,8 @@ class Api::V3::InboundDocumentsController < Api::V3::MainController
                                           user,
                                           "upload_api_v3",
                                           nil,
+                                          nil,
+                                          true,
                                           nil)
 
     if uploaded_document
