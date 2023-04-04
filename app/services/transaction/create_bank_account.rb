@@ -28,6 +28,11 @@ class Transaction::CreateBankAccount
             bank_account.is_used           = true
             bank_account.save
           end
+
+          retriever.state = 'ready' if retriever.budgea_state == 'successful'
+          retriever.state = 'error' if retriever.budgea_state == 'failed'
+
+          retriever.save
         end
       end
     elsif options.try(:[], 'force_disable') && options.try(:[], 'force_disable') == 'true'
