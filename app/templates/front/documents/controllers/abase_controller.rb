@@ -33,7 +33,9 @@ class Documents::AbaseController < FrontController #Must be loaded first that's 
       options << ['XLS (Coala)', 'xls_coala']                  if user.uses?(:coala)
 
       options << ['CSV (Cegid)', 'csv_cegid']                  if user.uses?(:cegid)
-      options << ['TRA + pièces jointes (Cegid)', 'tra_cegid'] if user.uses?(:cegid) && params[:source] != 'operations'
+
+      tra_title = ' + pièces jointes'                   if params[:source] != 'operations'
+      options << ["TRA#{tra_title} (Cegid)", 'tra_cegid'] if user.uses?(:cegid)
 
       options << ['TXT (Fec Agiris)', 'txt_fec_agiris']        if user.uses?(:fec_agiris)
       options << ['ECR (Fec Agiris ECR zip)', 'ecr_fec_agiris_facnote']        if user.uses?(:fec_agiris) && ['IDOC', 'MCN'].include?( user.organization.try(:code) )
