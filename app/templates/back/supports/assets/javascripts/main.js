@@ -310,6 +310,7 @@ jQuery(function() {
 
   bind_all_events();
 
+  AppListenTo('window.application_auto_rebind', (e)=>{ bind_all_events() });
   AppListenTo('get_retriever', (e)=>{ abu.supports( $(e.detail.action), $(e.detail.type), $(e.detail.datas) ); });
   AppListenTo('resume_me', (e)=>{ abu.supports( $(e.detail.action), $(e.detail.type), $(e.detail.datas) ); });
   AppListenTo('get_bank_accounts', (e)=>{ abu.supports( $(e.detail.action), $(e.detail.type), $(e.detail.datas), $(e.detail.title) ); });
