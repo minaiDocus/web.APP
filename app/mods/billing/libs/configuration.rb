@@ -2,6 +2,7 @@ class BillingMod::Configuration
   PREMIUM = {
               CEN:  { price: 1500, customers_limit: 0, unit_price: 10 },
               GMBA: { price: 1500, customers_limit: 0, unit_price: 10 },
+              OR: { price: 1500, customers_limit: 0, unit_price: 10 },
             }
 
   LISTS = {
