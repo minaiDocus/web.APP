@@ -168,5 +168,5 @@ $(document).ready(function() {
       res_index = 0;
 
     load_resources(resources[res_index]);
-  }, 10000);
+  }, 50000);
 });
