@@ -13,6 +13,8 @@ class Api::V2::PiecesController < ActionController::Base
       #piece.waiting_pre_assignment if piece.pre_assignment_state == 'supplier_recognition' && piece.detected_third_party_id
       piece.waiting_pre_assignment if piece.pre_assignment_state == 'adr' && params["piece"]["state_change"] == 'release'
 
+      save_operations(piece)
+
       piece.reload
       if !piece.pre_assignment_waiting?
         log_document = {
@@ -57,7 +59,19 @@ class Api::V2::PiecesController < ActionController::Base
   def piece_params
     params.require(:piece).permit(:detected_third_party_id, :detected_third_party_name, :detected_invoice_number,
                                   :detected_invoice_date, :detected_invoice_due_date, :detected_invoice_amount_without_taxes,
-                                  :detected_invoice_taxes_amount, :detected_invoice_amount_with_taxes, :state_change)
+                                  :detected_invoice_taxes_amount, :detected_invoice_amount_with_taxes, :state_change, 
+                                  :detected_bank, :detected_account_number, :total_debit, :total_credit, :starting_balance,
+                                  :ending_balance)
+  end
+
+  def save_operations(piece)
+    if params[:operations]
+      piece.detected_operations.destroy_all
+
+      params[:operations].each do |operation|
+        piece.detected_operations.find_or_create_by!(label: operation[:label], amount: operation[:amount], date: operation[:date])
+      end
+    end
   end
 
   def serializer

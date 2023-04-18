@@ -296,6 +296,9 @@ Rails.application.routes.draw do
 
     namespace :sgi do
       namespace :v1 do
+
+        resources :statement_data, only: :show
+        
         resources :grouping do
           get 'bundle_needed/:delivery_type', action: 'bundle_needed',  on: :collection
           post 'bundled', on: :collection

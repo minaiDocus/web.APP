@@ -9,10 +9,16 @@ class AccountingWorkflow::SendPieceToInvoiceRecognition
     @piece = piece
   end
 
-  def execute    
+  def execute
+    source = if @piece.pack.journal.entry_type == 4
+      'main_statement'
+    else
+      'main'
+    end
+
     payload = {
       document: {
-        source: 'main',
+        source: source,
         name: @piece.name,
         file_base64: Base64.encode64(@piece.cloud_content.download),
         source_identifier: @piece.id

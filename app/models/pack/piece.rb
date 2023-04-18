@@ -19,6 +19,8 @@ class Pack::Piece < ApplicationRecord
   has_many   :temp_preseizures,  class_name: 'Pack::Report::TempPreseizure', inverse_of: :piece
   has_many   :remote_files,  as: :remotable, dependent: :destroy
 
+  has_many   :detected_operations, foreign_key: :pack_piece_id
+
   belongs_to :user
   belongs_to :pack, inverse_of: :pieces
   belongs_to :organization
