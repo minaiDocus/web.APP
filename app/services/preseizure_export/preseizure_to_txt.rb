@@ -200,7 +200,7 @@ class PreseizureExport::PreseizureToTxt
       end
 
       journal = preseizure.report.journal({ name_only: false })
-      nature = case journal.compta_type
+      nature = case journal.try(:compta_type)
                when 'AC'
                 if preseizure.entries.where(type: 2).count > 1
                   'AF'
@@ -287,7 +287,7 @@ class PreseizureExport::PreseizureToTxt
             line[0] = preseizure.journal_name[0..2]
             line[3..11] = preseizure.computed_date.strftime('%d%m%Y') if preseizure.date
             line[11] = nature
-            line[13] = case journal.compta_type
+            line[13] = case journal.try(:compta_type)
                        when 'AC'
                         user.accounting_plan.general_account_providers.to_s.presence || '401000'
                        when 'VT'
