@@ -48,14 +48,14 @@
     - delivery = preseizure.pre_assignment_deliveries.where(state: 'sent').first
     - delivery = preseizure.pre_assignment_deliveries.where(state: 'error').last if not delivery
     - if delivery
-      - label_delivery = delivery.deliver_to == "sage_gec" ? 'Sage' : 'iBiza'
+      - label_delivery = Interfaces::Software::Configuration.human_format[delivery.deliver_to.to_sym].to_s.gsub(' - Privé', '')
       %span Dernier envoi
       %span= label_delivery
       %span.semibold= delivery.try(:updated_at).strftime("%d/%m/%Y")
       %span - 
       %span= delivery.try(:updated_at).strftime("%Hh%M")
-      - if delivery.try(:state) != 'sent' && delivery.try(:error_message)
-        %span.ms-3.badge.bg-danger= "Erreur : #{delivery.try(:error_message)}"
+      - if not preseizure.is_delivered?
+        %span.ms-3.badge.bg-danger= "Erreur : #{preseizure.try(:delivery_message)}"
       - else
         %label.ms-3 Envoyé vers
         %span.badge.bg-success= label_delivery
