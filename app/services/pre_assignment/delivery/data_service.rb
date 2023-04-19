@@ -56,8 +56,9 @@ class PreAssignment::Delivery::DataService
     @preseizures.each do |preseizure|
       preseizure.delivery_tried_at = time
       preseizure.is_locked         = false
+      preseizure_error             = preseizure.get_delivery_message_of('ibiza')
 
-      if error_message.to_s.match(/already sent/i)
+      if error_message.to_s.match(/already sent/i) || preseizure_error.to_s.match(/already sent/i)
         preseizure.delivery_state    = @software_name.to_s
       else
         preseizure.delivery_state    = 'failed'
