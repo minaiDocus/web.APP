@@ -15,6 +15,8 @@ module Cedricom
     end
 
     def perform
+      @created_operations_ids = [-1]
+
       cfonb_by_line = @reception.content.download.split(/\r\n+/)
 
       raw_operations = read_cfonb(cfonb_by_line)
@@ -241,8 +243,11 @@ module Cedricom
       operations
     end
 
-    def check_duplicated(bank_account, cedricom_operation)
-      bank_account.operations.where(api_name: 'cedricom', label: cedricom_operation[:long_label], date: cedricom_operation[:date], amount: cedricom_operation[:amount]).first
+    def check_duplicated(bank_account, cedricom_operation, specific_ids=[-1])
+      ops = bank_account.operations.where(api_name: 'cedricom', label: cedricom_operation[:long_label], date: cedricom_operation[:date], amount: cedricom_operation[:amount])
+      ops = ops.where(id: specific_ids) if specific_ids.any?
+
+      ops.first
     end
 
     def save_operation(bank_account, cedricom_operation)
@@ -250,7 +255,13 @@ module Cedricom
 
       return nil if !user || !user.still_active?
 
-      duplicate_ope = check_duplicated bank_account, cedricom_operation if bank_account
+      ## ACTIVATE DUPLICATION SEEKER ONLY FOR THIS USER AND NEW INJECTED OPERATIONS
+      if bank_account && ['ACC%0264'].include?(user.my_code)
+        sleep(3)
+        duplicate_ope = check_duplicated(bank_account, cedricom_operation, @created_operations_ids)
+
+        return nil if duplicate_ope
+      end
 
       operation = Operation.new
 
@@ -282,6 +293,8 @@ module Cedricom
       operation.save!
       
       if operation.persisted? && operation.bank_account
+        @created_operations_ids << operation.reload.id
+
         operation.update(api_id: "ebics_#{operation.id}")
 
         # operation.update(is_locked: true) if duplicate_ope && !['ACC%0343', 'ACC%0438'].include?(operation.user.code)
