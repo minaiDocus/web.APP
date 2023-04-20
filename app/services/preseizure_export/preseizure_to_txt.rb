@@ -558,7 +558,7 @@ class PreseizureExport::PreseizureToTxt
           end
 
           label = "#{preseizure.third_party} - #{preseizure.piece_number}"
-          label = preseizure.operation_label[0..34].gsub("\t", ' ') if preseizure.operation_label.present?
+          label = preseizure.operation_label.gsub("\t", ' ') if preseizure.operation_label.present?
 
           journal_code   = preseizure.journal_name || ""
           journal_lib    = user.account_book_types.where(name: journal_code).first.try(:description).try(:gsub, "\t", ' ').try(:tr, '()', '  ') || ""
