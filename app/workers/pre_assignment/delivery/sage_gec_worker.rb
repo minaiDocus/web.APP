@@ -4,9 +4,8 @@ class PreAssignment::Delivery::SageGecWorker
 
   def perform
     UniqueJobs.for 'PreAssignmentDeliverySageGecWorker' do
-      PreAssignmentDelivery.sage_gec.data_built.order(id: :asc).each do |delivery|
-        PreAssignment::Delivery::SageGecWorker::Launcher.delay.process(delivery.id)
-        sleep(5)
+      PreAssignmentDelivery.sage_gec.data_built.order(id: :asc).limit(200).each do |delivery|
+        PreAssignment::Delivery::SageGecWorker::Launcher.delay(queue: :high).process(delivery.id)
       end
     end
   end

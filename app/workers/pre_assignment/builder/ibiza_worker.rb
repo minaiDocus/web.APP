@@ -4,11 +4,11 @@ class PreAssignment::Builder::IbizaWorker
 
   def perform
     UniqueJobs.for 'PreAssignmentBuilderIbizaWorker' do
-      PreAssignmentDelivery.ibiza.pending.order(id: :asc).each do |delivery|
-        sleep(5)
+      PreAssignmentDelivery.ibiza.pending.order(id: :asc).limit(200).each do |delivery|
+        sleep(2)
         next if PreAssignmentDelivery.ibiza.building_data.count >= 5 #Launch bulding data every 5 building deliveries
 
-        PreAssignment::Builder::IbizaWorker::Launcher.delay.process(delivery.id)
+        PreAssignment::Builder::IbizaWorker::Launcher.delay(queue: :high).process(delivery.id)
       end
     end
   end
