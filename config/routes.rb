@@ -323,6 +323,8 @@ Rails.application.routes.draw do
     end
   end
 
+  get '/privacy', to: 'errors#privacy_policy'
+
   match '*a', to: 'errors#routing', via: :all
 end
 

@@ -6,4 +6,8 @@ class ErrorsController < ApplicationController
 	rescue
     render file: "#{Rails.root}/public/404", status: :not_found
   end
+
+  def privacy_policy
+    render file: "#{Rails.root}/public/privacy", status: 200
+  end
 end
