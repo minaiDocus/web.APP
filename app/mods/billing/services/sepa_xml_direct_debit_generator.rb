@@ -24,7 +24,7 @@ class BillingMod::SepaXmlDirectDebitGenerator
       build_line(d)
     end
 
-    @sdd.to_xml
+    @sdd.to_xml('pain.008.001.02')
   end
 
   private
