@@ -349,7 +349,7 @@ class DataProcessor::TempPack
         @inserted_piece.waiting_pre_assignment
         # SgiApiServices::AutoPreAssignedJefacturePiecesValidation.execute([@inserted_piece])
         # AccountingWorkflow::SendPieceToSupplierRecognition.execute([@inserted_piece]) if not success
-      elsif !@inserted_piece.pack.journal.entry_type.in?([2,3])
+      elsif !@inserted_piece.pack.journal.entry_type.in?([2,3,4])
         @inserted_piece.waiting_pre_assignment
       else
         Pack::Piece.extract_content(@inserted_piece)
