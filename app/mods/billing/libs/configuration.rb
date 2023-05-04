@@ -9,8 +9,8 @@ class BillingMod::Configuration
             ido_premium: {
               human_name: "iDo'Premium",
               description: "Vous permet de transférer vos pièces sans limite (quotas) de téléversement.",
-              hint: "Facture à 3.000€ HT pour les $$X premiers dossiers, au delà des $$X dossiers : 10€ ht/dossier",
-              label: 'Téléchargement + Pré-saisie comptable',
+              hint: "Abonnement à 1.500€ HT et 10€ ht/dossier",
+              label: "Abonnement iDo'Premium",
               price: 0,
               commitment: 0,
               cummulative_excess: false,
@@ -133,9 +133,13 @@ class BillingMod::Configuration
     end
 
     def price_of(package, user=nil)
-      package = :reduced_retriever if package.to_s == 'ido_retriever' && CustomUtils.reduced_retriever_price?(user.try(:organization).try(:code)) #We have an exception of ido_retriever price
+      if package.to_s == 'ido_premium'
+        user.try(:organization).present? ? (BillingMod::Configuration::PREMIUM[user.organization.code.to_sym].try(:[], :unit_price).presence || 10) : 10
+      else
+        package = :reduced_retriever if package.to_s == 'ido_retriever' && CustomUtils.reduced_retriever_price?(user.try(:organization).try(:code)) #We have an exception of ido_retriever price
 
-      BillingMod::Configuration::LISTS[package.to_sym][:price]
+        BillingMod::Configuration::LISTS[package.to_sym][:price]
+      end
     end
 
     def flow_limit_of(package)

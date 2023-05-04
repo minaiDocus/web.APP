@@ -14,6 +14,8 @@ class BillingMod::PrepareUserBilling
     @package = @user.package_of(@period)
     @package = clone_existing_package if not @package
 
+    @organization = @user.organization
+
     return false if not @package
 
     BillingMod::FetchFlow.new(@period).execute(@user)
@@ -62,7 +64,7 @@ class BillingMod::PrepareUserBilling
   end
 
   def create_package_billing
-    return true if @package.name == 'ido_premium'
+    # return true if @package.name == 'ido_premium' # iDo'Premium is now calculated in customer's billing
 
     create_billing({ name: @package.name, title: BillingMod::Configuration::LISTS[@package.name.to_sym][:label], price: @package.base_price })
   end

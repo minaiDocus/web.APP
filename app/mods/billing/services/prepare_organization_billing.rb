@@ -21,7 +21,7 @@ class BillingMod::PrepareOrganizationBilling
     end
 
     create_premium_billing
-    create_premium_overcharge_billing
+    # create_premium_overcharge_billing
 
     create_classic_discount_billing
     create_retriever_discount_billing
@@ -50,6 +50,8 @@ class BillingMod::PrepareOrganizationBilling
   end
 
   def create_premium_overcharge_billing
+    return false ### This part is now calculated in customer's billings 
+
     return false if not CustomUtils.is_ido_premium?(@organization.code)
 
     customers_count = evaluated_packages.of_period(@period).where(user_id: @customers_ids).where(name: 'ido_premium').count

@@ -100,8 +100,7 @@ module BillingMod
 
       @customers_excess = { bank_excess_count: 0, bank_excess_price: 0, journal_excess_count: 0, journal_excess_price: 0, excess_billing_count: 0, excess_billing_price: 0 }
 
-      ### WARNING: june_price node is valid only for June billing
-      @other_orders = { june_price: 0, discount_price: 0, re_site_price: 0, orders_price: 0, digitize_price: 0, remaining_month_price: 0 }
+      @other_orders = { discount_price: 0, re_site_price: 0, orders_price: 0, digitize_price: 0, remaining_month_price: 0 }
 
       recalculate_billing = @force || @is_update || @period == CustomUtils.period_of(Time.now) || !@invoice
 
@@ -170,12 +169,7 @@ module BillingMod
         when "order"
           @other_orders[:orders_price] += billing.price
         when "extra"
-          #### CONDITION : only valid for june billing
-          if billing.title == 'Rattrapage sur facturation : Mai'
-            @other_orders[:june_price] += billing.price
-          else
-            @other_orders[:orders_price] += billing.price
-          end
+          @other_orders[:orders_price] += billing.price
         when "discount"
           @other_orders[:discount_price] += billing.price
         end
@@ -568,14 +562,13 @@ module BillingMod
         if %w(ido_digitize ido_retriever mail).include?(package[0].to_s)
           data << ["- #{package[1]} option#{'s' if package[1] > 1} #{get_human_name_of(package[0])}", "#{CustomUtils.format_price(package[1] * get_price_of(package[0]) * 100)} €"]
         else
-          data << ["- #{package[1]} forfait#{'s' if package[1] > 1} #{get_human_name_of(package[0])}", "#{CustomUtils.format_price(package[1] * get_price_of(package[0]) * 100)} €"] if package[0].to_s != 'ido_premium'
+          data << ["- #{package[1]} forfait#{'s' if package[1] > 1} #{get_human_name_of(package[0])}", "#{CustomUtils.format_price(package[1] * get_price_of(package[0]) * 100)} €"]
         end
 
         @total_data_test += (package[1] * get_price_of(package[0])).to_f
       end
 
       @other_orders.each do |order|
-        data << ["Autre : Dossiers non facturés en Mai", "#{CustomUtils.format_price(order[1])} €"] if order[0].to_s == "june_price" && order[1] != 0
         data << ["Remise sur pré-affectation", "#{CustomUtils.format_price(order[1])} €"] if order[0].to_s == "discount_price" && order[1] != 0
         data << ["Rattrapage : Opérations antérieures", "#{CustomUtils.format_price(order[1])} €"]     if order[0].to_s == "re_site_price" && order[1] != 0
         data << ["Commandes et frais divers", "#{CustomUtils.format_price(order[1])} €"]  if order[0].to_s == "orders_price" && order[1] != 0
@@ -726,7 +719,11 @@ module BillingMod
     end
 
     def get_price_of(package)
-      BillingMod::Configuration::LISTS[package.to_sym][:price]
+      if package.to_s == 'ido_premium'
+        BillingMod::Configuration::PREMIUM[@organization.code.to_sym].try(:[], :unit_price).presence || 10
+      else
+        BillingMod::Configuration::LISTS[package.to_sym][:price]
+      end
     end
   end
 end
