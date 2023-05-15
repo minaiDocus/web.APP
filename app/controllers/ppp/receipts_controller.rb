@@ -23,7 +23,7 @@ class Ppp::ReceiptsController < PaperProcessesController
 
     user = User.find_by_code(_params[:customer_code])
     if user
-      user.options.with_lock(timeout: 1, retries: 10, retry_sleep: 0.1) do
+      user.options.with_lock(timeout: 1, retries: 10, retry_sleep: 1.5) do
         @paper_process = PaperProcess.where(type: 'receipt', tracking_number: _params[:tracking_number]).first
         @paper_process ||= PaperProcess.new(type: 'receipt')
         @paper_process.assign_attributes(_params)
