@@ -22,6 +22,7 @@ class UploadedDocument
     @uploader = uploader || user
     @tags     = tags
 
+    original_file_name   = original_file_name.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
     @original_file_name  = original_file_name.gsub(/\0/, '')
     @prev_period_offset  = prev_period_offset.to_i
 
