@@ -23,24 +23,22 @@ class Ppp::ReceiptsController < PaperProcessesController
 
     user = User.find_by_code(_params[:customer_code])
     if user
-      user.options.with_lock(timeout: 1, retries: 10, retry_sleep: 1.5) do
-        @paper_process = PaperProcess.where(type: 'receipt', tracking_number: _params[:tracking_number]).first
-        @paper_process ||= PaperProcess.new(type: 'receipt')
-        @paper_process.assign_attributes(_params)
-        if @paper_process.persisted? && @paper_process.valid?
-          session[:receipt_paper_process_id] = nil
-          @paper_process.save
-          flash[:success] = 'Modifié avec succès.'
-        elsif @paper_process.save
-          session[:receipt_paper_process_id] = nil
-          @paper_process.user         = user
-          @paper_process.organization = user.organization
-          @paper_process.save
-          flash[:success] = 'Créé avec succès.'
-        else
-          session[:receipt_paper_process_id] = @paper_process.id
-          flash[:error] = 'Donnée(s) invalide(s).'
-        end
+      @paper_process   = PaperProcess.where(type: 'receipt', tracking_number: _params[:tracking_number]).first
+      @paper_process ||= PaperProcess.new(type: 'receipt')
+      @paper_process.assign_attributes(_params)
+      if @paper_process.persisted? && @paper_process.valid?
+        session[:receipt_paper_process_id] = nil
+        @paper_process.save
+        flash[:success] = 'Modifié avec succès.'
+      elsif @paper_process.save
+        session[:receipt_paper_process_id] = nil
+        @paper_process.user         = user
+        @paper_process.organization = user.organization
+        @paper_process.save
+        flash[:success] = 'Créé avec succès.'
+      else
+        session[:receipt_paper_process_id] = @paper_process.id
+        flash[:error] = 'Donnée(s) invalide(s).'
       end
     else
       paper_process = PaperProcess.new(type: 'receipt')
