@@ -25,6 +25,7 @@ class Pack::Piece < ApplicationRecord
   belongs_to :pack, inverse_of: :pieces
   belongs_to :organization
   belongs_to :analytic_reference, inverse_of: :pieces, optional: true
+  belongs_to :account_book_type
 
   has_one_attached :cloud_content
   has_one_attached :cloud_content_thumbnail

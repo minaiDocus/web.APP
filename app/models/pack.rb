@@ -18,6 +18,7 @@ class Pack < ApplicationRecord
 
   belongs_to :owner, class_name: 'User', inverse_of: :packs
   belongs_to :organization
+  belongs_to :account_book_type
 
 
   has_many :pieces,    class_name: 'Pack::Piece',  inverse_of: :pack, dependent: :destroy, autosave: true

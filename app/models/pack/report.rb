@@ -14,6 +14,7 @@ class Pack::Report < ApplicationRecord
   belongs_to :pack, optional: true
   belongs_to :document, class_name: 'PeriodDocument', inverse_of: :report, foreign_key: :document_id, optional: true
   belongs_to :organization
+  belongs_to :account_book_type
 
   scope :not_delivered,             -> { joins(:preseizures).merge(Pack::Report::Preseizure.not_deleted.not_delivered).distinct }
   scope :delivered,                 -> { joins(:preseizures).merge(Pack::Report::Preseizure.not_deleted.delivered).distinct }

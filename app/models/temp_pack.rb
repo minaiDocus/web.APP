@@ -8,6 +8,7 @@ class TempPack < ApplicationRecord
   belongs_to :user
   belongs_to :organization
   belongs_to :document_delivery, optional: true
+  belongs_to :account_book_type
 
 
   scope :bundle_needed,        -> { joins(:temp_documents).where('temp_documents.state = ? AND temp_documents.is_locked = ?', 'bundle_needed', false).distinct }

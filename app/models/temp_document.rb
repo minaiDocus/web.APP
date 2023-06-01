@@ -26,6 +26,7 @@ class TempDocument < ApplicationRecord
   belongs_to :retriever, optional: true
   belongs_to :ibizabox_folder, optional: true
   belongs_to :analytic_reference, optional: true
+  belongs_to :account_book_type
   has_many :notifiables, dependent: :destroy, as: :notifiable
   # TODO : rename me
   has_one    :metadata2, class_name: 'TempDocumentMetadata'

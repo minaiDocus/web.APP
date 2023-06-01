@@ -25,6 +25,14 @@ class AccountBookType < ApplicationRecord
   has_many  :expense_categories
   has_many  :retrievers, inverse_of: 'journal', foreign_key: :journal_id
 
+  has_many :packs, foreign_key: :account_book_type_id
+  has_many :operations, foreign_key: :account_book_type_id
+  has_many :temp_packs, foreign_key: :account_book_type_id
+  has_many :temp_documents, foreign_key: :account_book_type_id
+  has_many :pieces, foreign_key: :account_book_type_id
+  has_many :reports, foreign_key: :account_book_type_id
+  has_many :preseizures, foreign_key: :account_book_type_id
+
   belongs_to :user, optional: true
   belongs_to :organization, optional: true
   belongs_to :analytic_reference, inverse_of: :journals, optional: true
