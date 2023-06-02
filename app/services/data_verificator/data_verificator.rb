@@ -9,6 +9,8 @@ class DataVerificator::DataVerificator
   end
 
   def execute
+    @mail_infos << DataVerificator::CheckIdoPremium.new().execute
+    
     @mail_infos << DataVerificator::NotFinalizedPiece.new().execute
 
     @mail_infos << DataVerificator::JefactureCheckPackId.new().execute
@@ -42,8 +44,6 @@ class DataVerificator::DataVerificator
     @mail_infos << DataVerificator::ErrorScriptMailerInfo.new().execute
 
     @mail_infos << DataVerificator::UpdateMcfSettingsToken.new().execute
-
-    #@mail_infos << DataVerificator::PieceReadyTempPackPreAssignmentNeeded.new().execute
 
     daily_mail
   end

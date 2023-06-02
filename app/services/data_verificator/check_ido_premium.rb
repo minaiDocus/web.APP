@@ -1,5 +1,5 @@
 # -*- encoding : UTF-8 -*-
-class DataVerificator::CheckIdoPremiumDocuments < DataVerificator::DataVerificator
+class DataVerificator::CheckIdoPremium < DataVerificator::DataVerificator
   def execute
 
     messages = []
@@ -13,16 +13,14 @@ class DataVerificator::CheckIdoPremiumDocuments < DataVerificator::DataVerificat
 
         active_customers.each do |customer|
           current_package = customer.package_of(CustomUtils.period_of(Time.now))
-          if current_package.name != 'ido_premium'
+          if current_package && current_package.name != 'ido_premium'
             non_premium_found += 1
+            messages << "customer_code: #{customer.code}, package_id: #{current_package.id}, package_name: #{current_package.name}, package_period: #{current_package.period}"
             update(current_package)
-            messages << "customer_code: #{customer.code}, package_id: #{current_package.id}, package_name: #{current_package.name}"
           else
             puts "no premium found"
           end
-
         end
-
       else
         puts "organization nil"
       end
@@ -33,7 +31,6 @@ class DataVerificator::CheckIdoPremiumDocuments < DataVerificator::DataVerificat
       type: "table",
       message: messages.join('; ')
     }
-
   end 
 
   def update(package)
