@@ -1,7 +1,7 @@
 class PonctualScripts::DataEncryption::CopyAllEncryptedDatas
      ALL_MODELS = [
                     "Archive::BudgeaUser", "Box", "BridgeAccount", "BudgeaAccount", "DropboxBasic", "ExactOnline", "Ftp", "GoogleDoc", "Ibiza", "Knowings", "McfSettings",
-                    "NewProviderRequest", "Organization", "Retriever", "Sftp", "Software::Acd", "Software::ExactOnline", "Software::Ibiza", "Software::MyUnisoft", "User"
+                    "NewProviderRequest", "Organization", "Retriever", "Sftp", "Software::Acd", "Software::ExactOnline", "Software::Ibiza", "Software::MyUnisoft"
                   ]
 
   def self.execute

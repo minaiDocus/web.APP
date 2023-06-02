@@ -1,8 +1,4 @@
 class PonctualScripts::DataEncryption::CopyEncryptedData
-=begin
- ALL_TABLES = ["Archive::BudgeaUser", "Box", "BridgeAccount", "BudgeaAccount", "DropboxBasic", "ExactOnline", "Ftp", "GoogleDoc", "Ibiza", "Knowings", "McfSettings",
-          "NewProviderRequest", "Organization", "Retriever", "Sftp", "Software::Acd", "Software::ExactOnline", "Software::Ibiza", "Software::MyUnisoft", "User"]
-=end
   def self.execute(model)
     new(model).execute
   end
@@ -48,15 +44,16 @@ class PonctualScripts::DataEncryption::CopyEncryptedData
       list_column.each do |column|
         if record.respond_to?(column) && record.send(column.to_sym).present?
           record.send( "alpha_#{column}=".to_sym, record.send(column.to_sym) )                   #alpha
-          record.send( "beta_#{column}=".to_sym, Base64.encode64(record.send(column.to_sym)) )   #beta
+          record.send( "beta_#{column}=".to_sym, Base64.encode64(record.send(column.to_sym).to_s) )   #beta
         end
       end
-      record.save
+      
+      puts record.errors.messages if not record.save
 
       remaining_datas = total_records - index - 1
       puts "Nombre d'enregistrements restants pour #{model}: #{remaining_datas}"
 
-      sleep(5) if index % 100
+      sleep(2) if index % 500000
     end
   end
 end
