@@ -7,6 +7,7 @@ class PreAssignment::Builder::DataService
   end
 
   def run
+    return false if !@user || !@user.still_active?
     execute
   end
 

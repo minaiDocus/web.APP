@@ -45,7 +45,7 @@ class PreAssignment::CreateDelivery
   end
 
   def valid_sage_gec?
-    @preseizures.any? && @report.try(:organization).try(:sage_gec).try(:used?) &&
+    @preseizures.any? && @report.try(:organization).try(:sage_gec).try(:used?) && @report.user.sage_gec.try(:sage_private_api_uuid).present? &&
     (
       !@is_auto ||
       (@report.user.sage_gec.try(:auto_deliver?) ||

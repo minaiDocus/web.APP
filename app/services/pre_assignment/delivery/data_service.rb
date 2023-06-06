@@ -36,6 +36,7 @@ class PreAssignment::Delivery::DataService
   end
 
   def run
+    return false if !@user || !@user.still_active?
     result = execute
     notify
 
