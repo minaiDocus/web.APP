@@ -7,8 +7,12 @@ class PreAssignment::Builder::DataService
   end
 
   def run
-    return false if !@user || !@user.still_active?
-    execute
+    if !@user || !@user.still_active?
+      @delivery.building_data
+      building_failed("Dossier Cloturé")
+    else
+      execute
+    end
   end
 
   private

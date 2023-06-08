@@ -36,12 +36,16 @@ class PreAssignment::Delivery::DataService
   end
 
   def run
-    return false if !@user || !@user.still_active?
-    result = execute
-    notify
+    if !@user || !@user.still_active?
+      @delivery.sending
+      handle_delivery_error("Dossier cloturé.")
+    else
+      result = execute
+      notify
 
-    PreAssignment::Delivery::DataService.delay(queue: :high).notify_deliveries if @@notified_at <= 10.minutes.ago
-    result
+      PreAssignment::Delivery::DataService.delay(queue: :high).notify_deliveries if @@notified_at <= 10.minutes.ago
+      result
+    end
   end
 
   private
