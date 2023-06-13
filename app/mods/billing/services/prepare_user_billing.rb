@@ -279,20 +279,54 @@ class BillingMod::PrepareUserBilling
         end
       else
         current_flow = @user.flow_of(@package.period)
-        data_flows   = @user.data_flows.where(period_version: current_flow.period_version).where('period <= ?', @package.period)
+        data_flows   = @user.data_flows.where(period_version: current_flow.period_version).where('period >= 202205 AND period < ?', @package.period)
 
-        billings     = @user.evaluated_billings.where(period: data_flows.pluck(:period), name: 'excess_billing')
+        billings     = []
+        billings     = user.evaluated_billings.where(period: data_flows.pluck(:period), name: 'excess_billing') if data_flows.any?
 
-        total_billed = 0
-        billings.each do |billing|
-          total_billed += billing.associated_hash[:excess]
+        to_billed    = 0
+        if billings.any?
+          to_billed = current_flow.compta_pieces
+        else
+          cumulated   = data_flows.select('SUM(compta_pieces) as t_compta_piece').first.try(:t_compte_piece).to_i
+          cumulated  += current_flow.compta_pieces.to_i
+          cumulated  -= @package.flow_limit
+
+          to_billed = (cumulated > 0)? cumulated : 0
         end
 
-        __flow = data_flows.select("SUM(compta_pieces) as t_compta_pieces").first
-        to_billed = __flow.try(:t_compta_pieces).to_i
-        to_billed -= total_billed
+        ### EXCEPTION CODE : WORKARROUND FOR MISSING BILLING OF 202305
+        if @package.period == 202306
+          prev_period  = 202305
+          prev_flow    = @user.flow_of(prev_period)
+          prev_package = @user.package_of(prev_period)
 
-        data_flow  = OpenStruct.new(t_compta_pieces: to_billed)
+          if prev_flow && ['ido_nano', 'ido_micro'].include?(prev_package.try(:name).to_s)
+            data_flows   = user.data_flows.where(period_version: prev_flow.period_version).where('period >= 202205 AND period < ?', prev_period)
+
+            billings     = []
+            billings     = user.evaluated_billings.where(period: data_flows.pluck(:period), name: 'excess_billing') if data_flows.any?
+
+            to_billed_2  = 0
+            if billings.any?
+              to_billed_2 = prev_flow.compta_pieces
+            else
+              cumulated   = data_flows.select('SUM(compta_pieces) as t_compta_piece').first.try(:t_compte_piece).to_i
+              cumulated  += prev_flow.compta_pieces.to_i
+              cumulated  -= @package.flow_limit
+
+              to_billed_2 = (cumulated > 0)? cumulated : 0
+            end
+
+            billing  = @user.evaluated_billings.where(period: prev_period, name: 'excess_billing').first
+            billed   = billing.try(:associated_hash).try(:[], :excess).to_i
+
+            to_billed += to_billed_2 - billed
+          end
+        end
+
+        ### IMPORTANT : Add flow limit because it will be removed later
+        data_flow = OpenStruct.new(t_compta_pieces: (to_billed + @package.flow_limit))
       end
     end
 

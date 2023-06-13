@@ -29,6 +29,8 @@ class BillingMod::FetchFlow
 
       data_flow         = customer.flow_of(@period)
 
+      package           = customer.package_of(@period)
+
       next false if data_flow.nil?
 
       data_flow.pieces            = pieces_count
@@ -40,6 +42,33 @@ class BillingMod::FetchFlow
       data_flow.journal_excess = journal_excess_of(customer)
 
       data_flow.scanned_sheets = scanned_sheets
+
+      if package.excess_duration == 'annual'
+        if data_flow.period_version == 0
+          start_period = package.commitment_start_period
+          end_period   = CustomUtils.period_operation(start_period, 12)
+          version      = 1
+
+          seeking = true
+          while seeking do
+            if start_period <= data_flow.period && data_flow.period < end_period
+              data_flow.period_version = version
+              seeking = false
+            else
+              start_period = end_period
+              end_period   = CustomUtils.period_operation(start_period, 12)
+              version += 1
+
+              if version >= 100 #infinite loop security
+                data_flow.period_version = version
+                seeking = false
+              end
+            end
+          end
+        end
+      else
+        data_flow.period_version = 0
+      end
 
       data_flow.save
     end
