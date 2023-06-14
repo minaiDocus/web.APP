@@ -5,7 +5,6 @@ class PreseizureExport::PreseizureToTxt
     @preseizures = Array(preseizures)
   end
 
-
   def execute(type_of_export="zip_quadratus")
     case type_of_export
       when "zip_quadratus"
@@ -246,7 +245,18 @@ class PreseizureExport::PreseizureToTxt
                       entry.account.try(:number)
                     end
                   else
-                    entry.account.try(:number)
+                    is_provider = false
+                    is_customer = false
+                    is_provider = user.accounting_plan.providers.where(third_party_account: entry.account.try(:number)).limit(1).size > 0
+                    is_customer = user.accounting_plan.customers.where(third_party_account: entry.account.try(:number)).limit(1).size > 0 unless is_provider
+
+                    if is_customer
+                      user.accounting_plan.general_account_customers.to_s.presence || '411000'
+                    elsif is_provider
+                      user.accounting_plan.general_account_providers.to_s.presence || '401000'
+                    else
+                      entry.account.try(:number)
+                    end
                   end
 
 
