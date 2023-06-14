@@ -36,7 +36,7 @@
         .form-group{ class: (['my_unisoft'].include? software)? '' : 'hide' }
           .to_change_box
             .select-container.no-padding.w-100
-              = sf.input :firm_id, input_html: { value: @organization.my_unisoft&.firm_id }, label_html: { class: 'semibold' }, hint: "Pour connecter MyUnisoft à iDocus, vous devez renseigner ici votre identifiant de schema MyUnisoft. Enfin vous devez demander au support MyUnisoft d'autoriser developpeurs@idocus.com à accéder à votre cabiner sur MyUnisoft."
+              = sf.input :firm_id, input_html: { value: @organization.my_unisoft&.firm_id }, label_html: { class: 'semibold' }, hint: "Pour connecter MyUnisoft à iDocus, vous devez renseigner ici votre identifiant de schéma MyUnisoft. Enfin, vous devez demander au support MyUnisoft d'autoriser developpeurs@idocus.com à accéder à votre cabinet sur MyUnisoft."
 
       - if software == 'acd'
         .form-group{ class: (['acd'].include? software)? '' : 'hide' }
