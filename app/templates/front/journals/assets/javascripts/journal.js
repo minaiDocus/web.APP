@@ -265,15 +265,16 @@ class Journal{
       const url = $(this).attr('link');
 
       self.applicationJS.sendRequest({ 'url': url }).then((element)=>{
-        let from        = '#journal.new';
+        let form = $(element).find('#journal.new');
         let modal_title = 'Nouveau journal comptable';
 
-        if (url.indexOf("edit") >= 0) {
-          from        = '#journal.edit';
+        if( form.length <= 0 )
+        {
+          form = $(element).find('#journal.edit');
           modal_title = 'Édition de journal comptable';
         }
 
-        self.journal_form_modal.find('.modal-body').html($(element).find(from).html());
+        self.journal_form_modal.find('.modal-body').html(form.html());
         self.journal_form_modal.find('.modal-title').text(modal_title);
         self.journal_form_modal.find('.previous-next-controls .next').attr('disabled', 'disabled');
         self.journal_form_modal.modal('show');
