@@ -288,7 +288,7 @@ class BillingMod::PrepareUserBilling
         if billings.any?
           to_billed = current_flow.compta_pieces
         else
-          cumulated   = data_flows.select('SUM(compta_pieces) as t_compta_piece').first.try(:t_compte_piece).to_i
+          cumulated   = data_flows.select('SUM(compta_pieces) as t_compta_piece').first.try(:t_compta_piece).to_i
           cumulated  += current_flow.compta_pieces.to_i
           cumulated  -= @package.flow_limit
 
@@ -311,7 +311,7 @@ class BillingMod::PrepareUserBilling
             if billings.any?
               to_billed_2 = prev_flow.compta_pieces
             else
-              cumulated   = data_flows.select('SUM(compta_pieces) as t_compta_piece').first.try(:t_compte_piece).to_i
+              cumulated   = data_flows.select('SUM(compta_pieces) as t_compta_piece').first.try(:t_compta_piece).to_i
               cumulated  += prev_flow.compta_pieces.to_i
               cumulated  -= @package.flow_limit
 
