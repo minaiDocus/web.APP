@@ -282,7 +282,7 @@ class BillingMod::PrepareUserBilling
         data_flows   = @user.data_flows.where(period_version: current_flow.period_version).where('period >= 202205 AND period < ?', @package.period)
 
         billings     = []
-        billings     = user.evaluated_billings.where(period: data_flows.pluck(:period), name: 'excess_billing') if data_flows.any?
+        billings     = @user.evaluated_billings.where(period: data_flows.pluck(:period), name: 'excess_billing') if data_flows.any?
 
         to_billed    = 0
         if billings.any?
@@ -302,10 +302,10 @@ class BillingMod::PrepareUserBilling
           prev_package = @user.package_of(prev_period)
 
           if prev_flow && ['ido_nano', 'ido_micro'].include?(prev_package.try(:name).to_s)
-            data_flows   = user.data_flows.where(period_version: prev_flow.period_version).where('period >= 202205 AND period < ?', prev_period)
+            data_flows   = @user.data_flows.where(period_version: prev_flow.period_version).where('period >= 202205 AND period < ?', prev_period)
 
             billings     = []
-            billings     = user.evaluated_billings.where(period: data_flows.pluck(:period), name: 'excess_billing') if data_flows.any?
+            billings     = @user.evaluated_billings.where(period: data_flows.pluck(:period), name: 'excess_billing') if data_flows.any?
 
             to_billed_2  = 0
             if billings.any?
