@@ -112,7 +112,7 @@ class BillingMod::PrepareUserBilling
   end
 
   def create_excess_billing
-    return false if calculated_excess[:price].to_f <= 0 || calculated_excess[:count].to_i <= 0
+    return false if calculated_excess[:price].to_f == 0 || calculated_excess[:count].to_i == 0
 
     create_billing({ name: 'excess_billing', title: 'Pré-affectation en excès', kind: 'excess', price: calculated_excess[:price].to_f, associated_hash: { excess: calculated_excess[:count], price: @package.excess_price } })
   end
@@ -331,7 +331,9 @@ class BillingMod::PrepareUserBilling
     end
 
     @excess_data[:count] = data_flow.try(:t_compta_pieces).to_i - @package.flow_limit
-    @excess_data[:price] = @package.excess_price.to_f * @excess_data[:count] if @package.flow_limit > 0 && @excess_data[:count] > 0
+    @excess_data[:count] = 0 if @package.excess_duration == 'month' && @excess_data[:count] <= 0
+
+    @excess_data[:price] = @package.excess_price.to_f * @excess_data[:count] if @package.flow_limit > 0 && @excess_data[:count] != 0
 
     @excess_data
   end
