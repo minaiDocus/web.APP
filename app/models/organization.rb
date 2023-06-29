@@ -240,7 +240,8 @@ class Organization < ApplicationRecord
   end
 
   def cedricom_configured?
-    self.cedricom_user.present? && self.encrypted_cedricom_password.present? && self.cedricom_name.present?
+    (self.cedricom_user.present? && self.encrypted_cedricom_password.present? && self.cedricom_name.present?) ||
+    (self.jedeclare_user.present? && self.encrypted_jedeclare_password.present? && self.jedeclare_account_identifier.present?)
   end
 
   def can_upload_documents?
