@@ -66,7 +66,6 @@
           .row.text-center.p-2.semibold.hide.alert-identification
             .col-md-12.red-label identifiant ou mot de passe incorrect
 
-          
           .form-check.text-start
             = f.check_box :remember_me, class: 'form-check-input pointer float-none'
             = f.label :remember_me, 'Rester connecté ?', class: 'form-check-label stay-connect ms-2'
@@ -75,7 +74,9 @@
             .col-md-12.text-center
               = f.submit 'Connexion', class: 'btn btn-primary bold w-100 connexion'
           .row.mt-3
-            .col-md-12.text-start
+            .col-md-6.text-start
               %a.red-label{ href: new_user_password_path } Mot de passe oublié ?
+            .col-md-6.text-end
+              %a.black-label{ href: user_unlock_path } Déverrouiller mon compte ?
 
   = javascript_include_tag 'front/main'

@@ -2,12 +2,31 @@
 %html
   %head
     %title
-      Idocus | Connexion
+      - if request.env["SERVER_NAME"].include?("axelium")
+        Axelium | Connexion
+      - elsif request.env["SERVER_NAME"].include?("dkpartners")
+        DK Partners | Connexion
+      - elsif request.env["SERVER_NAME"].include?("censial")
+        Censial Online | Connexion
+      - elsif request.env["SERVER_NAME"].include?("orial")
+        My Orial | Connexion
+      - else
+        Idocus | Connexion
+
     %meta{ :content => "text/html; charset=UTF-8", "http-equiv" => "Content-type" }
     %meta{ name: "viewport", content: "width=device-width, initial-scale=1" }
 
     %link{ :rel => 'shortcut icon', :type => "image/ico", :href => image_path('favicon.ico') }
-    = stylesheet_link_tag 'front/main'
+    - if request.env["SERVER_NAME"].include?("axelium")
+      = stylesheet_link_tag 'front/main_axelium'
+    - elsif request.env["SERVER_NAME"].include?("dkpartners")
+      = stylesheet_link_tag 'front/main_dk_partners'
+    - elsif request.env["SERVER_NAME"].include?("censial")
+      = stylesheet_link_tag 'front/main_censial'
+    - elsif request.env["SERVER_NAME"].include?("orial")
+      = stylesheet_link_tag 'front/main_orial'
+    - else
+      = stylesheet_link_tag 'front/main'
 
   .body_content
     .container-fluid.text-center.login
@@ -22,6 +41,11 @@
         %br
 
         = simple_form_for resource, url: unlock_path(resource_name) do |f|
-          = f.input :email, label: 'Votre adresse e-mail :'
-          .form-actions.padding0bottom
-            = f.submit 'Valider', class: 'btn btn-primary float-left'
+          .row.text-center
+            .col-md-12
+              .input-group.mb-3
+                %span.input-group-text#input-email= glyphicon('envelope-closed', { size: '14', color: 'background: rgba(26, 26, 26, 0.7)' })
+                = f.input :email, label: 'Votre adresse e-mail :'
+          .row.mt-3
+            .col-md-12.text-center
+              = f.submit 'Valider', class: 'btn btn-primary float-left'
