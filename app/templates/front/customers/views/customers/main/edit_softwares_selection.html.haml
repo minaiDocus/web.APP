@@ -73,6 +73,12 @@
                       %td
                         = hidden_field_tag :part, 'cegid'
                         = f.check_box :is_used, style: "position:unset"
+                  -if software.to_s == 'cegid_cfe' && @organization.try(:cegid_cfe).try(:used?)
+                    %tr
+                      %td Ce dossier utilise Cegid CFE ?
+                      %td
+                        = hidden_field_tag :part, 'cegid_cfe'
+                        = f.check_box :is_used, style: "position:unset"
                   - if software.to_s == 'fec_agiris' && @organization.try(:fec_agiris).try(:used?)
                     %tr
                       %td Ce dossier utilise Fec Agiris ?

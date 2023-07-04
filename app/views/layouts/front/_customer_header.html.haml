@@ -79,6 +79,12 @@
                         %span.float-start Sage GEC
                         - if @customer.uses?(:sage_gec)
                           = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'float-end' })
+                  - if software_uses('cegid_cfe')
+                    %li.clearfix
+                      %a.head_customer_link.semibold.nav-link.dropdown-item#cegid-cfe-tab{ href: organization_customer_softwares_path(@organization, @customer, software_name: 'cegid_cfe') }
+                        %span.float-start Cegid CFE
+                        - if @customer.uses?(:cegid_cfe)
+                          = glyphicon('check', { size: '15', color: 'rgba(26, 26, 26, 0.7);', class: 'float-end' })
                   - if @organization.try(:coala).try(:used?)  
                     %li.clearfix
                       %a.head_customer_link.semibold.nav-link.dropdown-item#coala-tab{ href: organization_customer_softwares_path(@organization, @customer, software_name: 'coala') }

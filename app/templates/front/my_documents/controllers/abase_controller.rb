@@ -245,7 +245,7 @@ class MyDocuments::AbaseController < FrontController #Must be loaded first that'
 
       if preseizures.any?
         preseizures.group_by(&:report_id).each do |_report_id, preseizures_by_report|
-          PreAssignment::CreateDelivery.new(preseizures_by_report, %w[ibiza exact_online my_unisoft sage_gec acd]).execute
+          PreAssignment::CreateDelivery.new(preseizures_by_report, %w[ibiza exact_online my_unisoft sage_gec acd cegid_cfe]).execute
         end
       end
 

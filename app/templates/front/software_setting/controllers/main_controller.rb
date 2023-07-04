@@ -64,6 +64,8 @@ class SoftwareSetting::MainController < OrganizationController
       result = SageGecLib::Setup.new({organization: @organization, columns: {is_used: is_used, auto_deliver: auto_deliver, sage_private_api_uuid: sage_private_api_uuid}}).execute
     elsif soft == 'acd'
       result = AcdLib::Setup.new({organization: @organization, columns: {username: username, password: password, url: url, is_used: is_used, auto_deliver: auto_deliver, code: code}}).execute
+    elsif soft == 'cegid_cfe'
+      result = CegidCfeLib::Setup.new({organization: @organization, columns: {is_used: is_used, auto_deliver: auto_deliver}}).execute
     else
       result = Software::UpdateOrCreate.assign_or_new({owner: @organization, columns: {is_used: is_used, auto_deliver: auto_deliver}, software: soft})
     end
@@ -78,6 +80,7 @@ class SoftwareSetting::MainController < OrganizationController
       { :coala_attributes => %i[id is_used auto_deliver] },
       { :ciel_attributes => %i[id is_used auto_deliver] },
       { :cegid_attributes => %i[id is_used auto_deliver] },
+      { :cegid_cfe_attributes => %i[id is_used auto_deliver] },
       { :fec_agiris_attributes => %i[id is_used auto_deliver] },
       { :fec_acd_attributes => %i[id is_used auto_deliver] },
       { :csv_descriptor_attributes => %i[id is_used auto_deliver] },

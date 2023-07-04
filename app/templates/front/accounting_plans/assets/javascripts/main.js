@@ -53,6 +53,11 @@ class AccountingPlan {
       software_table = 'sage_gec'
     }
 
+    if (software === 'Cegid CFE'){
+      software_table = 'cegid_cfe'
+    }
+
+
     return JSON.stringify({
       auto_updating_accounting_plan: auto_updating_accounting_plan,
       software: software,

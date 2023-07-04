@@ -147,6 +147,10 @@ PreAssignment::Builder::SageGecWorker:
   queue: default
   cron: '*/10 * * * * *'
 
+PreAssignment::Builder::CegidCfeWorker:
+  queue: default
+  cron: '0 22 * * *'
+
 PreAssignment::Delivery::IbizaWorker:
   queue: default
   cron: '*/10 * * * * *'
@@ -162,6 +166,10 @@ PreAssignment::Delivery::MyUnisoftWorker:
 PreAssignment::Delivery::SageGecWorker:
   queue: default
   cron: '*/10 * * * * *'
+
+PreAssignment::Builder::CegidCfeWorker:
+  queue: default
+  cron: '0 23 * * *'
 
 
 ## Daily data verifier worker

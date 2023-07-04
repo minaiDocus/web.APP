@@ -22,6 +22,7 @@ class Customer{
     this.show_exact_online_customer();
     this.show_my_unisoft_customer();
     this.show_sage_gec_customer();
+    this.show_cegid_cfe_customer();
 
     if ($('.packages_list').length > 0 ) { this.subscription_event(); }
     if ($('#journals select#copy-journals-into-customer').length > 0) { searchable_option_copy_journals_list(); }
@@ -254,6 +255,20 @@ class Customer{
       });
     }
   }
+
+  show_cegid_cfe_customer(){
+    if ($('#cegid-cfe-form').length > 0 ) {
+      $('.key-cegid-cfe').change(function() {        
+        if ($(this).val() != ''){
+          $('button[type=button].cegid_cfe_validation').removeAttr('disabled');
+        }
+        else{
+          $('button[type=button].cegid_cfe_validation').attr('disabled', true);
+        }
+      });
+    }
+  }
+
 
   show_acd_customer(){
     if ($('#acd-form').length > 0 ) {

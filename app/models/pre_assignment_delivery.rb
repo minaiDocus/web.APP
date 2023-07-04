@@ -10,13 +10,14 @@ class PreAssignmentDelivery < ApplicationRecord
 
   has_and_belongs_to_many :preseizures, class_name: 'Pack::Report::Preseizure'
 
-  validates_inclusion_of  :deliver_to, in: %w(ibiza exact_online my_unisoft sage_gec acd)
+  validates_inclusion_of  :deliver_to, in: %w(ibiza exact_online my_unisoft sage_gec acd cegid_cfe)
   validates_presence_of   :pack_name, :state
 
   scope :ibiza,         -> { where(deliver_to: 'ibiza') }
   scope :exact_online,  -> { where(deliver_to: 'exact_online') }
   scope :my_unisoft,    -> { where(deliver_to: 'my_unisoft') }
   scope :sage_gec,      -> { where(deliver_to: 'sage_gec') }
+  scope :cegid_cfe,     -> { where(deliver_to: 'cegid_cfe') }
   scope :acd,           -> { where(deliver_to: 'acd') }
   scope :auto,          -> { where(is_auto: true) }
   scope :sent,          -> { where(state: 'sent') }

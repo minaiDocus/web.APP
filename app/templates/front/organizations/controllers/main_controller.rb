@@ -56,6 +56,11 @@ class Organizations::MainController < OrganizationController
         auto_deliver    = organization_params['acd_attributes']['auto_deliver']
 
         result = AcdLib::Setup.new({organization: @organization, columns: {is_used: is_used, auto_deliver: auto_deliver}}).execute
+      when 'cegid_cfe'
+        is_used         = organization_params['cegid_cfe_attributes']['is_used'] == "1"
+        auto_deliver    = organization_params['cegid_cfe_attributes']['auto_deliver']
+
+        result = CegidCfeLib::Setup.new({organization: @organization, columns: {is_used: is_used, auto_deliver: auto_deliver}}).execute
       else
         is_used         = organization_params["#{params[:part]}_attributes"]['is_used'] == "1"
         auto_deliver    = organization_params["#{params[:part]}_attributes"]['auto_deliver']
@@ -185,6 +190,7 @@ class Organizations::MainController < OrganizationController
         { :csv_descriptor_attributes => %i[id is_used auto_deliver] },
         { :exact_online_attributes => %i[id is_used auto_deliver] },
         { :my_unisoft_attributes => %i[id is_used auto_deliver] },
+        { :cegid_cfe_attributes => %i[id is_used auto_deliver] },
         { :sage_gec_attributes => %i[id is_used auto_deliver] },
         { :acd_attributes => %i[id is_used auto_deliver] }
       )
@@ -213,6 +219,7 @@ class Organizations::MainController < OrganizationController
         { :csv_descriptor_attributes => %i[id is_used auto_deliver] },
         { :exact_online_attributes => %i[id is_used auto_deliver] },
         { :my_unisoft_attributes => %i[id is_used auto_deliver] },
+        { :cegid_cfe_attributes => %i[id is_used auto_deliver] },
         { :sage_gec_attributes => %i[id is_used auto_deliver] },
         { :acd_attributes => %i[id is_used auto_deliver] }
       )

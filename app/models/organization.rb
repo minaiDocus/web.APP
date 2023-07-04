@@ -65,6 +65,7 @@ class Organization < ApplicationRecord
   accepts_nested_attributes_for :fec_acd
   accepts_nested_attributes_for :fec_agiris
   accepts_nested_attributes_for :cegid
+  accepts_nested_attributes_for :cegid_cfe
   accepts_nested_attributes_for :exact_online
   accepts_nested_attributes_for :my_unisoft
   accepts_nested_attributes_for :csv_descriptor

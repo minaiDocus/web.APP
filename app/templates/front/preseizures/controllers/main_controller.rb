@@ -46,7 +46,7 @@ class Preseizures::MainController < OrganizationController
   end
 
   def deliver
-    PreAssignment::CreateDelivery.new(@preseizure, %w[ibiza exact_online my_unisoft sage_gec acd]).execute
+    PreAssignment::CreateDelivery.new(@preseizure, %w[ibiza exact_online my_unisoft sage_gec acd cegid_cfe]).execute
 
     respond_to do |format|
       format.json { render json: { status: :ok } }

@@ -1327,6 +1327,11 @@ fr:
           is_used: Utilise Sage GEC ?
           auto_deliver: Livrer automatiquement les écritures ?
           sage_private_api_uuid: Clé API privée Sage GEC
+      software_cegid_cfe:
+        attributes: 
+          is_used: Utilise Cegid CFE ?
+          auto_deliver: Livrer automatiquement les écritures ?
+          cegid_identifier: Code dossier CEGID
       software_coala:
         attributes:
           is_used: Activer l'option d'export des écritures comptables et pièces pour Coala (.zip)?

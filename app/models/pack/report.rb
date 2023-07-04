@@ -99,9 +99,10 @@ class Pack::Report < ApplicationRecord
             message_my_unisoft    = preseizures.first.get_delivery_message_of('my_unisoft')
             message_sage_gec      = preseizures.first.get_delivery_message_of('sage_gec')
             message_acd           = preseizures.first.get_delivery_message_of('acd')
+            message_cegid_cfe     = preseizures.first.get_delivery_message_of('cegid_cfe')
 
             if message_ibiza.present? && message_exact_online.present? && message_my_unisoft.present?
-              full_message = "-iBiza : #{message_ibiza} <br> -ExactOnline : #{message_exact_online} <br> -MyUnisoft : #{message_my_unisoft} <br> -Sage GEC : #{message_sage_gec} <br> -ACD : #{message_acd}"
+              full_message = "-iBiza : #{message_ibiza} <br> -ExactOnline : #{message_exact_online} <br> -MyUnisoft : #{message_my_unisoft} <br> -Sage GEC : #{message_sage_gec} <br> -ACD : #{message_acd} <br> -Cegid CFE : #{message_cegid_cfe}"
             else
               full_message = message_ibiza.presence || message_exact_online.presence || message_my_unisoft.presence || message_sage_gec.presence || message_acd.presence
             end

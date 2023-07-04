@@ -276,6 +276,50 @@
                 - modal_params = param_encode({ url: edit_acd_organization_customer_path(@organization, @customer), title: modal_title, after_show: 'bind_api_user_events', target: '#customer.edit.acd' , style: 'min-width: 1024px;'})
                 %button.btn.btn-light.w-25.semibold.as_idocus_modal.semibold{ idocus: modal_params  } Éditer
 
+  - if @customer.organization.try(:cegid_cfe).try(:used?) && params[:software_name] == 'cegid_cfe'
+    #my-unisoft{ class: ('active' if params[:tab] == 'cegid_cfe'), "role" => "tabpanel", "aria-labelledby" => "cegid-cfe-tab" }
+      .derivationLeft.box.no-margin
+        %h5.semibold Activation Cegid CFE
+        = simple_form_for @customer, url: customer_form_url(@organization, @customer), html: { id: 'form_cegid_cfe', class: 'form form-horizontal label-auto' } do |c|
+          = hidden_field_tag :part, 'cegid_cfe'
+          = c.simple_fields_for :cegid_cfe do |f|
+            .form-group
+              .row
+                .col-md-11
+                  = label_tag 'user[cegid_cfe_attributes][is_used]', "Ce dossier utilise Cegid CFE ?", class: 'control-label semibold'
+                .col-md-1.form-check.form-switch
+                  = f.input :is_used, as: :boolean, label: false, input_html: { class: 'form-check-input input_switch input_check_field check-software', id: 'user_cegid_cfe_attributes_is_used' }
+                  %label.semibold{class: 'form-check-label label_check_field', for: 'user_cegid_cfe_attributes_is_used'} Non
+          
+            %hr
+            .form-group.no-margin
+              .w-100.text-end
+                = f.submit t('actions.submit'), class: 'btn btn-primary w-25'
+      - if @customer.uses?(:cegid_cfe)
+        %hr
+        .derivationRight.box.no-margin.cegid_cfe_configuration  
+          %h5.semibold Configuration Cegid CFE         
+          - if @customer.cegid_cfe&.cegid_identifier.present?
+            %table.table.table-striped.table-condensed
+              %tbody
+                %tr
+                  %th Etat
+                  %td{colspan: 2, width: '17%'}
+                    .badge.badge-success.fs-origin Connecté                
+                %tr
+                  %th Identifiant Dossier
+                  %td{colspan: 2}= @customer.cegid_cfe.cegid_identifier
+          - else
+            %label.badge.bg-warning.bold.mt-3 Ce dossier n'est pas lié à celui de CEGID
+
+          %hr
+          .form-group.no-margin
+            .w-100.text-end
+              - if @organization.cegid_cfe.try(:configured?)
+                - modal_title = @customer.configured? ? "Édition des options Cegid CFE du client : #{@customer}" : "Configuration de Cegid CFE pour le dossier : #{@customer}"
+                - modal_params = param_encode({ url: edit_cegid_cfe_organization_customer_path(@organization, @customer), title: modal_title, after_show: 'bind_api_user_events', target: '#customer.edit.cegid_cfe' , style: 'min-width: 1024px;'})
+                %button.btn.btn-light.w-25.semibold.as_idocus_modal.semibold{ idocus: modal_params  } Éditer
+
   - if @organization.try(:coala).try(:used?) && params[:software_name] == 'coala'
     .box.no-margin#coala{ class: ('active' if params[:tab] == 'coala'), "role" => "tabpanel", "aria-labelledby" => "coala-tab" }
       .derivationLeft

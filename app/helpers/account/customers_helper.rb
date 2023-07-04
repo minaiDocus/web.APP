@@ -4,15 +4,17 @@ module Account::CustomersHelper
   def software_uses(software_name)
     case software_name
     when 'ibiza'
-      @organization.try(:ibiza).try(:used?) && !@customer.uses?(:exact_online) && !@customer.uses?(:my_unisoft) && !@customer.uses?(:sage_gec) && !@customer.uses?(:acd)
+      @organization.try(:ibiza).try(:used?) && !@customer.uses?(:exact_online) && !@customer.uses?(:my_unisoft) && !@customer.uses?(:sage_gec) && !@customer.uses?(:acd) && !@customer.uses?(:cegid_cfe)
     when 'exact_online'
-      @organization.try(:exact_online).try(:used?) && !@customer.uses?(:ibiza) && !@customer.uses?(:my_unisoft) && !@customer.uses?(:sage_gec) && !@customer.uses?(:acd)
+      @organization.try(:exact_online).try(:used?) && !@customer.uses?(:ibiza) && !@customer.uses?(:my_unisoft) && !@customer.uses?(:sage_gec) && !@customer.uses?(:acd) && !@customer.uses?(:cegid_cfe)
     when 'my_unisoft'
-      @organization.try(:my_unisoft).try(:used?) && !@customer.uses?(:ibiza) && !@customer.uses?(:exact_online) && !@customer.uses?(:sage_gec) && !@customer.uses?(:acd)
+      @organization.try(:my_unisoft).try(:used?) && !@customer.uses?(:ibiza) && !@customer.uses?(:exact_online) && !@customer.uses?(:sage_gec) && !@customer.uses?(:acd) && !@customer.uses?(:cegid_cfe)
     when 'sage_gec'
-      @organization.try(:sage_gec).try(:used?) && !@customer.uses?(:ibiza) && !@customer.uses?(:exact_online) && !@customer.uses?(:my_unisoft) && !@customer.uses?(:acd)
+      @organization.try(:sage_gec).try(:used?) && !@customer.uses?(:ibiza) && !@customer.uses?(:exact_online) && !@customer.uses?(:my_unisoft) && !@customer.uses?(:acd) && !@customer.uses?(:cegid_cfe)
+    when 'cegid_cfe'
+      @organization.try(:cegid_cfe).try(:used?) && !@customer.uses?(:ibiza) && !@customer.uses?(:exact_online) && !@customer.uses?(:my_unisoft) && !@customer.uses?(:acd) && !@customer.uses?(:sage_gec)
     when 'acd'
-      @organization.try(:acd).try(:used?) && !@customer.uses?(:ibiza) && !@customer.uses?(:exact_online) && !@customer.uses?(:my_unisoft) && !@customer.uses?(:sage_gec)
+      @organization.try(:acd).try(:used?) && !@customer.uses?(:ibiza) && !@customer.uses?(:exact_online) && !@customer.uses?(:my_unisoft) && !@customer.uses?(:sage_gec) && !@customer.uses?(:cegid_cfe)
     end
   end
 

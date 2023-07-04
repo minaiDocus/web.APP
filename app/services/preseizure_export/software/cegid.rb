@@ -7,6 +7,7 @@ class PreseizureExport::Software::Cegid
   end
 
   def execute
+    @timestamp = Time.now.to_i
     @base_name = @preseizures.first.report.name.tr(' ', '_').tr('%', '_')
     file_path  = ''
 
@@ -14,7 +15,11 @@ class PreseizureExport::Software::Cegid
       @dir      = dir
       PreseizureExport::Software::Cegid.delay_for(6.hours, queue: :high).remove_temp_dir(@dir)
 
-      file_path = @software_type == 'csv_cegid' ? cegid : cegid_tra
+      file_path = case @software_type
+                  when 'csv_cegid' then cegid
+                  when 'cegid' then cegid_tra
+                  when 'cegid_cfe' then cegid_tra_cfe
+                  end
     end
 
      file_path
@@ -52,6 +57,32 @@ class PreseizureExport::Software::Cegid
     end
 
     file_path = File.join(@dir, @base_name + '.zip')
+
+    Dir.chdir @dir
+
+    # Finaly zip the temp @dir
+    POSIX::Spawn.system "zip #{file_path} *"
+
+    file_path
+  end
+
+  def cegid_tra_cfe
+    software = @preseizures.first.user.cegid_cfe
+    base_name = "#{software.cegid_identifier}_#{@timestamp}"
+
+    data = PreseizureExport::PreseizureToTxt.new(@preseizures).execute("cegid_tra_cfe")
+
+    File.open("#{@dir}/#{base_name}.tra", 'w') do |f|
+      f.write(data)
+    end
+
+    # Copy pieces to temp directory
+    @preseizures.each do |preseizure|
+      @piece = preseizure.piece
+      FileUtils.cp @piece.cloud_content_object.path, File.join(@dir, preseizure.piece.name.tr(' ', '_').tr('%', '_') + '.pdf') if preseizure.piece
+    end
+
+    file_path = File.join(@dir, base_name + '.zip')
 
     Dir.chdir @dir
 

@@ -1,0 +1,37 @@
+#customer.edit.cegid_cfe.derivationRight
+  %input{ type: :hidden, id: "organization_id", value: "#{@organization.id}"}
+  %input{ type: :hidden, id: "customer_id", value: "#{@customer.id}"}
+  %h6.semibold Liaison avec Cegid CFE
+  .mb-4
+  = simple_form_for @customer, url: update_cegid_cfe_organization_customer_path(@organization, @customer), html: { class:  'form-horizontal label-medium', id: 'cegid-cfe-form' } do |f|
+    .accept_cegid_cfe{ class: ('hide' unless @customer.try(:cegid_cfe).try(:used?)) }  
+    = f.simple_fields_for :cegid_cfe do |m|
+      .select-container.no-padding.w-100
+        .form-group
+          .label-section
+            = label_tag 'user[cegid_cfe_attributes][cegid_identifier]', 'Veuillez saisir le code de votre dossier CEGID'
+          .control-section
+            = text_field_tag 'user[cegid_cfe_attributes][cegid_identifier]'
+      .form-group.mt-2
+        - auto_deliver = @customer.try(:cegid_cfe).try(:auto_deliver) || -1
+        .row
+          .col-md-4
+            = label_tag 'user[cegid_cfe_attributes][auto_deliver]', t('activerecord.models.software_cegid_cfe.attributes.auto_deliver'), class: 'semibold'
+          .col-md-4
+            .form-check.form-check-inline               
+              = radio_button_tag 'user[cegid_cfe_attributes][auto_deliver]', auto_deliver_options[0][1], auto_deliver == -1, class: 'form-check-input'
+              %label.form-check-label Paramètres du cabinet
+          .col-md-2
+            .form-check.form-check-inline
+              = radio_button_tag 'user[cegid_cfe_attributes][auto_deliver]', auto_deliver_options[1][1], auto_deliver == 0, class: 'form-check-input compta-user-options'
+              %label.form-check-label Non
+          .col-md-2
+            .form-check.form-check-inline
+              = radio_button_tag 'user[cegid_cfe_attributes][auto_deliver]', auto_deliver_options[2][1], auto_deliver == 1, class: 'form-check-input compta-user-options'
+              %label.form-check-label Oui
+      %input#auto_deliver_customer{ type: :hidden, name: "auto_deliver_customer", value: "#{@customer.try(:cegid_cfe).try(:auto_deliver?)}"}
+
+  .idocus_modal_buttons
+    - if @customer.configured?
+      - idocus_params = param_encode({ url: update_cegid_cfe_organization_customer_path(@organization, @customer), method: 'post', form:{ id: 'cegid-cfe-form', dump_action: true }, modal: { id: '#' }, redirect_to: { url: organization_customer_path(@organization, @customer, tab: 'cegid_cfe'), html: { target: '.cegid_cfe_configuration' } } })
+      %button.btn.btn-primary.cegid_cfe_validation.as_idocus_ajax{ type: :button, idocus: idocus_params } Valider

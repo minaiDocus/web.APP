@@ -13,7 +13,7 @@ class Documents::PiecesController < Documents::AbaseController
   def index
     redirect_to documents_reloaded_path if !@user.pre_assignement_displayed? && CustomUtils.use_final_documents?(@user)
 
-    @packs = Pack.includes(pieces: [:expense], owner: [:organization, :ibiza, :exact_online, :my_unisoft, :sage_gec, :acd]).search(@options[:text], @options.reject{ |k,v| k == :ids}).distinct.order(updated_at: :desc).page(@options[:page]).per(@options[:per_page])
+    @packs = Pack.includes(pieces: [:expense], owner: [:organization, :ibiza, :exact_online, :my_unisoft, :sage_gec, :acd, :cegid_cfe]).search(@options[:text], @options.reject{ |k,v| k == :ids}).distinct.order(updated_at: :desc).page(@options[:page]).per(@options[:per_page])
     @packs_with_failed_delivery_ids = packs_with_failed_delivery
 
     @period_service = Billing::Period.new user: @user

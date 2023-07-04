@@ -125,6 +125,7 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :fec_agiris
   accepts_nested_attributes_for :fec_acd
   accepts_nested_attributes_for :cegid
+  accepts_nested_attributes_for :cegid_cfe
   accepts_nested_attributes_for :exact_online
   accepts_nested_attributes_for :my_unisoft
   accepts_nested_attributes_for :sage_gec
@@ -157,15 +158,17 @@ class User < ApplicationRecord
 
       case software
         when 'ibiza'
-          skip_user = user.uses?(:exact_online) || user.uses?(:my_unisoft) || user.uses?(:sage_gec) || user.uses?(:acd)
+          skip_user = user.uses?(:exact_online) || user.uses?(:my_unisoft) || user.uses?(:sage_gec) || user.uses?(:acd) || user.uses?(:cegid_cfe)
         when 'exact_online'
-          skip_user = user.uses?(:ibiza) || user.uses?(:my_unisoft) || user.uses?(:sage_gec) || user.uses?(:acd)
+          skip_user = user.uses?(:ibiza) || user.uses?(:my_unisoft) || user.uses?(:sage_gec) || user.uses?(:acd) || user.uses?(:cegid_cfe)
+        when 'cegid_cfe'
+          skip_user = user.uses?(:ibiza) || user.uses?(:my_unisoft) || user.uses?(:sage_gec) || user.uses?(:acd) || user.uses?(:my_unisoft)
         when 'my_unisoft'
-          skip_user = user.uses?(:ibiza) || user.uses?(:exact_online) || user.uses?(:sage_gec) || user.uses?(:acd)
+          skip_user = user.uses?(:ibiza) || user.uses?(:exact_online) || user.uses?(:sage_gec) || user.uses?(:acd) || user.uses?(:cegid_cfe)
         when 'sage_gec'
-          skip_user = user.uses?(:ibiza) || user.uses?(:exact_online) || user.uses?(:my_unisoft) || user.uses?(:acd)
+          skip_user = user.uses?(:ibiza) || user.uses?(:exact_online) || user.uses?(:my_unisoft) || user.uses?(:acd) || user.uses?(:cegid_cfe)
         when 'acd'
-          skip_user = user.uses?(:ibiza) || user.uses?(:exact_online) || user.uses?(:my_unisoft) || user.uses?(:sage_gec)
+          skip_user = user.uses?(:ibiza) || user.uses?(:exact_online) || user.uses?(:my_unisoft) || user.uses?(:sage_gec) || user.uses?(:cegid_cfe)
         else
           skip_user = false
       end

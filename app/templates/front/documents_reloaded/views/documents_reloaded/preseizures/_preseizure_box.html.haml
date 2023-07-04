@@ -48,7 +48,10 @@
     - delivery = preseizure.pre_assignment_deliveries.where(state: 'sent').first
     - delivery = preseizure.pre_assignment_deliveries.where(state: 'error').last if not delivery
     - if delivery
-      - label_delivery = delivery.deliver_to == "sage_gec" ? 'Sage' : 'iBiza'
+      - label_delivery = case delivery.deliver_to
+      -                  when "sage_gec" then 'Sage' 
+      -                  when 'ibiza' then 'iBiza'
+      -                  when 'cegid_cfe' then 'Cegid CFE'
       %span Dernier envoi
       %span= label_delivery
       %span.semibold= delivery.try(:updated_at).strftime("%d/%m/%Y")

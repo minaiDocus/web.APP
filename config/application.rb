@@ -41,6 +41,7 @@ module Idocus
     Dir.glob("#{Rails.root}/lib/exact_online_lib/*.{rb}").each { |file| require file }
     Dir.glob("#{Rails.root}/lib/mcf_lib/api/*.{rb}").each { |file| require file }
     Dir.glob("#{Rails.root}/lib/mcf_lib/*.{rb}").each { |file| require file }
+    Dir.glob("#{Rails.root}/lib/cegid_cfe_lib/*.{rb}").each { |file| require file }
 
     Dir[Rails.root.join("app/templates/front/*/config.rb")].each do |f|
      require f

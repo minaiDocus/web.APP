@@ -19,7 +19,7 @@ class PreAssignment::Builder::DataService
 
   def execute; end
 
-  def save_data_to_storage(data_built, extension)
+  def save_data_to_storage(data_built, extension, keep_original_name=false)
     if data_built.present?
       CustomUtils.mktmpdir('preseizure_builder') do |dir|
         file_name = @delivery.pack_name.tr('% ', '_')
@@ -28,8 +28,11 @@ class PreAssignment::Builder::DataService
         File.open file_path, 'w' do |f|
           f.write(data_built.to_s)
         end
-
-        @delivery.cloud_content_object.attach(File.open(file_path), "#{file_name}_#{@delivery.id}.#{extension}") if @delivery.save
+        if keep_original_name
+          @delivery.cloud_content_object.attach(File.open(file_path), File.basename(data_built)) if @delivery.save
+        else
+          @delivery.cloud_content_object.attach(File.open(file_path), "#{file_name}_#{@delivery.id}.#{extension}") if @delivery.save
+        end
       end
     end
   end

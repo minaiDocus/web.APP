@@ -1,17 +1,18 @@
 module Interfaces::Software::Configuration
   #SOFTWARES = ['acd', 'ibiza', 'exact_online', 'my_unisoft', 'coala', 'sage_gec', 'quadratus', 'cegid', 'fec_agiris', 'fec_acd', 'csv_descriptor', 'cogilog', 'ciel']
-  API_SOFTWARES = ['ibiza', 'exact_online', 'my_unisoft', 'sage_gec', 'acd']
+  API_SOFTWARES = ['ibiza', 'exact_online', 'my_unisoft', 'sage_gec', 'acd', 'cegid_cfe']
   NON_API_SOFTWARES = ['coala', 'quadratus', 'cegid', 'fec_agiris', 'fec_acd', 'csv_descriptor', 'cogilog', 'ciel']
   SOFTWARES = API_SOFTWARES + NON_API_SOFTWARES
-  SOFTWARES_HUMAN_NAME = { acd: 'ACD', ibiza: 'iBiza', exact_online: 'Exact Online', my_unisoft: 'My Unisoft', coala: 'Coala', sage_gec: 'Sage GEC - Privé', quadratus: 'Quadratus', cegid: 'Cegid', fec_agiris: 'Agiris', fec_acd: 'FEC ACD', csv_descriptor: 'CSV', cogilog: 'Cogilog', ciel: 'Ciel' }
-  TABLE_NAME_WITH_SOFTWARES_USING_API = ['software_ibizas', 'software_exact_online', 'software_my_unisofts', 'software_sage_gec', 'software_acd']
-  SOFTWARES_OBJECTS = [::Software::Ibiza, ::Software::ExactOnline, ::Software::Cegid, ::Software::Coala, ::Software::SageGec, ::Software::FecAgiris, ::Software::FecAcd, ::Software::Quadratus, ::Software::CsvDescriptor, ::Software::MyUnisoft, ::Software::Cogilog, ::Software::Ciel]
+  SOFTWARES_HUMAN_NAME = { acd: 'ACD', ibiza: 'iBiza', exact_online: 'Exact Online', my_unisoft: 'My Unisoft', coala: 'Coala', sage_gec: 'Sage GEC - Privé', quadratus: 'Quadratus', cegid: 'Cegid', cegid_cfe: 'Cegid CFE', fec_agiris: 'Agiris', fec_acd: 'FEC ACD', csv_descriptor: 'CSV', cogilog: 'Cogilog', ciel: 'Ciel' }
+  TABLE_NAME_WITH_SOFTWARES_USING_API = ['software_ibizas', 'software_exact_online', 'software_my_unisofts', 'software_sage_gec', 'software_acd', 'software_cegid_cfe']
+  SOFTWARES_OBJECTS = [::Software::Ibiza, ::Software::ExactOnline, ::Software::Cegid, ::Software::CegidCfe, ::Software::Coala, ::Software::SageGec, ::Software::FecAgiris, ::Software::FecAcd, ::Software::Quadratus, ::Software::CsvDescriptor, ::Software::MyUnisoft, ::Software::Cogilog, ::Software::Ciel]
 
   def self.softwares
     {
       ibiza:          Software::Ibiza,
       exact_online:   Software::ExactOnline,
       cegid:          Software::Cegid,
+      cegidCfe:       Software::CegidCfe,
       coala:          Software::Coala,
       sage_gec:       Software::SageGec,
       fec_agiris:     Software::FecAgiris,
@@ -34,6 +35,7 @@ module Interfaces::Software::Configuration
       sage_gec:       'sage_gec',
       quadratus:      'quadratus',
       cegid:          'cegid',
+      cegid_cfe:      'cegid_cfe',
       fec_agiris:     'fec_agiris',
       acd:            'acd',
       fec_acd:        'fec_acd',
@@ -52,6 +54,7 @@ module Interfaces::Software::Configuration
       sage_gec:       "Sage GEC - Privé",
       quadratus:      "Quadratus",
       cegid:          "Cegid",
+      cegid_cfe:      "Cegid CFE",
       fec_agiris:     "Fec Agiris",
       acd:            'acd',
       fec_acd:        "Fec ACD",
@@ -70,6 +73,7 @@ module Interfaces::Software::Configuration
       sage_gec:       'software_sage_gec',
       quadratus:      'software_quadratus',
       cegid:          'software_cegids',
+      cegid_cfe:      'software_cegid_cves',
       fec_agiris:     'software_fec_agiris',
       acd:            'software_acd',
       fec_acd:        'software_fec_acds',
@@ -84,6 +88,7 @@ module Interfaces::Software::Configuration
       'Software::Ibiza'         => 'ibiza',
       'Software::ExactOnline'   => 'exact_online',
       'Software::Cegid'         => 'cegid',
+      'Software::CegidCfe'      => 'cegid_cfe',
       'Software::Coala'         => 'coala',
       'Software::SageGec'       => 'sage_gec',
       'Software::FecAgiris'     => 'fec_agiris',

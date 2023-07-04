@@ -10,6 +10,7 @@ module OwnedSoftwares
     has_one :fec_agiris, as: :owner, dependent: :destroy, class_name: 'Software::FecAgiris'
     has_one :fec_acd, as: :owner, dependent: :destroy, class_name: 'Software::FecAcd'
     has_one :cegid, as: :owner, dependent: :destroy, class_name: 'Software::Cegid'
+    has_one :cegid_cfe, as: :owner, dependent: :destroy, class_name: 'Software::CegidCfe'
     has_one :csv_descriptor, as: :owner, autosave: true, dependent: :destroy, class_name: 'Software::CsvDescriptor'
     has_one :my_unisoft, as: :owner, dependent: :destroy, class_name: 'Software::MyUnisoft'
     has_one :sage_gec, as: :owner, dependent: :destroy, class_name: 'Software::SageGec'

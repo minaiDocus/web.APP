@@ -55,6 +55,17 @@ class PreAssignment::CreateDelivery
     ) && !@preseizures.select(&:is_locked).first
   end
 
+  def valid_cegid_cfe?
+    @preseizures.any? && @report.try(:organization).try(:cegid_cfe).try(:used?) &&
+    (
+      !@is_auto ||
+      (@report.user.cegid_cfe.try(:auto_deliver?) ||
+        (@report.user.cegid_cfe.try(:auto_deliver) == -1 && @report.user.organization.cegid_cfe.try(:auto_deliver?)
+        )
+      )
+    ) && !@preseizures.select(&:is_locked).first
+  end
+
   def valid_acd?
     @preseizures.any? && @report.try(:organization).try(:acd).try(:used?) &&
     (
@@ -70,10 +81,11 @@ class PreAssignment::CreateDelivery
     ibiza_deliveries        = @deliver_to.include?('ibiza') ? deliver_to_ibiza : []
     exact_online_deliveries = @deliver_to.include?('exact_online') ? deliver_to_exact_online : []
     my_unisoft_deliveries   = @deliver_to.include?('my_unisoft') ? deliver_to_my_unisoft : []
-    sage_gec_deliveries   = @deliver_to.include?('sage_gec') ? deliver_to_sage_gec : []
+    sage_gec_deliveries     = @deliver_to.include?('sage_gec') ? deliver_to_sage_gec : []
+    cegid_cfe_deliveries    = @deliver_to.include?('cegid_cfe') ? deliver_to_cegid_cfe : []
     acd_deliveries   = @deliver_to.include?('acd') ? deliver_to_acd : []
 
-    @deliveries = ibiza_deliveries + exact_online_deliveries + my_unisoft_deliveries + sage_gec_deliveries + acd_deliveries
+    @deliveries = ibiza_deliveries + exact_online_deliveries + my_unisoft_deliveries + cegid_cfe_deliveries + acd_deliveries
     @report.update_attribute(:is_locked, (@report.preseizures.reload.not_deleted.not_locked.count == 0)) if @preseizures.any?
 
     if @deliveries.any?
@@ -192,6 +204,45 @@ class PreAssignment::CreateDelivery
         delivery.organization = @report.organization
         delivery.pack_name    = @report.name
         delivery.software_id  = @report.user.my_unisoft.try(:society_id)
+        delivery.is_auto      = @is_auto
+        delivery.grouped_date = date
+        delivery.total_item   = preseizures.size
+        delivery.preseizures  = preseizures
+
+        if delivery.save
+          preseizures.first.save if preseizures.size == 1
+
+          deliveries << delivery
+        end
+      end
+
+      deliveries
+    else
+      []
+    end
+  end
+
+  def deliver_to_cegid_cfe
+    if valid_cegid_cfe?      
+      deliveries = []
+
+      @to_deliver_preseizures = @preseizures
+
+      return [] if @to_deliver_preseizures.empty?
+
+      ids                   = @to_deliver_preseizures.map(&:id)
+      already_delivered_ids = @preseizures.map(&:id) - ids
+
+      Pack::Report::Preseizure.where(id: ids).update_all(is_locked: true)
+      Pack::Report::Preseizure.where(id: already_delivered_ids).each { |p| p.delivered_to('cegid_cfe') } if already_delivered_ids.any?
+
+      group_preseizures.each do |(date, channel), preseizures|
+        delivery              = PreAssignmentDelivery.new
+        delivery.report       = @report
+        delivery.deliver_to   = 'cegid_cfe'
+        delivery.user         = @report.user
+        delivery.organization = @report.organization
+        delivery.pack_name    = @report.name
         delivery.is_auto      = @is_auto
         delivery.grouped_date = date
         delivery.total_item   = preseizures.size
