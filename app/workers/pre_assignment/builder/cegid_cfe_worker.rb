@@ -5,7 +5,7 @@ class PreAssignment::Builder::CegidCfeWorker
   def perform
     UniqueJobs.for 'PreAssignmentBuilderCegidCfeWorker' do
       PreAssignmentDelivery.cegid_cfe.pending.order(id: :asc).limit(200).each do |delivery|
-        PreAssignment::Builder::CegidCfe::Launcher.delay(queue: :high).process(delivery.id)
+        PreAssignment::Builder::CegidCfeWorker::Launcher.delay(queue: :high).process(delivery.id)
       end
     end
   end
