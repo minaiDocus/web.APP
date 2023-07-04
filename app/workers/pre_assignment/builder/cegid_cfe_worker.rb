@@ -1,4 +1,4 @@
-class PreAssignment::Builder::CegidCfe
+class PreAssignment::Builder::CegidCfeWorker
   include Sidekiq::Worker
   sidekiq_options unique: :until_and_while_executing
 

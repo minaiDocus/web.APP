@@ -26,7 +26,7 @@ module CegidCfeLib
 
     def data_content
       begin
-        PreseizureExport::Software::Cegid.new(preseizures, 'tra_cegid_cfe').execute
+        PreseizureExport::Software::Cegid.new(@preseizures, 'cegid_cfe').execute
       rescue => e
         @error_messages << e
       end
