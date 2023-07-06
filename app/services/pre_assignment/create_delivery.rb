@@ -32,8 +32,6 @@ class PreAssignment::CreateDelivery
   end
 
   def valid_my_unisoft?
-    return false #Disable My Unisoft sending for now
-
     @preseizures.any? && @report.try(:organization).try(:my_unisoft).try(:used?) &&
     (
       !@is_auto ||
