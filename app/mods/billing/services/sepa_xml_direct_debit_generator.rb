@@ -9,7 +9,7 @@ class BillingMod::SepaXmlDirectDebitGenerator
       name:       'iDocus SAS',
       bic:        'CRLYFRPPXXX',
       iban:       'FR5630002022380000070756S92',
-      creditor_identifier: 'FR45ZZZ590221'
+      creditor_identifier: 'FR12ZZZ660752'
     )
 
     @sdd.message_identification = "PRLVIDO#{Time.now.to_i}"
