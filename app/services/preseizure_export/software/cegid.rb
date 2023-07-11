@@ -1,4 +1,5 @@
 # -*- encoding : UTF-8 -*-
+
 class PreseizureExport::Software::Cegid
   def initialize(preseizures, software_type, user=nil)
     @preseizures   = preseizures
@@ -17,12 +18,12 @@ class PreseizureExport::Software::Cegid
 
       file_path = case @software_type
                   when 'csv_cegid' then cegid
-                  when 'cegid' then cegid_tra
+                  when 'tra_cegid' then cegid_tra
                   when 'cegid_cfe' then cegid_tra_cfe
                   end
     end
 
-     file_path
+    file_path
   end
 
   class << self

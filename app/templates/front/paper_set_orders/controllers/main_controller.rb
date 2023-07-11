@@ -75,7 +75,8 @@ class PaperSetOrders::MainController < OrganizationController
   end
 
   def select_for_orders
-    @customers = customers.active.joins(:subscription).where('period_duration != 3').where('current_packages LIKE ? or current_packages LIKE ?', '%mail_option%', '%ido_annual%')
+    user_ids   = BillingMod::Package.of_period(CustomUtils.period_of(Time.now)).where("mail_active = true").where(user_id: customers.active.collect(&:id)).pluck(:user_id)
+    @customers = User.where(id: user_ids)
   end
 
   def order_multiple
