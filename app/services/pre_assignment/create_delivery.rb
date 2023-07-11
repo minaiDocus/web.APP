@@ -234,7 +234,7 @@ class PreAssignment::CreateDelivery
       Pack::Report::Preseizure.where(id: ids).update_all(is_locked: true)
       Pack::Report::Preseizure.where(id: already_delivered_ids).each { |p| p.delivered_to('cegid_cfe') } if already_delivered_ids.any?
 
-      group_preseizures.each do |(date, channel), preseizures|
+      @to_deliver_preseizures .each do |preseizures|
         delivery              = PreAssignmentDelivery.new
         delivery.report       = @report
         delivery.deliver_to   = 'cegid_cfe'
@@ -242,7 +242,6 @@ class PreAssignment::CreateDelivery
         delivery.organization = @report.organization
         delivery.pack_name    = @report.name
         delivery.is_auto      = @is_auto
-        delivery.grouped_date = date
         delivery.total_item   = preseizures.size
         delivery.preseizures  = preseizures
 
