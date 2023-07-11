@@ -234,22 +234,18 @@ class PreAssignment::CreateDelivery
       Pack::Report::Preseizure.where(id: ids).update_all(is_locked: true)
       Pack::Report::Preseizure.where(id: already_delivered_ids).each { |p| p.delivered_to('cegid_cfe') } if already_delivered_ids.any?
 
-      @to_deliver_preseizures.each do |preseizures|
-        delivery              = PreAssignmentDelivery.new
-        delivery.report       = @report
-        delivery.deliver_to   = 'cegid_cfe'
-        delivery.user         = @report.user
-        delivery.organization = @report.organization
-        delivery.pack_name    = @report.name
-        delivery.is_auto      = @is_auto
-        delivery.total_item   = preseizures.size
-        delivery.preseizures  = preseizures
+      delivery              = PreAssignmentDelivery.new
+      delivery.report       = @report
+      delivery.deliver_to   = 'cegid_cfe'
+      delivery.user         = @report.user
+      delivery.organization = @report.organization
+      delivery.pack_name    = @report.name
+      delivery.is_auto      = @is_auto
+      delivery.total_item   =  @to_deliver_preseizures.size
+      delivery.preseizures  =  @to_deliver_preseizures
 
-        if delivery.save
-          preseizures.first.save if preseizures.size == 1
-
-          deliveries << delivery
-        end
+      if delivery.save
+        deliveries << delivery
       end
 
       deliveries
