@@ -191,7 +191,7 @@ class Admin::Supports::MainController < BackController
 
     if preseizures.any?
       preseizures.group_by(&:report_id).each do |_report_id, preseizures_by_report|
-        PreAssignment::CreateDelivery.new(preseizures_by_report, %w[ibiza exact_online my_unisoft sage_gec acd cegid_cfe], {force: true}).execute
+        PreAssignment::CreateDelivery.new(preseizures_by_report, %w[ibiza exact_online my_unisoft sage_gec acd], {force: true}).execute
       end
     end
 
