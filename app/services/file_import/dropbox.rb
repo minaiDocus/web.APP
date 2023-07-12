@@ -29,8 +29,8 @@ class FileImport::Dropbox
           new(dropbox).check
         rescue DropboxApi::Errors::HttpError => e
           if e.message.match(/invalid_access_token/)
-            dropbox.reset_access_token
-            Notifications::Dropbox.new({ user: dropbox.user }).notify_dropbox_invalid_access_token
+            # dropbox.reset_access_token
+            # Notifications::Dropbox.new({ user: dropbox.user }).notify_dropbox_invalid_access_token
           else
             raise
           end
