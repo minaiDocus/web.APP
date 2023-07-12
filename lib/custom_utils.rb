@@ -237,7 +237,7 @@ class CustomUtils
     end
 
     def use_vats_2?(organization_code)
-      ['MCA', 'MCAC'].include?(organization_code)
+      ['MCA', 'MCAC', 'MGV'].include?(organization_code)
     end
 
     def list_vat_of(organization_code)
