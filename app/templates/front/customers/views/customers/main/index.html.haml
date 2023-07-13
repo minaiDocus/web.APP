@@ -19,7 +19,7 @@
             %span.me-2 Filtrer
             %span= glyphicon('transfer', { size: '15', color: '#72AA42', style: 'transform: rotate(90deg)'})
         .col-md-2.no-padding.text-center
-          - if (@user.leader? || (@user.manage_customers && @user.groups.any?)) && @organization.is_active
+          - if (@user.leader? || (@user.manage_customers && @user.groups.any?)) && @organization.is_active && @organization.can_create_customers?
             %button.btn.btn-primary.new-customer.semibold.add-edit.w-100
               %span.me-2= glyphicon('plus', { size: '15', color: '#FFFF'})
               %span Nouveau Client   
