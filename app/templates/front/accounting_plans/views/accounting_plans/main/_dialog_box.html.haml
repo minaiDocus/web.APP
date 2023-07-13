@@ -37,7 +37,10 @@
           %select.piece.form-select{name: "piece_ref"}
             %option{ value: '' } -----------------
             - params_fec[:head_list_fec].each_with_index do |head, indexation|
-              %option{ value: "#{indexation}", selected: ('selected' if indexation == 2)}= head
+              - selected_option = false
+              - selected_option = true if indexation == 2 && organization.try(:code) != 'OR'
+              - selected_option = true if head.match(/PieceRef/i) && organization.try(:code) == 'OR'
+              %option{ value: "#{indexation}", selected: selected_option }= head
         %hr
         .form-group.piece_reference_choise
           %label Sélectionner la colonne pour le compte générale
