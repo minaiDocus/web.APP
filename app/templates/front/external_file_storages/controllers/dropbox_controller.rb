@@ -82,6 +82,36 @@ class ExternalFileStorages::DropboxController < FrontController
     redirect_to profiles_path
   end
 
+  def launch_sync
+    dropbox = DropboxBasic.where(id: params[:dropbox_id]).first
+
+    if dropbox && dropbox.is_configured?
+      if dropbox.checked_at_for_all <= 30.minutes.ago
+        client  = FileImport::Dropbox::Client.new(DropboxApi::Client.new(dropbox.access_token))
+        begin
+          with_error = false
+          result = client.list_folder('')
+        rescue => e
+          with_error = true
+        end
+
+        if with_error
+          json_flash[:error] = "La liaison de votre compte Dropbox à iDocus a expiré. Merci de lancer la procédure de liaison"
+        else
+          json_flash[:success] = "La synchronisation est en cours, vos documents seront importés d'ici quelques minutes !"
+
+          FileImport::Dropbox.delay_for(1.minutes).launch_check(dropbox.id)
+        end
+      else
+        json_flash[:error] = "Une synchronisation a été récemment lancée. Merci de patienter pendant 30 minutes avant d'exécuter une synchronisation manuelle."
+      end
+    else
+      json_flash[:error] = "Votre compte Dropbox n'est pas lié à iDocus. Merci de lancer la procédure de liaison."
+    end
+
+    render json: { json_flash: json_flash }, status: 200
+  end
+
   private
 
   def verify_authorization

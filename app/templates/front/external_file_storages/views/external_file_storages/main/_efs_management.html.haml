@@ -19,6 +19,11 @@ Configurer l’accès à vos services de stockage externe de documents vous perm
             %h6
               Votre compte iDocus est connecté à votre compte Dropbox.
               = link_to 'Paramètres.', authorize_url_dropbox_path
+
+              %form#dropbox_sync.hide{ action: launch_sync_dropbox_path, method: 'post' }
+                %input{ name: 'dropbox_id', value: external_file_storage.dropbox_basic.id }
+              - ajax_params = param_encode({ url: "#url", events: 'click', confirm: 'Etes-vous sûr?', form: { id: 'dropbox_sync', dump_action: true, validate: false }})
+              = link_to "Synchroniser maintenant!", '#', class: 'btn btn-primary mt-2 semibold btn-filter as_idocus_ajax float-end', idocus: ajax_params
           - else
             %h6
               Pour connecter iDocus à votre compte Dropbox,

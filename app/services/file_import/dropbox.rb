@@ -64,6 +64,16 @@ class FileImport::Dropbox
         end
       end
     end
+
+    def launch_check(dropbox_id)
+      dropbox = DropboxBasic.where(id: dropbox_id).first
+
+      if dropbox && dropbox.is_configured? && dropbox.checked_at_for_all <= 30.minutes.ago
+        new(dropbox).check(true)
+      else
+        false
+      end
+    end
   end
 
   def initialize(object)
@@ -409,6 +419,8 @@ class FileImport::Dropbox
   end
 
   def check_for_all
+    @dropbox.update(checked_at_for_all: Time.now)
+
     @dropbox.import_folder_paths.each do |path|
       begin
         with_error = false
@@ -423,7 +435,5 @@ class FileImport::Dropbox
         process_entry entry
       end
     end
-
-    @dropbox.update(checked_at_for_all: Time.now)
   end
 end

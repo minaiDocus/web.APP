@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     resource :dropbox, controller: 'dropbox' do
       get 'authorize_url', on: :member
       get 'callback',      on: :member
+      post 'launch_sync', on: :member
     end
 
     resource :google_drive, controller: 'google_drive' do
