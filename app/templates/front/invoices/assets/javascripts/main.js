@@ -13,18 +13,18 @@ function update_journal_fields(code) {
     i++;
   }
 
-  $('#invoice_setting_journal_code').html(content);
+  $('#billing_mod_invoice_setting_journal_code').html(content);
 };
 
 jQuery(function () {
   AppListenTo('integration_bind_user_change', (e)=>{
-    $('#invoice_setting_user_code').on('change', function() {
+    $('#billing_mod_invoice_setting_user_code').on('change', function() {
       if ($(this).val() !== ''){
         update_journal_fields($(this).val());
-        $('#invoice_setting_journal_code').val();
-        $('#invoice_setting_journal_code').change();
+        $('#billing_mod_invoice_setting_journal_code').val();
+        $('#billing_mod_invoice_setting_journal_code').change();
       } else {
-        $('#invoice_setting_journal_code').html('');
+        $('#billing_mod_invoice_setting_journal_code').html('');
       }
     });
   });
