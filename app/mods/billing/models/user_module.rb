@@ -13,7 +13,7 @@ module BillingMod::UserModule
   def can_be_billed_at?(period)
     return true if self.organization.try(:invoice_created_customer)
 
-    if self.created_at.strftime('%Y%m').to_i < 202205
+    if self.my_package.is_with_commitment? || self.created_at.strftime('%Y%m').to_i < 202205
       return true
     else
       piece      = nil
