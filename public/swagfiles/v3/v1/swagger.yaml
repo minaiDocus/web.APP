@@ -1,0 +1,81 @@
+---
+openapi: 3.0.1
+info:
+  title: API V3
+  version: v3
+paths:
+  "/api/v3/inbound_documents":
+    post:
+      summary: Returns the authenticated organization informations
+      tags:
+      - Inbound Documents
+      security:
+      - bearer: []
+      parameters:
+      - name: inbound_document
+        in: query
+        schema:
+          type: object
+          properties:
+            filename:
+              type: string
+            content_base64:
+              type: string
+            user_id:
+              type: integer
+            user_code:
+              type: string
+            user_legal_identifier:
+              type: string
+            ledger_name:
+              type: string
+            ledger_id:
+              type: integer
+            source:
+              type: string
+            source_identifier:
+              type: string
+      responses:
+        '201':
+          description: Successfully saved the document
+        '401':
+          description: Token is invalid
+  "/api/v3/organizations/current":
+    get:
+      summary: Returns the authenticated organization informations
+      tags:
+      - Organizations
+      security:
+      - bearer: []
+      responses:
+        '200':
+          description: returns the current organization
+        '401':
+          description: Token is invalid
+  "/api/v3/users":
+    get:
+      summary: Returns the list of users for the authenticated organization with their
+        ledgers
+      tags:
+      - Users
+      security:
+      - bearer: []
+      responses:
+        '200':
+          description: returns the list of users
+        '401':
+          description: Token is invalid
+components:
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+servers:
+- url: http://{defaultHost}
+  variables:
+    defaultHost:
+      default: localhost:3000
+- url: https://{defaultHost}
+  variables:
+    defaultHost:
+      default: my.idocus.com
