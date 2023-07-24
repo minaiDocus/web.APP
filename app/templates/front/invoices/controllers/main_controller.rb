@@ -22,13 +22,13 @@ class Invoices::MainController < OrganizationController
   end
 
   def insert
-    @invoice_setting = (params[:invoice_setting][:id].present?) ? BillingMod::InvoiceSetting.find(params[:invoice_setting][:id]) : BillingMod::InvoiceSetting.new()
+    @invoice_setting = (params[:billing_mod_invoice_setting][:id].present?) ? BillingMod::InvoiceSetting.find(params[:billing_mod_invoice_setting][:id]) : BillingMod::InvoiceSetting.new()
     @invoice_setting.update(invoice_setting_params)
     @invoice_setting.organization = @organization
-    @invoice_setting.user         = User.find_by_code params[:invoice_setting][:user_code]
+    @invoice_setting.user         = User.find_by_code params[:billing_mod_invoice_setting][:user_code]
 
     if @invoice_setting.save
-      json_flash[:success] = (params[:invoice_setting][:id].present?) ? 'Modifié avec succès' : 'Ajout avec succès.'
+      json_flash[:success] = (params[:billing_mod_invoice_setting][:id].present?) ? 'Modifié avec succès' : 'Ajout avec succès.'
     else
       json_flash[:error] = 'Enregistrement non valide, veuillez verifier les informations.'
     end
@@ -78,6 +78,6 @@ class Invoices::MainController < OrganizationController
   end
 
   def invoice_setting_params
-    params.require(:invoice_setting).permit(:user_code, :journal_code)
+    params.require(:billing_mod_invoice_setting).permit(:user_code, :journal_code)
   end
 end
