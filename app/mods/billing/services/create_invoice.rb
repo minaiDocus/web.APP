@@ -526,7 +526,7 @@ module BillingMod
       @pdf.font_size 10
       @pdf.default_leading 5
 
-      formatted_address = [address.company, address.first_name + ' ' + address.last_name, address.address_1, address.address_2, address.zip.to_s + ' ' + address.city, address.country]
+      formatted_address = [address.try(:company).to_s, address.try(:first_name).to_s + ' ' + address.try(:last_name).to_s, address.try(:address_1).to_s, address.try(:address_2).to_s, address.try(:zip).to_s + ' ' + address.try(:city).to_s, address.try(:country).to_s]
                           .reject { |a| a.nil? || a.empty? }
                           .join("\n")
 
