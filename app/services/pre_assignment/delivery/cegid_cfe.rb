@@ -20,7 +20,7 @@ class PreAssignment::Delivery::CegidCfe < PreAssignment::Delivery::DataService
     @previous_error = @delivery.error_message
 
     if @delivery.preseizures.select{|pres| pres.pre_assignment_deliveries.where(state: 'sent').count > 0 }.size > 0
-      handle_delivery_success
+      #handle_delivery_success
     else
       begin
         response = CegidCfeLib::DataSender.new(@delivery).execute
@@ -31,7 +31,7 @@ class PreAssignment::Delivery::CegidCfe < PreAssignment::Delivery::DataService
           #DONT ACTIVATE RETRY SENDING DELIVERY
           #retry_sending
         else
-          handle_delivery_success
+          #handle_delivery_success
         end
       rescue => e
 
