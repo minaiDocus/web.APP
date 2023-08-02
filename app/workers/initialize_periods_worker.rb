@@ -35,6 +35,11 @@ class InitializePeriodsWorker
 
       # Operation.where(bank_account_id: bank_accounts.map(&:id)).update_all(api_id: nil)
       Transaction::DestroyBankAccountsWorker.perform_in(1.hours, bank_accounts.map(&:id), 'Destroy manual created bank')
+
+      # Disable all bank accounts of disabled retriever options
+      BillingMod::Package.of_period(CustomUtils.period_of(Time.now)).where(bank_active: false).each do |package|
+        package.user.bank_accounts.update_all(is_used: false) if !package.bank_active
+      end
     end
   end
 end
