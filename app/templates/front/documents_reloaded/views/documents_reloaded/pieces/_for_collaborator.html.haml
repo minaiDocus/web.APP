@@ -155,7 +155,7 @@
                       - delivery_state = 'none'
                       - if !preseizure.is_exported?
                         - delivery_state = piece.get_state_to('text')
-                        - if preseizure.id.to_i > 0 && preseizure.pre_assignment_deliveries.where(state: ['pending', 'data_built']).size > 0
+                        - if preseizure.id.to_i > 0 && preseizure.pre_assignment_deliveries.where(state: ['pending', 'data_built', 'sending']).size > 0
                           %span.badge.bg-warning.semibold Ecriture en cours de livraison
                         - elsif ['delivery_failed', 'duplication', 'piece_ignored'].include?(delivery_state)
                           %span.badge.badge-danger.semibold= t("pieces.delivery_state.#{delivery_state}")
