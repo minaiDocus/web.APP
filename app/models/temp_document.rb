@@ -484,6 +484,11 @@ class TempDocument < ApplicationRecord
   end
 
   def is_bundle_needed?
+    if self.pages_number.to_i == 0
+      self.pages_number = DocumentTools.pages_number(self.cloud_content_object.reload.path)
+      self.save
+    end
+
     return false if self.temp_pack.organization_id == Organization.find_by_code('TEEO').try(:id)
 
    ( self.scanned? || self.pages_number > 2 || (self.api_name == 'mobile' && self.pages_number > 1) ) && self.temp_pack.is_compta_processable? && !self.from_ibizabox? && !self.retrieved?
