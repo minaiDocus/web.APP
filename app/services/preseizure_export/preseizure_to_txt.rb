@@ -36,7 +36,7 @@ class PreseizureExport::PreseizureToTxt
       preseizure.accounts.order(type: :asc).each do |account|
         entry = account.entries.first
 
-        next if entry.amount.to_f == 0
+        next if entry.try(:amount).to_f == 0
 
         if preseizure.operation
           label = preseizure.operation_label.strip[0..29]
