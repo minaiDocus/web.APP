@@ -21,7 +21,7 @@ class Ppp::ReceiptsController < PaperProcessesController
 
     _params[:customer_code] = CustomUtils.replace_code_of(_params[:customer_code])
 
-    user = User.find_by_code(_params[:customer_code])
+    user = User.get_by_code(_params[:customer_code])
     if user
       @paper_process   = PaperProcess.where(type: 'receipt', tracking_number: _params[:tracking_number]).first
       @paper_process ||= PaperProcess.new(type: 'receipt')
@@ -41,7 +41,8 @@ class Ppp::ReceiptsController < PaperProcessesController
         flash[:error] = 'Donnée(s) invalide(s).'
       end
     else
-      paper_process = PaperProcess.new(type: 'receipt')
+      paper_process   = PaperProcess.where(type: 'receipt', tracking_number: _params[:tracking_number]).first
+      paper_process ||= PaperProcess.new(type: 'receipt')
       paper_process.assign_attributes(_params)
       paper_process.valid?
       session[:receipt_paper_process_id] = paper_process.id
