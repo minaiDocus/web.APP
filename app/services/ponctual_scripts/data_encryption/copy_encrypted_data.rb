@@ -43,6 +43,8 @@ class PonctualScripts::DataEncryption::CopyEncryptedData
 
       list_column.each do |column|
         if record.respond_to?(column) && record.send(column.to_sym).present?
+          next if record.send("alpha_#{column}").to_s.present?
+
           record.send( "alpha_#{column}=".to_sym, record.send(column.to_sym) )                   #alpha
           record.send( "beta_#{column}=".to_sym, Base64.encode64(record.send(column.to_sym).to_s) )   #beta
         end
